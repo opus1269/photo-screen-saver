@@ -1,0 +1,24 @@
+{
+  "name": "PhotoScreenSaver",
+  "authors": [
+    "Michael A. Updike <igreilly1269@gmail.com>"
+  ],
+  "description": "Photo Screen Saver implemented with Polymer",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components",
+		"assets",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.5",
+    "flatiron-director": "PolymerLabs/flatiron-director#^0.5",
+    "core-elements": "Polymer/core-elements#^0.5",
+    "paper-elements": "Polymer/paper-elements#^0.5"
+  }
+}

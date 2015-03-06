@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>Photo Screen Saver Options Page</title>
+
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+ <!-- <link href="components/polymer/polymer.html" rel="import"> -->
+  <link rel="import" href="components/core-animated-pages/core-animated-pages.html">
+  <link rel="import" href="components/core-animated-pages/transitions/slide-from-right.html">
+  <link rel="import" href="components/core-animated-pages/transitions/cross-fade.html">
+  <link rel="import" href="components/core-toolbar/core-toolbar.html">
+  <link rel="import" href="components/core-scaffold/core-scaffold.html">
+  <link rel="import" href="components/core-image/core-image.html">
+  <link rel="import" href="components/core-icon-button/core-icon-button.html">
+  <link rel="import" href="components/core-icon/core-icon.html">
+  <link rel="import" href="components/core-menu/core-menu.html">
+  <link rel="import" href="components/core-a11y-keys/core-a11y-keys.html">
+  <link rel="import" href="components/core-header-panel/core-header-panel.html">
+  <link rel="import" href="components/core-label/core-label.html">
+  <link rel="import" href="components/core-localstorage/core-localstorage.html">
+  <link rel="import" href="components/core-ajax/core-ajax.html">
+  <link rel="import" href="components/flatiron-director/flatiron-director.html">
+  <link rel="import" href="components/paper-item/paper-item.html">
+  <link rel="import" href="components/paper-spinner/paper-spinner.html">
+  <link rel="import" href="components/paper-button/paper-button.html">
+  <link rel="import" href="components/paper-slider/paper-slider.html">
+  <link rel="import" href="components/paper-toggle-button/paper-toggle-button.html">
+  <link rel="import" href="components/paper-checkbox/paper-checkbox.html">
+  <link rel="import" href="components/paper-dropdown-menu/paper-dropdown-menu.html">
+  <link rel="import" href="components/paper-dropdown/paper-dropdown.html">
+
+
+  <link rel="stylesheet" href="styles.css" >
+  <link rel="stylesheet" href="settings.css">
+  <link rel="stylesheet" href="sources.css">
+  <link rel="stylesheet" href="info.css">
+ </head>
+<body unresolved fullbleed>
+
+<template is="auto-binding" id="t">
+
+
+  <!-- Route controller. -->
+  <flatiron-director route="{{route}}" autoHash></flatiron-director>
+
+  <!-- Keyboard nav controller. -->
+  <core-a11y-keys id="keys" target="{{parentElement}}"
+                  keys="up down left right space space+shift"
+                  on-keys-pressed="{{keyHandler}}"></core-a11y-keys>
+
+  <!-- Dynamic content controller -->
+  <core-ajax id="ajax"  url="{{url}}" handleAs="document"
+             on-core-error="{{onError}}" on-core-response="{{onResponse}}"></core-ajax>
+
+  <core-scaffold  id="scaffold">
+
+    <nav>
+      <core-toolbar>
+        <span>Photo Screen Saver</span>
+      </core-toolbar>
+      <core-menu valueattr="hash" selected="{{route}}" selectedModel="{{selectedPage}}"
+                 on-core-select="{{menuItemSelected}}">
+        <template repeat="{{page, i in pages}}">
+          <paper-item id="{{'menuItem'+i}}" hash="{{page.hash}}" noink>
+            <core-icon icon="{{page.icon}}"></core-icon>
+            <a href="#{{page.hash}}">{{page.name}}</a>
+          </paper-item>
+        </template>
+      </core-menu>
+    </nav>
+
+    <core-toolbar tool flex>
+      <div flex>{{selectedPage.page.name}}</div>
+    </core-toolbar>
+
+    <div id="mainPageDiv" layout horizontal start-justified start fit>
+      <core-animated-pages id="pages" transitions="cross-fade-all" selected="{{route}}" valueattr="hash" on-tap="{{cyclePages}}" fit>
+        <template repeat="{{page, i in pages}}">
+          <section class="pageContainer" hash="{{page.hash}}" fit layout vertical start-justified>
+            <paper-shadow z="3"><div id="{{'pageDiv'+i}}" class="pageDiv"> </div></paper-shadow>
+         </section>
+        </template>
+      </core-animated-pages>
+    </div>
+  </core-scaffold>
+
+</template>
+
+<script src="google_photos.js"></script>
+<script src="options.js"></script>
+</body>
+</html>

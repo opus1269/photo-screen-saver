@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Photo Screen Saver Info fragment</title>
+</head>
+
+<body unresolved>
+
+  <div id="mainPageDiv">
+
+    <div class="infoDiv" vertical layout flex>
+
+      <core-toolbar class="pageHeader">
+        <paper-item class="info" flex>
+          <core-label flex>Programming Information</core-label>
+        </paper-item>
+      </core-toolbar>
+
+      <div id="innerInfoDiv" flex>
+
+        <h6>Source Code</h6>
+
+        <div class="infoitem">
+					<paper-button raised="" noink>
+            <a href="https://github.com/opus1269/photo-screen-saver/" target="_blank">
+              <div horizontal layout><core-icon src="/assets/github.png"></core-icon><p class="main-text">VIEW ON GITHUB</p></div>
+            </a>
+          </paper-button>
+        </div>
+
+        <hr>
+
+       <h6>APIs & Specifications</h6>
+
+        <div class="infoitem">
+          <paper-button raised="" noink>
+            <a href="https://developer.chrome.com/extensions" target="_blank">
+              <div horizontal layout><core-icon src="/assets/extension.png"></core-icon><p class="main-text">CHROME EXTENSION</p></div>
+            </a>
+          </paper-button>
+          <paper-button raised="" noink>
+            <a href="https://www.polymer-project.org/" target="_blank">
+              <div horizontal layout><core-icon src="/assets/polymer.png"></core-icon><p class="main-text">POLYMER</p></div>
+            </a>
+          </paper-button>
+          <paper-button raised="" noink>
+            <a href="http://www.google.com/design/spec/material-design/introduction.html#" target="_blank">
+              <div horizontal layout><core-icon src="/assets/material.png"></core-icon><p class="main-text">MATERIAL DESIGN</p></div>
+            </a>
+          </paper-button>
+          <section>
+						This extension has been built entirely with Polymer and raw JavaScript.  Polymer treats everything as a
+						<a href="http://webcomponents.org/" target="_blank">Web Component</a> I have never used things like AngularJS
+						(or even JQuery) so I can't really evaluate the pros and cons of this approach.  In addition, there is nothing
+						in Polymer that prevents you from using it with these other solutions.
+						
+          </section>
+        </div>
+
+        <hr>
+
+        <h6>Photo Libraries</h6>
+
+        <div class="infoitem">
+          <paper-button raised="" noink>
+            <a href="https://developers.google.com/picasa-web/" target="_blank">
+              <div horizontal layout><core-icon src="/assets/picasa.png"></core-icon><p class="main-text">PICASA API</p></div>
+            </a>
+          </paper-button>
+          <paper-button raised="" noink>
+            <a href="http://www.google.com/chrome/devices/chromecast/" target="_blank">
+              <div horizontal layout><core-icon src="/assets/chromecast.png"></core-icon><p class="main-text">CHROMECAST</p></div>
+            </a>
+          </paper-button>
+          <section>
+						<p class="main-text">
+						It is unfortunate, but the Google+ API still does not support working with photos, so the only way is with the Picasa Web API.
+						Your Google Drive folders are visible in Google+, but I have not found an efficient way to process them
+						so they are not available at this time.  The <a href="https://github.com/dconnolly/chromecast-backgrounds" target="_blank">Chromecast photos</a>
+						are a snapshot in time of those used for the backdrop.
+            </p>
+						<br />
+						<p class="main-text">
+							<b>Note:</b> This program is read only for your Google photos despite what the permissions popup says. The Picasa API does not have
+							a read only scope.
+						</p>
+          </section>
+        </div>
+
+        <hr>
+
+        <h6>Web Development Documentation</h6>
+
+        <div class="infoitem">
+          <paper-button raised="" noink>
+            <a href="https://www.webplatform.org/" target="_blank">
+              <div horizontal layout><core-icon src="/assets/webplatform.png"></core-icon><p class="main-text">WEB PLATFORM</p></div>
+            </a>
+          </paper-button>
+          <paper-button raised="" noink>
+            <a href="https://developer.mozilla.org/en-US/docs/Web" target="_blank">
+              <div horizontal layout><core-icon src="/assets/mdn.png"></core-icon><p class="main-text">MDN</p></div>
+            </a>
+          </paper-button>
+          <paper-button raised="" noink>
+            <a href="http://www.w3schools.com/default.asp" target="_blank">
+              <div horizontal layout><core-icon src="/assets/w3schools.png"></core-icon><p class="main-text">W3SCHOOLS</p></div>
+            </a>
+          </paper-button>
+          <section>
+						This was my first time doing Web development and the learning curve is pretty steep. Each of these sites provides
+						good tutorials and reference materials on the HTML-CSS-JavaScript paradigm.  The first is supported by the W3C and
+						most of the big Internet companies, but is also the least complete at this time.
+          </section>
+        </div>
+
+      </div>
+
+    <div>
+
+  </div>
+</body>
+</html>

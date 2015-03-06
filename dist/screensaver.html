@@ -1,0 +1,228 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>@import url("http://fonts.googleapis.com/css?family=Roboto:500,900,100,300,700,400");body {	font-family: "Roboto" "RobotoDraft", Arial, sans-serif;	font-size: 100%;	font-weight: 400;	padding: 0;	overflow: hidden;	margin: 0;	background-size: cover;	background-repeat: no-repeat;	background: -webkit-linear-gradient(top, #3a3a3a 0%,#666666 21%,#777777 34%,#898989 50%,#828c95 64%,#a0a0a0 83%,#b5bdc8 100%);}div { position: relative; display: block; padding: 0; margin: 0;}#mainContainer { visibility: hidden;}.slide { opacity: 0;}.author { font-size: 133%; position: fixed; right: 30px; bottom: 20px; padding: 0; margin: 0; color: WhiteSmoke; opacity: .9;}#bg {	position: fixed;	left: 50%;	top: 50%;	transform: translate(-50%,-50%);	visibility: hidden;	z-index: 1;}</style><style shim-shadowdom="">html /deep/ [layout][horizontal], html /deep/ [layout][vertical] { display: -ms-flexbox; display: -webkit-flex; display: flex;}html /deep/ [layout][horizontal][inline], html /deep/ [layout][vertical][inline] { display: -ms-inline-flexbox; display: -webkit-inline-flex; display: inline-flex;}html /deep/ [layout][horizontal] { -ms-flex-direction: row; -webkit-flex-direction: row; flex-direction: row;}html /deep/ [layout][horizontal][reverse] { -ms-flex-direction: row-reverse; -webkit-flex-direction: row-reverse; flex-direction: row-reverse;}html /deep/ [layout][vertical] { -ms-flex-direction: column; -webkit-flex-direction: column; flex-direction: column;}html /deep/ [layout][vertical][reverse] { -ms-flex-direction: column-reverse; -webkit-flex-direction: column-reverse; flex-direction: column-reverse;}html /deep/ [layout][wrap] { -ms-flex-wrap: wrap; -webkit-flex-wrap: wrap; flex-wrap: wrap;}html /deep/ [layout][wrap-reverse] { -ms-flex-wrap: wrap-reverse; -webkit-flex-wrap: wrap-reverse; flex-wrap: wrap-reverse;}html /deep/ [flex] { -ms-flex: 1 1 0.000000001px; -webkit-flex: 1; flex: 1; -webkit-flex-basis: 0.000000001px; flex-basis: 0.000000001px;}html /deep/ [vertical][layout] > [flex][auto-vertical], html /deep/ [vertical][layout]::shadow [flex][auto-vertical] { -ms-flex: 1 1 auto; -webkit-flex-basis: auto; flex-basis: auto;}html /deep/ [flex][auto] { -ms-flex: 1 1 auto; -webkit-flex-basis: auto; flex-basis: auto;}html /deep/ [flex][none] { -ms-flex: none; -webkit-flex: none; flex: none;}html /deep/ [flex][one] { -ms-flex: 1; -webkit-flex: 1; flex: 1;}html /deep/ [flex][two] { -ms-flex: 2; -webkit-flex: 2; flex: 2;}html /deep/ [flex][three] { -ms-flex: 3; -webkit-flex: 3; flex: 3;}html /deep/ [flex][four] { -ms-flex: 4; -webkit-flex: 4; flex: 4;}html /deep/ [flex][five] { -ms-flex: 5; -webkit-flex: 5; flex: 5;}html /deep/ [flex][six] { -ms-flex: 6; -webkit-flex: 6; flex: 6;}html /deep/ [flex][seven] { -ms-flex: 7; -webkit-flex: 7; flex: 7;}html /deep/ [flex][eight] { -ms-flex: 8; -webkit-flex: 8; flex: 8;}html /deep/ [flex][nine] { -ms-flex: 9; -webkit-flex: 9; flex: 9;}html /deep/ [flex][ten] { -ms-flex: 10; -webkit-flex: 10; flex: 10;}html /deep/ [flex][eleven] { -ms-flex: 11; -webkit-flex: 11; flex: 11;}html /deep/ [flex][twelve] { -ms-flex: 12; -webkit-flex: 12; flex: 12;}html /deep/ [layout][start] { -ms-flex-align: start; -webkit-align-items: flex-start; align-items: flex-start;}html /deep/ [layout][center], html /deep/ [layout][center-center] { -ms-flex-align: center; -webkit-align-items: center; align-items: center;}html /deep/ [layout][end] { -ms-flex-align: end; -webkit-align-items: flex-end; align-items: flex-end;}html /deep/ [layout][start-justified] { -ms-flex-pack: start; -webkit-justify-content: flex-start; justify-content: flex-start;}html /deep/ [layout][center-justified], html /deep/ [layout][center-center] { -ms-flex-pack: center; -webkit-justify-content: center; justify-content: center;}html /deep/ [layout][end-justified] { -ms-flex-pack: end; -webkit-justify-content: flex-end; justify-content: flex-end;}html /deep/ [layout][around-justified] { -ms-flex-pack: distribute; -webkit-justify-content: space-around; justify-content: space-around;}html /deep/ [layout][justified] { -ms-flex-pack: justify; -webkit-justify-content: space-between; justify-content: space-between;}html /deep/ [self-start] { -ms-align-self: flex-start; -webkit-align-self: flex-start; align-self: flex-start;}html /deep/ [self-center] { -ms-align-self: center; -webkit-align-self: center; align-self: center;}html /deep/ [self-end] { -ms-align-self: flex-end; -webkit-align-self: flex-end; align-self: flex-end;}html /deep/ [self-stretch] { -ms-align-self: stretch; -webkit-align-self: stretch; align-self: stretch;}html /deep/ [block] { display: block;}html /deep/ [hidden] { display: none !important;}html /deep/ [relative] { position: relative;}html /deep/ [fit] { position: absolute; top: 0; right: 0; bottom: 0; left: 0;}body[fullbleed] { margin: 0; height: 100vh;}html /deep/ [segment], html /deep/ segment { display: block; position: relative; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; margin: 1em 0.5em; padding: 1em; background-color: white; -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1); box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1); border-radius: 5px 5px 5px 5px;}</style></head><body unresolved="" fullbleed="" vertical="" layout=""><div hidden=""><polymer-element name="core-selection" attributes="multi" hidden="" assetpath="components/core-selection/"></polymer-element><polymer-element name="core-selector" attributes="selected multi valueattr selectedClass selectedProperty selectedAttribute selectedItem selectedModel selectedIndex notap excludedLocalNames target itemsSelector activateEvent" assetpath="components/core-selector/"><template><core-selection id="selection" multi="{{multi}}" on-core-select="{{selectionSelect}}"></core-selection><content id="items" select="*"></content></template></polymer-element><polymer-element name="core-style" hidden="" assetpath="components/core-style/"></polymer-element><polymer-element name="core-meta" attributes="label type" hidden="" assetpath="components/core-meta/"></polymer-element><polymer-element name="core-transition" extends="core-meta" assetpath="components/core-transition/"></polymer-element><polymer-element name="core-transition-pages" extends="core-transition" assetpath="components/core-animated-pages/transitions/"></polymer-element><core-style id="hero-transition">
+  /* Hide heroes that are not currently transitioning */
+  polyfill-next-selector { content: ':host &gt; [animate]:not(.core-selected) [hero]'; }
+  ::content &gt; [animate]:not(.core-selected) /deep/ [hero] {
+    opacity: 0;
+  }
+
+  polyfill-next-selector { content: ':host &gt; .core-selected[animate] [hero]'; }
+  ::content &gt; .core-selected[animate] /deep/ [hero] {
+    opacity: 1;
+    z-index: 10000;
+  }
+
+  polyfill-next-selector { content: ':host &gt; * [hero-p]'; }
+  ::content &gt; * /deep/ [hero-p] {
+    -webkit-transition: box-shadow 100ms ease-out;
+    transition: box-shadow 100ms ease-out;
+  }
+
+  polyfill-next-selector { content: ':host &gt; [animate] [hero-p]'; }
+  ::content &gt; [animate] /deep/ [hero-p] {
+    box-shadow: none !important;
+  }
+</core-style><polymer-element name="hero-transition" extends="core-transition-pages" assetpath="components/core-animated-pages/transitions/"></polymer-element><hero-transition id="hero-transition"></hero-transition><core-style id="cross-fade">
+  polyfill-next-selector { content: ':host &gt; * [cross-fade]'; }
+  ::content &gt; * /deep/ [cross-fade] {
+    -webkit-transition: opacity {{g.transitions.xfadeDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity {{g.transitions.xfadeDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  polyfill-next-selector { content: ':host &gt; * [cross-fade][bg]'; }
+  ::content &gt; * /deep/ [cross-fade][bg] {
+    -webkit-transition: background-color {{g.transitions.xfadeDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+    transition: background-color {{g.transitions.xfadeDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  polyfill-next-selector { content: ':host &gt; * [cross-fade][hero-p]'; }
+  ::content &gt; * /deep/ [cross-fade][hero-p] {
+    -webkit-transition: background-color {{g.transitions.xfadeDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+    transition: background-color {{g.transitions.xfadeDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  polyfill-next-selector { content: ':host &gt; .core-selected [cross-fade]'; }
+  ::content &gt; .core-selected /deep/ [cross-fade] {
+    opacity: 1;
+  }
+
+  polyfill-next-selector { content: ':host &gt; [animate]:not(.core-selected) [cross-fade]:not([hero-p]):not([bg])'; }
+  ::content &gt; [animate]:not(.core-selected) /deep/ [cross-fade]:not([hero-p]):not([bg]) {
+    opacity: 0;
+  }
+
+  polyfill-next-selector { content: ':host &gt; [animate]:not(.core-selected) [cross-fade][bg]'; }
+  ::content &gt; [animate]:not(.core-selected) /deep/ [cross-fade][bg] {
+    background-color: rgba(0, 0, 0, 0);
+  }
+
+  polyfill-next-selector { content: ':host &gt; [animate]:not(.core-selected) [cross-fade][hero-p]'; }
+  ::content &gt; [animate]:not(.core-selected) /deep/ [cross-fade][hero-p] {
+    background-color: rgba(0, 0, 0, 0);
+  }
+</core-style><core-style id="cross-fade-delayed">
+  polyfill-next-selector { content: ':host &gt; * [cross-fade-delayed]'; }
+  ::content &gt; * /deep/ [cross-fade-delayed] {
+    -webkit-transition: opacity {{g.transitions.xfadeDuration || g.transitions.duration}} ease-out;
+    transition: opacity {{g.transitions.xfadeDuration || g.transitions.duration}} ease-out;
+  }
+
+  polyfill-next-selector { content: ':host &gt; .core-selected [cross-fade-delayed]'; }
+  ::content &gt; .core-selected /deep/ [cross-fade-delayed] {
+    -webkit-transition: opacity {{g.transitions.xfadeDuration || g.transitions.duration}} ease-out {{g.transitions.xfadeDelay || g.transitions.xfadeDuration || g.transitions.duration}};
+    transition: opacity {{g.transitions.xfadeDuration || g.transitions.duration}} ease-out {{g.transitions.xfadeDelay || g.transitions.xfadeDuration || g.transitions.duration}};
+  }
+
+  polyfill-next-selector { content: ':host &gt; [animate]:not(.core-selected) [cross-fade-delayed]'; }
+  ::content &gt; [animate]:not(.core-selected) /deep/ [cross-fade-delayed] {
+    opacity: 0;
+  }
+
+  polyfill-next-selector { content: ':host &gt; .core-selected [cross-fade-delayed]'; }
+  ::content &gt; .core-selected /deep/ [cross-fade-delayed] {
+    opacity: 1;
+  }
+
+</core-style><core-style id="cross-fade-all">
+  /* cross-fade-all: cross fade everything except for heroes and their parents */
+  polyfill-next-selector { content: ':host(.cross-fade-all) &gt; * *:not([hero]):not([hero-p]):not([cross-fade])'; }
+  :host(.cross-fade-all) ::content &gt; * /deep/ *:not([hero]):not([hero-p]):not([cross-fade]) {
+    -webkit-transition: opacity {{g.transitions.xfadeDuration || g.transitions.duration}} ease-out;
+    transition: opacity {{g.transitions.xfadeDuration || g.transitions.duration}} ease-out;
+  }
+
+  polyfill-next-selector { content: ':host(.cross-fade-all) &gt; [animate]:not(.core-selected) *:not([hero]):not([hero-p]):not([cross-fade])'; }
+  :host(.cross-fade-all) ::content &gt; [animate]:not(.core-selected) /deep/ *:not([hero]):not([hero-p]):not([cross-fade]) {
+    opacity: 0;
+  }
+
+  polyfill-next-selector { content: ':host(.cross-fade-all) &gt; .core-selected *:not([hero])'; }
+  .host(.cross-fade-all) ::content &gt; .core-selected /deep/ * {
+    opacity: 1;
+  }
+
+  /* Only background-color is allowed for the hero's parents, no opacity transitions */
+  polyfill-next-selector { content: ':host(.cross-fade-all) &gt; * [hero-p]'; }
+  :host(.cross-fade-all) ::content &gt; * /deep/ [hero-p] {
+    -webkit-transition: background-color {{g.transitions.xfadeDuration || g.transitions.duration}} ease-out;
+    transition: background-color {{g.transitions.xfadeDuration || g.transitions.duration}} ease-out;
+    opacity: 1;
+  }
+
+  polyfill-next-selector { content: ':host(.cross-fade-all) &gt; [animate]:not(.core-selected) [hero-p]'; }
+  :host(.cross-fade-all) ::content &gt; [animate]:not(.core-selected) /deep/ [hero-p] {
+    background-color: rgba(0, 0, 0, 0);
+  }
+</core-style><core-transition-pages id="cross-fade"></core-transition-pages><core-transition-pages id="cross-fade-delayed"></core-transition-pages><core-transition-pages id="cross-fade-all" scopeclass="cross-fade-all"></core-transition-pages><polymer-element name="core-animated-pages" extends="core-selector" notap="" attributes="transitions" assetpath="components/core-animated-pages/"><template><style>:host { display: block; position: relative;}polyfill-next-selector { content: ':host > *'; }::content > * { position: absolute; top: 0; right: 0; bottom: 0; left: 0;}polyfill-next-selector { content: ':host > *:not(.core-selected):not([animate])'; }::content > *:not(.core-selected):not([animate]) { display: none !important;}</style><shadow></shadow></template></polymer-element><core-style id="slide-from-bottom">
+   polyfill-next-selector { content: ':host(.slide-from-bottom) &gt; *'; }
+  :host(.slide-from-bottom) ::content &gt; * {
+    -webkit-transition: -webkit-transform {{g.transitions.slideDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform {{g.transitions.slideDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  polyfill-next-selector { content: ':host(.slide-from-bottom) &gt; .core-selected ~ [animate]:not(.core-selected)'; }
+  :host(.slide-from-bottom) ::content &gt; .core-selected ~ [animate]:not(.core-selected) {
+    -webkit-transform: translateY(100%);
+    transform: translateY(100%);
+  }
+  
+  polyfill-next-selector { content: ':host(.slide-from-bottom) &gt; [animate]:not(.core-selected)'; }
+  :host(.slide-from-bottom) ::content &gt; [animate]:not(.core-selected) {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+
+  polyfill-next-selector { content: ':host(.slide-from-bottom) &gt; .core-selected'; }
+  :host(.slide-from-bottom) ::content &gt; .core-selected {
+    -webkit-transform: none;
+    transform: none;
+  }
+</core-style><core-transition-pages id="slide-from-bottom" scopeclass="slide-from-bottom"></core-transition-pages><core-style id="slide-from-right">
+  polyfill-next-selector { content: ':host(.slide-from-right) &gt; *'; }
+  :host(.slide-from-right) ::content &gt; * {
+    -webkit-transition: -webkit-transform {{g.transitions.slideDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform {{g.transitions.slideDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  polyfill-next-selector { content: ':host(.slide-from-right) &gt; .core-selected ~ [animate]:not(.core-selected)'; }
+  :host(.slide-from-right) ::content &gt; .core-selected ~ [animate]:not(.core-selected) {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+  }
+
+  polyfill-next-selector { content: ':host(.slide-from-right) &gt; [animate]:not(.core-selected)'; }
+  :host(.slide-from-right) ::content &gt; [animate]:not(.core-selected) {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+
+  polyfill-next-selector { content: ':host(.slide-from-right) &gt; .core-selected'; }
+  :host(.slide-from-right) ::content &gt; .core-selected {
+    -webkit-transform: none;
+    transform: none;
+  }
+</core-style><core-transition-pages id="slide-from-right" scopeclass="slide-from-right"></core-transition-pages><core-style id="slide-up">
+  polyfill-next-selector { content: ':host.slide-up &gt; * [slide-up]'; }
+  :host(.slide-up) ::content &gt; * /deep/ [slide-up] {
+    -webkit-transition: -webkit-transform {{g.transitions.slideDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform {{g.transitions.slideDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  polyfill-next-selector { content: ':host &gt; .core-selected [slide-up]'; }
+  ::content &gt; .core-selected /deep/ [slide-up] {
+    -webkit-transform: none;
+    transform: none;
+  }
+
+  polyfill-next-selector { content: ':host &gt; [animate]:not(.core-selected) [slide-up]'; }
+  ::content &gt; [animate]:not(.core-selected) /deep/ [slide-up] {
+    -webkit-transform: translateY(150%);
+    transform: translateY(150%);
+  }
+</core-style><core-style id="slide-up-offscreen">
+  polyfill-next-selector { content: ':host.slide-up-offscreen &gt; * [slide-up-offscreen]'; }
+  :host(.slide-up-offscreen) ::content &gt; * /deep/ [slide-up-offscreen] {
+    -webkit-transition: -webkit-transform {{g.transitions.slideDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform {{g.transitions.slideDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  polyfill-next-selector { content: ':host &gt; .core-selected [slide-up-offscreen]'; }
+  ::content &gt; .core-selected /deep/ [slide-up-offscreen] {
+    -webkit-transform: none;
+    transform: none;
+  }
+
+  polyfill-next-selector { content: ':host &gt; [animate]:not(.core-selected) [slide-up-offscreen]'; }
+  ::content &gt; [animate]:not(.core-selected) /deep/ [slide-up-offscreen] {
+    -webkit-transform: translateY(100vh);
+    transform: translateY(100vh);
+    z-index: -1;
+  }
+
+  polyfill-rule {
+    content: ':host &gt; [animate]:not(.core-selected) [slide-up-offscreen]';
+    -webkit-transform: translateY(1000px);
+  }
+</core-style><core-transition-pages id="slide-up" activeclass="slide-up"></core-transition-pages><core-transition-pages id="slide-up-offscreen" activeclass="slide-up-offscreen"></core-transition-pages><core-style id="scale-up">
+  polyfill-next-selector { content: ':host &gt; * [scale-up]'; }
+  ::content &gt; * /deep/ [scale-up] {
+    -webkit-transition: -webkit-transform {{g.transitions.scaleDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1) {{g.transitions.scaleDelay || g.transitions.delay}} !important;
+    transition: transform {{g.transitions.scaleDuration || g.transitions.duration}} cubic-bezier(0.4, 0, 0.2, 1) {{g.transitions.scaleDelay || g.transitions.delay}} !important;
+  }
+
+  polyfill-next-selector { content: ':host &gt; .core-selected [scale-up]'; }
+  ::content &gt; .core-selected /deep/ [scale-up]  {
+    -webkit-transform: none;
+    transform: none;
+  }
+
+  polyfill-next-selector { content: ':host &gt; [animate]:not(.core-selected) [scale-up]'; }
+  ::content &gt; [animate]:not(.core-selected) /deep/ [scale-up] {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+
+  polyfill-next-selector { content: ':host &gt; .core-selected[animate] [scale-up]'; }
+  ::content &gt; .core-selected[animate] /deep/ [scale-up]  {
+    z-index: 1000;
+  }
+</core-style><core-transition-pages id="scale-up"></core-transition-pages><polymer-element name="core-image" assetpath="components/core-image/"><template><style>:host { display: inline-block; overflow: hidden; position: relative;}#placeholder { background-color: inherit; opacity: 1;}#placeholder.fadein { transition: opacity 0.5s linear; opacity: 0;}</style><template if="{{!sizing}}"><img id="img"></template><template if="{{preload &amp;&amp; fade}}"><div id="placeholder" fit=""></div></template><content></content></template></polymer-element></div><template id="t" is="auto-binding"><div id="mainContainer" flex=""><core-animated-pages id="pages" selected="0" transitions="{{transition}}" fit=""><template id="innerTemplate" repeat="{{item in items}}"><section><div class="aniDiv" fit="" cross-fade="" slide-up="" slide-from-right="" scale-up=""><core-image id="{{item.name}}" class="slide" src="{{item.path}}" width="{{item.width}}" height="{{item.height}}" sizing="{{item.sizingType}}" preload=""></core-image><p id="{{item.authorID}}" class="author">{{(item.author !== '') ? 'Photo by ' : 'Photo from Google+'}} {{item.author}}</p></div></section></template></core-animated-pages></div></template><div id="bg"><img id="bg-img" src="/assets/not_available.png" alt=""></div><script charset="utf-8" src="screensaver-csp.js"></script></body></html>

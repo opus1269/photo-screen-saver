@@ -1,0 +1,66 @@
+
+:host {
+  margin: 0;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+}
+
+paper-slider::shadow #sliderBar::shadow #activeProgress,
+paper-slider::shadow #sliderKnobInner,
+paper-slider::shadow #sliderKnobInner::before
+{
+  background-color: #009688;
+}
+
+paper-toggle-button {
+  position: relative;
+}
+
+paper-slider {
+  position: relative;
+  width: 100%;
+}
+
+paper-item.settings::shadow .button-content {
+  padding: 0px;
+}
+
+div {
+  padding: 10px;
+  margin: 0px;
+}
+
+hr {
+  margin: 0px 10px;
+  border:none;
+  border-top:1px #CCCCCC solid;
+}
+
+h6 {
+  font-size: 80%;
+  font-weight: 500;
+  color: #009688;
+  margin: 20px 10px 10px 10px;
+}
+
+h4 {
+  font-size: 100%;
+  font-weight: 500;
+  margin: 20px 10px 10px 10px;
+}
+
+.settingsDiv {
+  padding: 0px;
+  height: 800px;
+}
+
+.paper-slider-div {
+  padding-bottom: 0px;
+}
+
+.paper-dropdown-menu-div {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+

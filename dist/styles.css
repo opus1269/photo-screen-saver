@@ -1,0 +1,94 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:500,900,100,300,700,400);
+
+body {
+  font-family: "Roboto" "RobotoDraft", Arial, sans-serif;
+  font-size: 100%;
+  font-weight: 400;
+  margin: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-touch-callout: none;
+}
+
+a, a:hover {
+  text-decoration: none;
+}
+
+core-animated-pages {
+  width: 100%;
+  height: 100%;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+
+body /deep/ core-toolbar {
+  background-color: #0099FF;
+  color: #fff;
+}
+
+core-menu {
+  color: black;
+  margin:  0 0 0;
+}
+
+core-menu > paper-item {
+  transition: all 200ms ease-in-out;
+}
+
+paper-item a {
+  text-decoration: none;
+  color: currentcolor;
+  margin-left: 5px;
+}
+
+core-menu > paper-item.core-selected {
+  background: #eee;
+}
+
+.main-text {
+  font-size: 100%;
+  font-weight: 400;
+  margin: 2px 0px 2px 0px;
+}
+
+.sub-text {
+  font-size: 80%;
+  font-weight: 300;
+  margin: 2px 0px 2px 0px;
+}
+
+#mainPageDiv {
+  margin: 0px;
+  max-width: 700px;
+  min-height: 850px;
+  height: 100%;
+  padding: 0px;
+}
+
+.pageHeader {
+  color: white;
+  background-color: #00CCFF ;
+  box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.2);
+  padding: 0;
+}
+
+.pageHeader  core-label {
+  font-size: 133%;
+}
+
+.pageContainer {
+  margin: 0px;
+  height: 100%;
+  padding: 30px 30px 30px 30px;
+
+}
+
+.pageDiv {
+  font-weight: 400;
+  color: black;
+  background-color: #fff;
+  margin: 0px;
+  padding: 0px;
+}
+
