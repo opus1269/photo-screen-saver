@@ -262,7 +262,7 @@
 					}
 				}
 			}
-		}  
+		}	 
 
 		if (!t.isComplete(selected)) {
 			bg.style.visibility = 'visible';

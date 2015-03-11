@@ -4,14 +4,15 @@
 var DEFAULT_ROUTE = 'one';
 
 var t = document.querySelector('#t');
-var ajax, pages, scaffold;
+var ajax, pages, errDialog;
 
 t.addEventListener('template-bound', function (e) {
-	scaffold = document.querySelector('#scaffold');
 	ajax = document.querySelector('#ajax');
 	pages = document.querySelector('#pages');
+	errDialog = document.querySelector('#error-dialog');
 	var keys = document.querySelector('#keys');
 
+	t.dialogText = "";
 	t.isDisabled = false;
 	t.isGoogleDisabled = false;
 	t.waitForLoad=false;
@@ -92,7 +93,8 @@ t.albumSelectChange = function (e) {
 				localStorage.albumSelections = JSON.stringify(t.albumSelections);
 			}
 			else {
-				console.log(error);
+				t.dialogText = error;
+				errDialog.toggle();
 			}
 		});
 	}
@@ -107,6 +109,7 @@ t.albumSelectChange = function (e) {
 	}
 };
 
+// refresh the album list
 t.albumRefreshTapped = function () {
 	t.waitForLoad=true;
 	gPhotos.loadAlbumList(function (albumList, error) {
@@ -115,12 +118,14 @@ t.albumRefreshTapped = function () {
 			t.selectAlbums();
 		}
 		else {
-			console.log(error);
+			t.dialogText = error;
+			errDialog.toggle();
 		}
 		t.waitForLoad=false;
 	});
 };
 
+// deselect all albums
 t.albumDeselectAllTapped = function () {
 	for (var i = 0; i < t.albumList.length; i++) {
 		if(t.albumList[i].checked) {
@@ -167,6 +172,7 @@ t.keyHandler = function (e, detail, sender) {
 	}
 };
 
+// handle page selections
 t.menuItemSelected = function (e, detail, sender) {
 
 	if (detail.isSelected) {
@@ -178,7 +184,8 @@ t.menuItemSelected = function (e, detail, sender) {
 					t.selectAlbums();
 				}
 				else {
-					console.log(error);
+					t.dialogText = error;
+					errDialog.toggle();
 				}
 				t.waitForLoad=false;
 			});
@@ -194,6 +201,7 @@ t.ajaxLoad = function (e, detail, sender) {
 	e.preventDefault(); // prevent link navigation.
 };
 
+// ajax response for pages
 t.onResponse = function (e, detail, sender) {
 	var item;
 	var page = detail.response.getElementById('mainPageDiv');
@@ -212,10 +220,12 @@ t.onResponse = function (e, detail, sender) {
 			item = pages.querySelector('#pageDiv3');
 
 		}
+
 		this.injectBoundHTML(html, item);
 	}
 };
 
+// ajax error
 t.onError = function (e, xhr) {
 	console.log(e);
 	console.log(xhr);

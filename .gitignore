@@ -1,4 +1,5 @@
 components/
 node_modules/
 dev/
+web-store/
 /*-csp.*

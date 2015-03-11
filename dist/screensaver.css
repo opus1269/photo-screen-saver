@@ -13,29 +13,29 @@ body {
 }
 
 div {
-  position: relative;
-  display: block;
-  padding: 0;
-  margin: 0;
+	position: relative;
+	display: block;
+	padding: 0;
+	margin: 0;
 }
 
 #mainContainer {
-  visibility: hidden;
+	visibility: hidden;
 }
 
 .slide {
-  opacity: 0;
+	opacity: 0;
 }
 
 .author {
-  font-size: 133%;
-  position: fixed;
-  right: 30px;
-  bottom: 20px;
-  padding: 0;
-  margin: 0;
-  color: WhiteSmoke;
-  opacity: .9;
+	font-size: 133%;
+	position: fixed;
+	right: 30px;
+	bottom: 20px;
+	padding: 0;
+	margin: 0;
+	color: WhiteSmoke;
+	opacity: .9;
 }
 
 #bg {

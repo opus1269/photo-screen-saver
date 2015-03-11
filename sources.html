@@ -2,50 +2,50 @@
 <html>
 
 <head>
-  <title>Photo Screen Saver Album List fragment</title>
+	<title>Photo Screen Saver Album List fragment</title>
 </head>
 
 <body unresolved>
 
-  <div id="mainPageDiv">
+	<div id="mainPageDiv">
 
-    <div class="sourcesDiv" vertical layout flex>
+		<div class="sourcesDiv" vertical layout flex>
 
-      <core-toolbar class="pageHeader">
-        <paper-item class="sources" class="recenteringTouch" flex>
-          <core-label for=".useGoogleToggle" flex>Your Photos</core-label>
-          <core-icon-button icon="check-box-outline-blank" on-tap="{{albumDeselectAllTapped}}" active=false  disabled?="{{isGoogleDisabled}}"></core-icon-button>
-          <core-icon-button icon="refresh" on-tap="{{albumRefreshTapped}}" active=false disabled?="{{isGoogleDisabled}}"></core-icon-button>
-          <paper-toggle-button id="useGoogleToggle" class="useGoogleToggle" checked="{{useGoogle}}" on-change="{{useGoogleChange}}"></paper-toggle-button>
-        </paper-item>
-        <core-localstorage name="useGoogle" value="{{useGoogle}}" on-core-localstorage-load="{{useGoogleChange}}"></core-localstorage>
-      </core-toolbar>
+			<core-toolbar class="pageHeader">
+				<paper-item class="sources" class="recenteringTouch" flex>
+					<core-label for=".useGoogleToggle" flex>Your Photos</core-label>
+					<core-icon-button icon="check-box-outline-blank" on-tap="{{albumDeselectAllTapped}}" active=false	 disabled?="{{isGoogleDisabled}}"></core-icon-button>
+					<core-icon-button icon="refresh" on-tap="{{albumRefreshTapped}}" active=false disabled?="{{isGoogleDisabled}}"></core-icon-button>
+					<paper-toggle-button id="useGoogleToggle" class="useGoogleToggle" checked="{{useGoogle}}" on-change="{{useGoogleChange}}"></paper-toggle-button>
+				</paper-item>
+				<core-localstorage name="useGoogle" value="{{useGoogle}}" on-core-localstorage-load="{{useGoogleChange}}"></core-localstorage>
+			</core-toolbar>
 
-      <div id="innerSourcesDiv" flex>
+			<div id="innerSourcesDiv" flex>
 
-        <div class="waiter" hidden?="{{!waitForLoad}}">
-          <h3>Loading Albums ...</h3>
-          <div class="waiter"><paper-spinner active="{{waitForLoad}}"></paper-spinner></div>
-        </div>
+				<div class="waiter" hidden?="{{!waitForLoad}}">
+					<h3>Loading Albums ...</h3>
+					<div class="waiter"><paper-spinner active="{{waitForLoad}}"></paper-spinner></div>
+				</div>
 
-        <div hidden?="{{waitForLoad}}">
-          <template repeat="{{album, i in albumList}}">
-            <div class="item" center horizontal layout>
-              <paper-item flex disabled?="{{isGoogleDisabled}}">
-                <core-label center horizontal layout flex>
-                  <paper-checkbox id="{{i+'albumcheck'}}" for checked="{{album.checked}}" on-change="{{albumSelectChange}}" disabled?="{{isGoogleDisabled}}"></paper-checkbox>
-                  <div flex><p class="main-text">{{album.name}}</p><p class="sub-text">{{album.ct + ' '}} photos</p></div>
-                  <core-image class="{{ {disabled: isGoogleDisabled} | tokenList}}" src="{{album.thumb}}" style="width: 72px; height: 72px;" sizing="cover" preload></core-image>
-                </core-label>
-              </paper-item>
-            </div>
-          </template>
-        </div>
+				<div hidden?="{{waitForLoad}}">
+					<template repeat="{{album, i in albumList}}">
+						<div class="item" center horizontal layout>
+							<paper-item flex disabled?="{{isGoogleDisabled}}">
+								<core-label center horizontal layout flex>
+									<paper-checkbox id="{{i+'albumcheck'}}" for checked="{{album.checked}}" on-change="{{albumSelectChange}}" disabled?="{{isGoogleDisabled}}"></paper-checkbox>
+									<div flex><p class="main-text">{{album.name}}</p><p class="sub-text">{{album.ct + ' '}} photos</p></div>
+									<core-image class="{{ {disabled: isGoogleDisabled} | tokenList}}" src="{{album.thumb}}" style="width: 72px; height: 72px;" sizing="cover" preload></core-image>
+								</core-label>
+							</paper-item>
+						</div>
+					</template>
+				</div>
 
-      </div>
+			</div>
 
-    <div>
+		<div>
 
-  </div>
+	</div>
 </body>
 </html>
