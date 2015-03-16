@@ -114,13 +114,13 @@ function processState(key) {
 // create the screen saver window
 window.showScreenSaver = function () {
 	chrome.windows.create({url: 'screensaver.html',
-													left: 0,
-													top: 0,
-													width: screen.width,
-													height: screen.height,
-													focused: true,
-													type: 'popup'},
-													function (win) {
+							left: 0,
+							top: 0,
+							width: screen.width,
+							height: screen.height,
+							focused: true,
+							type: 'popup'},
+							function (win) {
 			localStorage.windowID = win.id;
 			chrome.windows.update(win.id, {state: 'fullscreen'});
 	});
@@ -130,11 +130,20 @@ window.showScreenSaver = function () {
 function onIdleStateChanged(state) {
 	var win = parseInt(localStorage.windowID, 10);
 
-	if ((state === 'idle') && (win === -1) && JSON.parse(localStorage.enabled)) {
-		showScreenSaver();
-	}
-	else if((win !== -1) && !JSON.parse(localStorage.isPreview)) {
-		chrome.windows.remove(win);
+	if (!JSON.parse(localStorage.isPreview)) {
+		if ((state === 'idle') && JSON.parse(localStorage.enabled)) {
+			showScreenSaver();
+		}
+		else if (win !== -1) {
+			localStorage.windowID = '-1';
+			localStorage.isPreview = 'false';
+			try {
+				chrome.windows.remove(win);
+			}
+			catch (e) {
+
+			}
+		}
 	}
 }
 
@@ -150,14 +159,13 @@ function onInstalled() {
 	initData();
 
 	processState(null);
-
-	/*
-	// preload the chromecast images
-	localStorage.removeItem('badCCImages');
-	if(JSON.parse(localStorage.useChromecast)) {
-		chromeCast.preloadImages();
-	}
-	*/
+	
+	//// preload the chromecast images
+	//localStorage.removeItem('badCCImages');
+	//if(JSON.parse(localStorage.useChromecast)) {
+	//	chromeCast.preloadImages();
+	//}
+	
 
 	/*
 	// preload the author images
