@@ -11,7 +11,7 @@ function authenticatedXhr(method, url, callback) {
 	var retry = true;
 	(function getTokenAndXhr() {
 		chrome.identity.getAuthToken({ 'interactive': true },
-																 function (access_token) {
+										function (access_token) {
 			if (chrome.runtime.lastError) {
 				callback(chrome.runtime.lastError);
 				return;
@@ -20,7 +20,7 @@ function authenticatedXhr(method, url, callback) {
 			var xhr = new XMLHttpRequest();
 			xhr.open(method, url);
 			xhr.setRequestHeader('Authorization',
-													 'Bearer ' + access_token);
+								'Bearer ' + access_token);
 			xhr.send();
 			xhr.onload = function () {
 				if (this.status === 401 && retry) {
@@ -148,16 +148,15 @@ function loadDriveAlbumList(albumList,callback) {
 				ct++;
 				val = getAlbumByID(albumList,id);
 				if(!val) {
-						album = {};
-						album.index = -1;
-						album.type = 'drive';
-						album.name = 'unknown';
-						album.id = id;
-						album.ct = 1;
-						album.thumb = item.thumbnailLink;
-						album.checked = false;
-		 // album.photos = photos;
-						albumList.push(album);
+					album = {};
+					album.index = -1;
+					album.type = 'drive';
+					album.name = 'unknown';
+					album.id = id;
+					album.ct = 1;
+					album.thumb = item.thumbnailLink;
+					album.checked = false;
+					albumList.push(album);
 				}
 				else {
 					val.ct = val.ct + 1;
