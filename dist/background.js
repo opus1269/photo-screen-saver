@@ -160,11 +160,11 @@ function onInstalled() {
 
 	processState(null);
 	
-	// preload the chromecast images
-	localStorage.removeItem('badCCImages');
-	if(JSON.parse(localStorage.useChromecast)) {
-		chromeCast.preloadImages();
-	}
+	//// preload the chromecast images
+	//localStorage.removeItem('badCCImages');
+	//if(JSON.parse(localStorage.useChromecast)) {
+	//	chromeCast.preloadImages();
+	//}
 	
 
 	/*
