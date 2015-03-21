@@ -16,7 +16,6 @@ chrome.browserAction.onClicked.addListener(function () {
 		}
 		chrome.tabs.create({url: 'options.html'});
 	});
-
 });
 
 // initialize the app data
@@ -184,9 +183,10 @@ chrome.windows.onRemoved.addListener(function (windowId) {
 	}
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-	initData();
 
+// set things uo when Chrome first starts
+chrome.runtime.onStartup.addListener(function() {
+	initData();
 	processState(null);
 });
 
