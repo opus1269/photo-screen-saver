@@ -259,10 +259,6 @@ var chromecastImages = [
 				"author": "Trey Ratcliff"
 		},
 		{
-				"url": "https://lh6.googleusercontent.com/-7X44UiG6ohw/Ua2Qmj06zkI/AAAAAAAAfYA/owBHOfu6u_I/s1280-w1280-c-h720-k-no/Sunrise%2Bin%2BSangam",
-				"author": "Apurva Mathad"
-		},
-		{
 				"url": "https://lh5.googleusercontent.com/-ZH912PHEET8/URRP1BvQZ1I/AAAAAAAALEI/2ATrI0hnjis/s1920-w1920-h1080-c/PescaderoBench.jpg",
 				"author": "Aravind Ravisankar"
 		},
@@ -623,10 +619,6 @@ var chromecastImages = [
 				"author": "Alistair Nicol"
 		},
 		{
-				"url": "https://lh5.googleusercontent.com/-1OMPOm50As0/Ua2didd-IjI/AAAAAAAAfX4/afXkw0vQ4Nc/s1280-w1280-c-h720-k-no/Red%2Bpaint%2Bon%2Brock%2521",
-				"author": "Apurva Mathad"
-		},
-		{
 				"url": "https://lh6.googleusercontent.com/-sVsjQwFKpM0/UFN9mKAiexI/AAAAAAAASuM/qpOQevOJY8k/s1920-w1920-h1080-c/5-20-11-sunset-clouds365-kdelay.jpg",
 				"author": "Kelly DeLay"
 		},
@@ -673,10 +665,6 @@ var chromecastImages = [
 		{
 				"url": "https://lh4.googleusercontent.com/-z9s9Br2P5fo/UKZedhD_eYI/AAAAAAAACfk/2-qRWoFQDcs/s1920-w1920-h1080-c/new-england-4.jpg",
 				"author": "Jim Rowson"
-		},
-		{
-				"url": "https://lh5.googleusercontent.com/-qblqQRK-QW4/UMFUCEQ3zeI/AAAAAAAAyOI/SnSVoJqMuIk/s1280-w1280-c-h720-k-no/2012%2B-%2B1",
-				"author": "Derek Kind"
 		},
 		{
 				"url": "https://lh3.googleusercontent.com/-Qg8_rThEaGY/Tu6-8Ra_PHI/AAAAAAAAJfU/gGCCRd2tfgI/s1920-w1920-h1080-c/dsc_0056.jpg",
@@ -773,10 +761,6 @@ var chromecastImages = [
 		{
 				"url": "https://lh6.googleusercontent.com/-9-6Sd41GxEQ/U0MR8Gvqf4I/AAAAAAAJRB0/9fYITnA4fQk/s1920-w1920-h1080-c/A%2BSunset%2Bon%2Ba%2BTexas%2BFarm.jpg",
 				"author": "Trey Ratcliff"
-		},
-		{
-				"url": "https://lh4.googleusercontent.com/-0EtkLRGwW-M/T9frF1W1iXI/AAAAAAAAQXA/CiueoUGCsjo/s1280-w1280-c-h720-k-no/12%2B-%2B1",
-				"author": "Brian Matiash"
 		},
 		{
 				"url": "https://lh6.googleusercontent.com/-DfDrf9tZth0/TgtZGBjmXqI/AAAAAAAJA_A/e6jq_VQrXaY/s1920-w1920-h1080-c/300928932_3bf6d408df_o.jpg",
@@ -1461,10 +1445,6 @@ var chromecastImages = [
 		{
 				"url": "https://lh6.googleusercontent.com/-ZVK5-96bzpA/UtTypXkQUHI/AAAAAAAARwI/_iTqNhaMZ6c/s1920-w1920-h1080-c/DSC_8703.jpg",
 				"author": "Raja Ramakrishnan"
-		},
-		{
-				"url": "https://lh4.googleusercontent.com/-z3ejUbpYBEo/UgItzN0RkuI/AAAAAAAAwzk/ji4HaCRx_wU/s1280-w1280-c-h720-k-no/13%2B-%2B1",
-				"author": "Alistair Nicol"
 		},
 		{
 				"url": "https://lh6.googleusercontent.com/-ISfFDxxtu-s/U0MkxpnU1rI/AAAAAAAJBQQ/gmuXSo3KcFQ/s1920-w1920-h1080-c/trey-ratcliff-milford11.jpg",
@@ -2219,10 +2199,6 @@ var chromecastImages = [
 				"author": "Joe Azure"
 		},
 		{
-				"url": "https://lh6.googleusercontent.com/-XZGw1LIoIQk/Ua2ANshiwmI/AAAAAAAAfX8/PIcgUJRHb3M/s1280-w1280-c-h720-k-no/Sky%2BPainting",
-				"author": "Apurva Mathad"
-		},
-		{
 				"url": "https://lh4.googleusercontent.com/-dKrL8_a8MmE/UrWktdbZX_I/AAAAAAAAilY/2Ce0qzN9r3s/s1920-w1920-h1080-c/DSC_0816-Edit-Edit-Edit-Edit-Edit.JPG",
 				"author": "Alistair Nicol"
 		},
@@ -2317,10 +2293,6 @@ var chromecastImages = [
 		{
 				"url": "https://lh6.googleusercontent.com/-aIBq7YhM6-M/TxMQytFssDI/AAAAAAAANXs/9RurRnKmOOw/s1920-w1920-h1080-c/CliffHouseSunset.jpg",
 				"author": "Joe Azure"
-		},
-		{
-				"url": "https://lh4.googleusercontent.com/--Km5pB3lBaM/Ua3DdDBGtcI/AAAAAAAAPV4/p_BFy_Ps50w/s2560/DSC01034",
-				"author": "Apurva Mathad"
 		},
 		{
 				"url": "https://lh3.googleusercontent.com/-LVkYomDgo1g/TwoREmpuoLI/AAAAAAAAMiE/duaVKfg5Blg/s1920-w1920-h1080-c/Big-Sur-Coastal-Seascape-2.jpg",
