@@ -1,0 +1,6 @@
+{
+	"browser": true,
+	"loopfunc": true,
+	"expr": true,
+	"predef": [ "chrome" ]
+}
