@@ -58,16 +58,10 @@ module.exports = function(grunt) {
 		},
 		jshint: {
 			all: {
-				options: {
-					browser: true,
-					loopfunc: true,
-					expr: true,
-					globals: {
-						browser: true,
-						chrome: true
-					},
-				},
-				src: ['*.js', '!*-csp.js', '!chromecast.js'],
+			options: {
+				jshintrc: '.jshintrc' // relative to Gruntfile
+			},
+				src: ['*.js', '!*-csp.js'],
 			},
 		},
 		vulcanize: {
