@@ -2696,6 +2696,9 @@ var chromecastImages = [
 // save the indices of the bad images to localStorage
 // so they can be ignored
 function imgError() {
+
+	/*jshint validthis: true */
+
 	var pos = [];
 	pos[0] = chromecastImages.map(function (e) { return e.url.toUpperCase(); }).
 																indexOf(this.src.toUpperCase());
