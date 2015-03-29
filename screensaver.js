@@ -18,6 +18,11 @@
 		t.transition = 'cross-fade';
 		t.items = [];
 
+		// hide cursor
+		if (!JSON.parse(localStorage.isPreview)) {
+			document.body.style.cursor = 'none';
+		}
+
 		val = parseInt(localStorage.photoSizing,10);
 		switch(val) {
 			case 0:
