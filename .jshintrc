@@ -2,5 +2,6 @@
 	"browser": true,
 	"loopfunc": true,
 	"expr": true,
+	"sub":  true,
 	"predef": [ "chrome" ]
 }
