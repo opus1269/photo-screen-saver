@@ -109,11 +109,10 @@ t.albumSelectChange = function (e) {
 	}
 };
 
-// refresh the album list
-t.albumRefreshTapped = function () {
-	t.waitForLoad=true;
+t.loadAlbumList = function () {
+	t.waitForLoad = true;
 	gPhotos.loadAlbumList(function (albumList, error) {
-		if(!error) {
+		if (!error) {
 			t.albumList = albumList;
 			t.selectAlbums();
 		}
@@ -121,8 +120,13 @@ t.albumRefreshTapped = function () {
 			t.dialogText = error;
 			errDialog.toggle();
 		}
-		t.waitForLoad=false;
+		t.waitForLoad = false;
 	});
+};
+
+// refresh the album list
+t.albumRefreshTapped = function () {
+	t.loadAlbumList();
 };
 
 // deselect all albums
@@ -177,18 +181,7 @@ t.menuItemSelected = function (e, detail, sender) {
 
 	if (detail.isSelected) {
 		if(detail.item.id === 'menuItem1') {
-			t.waitForLoad=true;
-			gPhotos.loadAlbumList(function (albumList,error) {
-				if(!error) {
-					t.albumList = albumList;
-					t.selectAlbums();
-				}
-				else {
-					t.dialogText = error;
-					errDialog.toggle();
-				}
-				t.waitForLoad=false;
-			});
+			t.loadAlbumList();
 		}
 		else if(detail.item.id === 'menuItem2') {
 			localStorage.isPreview = 'true';
