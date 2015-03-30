@@ -18,11 +18,6 @@
 		t.transition = 'cross-fade';
 		t.items = [];
 
-		// hide cursor
-		if (!JSON.parse(localStorage.isPreview)) {
-			document.body.style.cursor = 'none';
-		}
-
 		val = parseInt(localStorage.photoSizing,10);
 		switch(val) {
 			case 0:
@@ -85,6 +80,7 @@
 		var albumSelections;
 		var arr = [], tmp = [];
 		var img;
+		var bg;
 
 		// prepare the array of photos the user has selected
 		if(JSON.parse(localStorage.useGoogle)) {
@@ -157,10 +153,10 @@
 				count++;
 			}
 		}
-		if(!count) {
+		if (!count) {
 			// no photos to show
-			document.body.style.backgroundImage = 'url("/assets/error.gif")';
-			document.body.style.backgroundSize = 'cover';
+			bg = document.querySelector('#bg1-img');
+			bg.style.visibility = 'visible';
 		}
 	};
 
@@ -291,5 +287,25 @@
 	window.addEventListener("click", function () {
 		chrome.windows.remove(parseInt(localStorage.windowID, 10));
 	}, false);
+
+	document.addEventListener('DOMContentLoaded', function () {
+		// hide cursor
+		if (!JSON.parse(localStorage.isPreview)) {
+			document.body.style.cursor = 'none';
+		}
+	});
+
+	// Standard Google Universal Analytics code
+	(function (i, s, o, g, r, a, m) {
+		i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+			(i[r].q = i[r].q || []).push(arguments);
+		}, i[r].l = 1 * new Date(); a = s.createElement(o),
+		m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m);
+	})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga'); // Note: https protocol here
+
+	ga('create', 'UA-61314754-1', 'auto');
+	ga('set', 'checkProtocolTask', function () { }); // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
+	ga('require', 'displayfeatures');
+	ga('send', 'pageview', '/screensaver.html');
 
 })();
