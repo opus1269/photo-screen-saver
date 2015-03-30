@@ -38,7 +38,7 @@ div {
 	opacity: .9;
 }
 
-#bg {
+#bg, #bg1 {
 	position: fixed;
 	left: 50%;
 	top: 50%;
@@ -46,3 +46,4 @@ div {
 	visibility: hidden;
 	z-index: 1;
 }
+
