@@ -52,7 +52,7 @@ module.exports = function(grunt) {
 					archive: 'dist/store.zip'
 				},
 				files: [
-					{expand: true, cwd: 'dist/', src: ['**', '!*.zip']}, 
+					{expand: true, cwd: 'dist/', src: ['**', '!*.zip', '!assets/*.db']}, 
 				]
 			}
 		},
