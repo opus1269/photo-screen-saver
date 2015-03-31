@@ -1,20 +1,16 @@
-/*jslint browser: true */ /*global chrome: true */
 (function () {
 "use strict";
 
 chrome.browserAction.onClicked.addListener(function () {
 
-	// TODO seems like there should be an easier way
-	var viewTabUrl = chrome.extension.getURL('options.html');
-	chrome.tabs.query({currentWindow: true}, function(tabs) {
-		for (var i = 0; i < tabs.length; i++) {
-			var tab = tabs[i];
-			if (tab.url.search(viewTabUrl) != -1) {
-				chrome.tabs.update(tab.id, {'highlighted': true});
-				return; // we're done
-			}
+	// display or focus options page
+	chrome.tabs.query({ title: 'Photo Screen Saver Options Page' }, function (tabs) {
+		if (!tabs.length) {
+			chrome.tabs.create({url: 'options.html'});
 		}
-		chrome.tabs.create({url: 'options.html'});
+		else {
+			chrome.tabs.update(tabs[0].id, { 'highlighted': true });
+		}
 	});
 });
 
@@ -159,20 +155,11 @@ function onInstalled() {
 
 	processState(null);
 	
-	//// preload the chromecast images
+	// preload the chromecast images
 	//localStorage.removeItem('badCCImages');
 	//if(JSON.parse(localStorage.useChromecast)) {
 	//	chromeCast.preloadImages();
 	//}
-	
-
-	/*
-	// preload the author images
-	localStorage.removeItem('badAuthorImages');
-	if(JSON.parse(localStorage.useAuthors)) {
-		gPhotos.preloadAuthorImages();
-	}
-	*/
 }
 
 // handle closing of the screen saver window
