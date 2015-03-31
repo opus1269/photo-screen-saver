@@ -23,12 +23,11 @@
 		"storage",
 		"idle",
 		"power",
-		"tabs",
 		"system.display",
 		"https://picasaweb.google.com/"
 	],
 	"background": {
-		"page": "background.html",
+		"scripts": ["google_photos.js","chromecast.js","background.js"],
 		"persistent": false
 	},
 	"browser_action": {
