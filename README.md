@@ -11,7 +11,4 @@ It is implemented using Polymer Web Components.
 
 <a href="https://chrome.google.com/webstore/detail/kohpcmlfdjfdggcjmjhhbcbankgmppgc">View in Chrome Web Store</a>
 
-<p>&nbsp;</p>
-
-<p>&nbsp;</p>
-
+<a href="https://www.bithound.io/github/opus1269/photo-screen-saver"><img src="https://www.bithound.io/github/opus1269/photo-screen-saver/badges/score.svg" alt="bitHound Score" /></a>
