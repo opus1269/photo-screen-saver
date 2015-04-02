@@ -155,11 +155,11 @@ function onInstalled() {
 
 	processState(null);
 	
-	// preload the chromecast images
-	//localStorage.removeItem('badCCImages');
-	//if(JSON.parse(localStorage.useChromecast)) {
-	//	chromeCast.preloadImages();
-	//}
+	// preload some chromecast images
+	localStorage.removeItem('badCCImages');
+	if(JSON.parse(localStorage.useChromecast)) {
+		chromeCast.preloadImages(10);
+	}
 }
 
 // handle closing of the screen saver window
