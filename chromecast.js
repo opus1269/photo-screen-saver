@@ -2722,9 +2722,9 @@ return {
 	},
 
 	// call this as early as possible
-	preloadImages: function () {
+	preloadImages: function (count) {
 		var imgs = [], img;
-		var numImages = chromecastImages.length;
+		var numImages = count || chromecastImages.length;
 
 		for (var i = 0; i < numImages; i++) {
 			img = new Image();
