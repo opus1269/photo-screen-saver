@@ -21,8 +21,10 @@ t.addEventListener('template-bound', function (e) {
 		{name: 'Settings',hash: 'one', icon: 'settings', url: '/settings.html'},
 		{name: 'Google+ Photo Albums', hash: 'two', icon: 'cloud-queue', url: '/sources.html'},
 		{name: 'Preview (click to close)', hash: 'three', icon: 'pageview', url: null},
-		{name: 'Information for Nerds', hash: 'four', icon: 'info-outline', url: '/info.html'}
-	];
+		{name: 'Information for Nerds', hash: 'four', icon: 'info-outline', url: '/info.html'},
+		{ name: 'Request Support / Report Bug', hash: 'five', icon: 'help', url: null },
+		{ name: 'Rate This Extension', hash: 'six', icon: 'grade', url: null }
+];
 
 	t.albumList = [];
 
@@ -187,7 +189,13 @@ t.menuItemSelected = function (e, detail, sender) {
 			localStorage.isPreview = 'true';
 			chrome.extension.getBackgroundPage().showScreenSaver();
 		}
-	}
+		else if (detail.item.id === 'menuItem4') {
+			chrome.tabs.create({url: 'https://chrome.google.com/webstore/detail/photo-screen-saver/kohpcmlfdjfdggcjmjhhbcbankgmppgc/support'});
+		}
+		else if (detail.item.id === 'menuItem5') {
+			chrome.tabs.create({ url: 'https://chrome.google.com/webstore/detail/photo-screen-saver/kohpcmlfdjfdggcjmjhhbcbankgmppgc/reviews' });
+		}
+}
 };
 
 t.ajaxLoad = function (e, detail, sender) {
