@@ -39,31 +39,41 @@ function initData() {
 	}
 }
 
+function processEnabled() {
+	if (JSON.parse(localStorage.enabled)) {
+		chrome.browserAction.setBadgeText({ text: '' });
+		if (JSON.parse(localStorage.keepAwake)) {
+			chrome.power.requestKeepAwake('display');
+		}
+		else {
+			chrome.power.releaseKeepAwake();
+		}
+	}
+	else {
+		chrome.browserAction.setBadgeText({ text: 'OFF' });
+		chrome.power.releaseKeepAwake();
+	}
+}
+
+function processKeepAwake() {
+	if (JSON.parse(localStorage.keepAwake)) {
+		chrome.power.requestKeepAwake('display');
+	}
+	else {
+		chrome.power.releaseKeepAwake();
+	}
+}
+
 // set everything based on the current values in localStorage
 function processState(key) {
 
 	if(key) {
 		switch(key) {
 			case 'enabled':
-				if(JSON.parse(localStorage.enabled)) {
-					if(JSON.parse(localStorage.keepAwake)) {
-						chrome.power.requestKeepAwake('display');
-					}
-					else {
-						chrome.power.releaseKeepAwake();
-					}
-				}
-				else {
-					chrome.power.releaseKeepAwake();
-				}
+				processEnabled();
 				break;
 			case 'keepAwake':
-				if(JSON.parse(localStorage.keepAwake)) {
-					chrome.power.requestKeepAwake('display');
-				}
-				else {
-					chrome.power.releaseKeepAwake();
-				}
+				processKeepAwake();
 				break;
 			case 'idleTime':
 				chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
@@ -83,26 +93,11 @@ function processState(key) {
 		}
 	}
 	else {
-		if(JSON.parse(localStorage.keepAwake)) {
-			chrome.power.requestKeepAwake('display');
-		}
-		else {
-			chrome.power.releaseKeepAwake();
-		}
+		processKeepAwake();
 
 		chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
 
-		if(JSON.parse(localStorage.enabled)) {
-			if(JSON.parse(localStorage.keepAwake)) {
-				chrome.power.requestKeepAwake('display');
-			}
-			else {
-				chrome.power.releaseKeepAwake();
-			}
-		}
-		else {
-			chrome.power.releaseKeepAwake();
-		}
+		processEnabled();
 	}
 }
 
@@ -171,7 +166,7 @@ chrome.windows.onRemoved.addListener(function (windowId) {
 });
 
 
-// set things uo when Chrome first starts
+// set things up when Chrome first starts
 chrome.runtime.onStartup.addListener(function() {
 	initData();
 	processState(null);
