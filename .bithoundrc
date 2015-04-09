@@ -43,7 +43,7 @@
     "**/extjs/src/**",
     "**/extjs/welcome/**",
     "bower_components/**",
-	"chromecast.js"
+	"/chromecast.js"
   ],
   "test": [
     "**/test/**",
