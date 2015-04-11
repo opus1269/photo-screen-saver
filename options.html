@@ -41,62 +41,63 @@
 </head>
 <body unresolved fullbleed>
 
-<template is="auto-binding" id="t">
+	<template is="auto-binding" id="t">
 
-	<!-- Error dialog -->
-	<paper-action-dialog id="error-dialog" heading="Request failed. Select refresh to try again." backdrop autoclosedisabled layered="false">
-		<p>{{dialogText}}</p>
+		<!-- Error dialog -->
+		<paper-action-dialog id="error-dialog" heading="Request failed. Select refresh to try again." backdrop autoclosedisabled layered="false">
+			<p>{{dialogText}}</p>
 
-		<paper-button affirmative autofocus>OK</paper-button>
-	</paper-action-dialog>
+			<paper-button affirmative autofocus>OK</paper-button>
+		</paper-action-dialog>
 
-	<!-- Route controller. -->
-	<flatiron-director route="{{route}}" autoHash></flatiron-director>
+		<!-- Route controller. -->
+		<flatiron-director route="{{route}}" autoHash></flatiron-director>
 
-	<!-- Keyboard nav controller. -->
-	<core-a11y-keys id="keys" target="{{parentElement}}"
-									keys="up down left right space space+shift"
-									on-keys-pressed="{{keyHandler}}"></core-a11y-keys>
+		<!-- Keyboard nav controller. -->
+		<core-a11y-keys id="keys" target="{{parentElement}}"
+										keys="up down left right space space+shift"
+										on-keys-pressed="{{keyHandler}}"></core-a11y-keys>
 
-	<!-- Dynamic content controller -->
-	<core-ajax id="ajax"	url="{{url}}" handleAs="document"
-						 on-core-error="{{onError}}" on-core-response="{{onResponse}}"></core-ajax>
+		<!-- Dynamic content controller -->
+		<core-ajax id="ajax"	url="{{url}}" handleAs="document"
+							 on-core-error="{{onError}}" on-core-response="{{onResponse}}"></core-ajax>
 
-	<core-scaffold	id="scaffold">
+		<core-scaffold	id="scaffold">
 
-		<nav>
-			<core-toolbar>
-				<span>Photo Screen Saver</span>
+			<nav>
+				<core-toolbar>
+					<span>Photo Screen Saver</span>
+				</core-toolbar>
+				<core-menu valueattr="hash" selected="{{route}}" selectedModel="{{selectedPage}}"
+							on-core-select="{{menuItemSelected}}">
+					<template repeat="{{page, i in pages}}">
+						<paper-item id="{{'menuItem'+i}}" hash="{{page.hash}}" noink>
+							<core-icon icon="{{page.icon}}"></core-icon>
+							<a href="#{{page.hash}}">{{page.name}}</a>
+						</paper-item>
+					</template>
+				</core-menu>
+			</nav>
+
+			<core-toolbar tool flex>
+				<div flex>{{selectedPage.page.name}}</div>
 			</core-toolbar>
-			<core-menu valueattr="hash" selected="{{route}}" selectedModel="{{selectedPage}}"
-								 on-core-select="{{menuItemSelected}}">
-				<template repeat="{{page, i in pages}}">
-					<paper-item id="{{'menuItem'+i}}" hash="{{page.hash}}" noink>
-						<core-icon icon="{{page.icon}}"></core-icon>
-						<a href="#{{page.hash}}">{{page.name}}</a>
-					</paper-item>
-				</template>
-			</core-menu>
-		</nav>
 
-		<core-toolbar tool flex>
-			<div flex>{{selectedPage.page.name}}</div>
-		</core-toolbar>
+			<div id="mainPageDiv" layout horizontal start-justified start fit>
+				<core-animated-pages id="pages" transitions="cross-fade-all" selected="{{route}}" valueattr="hash" on-tap="{{cyclePages}}" fit>
+					<template repeat="{{page, i in pages}}">
+						<section class="pageContainer" hash="{{page.hash}}" fit layout vertical start-justified>
+							<paper-shadow z="3"><div id="{{'pageDiv'+i}}" class="pageDiv"> </div></paper-shadow>
+					 </section>
+					</template>
+				</core-animated-pages>
+			</div>
+		</core-scaffold>
 
-		<div id="mainPageDiv" layout horizontal start-justified start fit>
-			<core-animated-pages id="pages" transitions="cross-fade-all" selected="{{route}}" valueattr="hash" on-tap="{{cyclePages}}" fit>
-				<template repeat="{{page, i in pages}}">
-					<section class="pageContainer" hash="{{page.hash}}" fit layout vertical start-justified>
-						<paper-shadow z="3"><div id="{{'pageDiv'+i}}" class="pageDiv"> </div></paper-shadow>
-				 </section>
-				</template>
-			</core-animated-pages>
-		</div>
-	</core-scaffold>
+	</template>
 
-</template>
-
-<script src="google_photos.js"></script>
-<script src="options.js"></script>
+	<script src="ga.js"></script>
+	<script src="google_photos.js"></script>
+	<script src="options.js"></script>
 </body>
 </html>
