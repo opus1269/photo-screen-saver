@@ -70,19 +70,13 @@
 		return false;
 	};
 
-	// perform final processing on the selected photo sources and
-	// populate the pages
-	t.loadImages = function () {
-		var i,j,count=0;
+	// prepare the array of photos the user has selected
+	t.getPhotoArray = function() {
 		var badImages;
-		var author;
-		var skip = JSON.parse(localStorage.skip);
 		var albumSelections;
 		var arr = [], tmp = [];
-		var img;
-		var bg;
+		var i;
 
-		// prepare the array of photos the user has selected
 		if(JSON.parse(localStorage.useGoogle)) {
 			tmp = [];
 			albumSelections = JSON.parse(localStorage.albumSelections);
@@ -104,7 +98,7 @@
 			if(localStorage.badCCImages) {
 				badImages = JSON.parse(localStorage.badCCImages);
 				for(i=0; i < badImages.length; i++) {
-						tmp[badImages[i]].ignore = true;
+					tmp[badImages[i]].ignore = true;
 				}
 			}
 			arr = arr.concat(tmp);
@@ -115,11 +109,26 @@
 			if(localStorage.badAuthorImages) {
 				badImages = JSON.parse(localStorage.badAuthorImages);
 				for(i=0; i < badImages.length; i++) {
-						tmp[badImages[i]].ignore = true;
+					tmp[badImages[i]].ignore = true;
 				}
 			}
 			arr = arr.concat(tmp);
 		}
+
+		return arr;
+	};
+
+	// perform final processing on the selected photo sources and
+	// populate the pages
+	t.loadImages = function () {
+		var i,j,count=0;
+		var author;
+		var skip = JSON.parse(localStorage.skip);
+		var arr = [];
+		var img;
+		var bg;
+
+		arr = t.getPhotoArray();
 
 		// randomize the order
 		if(JSON.parse(localStorage.shuffle)) {
@@ -153,6 +162,7 @@
 				count++;
 			}
 		}
+
 		if (!count) {
 			// no photos to show
 			bg = document.querySelector('#bg1-img');
@@ -223,6 +233,30 @@
 		return !coreImage.loading;
 	};
 
+	// try to find a photo that is ready to display
+	t.findPhoto = function(photoID) {
+		var i;
+		var found = false;
+
+		for (i = photoID + 1; i < t.items.length; i++) {
+			if (t.isComplete(i)) {
+				found = true;
+				photoID = i;
+				break;
+			}
+		}
+		if (!found) {
+			for (i = 0; i < photoID; i++) {
+				if (t.isComplete(i)) {
+					photoID = i;
+					break;
+				}
+			}
+		}
+		
+		return photoID;
+	};
+
 	// called at fixed time intervals to cycle through the pages
 	t.nextPhoto = function () {
 		var p = t.$.pages;
@@ -231,12 +265,9 @@
 		var nextPage = (curPage === t.items.length - 1) ? 0 : curPage + 1;
 		var itemCur = t.items[curPage];
 		var curImage = p.querySelector('#'+itemCur.name);
-		var itemNext = t.items[nextPage];
-		var nextImage = p.querySelector('#'+itemNext.name);
 		var mainContainer = t.$.mainContainer;
 		var bg = document.querySelector('#bg-img');
 
-		var found = false;
 		var selected = nextPage;
 
 		if(!started) {
@@ -246,24 +277,9 @@
 			curImage.style.transition = 'opacity 0.5s linear';
 		}
 
-		// try to find a photo that is ready to display
 		if (!t.isComplete(selected)) {
-			for(var i=selected+1; i < t.items.length; i++) {
-				if (t.isComplete(i)) {
-					found = true;
-					selected = i;
-					break;
-				}
-			}
-			if (!found) {
-				for (i = 0; i < selected; i++) {
-					if (t.isComplete(i)) {
-						selected = i;
-						break;
-					}
-				}
-			}
-		}	 
+			selected = t.findPhoto(selected);
+		}
 
 		if (!t.isComplete(selected)) {
 			bg.style.visibility = 'visible';
@@ -284,7 +300,7 @@
 		p.selected = selected;
 	};
 
-	window.addEventListener("click", function () {
+	window.addEventListener('click', function () {
 		chrome.windows.remove(parseInt(localStorage.windowID, 10));
 	}, false);
 
@@ -295,17 +311,7 @@
 		}
 	});
 
-	// Standard Google Universal Analytics code
-	(function (i, s, o, g, r, a, m) {
-		i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-			(i[r].q = i[r].q || []).push(arguments);
-		}, i[r].l = 1 * new Date(); a = s.createElement(o),
-		m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m);
-	})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga'); // Note: https protocol here
-
-	ga('create', 'UA-61314754-1', 'auto');
-	ga('set', 'checkProtocolTask', function () { }); // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
-	ga('require', 'displayfeatures');
+	// log pageview to google analytics
 	ga('send', 'pageview', '/screensaver.html');
 
 })();
