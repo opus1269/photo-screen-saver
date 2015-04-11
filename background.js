@@ -111,8 +111,8 @@ window.showScreenSaver = function () {
 							focused: true,
 							type: 'popup'},
 							function (win) {
-			localStorage.windowID = win.id;
-			chrome.windows.update(win.id, {state: 'fullscreen'});
+								localStorage.windowID = win.id;
+								chrome.windows.update(win.id, {state: 'fullscreen'});
 	});
 };
 
@@ -130,9 +130,7 @@ function onIdleStateChanged(state) {
 			try {
 				chrome.windows.remove(win);
 			}
-			catch (e) {
-
-			}
+			catch (e) {}
 		}
 	}
 }
