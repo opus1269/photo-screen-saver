@@ -12,6 +12,16 @@
 		CoreStyle.g.transitions.xfadeDuration = '2000ms';
 		CoreStyle.g.transitions.slideDuration = '2000ms';
 		CoreStyle.g.transitions.scaleDuration = '2000ms';
+
+		// override zoom factor - chrome 42 and later
+		try {
+			chrome.tabs.getZoom(function (zoomFactor) {
+				if ((zoomFactor < 0.99) || (zoomFactor > 1.01)) {
+					chrome.tabs.setZoom(1.0);
+				}
+			});
+		}
+		catch (err) {}
 		
 		t.transitionTime = parseInt(localStorage.transitionTime,10) * 1000;
 		t.sizingType = 'contain';
