@@ -2015,10 +2015,6 @@ var chromecastImages = [
 				"author": "Patrick Smith"
 		},
 		{
-				"url": "https://lh4.googleusercontent.com/-r6FVbIshHi4/UgJ7nWMESWI/AAAAAAAACy8/GO5WxpDNIUM/s1920-w1920-h1080-c/DSC_9065.jpg",
-				"author": "Mason Cummings"
-		},
-		{
 				"url": "https://lh5.googleusercontent.com/-F33Ezsq01cw/TgkRlUvin5I/AAAAAAAI6wA/g434OYIBJiA/s1920-w1920-h1080-c/Portofino2.jpg",
 				"author": "Trey Ratcliff"
 		},
