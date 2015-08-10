@@ -187,9 +187,7 @@ t.menuItemSelected = function (e, detail, sender) {
 		}
 		else if(detail.item.id === 'menuItem2') {
 			localStorage.isPreview = 'true';
-			chrome.runtime.getBackgroundPage(function (win) {
-				win.showScreenSaver();
-			});
+			chrome.extension.getBackgroundPage().showScreenSaver();
 		}
 		else if (detail.item.id === 'menuItem4') {
 			chrome.tabs.create({url: 'https://chrome.google.com/webstore/detail/photo-screen-saver/kohpcmlfdjfdggcjmjhhbcbankgmppgc/support'});
