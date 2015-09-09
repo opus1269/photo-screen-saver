@@ -39,6 +39,13 @@ function initData() {
 	}
 }
 
+// from http://stackoverflow.com/questions/4900436/detect-version-of-chrome-installed?rq=1
+function getChromeVersion() {
+	var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+
+	return raw ? parseInt(raw[2], 10) : false;
+}
+
 function processEnabled() {
 	if (JSON.parse(localStorage.enabled)) {
 		chrome.browserAction.setBadgeText({ text: '' });
@@ -103,17 +110,33 @@ function processState(key) {
 
 // create the screen saver window
 window.showScreenSaver = function () {
-	chrome.windows.create({url: 'screensaver.html',
-							left: 0,
-							top: 0,
-							width: screen.width,
-							height: screen.height,
-							focused: true,
-							type: 'popup'},
-							function (win) {
-								localStorage.windowID = win.id;
-								chrome.windows.update(win.id, {state: 'fullscreen'});
-	});
+	if(getChromeVersion() >= 44) {
+		// one step creation - chrome 44 and later
+		chrome.windows.create({
+			url: 'screensaver.html',
+			focused: true,
+			type: 'popup',
+			state: 'fullscreen'
+		},
+		function (win) {
+			localStorage.windowID = win.id;
+		});
+	}
+	else {
+		chrome.windows.create({
+			url: 'screensaver.html',
+			left: 0,
+			top: 0,
+			width: screen.width,
+			height: screen.height,
+			focused: true,
+			type: 'popup'
+		},
+		function (win) {
+			localStorage.windowID = win.id;
+			chrome.windows.update(win.id, { state: 'fullscreen' });
+		});
+	}
 };
 
 // add or remove the screen saver as needed
