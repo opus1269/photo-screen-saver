@@ -19,7 +19,7 @@ t.addEventListener('template-bound', function (e) {
 
 	t.pages = [
 		{name: 'Settings',hash: 'one', icon: 'settings', url: '/settings.html'},
-		{name: 'Google+ Photo Albums', hash: 'two', icon: 'cloud-queue', url: '/sources.html'},
+		{name: 'Google Photos Albums', hash: 'two', icon: 'cloud-queue', url: '/sources.html'},
 		{name: 'Preview (click to close)', hash: 'three', icon: 'pageview', url: null},
 		{name: 'Information for Nerds', hash: 'four', icon: 'info-outline', url: '/info.html'},
 		{ name: 'Request Support / Report Bug', hash: 'five', icon: 'help', url: null },
