@@ -111,7 +111,7 @@ function processState(key) {
 // create the screen saver window
 window.showScreenSaver = function () {
 	if(getChromeVersion() >= 44) {
-		// one step creation - chrome 44 and later
+		// use fullscreen option in create call - chrome 44 and later
 		chrome.windows.create({
 			url: 'screensaver.html',
 			focused: true,
@@ -120,6 +120,7 @@ window.showScreenSaver = function () {
 		},
 		function (win) {
 			localStorage.windowID = win.id;
+			chrome.windows.update(win.id, { focused: true });
 		});
 	}
 	else {
