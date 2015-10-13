@@ -22,7 +22,7 @@
 			});
 		}
 		catch (err) {}
-
+		
 		t.transitionTime = parseInt(localStorage.transitionTime,10) * 1000;
 		t.sizingType = 'contain';
 		t.transition = 'cross-fade';
@@ -263,7 +263,7 @@
 				}
 			}
 		}
-
+		
 		return photoID;
 	};
 
@@ -298,7 +298,7 @@
 		else {
 			bg.style.visibility = 'hidden';
 			mainContainer.style.visibility = 'visible';
-		}
+		} 
 		if(!t.sizingType) {
 			t.framePhoto(selected);
 		}
