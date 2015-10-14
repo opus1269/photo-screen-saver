@@ -1,7 +1,29 @@
 {
-	"browser": true,
 	"loopfunc": true,
 	"expr": true,
-	"sub":  true,
-	"predef": [ "chrome" ]
+	"sub": true,
+	"node": true,
+	"browser": true,
+	"bitwise": true,
+	"camelcase": true,
+	"curly": true,
+	"eqeqeq": true,
+	"immed": true,
+	"indent": 2,
+	"latedef": true,
+	"noarg": true,
+	"undef": true,
+	"unused": true,
+	"newcap": false,
+	"globals": {
+		"wrap": true,
+		"unwrap": true,
+		"Polymer": true,
+		"Platform": true,
+		"chrome": true,
+		"chromeCast": true,
+		"gPhotos": true,
+		"showScreenSaver": true,
+		"ga": true
+	}
 }

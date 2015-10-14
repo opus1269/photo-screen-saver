@@ -1,0 +1,34 @@
+<!-- shared styles for all elements and index.html -->
+<dom-module id="shared-styles">
+	<template>
+		<style>
+			.page-title {
+				@apply(--paper-font-display2);
+			}
+
+			@media (max-width: 600px) {
+				.page-title {
+					font-size: 24px!important;
+				}
+			}
+
+			:host([disabled]) .setting-label {
+				color: var(--disabled-text-color);
+			}
+
+			.section-title {
+				color: #009688;
+				font-size: 14px;
+				font-weight: 500;
+				margin: 10px 0 10px 16px;
+			}
+
+			hr {
+				margin: 0px 10px;
+				border: none;
+				border-top: 1px #CCCCCC solid;
+			}
+
+		</style>
+	</template>
+</dom-module>

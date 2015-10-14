@@ -1,0 +1,231 @@
+<style is="custom-style">
+
+	/*
+	 Polymer includes a shim for CSS Custom Properties that we can use for application theming.
+	 Below, you'll find the default palette for the Polymer Starter Kit layout. Feel free to play
+	 with changing the colors used or generate your own palette of colours at MaterialPalette.com.
+
+	 See https://www.polymer-project.org/1.0/docs/devguide/styling.html#xscope-styling-details
+	 for further information on custom CSS properties.
+	 */
+
+	/* Application theme */
+
+	:root {
+		--dark-primary-color: #1976D2;
+		--default-primary-color: #1976D2;
+		--light-primary-color: #2196F3;
+		--text-primary-color: #ffffff; /*text/icons*/
+		--accent-color: #BBDEFB;
+		--primary-background-color:  #1976D2;
+		--primary-text-color: #212121;
+		--secondary-text-color: #727272;
+		--disabled-text-color: #bdbdbd;
+		--divider-color: #B6B6B6;
+
+		/* Components */
+
+		/* paper-drawer-panel */
+		--drawer-menu-color: #ffffff;
+		--drawer-border-color: 1px solid #ccc;
+		--drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
+
+		/* paper-menu */
+		--paper-menu-background-color: #fff;
+		--menu-link-color: #111111;
+
+		/* paper-dialog */
+		--paper-dialog-background-color: #ffffff;
+
+		/* paper-toggle-button */
+		--paper-toggle-button-checked-button-color: #009688;
+		--paper-toggle-button-checked-bar-color: #009688;
+
+		/* paper-slder */
+		--paper-slider-active-color: #009688;
+		--paper-slider-secondary-color: #009688;
+		--paper-slider-knob-color: #009688;
+		--paper-slider-pin-color: #009688;
+		--paper-slider-knob-start-color: #009688;
+		--paper-slider-knob-start-border-color: transparent;
+		--paper-slider-pin-start-color: #009688;
+
+		/* paper-input */
+		--paper-input-container-focus-color: #009688;
+
+		/* paper-checkbox */
+		--paper-checkbox-checked-color: #009688;
+
+	}
+
+	 /* General styles */
+
+	paper-material {
+		border-radius: 2px;
+		background: white;
+		padding: 0px;
+	}
+
+	 #mainToolbar .middle-container  {
+		height: 100%;
+		margin-left: 48px;
+	}
+
+	#mainToolbar .middle {
+		font-size: 18px;
+		padding-bottom: 0;
+	}
+
+	#drawerToolbar {
+		color: var(--secondary-text-color);
+		background-color: var(--drawer-menu-color);
+		border-bottom: var(--drawer-toolbar-border-color);
+	}
+
+	/* Height of the main scroll area */
+	.content {
+		height: 1000px;
+	}
+
+ .page-toolbar {
+		font: var(--paper-font-title);
+		background-color: var(--light-primary-color);
+	}
+
+	#drawer.paper-drawer-panel > [drawer] {
+		border-right: 1px solid rgba(0, 0, 0, 0.14);
+	}
+
+	#mainPages neon-animatable {
+		padding: 43px 43px;
+	}
+
+	#settingsPage,
+	#infoPage,
+	#gogglePhotosPage	 {
+		max-width: 700px;
+		height: 100%;
+		margin: 0;
+	}
+
+	#settingsContainer {
+		padding: 20px 0;
+	}
+
+	#infoContainer {
+		padding: 20px 16px;
+	}
+
+	#infoContainer .section-title {
+		margin: 10px 0 10px 0;
+	}
+
+	#googlePhotosContainer {
+		height: 700px;
+		padding: 20px 16px;
+	  overflow: hidden;
+	  overflow-y: scroll;
+	}
+
+	.listItem {
+		position: relative;
+	  border-bottom-style: solid;
+	  border-color:  #CCCCCC;
+	  border-width: 1px;
+	  margin: 0;
+	  padding: 0;
+		cursor: pointer;
+	}
+
+	.listItem paper-item-body {
+	  padding-left: 10px;
+	}
+
+	.listItem paper-item {
+	  padding-right: 0;
+	}
+
+ .listItem iron-image {
+		height: 72px;
+		width: 72px;
+	 }
+
+ .listItem[disabled] iron-image {
+	  opacity: .2;
+	}
+
+	.listItem[disabled] {
+		pointer-events: none;
+	}
+
+	.listItem[disabled] .setting-label {
+		color: var(--disabled-text-color);
+	}
+
+	 paper-scroll-header-panel {
+		height: 100%;
+	}
+
+	paper-menu iron-icon {
+		margin-right: 33px;
+		opacity: 0.54;
+	}
+
+	.paper-menu > .iron-selected {
+		color: var(--default-primary-color);
+	}
+
+	paper-menu paper-item {
+		--paper-item: {
+			color: var(--menu-link-color);
+			text-rendering: optimizeLegibility;
+			cursor: pointer;
+		};
+	}
+
+	paper-toggle-button {
+		cursor: pointer;
+	}
+
+	paper-button {
+		margin-top: 10px;
+		margin-bottom: 20px;
+		@apply(--layout-center);
+		@apply(--layout-horizontal);
+ }
+
+	paper-button[raised] {
+		background: #FAFAFA;
+	}
+
+	paper-button iron-icon {
+		margin-right: 10px;
+	}
+
+	.button-a {
+		text-decoration: none;
+		color: var(--menu-link-color);
+		display: -ms-flexbox;
+		display: -webkit-flex;
+		display: flex;
+		-ms-flex-direction: row;
+		-webkit-flex-direction: row;
+		flex-direction: row;
+		-ms-flex-align: center;
+		-webkit-align-items: center;
+		align-items: center;
+		-webkit-font-smoothing: antialiased;
+		text-rendering: optimizeLegibility;
+		margin-right: 10px;
+	}
+
+	.waiter {
+	  margin: 40px auto;
+	}
+
+	.waiter paper-item {
+		font: var(--paper-font-title);
+	  margin: 40px auto;
+	}
+
+</style>

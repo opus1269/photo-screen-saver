@@ -1,0 +1,319 @@
+﻿<!doctype html>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="generator" content="Photo Screen Saver" />
+	<title>Photo Screen Saver Options Page</title>
+
+	<!-- build:css styles/main.css -->
+	<link rel="stylesheet" href="../styles/main.css">
+	<!-- endbuild-->
+
+	<!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+	<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+	<!-- endbuild -->
+
+	<link rel="import" href="../bower_components/polymer/polymer.html">
+
+	<!-- will be replaced with elements/elements.vulcanized.html -->
+	<link rel="import" href="../elements/elements.html">
+	<!-- endreplace-->
+
+	<!-- For shared styles, shared-styles.html import in elements.html -->
+	<style is="custom-style" include="shared-styles"></style>
+
+	<style>
+
+	</style>
+</head>
+
+<body unresolved class="fullbleed layout vertical">
+
+	 <template is="dom-bind" id="app">
+
+		<paper-drawer-panel id="paperDrawerPanel" drawer-width="290px">
+
+			<paper-material elevation="2" drawer fixed>
+				<!-- Drawer Scroll Header Panel -->
+				<paper-scroll-header-panel>
+					<!-- Drawer Toolbar -->
+					<paper-toolbar id="drawerToolbar">
+						<span class="paper-font-title">Menu</span>
+					</paper-toolbar>
+					<!-- Drawer Content -->
+					<paper-menu class="list" id="mainMenu" attr-for-selected="id" selected="[[route]]">
+						<template is="dom-repeat" items="[[pages]]">
+							<paper-item id="[[item.route]]" class="center horizontal layout" on-click="onDataRouteClick">
+								<iron-icon icon="[[item.icon]]"></iron-icon>
+								<span>[[item.label]]</span>
+							</paper-item>
+						</template>
+					</paper-menu>
+				</paper-scroll-header-panel>
+			</paper-material>
+
+				<!-- Main Scroll Header Panel -->
+			<paper-scroll-header-panel main fixed>
+
+				<!-- Main Toolbar -->
+				<paper-material class="paper-header" elevation="2">
+					<paper-toolbar id="mainToolbar">
+						<paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+						<span class="flex"></span>
+						<!-- Application name -->
+						<div class="middle middle-container center horizontal layout">
+							<div class="paper-font-headline app-name">Photo Screen Saver</div>
+						</div>
+					</paper-toolbar>
+				</paper-material>
+
+				<!-- Main Content -->
+				<div class="content">
+
+					<!-- Error dialog -->
+					<paper-dialog id="errorDialog" modal entry-animation="scale-up-animation"
+							exit-animation="fade-out-animation">
+						<h2>Request failed. Select refresh to try again.</h2>
+						<paper-dialog-scrollable>
+							<p>[[dialogText]]</p>
+						</paper-dialog-scrollable>
+						<div class="buttons">
+							<paper-button dialog-dismiss>OK</paper-button>
+						</div>
+					</paper-dialog>
+
+					<neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{route}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+
+						<neon-animatable data-route="page-settings">
+							<section>
+								<paper-material elevation="1" id="settingsPage">
+									<paper-material elevation="1">
+										<paper-toolbar class="page-toolbar">
+											<iron-label for="settingsToggle" class="center horizontal layout flex">
+												<div class="flex">Screensaver <span hidden$="[[!enabled]]">On</span><span hidden$="[[enabled]]">Off</span></div>
+												<paper-toggle-button id="settingsToggle" checked="{{enabled}}"></paper-toggle-button>
+											</iron-label>
+											<iron-localstorage name="enabled" value="{{enabled}}"></iron-localstorage>
+										</paper-toolbar>
+									</paper-material>
+									<div id="settingsContainer">
+										<setting-slider name="idleTime"
+																		section-title="Slide Show Controls"
+																		label="Wait time (minutes)"
+																		min="1" max="60" step="1"
+																		disabled$="[[!enabled]]"></setting-slider>
+										<setting-slider name="transitionTime"
+																		label="Photo transition time (seconds)"
+																		min="10" max="60" step="1"
+																		disabled$="[[!enabled]]"></setting-slider>
+										<setting-dropdown name="photoSizing"
+																			label="Photo display mode"
+																			items='["Letterbox","Fill Screen","Center & Frame"]'
+																			disabled$="[[!enabled]]"></setting-dropdown>
+										<setting-dropdown name="photoTransition"
+																			label="Photo transition method"
+																			items='["Scale up","Fade","Slide from right","Slide up"]'
+																			disabled$="[[!enabled]]"></setting-dropdown>
+										<setting-toggle name="shuffle"
+																		main-label="Shuffle"
+																		secondary-label="Present photos in random order"
+																		disabled$="[[!enabled]]"></setting-toggle>
+										<setting-toggle name="skip"
+																		main-label="Skip poor aspect ratio photos"
+																		secondary-label="Do not display certain photos in Fill Screen mode"
+																		disabled$="[[!enabled]]"></setting-toggle>
+										<setting-toggle name="showPhotog"
+																		main-label="Show Photographer"
+																		secondary-label="Display the photgrapher's name (always shows on framed photos)"
+																		noseparator
+																		disabled$="[[!enabled]]"></setting-toggle>
+										<setting-toggle name="allDisplays"
+																		section-title="Display"
+																		main-label="All displays"
+																		secondary-label="Show screensaver on all connected displays"
+																		disabled$="[[!enabled]]"></setting-toggle>
+										<setting-toggle name="keepAwake"
+																		main-label="Keep awake"
+																		secondary-label="Prevent display from sleeping"
+																		disabled$="[[!enabled]]"></setting-toggle>
+										<setting-time name="keepStart"
+																		main-label="Keep awake start"
+																		secondary-label="Start keep awake at this time"
+																		disabled$="[[!enabled]]"></setting-time>
+										<setting-time name="keepStop"
+																		main-label="Keep awake stop"
+																		secondary-label="Start keep awake at this time"
+																		noseparator
+																		disabled$="[[!enabled]]"></setting-time>
+										<setting-toggle name="useChromecast"
+																		section-title="Default Photo Sources"
+																		main-label="Chromecast"
+																		secondary-label="Backdrop photos from the Chromecast media streaming device"
+																		disabled$="[[!enabled]]"></setting-toggle>
+										<setting-toggle name="useAuthors"
+																		main-label="Author"
+																		secondary-label="Photos from the extension's author"
+																		disabled$="[[!enabled]]"></setting-toggle>
+									</div>
+								</paper-material>
+							</section>
+						</neon-animatable>
+
+						<neon-animatable data-route="page-google-photos">
+							<section>
+								<paper-material elevation="1" id="gogglePhotosPage">
+									<paper-material elevation="1">
+										<paper-toolbar class="page-toolbar">
+											<div class="flex">Google Photos Albums</div>
+											<paper-icon-button icon="check-box-outline-blank" on-tap="albumsDeselectAllTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
+											<paper-icon-button icon="refresh" on-tap="albumRefreshTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
+											<paper-toggle-button id="googlePhotosToggle" checked="{{useGoogle}}"></paper-toggle-button>
+											<iron-localstorage name="useGoogle" value="{{useGoogle}}"></iron-localstorage>
+										</paper-toolbar>
+									</paper-material>
+									<div id="googlePhotosContainer">
+
+										<div class="waiter" hidden$="[[!waitForLoad]]">
+											<div class="horizontal center-justified layout">
+												<paper-spinner alt="Loading Albums" active="[[waitForLoad]]"></paper-spinner>
+											</div>
+											<paper-item class="horizontal center-justified layout">Loading Albums</paper-item>
+										</div>
+
+										<div hidden$="[[waitForLoad]]">
+											<template is="dom-repeat" id="albumsTemplate" items="{{albums}}">
+												<div class="listItem" id="[[item.uid]]" disabled$="[[!useGoogle]]">
+													<iron-label>
+													 <paper-item class="center horizontal layout" tabIndex="-1">
+														 <paper-checkbox iron-label-target checked="{{item.checked}}" on-change="albumSelectChange" disabled$="[[!useGoogle]]"></paper-checkbox>
+															<paper-item-body class="flex" two-line>
+																<div class="setting-label">{{item.name}}</div>
+																<div class="setting-label" secondary><span>[[item.ct]]</span> <span> photos</span></div>
+																<paper-ripple center></paper-ripple>
+															</paper-item-body>
+														 <iron-image src="[[item.thumb]]" sizing="cover" preload disabled$="[[!useGoogle]]"></iron-image>
+														</paper-item>
+													</iron-label>
+												 </div>
+											</template>
+										</div>
+
+									</div>
+								</paper-material>
+							</section>
+						</neon-animatable>
+
+						<neon-animatable data-route="page-info">
+							<section>
+								<paper-material elevation="1" id="infoPage">
+									<paper-material elevation="1">
+										<paper-toolbar class="page-toolbar">
+											<div>Information For Nerds</div>
+										</paper-toolbar>
+									</paper-material>
+									<div id="infoContainer">
+										<div class="section-title">Source Code</div>
+										<div class="horizontal center layout">
+											<a class="button-a" href="https://github.com/opus1269/photo-screen-saver/" target="_blank" tabindex="-1">
+												<paper-button raised noink>
+													<iron-icon src="/images/github.png"></iron-icon> VIEW ON GITHUB
+												</paper-button>
+											</a>
+										</div>
+										<hr>
+										<div class="section-title">APIs & Specifications</div>
+										<div class="horizontal center layout">
+											<a class="button-a" href="https://developer.chrome.com/extensions" target="_blank" tabindex="-1">
+												<paper-button raised noink>
+													<iron-icon src="/images/extension.png"></iron-icon> CHROME EXTENSION
+												</paper-button>
+											</a>
+											<a class="button-a" href="https://www.polymer-project.org/" target="_blank" tabindex="-1">
+												<paper-button raised noink>
+													<iron-icon src="/images/polymer.png"></iron-icon> POLYMER
+												</paper-button>
+											</a>
+											<a class="button-a" href=http://www.google.com/design/spec/material-design/introduction.html#" target="_blank" tabindex="-1">
+												<paper-button raised noink>
+													<iron-icon src="/images/material.png"></iron-icon> MATERIAL DESIGN
+												</paper-button>
+											</a>
+										</div>
+										<p>
+											This extension has been built entirely with Polymer and vanilla JavaScript.	 Polymer treats everything as a
+											<a href="http://webcomponents.org/" target="_blank">Web Component</a> I have never used things like AngularJS
+											(or even JQuery) so I can't really evaluate the pros and cons of this approach.	 In addition, there is nothing
+											in Polymer that prevents you from using it with these other solutions.
+										</p>
+										<hr>
+										<div class="section-title">Photo Libraries</div>
+										<div class="horizontal center layout">
+											<a class="button-a" href="https://developers.google.com/picasa-web/" target="_blank" tabindex="-1">
+												<paper-button raised noink>
+													<iron-icon src="/images/picasa.png"></iron-icon> PICASA API
+												</paper-button>
+											</a>
+											<a class="button-a" href="http://www.google.com/chrome/devices/chromecast" target="_blank" tabindex="-1">
+												<paper-button raised noink>
+													<iron-icon src="/images/chromecast.png"></iron-icon> CHROMECAST
+												</paper-button>
+											</a>
+										</div>
+										<p>
+											It is unfortunate, but the Google+ API still does not support working with photos, so the only way is with the Picasa Web API.
+											The <a href="https://github.com/dconnolly/chromecast-backgrounds" target="_blank">Chromecast photos</a>
+											are a snapshot in time of those used for the backdrop.
+										</p>
+										<p>
+											<b>Note:</b> This program is read only for your Google photos despite what the permissions popup says. The Picasa API does not have
+											a read only scope.
+										</p>
+										<hr>
+										<div class="section-title">Web Development Documentation</div>
+										<div class="horizontal center layout">
+											<a class="button-a" href="https://www.webplatform.org/" target="_blank" tabindex="-1">
+												<paper-button raised noink>
+													<iron-icon src="/images/webplatform.png"></iron-icon> WEB PLATFORM
+												</paper-button>
+											</a>
+											<a class="button-a" href="https://developer.mozilla.org/en-US/docs/Web" target="_blank" tabindex="-1">
+												<paper-button raised noink>
+													<iron-icon src="/images/mdn.png"></iron-icon> MDN
+												</paper-button>
+											</a>
+											<a class="button-a" href="http://www.w3schools.com/default.asp" target="_blank" tabindex="-1">
+												<paper-button raised noink>
+													<iron-icon src="/images/w3schools.png"></iron-icon> W3SCHOOLS
+												</paper-button>
+											</a>
+										</div>
+										<p>
+											This was my first time doing Web development and the learning curve is pretty steep. Each of these sites provides
+											good tutorials and reference materials on the HTML-CSS-JavaScript paradigm.	 The first is supported by the W3C and
+											most of the big Internet companies, but is also the least complete at this time.
+										</p>
+									</div>
+								</paper-material>
+							</section>
+						</neon-animatable>
+
+						<neon-animatable data-route="page-local-photos"><section>[[route]]</section></neon-animatable>
+
+					</neon-animated-pages>
+				</div>
+			</paper-scroll-header-panel>
+		</paper-drawer-panel>
+
+	</template>
+
+	<!-- build:js scripts/app.js -->
+	<script src="../scripts/ga.js"></script>
+	<script src="../scripts/google_photos.js"></script>
+	<script src="../scripts/options.js"></script>
+ <!-- endbuild-->
+</body>
+
+</html>

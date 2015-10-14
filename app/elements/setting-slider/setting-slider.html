@@ -1,0 +1,111 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<dom-module id="setting-slider">
+	<template>
+		<style include="shared-styles"></style>
+		<style>
+
+			:host {
+				display: block;
+			}
+
+			:host([disabled]) {
+				pointer-events: none;
+			}
+
+		 :host([disabled]) .setting-label {
+				color: var(--disabled-text-color);
+			}
+
+			#label {
+				margin: 20px 0 0 0;
+
+				--paper-item-min-height: {
+					min-height: 0px;
+				};
+			}
+
+			:host paper-slider {
+	      position: relative;
+				margin: 0;
+				padding-right: 16px;
+				cursor: pointer;
+			}
+
+		</style>
+
+		<div class="section-title setting-label" tabindex="-1" hidden$="[[!sectionTitle]]">{{sectionTitle}}</div>
+
+		<div>
+			<paper-item id="label" class="setting-label" tabindex="-1">{{label}}</paper-item>
+			<div class="horizontal layout">
+				<paper-slider class="flex" editable value="{{value}}" min="{{min}}" max="{{max}}" step="{{step}}" disabled$="[[disabled]]"></paper-slider>
+			</div>
+		</div>
+		<iron-localstorage name="{{name}}" value="{{value}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
+		<hr hidden$="[[noseparator]]" />
+
+	</template>
+</dom-module>
+
+<script>
+
+	Polymer({
+		is: 'setting-slider',
+
+		hostAttributes: {
+			role: 'group',
+			tabIndex: -1
+		},
+
+		properties: {
+
+			name: {
+				type: String,
+				value: 'store'
+			},
+
+			label: {
+				type: String,
+				value: ''
+			},
+
+			min: {
+				type: Number,
+				value: 1
+			},
+
+			max: {
+				type: Number,
+				value: 100
+			},
+
+			step: {
+				type: Number,
+				value: 1
+			},
+
+			sectionTitle: {
+				type: String,
+				value: ''
+			},
+
+			noseparator: {
+				type: Boolean,
+				value: false
+			}
+
+		},
+
+		// initialize value if it is not in localstorage
+		_init: function() {
+			this.set('value', '10');
+		}
+
+	});
+
+</script>
