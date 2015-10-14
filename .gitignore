@@ -1,6 +1,7 @@
-components/
-node_modules/
-dev/
-web-store/
-/*-csp.*
-dist/
+node_modules
+dev
+dist
+app/bower_components
+bower_components
+.tmp
+*.db
