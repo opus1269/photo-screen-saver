@@ -17,6 +17,7 @@
 </dom-module>
 
 <script>
+'use-strict';
 
   Polymer({
 
@@ -42,7 +43,7 @@
 							node: this,
 							timing: {duration: 1500, easing: 'ease-in-out-sine'}
 						}]
-					}
+					};
 				}
 			},
 
@@ -50,7 +51,7 @@
         type: Number,
         observer: '_aniChanged'
       }
-      
+
 		},
 
 		_aniChanged: function(newValue) {
@@ -89,7 +90,7 @@
           transformOrigin: '50% 50%',
           timing: {duration: 1500, easing: 'ease-in-out-sine'}
         }]
-      }
+      };
     }
 
   });
