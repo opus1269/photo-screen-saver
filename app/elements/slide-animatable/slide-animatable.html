@@ -33,21 +33,21 @@
 				type: Object,
         value: function() {
           return {
-						'entry' : [{
+						'entry' : {
 							name: 'fade-in-animation',
 							node: this,
-							timing: {duration: 1500, easing: 'ease-in-out-sine'}
-						}],
-						'exit' : [{
+							timing: {duration: 2000, easing: 'ease-in-sine'}
+						},
+						'exit' : {
 							name: 'fade-out-animation',
 							node: this,
-							timing: {duration: 1500, easing: 'ease-in-out-sine'}
-						}]
+							timing: {duration: 2000, easing: 'ease-out-sine'}
+						}
 					};
 				}
 			},
 
-      ani: {
+      aniType: {
         type: Number,
         observer: '_aniChanged'
       }
@@ -55,7 +55,6 @@
 		},
 
 		_aniChanged: function(newValue) {
-			console.log(newValue);
 			var entry, exit;
 
 			switch(newValue) {
@@ -72,25 +71,13 @@
 					exit = 'slide-left-animation';
 					break;
 				case 3:
-					entry = 'slide-up-animation';
-					exit = 'slide-down-animation';
+					entry = 'slide-down-animation';
+					exit = 'slide-up-animation';
 					break;
 			}
 
-      this.animationConfig =  {
-        'entry' : [{
-          name: entry,
-          node: this,
-          transformOrigin: '50% 50%',
-          timing: {duration: 1500, easing: 'ease-in-out-sine'}
-        }],
-        'exit' : [{
-          name: exit,
-          node: this,
-          transformOrigin: '50% 50%',
-          timing: {duration: 1500, easing: 'ease-in-out-sine'}
-        }]
-      };
+      this.animationConfig.entry.name = entry;
+      this.animationConfig.exit.name = exit;
     }
 
   });

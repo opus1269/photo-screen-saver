@@ -10,16 +10,23 @@
 	t.items = [];
 
 	t.addEventListener('dom-change', function (event) {
-		var val;
 
 		tRep = document.querySelector('#repeatTemplate');
-		t.trans = parseInt(localStorage.photoTransition,10);
+		tRep.addEventListener('dom-change', function (event) {
+			console.log('slides ready');
+		});
+		t.transitionType = parseInt(localStorage.photoTransition,10);
 		t.transitionTime = parseInt(localStorage.transitionTime,10) * 1000;
-		t.sizingType = 'contain';
-
-		// show cursor for preview
-		if (JSON.parse(localStorage.isPreview)) {
-			document.body.style.cursor = 'auto';
+		switch(parseInt(localStorage.photoSizing,10)) {
+			case 0:
+				t.sizingType = 'contain';
+				break;
+			case 1:
+				t.sizingType = 'cover';
+				break;
+			case 2:
+				t.sizingType = null;
+				break;
 		}
 
 		// override zoom factor - chrome 42 and later
@@ -32,18 +39,12 @@
 		}
 		catch (err) {}
 
-		val = parseInt(localStorage.photoSizing,10);
-		switch(val) {
-			case 0:
-				t.sizingType = 'contain';
-				break;
-			case 1:
-				t.sizingType = 'cover';
-				break;
-			case 2:
-				t.sizingType = null;
-				break;
+		// show cursor for preview
+		if (JSON.parse(localStorage.isPreview)) {
+			document.body.style.cursor = 'auto';
 		}
+
+		t.loadImages();
 
     this.fire('runShow');
 
@@ -52,8 +53,6 @@
 	// This will run to infinity... and beyond
 	// The setTimeout lets us prep the first photo
 	t.addEventListener('runShow', function () {
-		t.loadImages();
-
 		setTimeout(function () {
 			t.nextPhoto();
 			window.setInterval(t.nextPhoto, parseInt(t.transitionTime, 10));
@@ -308,11 +307,11 @@
 		console.log('template config', config);
 
 // if(!started) {
-		// 	// special case for first page
-		// 	selected = curPage;
-		// 	started = true;
-		// 	curImage.style.transition = 'opacity 0.5s linear';
-		// }
+// 			// special case for first page
+// 			selected = curPage;
+// 			started = true;
+// 			curImage.style.transition = 'opacity 1s linear';
+// 		}
 
 		if (!t.isComplete(selected)) {
 			selected = t.findPhoto(selected);

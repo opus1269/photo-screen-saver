@@ -23,14 +23,14 @@
 
 </head>
 
-<body unresolved class="fullbleed vertical layout">
-	<template is="dom-bind" id="t" class="flex">
-		<div id="mainContainer">
-			<neon-animated-pages id="pages" selected="0" animate-initial-selection>
+<body unresolved class="fullbleed horizontal layout">
+	<template is="dom-bind" id="t">
+		<div id="mainContainer" class="flex">
+			<neon-animated-pages id="pages" selected="0" class="fit">
 				<template is="dom-repeat" id="repeatTemplate" items="{{items}}">
-					<slide-animatable ani="[[trans]]">
+					<slide-animatable ani-type="{{transitionType}}">
 						<section>
-							<div class="aniDiv fit">
+							<div class="aniDiv">
 								<iron-image id="{{item.name}}" class="slide" src="{{item.path}}" width="{{item.width}}" height="{{item.height}}" sizing="{{item.sizingType}}"
 								preload></iron-image>
 								<p id="{{item.authorID}}" class="author">{{item.label}}</p>
