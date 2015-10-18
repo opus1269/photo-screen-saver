@@ -1,31 +1,31 @@
 (function () {
 'use strict';
 
-chrome.browserAction.onClicked.addListener(function () {
+var DAYINMIN = 60 * 24; // minutes in day
 
-	// display or focus options page
-	chrome.tabs.query({ title: 'Photo Screen Saver Options Page' }, function (tabs) {
-		if (!tabs.length) {
+// display or focus options page
+chrome.browserAction.onClicked.addListener(function () {
+	chrome.tabs.query({ title: 'Photo Screen Saver Options Page' }, function (t) {
+		if (!t.length) {
 			chrome.tabs.create({url: '../html/options.html'});
 		}
 		else {
-			chrome.tabs.update(tabs[0].id, { 'highlighted': true });
+			chrome.tabs.update(t[0].id, { 'highlighted': true });
 		}
 	});
 });
 
-// initialize the data defauts
+// initialize the data in local storage
 function initData() {
-
 	// using local storage as a quick and dirty replacement for MVC
 	// not using chrome.storage 'cause the async nature of it complicates things
 	// just remember to use parse methods because all values are strings
 	var oldVer = parseInt(localStorage.version,10);
 
-	//update version
+	// latest version
 	localStorage.version = '2';
 
-	// Add the new version 2 options
+	// Add the new version 2 values
 	if(!oldVer || (oldVer < 2)) {
 		localStorage.allDisplays = 'false';
 		localStorage.keepStart = '"00:00"'; // 24 hr time
@@ -35,7 +35,7 @@ function initData() {
 		localStorage.localSelections = '[]';
 	}
 
-	// options from the beginning of time
+	// values from the beginning of time
 	if(!oldVer) {
 		localStorage.enabled = 'true';
 		localStorage.idleTime = '10'; // minutes
@@ -54,25 +54,98 @@ function initData() {
 	}
 }
 
-// from http://stackoverflow.com/questions/4900436/detect-version-of-chrome-installed?rq=1
+// from:
+// http://stackoverflow.com/questions/4900436/detect-version-of-chrome-installed
 function getChromeVersion() {
 	var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
 	return raw ? parseInt(raw[2], 10) : false;
 }
 
+// enabled state of screensaver
+// note: this does not effect the keep awake settings so you could
+// use the extension as a display keep awake scheduler without
+// using the screensaver
 function processEnabled() {
 	if (JSON.parse(localStorage.enabled)) {
 		chrome.browserAction.setBadgeText({ text: '' });
-		if (JSON.parse(localStorage.keepAwake)) {
-			chrome.power.requestKeepAwake('display');
-		}
-		else {
-			chrome.power.releaseKeepAwake();
-		}
 	}
 	else {
 		chrome.browserAction.setBadgeText({ text: 'OFF' });
-		chrome.power.releaseKeepAwake();
+	}
+}
+
+// get time
+// value format: '00:00'
+function getTime(value) {
+	var date = new Date();
+
+	date.setHours(value.substr(0,2));
+	date.setMinutes(value.substr(3,2));
+	return date.getTime();
+}
+
+// calculate delta in time from now in minutes on a 24 hr basis
+// value format: '00:00'
+function getTimeDelta(value) {
+	var curTime = Date.now();
+	var time = getTime(value);
+	var delayMin = (time - curTime) / 1000 / 60;
+
+	if(delayMin < 0) {
+		delayMin = DAYINMIN + delayMin;
+	}
+	return delayMin;
+}
+
+// is the current time between start and stop
+function isInRange(start, stop) {
+	var curTime = Date.now();
+	var startTime = getTime(start);
+	var stopTime = getTime(stop);
+	var ret = false;
+
+	if(stopTime > startTime) {
+		if((curTime > startTime) && (curTime < stopTime)) {
+			ret = true;
+		}
+	}
+	else {
+		if((curTime > startTime) || (curTime < stopTime)) {
+			ret = true;
+		}
+	}
+	return ret;
+}
+
+// create keep awake scheduling alarms
+// if a time range has been specified for when to keep the screen awake,
+// schedule repeating alarms
+function processAlarms() {
+	var kStart = JSON.parse(localStorage.keepStart);
+	var kStop = JSON.parse(localStorage.keepStop);
+
+	if (JSON.parse(localStorage.keepAwake) && (kStart !== kStop)) {
+		var startDelayMin = getTimeDelta(kStart);
+		var stopDelayMin = getTimeDelta(kStop);
+
+		chrome.alarms.create('keepStart', {
+			delayInMinutes: startDelayMin,
+			periodInMinutes: DAYINMIN
+		});
+		chrome.alarms.create('keepStop',{
+			delayInMinutes: stopDelayMin,
+			periodInMinutes: DAYINMIN
+		});
+
+		// if we are currently outside of the range of the keep awake
+		// then let display sleep
+		if (!isInRange(kStart, kStop)) {
+			chrome.power.requestKeepAwake('system');
+		}
+	}
+	else {
+		chrome.alarms.clear('keepStart');
+		chrome.alarms.clear('keepStop');
 	}
 }
 
@@ -83,44 +156,57 @@ function processKeepAwake() {
 	else {
 		chrome.power.releaseKeepAwake();
 	}
+	processAlarms();
 }
 
-// set everything based on the current values in localStorage
-function processState(key) {
+function processIdleTime() {
+	chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
+}
 
+function processUseAuthors() {
+	localStorage.removeItem('badAuthorImages');
+	if(JSON.parse(localStorage.useAuthors)) {
+		gPhotos.preloadAuthorImages();
+	}
+}
+
+function processUseChromecast() {
+	localStorage.removeItem('badCCImages');
+	if(JSON.parse(localStorage.useChromecast)) {
+		chromeCast.preloadImages();
+	}
+}
+
+// set state based on the current values in localStorage
+// TODO: Do we want useGoogle and useLocal here?
+function processState(key) {
 	if(key) {
 		switch(key) {
 			case 'enabled':
 				processEnabled();
 				break;
 			case 'keepAwake':
+			case 'keepStart':
+			case 'keepStop':
 				processKeepAwake();
 				break;
 			case 'idleTime':
-				console.log(parseInt(localStorage.idleTime, 10) * 60);
-				chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
+				processIdleTime();
 				break;
 			case 'useAuthors':
-				localStorage.removeItem('badAuthorImages');
-				if(JSON.parse(localStorage.useAuthors)) {
-					gPhotos.preloadAuthorImages();
-				}
+				processUseAuthors();
 				break;
 			case 'useChromecast':
-				localStorage.removeItem('badCCImages');
-				if(JSON.parse(localStorage.useChromecast)) {
-					chromeCast.preloadImages();
-				}
+				processUseChromecast();
 				break;
 		}
 	}
 	else {
 		processKeepAwake();
-
-		chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
-		console.log(parseInt(localStorage.idleTime, 10) * 60);
-
+		processIdleTime();
 		processEnabled();
+		processUseAuthors();
+		processUseChromecast();
 	}
 }
 
@@ -136,7 +222,6 @@ window.showScreenSaver = function () {
 		},
 		function (win) {
 			localStorage.windowID = win.id;
-			chrome.windows.update(win.id, { focused: true });
 		});
 	}
 	else {
@@ -156,11 +241,26 @@ window.showScreenSaver = function () {
 	}
 };
 
-// add or remove the screen saver as needed
+// event: called when extension is installed or updated or Chrome is updated
+function onInstalled() {
+	initData();
+	processState(null);
+}
+
+// event: called when Chrome first starts
+function onStartup() {
+	processState(null);
+}
+
+// event: process the state when someone has changed the storage
+function onStorageChanged(event) {
+	processState(event.key);
+}
+
+// event: add or remove the screen saver as needed
 function onIdleStateChanged(state) {
 	var win = parseInt(localStorage.windowID, 10);
 
-	console.log(parseInt(localStorage.idleTime, 10) * 60);
 	if (!JSON.parse(localStorage.isPreview)) {
 		if ((state === 'idle') && JSON.parse(localStorage.enabled)) {
 			showScreenSaver();
@@ -176,39 +276,36 @@ function onIdleStateChanged(state) {
 	}
 }
 
-// process the state when someone has changed the storage
-function onStorageChanged(e) {
-	processState(e.key);
-}
-
-// called when extension is installed or updated or
-// Chrome is updated
-function onInstalled() {
-
-	initData();
-
-	processState(null);
-
-	// preload some chromecast images
-	localStorage.removeItem('badCCImages');
-	if(JSON.parse(localStorage.useChromecast)) {
-		chromeCast.preloadImages(10);
+// event: process requests to change the keep awake mode
+function onAlarm(alarm) {
+	if(alarm.name === 'keepStop') {
+		if (JSON.parse(localStorage.keepAwake)) {
+			// let display sleep, but keep power on
+			// so we can reenable
+			chrome.power.requestKeepAwake('system');
+		}
+	}
+	else if(alarm.name === 'keepStart') {
+		if (JSON.parse(localStorage.keepAwake)) {
+			// Don't let display sleep
+			chrome.power.requestKeepAwake('display');
+		}
 	}
 }
 
-// handle closing of the screen saver window
-chrome.windows.onRemoved.addListener(function (windowId) {
+// event: handle closing of the screen saver window
+function onRemoved(windowId) {
 	if (windowId === parseInt(localStorage.windowID,10)) {
 		localStorage.windowID = -1;
 		localStorage.isPreview = 'false';
 	}
-});
+}
 
-// set things up when Chrome first starts
-chrome.runtime.onStartup.addListener(function() {
-	initData();
-	processState(null);
-});
+// listen for extension install or update
+chrome.runtime.onInstalled.addListener(onInstalled);
+
+// listen for Chrome starting
+chrome.runtime.onStartup.addListener(onStartup);
 
 // listen for changes to the stored data
 addEventListener("storage", onStorageChanged, false);
@@ -216,7 +313,10 @@ addEventListener("storage", onStorageChanged, false);
 // listen for changes to the idle state of the computer
 chrome.idle.onStateChanged.addListener(onIdleStateChanged);
 
-// listen for extension install or update
-chrome.runtime.onInstalled.addListener(onInstalled);
+// listen for the keep wake change alarms
+chrome.alarms.onAlarm.addListener(onAlarm);
+
+// Listen for the Screensaver window closed
+chrome.windows.onRemoved.addListener(onRemoved);
 
 })();
