@@ -132,8 +132,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 		_onTimeSelected: function () {
 			var picker = this.$.timePicker;
-			this.set('value', '0' + picker.hour.substr(-2) +
-			 		':' + '0' + picker.minute.substr(-2));
+			this.set('value', ('0' + picker.hour).substr(-2) +
+			 		':' + ('0' + picker.minute).substr(-2));
 		}
 
 	});
