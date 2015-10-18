@@ -98,13 +98,7 @@ gulp.task('clean', function (cb) {
 
 // Initialize the dev directory
 gulp.task('dev', function (cb) {
-	runSequence('clean', 'csp', 'copy', 'reload', cb);
-});
-
-// reload unpacked Chrome extension
-// requires: https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid
-gulp.task('reload', ['copy'], function () {
-	gulp.src(__filename).pipe(open({ uri: 'http://reload.extensions' }));
+	runSequence('clean', 'csp', 'copy', cb);
 });
 
 // Lint JavaScript
@@ -118,11 +112,11 @@ gulp.task('jshint', function () {
 });
 
 // Watch files for changes & reload extension
-gulp.task('watch',  ['csp', 'reload'], function () {
-	gulp.watch(srcStyles, ['reload']);
-	gulp.watch(srcImages, ['reload']);
-	gulp.watch(srcJs, ['csp', 'reload']);
-	gulp.watch(srcBase, ['reload']);
+gulp.task('watch',  ['csp', 'copy'], function () {
+	gulp.watch(srcStyles, ['copy']);
+	gulp.watch(srcImages, ['copy']);
+	gulp.watch(srcJs, ['csp', 'copy']);
+	gulp.watch(srcBase, ['copy']);
 });
 
 var styleTask = function (stylesPath, srcs) {
