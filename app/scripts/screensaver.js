@@ -1,18 +1,17 @@
 (function () {
 'use strict';
 
+	// main template and pages repeat temple
 	var t = document.querySelector('#t');
-	var tRep;
+	var tPages;
 
-	// flag to indicate that the slideshow has begun
-	var started = false;
-
+	// array of photos to use for slide show
 	t.items = [];
 
 	t.addEventListener('dom-change', function () {
 
-		tRep = document.querySelector('#repeatTemplate');
-		tRep.addEventListener('dom-change', function () {
+		tPages = document.querySelector('#repeatTemplate');
+		tPages.addEventListener('dom-change', function () {
 			console.log('slides ready');
 		});
 		t.transitionType = parseInt(localStorage.photoTransition,10);
@@ -44,6 +43,7 @@
 			document.body.style.cursor = 'auto';
 		}
 
+		// load the photos for the slide show
 		t.loadImages();
 
 		this.fire('runShow');
@@ -76,7 +76,7 @@
 	// check if a photo would look bad cropped
 	t.badAspect = function (aspectRatio) {
 		var aspectRatioScreen = screen.width / screen.height;
-		var cutoff = 0.5; // arbitrary
+		var cutoff = 0.5;  // arbitrary
 
 		if(aspectRatio && ((aspectRatio < aspectRatioScreen - cutoff) ||
 				(aspectRatio > aspectRatioScreen + cutoff))) {
@@ -225,7 +225,7 @@
 		// force use of photo label for this view
 		if(!JSON.parse(localStorage.showPhotog)) {
 			var label = t.getPhotoLabel(item.author,true);
-			var model = tRep.modelForElement(document.querySelector('#' + t.items[photoID].name));
+			var model = tPages.modelForElement(image);
 			model.set('item.label', label);
 		}
 
@@ -300,10 +300,9 @@
 
 		var selected = nextPage;
 
-		if(!started) {
-			// special case for first page
+		// special case for first page
+		if(p.selected === undefined) {
 			selected = curPage;
-			started = true;
 		}
 
 		if (!t.isComplete(selected)) {
