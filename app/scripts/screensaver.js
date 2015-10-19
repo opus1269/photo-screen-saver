@@ -56,7 +56,7 @@
 		this.async(function () {
 			t.nextPhoto();
 			window.setInterval(t.nextPhoto, parseInt(t.transitionTime, 10));
-		}, 1000);
+		}, 2000);
 	});
 
 	// create the photo label
