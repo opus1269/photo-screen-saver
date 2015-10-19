@@ -165,6 +165,7 @@ function processIdleTime() {
 
 function processUseAuthors() {
 	localStorage.removeItem('badAuthorImages');
+	localStorage.removeItem('authorImages');
 	if(JSON.parse(localStorage.useAuthors)) {
 		gPhotos.preloadAuthorImages();
 	}
