@@ -48,7 +48,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				<div class="setting-label" secondary hidden$="[[!secondaryLabel]]">{{secondaryLabel}}</div>
 				<paper-ripple center></paper-ripple>
 			</paper-item-body>
-			<div>[[timeLabel]]</div>
+			<div class="setting-label" >[[timeLabel]]</div>
 		</paper-item>
 		<hr hidden$="[[noseparator]]" />
 		<iron-localstorage id="store" name="{{name}}" value="{{value}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
