@@ -4,6 +4,7 @@
 var gulp = require('gulp');
 var changed = require('gulp-changed');
 var newer = require('gulp-newer');
+var replace = require('gulp-replace');
 var vulcanize = require('gulp-vulcanize');
 var crisper = require('gulp-crisper');
 var watch = require('gulp-watch');
@@ -75,11 +76,13 @@ gulp.task('bower', function () {
 });
 
 // copy files to dev
-gulp.task('copy', function () {
+gulp.task('copy-dev', function () {
 	return gulp.src(srcAll, { base: baseApp })
 		.pipe(newer(destDev))
+		.pipe(iff('*.html', replace('<google-analytics-tracker','<!-- <google-analytics-tracker')))
+		.pipe(iff('*.html', replace('</google-analytics-tracker>','</google-analytics-tracker> -->')))
 		.pipe(gulp.dest(destDev))
-		.pipe($.size({title: 'copy'}));
+		.pipe($.size({title: 'copy-dev'}));
 });
 
 // enforce CSP
@@ -98,7 +101,7 @@ gulp.task('clean', function (cb) {
 
 // Initialize the dev directory
 gulp.task('dev', function (cb) {
-	runSequence('clean', 'csp', 'copy', cb);
+	runSequence('clean', 'csp', 'copy-dev', cb);
 });
 
 // Lint JavaScript
@@ -112,11 +115,11 @@ gulp.task('jshint', function () {
 });
 
 // Watch files for changes & reload extension
-gulp.task('watch',  ['csp', 'copy'], function () {
-	gulp.watch(srcStyles, ['copy']);
-	gulp.watch(srcImages, ['copy']);
-	gulp.watch(srcJs, ['csp', 'copy']);
-	gulp.watch(srcBase, ['copy']);
+gulp.task('watch',  ['csp', 'copy-dev'], function () {
+	gulp.watch(srcStyles, ['copy-dev']);
+	gulp.watch(srcImages, ['copy-dev']);
+	gulp.watch(srcJs, ['csp', 'copy-dev']);
+	gulp.watch(srcBase, ['copy-dev']);
 });
 
 var styleTask = function (stylesPath, srcs) {

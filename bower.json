@@ -1,28 +1,27 @@
 {
-	"name": "PhotoScreenSaver",
-	"authors": [
-		"Michael A. Updike <igreilly1269@gmail.com>"
-	],
-	"description": "Photo Screen Saver implemented with Polymer",
-	"license": "MIT",
-	"private": true,
-	"ignore": [
-		"**/.*",
-		"node_modules",
-		"bower_components",
-		"components",
-		"assets",
-		"test",
-		"tests"
-	],
-	"dependencies": {
-		"polymer": "Polymer/polymer#^1.1.0",
-		"iron-elements": "PolymerElements/iron-elements#^1.0.0",
-		"paper-elements": "PolymerElements/paper-elements#^1.0.1",
-		"platinum-elements": "PolymerElements/platinum-elements#^1.1.0",
-		"neon-elements": "PolymerElements/neon-elements#^1.0.0",
-		"paper-time-picker": "paper-time-picker#^1.0.3",
-		"iron-label": "PolymerElements/iron-label#^1.0.1"
-
-	}
+  "name": "PhotoScreenSaver",
+  "authors": [
+    "Michael A. Updike <igreilly1269@gmail.com>"
+  ],
+  "description": "Photo Screen Saver implemented with Polymer",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components",
+    "assets",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
+    "iron-label": "PolymerElements/iron-label#^1.0.1",
+    "neon-elements": "PolymerElements/neon-elements#^1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.1",
+    "paper-time-picker": "paper-time-picker#^1.0.3",
+    "platinum-elements": "PolymerElements/platinum-elements#^1.1.0",
+    "polymer": "Polymer/polymer#^1.1.0"
+  }
 }

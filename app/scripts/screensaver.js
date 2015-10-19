@@ -342,7 +342,4 @@
 		chrome.windows.remove(parseInt(localStorage.windowID, 10));
 	}, false);
 
-	// log pageview to google analytics
-	// ga('send', 'pageview', '/screensaver.html');
-
 })();
