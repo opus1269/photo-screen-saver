@@ -9,10 +9,10 @@
 
 	t.items = [];
 
-	t.addEventListener('dom-change', function (event) {
+	t.addEventListener('dom-change', function () {
 
 		tRep = document.querySelector('#repeatTemplate');
-		tRep.addEventListener('dom-change', function (event) {
+		tRep.addEventListener('dom-change', function () {
 			console.log('slides ready');
 		});
 		t.transitionType = parseInt(localStorage.photoTransition,10);
@@ -46,7 +46,7 @@
 
 		t.loadImages();
 
-    this.fire('runShow');
+		this.fire('runShow');
 
 	});
 
@@ -171,14 +171,14 @@
 
 				// the Polymer way - !important
 				this.push('items', {name: 'image' + (count + 1),
-														path: arr[i].url,
-														authorID: 'author' + (count + 1),
-														author: author,
-														label: photoLabel,
-														sizingType: t.sizingType,
-														aspectRatio: arr[i].asp,
-														width: screen.width,
-														height: screen.height
+									path: arr[i].url,
+									authorID: 'author' + (count + 1),
+									author: author,
+									label: photoLabel,
+									sizingType: t.sizingType,
+									aspectRatio: arr[i].asp,
+									width: screen.width,
+									height: screen.height
 				});
 				count++;
 			}
@@ -230,7 +230,7 @@
 		}
 
 		height = Math.min((screen.width - padding * 2 - border * 2) / aspectRatio,
-											screen.height - padding * 2 - border - borderBot);
+							screen.height - padding * 2 - border - borderBot);
 		width = height * aspectRatio;
 
 		img.style.height = height + 'px';
@@ -292,26 +292,19 @@
 	t.nextPhoto = function () {
 		var p = t.$.pages;
 		// Polymer 1 changed selected sttribute to a string
-		var curPage = parseInt(((p.selected === -1) ? 0 : p.selected),10);
+		var curPage = parseInt(((!p.selected) ? 0 : p.selected),10);
 		// wrap around when we get to the last photo
 		var nextPage = (curPage === t.items.length - 1) ? 0 : curPage + 1;
-		var itemCur = t.items[curPage];
-		var curImage = p.querySelector('#' + itemCur.name);
 		var mainContainer = t.$.mainContainer;
 		var bg = document.querySelector('#bg-img');
 
-
 		var selected = nextPage;
 
-		var config = p.getAnimationConfig();
-		console.log('template config', config);
-
-// if(!started) {
-// 			// special case for first page
-// 			selected = curPage;
-// 			started = true;
-// 			curImage.style.transition = 'opacity 1s linear';
-// 		}
+		if(!started) {
+			// special case for first page
+			selected = curPage;
+			started = true;
+		}
 
 		if (!t.isComplete(selected)) {
 			selected = t.findPhoto(selected);
@@ -332,12 +325,10 @@
 			t.posText(selected);
 		}
 
-		// turn the image on !important
-		p.querySelector('#' + t.items[selected].name).style.opacity = 1.0;
-
 		p.selected = selected;
 	};
 
+	// close preview window on click
 	window.addEventListener('click', function () {
 		chrome.windows.remove(parseInt(localStorage.windowID, 10));
 	}, false);

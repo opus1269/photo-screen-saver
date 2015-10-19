@@ -26,7 +26,7 @@
 <body unresolved class="fullbleed horizontal layout">
 	<template is="dom-bind" id="t">
 		<div id="mainContainer" class="flex">
-			<neon-animated-pages id="pages" selected="0" class="fit">
+			<neon-animated-pages id="pages" animate-initial-selection class="fit">
 				<template is="dom-repeat" id="repeatTemplate" items="{{items}}">
 					<slide-animatable ani-type="{{transitionType}}">
 						<section>
