@@ -5,14 +5,14 @@
 
   <style>
 
-    :host {
-      display: block;
-    }
+	:host {
+	  display: block;
+	}
 
   </style>
 
   <template>
-    <content></content>
+	<content></content>
   </template>
 </dom-module>
 
@@ -21,65 +21,65 @@
 
   Polymer({
 
-    is: 'slide-animatable',
+	is: 'slide-animatable',
 
-    behaviors: [
-      Polymer.NeonAnimatableBehavior
-    ],
+	behaviors: [
+	  Polymer.NeonAnimatableBehavior
+	],
 
-		properties: {
+    properties: {
 
-      animationConfig: {
-				type: Object,
-        value: function() {
-          return {
-						'entry' : {
-							name: 'fade-in-animation',
-							node: this,
-							timing: {duration: 2000, easing: 'ease-in-sine'}
-						},
-						'exit' : {
-							name: 'fade-out-animation',
-							node: this,
-							timing: {duration: 2000, easing: 'ease-out-sine'}
-						}
-					};
-				}
-			},
+        animationConfig: {
+            type: Object,
+            value: function() {
+                return {
+                    'entry' : {
+                        name: 'fade-in-animation',
+                        node: this,
+                        timing: {duration: 2000, easing: 'ease-in-sine'}
+                    },
+                    'exit' : {
+                        name: 'fade-out-animation',
+                        node: this,
+                        timing: {duration: 2000, easing: 'ease-out-sine'}
+                    }
+                };
+            }
+        },
 
-      aniType: {
-        type: Number,
-        observer: '_aniChanged'
-      }
+        aniType: {
+            type: Number,
+            observer: '_aniChanged'
+        }
 
-		},
+    },
 
-		_aniChanged: function(newValue) {
-			var entry, exit;
+    _aniChanged: function(newValue) {
+        var entry, exit;
 
-			switch(newValue) {
-				case 0:
-					entry = 'scale-up-animation';
-					exit = 'scale-down-animation';
-					break;
-				case 1:
-					entry = 'fade-in-animation';
-					exit = 'fade-out-animation';
-					break;
-				case 2:
-					entry = 'slide-from-right-animation';
-					exit = 'slide-left-animation';
-					break;
-				case 3:
-					entry = 'slide-down-animation';
-					exit = 'slide-up-animation';
-					break;
-			}
+        switch(newValue) {
+            case 0:
+            entry = 'scale-up-animation';
+            exit = 'scale-down-animation';
+            break;
+            case 1:
+            entry = 'fade-in-animation';
+            exit = 'fade-out-animation';
+            break;
+            case 2:
+            entry = 'slide-from-right-animation';
+            exit = 'slide-left-animation';
+            break;
+            case 3:
+            entry = 'slide-down-animation';
+            exit = 'slide-up-animation';
+            break;
+        }
 
-      this.animationConfig.entry.name = entry;
-      this.animationConfig.exit.name = exit;
+        this.animationConfig.entry.name = entry;
+        this.animationConfig.exit.name = exit;
     }
 
-  });
+});
 
 </script>
