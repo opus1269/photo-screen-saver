@@ -11,9 +11,7 @@
 	t.addEventListener('dom-change', function () {
 
 		tPages = document.querySelector('#repeatTemplate');
-		tPages.addEventListener('dom-change', function () {
-			console.log('slides ready');
-		});
+
 		t.transitionType = parseInt(localStorage.photoTransition,10);
 		t.transitionTime = parseInt(localStorage.transitionTime,10) * 1000;
 		switch(parseInt(localStorage.photoSizing,10)) {
@@ -44,19 +42,21 @@
 		}
 
 		// load the photos for the slide show
-		t.loadImages();
-
-		this.fire('runShow');
+		this.debounce('job1', function() {
+			t.loadImages();
+			this.fire('pages-ready');
+		});
 
 	});
 
 	// This will run to infinity... and beyond
-	// The setTimeout lets us prep the first photo
-	t.addEventListener('runShow', function () {
-		setTimeout(function () {
+	// cycling through the selected photos
+	t.addEventListener('pages-ready', function () {
+		Polymer.dom.flush();
+		this.async(function () {
 			t.nextPhoto();
 			window.setInterval(t.nextPhoto, parseInt(t.transitionTime, 10));
-		}, 5000);
+		}, 1000);
 	});
 
 	// create the photo label
@@ -259,15 +259,13 @@
 		var item = t.items[photoID];
 		var image = t.$.pages.querySelector('#' + item.name);
 
-		return !image.loading;
+		return image && !image.loading;
 	};
 
 	// try to find a photo that is ready to display
 	t.findPhoto = function(photoID) {
 		var i;
 		var found = false;
-
-		photoID = 0;
 
 		for (i = photoID + 1; i < t.items.length; i++) {
 			if (t.isComplete(i)) {
@@ -277,21 +275,20 @@
 			}
 		}
 		if (!found) {
-			for (i = 0; i < photoID; i++) {
+			for (i = 0; i <t.items.length; i++) {
 				if (t.isComplete(i)) {
 					photoID = i;
+					found = true;
 					break;
 				}
 			}
 		}
-
 		return photoID;
 	};
 
 	// called at fixed time intervals to cycle through the pages
 	t.nextPhoto = function () {
 		var p = t.$.pages;
-		// Polymer 1 changed selected sttribute to a string
 		var curPage = parseInt(((!p.selected) ? 0 : p.selected),10);
 		// wrap around when we get to the last photo
 		var nextPage = (curPage === t.items.length - 1) ? 0 : curPage + 1;
@@ -316,15 +313,18 @@
 		else {
 			bg.style.visibility = 'hidden';
 			mainContainer.style.visibility = 'visible';
-		}
-		if(!t.sizingType) {
-			t.framePhoto(selected);
-		}
-		else if(t.sizingType === 'contain') {
-			t.posText(selected);
-		}
 
-		p.selected = selected;
+			// prep photos
+			if(!t.sizingType) {
+				t.framePhoto(selected);
+			}
+			else if(t.sizingType === 'contain') {
+				t.posText(selected);
+			}
+
+			// set the selected so the animation runs
+			p.selected = selected;
+		}
 	};
 
 	// close preview window on click
