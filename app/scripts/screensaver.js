@@ -1,5 +1,5 @@
-(function () {
-'use strict';
+(function() {
+	'use strict';
 
 	// main template and pages repeat temple
 	var t = document.querySelector('#t');
@@ -8,13 +8,13 @@
 	// array of photos to use for slide show
 	t.items = [];
 
-	t.addEventListener('dom-change', function () {
+	t.addEventListener('dom-change', function() {
 
 		tPages = document.querySelector('#repeatTemplate');
 
 		t.transitionType = parseInt(localStorage.photoTransition,10);
 		t.transitionTime = parseInt(localStorage.transitionTime,10) * 1000;
-		switch(parseInt(localStorage.photoSizing,10)) {
+		switch (parseInt(localStorage.photoSizing,10)) {
 			case 0:
 				t.sizingType = 'contain';
 				break;
@@ -27,8 +27,8 @@
 		}
 
 		// override zoom factor - chrome 42 and later
-		try  {
-			chrome.tabs.getZoom(function (zoomFactor) {
+		try {
+			chrome.tabs.getZoom(function(zoomFactor) {
 				if ((zoomFactor < 0.99) || (zoomFactor > 1.01)) {
 					chrome.tabs.setZoom(1.0);
 				}
@@ -51,22 +51,21 @@
 
 	// This will run to infinity... and beyond
 	// cycling through the selected photos
-	t.addEventListener('pages-ready', function () {
+	t.addEventListener('pages-ready', function() {
 		Polymer.dom.flush();
-		this.async(function () {
+		this.async(function() {
 			t.nextPhoto();
 			window.setInterval(t.nextPhoto, parseInt(t.transitionTime, 10));
 		}, 2000);
 	});
 
 	// create the photo label
-	t.getPhotoLabel = function (author, force) {
+	t.getPhotoLabel = function(author, force) {
 		var ret = '';
 		if (force || JSON.parse(localStorage.showPhotog)) {
 			if (author !== '') {
 				ret = 'Photo by ' + author;
-			}
-			else {
+			} else {
 				ret = 'Photo from Google+';
 			}
 		}
@@ -74,11 +73,11 @@
 	};
 
 	// check if a photo would look bad cropped
-	t.badAspect = function (aspectRatio) {
+	t.badAspect = function(aspectRatio) {
 		var aspectRatioScreen = screen.width / screen.height;
 		var cutoff = 0.5;  // arbitrary
 
-		if(aspectRatio && ((aspectRatio < aspectRatioScreen - cutoff) ||
+		if (aspectRatio && ((aspectRatio < aspectRatioScreen - cutoff) ||
 				(aspectRatio > aspectRatioScreen + cutoff))) {
 			return true;
 		}
@@ -92,38 +91,38 @@
 		var arr = [], tmp = [];
 		var i;
 
-		if(JSON.parse(localStorage.useGoogle)) {
+		if (JSON.parse(localStorage.useGoogle)) {
 			tmp = [];
 			albumSelections = JSON.parse(localStorage.albumSelections);
-			for(i=0; i < albumSelections.length; i++) {
+			for (i = 0; i < albumSelections.length; i++) {
 				tmp = tmp.concat(albumSelections[i].photos);
 				// TODO fix this
-				/*	if(localStorage.badUserImages) {
+				/*	if (localStorage.badUserImages) {
 					badImages = JSON.parse(localStorage.badUserImages);
-					for(j=0; j < badImages.length; j++) {
+					for (j=0; j < badImages.length; j++) {
 							tmp[badImages[i]].ignore = true;
 					}
 				}*/
 			}
 			arr = arr.concat(tmp);
 		}
-		if(JSON.parse(localStorage.useChromecast)) {
+		if (JSON.parse(localStorage.useChromecast)) {
 			tmp = [];
 			tmp = tmp.concat(chromeCast.getImages());
-			if(localStorage.badCCImages) {
+			if (localStorage.badCCImages) {
 				badImages = JSON.parse(localStorage.badCCImages);
-				for(i=0; i < badImages.length; i++) {
+				for (i = 0; i < badImages.length; i++) {
 					tmp[badImages[i]].ignore = true;
 				}
 			}
 			arr = arr.concat(tmp);
 		}
-		if(JSON.parse(localStorage.useAuthors)) {
+		if (JSON.parse(localStorage.useAuthors)) {
 			tmp = [];
 			tmp = tmp.concat(JSON.parse(localStorage.authorImages));
-			if(localStorage.badAuthorImages) {
+			if (localStorage.badAuthorImages) {
 				badImages = JSON.parse(localStorage.badAuthorImages);
-				for(i=0; i < badImages.length; i++) {
+				for (i = 0; i < badImages.length; i++) {
 					tmp[badImages[i]].ignore = true;
 				}
 			}
@@ -135,8 +134,8 @@
 
 	// perform final processing on the selected photo sources and
 	// populate the pages
-	t.loadImages = function () {
-		var i,count=0;
+	t.loadImages = function() {
+		var i,count = 0;
 		var author;
 		var photoLabel;
 		var skip = JSON.parse(localStorage.skip);
@@ -148,19 +147,19 @@
 		arr = t.getPhotoArray();
 
 		// randomize the order
-		if(JSON.parse(localStorage.shuffle)) {
+		if (JSON.parse(localStorage.shuffle)) {
 			chromeCast.shuffleArray(arr);
 		}
 
-		for(i=0; i < arr.length; i++) {
+		for (i = 0; i < arr.length; i++) {
 
 			// ignore photos that would look bad when cropped
-			if(skip && (t.sizingType === 'cover') && t.badAspect(arr[i].asp)) {
+			if (skip && (t.sizingType === 'cover') && t.badAspect(arr[i].asp)) {
 				arr[i].ignore = true;
 			}
 
 			// well.... don't know, let's guess :)
-			if(!arr[i].asp) {
+			if (!arr[i].asp) {
 				arr[i].asp = 16 / 9;
 			}
 
@@ -193,18 +192,17 @@
 	};
 
 	// position the text when using Letterbox
-	t.posText = function (photoID) {
+	t.posText = function(photoID) {
 		var item = t.items[photoID];
 		var aspectRatio = item.aspectRatio;
-		var author = t.$.pages.querySelector('#'+item.authorID);
+		var author = t.$.pages.querySelector('#' + item.authorID);
 		var screenAspectRatio = screen.width / screen.height;
 		var right,bottom;
 
-		if(aspectRatio < screenAspectRatio) {
+		if (aspectRatio < screenAspectRatio) {
 			right = (screen.width - (screen.height * aspectRatio)) / 2;
 			author.style.right = (right + 30) + 'px';
-		}
-		else {
+		} else {
 			bottom = (screen.height - (screen.width / aspectRatio)) / 2;
 			author.style.bottom = (bottom + 20) + 'px';
 		}
@@ -212,18 +210,18 @@
 
 	// show photo centered, with padding, border and shadow
 	// show it either scaled up or reduced to fit
-	t.framePhoto = function (photoID) {
+	t.framePhoto = function(photoID) {
 		var padding = 30,border = 5,borderBot = 50;
 		var item = t.items[photoID];
 		var p = t.$.pages;
-		var image = p.querySelector('#'+ item.name);
-		var author = p.querySelector('#'+ item.authorID);
+		var image = p.querySelector('#' + item.name);
+		var author = p.querySelector('#' + item.authorID);
 		var img = image.$.img;
 		var width, height;
 		var aspectRatio = item.aspectRatio;
 
 		// force use of photo label for this view
-		if(!JSON.parse(localStorage.showPhotog)) {
+		if (!JSON.parse(localStorage.showPhotog)) {
 			var label = t.getPhotoLabel(item.author,true);
 			var model = tPages.modelForElement(image);
 			model.set('item.label', label);
@@ -255,7 +253,7 @@
 	};
 
 	// check if the photo is ready to display
-	t.isComplete = function (photoID) {
+	t.isComplete = function(photoID) {
 		var item = t.items[photoID];
 		var image = t.$.pages.querySelector('#' + item.name);
 
@@ -275,7 +273,7 @@
 			}
 		}
 		if (!found) {
-			for (i = 0; i <t.items.length; i++) {
+			for (i = 0; i < t.items.length; i++) {
 				if (t.isComplete(i)) {
 					photoID = i;
 					found = true;
@@ -287,7 +285,7 @@
 	};
 
 	// called at fixed time intervals to cycle through the pages
-	t.nextPhoto = function () {
+	t.nextPhoto = function() {
 		var p = t.$.pages;
 		var curPage = parseInt(((!p.selected) ? 0 : p.selected),10);
 		// wrap around when we get to the last photo
@@ -298,7 +296,7 @@
 		var selected = nextPage;
 
 		// special case for first page
-		if(p.selected === undefined) {
+		if (p.selected === undefined) {
 			selected = curPage;
 		}
 
@@ -309,16 +307,14 @@
 		if (!t.isComplete(selected)) {
 			bg.style.visibility = 'visible';
 			mainContainer.style.visibility = 'hidden';
-		}
-		else {
+		} else {
 			bg.style.visibility = 'hidden';
 			mainContainer.style.visibility = 'visible';
 
 			// prep photos
-			if(!t.sizingType) {
+			if (!t.sizingType) {
 				t.framePhoto(selected);
-			}
-			else if(t.sizingType === 'contain') {
+			} else if (t.sizingType === 'contain') {
 				t.posText(selected);
 			}
 
@@ -328,7 +324,7 @@
 	};
 
 	// close preview window on click
-	window.addEventListener('click', function () {
+	window.addEventListener('click', function() {
 		chrome.windows.remove(parseInt(localStorage.windowID, 10));
 	}, false);
 
