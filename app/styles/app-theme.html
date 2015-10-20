@@ -131,7 +131,7 @@
 	  overflow-y: scroll;
 	}
 
-	.listItem {
+	.list-item {
 		position: relative;
 	  border-bottom-style: solid;
 	  border-color:  #CCCCCC;
@@ -141,28 +141,28 @@
 		cursor: pointer;
 	}
 
-	.listItem paper-item-body {
-	  padding-left: 10px;
+	.list-item paper-item-body {
+		padding-left: 10px;
 	}
 
-	.listItem paper-item {
-	  padding-right: 0;
+	.list-item paper-item {
+		padding-right: 0;
 	}
 
- .listItem iron-image {
+	.list-item iron-image {
 		height: 72px;
 		width: 72px;
-	 }
-
- .listItem[disabled] iron-image {
-	  opacity: .2;
 	}
 
-	.listItem[disabled] {
+	.list-item[disabled] iron-image {
+		opacity: .2;
+	}
+
+	.list-item[disabled] {
 		pointer-events: none;
 	}
 
-	.listItem[disabled] .setting-label {
+	.list-item[disabled] .setting-label {
 		color: var(--disabled-text-color);
 	}
 

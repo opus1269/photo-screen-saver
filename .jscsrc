@@ -1,5 +1,8 @@
 {
 	"preset": "google",
+	"maximumLineLength": 160,
+	"validateIndentation": "\t",
+	"disallowMultipleVarDecl": false,
 	"disallowSpacesInAnonymousFunctionExpression": null,
 	"excludeFiles": ["node_modules/**"]
 }

@@ -1,16 +1,16 @@
-(function () {
+(function() {
 'use strict';
 
-var DAYINMIN = 60 * 24; // minutes in day
+// minutes in day
+var MIN_IN_DAY = 60 * 24;
 
 // display or focus options page
-chrome.browserAction.onClicked.addListener(function () {
-	chrome.tabs.query({ title: 'Photo Screen Saver Options Page' }, function (t) {
+chrome.browserAction.onClicked.addListener(function() {
+	chrome.tabs.query({title: 'Photo Screen Saver Options Page'}, function(t) {
 		if (!t.length) {
 			chrome.tabs.create({url: '../html/options.html'});
-		}
-		else {
-			chrome.tabs.update(t[0].id, { 'highlighted': true });
+		} else {
+			chrome.tabs.update(t[0].id, {'highlighted': true});
 		}
 	});
 });
@@ -26,7 +26,7 @@ function initData() {
 	localStorage.version = '2';
 
 	// Add the new version 2 values
-	if(!oldVer || (oldVer < 2)) {
+	if (!oldVer || (oldVer < 2)) {
 		localStorage.allDisplays = 'false';
 		localStorage.keepStart = '"00:00"'; // 24 hr time
 		localStorage.keepStop = '"00:00"';  // 24 hr time
@@ -36,7 +36,7 @@ function initData() {
 	}
 
 	// values from the beginning of time
-	if(!oldVer) {
+	if (!oldVer) {
 		localStorage.enabled = 'true';
 		localStorage.idleTime = '10'; // minutes
 		localStorage.transitionTime = '30'; // seconds
@@ -67,10 +67,9 @@ function getChromeVersion() {
 // using the screensaver
 function processEnabled() {
 	if (JSON.parse(localStorage.enabled)) {
-		chrome.browserAction.setBadgeText({ text: '' });
-	}
-	else {
-		chrome.browserAction.setBadgeText({ text: 'OFF' });
+		chrome.browserAction.setBadgeText({text: ''});
+	} else {
+		chrome.browserAction.setBadgeText({text: 'OFF'});
 	}
 }
 
@@ -91,8 +90,8 @@ function getTimeDelta(value) {
 	var time = getTime(value);
 	var delayMin = (time - curTime) / 1000 / 60;
 
-	if(delayMin < 0) {
-		delayMin = DAYINMIN + delayMin;
+	if (delayMin < 0) {
+		delayMin = MIN_IN_DAY + delayMin;
 	}
 	return delayMin;
 }
@@ -104,13 +103,12 @@ function isInRange(start, stop) {
 	var stopTime = getTime(stop);
 	var ret = false;
 
-	if(stopTime > startTime) {
-		if((curTime > startTime) && (curTime < stopTime)) {
+	if (stopTime > startTime) {
+		if ((curTime > startTime) && (curTime < stopTime)) {
 			ret = true;
 		}
-	}
-	else {
-		if((curTime > startTime) || (curTime < stopTime)) {
+	} else {
+		if ((curTime > startTime) || (curTime < stopTime)) {
 			ret = true;
 		}
 	}
@@ -130,11 +128,11 @@ function processAlarms() {
 
 		chrome.alarms.create('keepStart', {
 			delayInMinutes: startDelayMin,
-			periodInMinutes: DAYINMIN
+			periodInMinutes: MIN_IN_DAY
 		});
 		chrome.alarms.create('keepStop',{
 			delayInMinutes: stopDelayMin,
-			periodInMinutes: DAYINMIN
+			periodInMinutes: MIN_IN_DAY
 		});
 
 		// if we are currently outside of the range of the keep awake
@@ -142,8 +140,7 @@ function processAlarms() {
 		if (!isInRange(kStart, kStop)) {
 			chrome.power.requestKeepAwake('system');
 		}
-	}
-	else {
+	} else {
 		chrome.alarms.clear('keepStart');
 		chrome.alarms.clear('keepStop');
 	}
@@ -152,8 +149,7 @@ function processAlarms() {
 function processKeepAwake() {
 	if (JSON.parse(localStorage.keepAwake)) {
 		chrome.power.requestKeepAwake('display');
-	}
-	else {
+	} else {
 		chrome.power.releaseKeepAwake();
 	}
 	processAlarms();
@@ -166,14 +162,14 @@ function processIdleTime() {
 function processUseAuthors() {
 	localStorage.removeItem('badAuthorImages');
 	localStorage.removeItem('authorImages');
-	if(JSON.parse(localStorage.useAuthors)) {
+	if (JSON.parse(localStorage.useAuthors)) {
 		gPhotos.preloadAuthorImages();
 	}
 }
 
 function processUseChromecast() {
 	localStorage.removeItem('badCCImages');
-	if(JSON.parse(localStorage.useChromecast)) {
+	if (JSON.parse(localStorage.useChromecast)) {
 		chromeCast.preloadImages();
 	}
 }
@@ -181,8 +177,8 @@ function processUseChromecast() {
 // set state based on the current values in localStorage
 // TODO: Do we want useGoogle and useLocal here?
 function processState(key) {
-	if(key) {
-		switch(key) {
+	if (key) {
+		switch (key) {
 			case 'enabled':
 				processEnabled();
 				break;
@@ -201,8 +197,7 @@ function processState(key) {
 				processUseChromecast();
 				break;
 		}
-	}
-	else {
+	} else {
 		processKeepAwake();
 		processIdleTime();
 		processEnabled();
@@ -212,8 +207,8 @@ function processState(key) {
 }
 
 // create the screen saver window
-window.showScreenSaver = function () {
-	if(getChromeVersion() >= 44) {
+window.showScreenSaver = function() {
+	if (getChromeVersion() >= 44) {
 		// use fullscreen option in create call - chrome 44 and later
 		chrome.windows.create({
 			url: '/html/screensaver.html',
@@ -221,11 +216,10 @@ window.showScreenSaver = function () {
 			type: 'popup',
 			state: 'fullscreen'
 		},
-		function (win) {
+		function(win) {
 			localStorage.windowID = win.id;
 		});
-	}
-	else {
+	} else {
 		chrome.windows.create({
 			url: '/html/screensaver.html',
 			left: 0,
@@ -235,9 +229,9 @@ window.showScreenSaver = function () {
 			focused: true,
 			type: 'popup'
 		},
-		function (win) {
+		function(win) {
 			localStorage.windowID = win.id;
-			chrome.windows.update(win.id, { state: 'fullscreen' });
+			chrome.windows.update(win.id, {state: 'fullscreen'});
 		});
 	}
 };
@@ -265,8 +259,7 @@ function onIdleStateChanged(state) {
 	if (!JSON.parse(localStorage.isPreview)) {
 		if ((state === 'idle') && JSON.parse(localStorage.enabled)) {
 			showScreenSaver();
-		}
-		else if (win !== -1) {
+		} else if (win !== -1) {
 			localStorage.windowID = '-1';
 			localStorage.isPreview = 'false';
 			try {
@@ -279,14 +272,13 @@ function onIdleStateChanged(state) {
 
 // event: process requests to change the keep awake mode
 function onAlarm(alarm) {
-	if(alarm.name === 'keepStop') {
+	if (alarm.name === 'keepStop') {
 		if (JSON.parse(localStorage.keepAwake)) {
 			// let display sleep, but keep power on
 			// so we can reenable
 			chrome.power.requestKeepAwake('system');
 		}
-	}
-	else if(alarm.name === 'keepStart') {
+	} else if (alarm.name === 'keepStart') {
 		if (JSON.parse(localStorage.keepAwake)) {
 			// Don't let display sleep
 			chrome.power.requestKeepAwake('display');
@@ -309,7 +301,7 @@ chrome.runtime.onInstalled.addListener(onInstalled);
 chrome.runtime.onStartup.addListener(onStartup);
 
 // listen for changes to the stored data
-addEventListener("storage", onStorageChanged, false);
+addEventListener('storage', onStorageChanged, false);
 
 // listen for changes to the idle state of the computer
 chrome.idle.onStateChanged.addListener(onIdleStateChanged);

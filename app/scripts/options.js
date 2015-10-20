@@ -1,21 +1,15 @@
-/*
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
-*/
-
 (function(document) {
 	'use strict';
+
+	// path to the extension
+	var EXT_URI = 'https://chrome.google.com/webstore/detail/photo-screen-saver/kohpcmlfdjfdggcjmjhhbcbankgmppgc/';
 
 	// Grab a reference to our auto-binding template
 	// and give it some initial binding values
 	// Learn more about auto-binding templates at http://goo.gl/Dx1u2g
 	var app = document.querySelector('#app');
 
-	// grap a few other convient references
+	// grap a few other convenient references
 	app.menu;
 	app.errorDialog;
 	app.albumT;
@@ -39,7 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	// array of selected google albums
 	app.albumSelections = JSON.parse(localStorage.albumSelections);
 
-	app.displayInstalledToast = function () {
+	app.displayInstalledToast = function() {
 		// Check to make sure caching is actually enabled—it won't be in the dev environment.
 		if (!document.querySelector('platinum-sw-cache').disabled) {
 			document.querySelector('#caching-complete').show();
@@ -56,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	});
 
 	// See https://github.com/Polymer/polymer/issues/1381
-	// window.addEventListener('WebComponentsReady', function () {
+	// window.addEventListener('WebComponentsReady', function() {
 	//   // imports are loaded and elements have been registered
 	//   app.menu = Polymer.dom(document).querySelector('#mainMenu');
 	//   app.errorDialog = Polymer.dom(document).querySelector('#errorDialog');
@@ -64,12 +58,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	// });
 
 	// Scroll page to top
-	app.scrollPageToTop = function () {
+	app.scrollPageToTop = function() {
 		document.getElementById('mainContainer').scrollTop = 0;
 	};
 
 	// Close drawer if drawerPanel is narrow
-	app.closeDrawer = function () {
+	app.closeDrawer = function() {
 		var drawerPanel = document.querySelector('#paperDrawerPanel');
 		if (drawerPanel.narrow) {
 			drawerPanel.closeDrawer();
@@ -77,12 +71,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	};
 
 	// handle menu selection of pages
-	app.onDataRouteClick = function (event) {
+	app.onDataRouteClick = function(event) {
 
 		// Close drawer after menu item is selected if drawerPanel is narrow
 		app.closeDrawer();
 
-		var index = app.pages.map(function (e) { return e.route; }).indexOf(event.srcElement.id);
+		var index = app.pages.map(function(e) {return e.route;}).indexOf(event.srcElement.id);
 
 		app.prevRoute = app.route;
 
@@ -91,12 +85,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				// some pages are url links
 				app.menu.select(app.prevRoute);
 				chrome.tabs.create({url: app.pages[index].obj});
-			}
-			else {
+			} else {
 				app.pages[index].obj(index,event);
 			}
-		}
-		else {
+		} else {
 			app.route = app.pages[index].route;
 			this.debounce('job1', function() {
 				app.scrollPageToTop();
@@ -106,7 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	};
 
 	// Refresh the list of albums
-	app.refreshAlbums = function (items){
+	app.refreshAlbums = function(items) {
 		var tmp = [];
 		var item;
 
@@ -121,43 +113,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	};
 
 	// show the Google Photos page
-	app.googlePhotos = function (index) {
+	app.googlePhotos = function(index) {
 		app.route = app.pages[index].route;
 		app.loadAlbumList();
 	};
 
 	// preview the screensaver
-	app.preview = function () {
-		app.async(function () {
+	app.preview = function() {
+		app.async(function() {
 			app.menu.select(app.prevRoute);
 		}, 500);
 		localStorage.isPreview = 'true';
-		chrome.runtime.getBackgroundPage(function (win) {
+		chrome.runtime.getBackgroundPage(function(win) {
 			win.showScreenSaver();
 		});
 	};
 
 	// list of pages
 	app.pages = [
-		{ label: 'Settings', route: 'page-settings', icon: 'settings', obj: null },
-		{ label: 'Google Photos Albums', route: 'page-google-photos', icon: 'cloud', obj: app.googlePhotos },
-		{ label: 'Local Photos', route: 'page-local-photos', icon: 'folder', obj: null },
-		{ label: 'Preview (click to close)', route: 'page-preview', icon: 'pageview', obj: app.preview },
-		{ label: 'Information For Nerds', route: 'page-info', icon: 'info', obj: null },
-		{ label: 'Request Support', route: 'page-support', icon: 'help', obj: 'https://chrome.google.com/webstore/detail/photo-screen-saver/kohpcmlfdjfdggcjmjhhbcbankgmppgc/support' },
-		{ label: 'Rate Extension', route: 'page-rate', icon: 'grade', obj: 'https://chrome.google.com/webstore/detail/photo-screen-saver/kohpcmlfdjfdggcjmjhhbcbankgmppgc/reviews' }
+		{label: 'Settings', route: 'page-settings', icon: 'settings', obj: null},
+		{label: 'Google Photos Albums', route: 'page-google-photos', icon: 'cloud', obj: app.googlePhotos},
+		{label: 'Local Photos', route: 'page-local-photos', icon: 'folder', obj: null},
+		{label: 'Preview (click to close)', route: 'page-preview', icon: 'pageview', obj: app.preview},
+		{label: 'Information For Nerds', route: 'page-info', icon: 'info', obj: null},
+		{label: 'Request Support', route: 'page-support', icon: 'help', obj: EXT_URI + 'support'},
+		{label: 'Rate Extension', route: 'page-rate', icon: 'grade', obj: EXT_URI + 'reviews'}
 	];
 
 	// Query Picasa for the list of the users albums
-	app.loadAlbumList = function () {
+	app.loadAlbumList = function() {
 		app.waitForLoad = true;
-		gPhotos.loadAlbumList(function (albums, error) {
+		gPhotos.loadAlbumList(function(albums, error) {
 			//error = 'This is an eror';
 			if (!error) {
 				app.albums = albums;
 				app.selectAlbums();
-			}
-			else {
+			} else {
 				app.dialogText = error;
 				app.errorDialog.open();
 			}
@@ -166,7 +157,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	};
 
 	// set the checked state of the albums (before binding)
-	app.selectAlbums = function () {
+	app.selectAlbums = function() {
 		var i, j;
 
 		for (i = 0; i < app.albums.length; i++) {
@@ -180,35 +171,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	};
 
 	// refresh the album list
-	app.albumRefreshTapped = function () {
+	app.albumRefreshTapped = function() {
 		app.loadAlbumList();
 	};
 
 	// deselect all albums
-	app.albumsDeselectAllTapped = function () {
+	app.albumsDeselectAllTapped = function() {
 		var model;
 
 		for (var i = 0; i < app.albums.length; i++) {
 			if (app.albums[i].checked) {
 				model = app.albumT.modelForElement(document.querySelector('#' + app.albums[i].uid));
 				model.set('item.checked', false);
-		 }
+			}
 		}
 		app.albumSelections = [];
 		localStorage.albumSelections = JSON.stringify(app.albumSelections);
 	};
 
 	// handle interactive album selections
-	app.albumSelectChange = function (event) {
+	app.albumSelectChange = function(event) {
 		var item = event.model.item;
-		var index = app.albumSelections.map(function (e) { return e.id; }).indexOf(item.id);
+		var index = app.albumSelections.map(function(e) {return e.id;}).indexOf(item.id);
 
 		if (index !== -1) {
 			app.albumSelections.splice(index, 1);
 		}
 
 		if (item.checked) {
-			app.albumSelections.push({ id: item.id, photos: item.photos });
+			app.albumSelections.push({id: item.id, photos: item.photos});
 		}
 
 		localStorage.albumSelections = JSON.stringify(app.albumSelections);

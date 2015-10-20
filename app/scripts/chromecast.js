@@ -1,5 +1,5 @@
 var chromeCast = (function() {
-"use strict";
+'use strict';
 
 var chromecastImages = [
     {

@@ -186,7 +186,7 @@
 
 		if (!count) {
 			// no photos to show
-			bg = document.querySelector('#bg1-img');
+			bg = document.querySelector('#bg1Img');
 			bg.style.visibility = 'visible';
 		}
 
@@ -293,7 +293,7 @@
 		// wrap around when we get to the last photo
 		var nextPage = (curPage === t.items.length - 1) ? 0 : curPage + 1;
 		var mainContainer = t.$.mainContainer;
-		var bg = document.querySelector('#bg-img');
+		var bg = document.querySelector('#bgImg');
 
 		var selected = nextPage;
 

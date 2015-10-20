@@ -7,7 +7,7 @@
 	<meta name="description" content="">
 	<meta name="generator" content="Photo Screen Saver" />
 
-	<!-- !Important -->
+	<!-- !important -->
 	<title>Photo Screen Saver Options Page</title>
 
 	<!-- build:css styles/main.css -->
@@ -34,7 +34,7 @@
 
 <body unresolved class="fullbleed layout vertical">
 
-	 <template is="dom-bind" id="app">
+	<template is="dom-bind" id="app">
 
 		<paper-drawer-panel id="paperDrawerPanel" drawer-width="290px">
 
@@ -113,7 +113,7 @@
 														disabled$="[[!enabled]]"></setting-slider>
 										<setting-dropdown name="photoSizing"
 															label="Photo display mode"
-															items='["Letterbox","Fill Screen","Center & Frame"]'
+															items='["Letterbox","Fill Screen","Center &amp; Frame"]'
 															disabled$="[[!enabled]]"></setting-dropdown>
 										<setting-dropdown name="photoTransition"
 															label="Photo transition method"
@@ -187,19 +187,19 @@
 
 										<div hidden$="[[waitForLoad]]">
 											<template is="dom-repeat" id="albumsTemplate" items="{{albums}}">
-												<div class="listItem" id="[[item.uid]]" disabled$="[[!useGoogle]]">
+												<div class="list-item" id="[[item.uid]]" disabled$="[[!useGoogle]]">
 													<iron-label>
-													 <paper-item class="center horizontal layout" tabIndex="-1">
-														 <paper-checkbox iron-label-target checked="{{item.checked}}" on-change="albumSelectChange" disabled$="[[!useGoogle]]"></paper-checkbox>
+														<paper-item class="center horizontal layout" tabIndex="-1">
+															<paper-checkbox iron-label-target checked="{{item.checked}}" on-change="albumSelectChange" disabled$="[[!useGoogle]]"></paper-checkbox>
 															<paper-item-body class="flex" two-line>
 																<div class="setting-label">{{item.name}}</div>
 																<div class="setting-label" secondary><span>[[item.ct]]</span> <span> photos</span></div>
 																<paper-ripple center></paper-ripple>
 															</paper-item-body>
-														 <iron-image src="[[item.thumb]]" sizing="cover" preload disabled$="[[!useGoogle]]"></iron-image>
+															<iron-image src="[[item.thumb]]" sizing="cover" preload disabled$="[[!useGoogle]]"></iron-image>
 														</paper-item>
 													</iron-label>
-												 </div>
+												</div>
 											</template>
 										</div>
 
@@ -238,7 +238,7 @@
 													<iron-icon src="/images/polymer.png"></iron-icon> POLYMER
 												</paper-button>
 											</a>
-											<a class="button-a" href=http://www.google.com/design/spec/material-design/introduction.html#" target="_blank" tabindex="-1">
+											<a class="button-a" href="http://www.google.com/design/spec/material-design/introduction.html#" target="_blank" tabindex="-1">
 												<paper-button raised noink>
 													<iron-icon src="/images/material.png"></iron-icon> MATERIAL DESIGN
 												</paper-button>
@@ -317,7 +317,7 @@
 	<!-- build:js scripts/app.js -->
 	<script src="../scripts/google_photos.js"></script>
 	<script src="../scripts/options.js"></script>
- <!-- endbuild-->
+	<!-- endbuild-->
 </body>
 
 </html>

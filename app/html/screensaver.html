@@ -4,6 +4,8 @@
 
 	<meta charset="utf-8">
 
+	<title>Photo Screen Saver Screensaver Page</title>
+
 	<link rel="stylesheet" href="../styles/screensaver.css">
 
 	<!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
@@ -32,7 +34,7 @@
 				<template is="dom-repeat" id="repeatTemplate" items="{{items}}">
 					<slide-animatable ani-type="{{transitionType}}">
 						<section>
-							<div class="aniDiv">
+							<div>
 								<iron-image id="{{item.name}}" class="slide" src="{{item.path}}" width="{{item.width}}" height="{{item.height}}" sizing="{{item.sizingType}}"
 								preload></iron-image>
 								<p id="{{item.authorID}}" class="author">{{item.label}}</p>
@@ -45,11 +47,11 @@
 	</template>
 
 	<div id="bg">
-		<img id=bg-img src="../images/not_available.png" alt="">
+		<img id="bgImg" src="../images/not_available.png" alt="">
 	</div>
 
 	<div id="bg1">
-		<img id=bg1-img src="../images/error.png" alt="">
+		<img id="bg1Img" src="../images/error.png" alt="">
 	</div>
 
 	<!-- build:copy-dev comment out -->
