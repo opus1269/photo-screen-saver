@@ -9,7 +9,10 @@ var vulcanize = require('gulp-vulcanize');
 var crisper = require('gulp-crisper');
 var watch = require('gulp-watch');
 var open = require('gulp-open');
+var jscs = require('gulp-jscs');
 var jshint = require('gulp-jshint');
+var htmllint = require('gulp-htmllint');
+var csslint = require('gulp-csslint');
 var gutil = require('gulp-util');
 var print = require('gulp-print');
 var iff = require('gulp-if');
@@ -69,14 +72,14 @@ var AUTOPREFIXER_BROWSERS = [
 ];
 
 // Update bower and enforce CSP
-gulp.task('bower', function () {
+gulp.task('bower', function() {
 	return gbower({ cmd: 'update'})
 		.pipe(crisper())
 		.pipe(gulp.dest(destBower));
 });
 
 // copy files to dev
-gulp.task('copy-dev', function () {
+gulp.task('copy-dev', function() {
 	return gulp.src(srcAll, { base: baseApp })
 		.pipe(newer(destDev))
 		.pipe(iff('*.html', replace('<google-analytics-tracker','<!-- <google-analytics-tracker')))
@@ -86,8 +89,8 @@ gulp.task('copy-dev', function () {
 });
 
 // enforce CSP
-gulp.task('csp', ['jshint'], function () {
-	return gulp.src(srcCsp, { base: baseApp })
+gulp.task('csp', ['jscs', 'jshint'], function() {
+	return gulp.src([srcHtml, srcElementsHtml, srcBowerHtml], { base: baseApp })
 		.pipe(newer(destDev))
 		.pipe(crisper())
 		.pipe(gulp.dest(destDev))
@@ -95,34 +98,74 @@ gulp.task('csp', ['jshint'], function () {
 });
 
 // Clean output directories
-gulp.task('clean', function (cb) {
+gulp.task('clean', function(cb) {
 	del(['.tmp', 'dist', 'dev'], cb);
 });
 
 // Initialize the dev directory
-gulp.task('dev', function (cb) {
+gulp.task('dev', function(cb) {
 	runSequence('clean', 'csp', 'copy-dev', cb);
 });
 
+// check coding style
+gulp.task('jscs', function() {
+	return gulp.src(srcJs, { base: baseApp })
+	.pipe(newer(destDev))
+	//	.pipe(jscs.extract()) // for inline code
+	.pipe(jscs())
+	.pipe(jscs.reporter())
+	.pipe(iff(isProduction, jscs.reporter('fail')))
+	.pipe($.size({title: 'jscs'}));
+});
+
 // Lint JavaScript
-gulp.task('jshint', function () {
+gulp.task('jshint', function() {
 	return gulp.src(srcJs, { base: baseApp })
 		.pipe(newer(destDev))
 		.pipe(jshint.extract()) // for inline code
 		.pipe(jshint())
 		.pipe(jshint.reporter('jshint-stylish'))
-		.pipe(iff(isProduction, jshint.reporter('fail')));
+		.pipe(iff(isProduction, jshint.reporter('fail')))
+		.pipe($.size({title: 'jshint'}));
 });
 
+// Lint CSS
+gulp.task('csslint', function() {
+	return gulp.src(srcCss, { base: baseApp })
+		.pipe(newer(destDev))
+	//	.pipe(jshint.extract()) // for inline code
+		.pipe(csslint())
+		.pipe(csslint.reporter())
+		.pipe(iff(isProduction, csslint.reporter('fail')))
+		.pipe($.size({title: 'csslint'}));
+});
+
+// Lint HTML5
+gulp.task('htmllint', function() {
+	return gulp.src(srcJs, { base: baseApp })
+		.pipe(newer(destDev))
+		.pipe(htmllint());
+});
+
+function htmllintReporter(filepath, issues) {
+    // if (issues.length > 0) {
+    //     issues.forEach(function(issue) {
+    //         gutil.log(gutil.colors.cyan('[gulp-htmllint] ') + gutil.colors.white(filepath + ' [' + issue.line + ',' + issue.column + ']: ') + gutil.colors.red('(' + issue.code + ') ' + issue.msg));
+    //     });
+	//
+    //     process.exitCode = 1;
+    // }
+}
+
 // Watch files for changes & reload extension
-gulp.task('watch',  ['csp', 'copy-dev'], function () {
-	gulp.watch(srcStyles, ['copy-dev']);
+gulp.task('watch',  ['csp', 'copy-dev'], function() {
+	gulp.watch(srcStyles, ['csslint', 'copy-dev']);
 	gulp.watch(srcImages, ['copy-dev']);
 	gulp.watch(srcJs, ['csp', 'copy-dev']);
 	gulp.watch(srcBase, ['copy-dev']);
 });
 
-var styleTask = function (stylesPath, srcs) {
+var styleTask = function(stylesPath, srcs) {
 	return gulp.src(srcs.map(function(src) {
 			return path.join('app', stylesPath, src);
 		}))
@@ -135,17 +178,17 @@ var styleTask = function (stylesPath, srcs) {
 };
 
 // Compile and automatically prefix stylesheets
-gulp.task('styles', function () {
+gulp.task('styles', function() {
 	return styleTask('styles', ['**/*.css']);
 });
 
-gulp.task('elements', function () {
+gulp.task('elements', function() {
 	return styleTask('elements', ['**/*.css']);
 });
 
 
 // Optimize images
-gulp.task('images', function () {
+gulp.task('images', function() {
 	return gulp.src('app/images/**/*')
 		.pipe($.cache($.imagemin({
 			progressive: true,
@@ -156,14 +199,14 @@ gulp.task('images', function () {
 });
 
 // Copy web fonts to dist
-gulp.task('fonts', function () {
+gulp.task('fonts', function() {
 	return gulp.src(['app/fonts/**'])
 		.pipe(gulp.dest('dist/fonts'))
 		.pipe($.size({title: 'fonts'}));
 });
 
 // Scan your HTML for assets & optimize them
-gulp.task('html', function () {
+gulp.task('html', function() {
 	var assets = $.useref.assets({searchPath: ['.tmp', 'app', 'dist']});
 
 	return gulp.src(['app/**/*.html', '!app/{elements,test}/**/*.html'])
@@ -190,7 +233,7 @@ gulp.task('html', function () {
 
 // Polybuild will take care of inlining HTML imports,
 // scripts and CSS for you.
-gulp.task('vulcanize', function () {
+gulp.task('vulcanize', function() {
 	return gulp.src('dist/index.html')
 		.pipe(polybuild({maximumCrush: true}))
 		.pipe(gulp.dest('dist/'));
@@ -200,7 +243,7 @@ gulp.task('vulcanize', function () {
 // than polybuild provides, follow instructions from readme at:
 // https://github.com/PolymerElements/polymer-starter-kit/#if-you-require-more-granular-configuration-of-vulcanize-than-polybuild-provides-you-an-option-by
 // Vulcanize granular configuration
-//gulp.task('vulcanize', function () {
+//gulp.task('vulcanize', function() {
 //	var DEST_DIR = 'dist/elements';
 //	return gulp.src('dist/elements/elements.vulcanized.html')
 //	  .pipe($.vulcanize({
@@ -213,7 +256,7 @@ gulp.task('vulcanize', function () {
 //});
 
 // Rename Polybuild's index.build.html to index.html
-gulp.task('rename-index', function () {
+gulp.task('rename-index', function() {
 	gulp.src('dist/index.build.html')
 		.pipe($.rename('index.html'))
 		.pipe(gulp.dest('dist/'));
@@ -221,7 +264,7 @@ gulp.task('rename-index', function () {
 });
 
 // Build production files, the default task
-// gulp.task('default', ['clean'], function (cb) {
+// gulp.task('default', ['clean'], function(cb) {
 // 	// Uncomment 'cache-config' after 'rename-index' if you are going to use service workers.
 // 	runSequence(
 // 		['copy', 'styles'],
