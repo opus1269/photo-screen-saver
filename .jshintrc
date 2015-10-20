@@ -24,6 +24,7 @@
 		"chromeCast": true,
 		"gPhotos": true,
 		"showScreenSaver": true,
+		"keyframeEffect": true,
 		"ga": true
 	}
 }
