@@ -1,0 +1,8 @@
+{
+	"attr-req-value": false,
+	"attr-name-style": "dash",
+	"id-class-style": "camel",
+	"class-style": "dash",
+	"id-class-ignore-regex": "{{.*?}}|.*?]]|UA-*-*",
+	"line-end-style": "lf"
+}
