@@ -36,12 +36,12 @@
                     'entry' : {
                         name: 'fade-in-animation',
                         node: this,
-                        timing: {duration: 2000, easing: 'ease-in-sine'}
+                        timing: {duration: 2000, easing: 'ease-in-out-sine'}
                     },
                     'exit' : {
                         name: 'fade-out-animation',
                         node: this,
-                        timing: {duration: 2000, easing: 'ease-out-sine'}
+                        timing: {duration: 2000, easing: 'ease-in-out-sine'}
                     }
                 };
             }
@@ -73,6 +73,10 @@
             case 3:
             entry = 'slide-down-animation';
             exit = 'slide-up-animation';
+            break;
+            case 4:
+            entry = 'spin-up-animation';
+            exit = 'spin-down-animation';
             break;
         }
 
