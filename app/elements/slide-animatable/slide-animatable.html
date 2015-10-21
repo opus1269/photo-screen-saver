@@ -55,7 +55,7 @@
     },
 
     _aniChanged: function(newValue) {
-        var entry, exit;
+        var entry, exit, dur = 2000;
 
         switch(newValue) {
             case 0:
@@ -77,11 +77,14 @@
             case 4:
             entry = 'spin-up-animation';
             exit = 'spin-down-animation';
+            dur = 3000;
             break;
         }
 
         this.animationConfig.entry.name = entry;
+        this.animationConfig.entry.timing.duration = dur;
         this.animationConfig.exit.name = exit;
+        this.animationConfig.exit.timing.duration = dur;
     }
 
 });
