@@ -68,6 +68,7 @@ module.exports = function(grunt) {
 			dev: {
 				options: {
 					force: false,
+					usePrefix: false,
 					patterns: [{
 						match: '<google-analytics-tracker',
 						replacement: '<!-- <google-analytics-tracker'
