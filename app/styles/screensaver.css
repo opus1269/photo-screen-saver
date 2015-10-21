@@ -20,6 +20,10 @@ div {
 	margin: 0;
 }
 
+#mainContainer {
+	visibility: hidden; /* !important */
+}
+
 .author {
 	font-size: 133%;
 	position: fixed;
