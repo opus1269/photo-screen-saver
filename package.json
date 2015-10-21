@@ -29,7 +29,7 @@
     "grunt-jscs": "",
     "grunt-line-remover": "",
     "grunt-newer": "",
-    "grunt-string-replace": "^1.2.0",
+    "grunt-replace": "^0.11.0",
     "grunt-vulcanize": "",
     "object-assign": "^4.0.1"
   }
