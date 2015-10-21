@@ -78,7 +78,7 @@ module.exports = function(grunt) {
 					}]
 				},
 				files: [
-					{expand: true,  cwd: destDev, src: [appFilesHtml], dest: destDev}
+					{expand: true,  cwd: destDev, src: [appFilesHtml, '!**/google-analytics-tracker.html'], dest: destDev}
 				]
 			}
 		},
