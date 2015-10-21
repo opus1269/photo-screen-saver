@@ -308,15 +308,15 @@
 			bg.style.visibility = 'visible';
 			mainContainer.style.visibility = 'hidden';
 		} else {
-			bg.style.visibility = 'hidden';
-			mainContainer.style.visibility = 'visible';
-
 			// prep photos
 			if (!t.sizingType) {
 				t.framePhoto(selected);
 			} else if (t.sizingType === 'contain') {
 				t.posText(selected);
 			}
+			// display slide
+			bg.style.visibility = 'hidden';
+			mainContainer.style.visibility = 'visible';
 
 			// set the selected so the animation runs
 			p.selected = selected;
