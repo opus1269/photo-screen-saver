@@ -1,4 +1,6 @@
 {
+	"unused": false,
+	"newcap": false,
 	"loopfunc": true,
 	"expr": true,
 	"sub": true,
@@ -13,8 +15,6 @@
 	"latedef": true,
 	"noarg": true,
 	"undef": true,
-	"unused": true,
-	"newcap": false,
 	"globals": {
 		"wrap": true,
 		"unwrap": true,
