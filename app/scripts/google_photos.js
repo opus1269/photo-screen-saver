@@ -1,3 +1,4 @@
+/*exported gPhotos*/
 var gPhotos = (function() {
 	'use strict';
 

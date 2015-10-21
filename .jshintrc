@@ -1,5 +1,5 @@
 {
-	"unused": false,
+	"unused": true,
 	"newcap": false,
 	"loopfunc": true,
 	"expr": true,
