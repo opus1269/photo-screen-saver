@@ -1,5 +1,12 @@
 module.exports = function(grunt) {
 
+	var appFiles = ['app/elements/**', 'app/html/**', 'app/images/**', 'app/scripts/**', 'app/styles/**', 'app/*'];
+	var appFilesJs = ['app/scripts/**/*.js', 'gruntfile.js'];
+	var appFilesHtml = ['app/elements/**/*.html', 'app/html/**/*.html'];
+	var bowerFiles = ['app/bower_components/**'];
+	var bowerFilesHtml = ['app/bower_components/**/*.html'];
+	var destDev = 'dev/';
+
 	// Project configuration.
 	grunt.initConfig({
 		pkg: '<json:package.json>',
@@ -9,12 +16,12 @@ module.exports = function(grunt) {
 					spawn: false,
 					interrupt: true
 				},
-				files: ['app/**/*', 'gruntfile.js'],
+				files: [appFiles, 'gruntfile.js'],
 				tasks: ['newer:jscs:all',
 						'newer:jshint:all',
 						'newer:crisper:dev',
 						'newer:copy:dev',
-						'newer:string-replace:dev'
+						'newer:replace:dev'
 						]
 			}
 		},
@@ -29,7 +36,12 @@ module.exports = function(grunt) {
 			},
 			dev: {
 				files: [
-					{expand: true, src: ['app/**/*'], dest: 'dev/'}
+					{expand: true, src: [appFiles], dest: destDev}
+				]
+			},
+			bower: {
+				files: [
+					{expand: true, src: [bowerFiles], dest: destDev}
 				]
 			}
 		},
@@ -38,7 +50,7 @@ module.exports = function(grunt) {
 				src: ['dist']
 			},
 			dev: {
-				src: ['dev']
+				src: destDev
 			}
 		},
 		'line-remover': {
@@ -51,21 +63,22 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		'string-replace': {
+		// don't track usage in development
+		replace: {
 			dev: {
 				options: {
-					saveUnchanged: false,
-					replacements: [{
-						pattern: '<google-analytics-tracker',
+					force: false,
+					patterns: [{
+						match: '<google-analytics-tracker',
 						replacement: '<!-- <google-analytics-tracker'
 					}, {
-						pattern: '</google-analytics-tracker>',
+						match: '</google-analytics-tracker>',
 						replacement: '</google-analytics-tracker> -->'
 					}]
 				},
-				files: {
-					'dev/': ['dev/app/elements/**/*.html', 'dev/app/html/**/*.html', '!dev/app/elements/google-analytics-tracker/google-analytics-tracker.html']
-				}
+				files: [
+					{expand: true,  cwd: destDev, src: [appFilesHtml], dest: destDev}
+				]
 			}
 		},
 		compress: {
@@ -83,7 +96,7 @@ module.exports = function(grunt) {
 				options: {
 					config: '.jscsrc'
 				},
-				src: ['app/**/*.js', 'gruntfile.js', '!app/scripts/chromecast.js', '!app/bower_components/**']
+				src: [appFilesJs, '!app/scripts/chromecast.js']
 			}
 		},
 		jshint: {
@@ -92,7 +105,7 @@ module.exports = function(grunt) {
 					jshintrc: '.jshintrc',
 					extract: 'auto'
 				},
-				src: ['app/**/*.js', 'app/elements/**/*.html', 'gruntfile.js', '!app/bower_components/**']
+				src: [appFilesJs, appFilesHtml]
 			}
 		},
 		crisper: {
@@ -103,7 +116,17 @@ module.exports = function(grunt) {
 					onlySplit: false
 				},
 				files: [
-					{expand: true, src: ['app/elements/**/*.html', '!elements.html', 'app/bower_components/**/*.html'], dest: 'dev/'}
+					{expand: true, src: [appFilesHtml], dest: destDev}
+				]
+			},
+			bower: {
+				options: {
+					cleanup: false,
+					scriptInHead: false,
+					onlySplit: false
+				},
+				files: [
+					{expand: true, src: [bowerFilesHtml], dest: destDev}
 				]
 			}
 		},
@@ -133,7 +156,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-newer');
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-line-remover');
-	grunt.loadNpmTasks('grunt-string-replace');
+	grunt.loadNpmTasks('grunt-replace');
 
 	// Default task.
 	grunt.registerTask('default', ['watch']);
@@ -143,5 +166,14 @@ module.exports = function(grunt) {
 		'prod',
 		['clean:prod', 'vulcanize:prod', 'copy:prod', 'lineremover:prod', 'compress:prod']
 	);
+
+	// development build task
+	grunt.registerTask(
+		'dev',
+		['clean:dev', 'jscs:all', 'jshint:all', 'bower', 'copy:dev', 'crisper:dev', 'replace:dev']
+	);
+
+	// copy bower files and enforce csp
+	grunt.registerTask('bower', ['copy:bower', 'crisper:bower']);
 
 };
