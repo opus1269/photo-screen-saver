@@ -1,6 +1,11 @@
 module.exports = function(grunt) {
 
-	var appFiles = ['app/elements/**', 'app/html/**', 'app/images/**', 'app/scripts/**', 'app/styles/**', 'app/*'];
+	var appFiles = ['app/elements/**',
+					'app/html/**',
+					'app/images/**',
+					'app/scripts/**',
+					'app/styles/**',
+					'app/*'];
 	var appFilesJs = ['app/scripts/**/*.js', 'gruntfile.js'];
 	var appFilesHtml = ['app/elements/**/*.html', 'app/html/**/*.html'];
 	var bowerFiles = ['app/bower_components/**'];
@@ -16,13 +21,12 @@ module.exports = function(grunt) {
 					spawn: false,
 					interrupt: true
 				},
-				files: [appFiles, 'gruntfile.js'],
+				files: [appFiles, 'gruntfile.js', '.jscrc', '.jshintrc'],
 				tasks: ['newer:jscs:all',
 						'newer:jshint:all',
 						'newer:crisper:dev',
 						'newer:copy:dev',
-						'newer:replace:dev'
-						]
+						'newer:replace:dev']
 			}
 		},
 		copy: {
@@ -104,7 +108,7 @@ module.exports = function(grunt) {
 			all: {
 				options: {
 					jshintrc: '.jshintrc',
-					extract: 'auto'
+					extract: 'auto' // for inline code
 				},
 				src: [appFilesJs, appFilesHtml]
 			}
@@ -149,15 +153,15 @@ module.exports = function(grunt) {
 
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-compress');
+	grunt.loadNpmTasks('grunt-newer');
 	grunt.loadNpmTasks('grunt-vulcanize');
 	grunt.loadNpmTasks('grunt-crisper');
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-jscs');
-	grunt.loadNpmTasks('grunt-newer');
-	grunt.loadNpmTasks('grunt-contrib-compress');
-	grunt.loadNpmTasks('grunt-line-remover');
 	grunt.loadNpmTasks('grunt-replace');
+	grunt.loadNpmTasks('grunt-line-remover');
+	grunt.loadNpmTasks('grunt-jscs');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
 
 	// Default task.
 	grunt.registerTask('default', ['watch']);
