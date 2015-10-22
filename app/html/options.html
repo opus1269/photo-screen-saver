@@ -189,7 +189,7 @@
 											<template is="dom-repeat" id="albumsTemplate" items="{{albums}}">
 												<div class="list-item" id="[[item.uid]]" disabled$="[[!useGoogle]]">
 													<iron-label>
-														<paper-item class="center horizontal layout" tabIndex="-1">
+														<paper-item class="center horizontal layout" tabindex="-1">
 															<paper-checkbox iron-label-target checked="{{item.checked}}" on-change="albumSelectChange" disabled$="[[!useGoogle]]"></paper-checkbox>
 															<paper-item-body class="flex" two-line>
 																<div class="setting-label">{{item.name}}</div>
