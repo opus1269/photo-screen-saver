@@ -33,13 +33,6 @@
 	// array of selected google albums
 	app.albumSelections = JSON.parse(localStorage.albumSelections);
 
-	app.displayInstalledToast = function() {
-		// Check to make sure caching is actually enabled—it won't be in the dev environment.
-		if (!document.querySelector('platinum-sw-cache').disabled) {
-			document.querySelector('#caching-complete').show();
-		}
-	};
-
 	// Listen for template bound event to know when bindings
 	// have resolved and content has been stamped to the page
 	app.addEventListener('dom-change', function() {
