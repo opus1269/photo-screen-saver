@@ -1,58 +1,51 @@
 module.exports = function(grunt) {
 
-	var appFiles = ['app/elements/**',
-					'app/html/**',
-					'app/images/**',
-					'app/scripts/**',
-					'app/styles/**',
-					'app/*'];
+	var appFiles = [
+		'app/elements/**',
+		'app/html/**',
+		'app/images/**',
+		'app/scripts/**',
+		'app/styles/**',
+		'app/*'
+	];
 	var appFilesJs = ['app/scripts/**/*.js', 'gruntfile.js'];
 	var appFilesHtml = ['app/elements/**/*.html', 'app/html/**/*.html'];
 	var bowerFiles = ['app/bower_components/**'];
 	var bowerFilesHtml = ['app/bower_components/**/*.html'];
 	var destDev = 'dev/';
+	var destProd = 'dist/';
 
 	// Project configuration.
 	grunt.initConfig({
 		pkg: '<json:package.json>',
 		watch: {
 			default: {
-				options: {
-					spawn: false,
-					interrupt: true
-				},
+				options: {spawn: false, interrupt: true},
 				files: [appFiles, 'gruntfile.js', '.jscrc', '.jshintrc'],
-				tasks: ['newer:jscs:all',
-						'newer:jshint:all',
-						'newer:htmlhintplus:all',
-						'newer:crisper:dev',
-						'newer:copy:dev',
-						'newer:replace:dev']
+				tasks: [
+					'newer:jscs:all',
+					'newer:jshint:all',
+			//		'newer:htmllint:all',
+					'newer:crisper:dev',
+					'newer:copy:dev',
+					'newer:replace:dev'
+				]
 			}
 		},
 		copy: {
 			prod: {
-				files: [
-					// includes files within path and its sub-directories
-					{expand: true, src: ['app/**/*', '!app/bower_components/**'], dest: 'dist/'},
-					{src: 'options-csp.html', dest: 'dist/options.html'},
-					{src: 'screensaver-csp.html', dest: 'dist/screensaver.html'}
-				]
+				files: [{expand: true, src: ['app/**/*', '!app/bower_components/**'], dest: destProd},]
 			},
 			dev: {
-				files: [
-					{expand: true, src: [appFiles], dest: destDev}
-				]
+				files: [{expand: true, src: [appFiles], dest: destDev}]
 			},
 			bower: {
-				files: [
-					{expand: true, src: [bowerFiles], dest: destDev}
-				]
+				files: [{expand: true, src: [bowerFiles], dest: destDev}]
 			}
 		},
 		clean: {
 			prod: {
-				src: ['dist']
+				src: destProd
 			},
 			dev: {
 				src: destDev
@@ -60,12 +53,8 @@ module.exports = function(grunt) {
 		},
 		lineremover: {
 			prod: {
-				options: {
-					exclusionPattern: /"key":/g
-				},
-				files: {
-					'dist/manifest.json': 'dist/manifest.json'
-				}
+				options: {exclusionPattern: /"key":/g},
+				files: {'dist/manifest.json': 'dist/manifest.json'}
 			}
 		},
 		// don't track usage in development
@@ -82,43 +71,36 @@ module.exports = function(grunt) {
 						replacement: '</google-analytics-tracker> -->'
 					}]
 				},
-				files: [
-					{expand: true,  cwd: destDev, src: [appFilesHtml, '!**/google-analytics-tracker.html'], dest: destDev}
-				]
+				files: [{expand: true,  cwd: destDev, src: [appFilesHtml, '!**/google-analytics-tracker.html'], dest: destDev}]
 			}
 		},
 		compress: {
 			prod: {
-				options: {
-					archive: 'dist/store.zip'
-				},
-				files: [
-					{expand: true, cwd: 'dist/', src: ['**', '!*.zip', '!images/*.db']}
-				]
+				options: {archive: 'dist/store.zip'},
+				files: [{expand: true, cwd: destProd, src: ['**', '!*.zip', '!images/*.db']}]
 			}
 		},
 		jscs: {
 			all: {
-				options: {
-					config: '.jscsrc'
-				},
+				options: {config: '.jscsrc'},
 				src: [appFilesJs, '!app/scripts/chromecast.js']
 			}
 		},
 		jshint: {
 			all: {
-				options: {
-					jshintrc: '.jshintrc',
-					extract: 'auto' // for inline code
-				},
+				options: {jshintrc: '.jshintrc', extract: 'auto'},
 				src: [appFilesJs, appFilesHtml]
+			}
+		},
+		htmllint: {
+			all: {
+				options: {htmllintrc: '.htmllintrc'},
+				src: [appFilesHtml]
 			}
 		},
 		htmlhintplus: {
 			all: {
-				options: {
-					htmlhintrc: '.htmlhintrc'
-				},
+				options: {htmlhintrc: '.htmlhintrc'},
 				src: [appFilesHtml]
 			}
 		},
@@ -129,9 +111,7 @@ module.exports = function(grunt) {
 					scriptInHead: false,
 					onlySplit: false
 				},
-				files: [
-					{expand: true, src: [appFilesHtml], dest: destDev}
-				]
+				files: [{expand: true, src: [appFilesHtml], dest: destDev}]
 			},
 			bower: {
 				options: {
@@ -139,9 +119,7 @@ module.exports = function(grunt) {
 					scriptInHead: false,
 					onlySplit: false
 				},
-				files: [
-					{expand: true, src: [bowerFilesHtml], dest: destDev}
-				]
+				files: [{expand: true, src: [bowerFilesHtml], dest: destDev}]
 			}
 		},
 		vulcanize: {
@@ -171,6 +149,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-line-remover');
 	grunt.loadNpmTasks('grunt-jscs');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-htmllint');
 	grunt.loadNpmTasks('grunt-htmlhint-plus');
 
 	// Default task.
