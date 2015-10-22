@@ -10,39 +10,39 @@ the rotate from 1 turn to 0
 Configuration:
 ```
 {
-  name: 'spin-down-animation',
-  node: <node>,
-  transformOrigin: <transform-origin>,
-  timing: <animation-timing>
+	name: 'spin-down-animation',
+	node: <node>,
+	transformOrigin: <transform-origin>,
+	timing: <animation-timing>
 }
 ```
 -->
 
 <script>
 
-  Polymer({
+	Polymer({
 
-    is: 'spin-down-animation',
+		is: 'spin-down-animation',
 
-    behaviors: [
-      Polymer.NeonAnimationBehavior
-    ],
+		behaviors: [
+			Polymer.NeonAnimationBehavior
+		],
 
-    configure: function(config) {
-      var node = config.node;
+		configure: function(config) {
+			var node = config.node;
 
-      if (config.transformOrigin) {
-        this.setPrefixedProperty(node, 'transformOrigin', config.transformOrigin);
-      }
+			if (config.transformOrigin) {
+				this.setPrefixedProperty(node, 'transformOrigin', config.transformOrigin);
+			}
 
-      this._effect = new KeyframeEffect(node, [
-        {'transform': 'scale(1) rotate(1.0turn)'},
-        {'transform': 'scale(0) rotate(0)'}
-      ], this.timingFromConfig(config));
+			this._effect = new KeyframeEffect(node, [
+				{'transform': 'scale(1) rotate(1.0turn)'},
+				{'transform': 'scale(0) rotate(0)'}
+			], this.timingFromConfig(config));
 
-      return this._effect;
-    }
+			return this._effect;
+		}
 
-  });
+	});
 
 </script>
