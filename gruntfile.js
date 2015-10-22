@@ -24,6 +24,7 @@ module.exports = function(grunt) {
 				files: [appFiles, 'gruntfile.js', '.jscrc', '.jshintrc'],
 				tasks: ['newer:jscs:all',
 						'newer:jshint:all',
+						'newer:htmlhintplus:all',
 						'newer:crisper:dev',
 						'newer:copy:dev',
 						'newer:replace:dev']
@@ -57,7 +58,7 @@ module.exports = function(grunt) {
 				src: destDev
 			}
 		},
-		'line-remover': {
+		lineremover: {
 			prod: {
 				options: {
 					exclusionPattern: /"key":/g
@@ -113,6 +114,14 @@ module.exports = function(grunt) {
 				src: [appFilesJs, appFilesHtml]
 			}
 		},
+		htmlhintplus: {
+			all: {
+				options: {
+					htmlhintrc: '.htmlhintrc'
+				},
+				src: [appFilesHtml]
+			}
+		},
 		crisper: {
 			dev: {
 				options: {
@@ -162,6 +171,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-line-remover');
 	grunt.loadNpmTasks('grunt-jscs');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-htmlhint-plus');
 
 	// Default task.
 	grunt.registerTask('default', ['watch']);

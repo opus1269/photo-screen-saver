@@ -26,6 +26,7 @@
     "grunt-contrib-jshint": "",
     "grunt-contrib-watch": "",
     "grunt-crisper": "",
+    "grunt-htmlhint-plus": "^0.1.0",
     "grunt-jscs": "",
     "grunt-line-remover": "",
     "grunt-newer": "",
