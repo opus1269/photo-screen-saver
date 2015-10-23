@@ -60,10 +60,10 @@ function initData() {
 
 // from:
 // http://stackoverflow.com/questions/4900436/detect-version-of-chrome-installed
-// function getChromeVersion() {
-// 	var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-// 	return raw ? parseInt(raw[2], 10) : false;
-// }
+function getChromeVersion() {
+	var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+	return raw ? parseInt(raw[2], 10) : false;
+}
 
 // get time
 // value format: '00:00'
@@ -231,17 +231,26 @@ function showScreenSaver(display) {
 		bounds.width = screen.width;
 		bounds.height = screen.height;
 	}
-	chrome.windows.create({
-		url: '/html/screensaver.html',
-		left: bounds.left,
-		top: bounds.top,
-		width: bounds.width,
-		height: bounds.height,
-		focused: true,
-		type: 'popup'
-	}, function(win) {
-		chrome.windows.update(win.id, {state: 'fullscreen', focused: true});
-	});
+	if (!bounds.left && !bounds.top && getChromeVersion() >= 44) {
+		chrome.windows.create({
+			url: '/html/screensaver.html',
+			focused: true,
+			type: 'popup',
+			state: 'fullscreen'
+		});
+	} else {
+		chrome.windows.create({
+			url: '/html/screensaver.html',
+			left: bounds.left,
+			top: bounds.top,
+			width: bounds.width,
+			height: bounds.height,
+			focused: true,
+			type: 'popup'
+		}, function(win) {
+			chrome.windows.update(win.id, {state: 'fullscreen', focused: true});
+		});
+	}
 }
 
 // event: called when extension is installed or updated or Chrome is updated
