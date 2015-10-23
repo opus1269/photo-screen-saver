@@ -10,6 +10,7 @@ module.exports = function(grunt) {
 	];
 	var appFilesJs = ['app/scripts/**/*.js', 'gruntfile.js'];
 	var appFilesHtml = ['app/elements/**/*.html', 'app/html/**/*.html'];
+	var appFilesCss = ['app/styles/**/*.css'];
 	var bowerFiles = ['app/bower_components/**'];
 	var bowerFilesHtml = ['app/bower_components/**/*.html'];
 	var destDev = 'dev/';
@@ -25,7 +26,7 @@ module.exports = function(grunt) {
 				tasks: [
 					'newer:jscs:all',
 					'newer:jshint:all',
-			//		'newer:htmllint:all',
+					'newer:csslint:all',
 					'newer:crisper:dev',
 					'newer:copy:dev',
 					'newer:replace:dev'
@@ -34,7 +35,19 @@ module.exports = function(grunt) {
 		},
 		copy: {
 			prod: {
-				files: [{expand: true, src: ['app/**/*', '!app/bower_components/**'], dest: destProd},]
+				files: [{
+					expand: true,
+					src: [
+						'app/scripts/**',
+						'app/html/**',
+						'app/styles/**',
+						'app/images/**',
+						'!app/images/*.db',
+						'app/elements/elements.html',
+						'app/manifest.json'
+					],
+					dest: destProd
+				}]
 			},
 			dev: {
 				files: [{expand: true, src: [appFiles], dest: destDev}]
@@ -51,34 +64,37 @@ module.exports = function(grunt) {
 				src: destDev
 			}
 		},
-		lineremover: {
-			prod: {
-				options: {exclusionPattern: /"key":/g},
-				files: {'dist/manifest.json': 'dist/manifest.json'}
-			}
-		},
+		// remove key for productionn
 		// don't track usage in development
 		replace: {
+			prod: {
+				options: {
+					force: false,
+					usePrefix: false,
+					patterns: [{
+						match: /\t"key".*\n/,
+						replacement: ''
+					}]
+				},
+				files: {'dist/app/manifest.json': 'app/manifest.json'}
+			},
 			dev: {
 				options: {
 					force: false,
 					usePrefix: true,
 					preservePrefix: false,
 					patterns: [{
-						match: '<!--build:replace -->',
-						replacement: '<!--build:replace'
-					}, {
-						match: '<!-- endbuild:replace -->',
-						replacement: 'endbuild:replace -->'
+						match: 'build:replace -->',
+						replacement: 'build:replace'
 					}]
 				},
-				files: [{expand: true,  cwd: destDev, src: [appFilesHtml, '!**/google-analytics-tracker.html'], dest: destDev}]
+				files: [{expand: true,  cwd: destDev, src: [appFilesHtml], dest: destDev}]
 			}
 		},
 		compress: {
 			prod: {
 				options: {archive: 'dist/store.zip'},
-				files: [{expand: true, cwd: destProd, src: ['**', '!*.zip', '!images/*.db']}]
+				files: [{expand: true, cwd: 'dist/app/', src: ['**']}]
 			}
 		},
 		jscs: {
@@ -93,6 +109,12 @@ module.exports = function(grunt) {
 				src: [appFilesJs, appFilesHtml]
 			}
 		},
+		csslint: {
+			all: {
+				options: {csslintrc: '.csslintrc'},
+				src: [appFilesCss]
+			}
+		},
 		htmllint: {
 			all: {
 				options: {htmllintrc: '.htmllintrc'},
@@ -105,36 +127,48 @@ module.exports = function(grunt) {
 				src: [appFilesHtml]
 			}
 		},
+		vulcanize: {
+			prod: {
+				options: {
+					inlineScripts: true,
+					inlineCss: true
+				},
+				files: [{expand: true, src: ['app/elements/elements.html'], dest: destProd}]
+			}
+		},
 		crisper: {
+			prod: {
+				options: {
+					cleanup: false
+				},
+				files: [{expand: true, cwd: destProd, src: ['app/elements/elements.html'], dest: destProd}]
+			},
 			dev: {
 				options: {
-					cleanup: false,
-					scriptInHead: false,
-					onlySplit: false
+					cleanup: false
 				},
 				files: [{expand: true, src: [appFilesHtml], dest: destDev}]
 			},
 			bower: {
 				options: {
-					cleanup: false,
-					scriptInHead: false,
-					onlySplit: false
+					cleanup: false
 				},
 				files: [{expand: true, src: [bowerFilesHtml], dest: destDev}]
 			}
 		},
-		vulcanize: {
+		uglify: {
 			prod: {
-				options: {
-					// specifying both csp and inline will include external sources as well as inline
-					csp: true,
-					inline: true,
-					strip: true
-				},
-				files: {
-					'options-csp.html': 'options.html',
-					'screensaver-csp.html': 'screensaver.html'
-				}
+				files: [{expand: true,  cwd: destProd, src: ['**/*.js'], dest: destProd}]
+			}
+		},
+		minifyHtml: {
+			prod: {
+				files: [{expand: true,  cwd: destProd, src: ['**/*.html'], dest: destProd}]
+			}
+		},
+		cssmin: {
+			prod: {
+				files: [{expand: true,  cwd: destProd, src: ['**/styles/*.css'], dest: destProd}]
 			}
 		}
 	});
@@ -147,25 +181,46 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-vulcanize');
 	grunt.loadNpmTasks('grunt-crisper');
 	grunt.loadNpmTasks('grunt-replace');
-	grunt.loadNpmTasks('grunt-line-remover');
 	grunt.loadNpmTasks('grunt-jscs');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-csslint');
 	grunt.loadNpmTasks('grunt-htmllint');
 	grunt.loadNpmTasks('grunt-htmlhint-plus');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-minify-html');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
 
 	// Default task.
 	grunt.registerTask('default', ['watch']);
 
 	// production build task
-	grunt.registerTask(
-		'prod',
-		['clean:prod', 'vulcanize:prod', 'copy:prod', 'lineremover:prod', 'compress:prod']
+	grunt.registerTask('prod',
+		[
+			'clean:prod',
+			'jscs:all',
+			'jshint:all',
+			'copy:prod',
+			'vulcanize:prod',
+			'crisper:prod',
+			'uglify:prod',
+			'minifyHtml:prod',
+			'cssmin:prod',
+			'replace:prod',
+			'compress:prod'
+		]
 	);
 
 	// development build task
-	grunt.registerTask(
-		'dev',
-		['clean:dev', 'jscs:all', 'jshint:all', 'bower', 'copy:dev', 'crisper:dev', 'replace:dev']
+	grunt.registerTask('dev',
+		[
+			'clean:dev',
+			'jscs:all',
+			'jshint:all',
+			'bower',
+			'copy:dev',
+			'crisper:dev',
+			'replace:dev'
+		]
 	);
 
 	// copy bower files and enforce csp
