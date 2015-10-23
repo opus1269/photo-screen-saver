@@ -62,13 +62,14 @@ module.exports = function(grunt) {
 			dev: {
 				options: {
 					force: false,
-					usePrefix: false,
+					usePrefix: true,
+					preservePrefix: false,
 					patterns: [{
-						match: '<google-analytics-tracker',
-						replacement: '<!-- <google-analytics-tracker'
+						match: '<!--build:replace -->',
+						replacement: '<!--build:replace'
 					}, {
-						match: '</google-analytics-tracker>',
-						replacement: '</google-analytics-tracker> -->'
+						match: '<!-- endbuild:replace -->',
+						replacement: 'endbuild:replace -->'
 					}]
 				},
 				files: [{expand: true,  cwd: destDev, src: [appFilesHtml, '!**/google-analytics-tracker.html'], dest: destDev}]
