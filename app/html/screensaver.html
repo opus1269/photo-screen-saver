@@ -8,22 +8,7 @@
 
 	<link rel="stylesheet" href="../styles/screensaver.css">
 
-	<!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
-	<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-	<!-- endbuild -->
-
-	<!-- Neon elements -->
-	<!-- Includes all the animation types  !important -->
-	<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
-
-	<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
-	<link rel="import" href="../bower_components/neon-animation/neon-animatable.html">
-
-	<link rel="import" href="../bower_components/iron-image/iron-image.html">
-
-	<link rel="import" href="../elements/slide-animatable/slide-animatable.html">
-	<link rel="import" href="../elements/animations/spin-up-animation.html">
-	<link rel="import" href="../elements/animations/spin-down-animation.html">
+	<link rel="import" href="../elements/elements.html">
 
 </head>
 
@@ -54,9 +39,9 @@
 		<img id="bg1Img" src="../images/error.png" alt="">
 	</div>
 
-	@@<!--build:replace -->
+	<!--@@build:replace -->
 	<google-analytics-tracker id="UA-61314754-1" page="/screensaver.html"></google-analytics-tracker>
-	@@<!-- endbuild:replace -->
+	<!-- endbuild:replace -->
 
 	<script src="../scripts/chromecast.js"></script>
 	<script src="../scripts/screensaver.js"></script>
