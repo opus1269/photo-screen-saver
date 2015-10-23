@@ -116,10 +116,11 @@
 		app.async(function() {
 			app.menu.select(app.prevRoute);
 		}, 500);
-		localStorage.isPreview = 'true';
-		chrome.runtime.getBackgroundPage(function(win) {
-			win.showScreenSaver();
-		});
+		// localStorage.isPreview = 'true';
+		// chrome.runtime.getBackgroundPage(function(win) {
+		// 	win.showScreenSaver();
+		// });
+		chrome.runtime.sendMessage({preview: 'show'});
 	};
 
 	// list of pages

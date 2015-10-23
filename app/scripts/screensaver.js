@@ -36,11 +36,6 @@
 		}
 		catch (err) {}
 
-		// show cursor for preview
-		if (JSON.parse(localStorage.isPreview)) {
-			document.body.style.cursor = 'auto';
-		}
-
 		// load the photos for the slide show
 		this.debounce('job1', function() {
 			t.loadImages();
@@ -325,7 +320,7 @@
 
 	// close preview window on click
 	window.addEventListener('click', function() {
-		chrome.windows.remove(parseInt(localStorage.windowID, 10));
+		window.close();
 	}, false);
 
 })();

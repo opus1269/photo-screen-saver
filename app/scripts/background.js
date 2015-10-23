@@ -49,29 +49,21 @@ function initData() {
 		localStorage.useAuthors = 'false';
 		localStorage.useGoogle = 'true';
 		localStorage.albumSelections = '[]';
-		localStorage.isPreview = 'false';
-		localStorage.windowID = '-1';
+		localStorage.isPreview = 'false'; // no longer used
+		localStorage.windowID = '-1';  // no longer used
 	}
+
+	// removed unused variables
+	localStorage.removeItem('isPreview');
+	localStorage.removeItem('windowID');
 }
 
 // from:
 // http://stackoverflow.com/questions/4900436/detect-version-of-chrome-installed
-function getChromeVersion() {
-	var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-	return raw ? parseInt(raw[2], 10) : false;
-}
-
-// enabled state of screensaver
-// note: this does not effect the keep awake settings so you could
-// use the extension as a display keep awake scheduler without
-// using the screensaver
-function processEnabled() {
-	if (JSON.parse(localStorage.enabled)) {
-		chrome.browserAction.setBadgeText({text: ''});
-	} else {
-		chrome.browserAction.setBadgeText({text: 'OFF'});
-	}
-}
+// function getChromeVersion() {
+// 	var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+// 	return raw ? parseInt(raw[2], 10) : false;
+// }
 
 // get time
 // value format: '00:00'
@@ -113,6 +105,18 @@ function isInRange(start, stop) {
 		}
 	}
 	return ret;
+}
+
+// enabled state of screensaver
+// note: this does not effect the keep awake settings so you could
+// use the extension as a display keep awake scheduler without
+// using the screensaver
+function processEnabled() {
+	if (JSON.parse(localStorage.enabled)) {
+		chrome.browserAction.setBadgeText({text: ''});
+	} else {
+		chrome.browserAction.setBadgeText({text: 'OFF'});
+	}
 }
 
 // create keep awake scheduling alarms
@@ -206,35 +210,39 @@ function processState(key) {
 	}
 }
 
-// create the screen saver window
-window.showScreenSaver = function() {
-	if (getChromeVersion() >= 44) {
-		// use fullscreen option in create call - chrome 44 and later
-		chrome.windows.create({
-			url: '/html/screensaver.html',
-			focused: true,
-			type: 'popup',
-			state: 'fullscreen'
-		},
-		function(win) {
-			localStorage.windowID = win.id;
-		});
+// show a screensaver on every display
+function showScreenSavers() {
+	chrome.system.display.getInfo(function(displayInfo) {
+		for (var i = 0; i < displayInfo.length; i++) {
+			showScreenSaver(displayInfo[i]);
+		}
+	});
+}
+
+// create a screen saver window on the given display
+// if no display is specified use the current one
+function showScreenSaver(display) {
+	var bounds = {};
+	if (display) {
+		bounds = display.bounds;
 	} else {
-		chrome.windows.create({
-			url: '/html/screensaver.html',
-			left: 0,
-			top: 0,
-			width: screen.width,
-			height: screen.height,
-			focused: true,
-			type: 'popup'
-		},
-		function(win) {
-			localStorage.windowID = win.id;
-			chrome.windows.update(win.id, {state: 'fullscreen'});
-		});
+		bounds.left = 0;
+		bounds.top = 0;
+		bounds.width = screen.width;
+		bounds.height = screen.height;
 	}
-};
+	chrome.windows.create({
+		url: '/html/screensaver.html',
+		left: bounds.left,
+		top: bounds.top,
+		width: bounds.width,
+		height: bounds.height,
+		focused: true,
+		type: 'popup'
+	}, function(win) {
+		chrome.windows.update(win.id, {state: 'fullscreen', focused: true});
+	});
+}
 
 // event: called when extension is installed or updated or Chrome is updated
 function onInstalled() {
@@ -252,21 +260,20 @@ function onStorageChanged(event) {
 	processState(event.key);
 }
 
-// event: add or remove the screen saver as needed
+// event: add or remove the screensavers as needed
 function onIdleStateChanged(state) {
-	var win = parseInt(localStorage.windowID, 10);
-
-	if (!JSON.parse(localStorage.isPreview)) {
-		if ((state === 'idle') && JSON.parse(localStorage.enabled)) {
+	if ((state === 'idle') && JSON.parse(localStorage.enabled)) {
+		if (JSON.parse(localStorage.allDisplays)) {
+			showScreenSavers();
+		} else {
 			showScreenSaver();
-		} else if (win !== -1) {
-			localStorage.windowID = '-1';
-			localStorage.isPreview = 'false';
-			try {
-				chrome.windows.remove(win);
-			}
-			catch (e) {}
 		}
+	} else {
+		chrome.windows.getAll({windowTypes: ['popup']}, function(windows) {
+			for (var i = 0; i < windows.length; i++) {
+				chrome.windows.remove(windows[i].id);
+			}
+		});
 	}
 }
 
@@ -286,11 +293,10 @@ function onAlarm(alarm) {
 	}
 }
 
-// event: handle closing of the screen saver window
-function onRemoved(windowId) {
-	if (windowId === parseInt(localStorage.windowID,10)) {
-		localStorage.windowID = -1;
-		localStorage.isPreview = 'false';
+// message: preview the screensaver
+function onPreview(request) {
+	if (request.preview === 'show') {
+		showScreenSaver();
 	}
 }
 
@@ -309,7 +315,7 @@ chrome.idle.onStateChanged.addListener(onIdleStateChanged);
 // listen for the keep wake change alarms
 chrome.alarms.onAlarm.addListener(onAlarm);
 
-// Listen for the Screensaver window closed
-chrome.windows.onRemoved.addListener(onRemoved);
+// listen for request to display preview of screensaver
+chrome.runtime.onMessage.addListener(onPreview);
 
 })();
