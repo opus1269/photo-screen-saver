@@ -20,10 +20,6 @@ div {
 	margin: 0;
 }
 
-#mainContainer {
-	visibility: hidden; /* !important */
-}
-
 .author {
 	font-size: 133%;
 	position: fixed;
@@ -35,11 +31,10 @@ div {
 	opacity: .9;
 }
 
-#bg, #bg1 {
+#noPhotos {
 	position: fixed;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%,-50%);
 	visibility: hidden;
-	z-index: 1;
 }

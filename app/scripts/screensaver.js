@@ -14,6 +14,7 @@
 
 		t.transitionType = parseInt(localStorage.photoTransition,10);
 		t.transitionTime = parseInt(localStorage.transitionTime,10) * 1000;
+		t.waitTime = t.transitionTime;
 		switch (parseInt(localStorage.photoSizing,10)) {
 			case 0:
 				t.sizingType = 'contain';
@@ -39,19 +40,10 @@
 		// load the photos for the slide show
 		this.debounce('job1', function() {
 			t.loadImages();
+			// this will kick off the slideshow
 			this.fire('pages-ready');
 		});
 
-	});
-
-	// This will run to infinity... and beyond
-	// cycling through the selected photos
-	t.addEventListener('pages-ready', function() {
-		Polymer.dom.flush();
-		this.async(function() {
-			t.nextPhoto();
-			window.setInterval(t.nextPhoto, parseInt(t.transitionTime, 10));
-		}, 2000);
 	});
 
 	// create the photo label
@@ -135,7 +127,6 @@
 		var photoLabel;
 		var skip = JSON.parse(localStorage.skip);
 		var arr = [];
-		var bg;
 
 		this.splice('items', 0, t.items.length);
 
@@ -180,8 +171,8 @@
 
 		if (!count) {
 			// no photos to show
-			bg = document.querySelector('#bg1Img');
-			bg.style.visibility = 'visible';
+			var err = document.querySelector('#noPhotos');
+			err.style.visibility = 'visible';
 		}
 
 	};
@@ -283,10 +274,7 @@
 	t.nextPhoto = function() {
 		var p = t.$.pages;
 		var curPage = parseInt(((!p.selected) ? 0 : p.selected),10);
-		// wrap around when we get to the last photo
 		var nextPage = (curPage === t.items.length - 1) ? 0 : curPage + 1;
-		var mainContainer = t.$.mainContainer;
-		var bg = document.querySelector('#bgImg');
 
 		var selected = nextPage;
 
@@ -296,27 +284,42 @@
 		}
 
 		if (!t.isComplete(selected)) {
+			// try to find a photo that is loaded
 			selected = t.findPhoto(selected);
 		}
 
 		if (!t.isComplete(selected)) {
-			bg.style.visibility = 'visible';
-			mainContainer.style.visibility = 'hidden';
+			// no photos are ready
+			// set the waitTime in the setTimeout function so we don't have to
+			// wait for the whole slide transition time to try again
+			t.waitTime = 1000;
 		} else {
+			// set the waitTime back to transition time in case it was changed
+			if (t.waitTime !== t.transitionTime) {
+				t.waitTime = t.transitionTime;
+			}
+
 			// prep photos
 			if (!t.sizingType) {
 				t.framePhoto(selected);
 			} else if (t.sizingType === 'contain') {
 				t.posText(selected);
 			}
-			// display slide
-			bg.style.visibility = 'hidden';
-			mainContainer.style.visibility = 'visible';
 
 			// set the selected so the animation runs
 			p.selected = selected;
 		}
+
+		// setup the next timer --- runs forever
+		t.timer = window.setTimeout(t.nextPhoto, t.waitTime);
 	};
+
+	// This will run to infinity... and beyond
+	t.addEventListener('pages-ready', function() {
+		t.waitTime = 500;
+		// each call to t.nextPhoto will set another timeout
+		t.timer = window.setTimeout(t.nextPhoto, t.waitTime);
+	});
 
 	// close preview window on click
 	window.addEventListener('click', function() {
