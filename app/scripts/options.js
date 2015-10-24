@@ -127,7 +127,6 @@
 	app.pages = [
 		{label: 'Settings', route: 'page-settings', icon: 'settings', obj: null},
 		{label: 'Google Photos Albums', route: 'page-google-photos', icon: 'cloud', obj: app.googlePhotos},
-		{label: 'Local Photos', route: 'page-local-photos', icon: 'folder', obj: null},
 		{label: 'Preview (click to close)', route: 'page-preview', icon: 'pageview', obj: app.preview},
 		{label: 'Information For Nerds', route: 'page-info', icon: 'info', obj: null},
 		{label: 'Request Support', route: 'page-support', icon: 'help', obj: EXT_URI + 'support'},

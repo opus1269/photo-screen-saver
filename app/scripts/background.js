@@ -30,9 +30,7 @@ function initData() {
 		localStorage.allDisplays = 'false';
 		localStorage.keepStart = '"00:00"'; // 24 hr time
 		localStorage.keepStop = '"00:00"';  // 24 hr time
-		localStorage.useLocal = 'false';
 		localStorage.showPhotog = 'true';
-		localStorage.localSelections = '[]';
 	}
 
 	// values from the beginning of time
@@ -179,7 +177,7 @@ function processUseChromecast() {
 }
 
 // set state based on the current values in localStorage
-// TODO: Do we want useGoogle and useLocal here?
+// TODO: Do we want useGoogle here?
 function processState(key) {
 	if (key) {
 		switch (key) {
