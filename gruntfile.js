@@ -1,12 +1,8 @@
 module.exports = function(grunt) {
 
 	var appFiles = [
-		'app/elements/**',
-		'app/html/**',
-		'app/images/**',
-		'app/scripts/**',
-		'app/styles/**',
-		'app/*'
+		'app/**',
+		'!app/bower_components/**'
 	];
 	var appFilesJs = ['app/scripts/**/*.js', 'gruntfile.js'];
 	var appFilesHtml = ['app/elements/**/*.html', 'app/html/**/*.html'];
@@ -37,15 +33,7 @@ module.exports = function(grunt) {
 			prod: {
 				files: [{
 					expand: true,
-					src: [
-						'app/scripts/**',
-						'app/html/**',
-						'app/styles/**',
-						'app/images/**',
-						'!app/images/*.db',
-						'app/elements/elements.html',
-						'app/manifest.json'
-					],
+					src: [appFiles, '!app/images/*.db', '!app/elements/*/**'],
 					dest: destProd
 				}]
 			},
@@ -170,6 +158,11 @@ module.exports = function(grunt) {
 			prod: {
 				files: [{expand: true,  cwd: destProd, src: ['**/styles/*.css'], dest: destProd}]
 			}
+		},
+		imagemin: {
+			prod: {
+				files: [{expand: true,  cwd: destProd, src: ['**/images/*'], dest: destProd}]
+			}
 		}
 	});
 
@@ -189,6 +182,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-minify-html');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-contrib-imagemin');
 
 	// Default task.
 	grunt.registerTask('default', ['watch']);
@@ -205,6 +199,7 @@ module.exports = function(grunt) {
 			'uglify:prod',
 			'minifyHtml:prod',
 			'cssmin:prod',
+			'imagemin:prod',
 			'replace:prod',
 			'compress:prod'
 		]
