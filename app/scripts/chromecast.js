@@ -14,7 +14,7 @@ var chromeCast = (function() {
 				cb();
 			}
 		};
-		xhttp.open('GET', '/assests/chromecast.json', true);
+		xhttp.open('GET', '/assets/chromecast.json', true);
 		xhttp.send();
 	}
 
