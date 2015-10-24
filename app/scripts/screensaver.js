@@ -46,6 +46,16 @@
 
 	});
 
+	// Fisher-Yates shuffle algorithm.
+	t.shuffleArray = function(array) {
+		for (var i = array.length - 1; i > 0; i--) {
+			var j = Math.floor(Math.random() * (i + 1));
+			var temp = array[i];
+			array[i] = array[j];
+			array[j] = temp;
+		}
+	};
+
 	// create the photo label
 	t.getPhotoLabel = function(author, force) {
 		var ret = '';
@@ -95,7 +105,7 @@
 		}
 		if (JSON.parse(localStorage.useChromecast)) {
 			tmp = [];
-			tmp = tmp.concat(chromeCast.getImages());
+			tmp = tmp.concat(JSON.parse(localStorage.ccImages));
 			if (localStorage.badCCImages) {
 				badImages = JSON.parse(localStorage.badCCImages);
 				for (i = 0; i < badImages.length; i++) {
@@ -134,7 +144,7 @@
 
 		// randomize the order
 		if (JSON.parse(localStorage.shuffle)) {
-			chromeCast.shuffleArray(arr);
+			t.shuffleArray(arr);
 		}
 
 		for (i = 0; i < arr.length; i++) {
@@ -316,7 +326,7 @@
 
 	// This will run to infinity... and beyond
 	t.addEventListener('pages-ready', function() {
-		t.waitTime = 500;
+		t.waitTime = 2000;
 		// each call to t.nextPhoto will set another timeout
 		t.timer = window.setTimeout(t.nextPhoto, t.waitTime);
 	});
