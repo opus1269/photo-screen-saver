@@ -230,7 +230,6 @@ function showScreenSaver(display) {
 		bounds.height = screen.height;
 	}
 	if (!bounds.left && !bounds.top && getChromeVersion() >= 44) {
-		// Chrome now supports fullscreen option on create
 		chrome.windows.create({
 			url: '/html/screensaver.html',
 			focused: true,
