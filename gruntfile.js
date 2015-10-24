@@ -1,9 +1,7 @@
 module.exports = function(grunt) {
 
-	var appFiles = [
-		'app/**',
-		'!app/bower_components/**'
-	];
+	// common paths and file collections
+	var appFiles = ['app/**', '!app/bower_components/**'];
 	var appFilesJs = ['app/scripts/**/*.js', 'gruntfile.js'];
 	var appFilesHtml = ['app/elements/**/*.html', 'app/html/**/*.html'];
 	var appFilesCss = ['app/styles/**/*.css'];
@@ -24,25 +22,25 @@ module.exports = function(grunt) {
 					'newer:jshint:all',
 					'newer:csslint:all',
 					'newer:crisper:dev',
-					'newer:copy:dev',
+					'sync:dev',
 					'newer:replace:dev'
 				]
 			}
 		},
-		copy: {
+		sync: {
 			prod: {
-				files: [{
-					expand: true,
-					src: [appFiles, '!app/images/*.db', '!app/elements/*/**'],
-					dest: destProd
-				}]
+				files: [{expand: true, src: [appFiles, '!app/images/*.db', '!app/elements/*/**'], dest: destProd}]
 			},
 			dev: {
+				verbose: true,
+				files: [{expand: true, src: [appFiles], dest: destDev}]
+			},
+			devquiet: {
 				files: [{expand: true, src: [appFiles], dest: destDev}]
 			},
 			bower: {
 				files: [{expand: true, src: [bowerFiles], dest: destDev}]
-			}
+			},
 		},
 		clean: {
 			prod: {
@@ -50,7 +48,7 @@ module.exports = function(grunt) {
 			},
 			dev: {
 				src: destDev
-			}
+			},
 		},
 		// remove key for productionn
 		// don't track usage in development
@@ -77,99 +75,90 @@ module.exports = function(grunt) {
 					}]
 				},
 				files: [{expand: true,  cwd: destDev, src: [appFilesHtml], dest: destDev}]
-			}
+			},
 		},
 		compress: {
 			prod: {
 				options: {archive: 'dist/store.zip'},
 				files: [{expand: true, cwd: 'dist/app/', src: ['**']}]
-			}
+			},
 		},
 		jscs: {
 			all: {
 				options: {config: '.jscsrc'},
-				src: [appFilesJs, '!app/scripts/chromecast.js']
-			}
+				src: [appFilesJs]
+			},
 		},
 		jshint: {
 			all: {
 				options: {jshintrc: '.jshintrc', extract: 'auto'},
 				src: [appFilesJs, appFilesHtml]
-			}
+			},
 		},
 		csslint: {
 			all: {
 				options: {csslintrc: '.csslintrc'},
 				src: [appFilesCss]
-			}
+			},
 		},
 		htmllint: {
 			all: {
 				options: {htmllintrc: '.htmllintrc'},
 				src: [appFilesHtml]
-			}
+			},
 		},
 		htmlhintplus: {
 			all: {
 				options: {htmlhintrc: '.htmlhintrc'},
 				src: [appFilesHtml]
-			}
+			},
 		},
 		vulcanize: {
 			prod: {
-				options: {
-					inlineScripts: true,
-					inlineCss: true
-				},
+				options: {inlineScripts: true, inlineCss: true},
 				files: [{expand: true, src: ['app/elements/elements.html'], dest: destProd}]
-			}
+			},
 		},
 		crisper: {
 			prod: {
-				options: {
-					cleanup: false
-				},
+				options: {cleanup: false},
 				files: [{expand: true, cwd: destProd, src: ['app/elements/elements.html'], dest: destProd}]
 			},
 			dev: {
-				options: {
-					cleanup: false
-				},
+				options: {cleanup: false},
 				files: [{expand: true, src: [appFilesHtml], dest: destDev}]
 			},
 			bower: {
-				options: {
-					cleanup: false
-				},
+				options: {cleanup: false},
 				files: [{expand: true, src: [bowerFilesHtml], dest: destDev}]
-			}
+			},
 		},
 		uglify: {
 			prod: {
 				files: [{expand: true,  cwd: destProd, src: ['**/*.js'], dest: destProd}]
-			}
+			},
 		},
 		minifyHtml: {
 			prod: {
 				files: [{expand: true,  cwd: destProd, src: ['**/*.html'], dest: destProd}]
-			}
+			},
 		},
 		cssmin: {
 			prod: {
 				files: [{expand: true,  cwd: destProd, src: ['**/styles/*.css'], dest: destProd}]
-			}
+			},
 		},
 		imagemin: {
 			prod: {
 				files: [{expand: true,  cwd: destProd, src: ['**/images/*'], dest: destProd}]
-			}
-		}
+			},
+		},
 	});
 
-	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-compress');
+	grunt.loadNpmTasks('grunt-sync');
 	grunt.loadNpmTasks('grunt-newer');
 	grunt.loadNpmTasks('grunt-vulcanize');
 	grunt.loadNpmTasks('grunt-crisper');
@@ -193,7 +182,7 @@ module.exports = function(grunt) {
 			'clean:prod',
 			'jscs:all',
 			'jshint:all',
-			'copy:prod',
+			'sync:prod',
 			'vulcanize:prod',
 			'crisper:prod',
 			'uglify:prod',
@@ -212,13 +201,13 @@ module.exports = function(grunt) {
 			'jscs:all',
 			'jshint:all',
 			'bower',
-			'copy:dev',
+			'sync:devquiet',
 			'crisper:dev',
 			'replace:dev'
 		]
 	);
 
 	// copy bower files and enforce csp
-	grunt.registerTask('bower', ['copy:bower', 'crisper:bower']);
+	grunt.registerTask('bower', ['sync:bower', 'crisper:bower']);
 
 };
