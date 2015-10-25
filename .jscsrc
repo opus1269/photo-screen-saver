@@ -2,6 +2,7 @@
 	"preset": "google",
 	"maximumLineLength": 160,
 	"validateIndentation": "\t",
+	"disallowTrailingWhitespace": false,
 	"disallowMultipleVarDecl": false,
 	"disallowSpacesInAnonymousFunctionExpression": null,
 	"excludeFiles": ["node_modules/**"]
