@@ -74,7 +74,7 @@ module.exports = function(grunt) {
 						replacement: 'build:replace'
 					}]
 				},
-				files: [{expand: true,  cwd: destDev, src: [appFilesHtml], dest: destDev}]
+				files: [{expand: true, cwd: destDev, src: [appFilesHtml], dest: destDev}]
 			},
 		},
 		compress: {
@@ -107,12 +107,6 @@ module.exports = function(grunt) {
 				src: [appFilesHtml]
 			},
 		},
-		htmlhintplus: {
-			all: {
-				options: {htmlhintrc: '.htmlhintrc'},
-				src: [appFilesHtml]
-			},
-		},
 		vulcanize: {
 			prod: {
 				options: {inlineScripts: true, inlineCss: true},
@@ -135,22 +129,22 @@ module.exports = function(grunt) {
 		},
 		uglify: {
 			prod: {
-				files: [{expand: true,  cwd: destProd, src: ['**/*.js'], dest: destProd}]
+				files: [{expand: true, cwd: destProd, src: ['**/*.js'], dest: destProd}]
 			},
 		},
 		minifyHtml: {
 			prod: {
-				files: [{expand: true,  cwd: destProd, src: ['**/*.html'], dest: destProd}]
+				files: [{expand: true, cwd: destProd, src: ['**/*.html'], dest: destProd}]
 			},
 		},
 		cssmin: {
 			prod: {
-				files: [{expand: true,  cwd: destProd, src: ['**/styles/*.css'], dest: destProd}]
+				files: [{expand: true, cwd: destProd, src: ['**/styles/*.css'], dest: destProd}]
 			},
 		},
 		imagemin: {
 			prod: {
-				files: [{expand: true,  cwd: destProd, src: ['**/images/*'], dest: destProd}]
+				files: [{expand: true, cwd: destProd, src: ['**/images/*'], dest: destProd}]
 			},
 		},
 	});
@@ -167,7 +161,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-csslint');
 	grunt.loadNpmTasks('grunt-htmllint');
-	grunt.loadNpmTasks('grunt-htmlhint-plus');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-minify-html');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');

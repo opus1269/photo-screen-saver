@@ -29,7 +29,6 @@
     "grunt-contrib-uglify": "^0.9.2",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-crisper": "^0.0.5",
-    "grunt-htmlhint-plus": "^0.1.0",
     "grunt-htmllint": "^0.2.7",
     "grunt-jscs": "^2.1.0",
     "grunt-minify-html": "^2.0.0",
