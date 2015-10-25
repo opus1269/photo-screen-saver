@@ -3,7 +3,7 @@ var gPhotos = (function() {
 	'use strict';
 
 	var PICASA_PATH = 'https://picasaweb.google.com/data/feed/api/user/';
-	var PHOTOS_QUERY = '?imgmax=720&thumbsize=72&fields=entry(media:group/media:content,media:group/media:credit)&v=2&alt=json';
+	var PHOTOS_QUERY = '?imgmax=1600&thumbsize=72&fields=entry(media:group/media:content,media:group/media:credit)&v=2&alt=json';
 
 	// callback function(error, httpStatus, responseText)
 	function authenticatedXhr(method, url, callback) {
