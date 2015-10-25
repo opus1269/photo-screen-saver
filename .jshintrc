@@ -1,5 +1,7 @@
 {
 	"unused": true,
+	"undef": true,
+	"camelcase": true,
 	"newcap": false,
 	"loopfunc": true,
 	"expr": true,
@@ -7,14 +9,12 @@
 	"node": true,
 	"browser": true,
 	"bitwise": true,
-	"camelcase": true,
 	"curly": true,
 	"eqeqeq": true,
 	"immed": true,
 	"indent": 2,
 	"latedef": true,
 	"noarg": true,
-	"undef": true,
 	"globals": {
 		"wrap": true,
 		"unwrap": true,
@@ -23,7 +23,8 @@
 		"chrome": true,
 		"chromeCast": true,
 		"gPhotos": true,
-		"showScreenSaver": true,
+		"Flickr": true,
+		"flickr": true,
 		"KeyframeEffect": true,
 		"ga": true
 	}
