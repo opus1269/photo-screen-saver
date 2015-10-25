@@ -1,7 +1,7 @@
 {
 	"attr-req-value": false,
 	"attr-name-style": "dash",
-	"attr-name-style": false,
+	"attr-quote-style": "double",
 	"id-class-style": "dash",
 	"class-style": "dash",
 	"id-class-ignore-regex": "{{.*?}}|.*?]]|UA-*-*",
