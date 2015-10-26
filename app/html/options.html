@@ -26,7 +26,7 @@
 
 <body unresolved class="fullbleed layout vertical">
 
-	<template is="dom-bind" id="app">
+	<template is="dom-bind" id="t">
 
 		<paper-drawer-panel id="paperDrawerPanel" drawer-width="290px">
 
@@ -105,11 +105,11 @@
 														disabled$="[[!enabled]]"></setting-slider>
 										<setting-dropdown name="photoSizing"
 															label="Photo display mode"
-															items='["Letterbox","Fill Screen","Center &amp; Frame"]'
+															items="[[photoSizingItems]]"
 															disabled$="[[!enabled]]"></setting-dropdown>
 										<setting-dropdown name="photoTransition"
 															label="Photo transition method"
-															items='["Scale up","Fade","Slide from right","Slide down","Spin up"]'
+															items="[[photoTransitionItems]]"
 															disabled$="[[!enabled]]"></setting-dropdown>
 										<setting-toggle name="shuffle"
 														main-label="Shuffle"
@@ -147,10 +147,19 @@
 														main-label="Chromecast"
 														secondary-label="Backdrop photos from the Chromecast media streaming device"
 														disabled$="[[!enabled]]"></setting-toggle>
+										<setting-toggle name="useInterestingFlickr"
+														main-label="Flickr - Interesting"
+														secondary-label="Interesting photos, updated daily"
+														disabled$="[[!enabled]]"></setting-toggle>
+										<setting-toggle name="useFavoriteFlickr"
+														main-label="Flickr - Favorites"
+														secondary-label="Favorite photos, curated by Flickr"
+														disabled$="[[!enabled]]"></setting-toggle>
 										<setting-toggle name="useAuthors"
 														main-label="Author"
 														secondary-label="Photos from the extension's author"
 														disabled$="[[!enabled]]"></setting-toggle>
+										<paper-item>This product uses the Flickr API but is not endorsed or certified by Flickr</paper-item
 									</div>
 								</paper-material>
 							</section>
