@@ -18,25 +18,6 @@ var chromeCast = (function() {
 		xhttp.send();
 	}
 
-	// save the indices of the bad images to localStorage
-	// so they can be ignored
-	function _imgError() {
-		/*jshint validthis: true */
-		var pos = [];
-		pos[0] = ccImages.map(function(e) { return e.url.toUpperCase(); }).
-																	indexOf(this.src.toUpperCase());
-
-		if (pos[0] !== -1) {
-			if (!localStorage.badCCImages) {
-				localStorage.badCCImages	= JSON.stringify(pos);
-			} else {
-				var arr = JSON.parse(localStorage.badCCImages);
-				arr.push(pos[0]);
-				localStorage.badCCImages = JSON.stringify(arr);
-			}
-		}
-	}
-
 	return {
 
 		// call this as early as possible
@@ -48,7 +29,18 @@ var chromeCast = (function() {
 
 				for (var i = 0; i < numImages; i++) {
 					img = new Image();
-					img.addEventListener('error', _imgError);
+
+					// cut out bad images
+					img.onerror = function() {
+						/*jshint validthis: true */
+						var ims = JSON.parse(localStorage.ccImages);
+						var ind = ims.map(function(e) {return e.url;}).indexOf(this.src);
+						if (ind >= 0) {
+							ims.splice(ind, 1);
+							localStorage.ccImages = JSON.stringify(ims);
+						}
+					};
+
 					img.src = ccImages[i].url;
 					imgs.push(img);
 				}

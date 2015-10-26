@@ -18,8 +18,7 @@ var gPhotos = (function() {
 
 				var xhr = new XMLHttpRequest();
 				xhr.open(method, url);
-				xhr.setRequestHeader('Authorization',
-									'Bearer ' + accessToken);
+				xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
 				xhr.send();
 				xhr.onload = function() {
 					if (this.status === 401 && retry) {
@@ -126,7 +125,18 @@ var gPhotos = (function() {
 					aspectRatio = width / height;
 					author = entry.media$group.media$credit[0].$t;
 					img = new Image();
-					//img.addEventListener('error', imgError);
+
+					// cut out bad images
+					img.onerror = function() {
+						/*jshint validthis: true */
+						var ims = JSON.parse(localStorage.authorImages);
+						var ind = ims.map(function(e) {return e.url;}).indexOf(this.src);
+						if (ind >= 0) {
+							ims.splice(ind, 1);
+							localStorage.authorImages = JSON.stringify(ims);
+						}
+					};
+
 					img.src = url;
 					imgs.push(img);
 					authorImage = {};
