@@ -29,7 +29,16 @@ module.exports = function(grunt) {
 		},
 		sync: {
 			prod: {
-				files: [{expand: true, src: [appFiles, '!app/images/*.db', '!app/elements/*/**'], dest: destProd}]
+				files: [{
+					expand: true,
+					src: [
+						appFiles,
+						'!app/images/*.db',
+						'!app/elements/*/**',
+						'!lib/flickrapi.dev.js'
+					],
+					dest: destProd
+				}]
 			},
 			dev: {
 				verbose: true,
@@ -60,6 +69,9 @@ module.exports = function(grunt) {
 					patterns: [{
 						match: /\t"key".*\n/,
 						replacement: ''
+					}, {
+						match: 'flickrapi.dev.js',
+						replacement: 'flickrapi.js'
 					}]
 				},
 				files: {'dist/app/manifest.json': 'app/manifest.json'}

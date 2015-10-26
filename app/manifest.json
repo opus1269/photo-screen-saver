@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Photo Screen Saver",
 	"short_name": "Photo Screen Saver",
-	"description": "A Screen Saver With Customizable Photo Sources",
+	"description": "A screensaver with multiple photo sources",
 	"version": "1.0.0",
 	"minimum_chrome_version": "38",
 	"icons": {
@@ -29,7 +29,13 @@
 		"https://picasaweb.google.com/"
 	],
 	"background": {
-		"scripts": ["/scripts/google_photos.js","/scripts/chromecast.js","/scripts/background.js"],
+		"scripts": [
+			"/scripts/background.js",
+			"/scripts/google_photos.js",
+			"/scripts/chromecast.js",
+			"/scripts/flickr.js",
+			"/lib/flickrapi.dev.js"
+		],
 		"persistent": false
 	},
 	"browser_action": {

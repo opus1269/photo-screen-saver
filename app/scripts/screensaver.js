@@ -83,47 +83,25 @@
 
 	// prepare the array of photos the user has selected
 	t.getPhotoArray = function() {
-		var badImages;
-		var albumSelections;
-		var arr = [], tmp = [];
-		var i;
+		var arr = [];
 
 		if (JSON.parse(localStorage.useGoogle)) {
-			tmp = [];
-			albumSelections = JSON.parse(localStorage.albumSelections);
-			for (i = 0; i < albumSelections.length; i++) {
-				tmp = tmp.concat(albumSelections[i].photos);
-				// TODO fix this
-				/*	if (localStorage.badUserImages) {
-					badImages = JSON.parse(localStorage.badUserImages);
-					for (j=0; j < badImages.length; j++) {
-							tmp[badImages[i]].ignore = true;
-					}
-				}*/
+			var albumSelections = JSON.parse(localStorage.albumSelections);
+			for (var i = 0; i < albumSelections.length; i++) {
+				arr = arr.concat(albumSelections[i].photos);
 			}
-			arr = arr.concat(tmp);
 		}
 		if (JSON.parse(localStorage.useChromecast)) {
-			tmp = [];
-			tmp = tmp.concat(JSON.parse(localStorage.ccImages));
-			if (localStorage.badCCImages) {
-				badImages = JSON.parse(localStorage.badCCImages);
-				for (i = 0; i < badImages.length; i++) {
-					tmp[badImages[i]].ignore = true;
-				}
-			}
-			arr = arr.concat(tmp);
+			arr = arr.concat(JSON.parse(localStorage.ccImages));
+		}
+		if (JSON.parse(localStorage.useInterestingFlickr)) {
+			arr = arr.concat(JSON.parse(localStorage.flickrInterestingImages));
+		}
+		if (JSON.parse(localStorage.useFavoriteFlickr)) {
+			arr = arr.concat(JSON.parse(localStorage.flickrFavoriteImages));
 		}
 		if (JSON.parse(localStorage.useAuthors)) {
-			tmp = [];
-			tmp = tmp.concat(JSON.parse(localStorage.authorImages));
-			if (localStorage.badAuthorImages) {
-				badImages = JSON.parse(localStorage.badAuthorImages);
-				for (i = 0; i < badImages.length; i++) {
-					tmp[badImages[i]].ignore = true;
-				}
-			}
-			arr = arr.concat(tmp);
+			arr = arr.concat(JSON.parse(localStorage.authorImages));
 		}
 
 		return arr;
@@ -325,9 +303,9 @@
 	};
 
 	// This will run to infinity... and beyond
+	// each call to t.nextPhoto will set another timeout
 	t.addEventListener('pages-ready', function() {
 		t.waitTime = 2000;
-		// each call to t.nextPhoto will set another timeout
 		t.timer = window.setTimeout(t.nextPhoto, t.waitTime);
 	});
 

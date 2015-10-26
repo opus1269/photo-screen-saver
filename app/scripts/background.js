@@ -31,6 +31,11 @@ function initData() {
 		localStorage.keepStart = '"00:00"'; // 24 hr time
 		localStorage.keepStop = '"00:00"';  // 24 hr time
 		localStorage.showPhotog = 'true';
+		localStorage.ccImages = '[]';
+		localStorage.useInterestingFlickr = 'false';
+		localStorage.useFavoriteFlickr = 'false';
+		localStorage.flickrInterestingImages = '[]';
+		localStorage.flickrFavoriteImages = '[]';
 	}
 
 	// values from the beginning of time
@@ -176,6 +181,25 @@ function processUseChromecast() {
 	}
 }
 
+function processUseInterestingFlickr() {
+	localStorage.removeItem('flickrInterestingImages');
+	localStorage.removeItem('badFlickrInterestingImages');
+	if (JSON.parse(localStorage.useInterestingFlickr)) {
+		console.log(flickr.TYPE_ENUM);
+		flickr.preloadImages(flickr.TYPE_ENUM.interesting);
+	}
+}
+
+function processUseFavoriteFlickr() {
+	localStorage.removeItem('flickrFavoriteImages');
+	localStorage.removeItem('badFlickrFavoriteImages');
+	if (JSON.parse(localStorage.useFavoriteFlickr)) {
+		try {flickr.preloadImages(flickr.TYPE_ENUM.favorite);}
+		catch (err) {console.log(err);}
+
+	}
+}
+
 // set state based on the current values in localStorage
 // TODO: Do we want useGoogle here?
 function processState(key) {
@@ -192,19 +216,27 @@ function processState(key) {
 			case 'idleTime':
 				processIdleTime();
 				break;
-			case 'useAuthors':
-				processUseAuthors();
-				break;
 			case 'useChromecast':
 				processUseChromecast();
+				break;
+			case 'useInterestingFlickr':
+				processUseInterestingFlickr();
+				break;
+			case 'useFavoriteFlickr':
+				processUseFavoriteFlickr();
+				break;
+			case 'useAuthors':
+				processUseAuthors();
 				break;
 		}
 	} else {
 		processKeepAwake();
 		processIdleTime();
 		processEnabled();
-		processUseAuthors();
 		processUseChromecast();
+		processUseInterestingFlickr();
+		processUseFavoriteFlickr();
+		processUseAuthors();
 	}
 }
 
@@ -230,7 +262,7 @@ function showScreenSaver(display) {
 		bounds.height = screen.height;
 	}
 	if (!bounds.left && !bounds.top && getChromeVersion() >= 44) {
-		// Chrome now supports fullscreen option on create
+		// Chrome supports fullscreen option on create since version 44
 		chrome.windows.create({
 			url: '/html/screensaver.html',
 			focused: true,
@@ -247,7 +279,7 @@ function showScreenSaver(display) {
 			focused: true,
 			type: 'popup'
 		}, function(win) {
-			chrome.windows.update(win.id, {state: 'fullscreen', focused: true});
+			chrome.windows.update(win.id, {state: 'fullscreen'});
 		});
 	}
 }
