@@ -43,7 +43,8 @@
     "**/extjs/src/**",
     "**/extjs/welcome/**",
     "/app/bower_components/**",
-    "/app/lib/**"
+    "**/app/lib/**",
+    "**/app/lib/**"
   ],
   "test": [
     "**/test/**",
