@@ -42,11 +42,13 @@
     "**/extjs/resources/**",
     "**/extjs/src/**",
     "**/extjs/welcome/**",
-    "**/bower_components/**"
+    "/app/bower_components/**",
+    "/app/lib/**"
   ],
   "test": [
     "**/test/**",
     "**/tests/**",
-    "**/spec/**".
+    "**/spec/**",
     "**/specs/**"
+  ]
 }
