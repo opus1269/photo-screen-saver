@@ -1,7 +1,7 @@
 {
   "name": "photo-screen-saver",
   "version": "1.0.0",
-  "description": "<a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/kohpcmlfdjfdggcjmjhhbcbankgmppgc\">![Try it now in CWS](https://raw.github.com/GoogleChrome/chrome-app-samples/master/tryitnowbutton.png \"Click here to install this sample from the Chrome Web Store\")</a>",
+  "description": "<a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/kohpcmlfdjfdggcjmjhhbcbankgmppgc\">",
   "main": "background.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
