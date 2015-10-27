@@ -31,7 +31,7 @@
 	t.albums = [];
 
 	// array photo sizing types
-	t.photoSizingItems = ['Letterbox','Fill Screen','Center &amp; Frame'];
+	t.photoSizingItems = ['Letterbox','Fill Screen','Frame'];
 
 	// array photo transition types
 	t.photoTransitionItems = ['Scale up','Fade','Slide from right','Slide down','Spin up'];
