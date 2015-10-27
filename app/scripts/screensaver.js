@@ -94,6 +94,9 @@
 		if (JSON.parse(localStorage.useChromecast)) {
 			arr = arr.concat(JSON.parse(localStorage.ccImages));
 		}
+		if (JSON.parse(localStorage.usePopular500px)) {
+			arr = arr.concat(JSON.parse(localStorage.popular500pxImages));
+		}
 		if (JSON.parse(localStorage.useInterestingFlickr)) {
 			arr = arr.concat(JSON.parse(localStorage.flickrInterestingImages));
 		}

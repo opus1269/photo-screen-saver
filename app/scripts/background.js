@@ -31,11 +31,9 @@ function initData() {
 		localStorage.keepStart = '"00:00"'; // 24 hr time
 		localStorage.keepStop = '"00:00"';  // 24 hr time
 		localStorage.showPhotog = 'true';
-		localStorage.ccImages = '[]';
+		localStorage.usePopular500px = 'false';
 		localStorage.useInterestingFlickr = 'false';
 		localStorage.useFavoriteFlickr = 'false';
-		localStorage.flickrInterestingImages = '[]';
-		localStorage.flickrFavoriteImages = '[]';
 	}
 
 	// values from the beginning of time
@@ -167,7 +165,6 @@ function processIdleTime() {
 }
 
 function processUseAuthors() {
-	localStorage.removeItem('badAuthorImages');
 	localStorage.removeItem('authorImages');
 	if (JSON.parse(localStorage.useAuthors)) {
 		gPhotos.preloadAuthorImages();
@@ -175,28 +172,30 @@ function processUseAuthors() {
 }
 
 function processUseChromecast() {
-	localStorage.removeItem('badCCImages');
+	localStorage.removeItem('ccImages');
 	if (JSON.parse(localStorage.useChromecast)) {
 		chromeCast.preloadImages();
 	}
 }
 
+function processUsePopular500px() {
+	localStorage.removeItem('popular500pxImages');
+	if (JSON.parse(localStorage.usePopular500px)) {
+		use500px.preloadImages();
+	}
+}
+
 function processUseInterestingFlickr() {
 	localStorage.removeItem('flickrInterestingImages');
-	localStorage.removeItem('badFlickrInterestingImages');
 	if (JSON.parse(localStorage.useInterestingFlickr)) {
-		console.log(flickr.TYPE_ENUM);
 		flickr.preloadImages(flickr.TYPE_ENUM.interesting);
 	}
 }
 
 function processUseFavoriteFlickr() {
 	localStorage.removeItem('flickrFavoriteImages');
-	localStorage.removeItem('badFlickrFavoriteImages');
 	if (JSON.parse(localStorage.useFavoriteFlickr)) {
-		try {flickr.preloadImages(flickr.TYPE_ENUM.favorite);}
-		catch (err) {console.log(err);}
-
+		flickr.preloadImages(flickr.TYPE_ENUM.favorite);
 	}
 }
 
@@ -219,6 +218,9 @@ function processState(key) {
 			case 'useChromecast':
 				processUseChromecast();
 				break;
+			case 'usePopular500px':
+				processUsePopular500px();
+				break;
 			case 'useInterestingFlickr':
 				processUseInterestingFlickr();
 				break;
@@ -234,6 +236,7 @@ function processState(key) {
 		processIdleTime();
 		processEnabled();
 		processUseChromecast();
+		processUsePopular500px();
 		processUseInterestingFlickr();
 		processUseFavoriteFlickr();
 		processUseAuthors();
@@ -334,7 +337,7 @@ function onAlarm(alarm) {
 }
 
 // message: preview the screensaver
-function onPreview(request) {
+function onMessage(request) {
 	if (request.preview === 'show') {
 		showScreenSaver();
 	}
@@ -356,6 +359,6 @@ chrome.idle.onStateChanged.addListener(onIdleStateChanged);
 chrome.alarms.onAlarm.addListener(onAlarm);
 
 // listen for request to display preview of screensaver
-chrome.runtime.onMessage.addListener(onPreview);
+chrome.runtime.onMessage.addListener(onMessage);
 
 })();

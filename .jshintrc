@@ -23,6 +23,8 @@
 		"chrome": true,
 		"chromeCast": true,
 		"gPhotos": true,
+		"_500px": true,
+		"use500px": true,
 		"Flickr": true,
 		"flickr": true,
 		"KeyframeEffect": true,
