@@ -4,17 +4,6 @@
 // minutes in day
 var MIN_IN_DAY = 60 * 24;
 
-// display or focus options page
-chrome.browserAction.onClicked.addListener(function() {
-	chrome.tabs.query({title: 'Photo Screen Saver Options Page'}, function(t) {
-		if (!t.length) {
-			chrome.tabs.create({url: '../html/options.html'});
-		} else {
-			chrome.tabs.update(t[0].id, {'highlighted': true});
-		}
-	});
-});
-
 // initialize the data in local storage
 function initData() {
 	// using local storage as a quick and dirty replacement for MVC
@@ -54,7 +43,7 @@ function initData() {
 		localStorage.windowID = '-1';  // no longer used
 	}
 
-	// removed unused variables
+	// remove unused variables
 	localStorage.removeItem('isPreview');
 	localStorage.removeItem('windowID');
 }
@@ -298,6 +287,17 @@ function onStartup() {
 	processState(null);
 }
 
+// event: display or focus options page
+function onClicked() {
+	chrome.tabs.query({title: 'Photo Screen Saver Options Page'}, function(t) {
+		if (!t.length) {
+			chrome.tabs.create({url: '../html/options.html'});
+		} else {
+			chrome.tabs.update(t[0].id, {'highlighted': true});
+		}
+	});
+}
+
 // event: process the state when someone has changed the storage
 function onStorageChanged(event) {
 	processState(event.key);
@@ -348,6 +348,9 @@ chrome.runtime.onInstalled.addListener(onInstalled);
 
 // listen for Chrome starting
 chrome.runtime.onStartup.addListener(onStartup);
+
+// listen for click on the icon
+chrome.browserAction.onClicked.addListener(onClicked);
 
 // listen for changes to the stored data
 addEventListener('storage', onStorageChanged, false);
