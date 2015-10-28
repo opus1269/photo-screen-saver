@@ -11,7 +11,9 @@ var use500px = (function() {
 	return {
 
 		preloadImages: function() {
-			_500px.init({sdk_key: SDK_KEY});
+			try {
+				_500px.init({sdk_key: SDK_KEY});
+			} catch (e) {}
 
 			_500px.api('/photos',{feature: 'popular', only: CATS, rpp: MAX_PHOTOS, sort: 'rating', image_size: 2048}, function(response) {
 				var imgs = [], img;
@@ -33,8 +35,7 @@ var use500px = (function() {
 								localStorage.popular500pxImages = JSON.stringify(ims);
 							}
 						};
-
-						img.src = photo.image_url;
+						img.src = photo.images[0].url;
 						imgs.push(img);
 						image = {};
 						image.url = img.src;
