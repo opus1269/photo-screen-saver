@@ -16,11 +16,12 @@
     "tests"
   ],
   "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
-    "iron-label": "PolymerElements/iron-label#^1.0.1",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.0",
     "neon-elements": "PolymerElements/neon-elements#^1.0.0",
-    "paper-elements": "PolymerElements/paper-elements#^1.0.1",
-    "paper-time-picker": "paper-time-picker#^1.0.3",
-    "polymer": "Polymer/polymer#1.1.5"
+    "iron-label": "PolymerElements/iron-label#^1.0.1",
+    "paper-time-picker": "git://github.com/opus1269/paper-time-picker.git#8ae390cf53d7e26790302aa77de695f63d134e92",
+    "flickrapi": "^0.3.36"
   }
 }
