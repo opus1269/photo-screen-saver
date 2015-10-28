@@ -45,7 +45,7 @@
 		<iron-localstorage id="store" name="{{name}}" value="{{value}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
 
 		<paper-dialog id="dialog" modal class="paper-time-picker-dialog">
-			<paper-time-picker id="timePicker"></paper-time-picker>
+			<paper-time-picker id="timePicker" hour="24" minute="0"></paper-time-picker>
 			<div class="buttons">
 				<paper-button dialog-dismiss>Cancel</paper-button>
 				<paper-button dialog-confirm on-tap="_onTimeSelected">OK</paper-button>
@@ -112,19 +112,25 @@
 		},
 
 		_valueChanged: function() {
-			var picker = this.$.timePicker;
-			picker.set('time',this.value);
-			this.timeLabel = picker.get('time');
+			this.set('timeLabel', this._formatTime(this.get('value')));
 		},
 
-		_onTap: function () {
+		_onTap: function() {
 			this.$.dialog.open();
 		},
 
-		_onTimeSelected: function () {
+		_onTimeSelected: function() {
 			var picker = this.$.timePicker;
 			this.set('value', ('0' + picker.hour).substr(-2) +
 			':' + ('0' + picker.minute).substr(-2));
+		},
+
+		// '00:00' 24 hr time
+		_formatTime: function(timeString) {
+			var hour = parseInt(timeString.substr(0,2), 10);
+			var period = (hour % 24) < 12 ? 'AM' : 'PM';
+			hour = hour % 12 || 12;
+			return hour + timeString.substr(2,3) + ' ' + period;
 		}
 
 	});
