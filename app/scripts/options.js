@@ -126,10 +126,6 @@
 		t.async(function() {
 			t.menu.select(t.prevRoute);
 		}, 500);
-		// localStorage.isPreview = 'true';
-		// chrome.runtime.getBackgroundPage(function(win) {
-		// 	win.showScreenSaver();
-		// });
 		chrome.runtime.sendMessage({preview: 'show'});
 	};
 
