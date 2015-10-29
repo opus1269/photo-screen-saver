@@ -5,8 +5,19 @@
 	var t = document.querySelector('#t');
 	var tPages;
 
-	// array of photos to use for slide show
+	// array of all the photos to use for slide show
+	t.itemsAll = [];
+
+	// current index into itemsAll;
+	t.curIdx = 0;
+
+	// array of TEMP_CT photos currently loaded into the animatable pages
+	// always changing subset of itemsAll
+	var TEMP_CT = 50;
 	t.items = [];
+
+	// set to true after first full page animation
+	t.started = false;
 
 	t.addEventListener('dom-change', function() {
 
@@ -38,11 +49,10 @@
 		catch (err) {}
 
 		// load the photos for the slide show
-		this.debounce('job1', function() {
-			t.loadImages();
-			// this will kick off the slideshow
-			this.fire('pages-ready');
-		});
+		t.loadImages();
+
+		// this will kick off the slideshow
+		this.fire('pages-ready');
 
 	});
 
@@ -57,14 +67,25 @@
 	};
 
 	// create the photo label
-	t.getPhotoLabel = function(author, force) {
+	t.getPhotoLabel = function(author, type, force) {
 		var ret = '';
-		if (force || JSON.parse(localStorage.showPhotog)) {
-			if (author !== '') {
-				ret = 'Photo by ' + author;
-			} else {
-				ret = 'Photo from Google+';
+		var source = '';
+		var idx = type.search('User');
+
+		if (!force && !JSON.parse(localStorage.showPhotog) && (idx !== -1)) {
+			// don't show label for user photos
+			return ret;
+		}
+		if (type) {
+			if (idx !== -1) {
+				type = type.substring(0, idx - 1); // strip off 'User'
 			}
+			source = ' / ' + type ;
+		}
+		if (author) {
+			ret = author + source;
+		} else if (source) {
+			ret = 'Photo from ' + source.substring(3);
 		}
 		return ret;
 	};
@@ -81,30 +102,49 @@
 		return false;
 	};
 
+	t.addType = function(arr, type) {
+		for (var i = 0; i < arr.length; i++) {
+			arr[i].type = type;
+		}
+	};
+
 	// prepare the array of photos the user has selected
 	t.getPhotoArray = function() {
 		var arr = [];
+		var tmp = [];
 
 		if (JSON.parse(localStorage.useGoogle)) {
 			var albumSelections = JSON.parse(localStorage.albumSelections);
 			for (var i = 0; i < albumSelections.length; i++) {
-				arr = arr.concat(albumSelections[i].photos);
+				tmp = []; tmp = albumSelections[i].photos;
+				t.addType(tmp, 'Google User');
+				arr = arr.concat(tmp);
 			}
 		}
 		if (JSON.parse(localStorage.useChromecast)) {
-			arr = arr.concat(JSON.parse(localStorage.ccImages));
+			tmp = []; tmp = JSON.parse(localStorage.ccImages);
+			t.addType(tmp, 'Google');
+			arr = arr.concat(tmp);
 		}
 		if (JSON.parse(localStorage.usePopular500px)) {
-			arr = arr.concat(JSON.parse(localStorage.popular500pxImages));
+			tmp = []; tmp = JSON.parse(localStorage.popular500pxImages);
+			t.addType(tmp, '500px');
+			arr = arr.concat(tmp);
 		}
 		if (JSON.parse(localStorage.useInterestingFlickr)) {
-			arr = arr.concat(JSON.parse(localStorage.flickrInterestingImages));
+			tmp = []; tmp = JSON.parse(localStorage.flickrInterestingImages);
+			t.addType(tmp, 'flickr');
+			arr = arr.concat(tmp);
 		}
 		if (JSON.parse(localStorage.useFavoriteFlickr)) {
-			arr = arr.concat(JSON.parse(localStorage.flickrFavoriteImages));
+			tmp = []; tmp = JSON.parse(localStorage.flickrFavoriteImages);
+			t.addType(tmp, 'flickr');
+			arr = arr.concat(tmp);
 		}
 		if (JSON.parse(localStorage.useAuthors)) {
-			arr = arr.concat(JSON.parse(localStorage.authorImages));
+			tmp = []; tmp = JSON.parse(localStorage.authorImages);
+			t.addType(tmp, 'Google');
+			arr = arr.concat(tmp);
 		}
 
 		return arr;
@@ -119,6 +159,7 @@
 		var skip = JSON.parse(localStorage.skip);
 		var arr = [];
 
+		this.splice('itemsAll', 0, t.itemsAll.length);
 		this.splice('items', 0, t.items.length);
 
 		arr = t.getPhotoArray();
@@ -143,19 +184,24 @@
 			if (!arr[i].ignore) {
 
 				arr[i].author ? author = arr[i].author : author = '';
-				photoLabel = t.getPhotoLabel(author);
+				photoLabel = t.getPhotoLabel(author, arr[i].type);
 
-				// the Polymer way - !important
-				this.push('items', {name: 'image' + (count + 1),
+				t.itemsAll.push({name: 'image' + (count + 1),
 									path: arr[i].url,
 									authorID: 'author' + (count + 1),
 									author: author,
+									type: arr[i].type,
 									label: photoLabel,
 									sizingType: t.sizingType,
 									aspectRatio: arr[i].asp,
 									width: screen.width,
 									height: screen.height
 				});
+				if (count < TEMP_CT) {
+					// the Polymer way - !important
+					t.push('items', t.itemsAll[count]);
+					t.curIdx++;
+				}
 				count++;
 			}
 		}
@@ -179,9 +225,11 @@
 		if (aspectRatio < screenAspectRatio) {
 			right = (screen.width - (screen.height * aspectRatio)) / 2;
 			author.style.right = (right + 30) + 'px';
+			author.style.bottom = '';
 		} else {
 			bottom = (screen.height - (screen.width / aspectRatio)) / 2;
 			author.style.bottom = (bottom + 20) + 'px';
+			author.style.right = '';
 		}
 	};
 
@@ -199,7 +247,7 @@
 
 		// force use of photo label for this view
 		if (!JSON.parse(localStorage.showPhotog)) {
-			var label = t.getPhotoLabel(item.author,true);
+			var label = t.getPhotoLabel(item.author, item.type, true);
 			var model = tPages.modelForElement(image);
 			model.set('item.label', label);
 		}
@@ -229,14 +277,6 @@
 
 	};
 
-	// check if the photo is ready to display
-	t.isComplete = function(photoID) {
-		var item = t.items[photoID];
-		var image = t.$.pages.querySelector('#' + item.name);
-
-		return image && !image.loading;
-	};
-
 	// try to find a photo that is ready to display
 	t.findPhoto = function(photoID) {
 		var i;
@@ -250,7 +290,7 @@
 			}
 		}
 		if (!found) {
-			for (i = 0; i < t.items.length; i++) {
+			for (i = 0; i < photoID; i++) {
 				if (t.isComplete(i)) {
 					photoID = i;
 					found = true;
@@ -261,17 +301,36 @@
 		return photoID;
 	};
 
+	// check if the photo is ready to display
+	t.isComplete = function(photoID) {
+		var item = t.items[photoID];
+		var image = t.$.pages.querySelector('#' + item.name);
+
+		return image.loaded;
+	};
+
 	// called at fixed time intervals to cycle through the pages
 	t.nextPhoto = function() {
 		var p = t.$.pages;
-		var curPage = parseInt(((!p.selected) ? 0 : p.selected),10);
+		var curPage = (p.selected === undefined) ? 0 : p.selected;
 		var nextPage = (curPage === t.items.length - 1) ? 0 : curPage + 1;
-
+		var prevPage = curPage ? curPage - 1 : t.items.length - 1;
 		var selected = nextPage;
 
-		// special case for first page
+		if (t.started && (t.itemsAll.length > t.items.length)) {
+			// splice in the next image at the previous page.
+			tPages.splice('items', prevPage, 1, t.itemsAll[t.curIdx]);
+			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
+		}
+
 		if (p.selected === undefined) {
+			// special case for first page. neon-animated-pages is configured
+			// to run the entry animation for the first selection
 			selected = curPage;
+		}	else if (!t.started) {
+			// first full animation will run. next time ready to start
+			// splicing in the new images
+			t.started = true;
 		}
 
 		if (!t.isComplete(selected)) {
@@ -280,7 +339,7 @@
 		}
 
 		if (!t.isComplete(selected)) {
-			// no photos are ready
+			// photo's not ready.. wait for it
 			// set the waitTime in the setTimeout function so we don't have to
 			// wait for the whole slide transition time to try again
 			t.waitTime = 1000;
