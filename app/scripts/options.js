@@ -62,7 +62,7 @@
 
 	// Scroll page to top
 	t.scrollPageToTop = function() {
-		document.getElementById('mainContainer').scrollTop = 0;
+		document.getElementById('scrollPanel').scrollToTop();
 	};
 
 	// Close drawer if drawerPanel is narrow

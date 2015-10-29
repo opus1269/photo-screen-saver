@@ -50,7 +50,7 @@
 			</paper-material>
 
 			<!-- Main Scroll Header Panel -->
-			<paper-scroll-header-panel main fixed>
+			<paper-scroll-header-panel id="scrollPanel" main fixed>
 
 				<!-- Main Toolbar -->
 				<paper-material class="paper-header" elevation="2">
@@ -120,8 +120,8 @@
 														secondary-label="Do not display certain photos in Fill Screen mode"
 														disabled$="[[!enabled]]"></setting-toggle>
 										<setting-toggle name="showPhotog"
-														main-label="Show photographer"
-														secondary-label="Display the photgrapher's name (always shows on framed photos)"
+														main-label="Show photographer label for photos you own"
+														secondary-label="(Always shows on framed photos)"
 														noseparator
 														disabled$="[[!enabled]]"></setting-toggle>
 										<setting-toggle name="allDisplays"
