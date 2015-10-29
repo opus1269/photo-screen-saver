@@ -31,13 +31,13 @@
 	t.albums = [];
 
 	// array photo sizing types
-	t.photoSizingItems = ['Letterbox','Fill Screen','Frame'];
+	t.photoSizingItems = ['Letterbox','Fill screen','Frame'];
 
 	// array photo transition types
 	t.photoTransitionItems = ['Scale up','Fade','Slide from right','Slide down','Spin up'];
 
-	// array of Flickr search terms
-	t.flickrSearchItems = ['None', 'Interesting - daily', 'Favorites'];
+	// array of time format options
+	t.timeItems = ['No', '12 hour format', '24 hour format'];
 
 	// array of selected google albums
 	t.albumSelections = JSON.parse(localStorage.albumSelections);

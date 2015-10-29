@@ -20,6 +20,18 @@ div {
 	margin: 0;
 }
 
+.time {
+	font-size: 300%;
+	font-weight: 300;
+	position: fixed;
+	right: 30px;
+	bottom: 50px;
+	padding: 0;
+	margin: 0;
+	color: white;
+	opacity: 1.0;
+}
+
 .author {
 	font-size: 133%;
 	position: fixed;
@@ -27,7 +39,7 @@ div {
 	bottom: 20px;
 	padding: 0;
 	margin: 0;
-	color: WhiteSmoke;
+	color: white;
 	opacity: .8;
 }
 

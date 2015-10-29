@@ -90,6 +90,27 @@
 		return ret;
 	};
 
+	// set the time label
+	t.setTime = function(photoID) {
+		var format = parseInt(localStorage.showTime, 10);
+		if (!format) {
+			return;
+		}
+		var item = t.items[photoID];
+		var p = t.$.pages;
+		var timeEl = p.querySelector('#' + item.timeID);
+		var date = new Date();
+
+		var model = tPages.modelForElement(timeEl);
+		if (format === 1) {
+			model.set('item.time', date.toLocaleTimeString(navigator.language,
+				{hour: 'numeric', minute: '2-digit',  hour12: true}));
+		} else {
+			model.set('item.time', date.toLocaleTimeString(navigator.language,
+				{hour: 'numeric', minute: '2-digit', hour12: false}));
+		}
+	};
+
 	// check if a photo would look bad cropped
 	t.badAspect = function(aspectRatio) {
 		var aspectRatioScreen = screen.width / screen.height;
@@ -102,6 +123,7 @@
 		return false;
 	};
 
+	// add a type identifying the source of a photo
 	t.addType = function(arr, type) {
 		for (var i = 0; i < arr.length; i++) {
 			arr[i].type = type;
@@ -192,6 +214,8 @@
 									author: author,
 									type: arr[i].type,
 									label: photoLabel,
+									timeID: 'time' + (count + 1),
+									time: '',
 									sizingType: t.sizingType,
 									aspectRatio: arr[i].asp,
 									width: screen.width,
@@ -219,6 +243,7 @@
 		var item = t.items[photoID];
 		var aspectRatio = item.aspectRatio;
 		var author = t.$.pages.querySelector('#' + item.authorID);
+		var time = t.$.pages.querySelector('#' + item.timeID);
 		var screenAspectRatio = screen.width / screen.height;
 		var right,bottom;
 
@@ -226,10 +251,14 @@
 			right = (screen.width - (screen.height * aspectRatio)) / 2;
 			author.style.right = (right + 30) + 'px';
 			author.style.bottom = '';
+			time.style.right = (right + 30) + 'px';
+			time.style.bottom = '';
 		} else {
 			bottom = (screen.height - (screen.width / aspectRatio)) / 2;
 			author.style.bottom = (bottom + 20) + 'px';
 			author.style.right = '';
+			time.style.bottom = (bottom + 50) + 'px';
+			time.style.right = '';
 		}
 	};
 
@@ -241,6 +270,7 @@
 		var p = t.$.pages;
 		var image = p.querySelector('#' + item.name);
 		var author = p.querySelector('#' + item.authorID);
+		var time = p.querySelector('#' + item.timeID);
 		var img = image.$.img;
 		var width, height;
 		var aspectRatio = item.aspectRatio;
@@ -268,12 +298,25 @@
 		image.style.boxShadow = '15px 15px 15px rgba(0,0,0,.7)';
 		image.style.borderBottom = borderBot + 'px solid WhiteSmoke';
 
-		author.style.width = screen.width + 'px';
-		author.style.right = '0px';
+		if (parseInt(localStorage.showTime, 10)) {
+			author.style.left = (screen.width - width) / 2 + 10 + 'px';
+			author.style.textAlign = 'left';
+		} else {
+			author.style.left = '0px';
+			author.style.textAlign = 'center';
+			author.style.width = screen.width + 'px';
+		}
 		author.style.bottom = (screen.height - height - borderBot - border + 20) / 2 + 'px';
 		author.style.color = 'black';
-		author.style.textAlign = 'center';
 		author.style.opacity = 1;
+
+		time.style.right = (screen.width - width) / 2 + 10 + 'px';
+		time.style.textAlign = 'right';
+		time.style.bottom = (screen.height - height - borderBot - border + 20) / 2 + 'px';
+		time.style.color = 'black';
+		time.style.opacity = 1;
+		time.style.fontSize = '28px';
+		time.style.fontWeight = 400;
 
 	};
 
@@ -350,6 +393,7 @@
 			}
 
 			// prep photos
+			t.setTime(selected);
 			if (!t.sizingType) {
 				t.framePhoto(selected);
 			} else if (t.sizingType === 'contain') {

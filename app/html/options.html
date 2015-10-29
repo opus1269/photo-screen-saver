@@ -119,6 +119,10 @@
 														main-label="Skip poor aspect ratio photos"
 														secondary-label="Do not display certain photos in Fill Screen mode"
 														disabled$="[[!enabled]]"></setting-toggle>
+										<setting-dropdown name="showTime"
+															label="Show time"
+															items="[[timeItems]]"
+															disabled$="[[!enabled]]"></setting-dropdown>
 										<setting-toggle name="showPhotog"
 														main-label="Show photographer label for photos you own"
 														secondary-label="(Always shows on framed photos)"
@@ -160,8 +164,8 @@
 														secondary-label="Favorite photos from the Flickr photo sharing site, curated by Flickr"
 														disabled$="[[!enabled]]"></setting-toggle>
 										<setting-toggle name="useAuthors"
-														main-label="Author"
-														secondary-label="Photos from the extension's author"
+														main-label="Extension developer"
+														secondary-label="Photos from the guy who wrote this"
 														disabled$="[[!enabled]]"></setting-toggle>
 										<paper-item>This product uses the Flickr API but is not endorsed or certified by Flickr</paper-item
 									</div>
