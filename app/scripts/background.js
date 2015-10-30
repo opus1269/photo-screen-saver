@@ -3,6 +3,8 @@
 
 // minutes in day
 var MIN_IN_DAY = 60 * 24;
+// milli second in day
+var MSEC_IN_DAY = MIN_IN_DAY * 60 * 1000;
 
 // initialize the data in local storage
 function initData() {
@@ -113,7 +115,9 @@ function processEnabled() {
 // create keep awake scheduling alarms
 // if a time range has been specified for when to keep the screen awake,
 // schedule repeating alarms
+// also create a daily alarm to update live photostreams
 function processAlarms() {
+
 	var kStart = JSON.parse(localStorage.keepStart);
 	var kStop = JSON.parse(localStorage.keepStop);
 
@@ -139,6 +143,17 @@ function processAlarms() {
 		chrome.alarms.clear('keepStart');
 		chrome.alarms.clear('keepStop');
 	}
+
+	// Add daily alarm to update 500px and flickr photoS
+	chrome.alarms.get('updatePhotos', function(alarm) {
+		if (!alarm) {
+			chrome.alarms.create('updatePhotos', {
+				when: Date.now() + MSEC_IN_DAY,
+				periodInMinutes: MIN_IN_DAY
+			});
+		}
+	});
+
 }
 
 function processKeepAwake() {
@@ -321,19 +336,28 @@ function onIdleStateChanged(state) {
 	}
 }
 
-// event: process requests to change the keep awake mode
+// event: alarms triggered
 function onAlarm(alarm) {
-	if (alarm.name === 'keepStop') {
-		if (JSON.parse(localStorage.keepAwake)) {
-			// let display sleep, but keep power on
-			// so we can reenable
-			chrome.power.requestKeepAwake('system');
-		}
-	} else if (alarm.name === 'keepStart') {
-		if (JSON.parse(localStorage.keepAwake)) {
-			// Don't let display sleep
-			chrome.power.requestKeepAwake('display');
-		}
+	switch (alarm.name) {
+		case 'keepStop':
+			if (JSON.parse(localStorage.keepAwake)) {
+				// let display sleep, but keep power on
+				// so we can reenable
+				chrome.power.requestKeepAwake('system');
+			}
+			break;
+		case 'keepStart':
+			if (JSON.parse(localStorage.keepAwake)) {
+				// Don't let display sleep
+				chrome.power.requestKeepAwake('display');
+			}
+			break;
+		case 'updatePhotos':
+			// get the latest for the live photo streams
+			processUsePopular500px();
+			processUseInterestingFlickr();
+			processUseFavoriteFlickr();
+			break;
 	}
 }
 
