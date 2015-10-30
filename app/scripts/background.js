@@ -19,7 +19,7 @@ function initData() {
 		localStorage.allDisplays = 'false';
 		localStorage.keepStart = '"00:00"'; // 24 hr time
 		localStorage.keepStop = '"00:00"';  // 24 hr time
-		localStorage.showTime = '1'; // default to 12 hour format
+		localStorage.showTime = '1'; // 12 hour format
 		localStorage.showPhotog = 'true';
 		localStorage.usePopular500px = 'false';
 		localStorage.useInterestingFlickr = 'false';
