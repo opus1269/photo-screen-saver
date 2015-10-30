@@ -58,15 +58,9 @@
 
 	}
 
-	 /* General styles */
+	/* General styles */
 
-	paper-material {
-		border-radius: 2px;
-		background: white;
-		padding: 0px;
-	}
-
-	 #mainToolbar .middle-container  {
+	#mainToolbar .middle-container  {
 		height: 100%;
 		margin-left: 48px;
 	}
@@ -83,16 +77,11 @@
 	}
 
 	/* Height of the main scroll area */
-	.content {
+	.options-content {
 		height: 1500px;
 	}
 
- .page-toolbar {
-		font: var(--paper-font-title);
-		background-color: var(--light-primary-color);
-	}
-
-	#drawer.paper-drawer-panel > [drawer] {
+ 	#drawer.paper-drawer-panel > [drawer] {
 		border-right: 1px solid rgba(0, 0, 0, 0.14);
 	}
 
@@ -100,73 +89,7 @@
 		padding: 43px 43px;
 	}
 
-	#settingsPage,
-	#infoPage,
-	#gogglePhotosPage	 {
-		max-width: 700px;
-		height: 100%;
-		margin: 0;
-	}
-
-	#settingsContainer {
-		padding: 20px 0;
-	}
-
-	#infoContainer {
-		padding: 20px 16px;
-	}
-
-	#infoContainer p {
-		font: var(--paper-font-subhead);
-	}
-
-	#infoContainer .section-title {
-		margin: 10px 0 10px 0;
-	}
-
-	#googlePhotosContainer {
-		height: 700px;
-		padding: 20px 16px;
-	  overflow: hidden;
-	  overflow-y: scroll;
-	}
-
-	.list-item {
-		position: relative;
-	  border-bottom-style: solid;
-	  border-color:  #CCCCCC;
-	  border-width: 1px;
-	  margin: 0;
-	  padding: 0;
-		cursor: pointer;
-	}
-
-	.list-item paper-item-body {
-		padding-left: 10px;
-	}
-
-	.list-item paper-item {
-		padding-right: 0;
-	}
-
-	.list-item iron-image {
-		height: 72px;
-		width: 72px;
-	}
-
-	.list-item[disabled] iron-image {
-		opacity: .2;
-	}
-
-	.list-item[disabled] {
-		pointer-events: none;
-	}
-
-	.list-item[disabled] .setting-label {
-		color: var(--disabled-text-color);
-	}
-
-	 paper-scroll-header-panel {
+	paper-scroll-header-panel {
 		height: 100%;
 	}
 
@@ -185,51 +108,6 @@
 			text-rendering: optimizeLegibility;
 			cursor: pointer;
 		};
-	}
-
-	paper-toggle-button {
-		cursor: pointer;
-	}
-
-	paper-button {
-		margin-top: 10px;
-		margin-bottom: 20px;
-		@apply(--layout-center);
-		@apply(--layout-horizontal);
- }
-
-	paper-button[raised] {
-		background: #FAFAFA;
-	}
-
-	paper-button iron-icon {
-		margin-right: 10px;
-	}
-
-	.button-a {
-		text-decoration: none;
-		color: var(--menu-link-color);
-		display: -ms-flexbox;
-		display: -webkit-flex;
-		display: flex;
-		-ms-flex-direction: row;
-		-webkit-flex-direction: row;
-		flex-direction: row;
-		-ms-flex-align: center;
-		-webkit-align-items: center;
-		align-items: center;
-		-webkit-font-smoothing: antialiased;
-		text-rendering: optimizeLegibility;
-		margin-right: 10px;
-	}
-
-	.waiter {
-	  margin: 40px auto;
-	}
-
-	.waiter paper-item {
-		font: var(--paper-font-title);
-	  margin: 40px auto;
 	}
 
 </style>

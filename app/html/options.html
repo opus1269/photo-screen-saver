@@ -65,11 +65,11 @@
 				</paper-material>
 
 				<!-- Main Content -->
-				<div id="mainContainer" class="content">
+				<div id="mainContainer" class="options-content">
 
 					<!-- Error dialog -->
 					<paper-dialog id="errorDialog" modal entry-animation="scale-up-animation"
-							exit-animation="fade-out-animation">
+						exit-animation="fade-out-animation">
 						<h2>Request failed. Select refresh to try again.</h2>
 						<paper-dialog-scrollable>
 							<p>[[dialogText]]</p>
@@ -83,234 +83,21 @@
 
 						<neon-animatable data-route="page-settings">
 							<section>
-								<paper-material elevation="1" id="settingsPage">
-									<paper-material elevation="1">
-										<paper-toolbar class="page-toolbar">
-											<iron-label for="settingsToggle" class="center horizontal layout flex">
-												<div class="flex">Screensaver <span hidden$="[[!enabled]]">On</span><span hidden$="[[enabled]]">Off</span></div>
-												<paper-toggle-button id="settingsToggle" checked="{{enabled}}"></paper-toggle-button>
-											</iron-label>
-											<iron-localstorage name="enabled" value="{{enabled}}"></iron-localstorage>
-										</paper-toolbar>
-									</paper-material>
-									<div id="settingsContainer">
-										<setting-slider name="idleTime"
-														section-title="Slide Show Controls"
-														label="Wait time (minutes)"
-														min="1" max="60" step="1"
-														disabled$="[[!enabled]]"></setting-slider>
-										<setting-slider name="transitionTime"
-														label="Photo transition time (seconds)"
-														min="10" max="60" step="1"
-														disabled$="[[!enabled]]"></setting-slider>
-										<setting-dropdown name="photoSizing"
-															label="Photo display mode"
-															items="[[photoSizingItems]]"
-															disabled$="[[!enabled]]"></setting-dropdown>
-										<setting-dropdown name="photoTransition"
-															label="Photo transition method"
-															items="[[photoTransitionItems]]"
-															disabled$="[[!enabled]]"></setting-dropdown>
-										<setting-toggle name="shuffle"
-														main-label="Shuffle"
-														secondary-label="Present photos in random order"
-														disabled$="[[!enabled]]"></setting-toggle>
-										<setting-toggle name="skip"
-														main-label="Skip poor aspect ratio photos"
-														secondary-label="Do not display certain photos in Fill Screen mode"
-														disabled$="[[!enabled]]"></setting-toggle>
-										<setting-dropdown name="showTime"
-															label="Show time"
-															items="[[timeItems]]"
-															disabled$="[[!enabled]]"></setting-dropdown>
-										<setting-toggle name="showPhotog"
-														main-label="Show photographer label for photos you own"
-														secondary-label="(Always shows on framed photos)"
-														noseparator
-														disabled$="[[!enabled]]"></setting-toggle>
-										<setting-toggle name="allDisplays"
-														section-title="Display"
-														main-label="All displays"
-														secondary-label="Show screensaver on all connected displays"
-														disabled$="[[!enabled]]"></setting-toggle>
-										<setting-toggle name="keepAwake"
-														main-label="Keep awake"
-														secondary-label="Prevent display from sleeping"
-														disabled$="[[!enabled]]"></setting-toggle>
-										<setting-time name="keepStart"
-														main-label="Keep awake start"
-														secondary-label="Start keep awake at this time"
-														disabled$="[[!enabled]]"></setting-time>
-										<setting-time name="keepStop"
-														main-label="Keep awake stop"
-														secondary-label="Stop keep awake at this time"
-														noseparator
-														disabled$="[[!enabled]]"></setting-time>
-										<setting-toggle name="useChromecast"
-														section-title="Default Photo Sources"
-														main-label="Chromecast"
-														secondary-label="Backdrop photos from the Chromecast media streaming device"
-														disabled$="[[!enabled]]"></setting-toggle>
-										<setting-toggle name="usePopular500px"
-														main-label="500px - popular"
-														secondary-label="Popular photos from the 500px photo sharing site"
-														disabled$="[[!enabled]]"></setting-toggle>
-										<setting-toggle name="useInterestingFlickr"
-														main-label="Flickr - interesting"
-														secondary-label="Interesting photos from the Flickr photo sharing site, updated daily"
-														disabled$="[[!enabled]]"></setting-toggle>
-										<setting-toggle name="useFavoriteFlickr"
-														main-label="Flickr - favorites"
-														secondary-label="Favorite photos from the Flickr photo sharing site, curated by Flickr"
-														disabled$="[[!enabled]]"></setting-toggle>
-										<setting-toggle name="useAuthors"
-														main-label="Extension developer"
-														secondary-label="Photos from the guy who wrote this"
-														disabled$="[[!enabled]]"></setting-toggle>
-										<paper-item>This product uses the Flickr API but is not endorsed or certified by Flickr</paper-item
-									</div>
-								</paper-material>
+								<settings-page></settings-page>
 							</section>
 						</neon-animatable>
 
 						<neon-animatable data-route="page-google-photos">
 							<section>
-								<paper-material elevation="1" id="gogglePhotosPage">
-									<paper-material elevation="1">
-										<paper-toolbar class="page-toolbar">
-											<div class="flex">Google Photos Albums</div>
-											<paper-icon-button icon="check-box-outline-blank" on-tap="albumsDeselectAllTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
-											<paper-icon-button icon="refresh" on-tap="albumRefreshTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
-											<paper-toggle-button id="googlePhotosToggle" checked="{{useGoogle}}"></paper-toggle-button>
-											<iron-localstorage name="useGoogle" value="{{useGoogle}}"></iron-localstorage>
-										</paper-toolbar>
-									</paper-material>
-									<div id="googlePhotosContainer">
-
-										<div class="waiter" hidden$="[[!waitForLoad]]">
-											<div class="horizontal center-justified layout">
-												<paper-spinner alt="Loading Albums" active="[[waitForLoad]]"></paper-spinner>
-											</div>
-											<paper-item class="horizontal center-justified layout">Loading Albums</paper-item>
-										</div>
-
-										<div hidden$="[[waitForLoad]]">
-											<template is="dom-repeat" id="albumsTemplate" items="{{albums}}">
-												<div class="list-item" id="[[item.uid]]" disabled$="[[!useGoogle]]">
-													<iron-label>
-														<paper-item class="center horizontal layout" tabindex="-1">
-															<paper-checkbox iron-label-target checked="{{item.checked}}" on-change="albumSelectChange" disabled$="[[!useGoogle]]"></paper-checkbox>
-															<paper-item-body class="flex" two-line>
-																<div class="setting-label">{{item.name}}</div>
-																<div class="setting-label" secondary><span>[[item.ct]]</span> <span> photos</span></div>
-																<paper-ripple center></paper-ripple>
-															</paper-item-body>
-															<iron-image src="[[item.thumb]]" sizing="cover" preload disabled$="[[!useGoogle]]"></iron-image>
-														</paper-item>
-													</iron-label>
-												</div>
-											</template>
-										</div>
-
-									</div>
-								</paper-material>
+								<google-photos-page id="gPhotosPage" dialog="errorDialog" dialog-text="{{dialogText}}"></google-photos-page>
 							</section>
 						</neon-animatable>
 
 						<neon-animatable data-route="page-info">
 							<section>
-								<paper-material elevation="1" id="infoPage">
-									<paper-material elevation="1">
-										<paper-toolbar class="page-toolbar">
-											<div>Information For Nerds</div>
-										</paper-toolbar>
-									</paper-material>
-									<div id="infoContainer">
-										<div class="section-title">Source Code</div>
-										<div class="horizontal center layout">
-											<a class="button-a" href="https://github.com/opus1269/photo-screen-saver/" target="_blank" tabindex="-1">
-												<paper-button raised noink>
-													<iron-icon src="/images/github.png"></iron-icon> VIEW ON GITHUB
-												</paper-button>
-											</a>
-										</div>
-										<hr>
-										<div class="section-title">APIs & Specifications</div>
-										<div class="horizontal center layout">
-											<a class="button-a" href="https://developer.chrome.com/extensions" target="_blank" tabindex="-1">
-												<paper-button raised noink>
-													<iron-icon src="/images/extension.png"></iron-icon> CHROME EXTENSION
-												</paper-button>
-											</a>
-											<a class="button-a" href="https://www.polymer-project.org/" target="_blank" tabindex="-1">
-												<paper-button raised noink>
-													<iron-icon src="/images/polymer.png"></iron-icon> POLYMER
-												</paper-button>
-											</a>
-											<a class="button-a" href="http://www.google.com/design/spec/material-design/introduction.html#" target="_blank" tabindex="-1">
-												<paper-button raised noink>
-													<iron-icon src="/images/material.png"></iron-icon> MATERIAL DESIGN
-												</paper-button>
-											</a>
-										</div>
-										<p>
-											This extension has been built entirely with Polymer and vanilla JavaScript.	 Polymer treats everything as a
-											<a href="http://webcomponents.org/" target="_blank">Web Component</a> I have never used things like AngularJS
-											(or even JQuery) so I can't really evaluate the pros and cons of this approach.	 In addition, there is nothing
-											in Polymer that prevents you from using it with these other solutions.
-										</p>
-										<hr>
-										<div class="section-title">Photo Libraries</div>
-										<div class="horizontal center layout">
-											<a class="button-a" href="https://developers.google.com/picasa-web/" target="_blank" tabindex="-1">
-												<paper-button raised noink>
-													<iron-icon src="/images/picasa.png"></iron-icon> PICASA API
-												</paper-button>
-											</a>
-											<a class="button-a" href="http://www.google.com/chrome/devices/chromecast" target="_blank" tabindex="-1">
-												<paper-button raised noink>
-													<iron-icon src="/images/chromecast.png"></iron-icon> CHROMECAST
-												</paper-button>
-											</a>
-										</div>
-										<p>
-											It is unfortunate, but the Google+ API still does not support working with photos, so the only way is with the Picasa Web API.
-											The <a href="https://github.com/dconnolly/chromecast-backgrounds" target="_blank">Chromecast photos</a>
-											are a snapshot in time of those used for the backdrop.
-										</p>
-										<p>
-											<strong>Note:</strong> This program is read only for your Google photos despite what the permissions popup says. The Picasa API does not have
-											a read only scope.
-										</p>
-										<hr>
-										<div class="section-title">Web Development Documentation</div>
-										<div class="horizontal center layout">
-											<a class="button-a" href="https://www.webplatform.org/" target="_blank" tabindex="-1">
-												<paper-button raised noink>
-													<iron-icon src="/images/webplatform.png"></iron-icon> WEB PLATFORM
-												</paper-button>
-											</a>
-											<a class="button-a" href="https://developer.mozilla.org/en-US/docs/Web" target="_blank" tabindex="-1">
-												<paper-button raised noink>
-													<iron-icon src="/images/mdn.png"></iron-icon> MDN
-												</paper-button>
-											</a>
-											<a class="button-a" href="http://www.w3schools.com/default.asp" target="_blank" tabindex="-1">
-												<paper-button raised noink>
-													<iron-icon src="/images/w3schools.png"></iron-icon> W3SCHOOLS
-												</paper-button>
-											</a>
-										</div>
-										<p>
-											This was my first time doing Web development and the learning curve is pretty steep. Each of these sites provides
-											good tutorials and reference materials on the HTML-CSS-JavaScript paradigm.	 The first is supported by the W3C and
-											most of the big Internet companies, but is also the least complete at this time.
-										</p>
-									</div>
-								</paper-material>
+								<info-page></info-page>
 							</section>
 						</neon-animatable>
-
 					</neon-animated-pages>
 				</div>
 			</paper-scroll-header-panel>
