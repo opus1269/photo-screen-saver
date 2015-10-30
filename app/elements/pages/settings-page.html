@@ -24,7 +24,7 @@
 
 		</style>
 
-    <paper-material elevation="1" id="settingsPage" class="page-container">
+    <paper-material elevation="1" class="page-container">
       <paper-material elevation="1">
         <paper-toolbar class="page-toolbar">
           <iron-label for="settingsToggle" class="center horizontal layout flex">
@@ -34,7 +34,7 @@
           <iron-localstorage name="enabled" value="{{enabled}}"></iron-localstorage>
         </paper-toolbar>
       </paper-material>
-      <div id="settingsContainer" class="page-content">
+      <div class="page-content">
         <setting-slider name="idleTime"
                 section-title="Slide Show Controls"
                 label="Wait time (minutes)"
@@ -107,6 +107,7 @@
         <setting-toggle name="useAuthors"
                 main-label="Extension developer"
                 secondary-label="Photos from the guy who wrote this"
+								noseparator
                 disabled$="[[!enabled]]"></setting-toggle>
         <paper-item>This product uses the Flickr API but is not endorsed or certified by Flickr</paper-item>
       </div>

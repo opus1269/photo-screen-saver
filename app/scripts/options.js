@@ -66,6 +66,7 @@
 	t.googlePhotos = function(index) {
 		t.route = t.pages[index].route;
 		t.gPhotosPage.loadAlbumList();
+		t.scrollPageToTop();
 	};
 
 	// preview the screensaver
@@ -88,7 +89,7 @@
 
 	// Scroll page to top
 	t.scrollPageToTop = function() {
-		document.getElementById('scrollPanel').scrollToTop();
+		t.$.scrollPanel.scrollToTop(true);
 	};
 
 	// Close drawer if drawerPanel is narrow

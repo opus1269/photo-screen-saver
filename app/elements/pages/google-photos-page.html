@@ -25,9 +25,11 @@
 
 		.page-content {
 			height: 700px;
-			padding: 20px 16px;
 			overflow: hidden;
 			overflow-y: scroll;
+			margin-left: 16px;
+			margin-right: 16px;
+			box-shadow: inset 1px -1px 2px 1px rgba(0, 0, 0, .25);
 		}
 
 		.waiter {
@@ -38,6 +40,10 @@
 			font: var(--paper-font-title);
 		  margin: 40px auto;
 		}
+
+		/*.list-container {
+			box-shadow: inset 1px -1px 2px 1px rgba(0, 0, 0, .25);
+		}*/
 
 		.list-item {
 			position: relative;
@@ -86,7 +92,7 @@
 					<iron-localstorage name="useGoogle" value="{{useGoogle}}"></iron-localstorage>
 				</paper-toolbar>
 			</paper-material>
-			<div id="googlePhotosContainer" class="page-content">
+			<div class="page-content">
 
 				<div class="waiter" hidden$="[[!waitForLoad]]">
 					<div class="horizontal center-justified layout">
@@ -95,7 +101,7 @@
 					<paper-item class="horizontal center-justified layout">Loading Albums</paper-item>
 				</div>
 
-				<div hidden$="[[waitForLoad]]">
+				<div class="list-container" hidden$="[[waitForLoad]]">
 					<template is="dom-repeat" id="albumsTemplate" items="{{albums}}">
 						<div class="list-item" id="[[item.uid]]" disabled$="[[!useGoogle]]">
 							<iron-label>
