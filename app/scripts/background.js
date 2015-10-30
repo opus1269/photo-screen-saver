@@ -157,35 +157,35 @@ function processIdleTime() {
 function processUseAuthors() {
 	localStorage.removeItem('authorImages');
 	if (JSON.parse(localStorage.useAuthors)) {
-		gPhotos.preloadAuthorImages();
+		gPhotos.loadAuthorImages(false);
 	}
 }
 
 function processUseChromecast() {
 	localStorage.removeItem('ccImages');
 	if (JSON.parse(localStorage.useChromecast)) {
-		chromeCast.preloadImages();
+		chromeCast.loadImages(false);
 	}
 }
 
 function processUsePopular500px() {
 	localStorage.removeItem('popular500pxImages');
 	if (JSON.parse(localStorage.usePopular500px)) {
-		use500px.preloadImages();
+		use500px.loadImages(false);
 	}
 }
 
 function processUseInterestingFlickr() {
 	localStorage.removeItem('flickrInterestingImages');
 	if (JSON.parse(localStorage.useInterestingFlickr)) {
-		flickr.preloadImages(flickr.TYPE_ENUM.interesting);
+		flickr.loadImages(flickr.TYPE_ENUM.interesting, false);
 	}
 }
 
 function processUseFavoriteFlickr() {
 	localStorage.removeItem('flickrFavoriteImages');
 	if (JSON.parse(localStorage.useFavoriteFlickr)) {
-		flickr.preloadImages(flickr.TYPE_ENUM.favorite);
+		flickr.loadImages(flickr.TYPE_ENUM.favorite, false);
 	}
 }
 

@@ -102,7 +102,7 @@ var gPhotos = (function() {
 
 	return {
 
-		preloadAuthorImages: function() {
+		loadAuthorImages: function(preload) {
 			var authorID = '103839696200462383083';
 			var authorAlbum = '6117481612859013089';
 			var request = PICASA_PATH + authorID + '/albumid/' + authorAlbum +
@@ -124,21 +124,24 @@ var gPhotos = (function() {
 					height = entry.media$group.media$content[0].height;
 					aspectRatio = width / height;
 					author = entry.media$group.media$credit[0].$t;
-					img = new Image();
+					if (preload) {
+						img = new Image();
 
-					// cut out bad images
-					img.onerror = function() {
-						/*jshint validthis: true */
-						var ims = JSON.parse(localStorage.authorImages);
-						var ind = ims.map(function(e) {return e.url;}).indexOf(this.src);
-						if (ind >= 0) {
-							ims.splice(ind, 1);
-							localStorage.authorImages = JSON.stringify(ims);
-						}
-					};
+						// cut out bad images
+						img.onerror = function() {
+							/*jshint validthis: true */
+							var ims = JSON.parse(localStorage.authorImages);
+							var ind = ims.map(function(e) {return e.url;}).indexOf(this.src);
+							if (ind >= 0) {
+								ims.splice(ind, 1);
+								localStorage.authorImages = JSON.stringify(ims);
+							}
+						};
 
-					img.src = url;
-					imgs.push(img);
+						img.src = url;
+						imgs.push(img);
+					}
+
 					authorImage = {};
 					authorImage.url = url;
 					authorImage.author = author;

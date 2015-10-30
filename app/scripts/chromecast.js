@@ -20,12 +20,15 @@ var chromeCast = (function() {
 
 	return {
 
-		// call this as early as possible
-		preloadImages: function(count, cb) {
+		// read chromecast.json and optionally preload the images
+		loadImages: function(preload) {
 
 			_loadChromecast(function() {
+				if (!preload) {
+					return;
+				}
 				var imgs = [], img;
-				var numImages = count || ccImages.length;
+				var numImages = ccImages.length;
 
 				for (var i = 0; i < numImages; i++) {
 					img = new Image();
@@ -43,9 +46,6 @@ var chromeCast = (function() {
 
 					img.src = ccImages[i].url;
 					imgs.push(img);
-				}
-				if (cb) {
-					cb();
 				}
 			});
 		}

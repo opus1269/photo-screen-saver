@@ -9,7 +9,7 @@ var flickr = (function() {
 	var TYPE_ENUM = Object.freeze({'interesting': 1, 'favorite': 2});
 
 	// get the favorites from the flickr account
-	function loadFavorites() {
+	function loadFavorites(preload) {
 		var imgs = [], img;
 		var images = [], image;
 		var aspectRatio;
@@ -28,21 +28,24 @@ var flickr = (function() {
 					var photo = list.photos.photo[i];
 					if ((typeof photo.url_l !== 'undefined') && photo.media === 'photo' && photo.ownername !== 'Yahoo On the Road') {
 						aspectRatio = parseInt(photo.width_l, 10) / parseInt(photo.height_l, 10);
-						img = new Image();
+						if (preload) {
+							img = new Image();
 
-						// cut out bad images
-						img.onerror = function() {
-							/*jshint validthis: true */
-							var ims = JSON.parse(localStorage.flickrFavoriteImages);
-							var ind = ims.map(function(e) {return e.url;}).indexOf(this.src);
-							if (ind >= 0) {
-								ims.splice(ind, 1);
-								localStorage.flickrFavoriteImages = JSON.stringify(ims);
-							}
-						};
+							// cut out bad images
+							img.onerror = function() {
+								/*jshint validthis: true */
+								var ims = JSON.parse(localStorage.flickrFavoriteImages);
+								var ind = ims.map(function(e) {return e.url;}).indexOf(this.src);
+								if (ind >= 0) {
+									ims.splice(ind, 1);
+									localStorage.flickrFavoriteImages = JSON.stringify(ims);
+								}
+							};
 
-						img.src = photo.url_l;
-						imgs.push(img);
+							img.src = photo.url_l;
+							imgs.push(img);
+						}
+
 						image = {};
 						image.url = photo.url_l;
 						image.author = photo.ownername;
@@ -55,7 +58,7 @@ var flickr = (function() {
 	}
 
 	// get the daily interesting photos
-	function loadInteresting() {
+	function loadInteresting(preload) {
 		var imgs = [], img;
 		var images = [], image;
 		var aspectRatio;
@@ -73,21 +76,24 @@ var flickr = (function() {
 					var photo = list.photos.photo[i];
 					if ((typeof photo.url_l !== 'undefined') && photo.media === 'photo') {
 						aspectRatio = parseInt(photo.width_l, 10) / parseInt(photo.height_l, 10);
-						img = new Image();
+						if (preload) {
+							img = new Image();
 
-						// cut out bad images
-						img.onerror = function() {
-							/*jshint validthis: true */
-							var ims = JSON.parse(localStorage.flickrInterestingImages);
-							var ind = ims.map(function(e) {return e.url;}).indexOf(this.src);
-							if (ind >= 0) {
-								ims.splice(ind, 1);
-								localStorage.flickrInterestingImages = JSON.stringify(ims);
-							}
-						};
+							// cut out bad images
+							img.onerror = function() {
+								/*jshint validthis: true */
+								var ims = JSON.parse(localStorage.flickrInterestingImages);
+								var ind = ims.map(function(e) {return e.url;}).indexOf(this.src);
+								if (ind >= 0) {
+									ims.splice(ind, 1);
+									localStorage.flickrInterestingImages = JSON.stringify(ims);
+								}
+							};
 
-						img.src = photo.url_l;
-						imgs.push(img);
+							img.src = photo.url_l;
+							imgs.push(img);
+						}
+
 						image = {};
 						image.url = photo.url_l;
 						image.author = photo.ownername;
@@ -103,13 +109,13 @@ var flickr = (function() {
 
 		TYPE_ENUM: TYPE_ENUM,
 
-		preloadImages: function(type) {
+		loadImages: function(type, preload) {
 			switch (type) {
 				case TYPE_ENUM.interesting:
-					loadInteresting();
+					loadInteresting(preload);
 					break;
 				case TYPE_ENUM.favorite:
-					loadFavorites();
+					loadFavorites(preload);
 					break;
 			}
 		}
