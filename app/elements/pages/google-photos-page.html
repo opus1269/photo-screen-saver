@@ -103,7 +103,7 @@
 									<paper-checkbox iron-label-target checked="{{item.checked}}" on-change="_albumSelectChange" disabled$="[[!useGoogle]]"></paper-checkbox>
 									<paper-item-body class="flex" two-line>
 										<div class="setting-label">{{item.name}}</div>
-										<div class="setting-label" secondary><span>[[item.ct]]</span><span> photos</span></div>
+										<div class="setting-label" secondary><span>[[item.ct]]</span><span>&nbsp;photos</span></div>
 										<paper-ripple center></paper-ripple>
 									</paper-item-body>
 									<iron-image src="[[item.thumb]]" sizing="cover" preload disabled$="[[!useGoogle]]"></iron-image>
