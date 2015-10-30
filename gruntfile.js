@@ -35,7 +35,7 @@ module.exports = function(grunt) {
 						appFiles,
 						'!app/images/*.db',
 						'!app/elements/*/**',
-						'!lib/flickrapi.dev.js'
+						'!app/lib/flickrapi.dev.js'
 					],
 					dest: destProd
 				}]
