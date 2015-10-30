@@ -72,7 +72,7 @@
 						exit-animation="fade-out-animation">
 						<h2>Request failed. Select refresh to try again.</h2>
 						<paper-dialog-scrollable>
-							<p>[[dialogText]]</p>
+							<p id="dialogTextEl"></p>
 						</paper-dialog-scrollable>
 						<div class="buttons">
 							<paper-button dialog-dismiss>OK</paper-button>
@@ -88,14 +88,12 @@
 						</neon-animatable>
 
 						<neon-animatable data-route="page-google-photos">
-							<section>
-								<google-photos-page id="gPhotosPage" dialog="errorDialog" dialog-text="{{dialogText}}"></google-photos-page>
+							<section id="googlePhotosInsertion">
 							</section>
 						</neon-animatable>
 
 						<neon-animatable data-route="page-info">
-							<section>
-								<info-page></info-page>
+							<section id="infoInsertion">
 							</section>
 						</neon-animatable>
 					</neon-animated-pages>

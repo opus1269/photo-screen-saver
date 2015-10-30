@@ -29,7 +29,10 @@
 			overflow-y: scroll;
 			margin-left: 16px;
 			margin-right: 16px;
-			box-shadow: inset 1px -1px 2px 1px rgba(0, 0, 0, .25);
+			border: 2px inset rgba(0, 0, 0, .25);
+			border-right: 1px solid rgba(0, 0, 0, .25);
+			border-top: 1px solid rgba(0, 0, 0, .25);
+			border
 		}
 
 		.waiter {
@@ -40,10 +43,6 @@
 			font: var(--paper-font-title);
 		  margin: 40px auto;
 		}
-
-		/*.list-container {
-			box-shadow: inset 1px -1px 2px 1px rgba(0, 0, 0, .25);
-		}*/
 
 		.list-item {
 			position: relative;
@@ -125,8 +124,15 @@
 </dom-module>
 
 <script>
-	Polymer({
+	GooglePhotosPage = Polymer({
 		is: 'google-photos-page',
+
+		// so we can lazily create the page
+		factoryImpl: function(id, dialogEl, dialogTextEl) {
+			this.setAttribute('id', id);
+	    this.dialogEl = dialogEl;
+	    this.dialogTextEl = dialogTextEl;
+	  },
 
 		properties: {
 
@@ -145,30 +151,32 @@
 				value: false
 		  },
 
-			dialog: {
-				type: String,
-				value: ''
+			dialogEl: {
+				type: Object,
+				value: {}
 			},
 
-			dialogText: {
-				type: String,
-				value: '',
-				notify: true
+			dialogTextEl: {
+				type: Object,
+				value: {}
 			}
 
+		},
+
+		ready: function() {
+			this.loadAlbumList();
 		},
 
 		// Query Picasa for the list of the users albums
 		loadAlbumList: function() {
 			this.set('waitForLoad', true);
 			gPhotos.loadAlbumList(function(albums, error) {
-					if (!error) {
+				if (!error) {
 					this.albums = albums;
 					this._selectAlbums();
 				} else {
-					var dialog = document.querySelector('#' + this.dialog);
-					this.dialogText = error;
-					dialog.open();
+					this.dialogTextEl.textContent = error;
+					this.dialogEl.open();
 				}
 				this.set('waitForLoad', false);
 			}.bind(this));

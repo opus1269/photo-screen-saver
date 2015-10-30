@@ -26,7 +26,9 @@ var flickr = (function() {
 				}
 				for (var i = 0; i < list.photos.photo.length; i++) {
 					var photo = list.photos.photo[i];
-					if ((typeof photo.url_l !== 'undefined') && photo.media === 'photo' && photo.ownername !== 'Yahoo On the Road') {
+					if (photo.url_l && photo.media === 'photo' &&
+						photo.isfriend !== '0' && photo.isfamily !== '0' &&
+						photo.ownername !== 'Yahoo On the Road') {
 						aspectRatio = parseInt(photo.width_l, 10) / parseInt(photo.height_l, 10);
 						if (preload) {
 							img = new Image();
@@ -74,7 +76,8 @@ var flickr = (function() {
 				}
 				for (var i = 0; i < list.photos.photo.length; i++) {
 					var photo = list.photos.photo[i];
-					if ((typeof photo.url_l !== 'undefined') && photo.media === 'photo') {
+					if (photo.url_l && photo.media === 'photo' &&
+						photo.isfriend !== '0' && photo.isfamily !== '0') {
 						aspectRatio = parseInt(photo.width_l, 10) / parseInt(photo.height_l, 10);
 						if (preload) {
 							img = new Image();
