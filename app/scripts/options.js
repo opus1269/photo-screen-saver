@@ -40,8 +40,6 @@
 		} else {
 			// some pages have functions to view them
 			t.pages[index].obj(index,event);
-			t.route = t.pages[index].route;
-			t.scrollPageToTop();
 		}
 	};
 
@@ -55,6 +53,8 @@
 		} else {
 			t.gPhotosPage.loadAlbumList();
 		}
+		t.route = t.pages[index].route;
+		t.scrollPageToTop();
 	};
 
 	// show the nerd page
@@ -65,6 +65,8 @@
 			var el = new InfoPage();
 			Polymer.dom(t.$.infoInsertion).appendChild(el);
 		}
+		t.route = t.pages[index].route;
+		t.scrollPageToTop();
 	};
 
 	// preview the screensaver
