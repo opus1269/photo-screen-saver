@@ -124,44 +124,37 @@
 		}
 	};
 
-	// prepare the array of photos the user has selected
-	t.getPhotoArray = function() {
-		var arr = [];
-		var tmp = [];
+	// get an array of photos from localStorage
+	t.getPhotos = function(cond, name, type, isArray) {
+		var ret = [];
+		if (isArray) {
+			if (JSON.parse(localStorage.getItem(cond))) {
+				var items = JSON.parse(localStorage.getItem(name));
+				for (var i = 0; i < items.length; i++) {
+					ret = ret.concat(items[i].photos);
+					if (ret) {t.addType(ret, type);}
+				}
+			}
 
-		if (JSON.parse(localStorage.useGoogle)) {
-			var albumSelections = JSON.parse(localStorage.albumSelections);
-			for (var i = 0; i < albumSelections.length; i++) {
-				tmp = []; tmp = albumSelections[i].photos;
-				t.addType(tmp, 'Google User');
-				arr = arr.concat(tmp);
+		} else {
+			if (JSON.parse(localStorage.getItem(cond))) {
+				ret = JSON.parse(localStorage.getItem(name));
+				if (ret) {t.addType(ret, type);}
 			}
 		}
-		if (JSON.parse(localStorage.useChromecast)) {
-			tmp = []; tmp = JSON.parse(localStorage.ccImages);
-			t.addType(tmp, 'Google');
-			arr = arr.concat(tmp);
-		}
-		if (JSON.parse(localStorage.usePopular500px)) {
-			tmp = []; tmp = JSON.parse(localStorage.popular500pxImages);
-			t.addType(tmp, '500px');
-			arr = arr.concat(tmp);
-		}
-		if (JSON.parse(localStorage.useInterestingFlickr)) {
-			tmp = []; tmp = JSON.parse(localStorage.flickrInterestingImages);
-			t.addType(tmp, 'flickr');
-			arr = arr.concat(tmp);
-		}
-		if (JSON.parse(localStorage.useFavoriteFlickr)) {
-			tmp = []; tmp = JSON.parse(localStorage.flickrFavoriteImages);
-			t.addType(tmp, 'flickr');
-			arr = arr.concat(tmp);
-		}
-		if (JSON.parse(localStorage.useAuthors)) {
-			tmp = []; tmp = JSON.parse(localStorage.authorImages);
-			t.addType(tmp, 'Google');
-			arr = arr.concat(tmp);
-		}
+		return ret;
+	};
+
+	// build the array of all selected photos
+	t.getPhotoArray = function() {
+		var arr = [];
+
+		arr = arr.concat(t.getPhotos('useGoogle', 'albumSelections','Google User', true));
+		arr = arr.concat(t.getPhotos('useChromecast', 'ccImages','Google'));
+		arr = arr.concat(t.getPhotos('usePopular500px', 'popular500pxImages','500px'));
+		arr = arr.concat(t.getPhotos('useInterestingFlickr', 'flickrInterestingImages','flickr'));
+		arr = arr.concat(t.getPhotos('useFavoriteFlickr', 'flickrFavoriteImages','flickr'));
+		arr = arr.concat(t.getPhotos('useAuthors', 'authorImages','Google'));
 
 		return arr;
 	};
