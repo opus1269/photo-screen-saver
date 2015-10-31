@@ -10,18 +10,13 @@
 	<!-- !important -->
 	<title>Photo Screen Saver Options Page</title>
 
-	<!-- build:css styles/main.css -->
 	<link rel="stylesheet" href="../styles/main.css">
-	<!-- endbuild-->
 
 	<link rel="import" href="../elements/elements.html">
 
 	<!-- For shared styles, shared-styles.html import in elements.html -->
 	<style is="custom-style" include="shared-styles"></style>
 
-	<style>
-
-	</style>
 </head>
 
 <body unresolved class="fullbleed layout vertical">
@@ -29,7 +24,6 @@
 	<template is="dom-bind" id="t">
 
 		<paper-drawer-panel id="paperDrawerPanel" drawer-width="290px">
-
 			<paper-material elevation="2" drawer fixed>
 				<!-- Drawer Scroll Header Panel -->
 				<paper-scroll-header-panel>
@@ -51,7 +45,6 @@
 
 			<!-- Main Scroll Header Panel -->
 			<paper-scroll-header-panel id="scrollPanel" main fixed>
-
 				<!-- Main Toolbar -->
 				<paper-material class="paper-header" elevation="2">
 					<paper-toolbar id="mainToolbar">
@@ -80,18 +73,15 @@
 					</paper-dialog>
 
 					<neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{route}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
-
 						<neon-animatable data-route="page-settings">
 							<section>
 								<settings-page></settings-page>
 							</section>
 						</neon-animatable>
-
 						<neon-animatable data-route="page-google-photos">
 							<section id="googlePhotosInsertion">
 							</section>
 						</neon-animatable>
-
 						<neon-animatable data-route="page-info">
 							<section id="infoInsertion">
 							</section>

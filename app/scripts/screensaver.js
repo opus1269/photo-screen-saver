@@ -1,6 +1,8 @@
 (function() {
 	'use strict';
 
+	var SCREEN_ASPECT = screen.width / screen.height;
+
 	// main auto-bind template
 	var t = document.querySelector('#t');
 
@@ -22,6 +24,8 @@
 	// set to true after first full page animation
 	t.started = false;
 
+	// Listen for template bound event to know when bindings
+	// have resolved and content has been stamped to the page
 	t.addEventListener('dom-change', function() {
 
 		t.rep = t.$.repeatTemplate;
@@ -107,11 +111,10 @@
 
 	// check if a photo would look bad cropped
 	t.badAspect = function(aspect) {
-		var aspectScreen = screen.width / screen.height;
-		var cutoff = 0.5;  // arbitrary
+		var CUT_OFF = 0.5;  // arbitrary
 
-		if (aspect && ((aspect < aspectScreen - cutoff) ||
-			(aspect > aspectScreen + cutoff))) {
+		if (aspect && ((aspect < SCREEN_ASPECT - CUT_OFF) ||
+			(aspect > SCREEN_ASPECT + CUT_OFF))) {
 			return true;
 		}
 		return false;
@@ -125,19 +128,18 @@
 	};
 
 	// get an array of photos from localStorage
-	t.getPhotos = function(cond, name, type, isArray) {
+	t.getPhotos = function(use, name, type, isArray) {
 		var ret = [];
 		if (isArray) {
-			if (JSON.parse(localStorage.getItem(cond))) {
+			if (JSON.parse(localStorage.getItem(use))) {
 				var items = JSON.parse(localStorage.getItem(name));
 				for (var i = 0; i < items.length; i++) {
 					ret = ret.concat(items[i].photos);
 					if (ret) {t.addType(ret, type);}
 				}
 			}
-
 		} else {
-			if (JSON.parse(localStorage.getItem(cond))) {
+			if (JSON.parse(localStorage.getItem(use))) {
 				ret = JSON.parse(localStorage.getItem(name));
 				if (ret) {t.addType(ret, type);}
 			}
@@ -195,18 +197,19 @@
 				arr[i].author ? author = arr[i].author : author = '';
 				photoLabel = t.getPhotoLabel(author, arr[i].type);
 
-				t.itemsAll.push({name: 'image' + (count + 1),
-									path: arr[i].url,
-									authorID: 'author' + (count + 1),
-									author: author,
-									type: arr[i].type,
-									label: photoLabel,
-									timeID: 'time' + (count + 1),
-									time: '',
-									sizingType: t.sizingType,
-									aspectRatio: arr[i].asp,
-									width: screen.width,
-									height: screen.height
+				t.itemsAll.push({
+					name: 'image' + (count + 1),
+					path: arr[i].url,
+					authorID: 'author' + (count + 1),
+					author: author,
+					type: arr[i].type,
+					label: photoLabel,
+					timeID: 'time' + (count + 1),
+					time: '',
+					sizingType: t.sizingType,
+					aspectRatio: arr[i].asp,
+					width: screen.width,
+					height: screen.height
 				});
 				if (count < TEMP_CT) {
 					// the Polymer way - !important
@@ -231,17 +234,16 @@
 		var author = t.p.querySelector('#' + item.authorID);
 		var time = t.p.querySelector('#' + item.timeID);
 		var aspect = item.aspectRatio;
-		var aspectScreen = screen.width / screen.height;
 		var right,bottom;
 
-		if (aspect < aspectScreen) {
-			right = (100 - aspect / aspectScreen * 100) / 2;
+		if (aspect < SCREEN_ASPECT) {
+			right = (100 - aspect / SCREEN_ASPECT * 100) / 2;
 			author.style.right = (right + 1) + 'vw';
 			author.style.bottom = '';
 			time.style.right = (right + 1) + 'vw';
 			time.style.bottom = '';
 		} else {
-			bottom = (100 - (aspectScreen / aspect * 100)) / 2;
+			bottom = (100 - (SCREEN_ASPECT / aspect * 100)) / 2;
 			author.style.bottom = (bottom + 1) + 'vh';
 			author.style.right = '';
 			time.style.bottom = (bottom + 3.5) + 'vh';
@@ -278,7 +280,7 @@
 							screen.height - padding * 2 - border - borderBot);
 		width = height * aspect;
 
-		// size with frame
+		// size with the frame
 		frWidth = width + border * 2;
 		frHeight = height + borderBot + border;
 

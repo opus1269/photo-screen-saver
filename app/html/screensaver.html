@@ -6,9 +6,12 @@
 
 	<title>Photo Screen Saver Screensaver Page</title>
 
-	<link rel="stylesheet" href="../styles/screensaver.css">
-
 	<link rel="import" href="../elements/elements.html">
+
+	<!-- For shared styles, shared-styles.html import in elements.html -->
+	<style is="custom-style" include="shared-styles"></style>
+
+	<link rel="stylesheet" href="../styles/screensaver.css">
 
 </head>
 
@@ -32,9 +35,7 @@
 		</div>
 	</template>
 
-	<div id="noPhotos">
-		<img src="../images/error.png" alt="" />
-	</div>
+	<div id="noPhotos">No Photos Are Selected</div>
 
 	<!--@@build:replace -->
 	<google-analytics-tracker id="UA-61314754-1" page="/screensaver.html"></google-analytics-tracker>
