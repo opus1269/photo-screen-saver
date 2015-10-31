@@ -19,11 +19,11 @@ div {
 }
 
 .time {
-	font-size: 300%;
-	font-weight: 200;
+	font-size: 5vh;
+	font-weight: 100;
 	position: fixed;
-	right: 30px;
-	bottom: 50px;
+	right: 1vw;
+	bottom: 3.5vh;
 	padding: 0;
 	margin: 0;
 	color: white;
@@ -31,14 +31,14 @@ div {
 }
 
 .author {
-	font-size: 133%;
+	font-size: 2.5vh;
 	position: fixed;
-	right: 30px;
-	bottom: 20px;
+	right: 1vw;
+	bottom: 1vh;
 	padding: 0;
 	margin: 0;
 	color: white;
-	opacity: .8;
+	opacity: .9;
 }
 
 #noPhotos {

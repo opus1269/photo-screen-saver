@@ -112,12 +112,12 @@
 	};
 
 	// check if a photo would look bad cropped
-	t.badAspect = function(aspectRatio) {
-		var aspectRatioScreen = screen.width / screen.height;
+	t.badAspect = function(aspect) {
+		var aspectScreen = screen.width / screen.height;
 		var cutoff = 0.5;  // arbitrary
 
-		if (aspectRatio && ((aspectRatio < aspectRatioScreen - cutoff) ||
-				(aspectRatio > aspectRatioScreen + cutoff))) {
+		if (aspect && ((aspect < aspectScreen - cutoff) ||
+				(aspect > aspectScreen + cutoff))) {
 			return true;
 		}
 		return false;
@@ -241,23 +241,23 @@
 	// position the text when using Letterbox
 	t.posText = function(photoID) {
 		var item = t.items[photoID];
-		var aspectRatio = item.aspectRatio;
+		var aspect = item.aspectRatio;
 		var author = t.$.pages.querySelector('#' + item.authorID);
 		var time = t.$.pages.querySelector('#' + item.timeID);
-		var screenAspectRatio = screen.width / screen.height;
+		var aspectScreen = screen.width / screen.height;
 		var right,bottom;
 
-		if (aspectRatio < screenAspectRatio) {
-			right = (screen.width - (screen.height * aspectRatio)) / 2;
-			author.style.right = (right + 30) + 'px';
+		if (aspect < aspectScreen) {
+			right = (100 - aspect / aspectScreen * 100) / 2;
+			author.style.right = (right + 1) + 'vw';
 			author.style.bottom = '';
-			time.style.right = (right + 30) + 'px';
+			time.style.right = (right + 1) + 'vw';
 			time.style.bottom = '';
 		} else {
-			bottom = (screen.height - (screen.width / aspectRatio)) / 2;
-			author.style.bottom = (bottom + 20) + 'px';
+			bottom = (100 - (aspectScreen / aspect * 100)) / 2;
+			author.style.bottom = (bottom + 1) + 'vh';
 			author.style.right = '';
-			time.style.bottom = (bottom + 50) + 'px';
+			time.style.bottom = (bottom + 3.5) + 'vh';
 			time.style.right = '';
 		}
 	};
@@ -265,7 +265,7 @@
 	// show photo centered, with padding, border and shadow
 	// show it either scaled up or reduced to fit
 	t.framePhoto = function(photoID) {
-		var padding = 30,border = 5,borderBot = 50;
+		var padding, border, borderBot;
 		var item = t.items[photoID];
 		var p = t.$.pages;
 		var image = p.querySelector('#' + item.name);
@@ -273,7 +273,12 @@
 		var time = p.querySelector('#' + item.timeID);
 		var img = image.$.img;
 		var width, height;
-		var aspectRatio = item.aspectRatio;
+		var aspect = item.aspectRatio;
+
+		// scale to screen size
+		border = screen.height * 0.005;
+		borderBot = screen.height * 0.05;
+		padding = screen.height * 0.025;
 
 		// force use of photo label for this view
 		if (!JSON.parse(localStorage.showPhotog)) {
@@ -282,9 +287,9 @@
 			model.set('item.label', label);
 		}
 
-		height = Math.min((screen.width - padding * 2 - border * 2) / aspectRatio,
+		height = Math.min((screen.width - padding * 2 - border * 2) / aspect,
 							screen.height - padding * 2 - border - borderBot);
-		width = height * aspectRatio;
+		width = height * aspect;
 
 		img.style.height = height + 'px';
 		img.style.width = width + 'px';
@@ -292,31 +297,33 @@
 		image.height = height;
 		image.width = width;
 		image.style.top = (screen.height - height - borderBot - border) / 2 + 'px';
-		image.style.left = (screen.width - width) / 2 + 'px';
-		image.style.border = border + 'px ridge WhiteSmoke';
-		image.style.borderRadius = '15px';
-		image.style.boxShadow = '15px 15px 15px rgba(0,0,0,.7)';
-		image.style.borderBottom = borderBot + 'px solid WhiteSmoke';
+		image.style.left = (screen.width - width - border * 2) / 2 + 'px';
+		image.style.border = 0.5 + 'vh ridge WhiteSmoke';
+		image.style.borderRadius = '1.5vh';
+		image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
+		image.style.borderBottom = 5 + 'vh solid WhiteSmoke';
 
 		if (parseInt(localStorage.showTime, 10)) {
 			author.style.left = (screen.width - width) / 2 + 10 + 'px';
 			author.style.textAlign = 'left';
 		} else {
-			author.style.left = '0px';
+			author.style.left = '0';
 			author.style.textAlign = 'center';
 			author.style.width = screen.width + 'px';
 		}
 		author.style.bottom = (screen.height - height - borderBot - border + 20) / 2 + 'px';
 		author.style.color = 'black';
-		author.style.opacity = 1;
+		author.style.opacity = 0.9;
+		author.style.fontSize = '2.5vh';
+		author.style.fontWeight = 300;
 
 		time.style.right = (screen.width - width) / 2 + 10 + 'px';
 		time.style.textAlign = 'right';
 		time.style.bottom = (screen.height - height - borderBot - border + 20) / 2 + 'px';
 		time.style.color = 'black';
-		time.style.opacity = 1;
-		time.style.fontSize = '28px';
-		time.style.fontWeight = 400;
+		time.style.opacity = 0.9;
+		time.style.fontSize = '2.5vh';
+		time.style.fontWeight = 300;
 
 	};
 
