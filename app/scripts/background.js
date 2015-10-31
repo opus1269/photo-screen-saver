@@ -51,13 +51,6 @@ function initData() {
 	localStorage.removeItem('windowID');
 }
 
-// from:
-// http://stackoverflow.com/questions/4900436/detect-version-of-chrome-installed
-function getChromeVersion() {
-	var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-	return raw ? parseInt(raw[2], 10) : false;
-}
-
 // get time
 // value format: '00:00'
 function getTime(value) {
@@ -249,17 +242,17 @@ function processState(key) {
 }
 
 // show a screensaver on every display
-function showScreenSavers() {
+function openScreenSavers() {
 	chrome.system.display.getInfo(function(displayInfo) {
 		for (var i = 0; i < displayInfo.length; i++) {
-			showScreenSaver(displayInfo[i]);
+			openScreenSaver(displayInfo[i]);
 		}
 	});
 }
 
 // create a screen saver window on the given display
 // if no display is specified use the current one
-function showScreenSaver(display) {
+function openScreenSaver(display) {
 	var bounds = {};
 	if (display) {
 		bounds = display.bounds;
@@ -269,7 +262,7 @@ function showScreenSaver(display) {
 		bounds.width = screen.width;
 		bounds.height = screen.height;
 	}
-	if (!bounds.left && !bounds.top && getChromeVersion() >= 44) {
+	if (!bounds.left && !bounds.top && myUtils.getChromeVersion() >= 44) {
 		// Chrome supports fullscreen option on create since version 44
 		chrome.windows.create({
 			url: '/html/screensaver.html',
@@ -290,6 +283,15 @@ function showScreenSaver(display) {
 			chrome.windows.update(win.id, {state: 'fullscreen'});
 		});
 	}
+}
+
+// close all the screensavers
+function closeScreenSavers() {
+	chrome.windows.getAll({windowTypes: ['popup']}, function(windows) {
+		for (var i = 0; i < windows.length; i++) {
+			chrome.windows.remove(windows[i].id);
+		}
+	});
 }
 
 // event: called when extension is installed or updated or Chrome is updated
@@ -323,16 +325,12 @@ function onStorageChanged(event) {
 function onIdleStateChanged(state) {
 	if ((state === 'idle') && JSON.parse(localStorage.enabled)) {
 		if (JSON.parse(localStorage.allDisplays)) {
-			showScreenSavers();
+			openScreenSavers();
 		} else {
-			showScreenSaver();
+			openScreenSaver();
 		}
 	} else {
-		chrome.windows.getAll({windowTypes: ['popup']}, function(windows) {
-			for (var i = 0; i < windows.length; i++) {
-				chrome.windows.remove(windows[i].id);
-			}
-		});
+		closeScreenSavers();
 	}
 }
 
@@ -364,7 +362,7 @@ function onAlarm(alarm) {
 // message: preview the screensaver
 function onMessage(request) {
 	if (request.preview === 'show') {
-		showScreenSaver();
+		openScreenSaver();
 	}
 }
 

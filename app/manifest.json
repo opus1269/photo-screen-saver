@@ -31,6 +31,7 @@
 	"background": {
 		"scripts": [
 			"/scripts/background.js",
+			"/scripts/utils.js",
 			"/scripts/google_photos.js",
 			"/scripts/chromecast.js",
 			"/scripts/use500px.js",

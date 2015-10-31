@@ -9,16 +9,6 @@ var use500px = (function() {
 	// categroies to use - we make them an array to overcome 100 photo limit per call
 	var CATS = ['Animals,City and Architecture', 'Landscape,Fine Art,Macro', 'Nature,Still Life'];
 
-	// Fisher-Yates shuffle algorithm.
-	var shuffleArray = function(array) {
-		for (var i = array.length - 1; i > 0; i--) {
-			var j = Math.floor(Math.random() * (i + 1));
-			var temp = array[i];
-			array[i] = array[j];
-			array[j] = temp;
-		}
-	};
-
 	return {
 
 		loadImages: function(preload) {
@@ -51,7 +41,7 @@ var use500px = (function() {
 									};
 									img.src = photo.images[0].url;
 									imgs.push(img);
-								}						
+								}
 
 								aspectRatio = photo.width / photo.height;
 								image = {};
@@ -65,7 +55,7 @@ var use500px = (function() {
 						if (localStorage.popular500pxImages) {
 							tmp = JSON.parse(localStorage.popular500pxImages);
 							tmp = tmp.concat(images);
-							shuffleArray(tmp);
+							myUtils.shuffleArray(tmp);
 						} else {
 							tmp = images;
 						}

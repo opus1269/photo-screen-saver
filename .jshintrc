@@ -21,6 +21,7 @@
 		"Polymer": true,
 		"Platform": true,
 		"chrome": true,
+		"myUtils": true,
 		"chromeCast": true,
 		"GooglePhotosPage": true,
 		"InfoPage": true,

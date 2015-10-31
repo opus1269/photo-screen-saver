@@ -1,14 +1,17 @@
 (function() {
 	'use strict';
 
-	// main template and pages repeat temple
+	// main auto-bind template
 	var t = document.querySelector('#t');
-	var tPages;
 
-	// array of all the photos to use for slide show
+	// repeat template
+	t.rep;
+
+	// neon-animated-pages element
+	t.p;
+
+	// array of all the photos to use for slide show and an index into it
 	t.itemsAll = [];
-
-	// current index into itemsAll;
 	t.curIdx = 0;
 
 	// array of TEMP_CT photos currently loaded into the animatable pages
@@ -21,8 +24,8 @@
 
 	t.addEventListener('dom-change', function() {
 
-		tPages = document.querySelector('#repeatTemplate');
-
+		t.rep = t.$.repeatTemplate;
+		t.p = t.$.pages;
 		t.transitionType = parseInt(localStorage.photoTransition,10);
 		t.transitionTime = parseInt(localStorage.transitionTime,10) * 1000;
 		t.waitTime = t.transitionTime;
@@ -46,7 +49,7 @@
 				}
 			});
 		}
-		catch (err) {}
+		catch (e) {}
 
 		// load the photos for the slide show
 		t.loadImages();
@@ -56,16 +59,6 @@
 
 	});
 
-	// Fisher-Yates shuffle algorithm.
-	t.shuffleArray = function(array) {
-		for (var i = array.length - 1; i > 0; i--) {
-			var j = Math.floor(Math.random() * (i + 1));
-			var temp = array[i];
-			array[i] = array[j];
-			array[j] = temp;
-		}
-	};
-
 	// create the photo label
 	t.getPhotoLabel = function(author, type, force) {
 		var ret = '';
@@ -73,7 +66,7 @@
 		var idx = type.search('User');
 
 		if (!force && !JSON.parse(localStorage.showPhotog) && (idx !== -1)) {
-			// don't show label for user photos
+			// don't show label for user photos, if requested
 			return ret;
 		}
 		if (type) {
@@ -97,14 +90,15 @@
 			return;
 		}
 		var item = t.items[photoID];
-		var p = t.$.pages;
-		var timeEl = p.querySelector('#' + item.timeID);
+		var timeEl = t.p.querySelector('#' + item.timeID);
 		var date = new Date();
 
-		var model = tPages.modelForElement(timeEl);
+		var model = t.rep.modelForElement(timeEl);
 		if (format === 1) {
-			model.set('item.time', date.toLocaleTimeString(navigator.language,
-				{hour: 'numeric', minute: '2-digit',  hour12: true}));
+			var time = date.toLocaleTimeString(
+				'en-us', {hour: 'numeric', minute: '2-digit',  hour12: true});
+			if (time.endsWith('M')) {time = time.substring(0, time.length - 3);}
+			model.set('item.time', time);
 		} else {
 			model.set('item.time', date.toLocaleTimeString(navigator.language,
 				{hour: 'numeric', minute: '2-digit', hour12: false}));
@@ -181,25 +175,25 @@
 		var skip = JSON.parse(localStorage.skip);
 		var arr = [];
 
-		this.splice('itemsAll', 0, t.itemsAll.length);
+		t.itemsAll = [];
 		this.splice('items', 0, t.items.length);
 
 		arr = t.getPhotoArray();
 
-		// randomize the order
 		if (JSON.parse(localStorage.shuffle)) {
-			t.shuffleArray(arr);
+			// randomize the order
+			myUtils.shuffleArray(arr);
 		}
 
 		for (i = 0; i < arr.length; i++) {
 
-			// ignore photos that would look bad when cropped
 			if (skip && (t.sizingType === 'cover') && t.badAspect(arr[i].asp)) {
+				// ignore photos that would look bad when cropped
 				arr[i].ignore = true;
 			}
 
-			// well.... don't know, let's guess :)
 			if (!arr[i].asp) {
+				// well.... don't know, let's guess :)
 				arr[i].asp = 16 / 9;
 			}
 
@@ -241,9 +235,9 @@
 	// position the text when using Letterbox
 	t.posText = function(photoID) {
 		var item = t.items[photoID];
+		var author = t.p.querySelector('#' + item.authorID);
+		var time = t.p.querySelector('#' + item.timeID);
 		var aspect = item.aspectRatio;
-		var author = t.$.pages.querySelector('#' + item.authorID);
-		var time = t.$.pages.querySelector('#' + item.timeID);
 		var aspectScreen = screen.width / screen.height;
 		var right,bottom;
 
@@ -267,12 +261,12 @@
 	t.framePhoto = function(photoID) {
 		var padding, border, borderBot;
 		var item = t.items[photoID];
-		var p = t.$.pages;
-		var image = p.querySelector('#' + item.name);
-		var author = p.querySelector('#' + item.authorID);
-		var time = p.querySelector('#' + item.timeID);
+		var image = t.p.querySelector('#' + item.name);
+		var author = t.p.querySelector('#' + item.authorID);
+		var time = t.p.querySelector('#' + item.timeID);
 		var img = image.$.img;
 		var width, height;
+		var frWidth, frHeight;
 		var aspect = item.aspectRatio;
 
 		// scale to screen size
@@ -280,10 +274,10 @@
 		borderBot = screen.height * 0.05;
 		padding = screen.height * 0.025;
 
-		// force use of photo label for this view
 		if (!JSON.parse(localStorage.showPhotog)) {
+			// force use of photo label for this view
 			var label = t.getPhotoLabel(item.author, item.type, true);
-			var model = tPages.modelForElement(image);
+			var model = t.rep.modelForElement(image);
 			model.set('item.label', label);
 		}
 
@@ -291,35 +285,39 @@
 							screen.height - padding * 2 - border - borderBot);
 		width = height * aspect;
 
+		// size with frame
+		frWidth = width + border * 2;
+		frHeight = height + borderBot + border;
+
 		img.style.height = height + 'px';
 		img.style.width = width + 'px';
 
 		image.height = height;
 		image.width = width;
-		image.style.top = (screen.height - height - borderBot - border) / 2 + 'px';
-		image.style.left = (screen.width - width - border * 2) / 2 + 'px';
+		image.style.top = (screen.height - frHeight) / 2 + 'px';
+		image.style.left = (screen.width - frWidth) / 2 + 'px';
 		image.style.border = 0.5 + 'vh ridge WhiteSmoke';
 		image.style.borderRadius = '1.5vh';
 		image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
 		image.style.borderBottom = 5 + 'vh solid WhiteSmoke';
 
 		if (parseInt(localStorage.showTime, 10)) {
-			author.style.left = (screen.width - width) / 2 + 10 + 'px';
+			author.style.left = (screen.width - frWidth) / 2 + 10 + 'px';
 			author.style.textAlign = 'left';
 		} else {
 			author.style.left = '0';
 			author.style.textAlign = 'center';
 			author.style.width = screen.width + 'px';
 		}
-		author.style.bottom = (screen.height - height - borderBot - border + 20) / 2 + 'px';
+		author.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
 		author.style.color = 'black';
 		author.style.opacity = 0.9;
 		author.style.fontSize = '2.5vh';
 		author.style.fontWeight = 300;
 
-		time.style.right = (screen.width - width) / 2 + 10 + 'px';
+		time.style.right = (screen.width - frWidth) / 2 + 10 + 'px';
 		time.style.textAlign = 'right';
-		time.style.bottom = (screen.height - height - borderBot - border + 20) / 2 + 'px';
+		time.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
 		time.style.color = 'black';
 		time.style.opacity = 0.9;
 		time.style.fontSize = '2.5vh';
@@ -329,8 +327,7 @@
 
 	// try to find a photo that is ready to display
 	t.findPhoto = function(photoID) {
-		var i;
-		var found = false;
+		var i, found = false;
 
 		for (i = photoID + 1; i < t.items.length; i++) {
 			if (t.isComplete(i)) {
@@ -353,27 +350,24 @@
 
 	// check if the photo is ready to display
 	t.isComplete = function(photoID) {
-		var item = t.items[photoID];
-		var image = t.$.pages.querySelector('#' + item.name);
-
-		return image.loaded;
+		var image = t.p.querySelector('#' + t.items[photoID].name);
+		return image && image.loaded;
 	};
 
 	// called at fixed time intervals to cycle through the pages
 	t.nextPhoto = function() {
-		var p = t.$.pages;
-		var curPage = (p.selected === undefined) ? 0 : p.selected;
+		var curPage = (t.p.selected === undefined) ? 0 : t.p.selected;
 		var nextPage = (curPage === t.items.length - 1) ? 0 : curPage + 1;
 		var prevPage = curPage ? curPage - 1 : t.items.length - 1;
 		var selected = nextPage;
 
 		if (t.started && (t.itemsAll.length > t.items.length)) {
 			// splice in the next image at the previous page.
-			tPages.splice('items', prevPage, 1, t.itemsAll[t.curIdx]);
+			t.rep.splice('items', prevPage, 1, t.itemsAll[t.curIdx]);
 			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
 		}
 
-		if (p.selected === undefined) {
+		if (t.p.selected === undefined) {
 			// special case for first page. neon-animated-pages is configured
 			// to run the entry animation for the first selection
 			selected = curPage;
@@ -408,7 +402,7 @@
 			}
 
 			// set the selected so the animation runs
-			p.selected = selected;
+			t.p.selected = selected;
 		}
 
 		// setup the next timer --- runs forever
