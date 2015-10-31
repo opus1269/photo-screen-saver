@@ -1,11 +1,6 @@
 (function() {
 'use strict';
 
-// minutes in day
-var MIN_IN_DAY = 60 * 24;
-// milli second in day
-var MSEC_IN_DAY = MIN_IN_DAY * 60 * 1000;
-
 // initialize the data in local storage
 function initData() {
 	// using local storage as a quick and dirty replacement for MVC
@@ -51,48 +46,6 @@ function initData() {
 	localStorage.removeItem('windowID');
 }
 
-// get time
-// value format: '00:00'
-function getTime(value) {
-	var date = new Date();
-
-	date.setHours(value.substr(0,2));
-	date.setMinutes(value.substr(3,2));
-	return date.getTime();
-}
-
-// calculate delta in time from now in minutes on a 24 hr basis
-// value format: '00:00'
-function getTimeDelta(value) {
-	var curTime = Date.now();
-	var time = getTime(value);
-	var delayMin = (time - curTime) / 1000 / 60;
-
-	if (delayMin < 0) {
-		delayMin = MIN_IN_DAY + delayMin;
-	}
-	return delayMin;
-}
-
-// is the current time between start and stop
-function isInRange(start, stop) {
-	var curTime = Date.now();
-	var startTime = getTime(start);
-	var stopTime = getTime(stop);
-	var ret = false;
-
-	if (stopTime > startTime) {
-		if ((curTime > startTime) && (curTime < stopTime)) {
-			ret = true;
-		}
-	} else {
-		if ((curTime > startTime) || (curTime < stopTime)) {
-			ret = true;
-		}
-	}
-	return ret;
-}
-
 // enabled state of screensaver
 // note: this does not effect the keep awake settings so you could
 // use the extension as a display keep awake scheduler without
@@ -115,21 +68,21 @@ function processAlarms() {
 	var kStop = JSON.parse(localStorage.keepStop);
 
 	if (JSON.parse(localStorage.keepAwake) && (kStart !== kStop)) {
-		var startDelayMin = getTimeDelta(kStart);
-		var stopDelayMin = getTimeDelta(kStop);
+		var startDelayMin = myUtils.getTimeDelta(kStart);
+		var stopDelayMin = myUtils.getTimeDelta(kStop);
 
 		chrome.alarms.create('keepStart', {
 			delayInMinutes: startDelayMin,
-			periodInMinutes: MIN_IN_DAY
+			periodInMinutes: myUtils.MIN_IN_DAY
 		});
 		chrome.alarms.create('keepStop',{
 			delayInMinutes: stopDelayMin,
-			periodInMinutes: MIN_IN_DAY
+			periodInMinutes: myUtils.MIN_IN_DAY
 		});
 
 		// if we are currently outside of the range of the keep awake
 		// then let display sleep
-		if (!isInRange(kStart, kStop)) {
+		if (!myUtils.isInRange(kStart, kStop)) {
 			chrome.power.requestKeepAwake('system');
 		}
 	} else {
@@ -141,8 +94,8 @@ function processAlarms() {
 	chrome.alarms.get('updatePhotos', function(alarm) {
 		if (!alarm) {
 			chrome.alarms.create('updatePhotos', {
-				when: Date.now() + MSEC_IN_DAY,
-				periodInMinutes: MIN_IN_DAY
+				when: Date.now() + myUtils.MSEC_IN_DAY,
+				periodInMinutes: myUtils.MIN_IN_DAY
 			});
 		}
 	});
@@ -198,7 +151,6 @@ function processUseFavoriteFlickr() {
 }
 
 // set state based on the current values in localStorage
-// TODO: Do we want useGoogle here?
 function processState(key) {
 	if (key) {
 		switch (key) {
