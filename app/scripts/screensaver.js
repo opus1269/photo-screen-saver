@@ -84,12 +84,12 @@
 	};
 
 	// set the time label
-	t.setTime = function(photoID) {
+	t.setTime = function(idx) {
 		var format = parseInt(localStorage.showTime, 10);
 		if (!format) {
 			return;
 		}
-		var item = t.items[photoID];
+		var item = t.items[idx];
 		var timeEl = t.p.querySelector('#' + item.timeID);
 		var date = new Date();
 
@@ -111,7 +111,7 @@
 		var cutoff = 0.5;  // arbitrary
 
 		if (aspect && ((aspect < aspectScreen - cutoff) ||
-				(aspect > aspectScreen + cutoff))) {
+			(aspect > aspectScreen + cutoff))) {
 			return true;
 		}
 		return false;
@@ -169,7 +169,7 @@
 	// perform final processing on the selected photo sources and
 	// populate the pages
 	t.loadImages = function() {
-		var i,count = 0;
+		var i, count = 0;
 		var author;
 		var photoLabel;
 		var skip = JSON.parse(localStorage.skip);
@@ -233,8 +233,8 @@
 	};
 
 	// position the text when using Letterbox
-	t.posText = function(photoID) {
-		var item = t.items[photoID];
+	t.posText = function(idx) {
+		var item = t.items[idx];
 		var author = t.p.querySelector('#' + item.authorID);
 		var time = t.p.querySelector('#' + item.timeID);
 		var aspect = item.aspectRatio;
@@ -258,9 +258,9 @@
 
 	// show photo centered, with padding, border and shadow
 	// show it either scaled up or reduced to fit
-	t.framePhoto = function(photoID) {
+	t.framePhoto = function(idx) {
 		var padding, border, borderBot;
-		var item = t.items[photoID];
+		var item = t.items[idx];
 		var image = t.p.querySelector('#' + item.name);
 		var author = t.p.querySelector('#' + item.authorID);
 		var time = t.p.querySelector('#' + item.timeID);
@@ -325,33 +325,56 @@
 
 	};
 
-	// try to find a photo that is ready to display
-	t.findPhoto = function(photoID) {
-		var i, found = false;
-
-		for (i = photoID + 1; i < t.items.length; i++) {
-			if (t.isComplete(i)) {
-				found = true;
-				photoID = i;
-				break;
-			}
-		}
-		if (!found) {
-			for (i = 0; i < photoID; i++) {
-				if (t.isComplete(i)) {
-					photoID = i;
-					found = true;
-					break;
-				}
-			}
-		}
-		return photoID;
+	// check if the photo is ready to display
+	t.isReady = function(idx) {
+		var image = t.p.querySelector('#' + t.items[idx].name);
+		return image && image.loaded;
 	};
 
-	// check if the photo is ready to display
-	t.isComplete = function(photoID) {
-		var image = t.p.querySelector('#' + t.items[photoID].name);
-		return image && image.loaded;
+	// try to find a photo that is ready to display
+	t.findLoadedPhoto = function(idx) {
+		if (t.isReady(idx)) {return idx;}
+
+		for (var i = idx + 1; i < t.items.length; i++) {
+			if (t.isReady(i)) {return i;}
+		}
+		for (i = 0; i < idx; i++) {
+			if (t.isReady(i)) {return i;}
+		}
+		return -1;
+	};
+
+	// splice in the next image at the previous page.
+	t.replaceLastPhoto = function(idx) {
+		if (t.started && (t.itemsAll.length > t.items.length)) {
+			// splice in the next image at the previous page.
+			t.rep.splice('items', idx, 1, t.itemsAll[t.curIdx]);
+			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
+		}
+	};
+
+	// final prep before display
+	t.prepPhoto = function(idx) {
+		t.setTime(idx);
+		if (!t.sizingType) {
+			t.framePhoto(idx);
+		} else if (t.sizingType === 'contain') {
+			t.posText(idx);
+		}
+	};
+
+	// get the next photo to display
+	t.getNextPhoto = function(idx) {
+		var ret = t.findLoadedPhoto(idx);
+		if (ret === -1) {
+			// no photos ready.. wait a second and try again
+			t.waitTime = 1000;
+			ret = -1;
+		} else if (t.waitTime !== t.transitionTime) {
+			// photo found, set the waitTime back to transition time in case it was changed
+			t.waitTime = t.transitionTime;
+		}
+		return ret;
 	};
 
 	// called at fixed time intervals to cycle through the pages
@@ -361,47 +384,25 @@
 		var prevPage = curPage ? curPage - 1 : t.items.length - 1;
 		var selected = nextPage;
 
-		if (t.started && (t.itemsAll.length > t.items.length)) {
-			// splice in the next image at the previous page.
-			t.rep.splice('items', prevPage, 1, t.itemsAll[t.curIdx]);
-			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
-		}
+		// replace the  photo that just ran with the next one
+		t.replaceLastPhoto(prevPage);
 
 		if (t.p.selected === undefined) {
 			// special case for first page. neon-animated-pages is configured
 			// to run the entry animation for the first selection
 			selected = curPage;
 		}	else if (!t.started) {
-			// first full animation will run. next time ready to start
+			// special case for first full animation. next time ready to start
 			// splicing in the new images
 			t.started = true;
 		}
 
-		if (!t.isComplete(selected)) {
-			// try to find a photo that is loaded
-			selected = t.findPhoto(selected);
-		}
+		selected = t.getNextPhoto(selected);
+		if (selected !== -1) {
 
-		if (!t.isComplete(selected)) {
-			// photo's not ready.. wait for it
-			// set the waitTime in the setTimeout function so we don't have to
-			// wait for the whole slide transition time to try again
-			t.waitTime = 1000;
-		} else {
-			// set the waitTime back to transition time in case it was changed
-			if (t.waitTime !== t.transitionTime) {
-				t.waitTime = t.transitionTime;
-			}
+			t.prepPhoto(selected);
 
-			// prep photos
-			t.setTime(selected);
-			if (!t.sizingType) {
-				t.framePhoto(selected);
-			} else if (t.sizingType === 'contain') {
-				t.posText(selected);
-			}
-
-			// set the selected so the animation runs
+			// set the next selected so the animation runs
 			t.p.selected = selected;
 		}
 
