@@ -153,7 +153,7 @@
 
 		arr = arr.concat(t.getPhotos('useGoogle', 'albumSelections','Google User', true));
 		arr = arr.concat(t.getPhotos('useChromecast', 'ccImages','Google'));
-		arr = arr.concat(t.getPhotos('usePopular500px', 'popular500pxImages','500px'));
+		arr = arr.concat(t.getPhotos('usePopular500px', 'popular500pxImages','500'));
 		arr = arr.concat(t.getPhotos('useInterestingFlickr', 'flickrInterestingImages','flickr'));
 		arr = arr.concat(t.getPhotos('useFavoriteFlickr', 'flickrFavoriteImages','flickr'));
 		arr = arr.concat(t.getPhotos('useAuthors', 'authorImages','Google'));
@@ -348,9 +348,23 @@
 		}
 	};
 
+	// superscript 500px
+	t.super500px = function(idx) {
+		var item = t.items[idx];
+		var author = t.p.querySelector('#' + item.authorID);
+		var sup = author.querySelector('#sup');
+
+		if (item.type !== '500') {
+			sup.textContent = '';
+		} else {
+			sup.textContent = 'px';
+		}
+	};
+
 	// final prep before display
 	t.prepPhoto = function(idx) {
 		t.setTime(idx);
+		t.super500px(idx);
 		if (!t.sizingType) {
 			t.framePhoto(idx);
 		} else if (t.sizingType === 'contain') {
