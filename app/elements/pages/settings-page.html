@@ -46,7 +46,7 @@
                 disabled$="[[!enabled]]"></setting-slider>
         <setting-dropdown name="photoSizing"
                   label="Photo display mode"
-                  items='["Letterbox","Fill screen","Frame"]'
+                  items='["Letterbox","Zoom (may crop)","Frame", "Full (may distort)"]'
                   disabled$="[[!enabled]]"></setting-dropdown>
         <setting-dropdown name="photoTransition"
                   label="Photo transition method"
@@ -57,8 +57,8 @@
                 secondary-label="Present photos in random order"
                 disabled$="[[!enabled]]"></setting-toggle>
         <setting-toggle name="skip"
-                main-label="Skip poor aspect ratio photos"
-                secondary-label="Do not display certain photos in Fill Screen mode"
+                main-label="Skip extreme aspect ratio photos"
+                secondary-label="Do not display certain photos in Zoom and Full modes"
                 disabled$="[[!enabled]]"></setting-toggle>
         <setting-dropdown name="showTime"
                   label="Show time"

@@ -11,13 +11,6 @@ html,body {
 	cursor: none;
 }
 
-div {
-	position: relative;
-	display: block;
-	padding: 0;
-	margin: 0;
-}
-
 .time {
 	font-size: 5.25vh;
 	font-weight: 200;

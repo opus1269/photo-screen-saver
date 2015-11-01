@@ -44,6 +44,9 @@ t.addEventListener('dom-change', function() {
 		case 2:
 			t.sizingType = null;
 			break;
+		case 3:
+			t.sizingType = 'stretch';
+			break;
 	}
 
 	// override zoom factor - chrome 42 and later
@@ -63,6 +66,17 @@ t.addEventListener('dom-change', function() {
 	this.fire('pages-ready');
 
 });
+
+// get references to the important elements of a slide
+t.getEls = function(idx) {
+	var ret = {item: null, slide: null, image: null, author: null, time: null};
+	ret.item = t.items[idx];
+	ret.slide = t.p.querySelector('#' + ret.item.name);
+	ret.image = ret.slide.querySelector('.' + 'image');
+	ret.author = ret.slide.querySelector('.' + 'author');
+	ret.time = ret.slide.querySelector('.' + 'time');
+	return ret;
+};
 
 // create the photo label
 t.getPhotoLabel = function(author, type, force) {
@@ -94,9 +108,8 @@ t.setTime = function(idx) {
 	if (!format) {
 		return;
 	}
-	var item = t.items[idx];
-	var timeEl = t.p.querySelector('#' + item.timeID);
-	var model = t.rep.modelForElement(timeEl);
+	var e = t.getEls(idx);
+	var model = t.rep.modelForElement(e.time);
 	var date = new Date();
 
 	if (format === 1) {
@@ -162,13 +175,24 @@ t.getPhotoArray = function() {
 	return arr;
 };
 
+t.ignorePhoto = function(item) {
+	var ret = false;
+	var skip = JSON.parse(localStorage.skip);
+	// blah blah blah
+	if ((!item.asp || isNaN(item.asp)) ||
+			(skip && ((t.sizingType === 'cover') || (t.sizingType === 'stretch')) && t.isBadAspect(item.asp))) {
+		// ignore photos that dont have aspect ratio or would look really bad when cropped or stretched
+		ret = true;
+	}
+	return ret;
+};
+
 // perform final processing on the selected photo sources and
 // populate the pages
 t.loadImages = function() {
-	var i, count = 0;
+	var count = 0;
 	var author;
 	var photoLabel;
-	var skip = JSON.parse(localStorage.skip);
 	var arr = [];
 
 	t.itemsAll = [];
@@ -181,17 +205,9 @@ t.loadImages = function() {
 		myUtils.shuffleArray(arr);
 	}
 
-	for (i = 0; i < arr.length; i++) {
+	for (var i = 0; i < arr.length; i++) {
 
-		if (skip && (t.sizingType === 'cover') && t.isBadAspect(arr[i].asp)) {
-			// ignore photos that would look bad when cropped
-			arr[i].ignore = true;
-		}
-
-		if (!arr[i].asp) {
-			// well.... don't know, let's guess :)
-			arr[i].asp = 16 / 9;
-		}
+		arr[i].ignore = t.ignorePhoto(arr[i]);
 
 		if (!arr[i].ignore) {
 
@@ -199,13 +215,11 @@ t.loadImages = function() {
 			photoLabel = t.getPhotoLabel(author, arr[i].type);
 
 			t.itemsAll.push({
-				name: 'image' + (count + 1),
+				name: 'item' + (count + 1),
 				path: arr[i].url,
-				authorID: 'author' + (count + 1),
 				author: author,
 				type: arr[i].type,
 				label: photoLabel,
-				timeID: 'time' + (count + 1),
 				time: '',
 				sizingType: t.sizingType,
 				aspectRatio: arr[i].asp,
@@ -228,40 +242,42 @@ t.loadImages = function() {
 };
 
 // position the text when using Letterbox
-t.posText = function(idx) {
-	var item = t.items[idx];
-	var author = t.p.querySelector('#' + item.authorID);
-	var time = t.p.querySelector('#' + item.timeID);
-	var aspect = item.aspectRatio;
+t.letterboxPhoto = function(idx) {
+	var e = t.getEls(idx);
+	var aspect = e.item.aspectRatio;
 	var right,bottom;
 
 	if (aspect < SCREEN_ASPECT) {
 		right = (100 - aspect / SCREEN_ASPECT * 100) / 2;
-		author.style.right = (right + 1) + 'vw';
-		author.style.bottom = '';
-		time.style.right = (right + 1) + 'vw';
-		time.style.bottom = '';
+		e.author.style.right = (right + 1) + 'vw';
+		e.author.style.bottom = '';
+		e.time.style.right = (right + 1) + 'vw';
+		e.time.style.bottom = '';
 	} else {
 		bottom = (100 - SCREEN_ASPECT / aspect * 100) / 2;
-		author.style.bottom = (bottom + 1) + 'vh';
-		author.style.right = '';
-		time.style.bottom = (bottom + 3.5) + 'vh';
-		time.style.right = '';
+		e.author.style.bottom = (bottom + 1) + 'vh';
+		e.author.style.right = '';
+		e.time.style.bottom = (bottom + 3.5) + 'vh';
+		e.time.style.right = '';
 	}
+};
+
+// strech photo
+t.stretchPhoto = function(idx) {
+	var e = t.getEls(idx);
+	e.image.style.backgroundSize = '100% 100%';
+	e.image.style.backgroundRepeat = 'no-repeat';
 };
 
 // show photo centered, with padding, border and shadow
 // show it either scaled up or reduced to fit
 t.framePhoto = function(idx) {
 	var padding, border, borderBot;
-	var item = t.items[idx];
-	var image = t.p.querySelector('#' + item.name);
-	var author = t.p.querySelector('#' + item.authorID);
-	var time = t.p.querySelector('#' + item.timeID);
-	var img = image.$.img;
+	var e = t.getEls(idx);
+	var img = e.image.$.img;
 	var width, height;
 	var frWidth, frHeight;
-	var aspect = item.aspectRatio;
+	var aspect = e.item.aspectRatio;
 
 	// scale to screen size
 	border = screen.height * 0.005;
@@ -270,8 +286,8 @@ t.framePhoto = function(idx) {
 
 	if (!JSON.parse(localStorage.showPhotog)) {
 		// force use of photo label for this view
-		var label = t.getPhotoLabel(item.author, item.type, true);
-		var model = t.rep.modelForElement(image);
+		var label = t.getPhotoLabel(e.item.author, e.item.type, true);
+		var model = t.rep.modelForElement(e.image);
 		model.set('item.label', label);
 	}
 
@@ -286,43 +302,43 @@ t.framePhoto = function(idx) {
 	img.style.height = height + 'px';
 	img.style.width = width + 'px';
 
-	image.height = height;
-	image.width = width;
-	image.style.top = (screen.height - frHeight) / 2 + 'px';
-	image.style.left = (screen.width - frWidth) / 2 + 'px';
-	image.style.border = 0.5 + 'vh ridge WhiteSmoke';
-	image.style.borderRadius = '1.5vh';
-	image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
-	image.style.borderBottom = 5 + 'vh solid WhiteSmoke';
+	e.image.height = height;
+	e.image.width = width;
+	e.image.style.top = (screen.height - frHeight) / 2 + 'px';
+	e.image.style.left = (screen.width - frWidth) / 2 + 'px';
+	e.image.style.border = 0.5 + 'vh ridge WhiteSmoke';
+	e.image.style.borderRadius = '1.5vh';
+	e.image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
+	e.image.style.borderBottom = 5 + 'vh solid WhiteSmoke';
 
 	if (parseInt(localStorage.showTime, 10)) {
-		author.style.left = (screen.width - frWidth) / 2 + 10 + 'px';
-		author.style.textAlign = 'left';
+		e.author.style.left = (screen.width - frWidth) / 2 + 10 + 'px';
+		e.author.style.textAlign = 'left';
 	} else {
-		author.style.left = '0';
-		author.style.width = screen.width + 'px';
-		author.style.textAlign = 'center';
+		e.author.style.left = '0';
+		e.author.style.width = screen.width + 'px';
+		e.author.style.textAlign = 'center';
 	}
-	author.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
-	author.style.color = 'black';
-	author.style.opacity = 0.9;
-	author.style.fontSize = '2.5vh';
-	author.style.fontWeight = 300;
+	e.author.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
+	e.author.style.color = 'black';
+	e.author.style.opacity = 0.9;
+	e.author.style.fontSize = '2.5vh';
+	e.author.style.fontWeight = 300;
 
-	time.style.right = (screen.width - frWidth) / 2 + 10 + 'px';
-	time.style.textAlign = 'right';
-	time.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
-	time.style.color = 'black';
-	time.style.opacity = 0.9;
-	time.style.fontSize = '3vh';
-	time.style.fontWeight = 300;
+	e.time.style.right = (screen.width - frWidth) / 2 + 10 + 'px';
+	e.time.style.textAlign = 'right';
+	e.time.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
+	e.time.style.color = 'black';
+	e.time.style.opacity = 0.9;
+	e.time.style.fontSize = '3vh';
+	e.time.style.fontWeight = 300;
 
 };
 
 // check if the photo is ready to display
 t.isReady = function(idx) {
-	var image = t.p.querySelector('#' + t.items[idx].name);
-	return image && image.loaded;
+	var e = t.getEls(idx);
+	return e.image && e.image.loaded;
 };
 
 // try to find a photo that is ready to display
@@ -349,11 +365,10 @@ t.replaceLastPhoto = function(idx) {
 
 // superscript 500px
 t.super500px = function(idx) {
-	var item = t.items[idx];
-	var author = t.p.querySelector('#' + item.authorID);
-	var sup = author.querySelector('#sup');
+	var e = t.getEls(idx);
+	var sup = e.author.querySelector('#sup');
 
-	if (item.type !== '500') {
+	if (e.item.type !== '500') {
 		sup.textContent = '';
 	} else {
 		sup.textContent = 'px';
@@ -367,7 +382,9 @@ t.prepPhoto = function(idx) {
 	if (!t.sizingType) {
 		t.framePhoto(idx);
 	} else if (t.sizingType === 'contain') {
-		t.posText(idx);
+		t.letterboxPhoto(idx);
+	} else if (t.sizingType === 'stretch') {
+		t.stretchPhoto(idx);
 	}
 };
 
