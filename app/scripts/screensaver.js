@@ -16,9 +16,9 @@ t.p;
 t.itemsAll = [];
 t.curIdx = 0;
 
-// array of TEMP_CT photos currently loaded into the animatable pages
+// array of photos max(NUM_PAGES) currently loaded into the animatable pages
 // always changing subset of itemsAll
-var TEMP_CT = 50;
+var NUM_PAGES = 50;
 t.items = [];
 
 // set to true after first full page animation
@@ -211,8 +211,8 @@ t.loadImages = function() {
 				width: screen.width,
 				height: screen.height
 			});
-			if (count < TEMP_CT) {
-				// the Polymer way - !important
+			if (count < NUM_PAGES) {
+				// add a new page
 				t.push('items', t.itemsAll[count]);
 				t.curIdx++;
 			}
@@ -221,9 +221,7 @@ t.loadImages = function() {
 	}
 
 	if (!count) {
-		// no photos to show
-		var err = document.querySelector('#noPhotos');
-		err.style.visibility = 'visible';
+		t.$.noPhotos.style.visibility = 'visible';
 	}
 
 };
