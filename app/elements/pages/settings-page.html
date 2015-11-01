@@ -77,16 +77,18 @@
         <setting-toggle name="keepAwake"
                 main-label="Keep awake"
                 secondary-label="Prevent display from sleeping"
-                disabled$="[[!enabled]]"></setting-toggle>
+								checked="{{keepEnabled}}"></setting-toggle>
         <setting-time name="keepStart"
                 main-label="Keep awake start"
                 secondary-label="Start keep awake at this time (may not work on your device)"
-                disabled$="[[!enabled]]"></setting-time>
+								indent
+                disabled$="[[!keepEnabled]]"></setting-time>
         <setting-time name="keepStop"
                 main-label="Keep awake stop"
                 secondary-label="Stop keep awake at this time  (may not work on your device)"
+								indent
                 noseparator
-                disabled$="[[!enabled]]"></setting-time>
+                disabled$="[[!keepEnabled]]"></setting-time>
         <setting-toggle name="useChromecast"
                 section-title="Default Photo Sources"
                 main-label="Chromecast"

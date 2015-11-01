@@ -46,16 +46,23 @@ function initData() {
 	localStorage.removeItem('windowID');
 }
 
+// set the text label displayed on the icon
+function setBadgeText() {
+	if (JSON.parse(localStorage.enabled)) {
+		chrome.browserAction.setBadgeText({text: ''});
+	} else if (JSON.parse(localStorage.keepAwake)) {
+		chrome.browserAction.setBadgeText({text: 'AWK'});
+	} else {
+		chrome.browserAction.setBadgeText({text: 'OFF'});
+	}
+}
+
 // enabled state of screensaver
 // note: this does not effect the keep awake settings so you could
 // use the extension as a display keep awake scheduler without
 // using the screensaver
 function processEnabled() {
-	if (JSON.parse(localStorage.enabled)) {
-		chrome.browserAction.setBadgeText({text: ''});
-	} else {
-		chrome.browserAction.setBadgeText({text: 'OFF'});
-	}
+	setBadgeText();
 }
 
 // create keep awake scheduling alarms
@@ -109,6 +116,7 @@ function processKeepAwake() {
 		chrome.power.releaseKeepAwake();
 	}
 	processAlarms();
+	setBadgeText();
 }
 
 function processIdleTime() {
