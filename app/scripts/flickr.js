@@ -18,7 +18,7 @@ var flickr = (function() {
 
 		flickr.favorites.getPublicList({api_key: API_KEY,
 			user_id: '66956608@N06',
-			extras: 'owner_name,url_l,media',
+			extras: 'owner_name,url_k,media',
 			per_page: MAX_PHOTOS}, function(err, list) {
 				if (err) {
 					console.log(err);
@@ -26,7 +26,7 @@ var flickr = (function() {
 				}
 				for (var i = 0; i < list.photos.photo.length; i++) {
 					var photo = list.photos.photo[i];
-					if (photo.url_l && photo.media === 'photo' &&
+					if (photo.url_k && photo.media === 'photo' &&
 						photo.isfriend !== '0' && photo.isfamily !== '0' &&
 						photo.ownername !== 'Yahoo On the Road') {
 						aspectRatio = parseInt(photo.width_l, 10) / parseInt(photo.height_l, 10);
@@ -44,12 +44,12 @@ var flickr = (function() {
 								}
 							};
 
-							img.src = photo.url_l;
+							img.src = photo.url_k;
 							imgs.push(img);
 						}
 
 						image = {};
-						image.url = photo.url_l;
+						image.url = photo.url_k;
 						image.author = photo.ownername;
 						image.asp = aspectRatio.toPrecision(3);
 						images.push(image);
@@ -68,7 +68,7 @@ var flickr = (function() {
 		var flickr = new Flickr({api_key: API_KEY});
 
 		flickr.interestingness.getList({api_key: API_KEY,
-			extras: 'owner_name,url_l,media',
+			extras: 'owner_name,url_k,media',
 			per_page: MAX_PHOTOS}, function(err, list) {
 				if (err) {
 					console.log(err);
@@ -76,7 +76,7 @@ var flickr = (function() {
 				}
 				for (var i = 0; i < list.photos.photo.length; i++) {
 					var photo = list.photos.photo[i];
-					if (photo.url_l && photo.media === 'photo' &&
+					if (photo.url_k && photo.media === 'photo' &&
 						photo.isfriend !== '0' && photo.isfamily !== '0') {
 						aspectRatio = parseInt(photo.width_l, 10) / parseInt(photo.height_l, 10);
 						if (preload) {
@@ -93,12 +93,12 @@ var flickr = (function() {
 								}
 							};
 
-							img.src = photo.url_l;
+							img.src = photo.url_k;
 							imgs.push(img);
 						}
 
 						image = {};
-						image.url = photo.url_l;
+						image.url = photo.url_k;
 						image.author = photo.ownername;
 						image.asp = aspectRatio.toPrecision(3);
 						images.push(image);
