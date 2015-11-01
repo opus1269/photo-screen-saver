@@ -1,6 +1,7 @@
 (function() {
 'use strict';
 
+// aspect ratio of screen
 var SCREEN_ASPECT = screen.width / screen.height;
 
 // main auto-bind template
@@ -48,7 +49,7 @@ t.addEventListener('dom-change', function() {
 	// override zoom factor - chrome 42 and later
 	try {
 		chrome.tabs.getZoom(function(zoomFactor) {
-			if ((zoomFactor < 0.99) || (zoomFactor > 1.01)) {
+			if ((zoomFactor <= 0.99) || (zoomFactor >= 1.01)) {
 				chrome.tabs.setZoom(1.0);
 			}
 		});
@@ -95,9 +96,9 @@ t.setTime = function(idx) {
 	}
 	var item = t.items[idx];
 	var timeEl = t.p.querySelector('#' + item.timeID);
+	var model = t.rep.modelForElement(timeEl);
 	var date = new Date();
 
-	var model = t.rep.modelForElement(timeEl);
 	if (format === 1) {
 		var time = date.toLocaleTimeString(
 			'en-us', {hour: 'numeric', minute: '2-digit',  hour12: true});
@@ -110,7 +111,7 @@ t.setTime = function(idx) {
 };
 
 // check if a photo would look bad cropped
-t.badAspect = function(aspect) {
+t.isBadAspect = function(aspect) {
 	var CUT_OFF = 0.5;  // arbitrary
 
 	if (aspect && ((aspect < SCREEN_ASPECT - CUT_OFF) ||
@@ -182,7 +183,7 @@ t.loadImages = function() {
 
 	for (i = 0; i < arr.length; i++) {
 
-		if (skip && (t.sizingType === 'cover') && t.badAspect(arr[i].asp)) {
+		if (skip && (t.sizingType === 'cover') && t.isBadAspect(arr[i].asp)) {
 			// ignore photos that would look bad when cropped
 			arr[i].ignore = true;
 		}
@@ -241,7 +242,7 @@ t.posText = function(idx) {
 		time.style.right = (right + 1) + 'vw';
 		time.style.bottom = '';
 	} else {
-		bottom = (100 - (SCREEN_ASPECT / aspect * 100)) / 2;
+		bottom = (100 - SCREEN_ASPECT / aspect * 100) / 2;
 		author.style.bottom = (bottom + 1) + 'vh';
 		author.style.right = '';
 		time.style.bottom = (bottom + 3.5) + 'vh';
@@ -299,8 +300,8 @@ t.framePhoto = function(idx) {
 		author.style.textAlign = 'left';
 	} else {
 		author.style.left = '0';
-		author.style.textAlign = 'center';
 		author.style.width = screen.width + 'px';
+		author.style.textAlign = 'center';
 	}
 	author.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
 	author.style.color = 'black';
@@ -313,7 +314,7 @@ t.framePhoto = function(idx) {
 	time.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
 	time.style.color = 'black';
 	time.style.opacity = 0.9;
-	time.style.fontSize = '2.5vh';
+	time.style.fontSize = '3vh';
 	time.style.fontWeight = 300;
 
 };
