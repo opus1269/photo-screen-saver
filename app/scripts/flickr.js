@@ -29,7 +29,7 @@ var flickr = (function() {
 					if (photo.url_k && photo.media === 'photo' &&
 						photo.isfriend !== '0' && photo.isfamily !== '0' &&
 						photo.ownername !== 'Yahoo On the Road') {
-						aspectRatio = parseInt(photo.width_l, 10) / parseInt(photo.height_l, 10);
+						aspectRatio = parseInt(photo.width_k, 10) / parseInt(photo.height_k, 10);
 						if (preload) {
 							img = new Image();
 
@@ -78,7 +78,7 @@ var flickr = (function() {
 					var photo = list.photos.photo[i];
 					if (photo.url_k && photo.media === 'photo' &&
 						photo.isfriend !== '0' && photo.isfamily !== '0') {
-						aspectRatio = parseInt(photo.width_l, 10) / parseInt(photo.height_l, 10);
+						aspectRatio = parseInt(photo.width_k, 10) / parseInt(photo.height_k, 10);
 						if (preload) {
 							img = new Image();
 
