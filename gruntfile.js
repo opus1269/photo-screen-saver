@@ -53,7 +53,7 @@ module.exports = function(grunt) {
 		},
 		clean: {
 			prod: {
-				src: destProd + '**'
+				src: [destProd + 'app', destProd + 'store.zip']
 			},
 			dev: {
 				src: destDev
