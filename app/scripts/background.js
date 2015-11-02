@@ -160,44 +160,43 @@ function processUseFavoriteFlickr() {
 
 // set state based on the current values in localStorage
 function processState(key) {
-	if (key) {
-		switch (key) {
-			case 'enabled':
-				processEnabled();
-				break;
-			case 'keepAwake':
-			case 'keepStart':
-			case 'keepStop':
-				processKeepAwake();
-				break;
-			case 'idleTime':
-				processIdleTime();
-				break;
-			case 'useChromecast':
-				processUseChromecast();
-				break;
-			case 'usePopular500px':
-				processUsePopular500px();
-				break;
-			case 'useInterestingFlickr':
-				processUseInterestingFlickr();
-				break;
-			case 'useFavoriteFlickr':
-				processUseFavoriteFlickr();
-				break;
-			case 'useAuthors':
-				processUseAuthors();
-				break;
-		}
-	} else {
-		processKeepAwake();
-		processIdleTime();
-		processEnabled();
-		processUseChromecast();
-		processUsePopular500px();
-		processUseInterestingFlickr();
-		processUseFavoriteFlickr();
-		processUseAuthors();
+	switch (key) {
+		case 'enabled':
+			processEnabled();
+			break;
+		case 'keepAwake':
+		case 'keepStart':
+		case 'keepStop':
+			processKeepAwake();
+			break;
+		case 'idleTime':
+			processIdleTime();
+			break;
+		case 'useChromecast':
+			processUseChromecast();
+			break;
+		case 'usePopular500px':
+			processUsePopular500px();
+			break;
+		case 'useInterestingFlickr':
+			processUseInterestingFlickr();
+			break;
+		case 'useFavoriteFlickr':
+			processUseFavoriteFlickr();
+			break;
+		case 'useAuthors':
+			processUseAuthors();
+			break;
+		case 'all':
+			processKeepAwake();
+			processIdleTime();
+			processEnabled();
+			processUseChromecast();
+			processUsePopular500px();
+			processUseInterestingFlickr();
+			processUseFavoriteFlickr();
+			processUseAuthors();
+			break;
 	}
 }
 
@@ -257,12 +256,12 @@ function closeScreenSavers() {
 // event: called when extension is installed or updated or Chrome is updated
 function onInstalled() {
 	initData();
-	processState(null);
+	processState('all');
 }
 
 // event: called when Chrome first starts
 function onStartup() {
-	processState(null);
+	processState('all');
 }
 
 // event: display or focus options page
