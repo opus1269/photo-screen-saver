@@ -10,6 +10,9 @@ var chromeCast = (function() {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState === 4 && xhttp.status === 200) {
 				ccImages = JSON.parse(xhttp.responseText);
+				for (var i = 0; i < ccImages.length; i++) {
+					ccImages[i].asp = 16 / 9;
+				}
 				localStorage.ccImages = JSON.stringify(ccImages);
 				cb();
 			}
