@@ -1,6 +1,7 @@
 node_modules
 dev
 dist/app
+dist/store-test.zip
 app/bower_components
 bower_components
 .tmp
