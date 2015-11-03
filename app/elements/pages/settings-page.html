@@ -76,19 +76,24 @@
                 disabled$="[[!enabled]]"></setting-toggle>
         <setting-toggle name="keepAwake"
                 main-label="Keep awake"
-                secondary-label="Prevent display from sleeping"
+                secondary-label="Prevent display from sleeping  (always active if start and stop tmes are equal)"
 								checked="{{keepEnabled}}"></setting-toggle>
         <setting-time name="keepStart"
                 main-label="Keep awake start"
-                secondary-label="Start keep awake at this time (may not work on your device)"
+                secondary-label="Start keep awake at this time"
 								indent
                 disabled$="[[!keepEnabled]]"></setting-time>
         <setting-time name="keepStop"
                 main-label="Keep awake stop"
-                secondary-label="Stop keep awake at this time  (may not work on your device)"
+                secondary-label="Stop keep awake at this time"
 								indent
-                noseparator
                 disabled$="[[!keepEnabled]]"></setting-time>
+				<setting-toggle name="useChromeOsHack"
+                main-label="Apply Chrome OS hack"
+                secondary-label="Required on many Chromebooks and Chromeboxs for scheduling to work"
+								indent
+								noseparator
+								disabled$="[[!keepEnabled]]"></setting-toggle>
         <setting-toggle name="useChromecast"
                 section-title="Default Photo Sources"
                 main-label="Chromecast"

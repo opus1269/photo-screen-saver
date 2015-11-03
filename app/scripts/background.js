@@ -21,6 +21,8 @@ function initData() {
 		localStorage.usePopular500px = 'false';
 		localStorage.useInterestingFlickr = 'false';
 		localStorage.useFavoriteFlickr = 'false';
+		localStorage.useChromeOsHack = 'false';
+		localStorage.chromeOsHack = 'false';
 	}
 
 	// values from the beginning of time
@@ -91,10 +93,12 @@ function processAlarms() {
 		// then let display sleep
 		if (!myUtils.isInRange(kStart, kStop)) {
 			chrome.power.requestKeepAwake('system');
+			setChromeOsHack();
 		}
 	} else {
 		chrome.alarms.clear('keepStart');
 		chrome.alarms.clear('keepStop');
+		localStorage.chromeOsHack = 'false';
 	}
 
 	// Add daily alarm to update 500px and flickr photoS
@@ -253,6 +257,23 @@ function closeScreenSavers() {
 	});
 }
 
+// HACK: for Chrome OS
+function setChromeOsHack(close) {
+	if (!JSON.parse(localStorage.useChromeOsHack)) {
+		return;
+	}
+	chrome.runtime.getPlatformInfo(function(info) {
+		if (info.os === 'cros') {
+			// close screensavers. Chrome OS won't sleep display
+			// if the screensaver is running
+			localStorage.chromeOsHack = 'true';
+			if (close) {
+				closeScreenSavers();
+			}
+		}
+	});
+}
+
 // event: called when extension is installed or updated or Chrome is updated
 function onInstalled() {
 	initData();
@@ -282,7 +303,13 @@ function onStorageChanged(event) {
 
 // event: add or remove the screensavers as needed
 function onIdleStateChanged(state) {
-	if ((state === 'idle') && JSON.parse(localStorage.enabled)) {
+	if (
+		(state === 'idle') &&
+		JSON.parse(localStorage.enabled) &&
+		!(JSON.parse(localStorage.useChromeOsHack) &&
+		JSON.parse(localStorage.chromeOsHack))) {
+		// if machine is idle and screensaver is enabled and we are not outside
+		// of the keep awake active scheduler on ChromeOs then show screensavers
 		if (JSON.parse(localStorage.allDisplays)) {
 			openScreenSavers();
 		} else {
@@ -296,17 +323,19 @@ function onIdleStateChanged(state) {
 // event: alarms triggered
 function onAlarm(alarm) {
 	switch (alarm.name) {
+		case 'keepStart':
+			if (JSON.parse(localStorage.keepAwake)) {
+				// Don't let display sleep
+				chrome.power.requestKeepAwake('display');
+				localStorage.chromeOsHack = 'false';
+			}
+			break;
 		case 'keepStop':
 			if (JSON.parse(localStorage.keepAwake)) {
 				// let display sleep, but keep power on
 				// so we can reenable
 				chrome.power.requestKeepAwake('system');
-			}
-			break;
-		case 'keepStart':
-			if (JSON.parse(localStorage.keepAwake)) {
-				// Don't let display sleep
-				chrome.power.requestKeepAwake('display');
+				setChromeOsHack(true);
 			}
 			break;
 		case 'updatePhotos':

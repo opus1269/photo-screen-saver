@@ -34,7 +34,8 @@ t.addEventListener('dom-change', function() {
 	t.transitionType = parseInt(localStorage.photoTransition,10);
 	t.transitionTime = parseInt(localStorage.transitionTime,10) * 1000;
 	t.waitTime = t.transitionTime;
-	switch (parseInt(localStorage.photoSizing,10)) {
+	t.photoSizing = parseInt(localStorage.photoSizing,10);
+	switch (t.photoSizing) {
 		case 0:
 			t.sizingType = 'contain';
 			break;
@@ -45,19 +46,18 @@ t.addEventListener('dom-change', function() {
 			t.sizingType = null;
 			break;
 		case 3:
-			t.sizingType = 'stretch';
+			t.sizingType = null;
 			break;
 	}
 
-	// override zoom factor - chrome 42 and later
-	try {
+	if (myUtils.getChromeVersion() >= 42) {
+		// override zoom factor - chrome 42 and later
 		chrome.tabs.getZoom(function(zoomFactor) {
 			if ((zoomFactor <= 0.99) || (zoomFactor >= 1.01)) {
 				chrome.tabs.setZoom(1.0);
 			}
 		});
 	}
-	catch (e) {}
 
 	// load the photos for the slide show
 	t.loadImages();
@@ -123,7 +123,7 @@ t.setTime = function(idx) {
 	}
 };
 
-// check if a photo would look bad cropped
+// check if a photo would look bad cropped or streched
 t.isBadAspect = function(aspect) {
 	var CUT_OFF = 0.5;  // arbitrary
 
@@ -227,7 +227,7 @@ t.loadImages = function() {
 				height: screen.height
 			});
 			if (count < NUM_PAGES) {
-				// add a new page
+				// add a new animatable page
 				t.push('items', t.itemsAll[count]);
 				t.curIdx++;
 			}
@@ -265,8 +265,10 @@ t.letterboxPhoto = function(idx) {
 // strech photo
 t.stretchPhoto = function(idx) {
 	var e = t.getEls(idx);
-	e.image.style.backgroundSize = '100% 100%';
-	e.image.style.backgroundRepeat = 'no-repeat';
+	var img = e.image.$.img;
+	img.style.width = '100%';
+	img.style.height = '100%';
+	img.style.objectFit = 'fill';
 };
 
 // show photo centered, with padding, border and shadow
@@ -354,12 +356,15 @@ t.findLoadedPhoto = function(idx) {
 	return -1;
 };
 
-// splice in the next image at the previous page.
+// splice in the next image at the previous page. do it after animation
+// so it stays smooth on slow machines, like my chromebook :(
 t.replaceLastPhoto = function(idx) {
 	if (t.started && (t.itemsAll.length > t.items.length)) {
-		// splice in the next image at the previous page.
-		t.rep.splice('items', idx, 1, t.itemsAll[t.curIdx]);
-		t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
+		// splice in the next image at the previous page. do it after animation
+		t.async(function() {
+			t.rep.splice('items', idx, 1, t.itemsAll[t.curIdx]);
+			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
+		}, 3000);
 	}
 };
 
@@ -379,12 +384,18 @@ t.super500px = function(idx) {
 t.prepPhoto = function(idx) {
 	t.setTime(idx);
 	t.super500px(idx);
-	if (!t.sizingType) {
-		t.framePhoto(idx);
-	} else if (t.sizingType === 'contain') {
-		t.letterboxPhoto(idx);
-	} else if (t.sizingType === 'stretch') {
-		t.stretchPhoto(idx);
+	switch (t.photoSizing) {
+		case 0:
+			t.letterboxPhoto(idx);
+			break;
+		case 1:
+			break;
+		case 2:
+			t.framePhoto(idx);
+			break;
+		case 3:
+			t.stretchPhoto(idx);
+			break;
 	}
 };
 
