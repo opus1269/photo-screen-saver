@@ -49,20 +49,19 @@ module.exports = function(grunt) {
 			},
 			bower: {
 				files: [{expand: true, src: [bowerFiles], dest: destDev}]
-			},
+			}
 		},
 		clean: {
 			prod: {
-				src: [destProd + 'app', destProd + 'store.zip']
+				src: [destProd + 'app', destProd + '*.zip']
 			},
 			dev: {
 				src: destDev
-			},
+			}
 		},
-		// remove key for productionn
-		// don't track usage in development
 		replace: {
 			prod: {
+				// remove manifest key and use non-dev flickr API for productionn
 				options: {
 					force: false,
 					usePrefix: false,
@@ -76,7 +75,19 @@ module.exports = function(grunt) {
 				},
 				files: {'dist/app/manifest.json': 'app/manifest.json'}
 			},
+			prodTest: {
+				options: {
+					force: false,
+					usePrefix: false,
+					patterns: [{
+						match: 'flickrapi.dev.js',
+						replacement: 'flickrapi.js'
+					}]
+				},
+				files: {'dist/app/manifest.json': 'app/manifest.json'}
+			},
 			dev: {
+				// remove Google analytics tracking
 				options: {
 					force: false,
 					usePrefix: true,
@@ -87,43 +98,47 @@ module.exports = function(grunt) {
 					}]
 				},
 				files: [{expand: true, cwd: destDev, src: [appFilesHtml], dest: destDev}]
-			},
+			}
 		},
 		compress: {
 			prod: {
 				options: {archive: 'dist/store.zip'},
 				files: [{expand: true, cwd: 'dist/app/', src: ['**']}]
 			},
+			prodTest: {
+				options: {archive: 'dist/store-test.zip'},
+				files: [{expand: true, cwd: 'dist/app/', src: ['**']}]
+			}
 		},
 		jscs: {
 			all: {
 				options: {config: '.jscsrc'},
 				src: [appFilesJs]
-			},
+			}
 		},
 		jshint: {
 			all: {
 				options: {jshintrc: '.jshintrc', extract: 'auto'},
 				src: [appFilesJs, appFilesHtml]
-			},
+			}
 		},
 		csslint: {
 			all: {
 				options: {csslintrc: '.csslintrc'},
 				src: [appFilesCss]
-			},
+			}
 		},
 		htmllint: {
 			all: {
 				options: {htmllintrc: '.htmllintrc'},
 				src: [appFilesHtml]
-			},
+			}
 		},
 		vulcanize: {
 			prod: {
 				options: {inlineScripts: true, inlineCss: true},
 				files: [{expand: true, src: ['app/elements/elements.html'], dest: destProd}]
-			},
+			}
 		},
 		crisper: {
 			prod: {
@@ -137,28 +152,28 @@ module.exports = function(grunt) {
 			bower: {
 				options: {cleanup: false},
 				files: [{expand: true, src: [bowerFilesHtml], dest: destDev}]
-			},
+			}
 		},
 		uglify: {
 			prod: {
 				files: [{expand: true, cwd: destProd, src: ['**/*.js'], dest: destProd}]
-			},
+			}
 		},
 		minifyHtml: {
 			prod: {
 				files: [{expand: true, cwd: destProd, src: ['**/*.html'], dest: destProd}]
-			},
+			}
 		},
 		cssmin: {
 			prod: {
 				files: [{expand: true, cwd: destProd, src: ['**/styles/*.css'], dest: destProd}]
-			},
+			}
 		},
 		imagemin: {
 			prod: {
 				files: [{expand: true, cwd: destProd, src: ['**/images/*'], dest: destProd}]
-			},
-		},
+			}
+		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-clean');
@@ -196,6 +211,24 @@ module.exports = function(grunt) {
 			'imagemin:prod',
 			'replace:prod',
 			'compress:prod'
+		]
+	);
+
+	// production test build task - leaving manifest key in
+	grunt.registerTask('prodTest',
+		[
+			'clean:prod',
+			'jscs:all',
+			'jshint:all',
+			'sync:prod',
+			'vulcanize:prod',
+			'crisper:prod',
+			'uglify:prod',
+			'minifyHtml:prod',
+			'cssmin:prod',
+			'imagemin:prod',
+			'replace:prodTest',
+			'compress:prodTest'
 		]
 	);
 
