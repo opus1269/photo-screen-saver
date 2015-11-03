@@ -7,6 +7,7 @@
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../setting-toggle/setting-toggle.html">
 <link rel="import" href="../setting-slider/setting-slider.html">
 <link rel="import" href="../setting-dropdown/setting-dropdown.html">
@@ -30,6 +31,7 @@
           <iron-label for="settingsToggle" class="center horizontal layout flex">
             <div class="flex">Screensaver <span hidden$="[[!enabled]]">On</span><span hidden$="[[enabled]]">Off</span></div>
             <paper-toggle-button id="settingsToggle" checked="{{enabled}}"></paper-toggle-button>
+						<paper-tooltip for="settingsToggle" position="left" offset="0">Enable/disable the screesaver</paper-tooltip>
           </iron-label>
           <iron-localstorage name="enabled" value="{{enabled}}"></iron-localstorage>
         </paper-toolbar>
@@ -74,10 +76,14 @@
                 main-label="All displays"
                 secondary-label="Show screensaver on all connected displays"
                 disabled$="[[!enabled]]"></setting-toggle>
-        <setting-toggle name="keepAwake"
+        <setting-toggle id="keepAwake" name="keepAwake"
                 main-label="Keep awake"
                 secondary-label="Prevent display from sleeping  (always active if start and stop tmes are equal)"
 								checked="{{keepEnabled}}"></setting-toggle>
+				<paper-tooltip for="keepAwake" position="top" offset="0">
+								The Keep awake features are available even if the screensaver is
+								disabled, so you can use the app as a general screen display
+								scheduler. The icon will display "AWK" when in this state.</paper-tooltip>
         <setting-time name="keepStart"
                 main-label="Keep awake start"
                 secondary-label="Start keep awake at this time"
@@ -88,12 +94,17 @@
                 secondary-label="Stop keep awake at this time"
 								indent
                 disabled$="[[!keepEnabled]]"></setting-time>
-				<setting-toggle name="useChromeOsHack"
+				<setting-toggle id="useChromeOsHack" name="useChromeOsHack"
                 main-label="Apply Chrome OS hack"
                 secondary-label="Required on many Chromebooks and Chromeboxs for scheduling to work"
 								indent
 								noseparator
 								disabled$="[[!keepEnabled]]"></setting-toggle>
+				<paper-tooltip for="useChromeOsHack" position="top" offset="0">
+								Many Chrome OS devices will not sleep if the screensaver is running.
+								This option will close the screensaver if it is running when the Keep
+								awake stop time is reached and prevent display of the screensaver
+								until the Keep awake start time is reached.</paper-tooltip>
         <setting-toggle name="useChromecast"
                 section-title="Default Photo Sources"
                 main-label="Chromecast"

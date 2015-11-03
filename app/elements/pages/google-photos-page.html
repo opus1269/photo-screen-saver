@@ -13,6 +13,7 @@
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
 <dom-module id="google-photos-page">
 	<template>
@@ -85,9 +86,12 @@
 			<paper-material elevation="1">
 				<paper-toolbar class="page-toolbar">
 					<div class="flex">Google Photos Albums</div>
-					<paper-icon-button icon="check-box-outline-blank" on-tap="_albumsDeselectAllTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
-					<paper-icon-button icon="refresh" on-tap="_albumRefreshTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
+					<paper-icon-button id="deselect" icon="check-box-outline-blank" on-tap="_albumsDeselectAllTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
+					<paper-tooltip for="deselect" position="left" offset="0">Deselect all albums</paper-tooltip>
+					<paper-icon-button id="refresh" icon="refresh" on-tap="_albumRefreshTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
+					<paper-tooltip for="refresh" position="left" offset="0">Refresh album list</paper-tooltip>
 					<paper-toggle-button id="googlePhotosToggle" checked="{{useGoogle}}"></paper-toggle-button>
+					<paper-tooltip for="googlePhotosToggle" position="left" offset="0">Enable/disable use of albums</paper-tooltip>
 					<iron-localstorage name="useGoogle" value="{{useGoogle}}"></iron-localstorage>
 				</paper-toolbar>
 			</paper-material>
