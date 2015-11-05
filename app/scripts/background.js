@@ -14,15 +14,15 @@ function initData() {
 	// Add the new version 2 values
 	if (!oldVer || (oldVer < 2)) {
 		localStorage.allDisplays = 'false';
-		localStorage.keepStart = '"00:00"'; // 24 hr time
-		localStorage.keepStop = '"00:00"';  // 24 hr time
+		localStorage.activeStart = '"00:00"'; // 24 hr time
+		localStorage.activeStop = '"00:00"';  // 24 hr time
+		localStorage.allowSuspend = 'false';  // 24 hr time
 		localStorage.showTime = '1'; // 12 hour format
 		localStorage.showPhotog = 'true';
 		localStorage.usePopular500px = 'false';
+		localStorage.useYesterday500px = 'false';
 		localStorage.useInterestingFlickr = 'false';
 		localStorage.useFavoriteFlickr = 'false';
-		localStorage.useChromeOsHack = 'false';
-		localStorage.chromeOsHack = 'false';
 	}
 
 	// values from the beginning of time
@@ -59,6 +59,28 @@ function setBadgeText() {
 	}
 }
 
+// return true is screensaver can be displayed
+function isActive() {
+	var enabled = JSON.parse(localStorage.enabled);
+	var aStart = JSON.parse(localStorage.activeStart);
+	var aStop = JSON.parse(localStorage.activeStop);
+
+	if (!enabled || !myUtils.isInRange(aStart, aStop)) {
+		return false;
+	}
+	return true;
+}
+
+// set state when the screensaver is in the non-active range
+function setInactive() {
+	if (JSON.parse(localStorage.allowSuspend)) {
+		chrome.power.releaseKeepAwake();
+	} else {
+		chrome.power.requestKeepAwake('system');
+	}
+	closeScreenSavers();
+}
+
 // enabled state of screensaver
 // note: this does not effect the keep awake settings so you could
 // use the extension as a display keep awake scheduler without
@@ -67,38 +89,34 @@ function processEnabled() {
 	setBadgeText();
 }
 
-// create keep awake scheduling alarms
-// if a time range has been specified for when to keep the screen awake,
-// schedule repeating alarms
+// create active period scheduling alarms
 // also create a daily alarm to update live photostreams
 function processAlarms() {
 
-	var kStart = JSON.parse(localStorage.keepStart);
-	var kStop = JSON.parse(localStorage.keepStop);
+	var aStart = JSON.parse(localStorage.activeStart);
+	var aStop = JSON.parse(localStorage.activeStop);
 
-	if (JSON.parse(localStorage.keepAwake) && (kStart !== kStop)) {
-		var startDelayMin = myUtils.getTimeDelta(kStart);
-		var stopDelayMin = myUtils.getTimeDelta(kStop);
+	if (aStart !== aStop) {
+		var startDelayMin = myUtils.getTimeDelta(aStart);
+		var stopDelayMin = myUtils.getTimeDelta(aStop);
 
-		chrome.alarms.create('keepStart', {
+		chrome.alarms.create('activeStart', {
 			delayInMinutes: startDelayMin,
 			periodInMinutes: myUtils.MIN_IN_DAY
 		});
-		chrome.alarms.create('keepStop',{
+		chrome.alarms.create('activeStop',{
 			delayInMinutes: stopDelayMin,
 			periodInMinutes: myUtils.MIN_IN_DAY
 		});
 
-		// if we are currently outside of the range of the keep awake
-		// then let display sleep
-		if (!myUtils.isInRange(kStart, kStop)) {
-			chrome.power.requestKeepAwake('system');
-			setChromeOsHack();
+		// if we are currently outside of the active range
+		// then set inactive state
+		if (!myUtils.isInRange(aStart, aStop)) {
+			setInactive();
 		}
 	} else {
-		chrome.alarms.clear('keepStart');
-		chrome.alarms.clear('keepStop');
-		localStorage.chromeOsHack = 'false';
+		chrome.alarms.clear('activeStart');
+		chrome.alarms.clear('activeStop');
 	}
 
 	// Add daily alarm to update 500px and flickr photoS
@@ -144,7 +162,14 @@ function processUseChromecast() {
 function processUsePopular500px() {
 	localStorage.removeItem('popular500pxImages');
 	if (JSON.parse(localStorage.usePopular500px)) {
-		use500px.loadImages(false);
+		use500px.loadImages(use500px.TYPE_ENUM.popular, 'popular500pxImages', false);
+	}
+}
+
+function processUseYesterday500px() {
+	localStorage.removeItem('yesterday500pxImages');
+	if (JSON.parse(localStorage.useYesterday500px)) {
+		use500px.loadImages(use500px.TYPE_ENUM.yesterday, 'yesterday500pxImages', false);
 	}
 }
 
@@ -155,13 +180,6 @@ function processUseInterestingFlickr() {
 	}
 }
 
-function processUseFavoriteFlickr() {
-	localStorage.removeItem('flickrFavoriteImages');
-	if (JSON.parse(localStorage.useFavoriteFlickr)) {
-		flickr.loadImages(flickr.TYPE_ENUM.favorite, false);
-	}
-}
-
 // set state based on the current values in localStorage
 function processState(key) {
 	switch (key) {
@@ -169,8 +187,9 @@ function processState(key) {
 			processEnabled();
 			break;
 		case 'keepAwake':
-		case 'keepStart':
-		case 'keepStop':
+		case 'activeStart':
+		case 'activeStop':
+		case 'allowSuspend':
 			processKeepAwake();
 			break;
 		case 'idleTime':
@@ -182,11 +201,11 @@ function processState(key) {
 		case 'usePopular500px':
 			processUsePopular500px();
 			break;
+		case 'useYesterday500px':
+			processUseYesterday500px();
+			break;
 		case 'useInterestingFlickr':
 			processUseInterestingFlickr();
-			break;
-		case 'useFavoriteFlickr':
-			processUseFavoriteFlickr();
 			break;
 		case 'useAuthors':
 			processUseAuthors();
@@ -198,24 +217,25 @@ function processState(key) {
 			processUseChromecast();
 			processUsePopular500px();
 			processUseInterestingFlickr();
-			processUseFavoriteFlickr();
 			processUseAuthors();
+			break;
+		default:
 			break;
 	}
 }
 
-// show a screensaver on every display
-function openScreenSavers() {
+// create a screensaver on every display
+function _openScreenSavers() {
 	chrome.system.display.getInfo(function(displayInfo) {
 		for (var i = 0; i < displayInfo.length; i++) {
-			openScreenSaver(displayInfo[i]);
+			_openScreenSaver(displayInfo[i]);
 		}
 	});
 }
 
 // create a screen saver window on the given display
 // if no display is specified use the current one
-function openScreenSaver(display) {
+function _openScreenSaver(display) {
 	var bounds = {};
 	if (display) {
 		bounds = display.bounds;
@@ -248,28 +268,21 @@ function openScreenSaver(display) {
 	}
 }
 
+// always request display screensaver through this call
+function displayScreenSaver(single) {
+	closeScreenSavers();
+	if (!single && JSON.parse(localStorage.allDisplays)) {
+		_openScreenSavers();
+	} else {
+		_openScreenSaver();
+	}
+}
+
 // close all the screensavers
 function closeScreenSavers() {
 	chrome.windows.getAll({windowTypes: ['popup']}, function(windows) {
 		for (var i = 0; i < windows.length; i++) {
 			chrome.windows.remove(windows[i].id);
-		}
-	});
-}
-
-// HACK: for Chrome OS
-function setChromeOsHack(close) {
-	if (!JSON.parse(localStorage.useChromeOsHack)) {
-		return;
-	}
-	chrome.runtime.getPlatformInfo(function(info) {
-		if (info.os === 'cros') {
-			// close screensavers. Chrome OS won't sleep display
-			// if the screensaver is running
-			localStorage.chromeOsHack = 'true';
-			if (close) {
-				closeScreenSavers();
-			}
 		}
 	});
 }
@@ -303,18 +316,8 @@ function onStorageChanged(event) {
 
 // event: add or remove the screensavers as needed
 function onIdleStateChanged(state) {
-	if (
-		(state === 'idle') &&
-		JSON.parse(localStorage.enabled) &&
-		!(JSON.parse(localStorage.useChromeOsHack) &&
-		JSON.parse(localStorage.chromeOsHack))) {
-		// if machine is idle and screensaver is enabled and we are not outside
-		// of the keep awake active scheduler on ChromeOs then show screensavers
-		if (JSON.parse(localStorage.allDisplays)) {
-			openScreenSavers();
-		} else {
-			openScreenSaver();
-		}
+	if (state === 'idle' && isActive()) {
+		displayScreenSaver();
 	} else {
 		closeScreenSavers();
 	}
@@ -323,26 +326,29 @@ function onIdleStateChanged(state) {
 // event: alarms triggered
 function onAlarm(alarm) {
 	switch (alarm.name) {
-		case 'keepStart':
+		case 'activeStart':
+			// Don't let display sleep
 			if (JSON.parse(localStorage.keepAwake)) {
-				// Don't let display sleep
 				chrome.power.requestKeepAwake('display');
-				localStorage.chromeOsHack = 'false';
 			}
+			var interval  = parseInt(localStorage.idleTime, 10) * 60;
+			chrome.idle.queryState(interval, function(state) {
+				// on active start display screensaver if the idle time criteria is met
+				if (state === 'idle') {
+					displayScreenSaver();
+				}
+			});
 			break;
-		case 'keepStop':
-			if (JSON.parse(localStorage.keepAwake)) {
-				// let display sleep, but keep power on
-				// so we can reenable
-				chrome.power.requestKeepAwake('system');
-				setChromeOsHack(true);
-			}
+		case 'activeStop':
+			setInactive();
 			break;
 		case 'updatePhotos':
 			// get the latest for the live photo streams
 			processUsePopular500px();
+			processUseYesterday500px();
 			processUseInterestingFlickr();
-			processUseFavoriteFlickr();
+			break;
+		default:
 			break;
 	}
 }
@@ -350,7 +356,7 @@ function onAlarm(alarm) {
 // message: preview the screensaver
 function onMessage(request) {
 	if (request.preview === 'show') {
-		openScreenSaver();
+		displayScreenSaver(true);
 	}
 }
 

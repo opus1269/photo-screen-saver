@@ -82,29 +82,26 @@
 								checked="{{keepEnabled}}"></setting-toggle>
 				<paper-tooltip for="keepAwake" position="top" offset="0">
 								The Keep awake features are available even if the screensaver is
-								disabled, so you can use the app as a general screen display
-								scheduler. The icon will display "AWK" when in this state.</paper-tooltip>
-        <setting-time name="keepStart"
-                main-label="Keep awake start"
-                secondary-label="Start keep awake at this time"
+								disabled, so you can use the app as a general power
+								scheduler. The icon will display "AWK" when in this state.
+								<br><br>Many Chrome OS devices will not sleep if the screensaver
+								is running, even if the Keep awake is off.</paper-tooltip>
+        <setting-time name="activeStart"
+                main-label="Screensaver/Keep awake active start time"
+                secondary-label="Allow screensaver display, starting at this time"
 								indent
                 disabled$="[[!keepEnabled]]"></setting-time>
-        <setting-time name="keepStop"
-                main-label="Keep awake stop"
-                secondary-label="Stop keep awake at this time"
+        <setting-time name="activeStop"
+                main-label="Screensaver/Keep awake active stop time"
+                secondary-label="Disallow screensaver display after this time"
 								indent
-                disabled$="[[!keepEnabled]]"></setting-time>
-				<setting-toggle id="useChromeOsHack" name="useChromeOsHack"
-                main-label="Apply Chrome OS hack"
-                secondary-label="Required on many Chromebooks and Chromeboxs for scheduling to work"
+	              disabled$="[[!keepEnabled]]"></setting-time>
+				<setting-toggle id="allowSuspend" name="allowSuspend"
+                main-label="Allow system suspend"
+                secondary-label="Allow the computer to suspend during inactive time"
 								indent
 								noseparator
 								disabled$="[[!keepEnabled]]"></setting-toggle>
-				<paper-tooltip for="useChromeOsHack" position="top" offset="0">
-								Many Chrome OS devices will not sleep if the screensaver is running.
-								This option will close the screensaver if it is running when the Keep
-								awake stop time is reached and prevent display of the screensaver
-								until the Keep awake start time is reached.</paper-tooltip>
         <setting-toggle name="useChromecast"
                 section-title="Default Photo Sources"
                 main-label="Chromecast"
@@ -114,13 +111,13 @@
                 main-label="500px - popular"
                 secondary-label="Popular photos from the 500px photo sharing site"
                 disabled$="[[!enabled]]"></setting-toggle>
+				<setting-toggle name="useYesterday500px"
+	              main-label="500px - fresh"
+	              secondary-label="Fresh photos from the 500px photo sharing site, updated daily"
+	              disabled$="[[!enabled]]"></setting-toggle>
         <setting-toggle name="useInterestingFlickr"
                 main-label="Flickr - interesting"
                 secondary-label="Interesting photos from the Flickr photo sharing site, updated daily"
-                disabled$="[[!enabled]]"></setting-toggle>
-        <setting-toggle name="useFavoriteFlickr"
-                main-label="Flickr - favorites"
-                secondary-label="Favorite photos from the Flickr photo sharing site, curated by Flickr"
                 disabled$="[[!enabled]]"></setting-toggle>
         <setting-toggle name="useAuthors"
                 main-label="Extension developer"
