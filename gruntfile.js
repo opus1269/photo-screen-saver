@@ -59,23 +59,17 @@ module.exports = function(grunt) {
 				src: destDev
 			}
 		},
+		lineremover: {
+			prod: {
+				files: {'dist/app/manifest.json': 'dist/app/manifest.json'},
+				options: {
+					exclusionPattern: /"key":/g
+				}
+			}
+		},
 		replace: {
 			prod: {
 				// remove manifest key and use non-dev flickr API for productionn
-				options: {
-					force: false,
-					usePrefix: false,
-					patterns: [{
-						match: /\t"key".*\n/,
-						replacement: ''
-					}, {
-						match: 'flickrapi.dev.js',
-						replacement: 'flickrapi.js'
-					}]
-				},
-				files: {'dist/app/manifest.json': 'app/manifest.json'}
-			},
-			prodTest: {
 				options: {
 					force: false,
 					usePrefix: false,
@@ -183,6 +177,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-newer');
 	grunt.loadNpmTasks('grunt-vulcanize');
 	grunt.loadNpmTasks('grunt-crisper');
+	grunt.loadNpmTasks('grunt-line-remover');
 	grunt.loadNpmTasks('grunt-replace');
 	grunt.loadNpmTasks('grunt-jscs');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -209,6 +204,7 @@ module.exports = function(grunt) {
 			'minifyHtml:prod',
 			'cssmin:prod',
 			'imagemin:prod',
+			'lineremover:prod',
 			'replace:prod',
 			'compress:prod'
 		]
@@ -227,7 +223,7 @@ module.exports = function(grunt) {
 			'minifyHtml:prod',
 			'cssmin:prod',
 			'imagemin:prod',
-			'replace:prodTest',
+			'replace:prod',
 			'compress:prodTest'
 		]
 	);
