@@ -1,8 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text eol=auto
 
-*.png binary
-
 # Standard to msysgit
 *.doc	 diff=astextplain
 *.DOC	 diff=astextplain
