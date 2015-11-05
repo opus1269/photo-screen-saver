@@ -61,6 +61,10 @@ var myUtils = (function() {
 			var stopTime = this.getTime(stop);
 			var ret = false;
 
+			if (start === stop) {
+				return true;
+			}
+
 			if (stopTime > startTime) {
 				if ((curTime > startTime) && (curTime < stopTime)) {
 					ret = true;
