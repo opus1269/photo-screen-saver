@@ -19,7 +19,7 @@ t.curIdx = 0;
 
 // array of photos max(NUM_PAGES) currently loaded into the animatable pages
 // always changing subset of itemsAll
-var NUM_PAGES = 50;
+var NUM_PAGES = 20;
 t.items = [];
 
 // set to true after first full page animation
@@ -43,10 +43,10 @@ t.addEventListener('dom-change', function() {
 			t.sizingType = 'cover';
 			break;
 		case 2:
-			t.sizingType = null;
-			break;
 		case 3:
 			t.sizingType = null;
+			break;
+		default:
 			break;
 	}
 
@@ -69,12 +69,11 @@ t.addEventListener('dom-change', function() {
 
 // get references to the important elements of a slide
 t.getEls = function(idx) {
-	var ret = {item: null, slide: null, image: null, author: null, time: null};
+	var ret = {};
 	ret.item = t.items[idx];
-	ret.slide = t.p.querySelector('#' + ret.item.name);
-	ret.image = ret.slide.querySelector('.' + 'image');
-	ret.author = ret.slide.querySelector('.' + 'author');
-	ret.time = ret.slide.querySelector('.' + 'time');
+	ret.image = t.p.querySelector('#' + ret.item.name);
+	ret.author = t.p.querySelector('#' + ret.item.authorID);
+	ret.time = t.p.querySelector('#' + ret.item.timeID);
 	return ret;
 };
 
@@ -168,8 +167,8 @@ t.getPhotoArray = function() {
 	arr = arr.concat(t.getPhotos('useGoogle', 'albumSelections','Google User', true));
 	arr = arr.concat(t.getPhotos('useChromecast', 'ccImages','Google'));
 	arr = arr.concat(t.getPhotos('usePopular500px', 'popular500pxImages','500'));
+	arr = arr.concat(t.getPhotos('useYesterday500px', 'yesterday500pxImages','500'));
 	arr = arr.concat(t.getPhotos('useInterestingFlickr', 'flickrInterestingImages','flickr'));
-	arr = arr.concat(t.getPhotos('useFavoriteFlickr', 'flickrFavoriteImages','flickr'));
 	arr = arr.concat(t.getPhotos('useAuthors', 'authorImages','Google'));
 
 	return arr;
@@ -180,7 +179,7 @@ t.ignorePhoto = function(item) {
 	var skip = JSON.parse(localStorage.skip);
 	// blah blah blah
 	if ((!item.asp || isNaN(item.asp)) ||
-			(skip && ((t.sizingType === 'cover') || (t.sizingType === 'stretch')) && t.isBadAspect(item.asp))) {
+			(skip && ((t.photoSizing === 1) || (t.photoSizing === 3)) && t.isBadAspect(item.asp))) {
 		// ignore photos that dont have aspect ratio or would look really bad when cropped or stretched
 		ret = true;
 	}
@@ -218,9 +217,11 @@ t.loadImages = function() {
 				name: 'item' + (count + 1),
 				path: arr[i].url,
 				author: author,
+				authorID: 'author' + (count + 1),
 				type: arr[i].type,
 				label: photoLabel,
 				time: '',
+				timeID: 'time' + (count + 1),
 				sizingType: t.sizingType,
 				aspectRatio: arr[i].asp,
 				width: screen.width,
@@ -228,7 +229,9 @@ t.loadImages = function() {
 			});
 			if (count < NUM_PAGES) {
 				// add a new animatable page
-				t.push('items', t.itemsAll[count]);
+				t.push('items',
+					JSON.parse(JSON.stringify(t.itemsAll[count])) // shallow copy
+				);
 				t.curIdx++;
 			}
 			count++;
@@ -337,38 +340,64 @@ t.framePhoto = function(idx) {
 
 };
 
-// check if the photo is ready to display
-t.isReady = function(idx) {
+// check if the photo threw a 404
+t.isError = function(idx) {
+	var e = t.getEls(idx);
+	return e.image.error;
+};
+
+// check if the photo is loaded
+t.isLoaded = function(idx) {
 	var e = t.getEls(idx);
 	return e.image && e.image.loaded;
 };
 
 // try to find a photo that is ready to display
 t.findLoadedPhoto = function(idx) {
-	if (t.isReady(idx)) {return idx;}
-
+	if (t.isLoaded(idx)) {
+		return idx;
+	}
 	for (var i = idx + 1; i < t.items.length; i++) {
-		if (t.isReady(i)) {return i;}
+		if (t.isLoaded(i)) {return i;}
 	}
 	for (i = 0; i < idx; i++) {
-		if (t.isReady(i)) {return i;}
+		if (t.isLoaded(i)) {return i;}
 	}
 	return -1;
 };
 
-// splice in the next image at the previous page. do it after animation
-// so it stays smooth on slow machines, like my chromebook :(
-t.replaceLastPhoto = function(idx) {
+// splice in the next photo from the master array
+t.replacePhoto = function(idx, isError) {
+	var e = t.getEls(idx);
+	var item;
+
+	if (isError) {
+		// mark bad urls so we don't use them anymore
+		var index = t.itemsAll.map(function(e) {return e.name;}).indexOf(e.item.name);
+		if (index !== -1) {
+			t.itemsAll[index].name = 'skip';
+		}
+	}
+
 	if (t.started && (t.itemsAll.length > t.items.length)) {
-		// splice in the next image at the previous page. do it after animation
-		t.async(function() {
-			t.rep.splice('items', idx, 1, t.itemsAll[t.curIdx]);
+		for (var i = t.curIdx; i < t.itemsAll.length; i++) {
+			// find a url that is ok, AFAWK
+			item = t.itemsAll[i];
+			if (item.name !== 'skip') {
+				t.curIdx = i;
+				break;
+			}
+		}
+
+		// splice in the next image at this page
+		this.async(function() {
+			t.rep.splice('items', idx, 1, item);
 			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
-		}, 3000);
+		}, 2500);
 	}
 };
 
-// superscript 500px
+// add superscript to 500px
 t.super500px = function(idx) {
 	var e = t.getEls(idx);
 	var sup = e.author.querySelector('#sup');
@@ -388,13 +417,13 @@ t.prepPhoto = function(idx) {
 		case 0:
 			t.letterboxPhoto(idx);
 			break;
-		case 1:
-			break;
 		case 2:
 			t.framePhoto(idx);
 			break;
 		case 3:
 			t.stretchPhoto(idx);
+			break;
+		default:
 			break;
 	}
 };
@@ -405,7 +434,6 @@ t.getNextPhoto = function(idx) {
 	if (ret === -1) {
 		// no photos ready.. wait a second and try again
 		t.waitTime = 1000;
-		ret = -1;
 	} else if (t.waitTime !== t.transitionTime) {
 		// photo found, set the waitTime back to transition time in case it was changed
 		t.waitTime = t.transitionTime;
@@ -414,14 +442,19 @@ t.getNextPhoto = function(idx) {
 };
 
 // called at fixed time intervals to cycle through the pages
-t.nextPhoto = function() {
+t.runShow = function() {
 	var curPage = (t.p.selected === undefined) ? 0 : t.p.selected;
 	var nextPage = (curPage === t.items.length - 1) ? 0 : curPage + 1;
-	var prevPage = curPage ? curPage - 1 : t.items.length - 1;
+	var prevPage = (curPage > 0) ? curPage - 1 : t.items.length - 1;
 	var selected = nextPage;
 
-	// replace the  photo that just ran with the next one
-	t.replaceLastPhoto(prevPage);
+	if (t.isError(nextPage)) {
+		// broken link, replace with next one from master array
+		t.replacePhoto(nextPage, true);
+	}
+
+	// replace the photo that just ran with the next one
+	t.replacePhoto(prevPage);
 
 	if (t.p.selected === undefined) {
 		// special case for first page. neon-animated-pages is configured
@@ -443,14 +476,14 @@ t.nextPhoto = function() {
 	}
 
 	// setup the next timer --- runs forever
-	t.timer = window.setTimeout(t.nextPhoto, t.waitTime);
+	t.timer = window.setTimeout(t.runShow, t.waitTime);
 };
 
 // This will run to infinity... and beyond
-// each call to t.nextPhoto will set another timeout
+// each call to t.runShow will set another timeout
 t.addEventListener('pages-ready', function() {
 	t.waitTime = 2000;
-	t.timer = window.setTimeout(t.nextPhoto, t.waitTime);
+	t.timer = window.setTimeout(t.runShow, t.waitTime);
 });
 
 // close preview window on click
