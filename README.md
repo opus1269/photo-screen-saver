@@ -26,6 +26,12 @@ It is implemented using Vanilla JavaScript and [Polymer](https://www.polymer-pro
 ### Frequently Asked Questions
 <br />
 
+* **How do I uninstall this?**
+
+  Right click on the icon in the browser toolbar and select "Remove From Chrome..."
+
+  ***
+
 * **Why is the time label incorrect on my Chromebook?**
 
   If you have this problem, go to "Settings" -> "Show Advanced Settings" and in
@@ -46,7 +52,19 @@ It is implemented using Vanilla JavaScript and [Polymer](https://www.polymer-pro
 
   Other applications may be preventing the display or computer from sleeping.
 
-  On many Chrome OS devices the display will not sleep if the screensaver is active.
+  On many Chrome OS devices the display will not sleep if the screensaver is running.
   You can use the Screensaver/Keep awake scheduling feature to control when the screensaver is displayed.
+
+  ***
+
+* **Can you add support for accessing the photos in my 500<sup>px</sup>/Flickr account?**
+
+  I believe this will be doable and plan on adding it soon.
+
+  ***
+
+* **Can you add support for using files from my local computer?**
+
+  No. Unfortunately, extensions are not allowed to access the local filesystem.
 
   <br />
