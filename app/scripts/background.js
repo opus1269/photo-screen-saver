@@ -50,12 +50,18 @@ function initData() {
 
 // set the text label displayed on the icon
 function setBadgeText() {
-	if (JSON.parse(localStorage.enabled)) {
-		chrome.browserAction.setBadgeText({text: ''});
-	} else if (JSON.parse(localStorage.keepAwake)) {
-		chrome.browserAction.setBadgeText({text: 'AWK'});
+	if (!JSON.parse(localStorage.enabled)) {
+		if (JSON.parse(localStorage.keepAwake)) {
+			chrome.browserAction.setBadgeText({text: 'PWR'});
+		} else {
+			chrome.browserAction.setBadgeText({text: 'OFF'});
+		}
 	} else {
-		chrome.browserAction.setBadgeText({text: 'OFF'});
+		if (!isActive()) {
+			chrome.browserAction.setBadgeText({text: 'SLP'});
+		} else {
+			chrome.browserAction.setBadgeText({text: ''});
+		}
 	}
 }
 
@@ -211,11 +217,12 @@ function processState(key) {
 			processUseAuthors();
 			break;
 		case 'all':
+			processEnabled();
 			processKeepAwake();
 			processIdleTime();
-			processEnabled();
 			processUseChromecast();
 			processUsePopular500px();
+			processUseYesterday500px();
 			processUseInterestingFlickr();
 			processUseAuthors();
 			break;
@@ -338,9 +345,11 @@ function onAlarm(alarm) {
 					displayScreenSaver();
 				}
 			});
+			setBadgeText();
 			break;
 		case 'activeStop':
 			setInactiveState();
+			setBadgeText();
 			break;
 		case 'updatePhotos':
 			// get the latest for the live photo streams
