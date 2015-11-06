@@ -57,7 +57,7 @@ function setBadgeText() {
 			chrome.browserAction.setBadgeText({text: 'OFF'});
 		}
 	} else {
-		if (!isActive()) {
+		if (JSON.parse(localStorage.keepAwake) && !isActive()) {
 			chrome.browserAction.setBadgeText({text: 'SLP'});
 		} else {
 			chrome.browserAction.setBadgeText({text: ''});
