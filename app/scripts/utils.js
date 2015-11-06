@@ -66,11 +66,11 @@ var myUtils = (function() {
 			}
 
 			if (stopTime > startTime) {
-				if ((curTime > startTime) && (curTime < stopTime)) {
+				if ((curTime >= startTime) && (curTime <= stopTime)) {
 					ret = true;
 				}
 			} else {
-				if ((curTime > startTime) || (curTime < stopTime)) {
+				if ((curTime >= startTime) || (curTime <= stopTime)) {
 					ret = true;
 				}
 			}
