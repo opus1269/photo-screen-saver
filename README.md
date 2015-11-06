@@ -30,6 +30,16 @@ It is implemented using Vanilla JavaScript and [Polymer](https://www.polymer-pro
   If you have this problem, go to "Settings" -> "Show Advanced Settings" and in
   the "Date and time" section uncheck the "Set time zone automatically using your location".
 
-* I have the Keep awake off, but my display is not sleeping.
+* What do the labels on the icon mean?
+
+  - No label: Screensaver is enabled and will be displayed when the computer is idle.
+  - OFF: Screensaver is disabled.  
+  - SLP: The time is in the inactive range of the scheduler. Screensaver will not display.
+  - PWR: The scheduler will process the keep awake settings, but the screensaver will never display
+
+
+* I have the Keep awake off, but my display is not sleeping. Why is that?
+
+  Other applications may be preventing the display or computer from sleeping.
 
   On many Chrome OS devices the display will not sleep if the screensaver is active. You can use the Screensaver/Keep awake scheduling feature to control when the screensaver is displayed.
