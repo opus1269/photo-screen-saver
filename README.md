@@ -4,7 +4,7 @@ This extension displays a screensaver composed of a slide show of photos in vari
 
 * The users own Google Photos Albums
 * A subset of the background photos used by the Chromecast media streaming device
-* Popular photos from 500<sup>px</sup>
+* Popular and fresh photos from 500<sup>px</sup>
 * Interesting photos from Flickr
 
 Numerous options are available to control the appearance of the slide show including:
@@ -13,12 +13,23 @@ Numerous options are available to control the appearance of the slide show inclu
 * Between photo time interval
 * Photo display mode: Letterbox, Zoom, Full etc.
 * Photo transition animations: Fade in, Scale up etc.
-* A [Keep Awake](https://developer.chrome.com/extensions/power) scheduler to control when the display should remain on
+* A scheduler to control when the screensaver, display, and computer should remain on
 * Optionally show on all connected displays
 * Optionally display current time
 
 It is implemented using Vanilla JavaScript and [Polymer](https://www.polymer-project.org/1.0/).
 
-### [View in Chrome Web Store](https://chrome.google.com/webstore/detail/kohpcmlfdjfdggcjmjhhbcbankgmppgc)
+#### [View in Chrome Web Store](https://chrome.google.com/webstore/detail/kohpcmlfdjfdggcjmjhhbcbankgmppgc)
 
 <a href="https://www.bithound.io/github/opus1269/photo-screen-saver"><img src="https://www.bithound.io/github/opus1269/photo-screen-saver/badges/score.svg" alt="bitHound Score" /></a>
+
+### Frequently Asked Questions
+
+* Why is the time display incorrect on my Chromebook?
+
+  If you have this problem, go to "Settings" -> "Show Advanced Settings" and in
+  the "Date and time" section uncheck the "Set time zone automatically using your location".
+
+* I have the Keep awake off, but my display is not sleeping.
+
+  On many Chrome OS devices the display will not sleep if the screensaver is active. You can use the Screensaver/Keep awake scheduling feature to control when the screensaver is displayed.
