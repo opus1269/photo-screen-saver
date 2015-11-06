@@ -24,22 +24,29 @@ It is implemented using Vanilla JavaScript and [Polymer](https://www.polymer-pro
 <a href="https://www.bithound.io/github/opus1269/photo-screen-saver"><img src="https://www.bithound.io/github/opus1269/photo-screen-saver/badges/score.svg" alt="bitHound Score" /></a>
 
 ### Frequently Asked Questions
+<br />
 
-* Why is the time display incorrect on my Chromebook?
+* **Why is the time label incorrect on my Chromebook?**
 
   If you have this problem, go to "Settings" -> "Show Advanced Settings" and in
   the "Date and time" section uncheck the "Set time zone automatically using your location".
 
-* What do the labels on the icon mean?
+  ***
+
+* **What do the labels on the icon mean?**
 
   - No label: Screensaver is enabled and will be displayed when the computer is idle.
   - OFF: Screensaver is disabled.  
   - SLP: The time is in the inactive range of the scheduler. Screensaver will not display.
   - PWR: The scheduler will process the keep awake settings, but the screensaver will never display
 
+  ***
 
-* I have the Keep awake off, but my display is not sleeping. Why is that?
+* **I have the Keep awake off, but my display is not sleeping. Why is that?**
 
   Other applications may be preventing the display or computer from sleeping.
 
-  On many Chrome OS devices the display will not sleep if the screensaver is active. You can use the Screensaver/Keep awake scheduling feature to control when the screensaver is displayed.
+  On many Chrome OS devices the display will not sleep if the screensaver is active.
+  You can use the Screensaver/Keep awake scheduling feature to control when the screensaver is displayed.
+
+  <br />
