@@ -390,10 +390,8 @@ t.replacePhoto = function(idx, isError) {
 		}
 
 		// splice in the next image at this page
-		this.async(function() {
-			t.rep.splice('items', idx, 1, item);
-			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
-		}, 2500);
+		t.rep.splice('items', idx, 1, item);
+		t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
 	}
 };
 
