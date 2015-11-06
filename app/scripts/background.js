@@ -72,7 +72,7 @@ function isActive() {
 }
 
 // set state when the screensaver is in the non-active range
-function setInactive() {
+function setInactiveState() {
 	if (JSON.parse(localStorage.allowSuspend)) {
 		chrome.power.releaseKeepAwake();
 	} else {
@@ -112,7 +112,7 @@ function processAlarms() {
 		// if we are currently outside of the active range
 		// then set inactive state
 		if (!myUtils.isInRange(aStart, aStop)) {
-			setInactive();
+			setInactiveState();
 		}
 	} else {
 		chrome.alarms.clear('activeStart');
@@ -280,9 +280,9 @@ function displayScreenSaver(single) {
 
 // close all the screensavers
 function closeScreenSavers() {
-	chrome.windows.getAll({windowTypes: ['popup']}, function(windows) {
-		for (var i = 0; i < windows.length; i++) {
-			chrome.windows.remove(windows[i].id);
+	chrome.tabs.query({title: 'Photo Screen Saver Screensaver Page'}, function(t) {
+		for (var i = 0; i < t.length; i++) {
+			chrome.windows.remove(t[i].windowId);
 		}
 	});
 }
@@ -340,7 +340,7 @@ function onAlarm(alarm) {
 			});
 			break;
 		case 'activeStop':
-			setInactive();
+			setInactiveState();
 			break;
 		case 'updatePhotos':
 			// get the latest for the live photo streams
