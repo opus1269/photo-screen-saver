@@ -5,3 +5,5 @@
 *.PNG binary
 *.zip binary
 *.ZIP binary
+*.xcf binary
+*.XCF binary
