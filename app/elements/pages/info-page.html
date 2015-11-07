@@ -1,0 +1,131 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="info-page">
+	<template>
+		<style include="shared-styles"></style>
+		<style>
+
+		:host {
+			display: block;
+			position: relative;
+		}
+
+		.page-content {
+			margin-left: 16px;
+			margin-right: 16px;
+		}
+
+		.page-content p {
+			font: var(--paper-font-subhead);
+		}
+
+		.section-title {
+			margin-right: 0;
+		}
+
+		</style>
+
+		<paper-material elevation="1" id="infoPage" class="page-container">
+			<paper-material elevation="1">
+				<paper-toolbar class="page-toolbar">
+					<div>Information For Nerds</div>
+				</paper-toolbar>
+			</paper-material>
+			<div id="infoContainer" class="page-content">
+				<div class="section-title">Source Code</div>
+				<div class="horizontal center layout">
+					<a class="button-a" href="https://github.com/opus1269/photo-screen-saver/" target="_blank" tabindex="-1">
+						<paper-button raised noink>
+							<iron-icon src="/images/github.png"></iron-icon> VIEW ON GITHUB
+						</paper-button>
+					</a>
+				</div>
+				<hr>
+				<div class="section-title">APIs & Specifications</div>
+				<div class="horizontal center layout">
+					<a class="button-a" href="https://developer.chrome.com/extensions" target="_blank" tabindex="-1">
+						<paper-button raised noink>
+							<iron-icon src="/images/extension.png"></iron-icon> CHROME EXTENSION
+						</paper-button>
+					</a>
+					<a class="button-a" href="https://www.polymer-project.org/" target="_blank" tabindex="-1">
+						<paper-button raised noink>
+							<iron-icon src="/images/polymer.png"></iron-icon> POLYMER
+						</paper-button>
+					</a>
+					<a class="button-a" href="http://www.google.com/design/spec/material-design/introduction.html#" target="_blank" tabindex="-1">
+						<paper-button raised noink>
+							<iron-icon src="/images/material.png"></iron-icon> MATERIAL DESIGN
+						</paper-button>
+					</a>
+				</div>
+				<p>
+					This extension has been built entirely with Polymer and vanilla JavaScript.	 Polymer treats everything as a
+					<a href="http://webcomponents.org/" target="_blank">Web Component</a> I have never used things like AngularJS
+					(or even JQuery) so I can't really evaluate the pros and cons of this approach.	 In addition, there is nothing
+					in Polymer that prevents you from using it with these other solutions.
+				</p>
+				<hr>
+				<div class="section-title">Photo Libraries</div>
+				<div class="horizontal center layout">
+					<a class="button-a" href="https://developers.google.com/picasa-web/" target="_blank" tabindex="-1">
+						<paper-button raised noink>
+							<iron-icon src="/images/picasa.png"></iron-icon> PICASA API
+						</paper-button>
+					</a>
+					<a class="button-a" href="http://www.google.com/chrome/devices/chromecast" target="_blank" tabindex="-1">
+						<paper-button raised noink>
+							<iron-icon src="/images/chromecast.png"></iron-icon> CHROMECAST
+						</paper-button>
+					</a>
+				</div>
+				<p>
+					It is unfortunate, but the Google+ API still does not support working with photos, so the only way is with the Picasa Web API.
+					The <a href="https://github.com/dconnolly/chromecast-backgrounds" target="_blank">Chromecast photos</a>
+					are a snapshot in time of those used for the backdrop.
+				</p>
+				<p>
+					<strong>Note:</strong> This program is read only for your Google photos despite what the permissions popup says. The Picasa API does not have
+					a read only scope.
+				</p>
+				<hr>
+				<div class="section-title">Web Development Documentation</div>
+				<div class="horizontal center layout">
+					<a class="button-a" href="https://www.webplatform.org/" target="_blank" tabindex="-1">
+						<paper-button raised noink>
+							<iron-icon src="/images/webplatform.png"></iron-icon> WEB PLATFORM
+						</paper-button>
+					</a>
+					<a class="button-a" href="https://developer.mozilla.org/en-US/docs/Web" target="_blank" tabindex="-1">
+						<paper-button raised noink>
+							<iron-icon src="/images/mdn.png"></iron-icon> MDN
+						</paper-button>
+					</a>
+					<a class="button-a" href="http://www.w3schools.com/default.asp" target="_blank" tabindex="-1">
+						<paper-button raised noink>
+							<iron-icon src="/images/w3schools.png"></iron-icon> W3SCHOOLS
+						</paper-button>
+					</a>
+				</div>
+				<p>
+					This was my first time doing Web development and the learning curve is pretty steep. Each of these sites provides
+					good tutorials and reference materials on the HTML-CSS-JavaScript paradigm.	 The first is supported by the W3C and
+					most of the big Internet companies, but is also the least complete at this time.
+				</p>
+			</div>
+			<content></content>
+		</paper-material>
+	</template>
+</dom-module>
+
+<script>
+	InfoPage = Polymer({
+		is: "info-page",
+	});
+</script>

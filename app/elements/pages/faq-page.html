@@ -1,0 +1,116 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="faq-page">
+	<template>
+		<style include="shared-styles"></style>
+		<style>
+
+		:host {
+			display: block;
+			position: relative;
+		}
+
+		.page-content {
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+
+		.page-content p {
+			font: var(--paper-font-subhead);
+		}
+
+		.section-title {
+			margin-right: 0;
+		}
+
+		</style>
+
+		<paper-material elevation="1" id="faqPage" class="page-container">
+			<paper-material elevation="1">
+				<paper-toolbar class="page-toolbar">
+					<div>Frequently Asked Questions</div>
+				</paper-toolbar>
+			</paper-material>
+			<div id="faqContainer" class="page-content">
+
+				<ul>
+				<li><p><strong>How do I uninstall this?</strong></p>
+
+				<p>Right click on the icon in the browser toolbar and select "Remove From Chrome..."</p></li>
+				</ul>
+
+				<hr />
+
+				<ul>
+				<li><p><strong>I received a Status: 500 error trying to load my Google Photos albums. What does that mean?</strong></p>
+
+				<p>This is an error on the Server that provides the photos. This is probably
+				a very temporary issue - please try again later.</p></li>
+				</ul>
+
+				<hr />
+
+				<ul>
+				<li><p><strong>Why is the time label incorrect on my Chromebook?</strong></p>
+
+				<p>If you have this problem, go to "Settings" -> "Show Advanced Settings" and in
+				the "Date and time" section uncheck the "Set time zone automatically using your location".</p></li>
+				</ul>
+
+				<hr />
+
+				<ul>
+				<li><p><strong>What do the labels on the icon mean?</strong></p>
+
+				<ul><li>No label: Screensaver is enabled and will be displayed when the computer is idle.</li>
+				<li>OFF: Screensaver is disabled.  </li>
+				<li>SLP: The time is in the inactive range of the scheduler. Screensaver will not display.</li>
+				<li>PWR: The scheduler will process the keep awake settings, but the screensaver will never display</li></ul></li>
+				</ul>
+
+				<hr />
+
+				<ul>
+				<li><p><strong>I have the Keep awake off, but my display is not sleeping. Why is that?</strong></p>
+
+				<p>Other applications may be preventing the display or computer from sleeping.</p>
+
+				<p>On many Chrome OS devices the display will not sleep if the screensaver is running.
+				You can use the Screensaver/Keep awake scheduling feature to control when the screensaver is displayed.</p></li>
+				</ul>
+
+				<hr />
+
+				<ul>
+				<li><p><strong>Can you add support for accessing the photos in my 500<sup>px</sup>/Flickr account?</strong></p>
+
+				<p>I believe this will be doable and plan on adding it soon.</p></li>
+				</ul>
+
+				<hr />
+
+				<ul>
+				<li><p><strong>Can you add support for using files from my local computer?</strong></p>
+
+				<p>No. Unfortunately, extensions are not allowed to access the local filesystem.</p>
+
+				<p><br /></p></li>
+				</ul>
+
+			</div>
+			<content></content>
+		</paper-material>
+	</template>
+</dom-module>
+
+<script>
+	FaqPage = Polymer({
+		is: "faq-page",
+	});
+</script>

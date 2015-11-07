@@ -1,0 +1,7 @@
+# Auto detect text files and perform LF normalization
+* text eol=auto
+
+*.png binary
+*.PNG binary
+*.zip binary
+*.ZIP binary

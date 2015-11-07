@@ -1,0 +1,92 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable-behavior.html">
+
+<dom-module id="slide-animatable">
+
+	<style>
+
+	:host {
+		display: block;
+	}
+
+	</style>
+
+	<template>
+	<content></content>
+	</template>
+</dom-module>
+
+<script>
+'use-strict';
+
+	Polymer({
+
+	is: 'slide-animatable',
+
+	behaviors: [
+		Polymer.NeonAnimatableBehavior
+	],
+
+	properties: {
+
+		animationConfig: {
+			type: Object,
+			value: function() {
+				return {
+					'entry' : {
+						name: 'fade-in-animation',
+						node: this,
+						timing: {duration: 2000, easing: 'ease-in-out-sine'}
+					},
+					'exit' : {
+						name: 'fade-out-animation',
+						node: this,
+						timing: {duration: 2000, easing: 'ease-in-out-sine'}
+					}
+				};
+			}
+		},
+
+		aniType: {
+			type: Number,
+			observer: '_aniChanged'
+		}
+
+	},
+
+	_aniChanged: function(newValue) {
+		var entry, exit, dur = 2000;
+
+		switch(newValue) {
+			case 0:
+			entry = 'scale-up-animation';
+			exit = 'scale-down-animation';
+			break;
+			case 1:
+			entry = 'fade-in-animation';
+			exit = 'fade-out-animation';
+			break;
+			case 2:
+			entry = 'slide-from-right-animation';
+			exit = 'slide-left-animation';
+			break;
+			case 3:
+			entry = 'slide-down-animation';
+			exit = 'slide-up-animation';
+			break;
+			case 4:
+			entry = 'spin-up-animation';
+			exit = 'spin-down-animation';
+			dur = 3000;
+			break;
+		}
+
+		this.animationConfig.entry.name = entry;
+		this.animationConfig.entry.timing.duration = dur;
+		this.animationConfig.exit.name = exit;
+		this.animationConfig.exit.timing.duration = dur;
+	}
+
+});
+
+</script>

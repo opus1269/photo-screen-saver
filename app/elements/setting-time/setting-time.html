@@ -1,0 +1,142 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-time-picker/paper-time-picker.html">
+
+<dom-module id="setting-time">
+	<template>
+		<style include="shared-styles"></style>
+		<style>
+
+			:host {
+				display: block;
+				position: relative;
+			}
+
+			:host([disabled]) {
+				pointer-events: none;
+			}
+
+			:host paper-item {
+				display: block;
+				position: relative;
+				cursor: pointer;
+			}
+
+			:host([indent]) paper-item {
+				padding-left: 24px;
+			}
+
+		</style>
+
+		<div class="section-title setting-label" tabindex="-1" hidden$="[[!sectionTitle]]">{{sectionTitle}}</div>
+
+		<paper-item class="center horizontal layout" on-tap="_onTap">
+			<paper-item-body class="flex" two-line>
+				<div class="setting-label" hidden$="[[!mainLabel]]">{{mainLabel}}</div>
+				<div class="setting-label" secondary hidden$="[[!secondaryLabel]]">{{secondaryLabel}}</div>
+				<paper-ripple center></paper-ripple>
+			</paper-item-body>
+			<div class="setting-label" >[[timeLabel]]</div>
+		</paper-item>
+		<hr hidden$="[[noseparator]]" />
+		<iron-localstorage id="store" name="{{name}}" value="{{value}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
+
+		<paper-dialog id="dialog" modal class="paper-time-picker-dialog">
+			<paper-time-picker id="timePicker" hour="24" minute="0"></paper-time-picker>
+			<div class="buttons">
+				<paper-button dialog-dismiss>Cancel</paper-button>
+				<paper-button dialog-confirm on-tap="_onTimeSelected">OK</paper-button>
+			</div>
+		</paper-dialog>
+
+	</template>
+</dom-module>
+
+<script>
+'use-strict';
+
+	Polymer({
+		is: 'setting-time',
+
+		hostAttributes: {
+			role: 'group',
+			tabIndex: -1
+		},
+
+		properties: {
+
+			name: {
+				type: String,
+				value: 'store'
+			},
+
+			value: {
+				type: String,
+				value: '00:00',
+				observer: '_valueChanged'
+			},
+
+			timeLabel: {
+				type: String,
+				value: 'unknown'
+			},
+
+			mainLabel: {
+				type: String,
+				value: ''
+			},
+
+			secondaryLabel: {
+				type: String,
+				value: ''
+			},
+
+			sectionTitle: {
+				type: String,
+				value: ''
+			},
+
+			noseparator: {
+				type: Boolean,
+				value: false
+			}
+
+		},
+
+		// initialize value if it is not in localstorage
+		_init: function() {
+			this.set('value','00:00');
+		},
+
+		_valueChanged: function() {
+			this.set('timeLabel', this._formatTime(this.get('value')));
+		},
+
+		_onTap: function() {
+			this.$.dialog.open();
+		},
+
+		_onTimeSelected: function() {
+			var picker = this.$.timePicker;
+			this.set('value', ('0' + picker.hour).substr(-2) +
+			':' + ('0' + picker.minute).substr(-2));
+		},
+
+		// '00:00' 24 hr time
+		_formatTime: function(timeString) {
+			var hour = parseInt(timeString.substr(0,2), 10);
+			var period = (hour % 24) < 12 ? 'AM' : 'PM';
+			hour = hour % 12 || 12;
+			return hour + timeString.substr(2,3) + ' ' + period;
+		}
+
+	});
+
+</script>

@@ -1,0 +1,91 @@
+<!-- shared styles for all elements and main html -->
+<dom-module id="shared-styles">
+	<template>
+		<style>
+			.page-title {
+				@apply(--paper-font-display2);
+			}
+
+			@media (max-width: 600px) {
+				.page-title {
+					font-size: 24px!important;
+				}
+			}
+
+			.page-toolbar {
+				 font: var(--paper-font-title);
+				 background-color: var(--light-primary-color);
+				 margin-bottom: 10px;
+			 }
+
+			.page-container {
+				max-width: 700px;
+				height: 100%;
+				margin-bottom: 20px;
+			}
+
+			.page-content {
+				margin-top: 20px;
+				margin-bottom: 20px;
+			}
+
+			paper-material {
+				border-radius: 2px;
+				background: white;
+				padding: 0;
+			}
+
+			paper-toggle-button {
+				cursor: pointer;
+			}
+
+			paper-button {
+				margin-top: 10px;
+				margin-bottom: 20px;
+				@apply(--layout-center);
+				@apply(--layout-horizontal);
+		 	}
+
+			paper-button([raised]) {
+				background: #FAFAFA;
+			}
+
+			paper-button iron-icon {
+				margin-right: 10px;
+			}
+
+			.button-a {
+				text-decoration: none;
+				color: var(--menu-link-color);
+				display: -ms-flexbox;
+				display: -webkit-flex;
+				display: flex;
+				-webkit-flex-direction: row;
+				flex-direction: row;
+				-webkit-align-items: center;
+				align-items: center;
+				-webkit-font-smoothing: antialiased;
+				text-rendering: optimizeLegibility;
+				margin-right: 10px;
+			}
+
+			:host([disabled]) .setting-label {
+				color: var(--disabled-text-color);
+			}
+
+			.section-title {
+				color: #009688;
+				font-size: 14px;
+				font-weight: 500;
+				margin: 10px 0 10px 16px;
+			}
+
+			hr {
+				margin: 0px 10px;
+				border: none;
+				border-top: 1px #CCCCCC solid;
+			}
+
+		</style>
+	</template>
+</dom-module>

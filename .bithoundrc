@@ -42,12 +42,14 @@
     "**/extjs/resources/**",
     "**/extjs/src/**",
     "**/extjs/welcome/**",
-    "bower_components/**",
-	"/chromecast.js"
+    "/app/bower_components/**",
+    "**/app/lib/**",
+    "**/app/lib/**"
   ],
   "test": [
     "**/test/**",
     "**/tests/**",
-    "**/spec/**".
+    "**/spec/**",
     "**/specs/**"
+  ]
 }

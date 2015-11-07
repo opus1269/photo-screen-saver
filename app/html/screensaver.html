@@ -1,0 +1,53 @@
+﻿<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+
+	<!-- !Important -->
+	<title>Photo Screen Saver Screensaver Page</title>
+
+	<link rel="import" href="../elements/elements.html">
+
+	<!-- For shared styles, shared-styles.html import in elements.html -->
+	<style is="custom-style" include="shared-styles"></style>
+
+	<link rel="stylesheet" href="../styles/screensaver.css">
+
+</head>
+
+<body unresolved class="fullbleed vertical layout">
+	<template is="dom-bind" id="t">
+		<div id="mainContainer" class="flex">
+			<neon-animated-pages id="pages" animate-initial-selection class="fit">
+				<template is="dom-repeat" id="repeatTemplate" items="{{items}}">
+					<slide-animatable ani-type="{{transitionType}}" class="fit">
+						<section>
+								<iron-image
+									id="{{item.name}}"
+									class="image"
+									src="{{item.path}}"
+									width="{{item.width}}"
+									height="{{item.height}}"
+									sizing="{{item.sizingType}}"
+									preload>
+								</iron-image>
+								<div id="{{item.timeID}}" class="time">{{item.time}}</div>
+								<div id="{{item.authorID}}" class="author">{{item.label}}<sup id="sup"></sup></div>
+						</section>
+					</slide-animatable>
+				</template>
+			</neon-animated-pages>
+		</div>
+		<div id="noPhotos">No Photos Are Selected</div>
+	</template>
+
+	<!--@@build:replace -->
+	<google-analytics-tracker id="UA-61314754-1" page="/screensaver.html"></google-analytics-tracker>
+	<!-- endbuild:replace -->
+
+	<script src="../scripts/utils.js"></script>
+	<script src="../scripts/screensaver.js"></script>
+
+</body>
+</html>

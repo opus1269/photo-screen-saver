@@ -1,0 +1,137 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../setting-toggle/setting-toggle.html">
+<link rel="import" href="../setting-slider/setting-slider.html">
+<link rel="import" href="../setting-dropdown/setting-dropdown.html">
+<link rel="import" href="../setting-time/setting-time.html">
+
+<dom-module id="settings-page">
+	<template>
+		<style include="shared-styles"></style>
+		<style>
+
+			:host {
+				display: block;
+				position: relative;
+			}
+
+		</style>
+
+    <paper-material elevation="1" class="page-container">
+      <paper-material elevation="1">
+        <paper-toolbar class="page-toolbar">
+          <iron-label for="settingsToggle" class="center horizontal layout flex">
+            <div class="flex">Screensaver <span hidden$="[[!enabled]]">On</span><span hidden$="[[enabled]]">Off</span></div>
+            <paper-toggle-button id="settingsToggle" checked="{{enabled}}"></paper-toggle-button>
+						<paper-tooltip for="settingsToggle" position="left" offset="0">Enable/disable the screesaver</paper-tooltip>
+          </iron-label>
+          <iron-localstorage name="enabled" value="{{enabled}}"></iron-localstorage>
+        </paper-toolbar>
+      </paper-material>
+      <div class="page-content">
+        <setting-slider name="idleTime"
+                section-title="Slide Show Controls"
+                label="Wait time (minutes)"
+                min="1" max="60" step="1"
+                disabled$="[[!enabled]]"></setting-slider>
+        <setting-slider name="transitionTime"
+                label="Photo transition time (seconds)"
+                min="10" max="60" step="1"
+                disabled$="[[!enabled]]"></setting-slider>
+        <setting-dropdown name="photoSizing"
+                  label="Photo display mode"
+                  items='["Letterbox","Zoom (may crop)","Frame", "Full (may distort)"]'
+                  disabled$="[[!enabled]]"></setting-dropdown>
+        <setting-dropdown name="photoTransition"
+                  label="Photo transition method"
+                  items='["Scale up","Fade","Slide from right","Slide down","Spin up"]'
+                  disabled$="[[!enabled]]"></setting-dropdown>
+        <setting-toggle name="shuffle"
+                main-label="Shuffle"
+                secondary-label="Present photos in random order"
+                disabled$="[[!enabled]]"></setting-toggle>
+        <setting-toggle name="skip"
+                main-label="Skip extreme aspect ratio photos"
+                secondary-label="Do not display certain photos in Zoom and Full modes"
+                disabled$="[[!enabled]]"></setting-toggle>
+        <setting-dropdown name="showTime"
+                  label="Show time"
+                  items='["No", "12 hour format", "24 hour format"]'
+                  disabled$="[[!enabled]]"></setting-dropdown>
+        <setting-toggle name="showPhotog"
+                main-label="Show photographer label for photos you own"
+                secondary-label="(Always shows in Frame mode)"
+                noseparator
+                disabled$="[[!enabled]]"></setting-toggle>
+        <setting-toggle name="allDisplays"
+                section-title="Display"
+                main-label="All displays"
+                secondary-label="Show screensaver on all connected displays"
+                disabled$="[[!enabled]]"></setting-toggle>
+        <setting-toggle id="keepAwake" name="keepAwake"
+                main-label="Keep awake"
+                secondary-label="Prevent display from sleeping  (always active if start and stop tmes are equal)"
+								checked="{{keepEnabled}}"></setting-toggle>
+				<paper-tooltip for="keepAwake" position="top" offset="0">
+								The Keep awake features are available even if the screensaver is
+								disabled, so you can use the app as a general power
+								scheduler. The icon will display "PWR" when in this state.
+								</paper-tooltip>
+        <setting-time name="activeStart"
+                main-label="Screensaver/Keep awake active start time"
+                secondary-label="Allow screensaver display, starting at this time"
+								indent
+                disabled$="[[!keepEnabled]]"></setting-time>
+        <setting-time name="activeStop"
+                main-label="Screensaver/Keep awake active stop time"
+                secondary-label="Disallow screensaver display after this time"
+								indent
+	              disabled$="[[!keepEnabled]]"></setting-time>
+				<setting-toggle id="allowSuspend" name="allowSuspend"
+                main-label="Allow system suspend"
+                secondary-label="Allow the computer to suspend during inactive time"
+								indent
+								noseparator
+								disabled$="[[!keepEnabled]]"></setting-toggle>
+        <setting-toggle name="useChromecast"
+                section-title="Default Photo Sources"
+                main-label="Chromecast"
+                secondary-label="Backdrop photos from the Chromecast media streaming device"
+                disabled$="[[!enabled]]"></setting-toggle>
+        <setting-toggle name="usePopular500px"
+                main-label="500px - popular"
+                secondary-label="Popular photos from the 500px photo sharing site"
+                disabled$="[[!enabled]]"></setting-toggle>
+				<setting-toggle name="useYesterday500px"
+	              main-label="500px - fresh"
+	              secondary-label="Fresh photos from the 500px photo sharing site, updated daily"
+	              disabled$="[[!enabled]]"></setting-toggle>
+        <setting-toggle name="useInterestingFlickr"
+                main-label="Flickr - interesting"
+                secondary-label="Interesting photos from the Flickr photo sharing site, updated daily"
+                disabled$="[[!enabled]]"></setting-toggle>
+        <setting-toggle name="useAuthors"
+                main-label="Extension developer"
+                secondary-label="Photos from the guy who wrote this"
+								noseparator
+                disabled$="[[!enabled]]"></setting-toggle>
+        <paper-item tabindex="-1">This product uses the Flickr API but is not endorsed or certified by Flickr</paper-item>
+      </div>
+			<content></content>
+    </paper-material>
+	</template>
+</dom-module>
+
+<script>
+	Polymer({
+		is: "settings-page",
+	});
+</script>

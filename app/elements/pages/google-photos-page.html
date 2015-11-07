@@ -1,0 +1,239 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<dom-module id="google-photos-page">
+	<template>
+		<style include="shared-styles"></style>
+		<style>
+
+		:host {
+			display: block;
+			position: relative;
+		}
+
+		.page-toolbar {
+			margin: 0;
+		}
+
+		.page-content {
+			height: 700px;
+			overflow: hidden;
+			overflow-y: scroll;
+			margin: 0;
+		}
+
+		.waiter {
+		  margin: 40px auto;
+		}
+
+		.waiter paper-item {
+			font: var(--paper-font-title);
+		  margin: 40px auto;
+		}
+
+		.list-item {
+			position: relative;
+		  border-bottom-style: solid;
+		  border-color:  #CCCCCC;
+		  border-width: 1px;
+		  margin: 0 5px;
+		  padding: 0;
+			cursor: pointer;
+		}
+
+		.list-item paper-item-body {
+			padding-left: 10px;
+		}
+
+		.list-item paper-item {
+			padding-right: 0;
+		}
+
+		.list-item iron-image {
+			height: 72px;
+			width: 72px;
+		}
+
+		.list-item[disabled] iron-image {
+			opacity: .2;
+		}
+
+		.list-item[disabled] {
+			pointer-events: none;
+		}
+
+		.list-item[disabled] .setting-label {
+			color: var(--disabled-text-color);
+		}
+
+		</style>
+
+		<paper-material elevation="1" class="page-container">
+			<paper-material elevation="1">
+				<paper-toolbar class="page-toolbar">
+					<div class="flex">Google Photos Albums</div>
+					<paper-icon-button id="deselect" icon="check-box-outline-blank" on-tap="_albumsDeselectAllTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
+					<paper-tooltip for="deselect" position="left" offset="0">Deselect all albums</paper-tooltip>
+					<paper-icon-button id="refresh" icon="refresh" on-tap="_albumRefreshTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
+					<paper-tooltip for="refresh" position="left" offset="0">Refresh album list</paper-tooltip>
+					<paper-toggle-button id="googlePhotosToggle" checked="{{useGoogle}}"></paper-toggle-button>
+					<paper-tooltip for="googlePhotosToggle" position="left" offset="0">Enable/disable use of albums</paper-tooltip>
+					<iron-localstorage name="useGoogle" value="{{useGoogle}}"></iron-localstorage>
+				</paper-toolbar>
+			</paper-material>
+
+			<div class="page-content">
+
+				<div class="waiter" hidden$="[[!waitForLoad]]">
+					<div class="horizontal center-justified layout">
+						<paper-spinner alt="Loading Albums" active="[[waitForLoad]]"></paper-spinner>
+					</div>
+					<paper-item class="horizontal center-justified layout">Loading Albums</paper-item>
+				</div>
+
+				<div class="list-container" hidden$="[[waitForLoad]]">
+					<template is="dom-repeat" id="albumsTemplate" items="{{albums}}">
+						<div class="list-item" id="[[item.uid]]" disabled$="[[!useGoogle]]">
+							<iron-label>
+								<paper-item class="center horizontal layout" tabindex="-1">
+									<paper-checkbox iron-label-target checked="{{item.checked}}" on-change="_albumSelectChange" disabled$="[[!useGoogle]]"></paper-checkbox>
+									<paper-item-body class="flex" two-line>
+										<div class="setting-label">{{item.name}}</div>
+										<div class="setting-label" secondary><span>[[item.ct]]</span><span>&nbsp;photos</span></div>
+										<paper-ripple center></paper-ripple>
+									</paper-item-body>
+									<iron-image src="[[item.thumb]]" sizing="cover" preload disabled$="[[!useGoogle]]"></iron-image>
+								</paper-item>
+							</iron-label>
+						</div>
+					</template>
+				</div>
+			</div>
+			<content></content>
+		</paper-material>
+	</template>
+</dom-module>
+
+<script>
+	GooglePhotosPage = Polymer({
+		is: 'google-photos-page',
+
+		// so we can lazily create the page
+		factoryImpl: function(id, dialogEl, dialogTextEl) {
+			this.setAttribute('id', id);
+	    this.dialogEl = dialogEl;
+	    this.dialogTextEl = dialogTextEl;
+	  },
+
+		properties: {
+
+			albums: {
+		    type: Array,
+				value: []
+		  },
+
+			albumSelections: {
+		    type: Array,
+				value: []
+		  },
+
+		  waitForLoad: {
+		    type: Boolean,
+				value: false
+		  },
+
+			dialogEl: {
+				type: Object,
+				value: {}
+			},
+
+			dialogTextEl: {
+				type: Object,
+				value: {}
+			}
+
+		},
+
+		ready: function() {
+			this.loadAlbumList();
+		},
+
+		// Query Picasa for the list of the users albums
+		loadAlbumList: function() {
+			this.set('waitForLoad', true);
+			gPhotos.loadAlbumList(function(albums, error) {
+				if (!error) {
+					this.albums = albums;
+					this._selectAlbums();
+				} else {
+					this.dialogTextEl.textContent = error;
+					this.dialogEl.open();
+				}
+				this.set('waitForLoad', false);
+			}.bind(this));
+		},
+
+		// set the checked state of the albums
+		_selectAlbums: function() {
+			this.albumSelections = JSON.parse(localStorage.albumSelections);
+			for (var i = 0; i < this.albums.length; i++) {
+				for (var j = 0; j < this.albumSelections.length; j++) {
+					if (this.albums[i].id === this.albumSelections[j].id) {
+						this.albums[i].checked = true;
+						break;
+					}
+				}
+			}
+		},
+
+		// refresh the album list
+		_albumRefreshTapped: function() {
+			this.loadAlbumList();
+		},
+
+		// handle interactive album selections
+		_albumSelectChange: function(event) {
+			var item = event.model.item;
+			var index = this.albumSelections.map(function(e) {return e.id;}).indexOf(item.id);
+
+			if (index !== -1) {
+				this.splice('albumSelections', index, 1);
+			}
+
+			if (item.checked) {
+				this.push('albumSelections', {id: item.id, photos: item.photos});
+			}
+
+			localStorage.albumSelections = JSON.stringify(this.albumSelections);
+		},
+
+		// deselect all albums
+		_albumsDeselectAllTapped: function() {
+			var model;
+
+			for (var i = 0; i < this.albums.length; i++) {
+				if (this.albums[i].checked) {
+					model = this.$.albumsTemplate.modelForElement(document.querySelector('#' + this.albums[i].uid));
+					model.set('item.checked', false);
+				}
+			}
+			this.splice('albumSelections', 0, this.albumSelections.length);
+			localStorage.albumSelections = JSON.stringify(this.albumSelections);
+		}
+
+	});
+</script>

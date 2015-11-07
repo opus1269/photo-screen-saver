@@ -1,0 +1,110 @@
+<!--
+@@license
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<dom-module id="setting-toggle">
+	<template>
+		<style include="shared-styles"></style>
+		<style>
+
+			:host {
+				display: block;
+				position: relative;
+			}
+
+			:host([disabled]) {
+				pointer-events: none;
+			}
+
+			:host iron-label {
+				display: block;
+				position: relative;
+				cursor: pointer;
+			}
+
+			:host([indent]) paper-item {
+				padding-left: 24px;
+			}
+
+		</style>
+
+		<div class="section-title setting-label" tabindex="-1" hidden$="[[!sectionTitle]]">{{sectionTitle}}</div>
+
+		<iron-label for="toggle">
+			<paper-item class="center horizontal layout" tabindex="-1">
+				<paper-item-body class="flex" two-line>
+					<div class="setting-label" hidden$="[[!mainLabel]]">{{mainLabel}}</div>
+					<div class="setting-label" secondary hidden$="[[!secondaryLabel]]">{{secondaryLabel}}</div>
+					<paper-ripple center></paper-ripple>
+				</paper-item-body>
+				<paper-toggle-button id="toggle" checked="{{checked}}" disabled$="[[disabled]]"></paper-toggle-button>
+			</paper-item>
+		</iron-label>
+		<hr hidden$="[[noseparator]]" />
+		<iron-localstorage name="{{name}}" value="{{checked}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
+
+	</template>
+</dom-module>
+
+<script>
+'use-strict';
+
+	Polymer({
+		is: 'setting-toggle',
+
+		hostAttributes: {
+			role: 'group',
+			tabIndex: -1
+		},
+
+		properties: {
+
+			name: {
+				type: String,
+				value: 'store'
+			},
+
+			checked: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+
+			mainLabel: {
+				type: String,
+				value: ''
+			},
+
+			secondaryLabel: {
+				type: String,
+				value: ''
+			},
+
+			sectionTitle: {
+				type: String,
+				value: ''
+			},
+
+			noseparator: {
+				type: Boolean,
+				value: false
+			}
+
+		},
+
+		// initialize value if it is not in localstorage
+		_init: function() {
+			this.set('checked', 'false');
+		}
+
+	});
+</script>

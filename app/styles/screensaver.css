@@ -1,0 +1,48 @@
+html,body {
+	font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 100%;
+	font-weight: 400;
+	height: 100vh;
+	margin: 0;
+	overflow: hidden;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-image: -webkit-linear-gradient(top, #3a3a3a 0%,#666666 21%,#777777 34%,#898989 50%,#828c95 64%,#a0a0a0 83%,#b5bdc8 100%);
+	cursor: none;
+}
+
+.time {
+	font-size: 5.25vh;
+	font-weight: 200;
+	position: fixed;
+	right: 1vw;
+	bottom: 3.5vh;
+	padding: 0;
+	margin: 0;
+	color: white;
+	opacity: 0.9;
+}
+
+.author {
+	font-size: 2.5vh;
+	font-weight: 300;
+	position: fixed;
+	right: 1vw;
+	bottom: 1vh;
+	padding: 0;
+	margin: 0;
+	color: white;
+	opacity: .8;
+}
+
+#noPhotos {
+	font-size: 5vh;
+	font-weight: 600;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+	color: red;
+	visibility: hidden;
+	opacity: .8;
+}

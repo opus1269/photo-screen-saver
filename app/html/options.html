@@ -1,0 +1,104 @@
+﻿<!doctype html>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="generator" content="Photo Screen Saver" />
+
+	<!-- !important -->
+	<title>Photo Screen Saver Options Page</title>
+
+	<link rel="stylesheet" href="../styles/main.css">
+
+	<link rel="import" href="../elements/elements.html">
+
+	<!-- For shared styles, shared-styles.html import in elements.html -->
+	<style is="custom-style" include="shared-styles"></style>
+
+</head>
+
+<body unresolved class="fullbleed layout vertical">
+
+	<template is="dom-bind" id="t">
+
+		<paper-drawer-panel id="paperDrawerPanel" drawer-width="320px">
+			<paper-material elevation="2" drawer fixed>
+				<!-- Drawer Scroll Header Panel -->
+				<paper-scroll-header-panel>
+					<!-- Drawer Toolbar -->
+					<paper-toolbar id="drawerToolbar">
+						<span class="paper-font-title">Menu</span>
+					</paper-toolbar>
+					<!-- Drawer Content -->
+					<paper-menu class="list" id="mainMenu" attr-for-selected="id" selected="[[route]]">
+						<template is="dom-repeat" items="[[pages]]">
+							<paper-item id="[[item.route]]" class="center horizontal layout" on-click="onDataRouteClick">
+								<iron-icon icon="[[item.icon]]"></iron-icon>
+								<span>[[item.label]]</span>
+							</paper-item>
+						</template>
+					</paper-menu>
+				</paper-scroll-header-panel>
+			</paper-material>
+
+			<!-- Main Scroll Header Panel -->
+			<paper-scroll-header-panel id="scrollPanel" main fixed>
+				<!-- Main Toolbar -->
+				<paper-material class="paper-header" elevation="2">
+					<paper-toolbar id="mainToolbar">
+						<paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+						<span class="flex"></span>
+						<!-- Application name -->
+						<div class="middle middle-container center horizontal layout">
+							<div class="paper-font-headline app-name">Photo Screen Saver</div>
+						</div>
+					</paper-toolbar>
+				</paper-material>
+
+				<!-- Main Content id !important -->
+				<div id="mainContainer" class="options-content">
+
+					<!-- Error dialog -->
+					<paper-dialog id="errorDialog" modal entry-animation="scale-up-animation"
+						exit-animation="fade-out-animation">
+						<h2>Request failed. Select refresh to try again.</h2>
+						<paper-dialog-scrollable>
+							<p id="dialogTextEl"></p>
+						</paper-dialog-scrollable>
+						<div class="buttons">
+							<paper-button dialog-dismiss>OK</paper-button>
+						</div>
+					</paper-dialog>
+
+					<neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{route}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+						<neon-animatable data-route="page-settings">
+							<section>
+								<settings-page></settings-page>
+							</section>
+						</neon-animatable>
+						<neon-animatable data-route="page-google-photos">
+							<section id="googlePhotosInsertion"></section>
+						</neon-animatable>
+						<neon-animatable data-route="page-faq">
+							<section id="faqInsertion"></section>
+						</neon-animatable>
+						<neon-animatable data-route="page-info">
+							<section id="infoInsertion"></section>
+						</neon-animatable>
+					</neon-animated-pages>
+				</div>
+			</paper-scroll-header-panel>
+		</paper-drawer-panel>
+	</template>
+
+	<!--@@build:replace -->
+	<google-analytics-tracker id="UA-61314754-1" page="/options.html"></google-analytics-tracker>
+	<!-- endbuild:replace -->
+
+	<script src="../scripts/google_photos.js"></script>
+	<script src="../scripts/options.js"></script>
+
+</body>
+</html>
