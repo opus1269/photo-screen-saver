@@ -96,7 +96,7 @@ module.exports = function(grunt) {
 		},
 		compress: {
 			prod: {
-				options: {archive: 'dist/store.zip'},
+				options: {archive: 'store/store.zip'},
 				files: [{expand: true, cwd: 'dist/app/', src: ['**']}]
 			},
 			prodTest: {
