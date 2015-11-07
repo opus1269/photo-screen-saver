@@ -32,6 +32,13 @@ It is implemented using Vanilla JavaScript and [Polymer](https://www.polymer-pro
 
   ***
 
+* **I received a Status: 500 error trying to load my Google Photos albums. What does that mean?**
+
+  This is an error on the Server that provides the photos. This is probably
+  a very temporary issue - please try again later.
+
+  ***
+
 * **Why is the time label incorrect on my Chromebook?**
 
   If you have this problem, go to "Settings" -> "Show Advanced Settings" and in
