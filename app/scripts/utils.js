@@ -1,3 +1,6 @@
+/*
+@@license
+*/
 /*exported myUtils*/
 var myUtils = (function() {
 	'use strict';

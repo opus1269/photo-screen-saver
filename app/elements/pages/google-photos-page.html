@@ -1,3 +1,6 @@
+<!--
+@@license
+-->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
@@ -37,21 +40,21 @@
 		}
 
 		.waiter {
-		  margin: 40px auto;
+			margin: 40px auto;
 		}
 
 		.waiter paper-item {
 			font: var(--paper-font-title);
-		  margin: 40px auto;
+			margin: 40px auto;
 		}
 
 		.list-item {
 			position: relative;
-		  border-bottom-style: solid;
-		  border-color:  #CCCCCC;
-		  border-width: 1px;
-		  margin: 0 5px;
-		  padding: 0;
+			border-bottom-style: solid;
+			border-color:	#CCCCCC;
+			border-width: 1px;
+			margin: 0 5px;
+			padding: 0;
 			cursor: pointer;
 		}
 
@@ -135,26 +138,26 @@
 		// so we can lazily create the page
 		factoryImpl: function(id, dialogEl, dialogTextEl) {
 			this.setAttribute('id', id);
-	    this.dialogEl = dialogEl;
-	    this.dialogTextEl = dialogTextEl;
-	  },
+			this.dialogEl = dialogEl;
+			this.dialogTextEl = dialogTextEl;
+		},
 
 		properties: {
 
 			albums: {
-		    type: Array,
+				type: Array,
 				value: []
-		  },
+			},
 
 			albumSelections: {
-		    type: Array,
+				type: Array,
 				value: []
-		  },
+			},
 
-		  waitForLoad: {
-		    type: Boolean,
+			waitForLoad: {
+				type: Boolean,
 				value: false
-		  },
+			},
 
 			dialogEl: {
 				type: Object,

@@ -1,3 +1,6 @@
+/*
+@@license
+*/
 /*exported chromeCast*/
 var chromeCast = (function() {
 	'use strict';

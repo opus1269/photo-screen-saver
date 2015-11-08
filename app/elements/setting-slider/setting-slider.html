@@ -1,3 +1,6 @@
+<!--
+@@license
+-->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
@@ -55,58 +58,57 @@
 <script>
 'use-strict';
 
-	Polymer({
-		is: 'setting-slider',
+Polymer({
+	is: 'setting-slider',
 
-		hostAttributes: {
-			role: 'group',
-			tabIndex: -1
+	hostAttributes: {
+		role: 'group',
+		tabIndex: -1
+	},
+
+	properties: {
+
+		name: {
+			type: String,
+			value: 'store'
 		},
 
-		properties: {
-
-			name: {
-				type: String,
-				value: 'store'
-			},
-
-			label: {
-				type: String,
-				value: ''
-			},
-
-			min: {
-				type: Number,
-				value: 1
-			},
-
-			max: {
-				type: Number,
-				value: 100
-			},
-
-			step: {
-				type: Number,
-				value: 1
-			},
-
-			sectionTitle: {
-				type: String,
-				value: ''
-			},
-
-			noseparator: {
-				type: Boolean,
-				value: false
-			}
-
+		label: {
+			type: String,
+			value: ''
 		},
 
-		// initialize value if it is not in localstorage
-		_init: function() {
-			this.set('value', '10');
+		min: {
+			type: Number,
+			value: 1
+		},
+
+		max: {
+			type: Number,
+			value: 100
+		},
+
+		step: {
+			type: Number,
+			value: 1
+		},
+
+		sectionTitle: {
+			type: String,
+			value: ''
+		},
+
+		noseparator: {
+			type: Boolean,
+			value: false
 		}
 
-	});
+	},
 
+	// initialize value if it is not in localstorage
+	_init: function() {
+		this.set('value', '10');
+	}
+
+});
 </script>

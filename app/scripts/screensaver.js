@@ -1,3 +1,6 @@
+/*
+@@license
+*/
 (function() {
 'use strict';
 

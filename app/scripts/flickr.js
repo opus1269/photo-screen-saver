@@ -1,3 +1,6 @@
+/*
+@@license
+*/
 /*exported flickr*/
 var flickr = (function() {
 	'use strict';

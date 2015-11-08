@@ -1,3 +1,6 @@
+<!--
+@@license
+-->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
@@ -62,81 +65,80 @@
 <script>
 'use-strict';
 
-	Polymer({
-		is: 'setting-time',
+Polymer({
+	is: 'setting-time',
 
-		hostAttributes: {
-			role: 'group',
-			tabIndex: -1
+	hostAttributes: {
+		role: 'group',
+		tabIndex: -1
+	},
+
+	properties: {
+
+		name: {
+			type: String,
+			value: 'store'
 		},
 
-		properties: {
-
-			name: {
-				type: String,
-				value: 'store'
-			},
-
-			value: {
-				type: String,
-				value: '00:00',
-				observer: '_valueChanged'
-			},
-
-			timeLabel: {
-				type: String,
-				value: 'unknown'
-			},
-
-			mainLabel: {
-				type: String,
-				value: ''
-			},
-
-			secondaryLabel: {
-				type: String,
-				value: ''
-			},
-
-			sectionTitle: {
-				type: String,
-				value: ''
-			},
-
-			noseparator: {
-				type: Boolean,
-				value: false
-			}
-
+		value: {
+			type: String,
+			value: '00:00',
+			observer: '_valueChanged'
 		},
 
-		// initialize value if it is not in localstorage
-		_init: function() {
-			this.set('value','00:00');
+		timeLabel: {
+			type: String,
+			value: 'unknown'
 		},
 
-		_valueChanged: function() {
-			this.set('timeLabel', this._formatTime(this.get('value')));
+		mainLabel: {
+			type: String,
+			value: ''
 		},
 
-		_onTap: function() {
-			this.$.dialog.open();
+		secondaryLabel: {
+			type: String,
+			value: ''
 		},
 
-		_onTimeSelected: function() {
-			var picker = this.$.timePicker;
-			this.set('value', ('0' + picker.hour).substr(-2) +
-			':' + ('0' + picker.minute).substr(-2));
+		sectionTitle: {
+			type: String,
+			value: ''
 		},
 
-		// '00:00' 24 hr time
-		_formatTime: function(timeString) {
-			var hour = parseInt(timeString.substr(0,2), 10);
-			var period = (hour % 24) < 12 ? 'AM' : 'PM';
-			hour = hour % 12 || 12;
-			return hour + timeString.substr(2,3) + ' ' + period;
+		noseparator: {
+			type: Boolean,
+			value: false
 		}
 
-	});
+	},
 
+	// initialize value if it is not in localstorage
+	_init: function() {
+		this.set('value','00:00');
+	},
+
+	_valueChanged: function() {
+		this.set('timeLabel', this._formatTime(this.get('value')));
+	},
+
+	_onTap: function() {
+		this.$.dialog.open();
+	},
+
+	_onTimeSelected: function() {
+		var picker = this.$.timePicker;
+		this.set('value', ('0' + picker.hour).substr(-2) +
+		':' + ('0' + picker.minute).substr(-2));
+	},
+
+	// '00:00' 24 hr time
+	_formatTime: function(timeString) {
+		var hour = parseInt(timeString.substr(0,2), 10);
+		var period = (hour % 24) < 12 ? 'AM' : 'PM';
+		hour = hour % 12 || 12;
+		return hour + timeString.substr(2,3) + ' ' + period;
+	}
+
+});
 </script>

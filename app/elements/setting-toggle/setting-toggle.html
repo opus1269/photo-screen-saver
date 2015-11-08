@@ -58,53 +58,53 @@
 <script>
 'use-strict';
 
-	Polymer({
-		is: 'setting-toggle',
+Polymer({
+	is: 'setting-toggle',
 
-		hostAttributes: {
-			role: 'group',
-			tabIndex: -1
+	hostAttributes: {
+		role: 'group',
+		tabIndex: -1
+	},
+
+	properties: {
+
+		name: {
+			type: String,
+			value: 'store'
 		},
 
-		properties: {
-
-			name: {
-				type: String,
-				value: 'store'
-			},
-
-			checked: {
-				type: Boolean,
-				value: false,
-				notify: true
-			},
-
-			mainLabel: {
-				type: String,
-				value: ''
-			},
-
-			secondaryLabel: {
-				type: String,
-				value: ''
-			},
-
-			sectionTitle: {
-				type: String,
-				value: ''
-			},
-
-			noseparator: {
-				type: Boolean,
-				value: false
-			}
-
+		checked: {
+			type: Boolean,
+			value: false,
+			notify: true
 		},
 
-		// initialize value if it is not in localstorage
-		_init: function() {
-			this.set('checked', 'false');
+		mainLabel: {
+			type: String,
+			value: ''
+		},
+
+		secondaryLabel: {
+			type: String,
+			value: ''
+		},
+
+		sectionTitle: {
+			type: String,
+			value: ''
+		},
+
+		noseparator: {
+			type: Boolean,
+			value: false
 		}
 
-	});
+	},
+
+	// initialize value if it is not in localstorage
+	_init: function() {
+		this.set('checked', 'false');
+	}
+
+});
 </script>

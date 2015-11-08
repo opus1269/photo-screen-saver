@@ -1,3 +1,6 @@
+/*
+@@license
+*/
 /*exported use500px*/
 var use500px = (function() {
 	'use strict';
