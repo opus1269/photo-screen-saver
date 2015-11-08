@@ -13,12 +13,6 @@ var t = document.querySelector('#t');
 t.route = 'page-settings';
 t.prevRoute = 'page-settings';
 
-// Listen for template bound event to know when bindings
-// have resolved and content has been stamped to the page
-t.addEventListener('dom-change', function() {
-	console.log('dom-change', t.$.mainMenu);
-});
-
 // handle main menu selections
 t.onDataRouteClick = function(event) {
 
