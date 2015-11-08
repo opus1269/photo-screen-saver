@@ -4,6 +4,7 @@
 	"validateIndentation": "\t",
 	"disallowTrailingWhitespace": false,
 	"disallowMultipleVarDecl": false,
+	"requireDotNotation": false,
 	"disallowSpacesInAnonymousFunctionExpression": null,
 	"excludeFiles": ["node_modules/**"]
 }

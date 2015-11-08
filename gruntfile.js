@@ -7,20 +7,22 @@ module.exports = function(grunt) {
 	var appFilesCss = ['app/styles/**/*.css'];
 	var bowerFiles = ['app/bower_components/**'];
 	var bowerFilesHtml = ['app/bower_components/**/*.html'];
-	var destDev = 'dev/';
-	var destProd = 'dist/';
+	var vulcanizeFile = ['app/elements/elements.html'];
+	var manifestFile = 'dist/app/manifest.json';
+	var devDir = 'dev/';
+	var distDir = 'dist/';
 
 	// Project configuration.
 	grunt.initConfig({
-		pkg: '<json:package.json>',
+
 		watch: {
 			default: {
 				options: {spawn: false, interrupt: true},
 				files: [appFiles, 'gruntfile.js', '.jscrc', '.jshintrc'],
 				tasks: [
-					'newer:jscs:all',
-					'newer:jshint:all',
-					'newer:csslint:all',
+					'jscs',
+					'newer:jshint',
+					'newer:csslint',
 					'newer:crisper:dev',
 					'sync:dev',
 					'newer:replace:dev'
@@ -37,37 +39,27 @@ module.exports = function(grunt) {
 						'!app/elements/*/**',
 						'!app/lib/flickrapi.dev.js'
 					],
-					dest: destProd
+					dest: distDir
 				}]
 			},
-			dev: {
-				verbose: true,
-				files: [{expand: true, src: [appFiles], dest: destDev}]
-			},
-			devquiet: {
-				files: [{expand: true, src: [appFiles], dest: destDev}]
-			},
-			bower: {
-				files: [{expand: true, src: [bowerFiles], dest: destDev}]
-			}
+			dev: {files: [{expand: true, src: [appFiles], dest: devDir}]},
+			bower: {files: [{expand: true, src: [bowerFiles], dest: devDir}]}
 		},
 		clean: {
-			prod: {
-				src: [destProd + 'app', destProd + '*.zip']
-			},
-			dev: {
-				src: destDev
-			}
+			prod: {src: distDir},
+			dev: {src: devDir}
 		},
 		lineremover: {
-			prod: {
+			default: {
+				// remove key from manifest
 				options: {exclusionPattern: /"key":/},
-				files: {'dist/app/manifest.json': 'dist/app/manifest.json'}
+				src: manifestFile,
+				dest: manifestFile,
 			}
 		},
 		replace: {
 			prod: {
-				// remove manifest key and use non-dev flickr API for productionn
+				// use non-dev flickr API for productionn
 				options: {
 					force: false,
 					usePrefix: false,
@@ -76,7 +68,8 @@ module.exports = function(grunt) {
 						replacement: 'flickrapi.js'
 					}]
 				},
-				files: {'dist/app/manifest.json': 'dist/app/manifest.json'}
+				src: manifestFile,
+				dest: manifestFile,
 			},
 			dev: {
 				// remove Google analytics tracking
@@ -89,7 +82,7 @@ module.exports = function(grunt) {
 						replacement: 'build:replace'
 					}]
 				},
-				files: [{expand: true, cwd: destDev, src: [appFilesHtml], dest: destDev}]
+				files: [{expand: true, cwd: devDir, src: [appFilesHtml], dest: devDir}]
 			}
 		},
 		compress: {
@@ -103,69 +96,76 @@ module.exports = function(grunt) {
 			}
 		},
 		jscs: {
-			all: {
-				options: {config: '.jscsrc'},
-				src: [appFilesJs]
+			default: {
+				options: {
+					config: '.jscsrc',
+					esnext: false,
+					verbose: true,
+					fix: false,
+					extract: ['app/elements/**/*.html']
+				},
+				src: [appFilesJs, 'app/elements/']
 			}
 		},
 		jshint: {
-			all: {
+			default: {
 				options: {jshintrc: '.jshintrc', extract: 'auto'},
 				src: [appFilesJs, appFilesHtml]
 			}
 		},
 		csslint: {
-			all: {
+			default: {
 				options: {csslintrc: '.csslintrc'},
 				src: [appFilesCss]
 			}
 		},
 		htmllint: {
-			all: {
+			default: {
 				options: {htmllintrc: '.htmllintrc'},
 				src: [appFilesHtml]
 			}
 		},
 		vulcanize: {
-			prod: {
+			default: {
 				options: {inlineScripts: true, inlineCss: true},
-				files: [{expand: true, src: ['app/elements/elements.html'], dest: destProd}]
+				files: [{expand: true, src: vulcanizeFile, dest: distDir}]
 			}
 		},
 		crisper: {
 			prod: {
 				options: {cleanup: false},
-				files: [{expand: true, cwd: destProd, src: ['app/elements/elements.html'], dest: destProd}]
+				files: [{expand: true, cwd: distDir, src: vulcanizeFile, dest: distDir}]
 			},
 			dev: {
 				options: {cleanup: false},
-				files: [{expand: true, src: [appFilesHtml], dest: destDev}]
+				files: [{expand: true, src: [appFilesHtml], dest: devDir}]
 			},
 			bower: {
 				options: {cleanup: false},
-				files: [{expand: true, src: [bowerFilesHtml], dest: destDev}]
+				files: [{expand: true, src: [bowerFilesHtml], dest: devDir}]
 			}
 		},
 		uglify: {
-			prod: {
-				files: [{expand: true, cwd: destProd, src: ['**/*.js'], dest: destProd}]
+			default: {
+				files: [{expand: true, cwd: distDir, src: ['**/*.js'], dest: distDir}]
 			}
 		},
 		minifyHtml: {
-			prod: {
-				files: [{expand: true, cwd: destProd, src: ['**/*.html'], dest: destProd}]
+			default: {
+				files: [{expand: true, cwd: distDir, src: ['**/*.html'], dest: distDir}]
 			}
 		},
 		cssmin: {
-			prod: {
-				files: [{expand: true, cwd: destProd, src: ['**/styles/*.css'], dest: destProd}]
+			default: {
+				files: [{expand: true, cwd: distDir, src: ['**/styles/*.css'], dest: distDir}]
 			}
 		},
 		imagemin: {
-			prod: {
-				files: [{expand: true, cwd: destProd, src: ['**/images/*'], dest: destProd}]
+			default: {
+				files: [{expand: true, cwd: distDir, src: ['**/images/*'], dest: distDir}]
 			}
 		}
+
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-clean');
@@ -186,23 +186,23 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-imagemin');
 
-	// Default task.
+	// Default task. Watch for file changes
 	grunt.registerTask('default', ['watch']);
 
 	// production build task
 	grunt.registerTask('prod',
 		[
 			'clean:prod',
-			'jscs:all',
-			'jshint:all',
+			'jscs',
+			'jshint',
 			'sync:prod',
-			'vulcanize:prod',
+			'vulcanize',
 			'crisper:prod',
-			'uglify:prod',
-			'minifyHtml:prod',
-			'cssmin:prod',
-			'imagemin:prod',
-			'lineremover:prod',
+			'uglify',
+			'minifyHtml',
+			'cssmin',
+			'imagemin',
+			'lineremover',
 			'replace:prod',
 			'compress:prod'
 		]
@@ -212,15 +212,15 @@ module.exports = function(grunt) {
 	grunt.registerTask('prodTest',
 		[
 			'clean:prod',
-			'jscs:all',
-			'jshint:all',
+			'jscs',
+			'jshint',
 			'sync:prod',
-			'vulcanize:prod',
+			'vulcanize',
 			'crisper:prod',
-			'uglify:prod',
-			'minifyHtml:prod',
-			'cssmin:prod',
-			'imagemin:prod',
+			'uglify',
+			'minifyHtml',
+			'cssmin',
+			'imagemin',
 			'replace:prod',
 			'compress:prodTest'
 		]
@@ -230,10 +230,10 @@ module.exports = function(grunt) {
 	grunt.registerTask('dev',
 		[
 			'clean:dev',
-			'jscs:all',
-			'jshint:all',
+			'jscs',
+			'jshint',
 			'bower',
-			'sync:devquiet',
+			'sync:dev',
 			'crisper:dev',
 			'replace:dev'
 		]
