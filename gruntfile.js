@@ -61,10 +61,8 @@ module.exports = function(grunt) {
 		},
 		lineremover: {
 			prod: {
-				files: {'dist/app/manifest.json': 'dist/app/manifest.json'},
-				options: {
-					exclusionPattern: /"key":/g
-				}
+				options: {exclusionPattern: /"key":/},
+				files: {'dist/app/manifest.json': 'dist/app/manifest.json'}
 			}
 		},
 		replace: {
@@ -78,7 +76,7 @@ module.exports = function(grunt) {
 						replacement: 'flickrapi.js'
 					}]
 				},
-				files: {'dist/app/manifest.json': 'app/manifest.json'}
+				files: {'dist/app/manifest.json': 'dist/app/manifest.json'}
 			},
 			dev: {
 				// remove Google analytics tracking
