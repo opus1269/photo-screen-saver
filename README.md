@@ -43,6 +43,7 @@ It is implemented using Vanilla JavaScript and [Polymer](https://www.polymer-pro
 
   If you have this problem, go to "Settings" -> "Show Advanced Settings" and in
   the "Date and time" section uncheck the "Set time zone automatically using your location".
+  You will need to re-start for the change to take effect.
 
   ***
 
@@ -61,6 +62,14 @@ It is implemented using Vanilla JavaScript and [Polymer](https://www.polymer-pro
 
   On many Chrome OS devices the display will not sleep if the screensaver is running.
   You can use the Screensaver/Keep awake scheduling feature to control when the screensaver is displayed.
+
+  ***
+
+* **I have the Keep awake on, but my system is shutting down. Why is that?**
+
+  The Keep awake features are requests to the computer and do not have to be honored.
+  The display request is almost always honored, but the system request isn't. In
+  particular, many PC's will put the computer to sleep if you have them set to do this.
 
   ***
 
