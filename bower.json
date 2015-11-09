@@ -23,6 +23,7 @@
     "iron-label": "PolymerElements/iron-label#^1.0.1",
     "paper-time-picker": "git://github.com/opus1269/paper-time-picker.git#Mine",
     "iron-image": "git://github.com/opus1269/iron-image.git#5c46eafda89e9c65d5499b420e99eeb76de8d62a",
+    "paper-toolbar": "git://github.com/opus1269/paper-toolbar.git#master",
     "flickrapi": "^0.3.36"
   }
 }
