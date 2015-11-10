@@ -18,8 +18,8 @@ function initData() {
 	if (!oldVer || (oldVer < 2)) {
 		localStorage.allDisplays = 'false';
 		localStorage.activeStart = '"00:00"'; // 24 hr time
-		localStorage.activeStop = '"00:00"';  // 24 hr time
-		localStorage.allowSuspend = 'false';  // 24 hr time
+		localStorage.activeStop = '"00:00"';	// 24 hr time
+		localStorage.allowSuspend = 'false';	// 24 hr time
 		localStorage.showTime = '1'; // 12 hour format
 		localStorage.showPhotog = 'true';
 		localStorage.usePopular500px = 'false';
@@ -43,7 +43,7 @@ function initData() {
 		localStorage.useGoogle = 'true';
 		localStorage.albumSelections = '[]';
 		localStorage.isPreview = 'false'; // no longer used
-		localStorage.windowID = '-1';  // no longer used
+		localStorage.windowID = '-1';	// no longer used
 	}
 
 	// remove unused variables
@@ -189,48 +189,37 @@ function processUseInterestingFlickr() {
 	}
 }
 
-// set state based on the current values in localStorage
+// Map processing functions to localStorage values
+var STATE_MAP =  {
+	'enabled': processEnabled,
+	'keepAwake': processKeepAwake,
+	'activeStart': processKeepAwake,
+	'activeStop':  processKeepAwake,
+	'allowSuspend': processKeepAwake,
+	'idleTime': processIdleTime,
+	'useChromecast': processUseChromecast,
+	'usePopular500px': processUsePopular500px,
+	'useYesterday500px': processUseYesterday500px,
+	'useInterestingFlickr': processUseInterestingFlickr,
+	'useAuthors': processUseAuthors,
+};
+
 function processState(key) {
-	switch (key) {
-		case 'enabled':
-			processEnabled();
-			break;
-		case 'keepAwake':
-		case 'activeStart':
-		case 'activeStop':
-		case 'allowSuspend':
-			processKeepAwake();
-			break;
-		case 'idleTime':
-			processIdleTime();
-			break;
-		case 'useChromecast':
-			processUseChromecast();
-			break;
-		case 'usePopular500px':
-			processUsePopular500px();
-			break;
-		case 'useYesterday500px':
-			processUseYesterday500px();
-			break;
-		case 'useInterestingFlickr':
-			processUseInterestingFlickr();
-			break;
-		case 'useAuthors':
-			processUseAuthors();
-			break;
-		case 'all':
-			processEnabled();
-			processKeepAwake();
-			processIdleTime();
-			processUseChromecast();
-			processUsePopular500px();
-			processUseYesterday500px();
-			processUseInterestingFlickr();
-			processUseAuthors();
-			break;
-		default:
-			break;
+	var noop = function() {};
+	var called = [];
+	var fn;
+
+	if (key === 'all') {
+		Object.keys(STATE_MAP).forEach(function(ky) {
+			fn = STATE_MAP[ky];
+			if (called.indexOf(fn) === -1) {
+				// track functions we have already called
+				called.push(fn);
+				return fn();
+			}
+		});
+	} else {
+		(STATE_MAP[key] || noop)();
 	}
 }
 
@@ -329,7 +318,10 @@ function onIdleStateChanged(state) {
 	if (state === 'idle' && isActive()) {
 		displayScreenSaver();
 	} else {
-		closeScreenSavers();
+		// delay close a little to allow time to process mouse and keyboard
+		chrome.alarms.create('close', {
+			when: Date.now() + 250,
+		});
 	}
 }
 
@@ -341,7 +333,7 @@ function onAlarm(alarm) {
 			if (JSON.parse(localStorage.keepAwake)) {
 				chrome.power.requestKeepAwake('display');
 			}
-			var interval  = parseInt(localStorage.idleTime, 10) * 60;
+			var interval	= parseInt(localStorage.idleTime, 10) * 60;
 			chrome.idle.queryState(interval, function(state) {
 				// on active start display screensaver if the idle time criteria is met
 				if (state === 'idle') {
@@ -359,6 +351,9 @@ function onAlarm(alarm) {
 			processUsePopular500px();
 			processUseYesterday500px();
 			processUseInterestingFlickr();
+			break;
+		case 'close':
+			closeScreenSavers();
 			break;
 		default:
 			break;
