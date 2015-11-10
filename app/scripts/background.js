@@ -318,7 +318,10 @@ function onIdleStateChanged(state) {
 	if (state === 'idle' && isActive()) {
 		displayScreenSaver();
 	} else {
-		closeScreenSavers();
+		// delay close a little to allow time to process mouse and keyboard
+		chrome.alarms.create('close', {
+			when: Date.now() + 250,
+		});
 	}
 }
 
@@ -348,6 +351,9 @@ function onAlarm(alarm) {
 			processUsePopular500px();
 			processUseYesterday500px();
 			processUseInterestingFlickr();
+			break;
+		case 'close':
+			closeScreenSavers();
 			break;
 		default:
 			break;

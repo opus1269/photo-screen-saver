@@ -518,15 +518,16 @@ t.addEventListener('pages-ready', function() {
 	t.timer = window.setTimeout(t.runShow, t.waitTime);
 });
 
-// close preview window on click
+// display source of photo and close window
 window.addEventListener('click', function() {
+	t.showPhotoInfo();
 	window.close();
 }, false);
 
-// display more info. about the current photo, if possible
+// close preview window on Enter (prob won't work on Chrome OS)
 window.addEventListener('keydown', function(event) {
 	if (event.keyIdentifier === 'Enter') {
-		t.showPhotoInfo();
+		window.close();
 	}
 }, false);
 
