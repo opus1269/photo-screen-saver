@@ -102,6 +102,7 @@ var flickr = (function() {
 
 						image = {};
 						image.url = photo.url_k;
+						image.ex = photo.owner;
 						image.author = photo.ownername;
 						image.asp = aspectRatio.toPrecision(3);
 						images.push(image);

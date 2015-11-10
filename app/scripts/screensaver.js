@@ -80,6 +80,36 @@ t.getEls = function(idx) {
 	return ret;
 };
 
+// show more info on the current photo
+t.showPhotoInfo = function() {
+	var e = t.getEls(t.p.selected);
+	var item = e.item;
+	var path = item.path;
+	var type = item.type;
+	var re;
+	var id;
+	var url;
+
+	switch (type) {
+		case '500':
+			re = /(\/[^\/]*){4}/;
+			id = path.match(re);
+			url = 'http://500px.com/photo' + id[1];
+			chrome.tabs.create({url: url});
+			break;
+		case 'flickr':
+			if (item.ex) {
+				re = /(\/[^\/]*){4}(_.*_)/;
+				id = path.match(re);
+				url = 'https://www.flickr.com/photos/' + item.ex + id[1];
+				chrome.tabs.create({url: url});
+			}
+			break;
+		default:
+			break;
+	}
+};
+
 // create the photo label
 t.getPhotoLabel = function(author, type, force) {
 	var ret = '';
@@ -228,7 +258,8 @@ t.loadImages = function() {
 				sizingType: t.sizingType,
 				aspectRatio: arr[i].asp,
 				width: screen.width,
-				height: screen.height
+				height: screen.height,
+				ex: arr[i].ex
 			});
 			if (count < NUM_PAGES) {
 				// add a new animatable page
@@ -490,6 +521,13 @@ t.addEventListener('pages-ready', function() {
 // close preview window on click
 window.addEventListener('click', function() {
 	window.close();
+}, false);
+
+// display more info. about the current photo, if possible
+window.addEventListener('keydown', function(event) {
+	if (event.keyIdentifier === 'Enter') {
+		t.showPhotoInfo();
+	}
 }, false);
 
 })();
