@@ -13,6 +13,43 @@ var use500px = (function() {
 	// categroies to use - we make them an array to overcome 100 photo limit per call
 	var CATS = ['Animals,City and Architecture', 'Landscapes,Still Life', 'Macro,Underwater'];
 
+	// callback function(error, httpStatus, responseText)
+	function authenticatedXhr(method, url, callback) {
+		var retry = true;
+		(function getTokenAndXhr() {
+			chrome.identity.getAuthToken({'interactive': true},
+											function(accessToken) {
+				if (chrome.runtime.lastError) {
+					callback(chrome.runtime.lastError);
+					return;
+				}
+
+				var xhr = new XMLHttpRequest();
+				xhr.open(method, url);
+				xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+				xhr.send();
+				xhr.onload = function() {
+					if (this.status === 401 && retry) {
+						// This status may indicate that the cached
+						// access token was invalid. Retry once with
+						// a fresh token.
+						retry = false;
+						chrome.identity.removeCachedAuthToken(
+								{'token': accessToken},
+								getTokenAndXhr);
+						return;
+					}
+
+					callback(null, this.status, this.responseText);
+				};
+				xhr.onerror = function(e) {
+					callback(e);
+				};
+			});
+
+		})();
+	}
+
 	return {
 
 		TYPE_ENUM: TYPE_ENUM,
@@ -69,6 +106,57 @@ var use500px = (function() {
 					});
 				} catch (e) {console.log(e);}
 			}
+		},
+
+		// callback function(albumList, error)
+		loadAlbumList: function(callback) {
+			//var request = 'https://api.500px.com/v1/photos?feature=popular';
+
+			// chrome.runtime.getBackgroundPage().oauth500px.authorize(function() {
+			// 	console.log('authorized');
+			// });
+			//
+			// callback(null,true);
+
+			// 			authenticatedXhr('GET',request, function(error, httpStatus, responseText) {
+			// 	console.log(responseText);
+			// 	if (error) {
+			// 		callback(null, error);
+			// 		return;
+			// 	} else if (httpStatus !== 200) {
+			// 		callback(null, 'Server status: ' + httpStatus);
+			// 		return;
+			// 	}
+			// });
+			var path = 'https://api.500px.com/v1/oauth?oauth_consumer_key=f6c33b154c30f00eaf6ca8b68a0fd89674f35d56';
+			chrome.identity.launchWebAuthFlow({'url': path, 'interactive': true}, function(redirect_url) {
+					console.log(redirect_url);
+				});
+
+			// try {
+			// 	_500px.init({sdk_key: SDK_KEY});
+			// } catch (e) {}
+			//
+			// _500px.login(function(status) {
+			// 	if (status === 'authorized') {
+			// 		console.log('You have logged in');
+			// 		_500px.api('/users', function(response) {
+			// 			console.log(response);
+			// 		});
+			// 	} else {
+			// 		console.log('You denied my application');
+			// 		callback();
+			// 	}
+			// });
+			// _500px.ensureAuthorization(function() {
+			// 	_500px.api('/users', function(response) {
+			// 		console.log('Your username is ' + response.user.username);
+			// 		console.log(response);
+			//
+			// 		callback();
+			// 	});
+			// });
 		}
+
 	};
 })();

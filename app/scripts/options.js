@@ -54,6 +54,20 @@ t.googlePhotos = function(index) {
 	t.scrollPageToTop();
 };
 
+// show the 500px Photos page
+t.f500pxPhotos = function(index) {
+	if (!t.pages[index].ready) {
+		// create the page the first time
+		t.pages[index].ready = true;
+		t.f500pxPage = new F500pxPage('f500pxPage', t.$.errorDialog, t.$.dialogTextEl);
+		Polymer.dom(t.$.f500pxInsertion).appendChild(t.f500pxPage);
+	} else {
+		t.f500pxPage.loadAlbumList();
+	}
+	t.route = t.pages[index].route;
+	t.scrollPageToTop();
+};
+
 // show the faq page
 t.faq = function(index) {
 	if (!t.pages[index].ready) {
@@ -90,6 +104,7 @@ t.preview = function() {
 t.pages = [
 	{label: 'Settings', route: 'page-settings', icon: 'settings', obj: null, ready: true},
 	{label: 'Google Photos Albums', route: 'page-google-photos', icon: 'cloud', obj: t.googlePhotos, ready: false},
+	{label: '500px Albums', route: 'page-f500px', icon: 'cloud', obj: t.f500pxPhotos, ready: false},
 	{label: 'Preview (Click or <Enter> to close)', route: 'page-preview', icon: 'pageview', obj: t.preview, ready: true},
 	{label: 'Frequently Asked Questions', route: 'page-faq', icon: 'help', obj: t.faq, ready: false},
 	{label: 'Information For Nerds', route: 'page-info', icon: 'info', obj: t.info, ready: false},

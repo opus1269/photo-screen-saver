@@ -26,7 +26,8 @@
 		"system.display",
 		"alarms",
 		"https://chrome.google.com/",
-		"https://picasaweb.google.com/"
+		"https://picasaweb.google.com/",
+		"https://api.500px.com/"
 	],
 	"background": {
 		"scripts": [

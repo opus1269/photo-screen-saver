@@ -4,6 +4,16 @@
 (function() {
 'use strict';
 
+// var oauth500px = ChromeExOAuth.initBackgroundPage({
+// 	'request_url': 'https://api.500px.com/v1/oauth/request_token',
+// 	'authorize_url': 'https://api.500px.com/v1/oauth/authorize',
+// 	'access_url': 'https://api.500px.com/v1/oauth/access_token',
+// 	'consumer_key': 'f6c33b154c30f00eaf6ca8b68a0fd89674f35d56',
+// 	'consumer_secret': '7NNroelTPqJz0TYyGtUn6Olr65LewlGkNdEA1gNU',
+// 	'scope': 'https://api.500px.com/v1',
+// 	'app_name': '500px'
+// });
+
 // initialize the data in local storage
 function initData() {
 	// using local storage as a quick and dirty replacement for MVC
@@ -12,14 +22,22 @@ function initData() {
 	var oldVer = parseInt(localStorage.version,10);
 
 	// latest version
-	localStorage.version = '2';
+	localStorage.version = '3';
+
+	// Add the new version 3 values
+	if (!oldVer || (oldVer < 3)) {
+		localStorage.useFlickr = 'true';
+		localStorage.useFlickrSelections = '[]';
+		localStorage.use500px = 'true';
+		localStorage.use500pxSelections = '[]';
+	}
 
 	// Add the new version 2 values
 	if (!oldVer || (oldVer < 2)) {
 		localStorage.allDisplays = 'false';
 		localStorage.activeStart = '"00:00"'; // 24 hr time
 		localStorage.activeStop = '"00:00"';	// 24 hr time
-		localStorage.allowSuspend = 'false';	// 24 hr time
+		localStorage.allowSuspend = 'false';
 		localStorage.showTime = '1'; // 12 hour format
 		localStorage.showPhotog = 'true';
 		localStorage.usePopular500px = 'false';
@@ -87,6 +105,7 @@ function setInactiveState() {
 	} else {
 		chrome.power.requestKeepAwake('system');
 	}
+	setBadgeText();
 	closeScreenSavers();
 }
 
@@ -344,7 +363,6 @@ function onAlarm(alarm) {
 			break;
 		case 'activeStop':
 			setInactiveState();
-			setBadgeText();
 			break;
 		case 'updatePhotos':
 			// get the latest for the live photo streams
