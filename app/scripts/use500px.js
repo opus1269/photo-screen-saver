@@ -11,7 +11,7 @@ var use500px = (function() {
 	var MAX_PHOTOS = 100; // 100 is api max
 	var TYPE_ENUM = Object.freeze({'popular': 1, 'fresh_yesterday': 2});
 	// categroies to use - we make them an array to overcome 100 photo limit per call
-	var CATS = ['Animals,City and Architecture', 'Landscapes,Still Life', 'Macro,Underwater'];
+	var CATS = ['Animals,City and Architecture', 'Landscapes', 'Macro,Still Life,Underwater'];
 
 	return {
 
