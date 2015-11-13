@@ -5,6 +5,14 @@
 	"description": "A screensaver with multiple photo sources",
 	"version": "1.0.4",
 	"minimum_chrome_version": "38",
+	"commands": {
+		"toggle-enabled": {
+			"suggested_key": {
+				"default": "Alt+Shift+Q"
+			},
+			"description": "Toggle enabled state"
+		}
+	},
 	"icons": {
 		"19": "/images/icon_19.png",
 		"38": "/images/icon_38.png",

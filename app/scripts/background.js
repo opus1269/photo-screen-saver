@@ -388,13 +388,25 @@ function onMessage(request) {
 	}
 }
 
+function _toggleEnabled() {
+	// toggle enabled state
+	localStorage.enabled =  !JSON.parse(localStorage.enabled);
+	// storage changed not fired on same page as change
+	processEnabled();
+
+}
+
 // event: context menu clicked
 function onMenuClicked(info) {
 	if (info.menuItemId === 'ENABLE_MENU') {
-		// toggle enabled state
-		localStorage.enabled =  !JSON.parse(localStorage.enabled);
-		// storage changed not fired on same page as change
-		processEnabled();
+		_toggleEnabled();
+	}
+}
+
+// event: special key command
+function onKeyCommand(cmd) {
+	if (cmd === 'toggle-enabled') {
+		_toggleEnabled();
 	}
 }
 
@@ -422,4 +434,6 @@ chrome.runtime.onMessage.addListener(onMessage);
 // listen for clicks on context menus
 chrome.contextMenus.onClicked.addListener(onMenuClicked);
 
+// listen for special keyboard commands
+chrome.commands.onCommand.addListener(onKeyCommand);
 })();
