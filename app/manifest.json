@@ -3,7 +3,7 @@
 	"name": "Photo Screen Saver",
 	"short_name": "Photo Screen Saver",
 	"description": "A screensaver with multiple photo sources",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"minimum_chrome_version": "38",
 	"icons": {
 		"19": "/images/icon_19.png",
@@ -25,6 +25,7 @@
 		"power",
 		"system.display",
 		"alarms",
+		"contextMenus",
 		"https://chrome.google.com/",
 		"https://picasaweb.google.com/"
 	],
