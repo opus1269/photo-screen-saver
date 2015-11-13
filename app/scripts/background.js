@@ -105,6 +105,13 @@ function setInactiveState() {
 // use the extension as a display keep awake scheduler without
 // using the screensaver
 function processEnabled() {
+	// update context menu text
+	var label = 'Enable';
+	if (JSON.parse(localStorage.enabled)) {
+		label = 'Disable';
+	}
+	chrome.contextMenus.update('ENABLE_MENU', {title: label, contexts: ['browser_action']});
+
 	setBadgeText();
 }
 
@@ -298,6 +305,10 @@ function closeScreenSavers() {
 
 // event: called when extension is installed or updated or Chrome is updated
 function onInstalled() {
+	// create menus on the right click menu of the extension icon
+	chrome.contextMenus.create({type: 'normal', id: 'ENABLE_MENU', title: 'Disable', contexts: ['browser_action']});
+	chrome.contextMenus.create({type: 'separator', id: 'SEP_MENU', contexts: ['browser_action']});
+
 	initData();
 	processState('all');
 }
@@ -308,7 +319,7 @@ function onStartup() {
 }
 
 // event: display or focus options page
-function onClicked() {
+function onIconClicked() {
 	chrome.tabs.query({title: 'Photo Screen Saver Options Page'}, function(t) {
 		if (!t.length) {
 			chrome.tabs.create({url: '../html/options.html'});
@@ -377,6 +388,28 @@ function onMessage(request) {
 	}
 }
 
+function _toggleEnabled() {
+	// toggle enabled state
+	localStorage.enabled =  !JSON.parse(localStorage.enabled);
+	// storage changed not fired on same page as change
+	processEnabled();
+
+}
+
+// event: context menu clicked
+function onMenuClicked(info) {
+	if (info.menuItemId === 'ENABLE_MENU') {
+		_toggleEnabled();
+	}
+}
+
+// event: special key command
+function onKeyCommand(cmd) {
+	if (cmd === 'toggle-enabled') {
+		_toggleEnabled();
+	}
+}
+
 // listen for extension install or update
 chrome.runtime.onInstalled.addListener(onInstalled);
 
@@ -384,7 +417,7 @@ chrome.runtime.onInstalled.addListener(onInstalled);
 chrome.runtime.onStartup.addListener(onStartup);
 
 // listen for click on the icon
-chrome.browserAction.onClicked.addListener(onClicked);
+chrome.browserAction.onClicked.addListener(onIconClicked);
 
 // listen for changes to the stored data
 addEventListener('storage', onStorageChanged, false);
@@ -398,4 +431,9 @@ chrome.alarms.onAlarm.addListener(onAlarm);
 // listen for request to display preview of screensaver
 chrome.runtime.onMessage.addListener(onMessage);
 
+// listen for clicks on context menus
+chrome.contextMenus.onClicked.addListener(onMenuClicked);
+
+// listen for special keyboard commands
+chrome.commands.onCommand.addListener(onKeyCommand);
 })();
