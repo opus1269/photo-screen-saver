@@ -12,14 +12,24 @@ function initData() {
 	var oldVer = parseInt(localStorage.version,10);
 
 	// latest version
-	localStorage.version = '2';
+	localStorage.version = '3';
+
+	// Add the new version 3 values
+	if (!oldVer || (oldVer < 3)) {
+		localStorage.background = '"background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)"';
+		// these not implemented yet
+		localStorage.useFlickr = 'true';
+		localStorage.useFlickrSelections = '[]';
+		localStorage.use500px = 'true';
+		localStorage.use500pxSelections = '[]';
+	}
 
 	// Add the new version 2 values
 	if (!oldVer || (oldVer < 2)) {
 		localStorage.allDisplays = 'false';
 		localStorage.activeStart = '"00:00"'; // 24 hr time
 		localStorage.activeStop = '"00:00"';	// 24 hr time
-		localStorage.allowSuspend = 'false';	// 24 hr time
+		localStorage.allowSuspend = 'false';
 		localStorage.showTime = '1'; // 12 hour format
 		localStorage.showPhotog = 'true';
 		localStorage.usePopular500px = 'false';
@@ -42,8 +52,8 @@ function initData() {
 		localStorage.useAuthors = 'false';
 		localStorage.useGoogle = 'true';
 		localStorage.albumSelections = '[]';
-		localStorage.isPreview = 'false'; // no longer used
-		localStorage.windowID = '-1';	// no longer used
+		//localStorage.isPreview = 'false'; // no longer used
+		//localStorage.windowID = '-1';	// no longer used
 	}
 
 	// remove unused variables
@@ -68,7 +78,7 @@ function setBadgeText() {
 	}
 }
 
-// return true is screensaver can be displayed
+// return true if screensaver can be displayed
 function isActive() {
 	var enabled = JSON.parse(localStorage.enabled);
 	var aStart = JSON.parse(localStorage.activeStart);
@@ -128,7 +138,7 @@ function processAlarms() {
 		chrome.alarms.clear('activeStop');
 	}
 
-	// Add daily alarm to update 500px and flickr photoS
+	// Add daily alarm to update 500px and flickr photos
 	chrome.alarms.get('updatePhotos', function(alarm) {
 		if (!alarm) {
 			chrome.alarms.create('updatePhotos', {
@@ -157,35 +167,35 @@ function processIdleTime() {
 function processUseAuthors() {
 	localStorage.removeItem('authorImages');
 	if (JSON.parse(localStorage.useAuthors)) {
-		gPhotos.loadAuthorImages(false);
+		gPhotos.loadAuthorImages();
 	}
 }
 
 function processUseChromecast() {
 	localStorage.removeItem('ccImages');
 	if (JSON.parse(localStorage.useChromecast)) {
-		chromeCast.loadImages(false);
+		chromeCast.loadImages();
 	}
 }
 
 function processUsePopular500px() {
 	localStorage.removeItem('popular500pxImages');
 	if (JSON.parse(localStorage.usePopular500px)) {
-		use500px.loadImages(use500px.TYPE_ENUM.popular, 'popular500pxImages', false);
+		use500px.loadImages('popular', 'popular500pxImages');
 	}
 }
 
 function processUseYesterday500px() {
 	localStorage.removeItem('yesterday500pxImages');
 	if (JSON.parse(localStorage.useYesterday500px)) {
-		use500px.loadImages(use500px.TYPE_ENUM.yesterday, 'yesterday500pxImages', false);
+		use500px.loadImages('fresh_yesterday', 'yesterday500pxImages');
 	}
 }
 
 function processUseInterestingFlickr() {
 	localStorage.removeItem('flickrInterestingImages');
 	if (JSON.parse(localStorage.useInterestingFlickr)) {
-		flickr.loadImages(flickr.TYPE_ENUM.interesting, false);
+		flickr.loadImages();
 	}
 }
 

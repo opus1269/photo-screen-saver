@@ -26,34 +26,9 @@ var chromeCast = (function() {
 
 	return {
 
-		// read chromecast.json and optionally preload the images
-		loadImages: function(preload) {
-
-			_loadChromecast(function() {
-				if (!preload) {
-					return;
-				}
-				var imgs = [], img;
-				var numImages = ccImages.length;
-
-				for (var i = 0; i < numImages; i++) {
-					img = new Image();
-
-					// cut out bad images
-					img.onerror = function() {
-						/*jshint validthis: true */
-						var ims = JSON.parse(localStorage.ccImages);
-						var ind = ims.map(function(e) {return e.url;}).indexOf(this.src);
-						if (ind >= 0) {
-							ims.splice(ind, 1);
-							localStorage.ccImages = JSON.stringify(ims);
-						}
-					};
-
-					img.src = ccImages[i].url;
-					imgs.push(img);
-				}
-			});
+		// read chromecast.json 
+		loadImages: function() {
+			_loadChromecast();
 		}
 	};
 })();

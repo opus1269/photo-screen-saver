@@ -57,7 +57,7 @@ var gPhotos = (function() {
 	}
 
 	// callback function(photos, error);
-	function loadPicasaAlbum(id, preload, callback) {
+	function loadPicasaAlbum(id, callback) {
 		var request = PICASA_PATH + 'default/albumid/' + id + '/' + PHOTOS_QUERY;
 
 		authenticatedXhr('GET',request, function(error, httpStatus, responseText) {
@@ -72,7 +72,6 @@ var gPhotos = (function() {
 			var root = JSON.parse(responseText);
 			var feed = root.feed;
 			var entries = feed.entry || [], entry;
-			var imgs = [], img;
 			var photos = [],photo;
 			var url,author,width,height,aspectRatio;
 
@@ -84,13 +83,6 @@ var gPhotos = (function() {
 					height = entry.media$group.media$content[0].height;
 					aspectRatio = width / height;
 					author = entry.media$group.media$credit[0].$t;
-
-					if (preload) {
-						img = new Image();
-						// img.addEventListener('error', _imgError);
-						img.src = url;
-						imgs.push(img);
-					}
 
 					photo = {};
 					photo.url = url;
@@ -105,7 +97,7 @@ var gPhotos = (function() {
 
 	return {
 
-		loadAuthorImages: function(preload) {
+		loadAuthorImages: function() {
 			var authorID = '103839696200462383083';
 			var authorAlbum = '6117481612859013089';
 			var request = PICASA_PATH + authorID + '/albumid/' + authorAlbum +
@@ -116,7 +108,6 @@ var gPhotos = (function() {
 				var root = JSON.parse(oReq.response);
 				var feed = root.feed;
 				var entries = feed.entry || [], entry;
-				var imgs = [], img;
 				var authorImages = [],authorImage;
 				var url,author,width,height,aspectRatio;
 
@@ -127,23 +118,6 @@ var gPhotos = (function() {
 					height = entry.media$group.media$content[0].height;
 					aspectRatio = width / height;
 					author = entry.media$group.media$credit[0].$t;
-					if (preload) {
-						img = new Image();
-
-						// cut out bad images
-						img.onerror = function() {
-							/*jshint validthis: true */
-							var ims = JSON.parse(localStorage.authorImages);
-							var ind = ims.map(function(e) {return e.url;}).indexOf(this.src);
-							if (ind >= 0) {
-								ims.splice(ind, 1);
-								localStorage.authorImages = JSON.stringify(ims);
-							}
-						};
-
-						img.src = url;
-						imgs.push(img);
-					}
 
 					authorImage = {};
 					authorImage.url = url;
@@ -181,7 +155,7 @@ var gPhotos = (function() {
 				for (var i = 0; i < entries.length; ++i) {
 					(function(index) {
 						entry = entries[index];
-						loadPicasaAlbum(entries[index].gphoto$id.$t, false, function(photos, error) {
+						loadPicasaAlbum(entries[index].gphoto$id.$t, function(photos, error) {
 							if (error) {
 								callback(null, error);
 								return;

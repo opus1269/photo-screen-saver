@@ -1,13 +1,10 @@
-html,body {
+body {
 	font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 100%;
 	font-weight: 400;
 	height: 100vh;
 	margin: 0;
 	overflow: hidden;
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-image: -webkit-linear-gradient(top, #3a3a3a 0%,#666666 21%,#777777 34%,#898989 50%,#828c95 64%,#a0a0a0 83%,#b5bdc8 100%);
 	cursor: none;
 }
 
