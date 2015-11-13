@@ -7,6 +7,10 @@
 // aspect ratio of screen
 var SCREEN_ASPECT = screen.width / screen.height;
 
+// use the selected background
+var background = JSON.parse(localStorage.background);
+document.body.style.background = background.substring(11);
+
 // main auto-bind template
 var t = document.querySelector('#t');
 

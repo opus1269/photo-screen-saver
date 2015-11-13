@@ -18,6 +18,7 @@
 <link rel="import" href="../setting-slider/setting-slider.html">
 <link rel="import" href="../setting-dropdown/setting-dropdown.html">
 <link rel="import" href="../setting-time/setting-time.html">
+<link rel="import" href="../setting-background/setting-background.html">
 
 <dom-module id="settings-page">
 	<template>
@@ -86,6 +87,10 @@
 		        <setting-toggle name="showPhotog"
 		                main-label="Show photographer label for photos you own"
 		                secondary-label="(Always shows in Frame mode)"
+		                disabled$="[[!enabled]]"></setting-toggle>
+						<setting-background name="background"
+		                main-label="Choose background style"
+		                secondary-label="Set the background for the slide show"
 		                noseparator
 		                disabled$="[[!enabled]]"></setting-toggle>
 					</div>
@@ -141,7 +146,7 @@
 		                main-label="Extension developer"
 		                secondary-label="Photos from the guy who wrote this"
 		                disabled$="[[!enabled]]"></setting-toggle>
-						<paper-item tabindex="-1">Click mouse to view the site for Flickr and 500px photos</paper-item>
+						<paper-item tabindex="-1">Click mouse to view the website for Flickr and 500px photos</paper-item>
 						<paper-item tabindex="-1">This product uses the Flickr API but is not endorsed or certified by Flickr</paper-item>
 					</div>
 				</iron-pages>
