@@ -55,6 +55,10 @@
 			height: 56px;
 		}
 
+		.selected-background[disabled] {
+			opacity: .2;
+		}
+
 		</style>
 
 		<paper-dialog id="dialog" modal entry-animation="scale-up-animation"
@@ -81,7 +85,7 @@
 				<div class="setting-label" hidden$="[[!mainLabel]]">{{mainLabel}}</div>
 				<div class="setting-label" secondary hidden$="[[!secondaryLabel]]">{{secondaryLabel}}</div>
 			</paper-item-body>
-			<div class="selected-background" style$="[[value]]"></div>
+			<div class="selected-background" style$="[[value]]" disabled$="[[disabled]]"></div>
 			<paper-ripple center></paper-ripple>
 		</paper-item>
 		<hr hidden$="[[noseparator]]" />
