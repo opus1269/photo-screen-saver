@@ -20,12 +20,12 @@ var use500px = (function() {
 				_500px.init({sdk_key: SDK_KEY});
 			} catch (e) {}
 
-			for (var j = 0; j < CATS.length; j++) {
+			for (let j = 0; j < CATS.length; j++) {
 				try {
-					_500px.api('/photos',{feature: type, only: CATS[j], rpp: MAX_PHOTOS, sort: 'rating', image_size: 2048}, function(response) {
+					_500px.api('/photos', {feature: type, only: CATS[j], rpp: MAX_PHOTOS, sort: 'rating', image_size: 2048}, function(response) {
 						var images = [], image;
 						var aspectRatio;
-						for (var i = 0; i < response.data.photos.length; i++) {
+						for (let i = 0; i < response.data.photos.length; i++) {
 							var photo = response.data.photos[i];
 							if (!photo.nsfw) {
 
