@@ -7,6 +7,9 @@
 // aspect ratio of screen
 var SCREEN_ASPECT = screen.width / screen.height;
 
+// max number of animated pages
+var MAX_PAGES = 20;
+
 // use the selected background
 var background = JSON.parse(localStorage.background);
 document.body.style.background = background.substring(11);
@@ -23,10 +26,10 @@ t.p;
 // array of all the photos to use for slide show and an index into it
 t.itemsAll = [];
 t.curIdx = 0;
+t.noPhotos = false;
 
-// array of photos max(NUM_PAGES) currently loaded into the animatable pages
+// array of photos max(MAX_PAGES) currently loaded into the animatable pages
 // always changing subset of itemsAll
-var NUM_PAGES = 20;
 t.items = [];
 
 // set to true after first full page animation
@@ -70,7 +73,9 @@ t.addEventListener('dom-change', function() {
 	t.loadImages();
 
 	// this will kick off the slideshow
-	this.fire('pages-ready');
+	if (!t.noPhotos) {
+		this.fire('pages-ready');
+	}
 
 });
 
@@ -86,13 +91,14 @@ t.getEls = function(idx) {
 
 // show more info on the current photo
 t.showPhotoInfo = function() {
+	if (t.noPhotos) {
+		return;
+	}
 	var e = t.getEls(t.p.selected);
 	var item = e.item;
 	var path = item.path;
 	var type = item.type;
-	var re;
-	var id;
-	var url;
+	var re, id, url;
 
 	switch (type) {
 		case '500':
@@ -265,11 +271,9 @@ t.loadImages = function() {
 				height: screen.height,
 				ex: arr[i].ex
 			});
-			if (count < NUM_PAGES) {
-				// add a new animatable page
-				t.push('items',
-					JSON.parse(JSON.stringify(t.itemsAll[count])) // shallow copy
-				);
+			if (count < MAX_PAGES) {
+				// add a new animatable page - shallow copy
+				t.push('items', JSON.parse(JSON.stringify(t.itemsAll[count])));
 				t.curIdx++;
 			}
 			count++;
@@ -278,6 +282,7 @@ t.loadImages = function() {
 
 	if (!count) {
 		t.$.noPhotos.style.visibility = 'visible';
+		t.noPhotos = true;
 	}
 
 };
