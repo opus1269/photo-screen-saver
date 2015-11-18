@@ -1,5 +1,6 @@
 {
 	"unused": true,
+	"esnext": true,
 	"undef": true,
 	"camelcase": true,
 	"newcap": false,
