@@ -58,19 +58,6 @@ module.exports = function(grunt) {
 			}
 		},
 		replace: {
-			prod: {
-				// use non-dev flickr API for productionn
-				options: {
-					force: false,
-					usePrefix: false,
-					patterns: [{
-						match: 'flickrapi.dev.js',
-						replacement: 'flickrapi.js'
-					}]
-				},
-				src: manifestFile,
-				dest: manifestFile,
-			},
 			dev: {
 				// remove Google analytics tracking
 				options: {
@@ -203,7 +190,6 @@ module.exports = function(grunt) {
 			'cssmin',
 			'imagemin',
 			'lineremover',
-			'replace:prod',
 			'compress:prod'
 		]
 	);
@@ -221,7 +207,6 @@ module.exports = function(grunt) {
 			'minifyHtml',
 			'cssmin',
 			'imagemin',
-			'replace:prod',
 			'compress:prodTest'
 		]
 	);
