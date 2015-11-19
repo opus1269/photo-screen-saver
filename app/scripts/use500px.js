@@ -26,28 +26,32 @@ var use500px = (function() {
 
 					xhr[index].onload = function() {
 						var response = JSON.parse(xhr[index].response);
-						var images = [], image;
-						var aspectRatio;
-						for (var i = 0; i < response.photos.length; i++) {
-							var photo = response.photos[i];
-							if (!photo.nsfw) {
-								aspectRatio = photo.width / photo.height;
-								image = {};
-								image.url = photo.images[0].url;
-								image.author = photo.user.fullname;
-								image.asp = aspectRatio.toPrecision(3);
-								images.push(image);
-							}
-						}
-						var tmp = [];
-						if (localStorage.getItem(name)) {
-							tmp = JSON.parse(localStorage.getItem(name));
-							tmp = tmp.concat(images);
-							myUtils.shuffleArray(tmp);
+						if (response.error) {
+							console.log(response.error);
 						} else {
-							tmp = images;
+							var images = [], image;
+							var aspectRatio;
+							for (var i = 0; i < response.photos.length; i++) {
+								var photo = response.photos[i];
+								if (!photo.nsfw) {
+									aspectRatio = photo.width / photo.height;
+									image = {};
+									image.url = photo.images[0].url;
+									image.author = photo.user.fullname;
+									image.asp = aspectRatio.toPrecision(3);
+									images.push(image);
+								}
+							}
+							var tmp = [];
+							if (localStorage.getItem(name)) {
+								tmp = JSON.parse(localStorage.getItem(name));
+								tmp = tmp.concat(images);
+								myUtils.shuffleArray(tmp);
+							} else {
+								tmp = images;
+							}
+							localStorage.setItem(name, JSON.stringify(tmp));
 						}
-						localStorage.setItem(name, JSON.stringify(tmp));
 					};
 
 					xhr[index].onerror = function(e) {

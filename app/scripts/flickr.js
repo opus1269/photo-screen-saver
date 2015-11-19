@@ -21,22 +21,26 @@ var flickr = (function() {
 
 			xhr.onload = function() {
 				var response = JSON.parse(xhr.response);
-				var images = [], image;
-				var aspectRatio;
-				for (var i = 0; i < response.photos.photo.length; i++) {
-					var photo = response.photos.photo[i];
-					if (photo.url_k && photo.media === 'photo' && photo.isfriend !== '0' && photo.isfamily !== '0') {
-						aspectRatio = parseInt(photo.width_k, 10) / parseInt(photo.height_k, 10);
+				if (response.stat !== 'ok') {
+					console.log(response.message);
+				} else {
+					var images = [], image;
+					var aspectRatio;
+					for (var i = 0; i < response.photos.photo.length; i++) {
+						var photo = response.photos.photo[i];
+						if (photo.url_k && photo.media === 'photo' && photo.isfriend !== '0' && photo.isfamily !== '0') {
+							aspectRatio = parseInt(photo.width_k, 10) / parseInt(photo.height_k, 10);
 
-						image = {};
-						image.url = photo.url_k;
-						image.ex = photo.owner;
-						image.author = photo.ownername;
-						image.asp = aspectRatio.toPrecision(3);
-						images.push(image);
+							image = {};
+							image.url = photo.url_k;
+							image.ex = photo.owner;
+							image.author = photo.ownername;
+							image.asp = aspectRatio.toPrecision(3);
+							images.push(image);
+						}
 					}
+					localStorage.flickrInterestingImages = JSON.stringify(images);
 				}
-				localStorage.flickrInterestingImages = JSON.stringify(images);
 			};
 
 			xhr.onerror = function(e) {

@@ -221,7 +221,7 @@ t.ignorePhoto = function(item) {
 	var ret = false;
 	var skip = JSON.parse(localStorage.skip);
 	// blah blah blah
-	if ((!item.asp || isNaN(item.asp)) ||
+	if ((!item || !item.asp || isNaN(item.asp)) ||
 			(skip && ((t.photoSizing === 1) || (t.photoSizing === 3)) && t.isBadAspect(item.asp))) {
 		// ignore photos that dont have aspect ratio or would look really bad when cropped or stretched
 		ret = true;
@@ -249,9 +249,7 @@ t.loadImages = function() {
 
 	for (var i = 0; i < arr.length; i++) {
 
-		arr[i].ignore = t.ignorePhoto(arr[i]);
-
-		if (!arr[i].ignore) {
+		if (!t.ignorePhoto(arr[i])) {
 
 			arr[i].author ? author = arr[i].author : author = '';
 			photoLabel = t.getPhotoLabel(author, arr[i].type);
