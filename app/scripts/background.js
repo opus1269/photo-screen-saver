@@ -63,19 +63,13 @@ function initData() {
 
 // set the text label displayed on the icon
 function setBadgeText() {
-	if (!JSON.parse(localStorage.enabled)) {
-		if (JSON.parse(localStorage.keepAwake)) {
-			chrome.browserAction.setBadgeText({text: 'PWR'});
-		} else {
-			chrome.browserAction.setBadgeText({text: 'OFF'});
-		}
+	var text = '';
+	if (JSON.parse(localStorage.enabled)) {
+		text = (JSON.parse(localStorage.keepAwake) && !isActive()) ? 'SLP' : '';
 	} else {
-		if (JSON.parse(localStorage.keepAwake) && !isActive()) {
-			chrome.browserAction.setBadgeText({text: 'SLP'});
-		} else {
-			chrome.browserAction.setBadgeText({text: ''});
-		}
+		text = JSON.parse(localStorage.keepAwake) ? 'PWR' : 'OFF';
 	}
+	chrome.browserAction.setBadgeText({text: text});
 }
 
 // return true if screensaver can be displayed
@@ -92,12 +86,9 @@ function isActive() {
 
 // set state when the screensaver is in the non-active range
 function setInactiveState() {
-	if (JSON.parse(localStorage.allowSuspend)) {
-		chrome.power.releaseKeepAwake();
-	} else {
-		chrome.power.requestKeepAwake('system');
-	}
+	JSON.parse(localStorage.allowSuspend) ? chrome.power.releaseKeepAwake() : chrome.power.requestKeepAwake('system');
 	closeScreenSavers();
+	setBadgeText();
 }
 
 // enabled state of screensaver
@@ -106,12 +97,8 @@ function setInactiveState() {
 // using the screensaver
 function processEnabled() {
 	// update context menu text
-	var label = 'Enable';
-	if (JSON.parse(localStorage.enabled)) {
-		label = 'Disable';
-	}
+	var label = JSON.parse(localStorage.enabled) ? 'Disable' : 'Enable';
 	chrome.contextMenus.update('ENABLE_MENU', {title: label, contexts: ['browser_action']});
-
 	setBadgeText();
 }
 
@@ -158,11 +145,7 @@ function processAlarms() {
 }
 
 function processKeepAwake() {
-	if (JSON.parse(localStorage.keepAwake)) {
-		chrome.power.requestKeepAwake('display');
-	} else {
-		chrome.power.releaseKeepAwake();
-	}
+	JSON.parse(localStorage.keepAwake) ? chrome.power.requestKeepAwake('display') : chrome.power.releaseKeepAwake();
 	processAlarms();
 	setBadgeText();
 }
@@ -321,11 +304,7 @@ function onStartup() {
 // event: display or focus options page
 function onIconClicked() {
 	chrome.tabs.query({title: 'Photo Screen Saver Options Page'}, function(t) {
-		if (!t.length) {
-			chrome.tabs.create({url: '../html/options.html'});
-		} else {
-			chrome.tabs.update(t[0].id, {'highlighted': true});
-		}
+		t.length ? chrome.tabs.update(t[0].id, {'highlighted': true}) : chrome.tabs.create({url: '../html/options.html'});
 	});
 }
 
@@ -365,7 +344,6 @@ function onAlarm(alarm) {
 			break;
 		case 'activeStop':
 			setInactiveState();
-			setBadgeText();
 			break;
 		case 'updatePhotos':
 			// get the latest for the live photo streams
