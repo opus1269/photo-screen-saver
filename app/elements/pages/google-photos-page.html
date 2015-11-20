@@ -180,12 +180,12 @@
 		// Query Picasa for the list of the users albums
 		loadAlbumList: function() {
 			this.set('waitForLoad', true);
-			gPhotos.loadAlbumList(function(albums, error) {
+			gPhotos.loadAlbumList(function(error, albums) {
 				if (!error) {
 					this.albums = albums;
 					this._selectAlbums();
 				} else {
-					this.dialogTextEl.textContent = error;
+					this.dialogTextEl.innerHTML = error;
 					this.dialogEl.open();
 				}
 				this.set('waitForLoad', false);

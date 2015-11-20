@@ -8,14 +8,16 @@ var gPhotos = (function() {
 	var PICASA_PATH = 'https://picasaweb.google.com/data/feed/api/user/';
 	var PHOTOS_QUERY = '?imgmax=1600&thumbsize=72&fields=entry(media:group/media:content,media:group/media:credit)&v=2&alt=json';
 
+	// perform a request using OAuth 2.0 authentication
 	// callback function(error, httpStatus, responseText)
 	function authenticatedXhr(method, url, callback) {
 		var retry = true;
+		var error = null;
 		(function getTokenAndXhr() {
 			chrome.identity.getAuthToken({'interactive': true},
 											function(accessToken) {
 				if (chrome.runtime.lastError) {
-					callback(chrome.runtime.lastError);
+					callback(chrome.runtime.lastError.message);
 					return;
 				}
 
@@ -23,22 +25,29 @@ var gPhotos = (function() {
 				xhr.open(method, url);
 				xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
 				xhr.send();
+
 				xhr.onload = function() {
 					if (this.status === 401 && retry) {
 						// This status may indicate that the cached
 						// access token was invalid. Retry once with
 						// a fresh token.
 						retry = false;
-						chrome.identity.removeCachedAuthToken(
-								{'token': accessToken},
-								getTokenAndXhr);
+						chrome.identity.removeCachedAuthToken({'token': accessToken}, getTokenAndXhr);
 						return;
 					}
 
-					callback(null, this.status, this.responseText);
+					if (this.status !== 200) {
+						error = '<strong>Server status: ' + this.status + '</strong><p>' + this.responseText + '</p>';
+					}
+					callback(error, this.status, this.responseText);
 				};
-				xhr.onerror = function(e) {
-					callback(e);
+
+				xhr.onerror = function() {
+					var error = '<strong>Network Request: Unknown error</strong>';
+					if (chrome.runtime.lastError) {
+						error = chrome.runtime.lastError.message;
+					}
+					callback(error);
 				};
 			});
 
@@ -56,16 +65,14 @@ var gPhotos = (function() {
 		return true;
 	}
 
-	// callback function(photos, error);
+	// load the photos for the given album
+	// callback function(error, photos);
 	function loadPicasaAlbum(id, callback) {
 		var request = PICASA_PATH + 'default/albumid/' + id + '/' + PHOTOS_QUERY;
 
 		authenticatedXhr('GET',request, function(error, httpStatus, responseText) {
 			if (error) {
-				callback(null, error);
-				return;
-			} else if (httpStatus !== 200) {
-				callback(null, 'Server status: ' + httpStatus);
+				callback(error);
 				return;
 			}
 
@@ -86,12 +93,13 @@ var gPhotos = (function() {
 					myUtils.addImage(images, url, author, asp);
 				}
 			}
-			callback(images, error);
+			callback(null, images);
 		});
 	}
 
 	return {
 
+		// load and store the developers photos default photo source
 		loadAuthorImages: function() {
 			var authorID = '103839696200462383083';
 			var authorAlbum = '6117481612859013089';
@@ -121,34 +129,32 @@ var gPhotos = (function() {
 			xhr.send();
 		},
 
-		// callback function(albumList, error)
+		// load the users list of albums, including the photos in each
+		// callback function(error, albumList)
 		loadAlbumList: function(callback) {
 			var albumListQuery = '?v=2&thumbsize=72&alt=json';
 			var request = PICASA_PATH + 'default/' + albumListQuery;
 
 			authenticatedXhr('GET',request, function(error, httpStatus, responseText) {
 				if (error) {
-					callback(null, error);
-					return;
-				} else if (httpStatus !== 200) {
-					callback(null, 'Server status: ' + httpStatus);
+					callback(error);
 					return;
 				}
 
 				var root = JSON.parse(responseText);
 				var feed = root.feed;
-				var entries = feed.entry || [], entry;
+				var entries = feed.entry || [];
 				var albumList = [], album;
 				var ct = 0;
 
 				for (var i = 0; i < entries.length; ++i) {
 					(function(index) {
-						entry = entries[index];
-						loadPicasaAlbum(entries[index].gphoto$id.$t, function(photos, error) {
+						loadPicasaAlbum(entries[index].gphoto$id.$t, function(error, photos) {
 							if (error) {
-								callback(null, error);
+								callback(error);
 								return;
 							}
+
 							if (!entries[index].gphoto$albumType && photos.length) {
 								album = {};
 								album.index = index;
@@ -165,7 +171,7 @@ var gPhotos = (function() {
 								albumList.sort(function(a, b) {
 									return a.index - b.index;
 								});
-								callback(albumList, error);
+								callback(null, albumList);
 							}
 							ct++;
 						});
