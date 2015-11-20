@@ -10,12 +10,11 @@ var use500px = (function() {
 	var MAX_PHOTOS = 100; // 100 is api max
 	// categroies to use - we make them an array to overcome 100 photo limit per call
 	var CATS = ['Nature,City and Architecture', 'Landscapes,Animals', 'Macro,Still Life,Underwater'];
-	var xhr = [];
 
 	return {
 
 		loadImages: function(type, name) {
-
+			var xhr = [];
 			for (var j = 0; j < CATS.length; j++) {
 				(function(index) {
 					var request = URL + 'photos/' + '?consumer_key=' + KEY +
@@ -29,17 +28,13 @@ var use500px = (function() {
 						if (response.error) {
 							console.log(response.error);
 						} else {
-							var images = [], image;
-							var aspectRatio;
+							var images = [];
+							var asp;
 							for (var i = 0; i < response.photos.length; i++) {
 								var photo = response.photos[i];
 								if (!photo.nsfw) {
-									aspectRatio = photo.width / photo.height;
-									image = {};
-									image.url = photo.images[0].url;
-									image.author = photo.user.fullname;
-									image.asp = aspectRatio.toPrecision(3);
-									images.push(image);
+									asp = photo.width / photo.height;
+									myUtils.addImage(images, photo.images[0].url, photo.user.fullname, asp);
 								}
 							}
 							var tmp = [];

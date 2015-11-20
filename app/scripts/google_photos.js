@@ -72,8 +72,8 @@ var gPhotos = (function() {
 			var root = JSON.parse(responseText);
 			var feed = root.feed;
 			var entries = feed.entry || [], entry;
-			var photos = [],photo;
-			var url,author,width,height,aspectRatio;
+			var images = [];
+			var url,author,width,height,asp;
 
 			for (var i = 0; i < entries.length; i++) {
 				entry = entries[i];
@@ -81,17 +81,12 @@ var gPhotos = (function() {
 					url = entry.media$group.media$content[0].url;
 					width = entry.media$group.media$content[0].width;
 					height = entry.media$group.media$content[0].height;
-					aspectRatio = width / height;
+					asp = width / height;
 					author = entry.media$group.media$credit[0].$t;
-
-					photo = {};
-					photo.url = url;
-					photo.author = author;
-					photo.asp = aspectRatio.toPrecision(3);
-					photos.push(photo);
+					myUtils.addImage(images, url, author, asp);
 				}
 			}
-			callback(photos, error);
+			callback(images, error);
 		});
 	}
 
@@ -100,36 +95,30 @@ var gPhotos = (function() {
 		loadAuthorImages: function() {
 			var authorID = '103839696200462383083';
 			var authorAlbum = '6117481612859013089';
-			var request = PICASA_PATH + authorID + '/albumid/' + authorAlbum +
-						'/' + PHOTOS_QUERY;
-			var oReq = new XMLHttpRequest();
+			var request = PICASA_PATH + authorID + '/albumid/' + authorAlbum + '/' + PHOTOS_QUERY;
+			var xhr = new XMLHttpRequest();
 
-			oReq.onload = function() {
-				var root = JSON.parse(oReq.response);
+			xhr.onload = function() {
+				var root = JSON.parse(xhr.response);
 				var feed = root.feed;
 				var entries = feed.entry || [], entry;
-				var authorImages = [],authorImage;
-				var url,author,width,height,aspectRatio;
+				var images = [];
+				var url, author, width, height, asp;
 
 				for (var i = 0; i < entries.length; i++) {
 					entry = entries[i];
 					url = entry.media$group.media$content[0].url;
 					width = entry.media$group.media$content[0].width;
 					height = entry.media$group.media$content[0].height;
-					aspectRatio = width / height;
+					asp = width / height;
 					author = entry.media$group.media$credit[0].$t;
-
-					authorImage = {};
-					authorImage.url = url;
-					authorImage.author = author;
-					authorImage.asp = aspectRatio.toPrecision(3);
-					authorImages.push(authorImage);
+					myUtils.addImage(images, url, author, asp);
 				}
-				localStorage.authorImages = JSON.stringify(authorImages);
+				localStorage.authorImages = JSON.stringify(images);
 			};
 
-			oReq.open('GET', request, true);
-			oReq.send();
+			xhr.open('GET', request, true);
+			xhr.send();
 		},
 
 		// callback function(albumList, error)

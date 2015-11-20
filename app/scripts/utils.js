@@ -34,6 +34,15 @@ var myUtils = (function() {
 			return raw ? parseInt(raw[2], 10) : false;
 		},
 
+		// add an image to an array
+		addImage: function(images, url, author, asp, ex) {
+			var image = {url: url, author: author, asp: asp.toPrecision(3)};
+			if (ex) {
+				image.ex = ex;
+			}
+			images.push(image);
+		},
+
 		// get time
 		// value format: '00:00'
 		getTime: function(value) {

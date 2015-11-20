@@ -24,19 +24,13 @@ var flickr = (function() {
 				if (response.stat !== 'ok') {
 					console.log(response.message);
 				} else {
-					var images = [], image;
-					var aspectRatio;
+					var images = [];
+					var asp;
 					for (var i = 0; i < response.photos.photo.length; i++) {
 						var photo = response.photos.photo[i];
 						if (photo.url_k && photo.media === 'photo' && photo.isfriend !== '0' && photo.isfamily !== '0') {
-							aspectRatio = parseInt(photo.width_k, 10) / parseInt(photo.height_k, 10);
-
-							image = {};
-							image.url = photo.url_k;
-							image.ex = photo.owner;
-							image.author = photo.ownername;
-							image.asp = aspectRatio.toPrecision(3);
-							images.push(image);
+							asp = parseInt(photo.width_k, 10) / parseInt(photo.height_k, 10);
+							myUtils.addImage(images, photo.url_k, photo.ownername, asp, photo.owner);
 						}
 					}
 					localStorage.flickrInterestingImages = JSON.stringify(images);

@@ -11,18 +11,18 @@ var chromeCast = (function() {
 
 		// read chromecast.json and save to localStorage
 		loadImages: function() {
-			var xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (xhttp.readyState === 4 && xhttp.status === 200) {
-					ccImages = JSON.parse(xhttp.responseText);
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					ccImages = JSON.parse(xhr.responseText);
 					for (var i = 0; i < ccImages.length; i++) {
 						ccImages[i].asp = 16 / 9;
 					}
 					localStorage.ccImages = JSON.stringify(ccImages);
 				}
 			};
-			xhttp.open('GET', '/assets/chromecast.json', true);
-			xhttp.send();
+			xhr.open('GET', '/assets/chromecast.json', true);
+			xhr.send();
 		}
 	};
 })();
