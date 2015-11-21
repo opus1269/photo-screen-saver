@@ -70,9 +70,9 @@ var plugins = require('gulp-load-plugins')({
 });
 
 // print which file changed
-var changeEvent = function(evt) {
-	gutil.log('File', gutil.colors.cyan(evt.path.replace(new RegExp('/.*(?=/' + base.src + ')/'), '')), 'was', gutil.colors.magenta(evt.type));
-};
+function onChange(event) {
+	gutil.log('File', gutil.colors.cyan(event.path.replace(new RegExp('/.*(?=/' + base.src + ')/'), '')), 'was', gutil.colors.magenta(event.type));
+}
 
 // clean output directories
 gulp.task('clean', function() {
@@ -100,11 +100,11 @@ gulp.task('lintjs', function() {
 	.pipe(plugins.changed(path.scripts.dev))
 	.pipe(plugins.changed(path.elements.dev))
 	.pipe(plugins.changed(base.dev))
-  .pipe(plugins.if('*.html', plugins.htmlExtract())) // jscs needs extract
-  .pipe(plugins.jshint())
-  .pipe(plugins.jscs())
-  .pipe(plugins.jscsStylish.combineWithHintResults())
-  .pipe(plugins.jshint.reporter('jshint-stylish'))
+	.pipe(plugins.if('*.html', plugins.htmlExtract())) // jscs needs extract
+	.pipe(plugins.jshint())
+	.pipe(plugins.jscs())
+	.pipe(plugins.jscsStylish.combineWithHintResults())
+	.pipe(plugins.jshint.reporter('jshint-stylish'))
 	.pipe(plugins.jshint.reporter('fail'));
 });
 
@@ -174,29 +174,16 @@ gulp.task('zip', function() {
 });
 
 // track changes in development
-gulp.task('watch', ['manifest', 'scripts', 'html', 'styles',  'elements', 'images', 'assets'], function() {
+gulp.task('watch', ['manifest', 'scripts', 'html', 'styles',	'elements', 'images', 'assets'], function() {
 
-	gulp.watch(base.src + 'manifest.json', ['manifest']).on('change', function(evt) {
-		changeEvent(evt);
-	});
-	gulp.watch([files.scripts, 'gulpfile.js'], ['scripts']).on('change', function(evt) {
-		changeEvent(evt);
-	});
-	gulp.watch(files.html, ['html']).on('change', function(evt) {
-		changeEvent(evt);
-	});
-	gulp.watch(files.styles, ['styles']).on('change', function(evt) {
-		changeEvent(evt);
-	});
-	gulp.watch(files.elements, ['elements']).on('change', function(evt) {
-		changeEvent(evt);
-	});
-	gulp.watch(files.images, ['images']).on('change', function(evt) {
-		changeEvent(evt);
-	});
-	gulp.watch(files.assets, ['assets']).on('change', function(evt) {
-		changeEvent(evt);
-	});
+	gulp.watch(base.src + 'manifest.json', ['manifest']).on('change', onChange);
+	gulp.watch([files.scripts, 'gulpfile.js'], ['scripts']).on('change', onChange);
+	gulp.watch(files.html, ['html']).on('change', onChange);
+	gulp.watch(files.styles, ['styles']).on('change', onChange);
+	gulp.watch(files.elements, ['elements']).on('change', onChange);
+	gulp.watch(files.images, ['images']).on('change', onChange);
+	gulp.watch(files.assets, ['assets']).on('change', onChange);
+
 });
 
 // Default - watch for changes in development
@@ -204,18 +191,14 @@ gulp.task('default', ['watch']);
 
 // Development build
 gulp.task('dev', function(callback) {
-
 	isProd = false;
 
-	runSequence(
-		'clean', ['bower', 'manifest', 'html', 'scripts', 'styles',  'elements', 'images', 'assets'], callback);
+	runSequence('clean', ['bower', 'manifest', 'html', 'scripts', 'styles',	'elements', 'images', 'assets'], callback);
 });
 
 // Production build
 gulp.task('prod', function(callback) {
-
 	isProd = true;
 
-	runSequence(
-		'clean', ['manifest', 'html', 'scripts', 'styles',  'vulcanize', 'images', 'assets'], 'zip', callback);
+	runSequence('clean', ['manifest', 'html', 'scripts', 'styles',	'vulcanize', 'images', 'assets'], 'zip', callback);
 });
