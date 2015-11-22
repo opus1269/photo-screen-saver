@@ -55,8 +55,10 @@ var files = {
 	bower: [path.bower.src + '**/*', '!' + path.bower.src + '**/test/*', '!' + path.bower.src + '**/demo/*']
 };
 
-// flag for production build
+// flag for production release build
 var isProd = false;
+// flag to keep key in production build for testing purposes
+var isProdTest = false;
 
 var gulp = require('gulp');
 var del = require('del');
@@ -83,7 +85,7 @@ gulp.task('clean', function() {
 gulp.task('manifest', function() {
 	return gulp.src(base.src + 'manifest.json')
 	.pipe(plugins.changed(isProd ? base.dist : base.dev))
-	.pipe(isProd ? plugins.stripLine('"key":') : gutil.noop())
+	.pipe((isProd && !isProdTest) ? plugins.stripLine('"key":') : gutil.noop())
 	.pipe(isProd ? gulp.dest(base.dist) : gulp.dest(base.dev));
 });
 
@@ -137,7 +139,7 @@ gulp.task('elements', ['lintjs'], function() {
 gulp.task('styles', function() {
 	return gulp.src(files.styles)
 	.pipe(plugins.changed(isProd ? path.styles.dist : path.styles.dev))
-	.pipe(plugins.if('*.css', isProd ? plugins.cssmin() : gutil.noop()))
+	.pipe(plugins.if('*.css', isProd ? plugins.minifyCss() : gutil.noop()))
 	.pipe(isProd ? gulp.dest(path.styles.dist) : gulp.dest(path.styles.dev));
 });
 
@@ -169,8 +171,8 @@ gulp.task('vulcanize', function() {
 // compress for the Chrome Web Store
 gulp.task('zip', function() {
 	return gulp.src(base.dist + '**')
-	.pipe(plugins.zip('store.zip'))
-	.pipe(gulp.dest(base.store));
+	.pipe(!isProdTest ? plugins.zip('store.zip') : plugins.zip('store-test.zip'))
+	.pipe(!isProdTest ? gulp.dest(base.store) : gulp.dest('dist'));
 });
 
 // track changes in development
@@ -199,6 +201,15 @@ gulp.task('dev', function(callback) {
 // Production build
 gulp.task('prod', function(callback) {
 	isProd = true;
+	isProdTest = false;
+
+	runSequence('clean', ['manifest', 'html', 'scripts', 'styles',	'vulcanize', 'images', 'assets'], 'zip', callback);
+});
+
+// Production test build
+gulp.task('prodTest', function(callback) {
+	isProd = true;
+	isProdTest = true;
 
 	runSequence('clean', ['manifest', 'html', 'scripts', 'styles',	'vulcanize', 'images', 'assets'], 'zip', callback);
 });
