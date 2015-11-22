@@ -35,7 +35,7 @@ function initData() {
 		localStorage.usePopular500px = 'false';
 		localStorage.useYesterday500px = 'false';
 		localStorage.useInterestingFlickr = 'false';
-		localStorage.useFavoriteFlickr = 'false';
+		//localStorage.useFavoriteFlickr = 'false'; // no longer used
 	}
 
 	// values from the beginning of time
@@ -59,13 +59,14 @@ function initData() {
 	// remove unused variables
 	localStorage.removeItem('isPreview');
 	localStorage.removeItem('windowID');
+	localStorage.removeItem('useFavoriteFlickr');
 }
 
 // set the text label displayed on the icon
 function setBadgeText() {
 	var text = '';
 	if (JSON.parse(localStorage.enabled)) {
-		text = (JSON.parse(localStorage.keepAwake) && !isActive()) ? 'SLP' : '';
+		text = isActive() ? '' : 'SLP';
 	} else {
 		text = JSON.parse(localStorage.keepAwake) ? 'PWR' : 'OFF';
 	}
@@ -75,10 +76,12 @@ function setBadgeText() {
 // return true if screensaver can be displayed
 function isActive() {
 	var enabled = JSON.parse(localStorage.enabled);
+	var keepAwake = JSON.parse(localStorage.keepAwake);
 	var aStart = JSON.parse(localStorage.activeStart);
 	var aStop = JSON.parse(localStorage.activeStop);
 
-	if (!enabled || !myUtils.isInRange(aStart, aStop)) {
+	if (!enabled || (keepAwake && !myUtils.isInRange(aStart, aStop))) {
+		// not enabled or keepAwke is enabled and is in inactive range
 		return false;
 	}
 	return true;
@@ -89,6 +92,13 @@ function setInactiveState() {
 	JSON.parse(localStorage.allowSuspend) ? chrome.power.releaseKeepAwake() : chrome.power.requestKeepAwake('system');
 	closeScreenSavers();
 	setBadgeText();
+}
+
+// toggle enabled state
+function _toggleEnabled() {
+	localStorage.enabled =  !JSON.parse(localStorage.enabled);
+	// storage changed event not fired on same page as the change
+	processEnabled();
 }
 
 // enabled state of screensaver
@@ -105,11 +115,11 @@ function processEnabled() {
 // create active period scheduling alarms
 // also create a daily alarm to update live photostreams
 function processAlarms() {
-
+	var keepAwake = JSON.parse(localStorage.keepAwake);
 	var aStart = JSON.parse(localStorage.activeStart);
 	var aStop = JSON.parse(localStorage.activeStop);
 
-	if (aStart !== aStop) {
+	if (keepAwake && aStart !== aStop) {
 		var startDelayMin = myUtils.getTimeDelta(aStart);
 		var stopDelayMin = myUtils.getTimeDelta(aStop);
 
@@ -141,7 +151,6 @@ function processAlarms() {
 			});
 		}
 	});
-
 }
 
 function processKeepAwake() {
@@ -364,14 +373,6 @@ function onMessage(request) {
 	if (request.preview === 'show') {
 		displayScreenSaver(true);
 	}
-}
-
-function _toggleEnabled() {
-	// toggle enabled state
-	localStorage.enabled =  !JSON.parse(localStorage.enabled);
-	// storage changed not fired on same page as change
-	processEnabled();
-
 }
 
 // event: context menu clicked
