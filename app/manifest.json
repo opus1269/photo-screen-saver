@@ -52,5 +52,9 @@
 		"default_title": "Photo Screen Saver - click for options",
 		"default_icon": "/images/icon_19.png"
 	},
+	/*"options_ui": {
+		"page": "/html/options.html",
+		"chrome_style": false
+	},*/
 	"options_page": "/html/options.html"
 }

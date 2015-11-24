@@ -1,5 +1,8 @@
 body {
-	background: #fafafa;
 	font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	background: #fafafa;
 	color: #333;
+	min-width: 600px;
+	min-height: 700px;
+	overflow: hidden;
 }
