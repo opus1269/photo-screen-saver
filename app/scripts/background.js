@@ -108,7 +108,7 @@ function _toggleEnabled() {
 function processEnabled() {
 	// update context menu text
 	var label = JSON.parse(localStorage.enabled) ? 'Disable' : 'Enable';
-	chrome.contextMenus.update('ENABLE_MENU', {title: label, contexts: ['browser_action']});
+	chrome.contextMenus.update('ENABLE_MENU', {title: label});
 	setBadgeText();
 }
 
@@ -328,23 +328,21 @@ function onIdleStateChanged(state) {
 		displayScreenSaver();
 	} else {
 		// delay close a little to allow time to process mouse and keyboard
-		chrome.alarms.create('close', {
-			when: Date.now() + 250,
-		});
+		chrome.alarms.create('close', {when: Date.now() + 250});
 	}
 }
 
-// event: alarms triggered
+// event: alarm triggered
 function onAlarm(alarm) {
 	switch (alarm.name) {
 		case 'activeStart':
-			// Don't let display sleep
+			// entering active time range of keep awake
 			if (JSON.parse(localStorage.keepAwake)) {
 				chrome.power.requestKeepAwake('display');
 			}
 			var interval	= parseInt(localStorage.idleTime, 10) * 60;
 			chrome.idle.queryState(interval, function(state) {
-				// on active start display screensaver if the idle time criteria is met
+				// display screensaver if the idle time criteria is met
 				if (state === 'idle') {
 					displayScreenSaver();
 				}
@@ -352,6 +350,7 @@ function onAlarm(alarm) {
 			setBadgeText();
 			break;
 		case 'activeStop':
+			// leaving active time range of keep awake
 			setInactiveState();
 			break;
 		case 'updatePhotos':
@@ -361,6 +360,7 @@ function onAlarm(alarm) {
 			processUseInterestingFlickr();
 			break;
 		case 'close':
+			// close screensavers
 			closeScreenSavers();
 			break;
 		default:
