@@ -65,6 +65,27 @@ var gPhotos = (function() {
 		return true;
 	}
 
+	// return the array of photos
+	function processPhotos(root) {
+		var feed = root.feed;
+		var entries = feed.entry || [], entry;
+		var photos = [];
+		var url,author,width,height,asp;
+
+		for (var i = 0; i < entries.length; i++) {
+			entry = entries[i];
+			if (isImage(entry)) {
+				url = entry.media$group.media$content[0].url;
+				width = entry.media$group.media$content[0].width;
+				height = entry.media$group.media$content[0].height;
+				asp = width / height;
+				author = entry.media$group.media$credit[0].$t;
+				myUtils.addImage(photos, url, author, asp);
+			}
+		}
+		return photos;
+	}
+
 	// load the photos for the given album
 	// callback function(error, photos);
 	function loadPicasaAlbum(id, callback) {
@@ -75,25 +96,7 @@ var gPhotos = (function() {
 				callback(error);
 				return;
 			}
-
-			var root = JSON.parse(responseText);
-			var feed = root.feed;
-			var entries = feed.entry || [], entry;
-			var images = [];
-			var url,author,width,height,asp;
-
-			for (var i = 0; i < entries.length; i++) {
-				entry = entries[i];
-				if (isImage(entry)) {
-					url = entry.media$group.media$content[0].url;
-					width = entry.media$group.media$content[0].width;
-					height = entry.media$group.media$content[0].height;
-					asp = width / height;
-					author = entry.media$group.media$credit[0].$t;
-					myUtils.addImage(images, url, author, asp);
-				}
-			}
-			callback(null, images);
+			callback(null, processPhotos(JSON.parse(responseText)));
 		});
 	}
 
@@ -107,22 +110,7 @@ var gPhotos = (function() {
 			var xhr = new XMLHttpRequest();
 
 			xhr.onload = function() {
-				var root = JSON.parse(xhr.response);
-				var feed = root.feed;
-				var entries = feed.entry || [], entry;
-				var images = [];
-				var url, author, width, height, asp;
-
-				for (var i = 0; i < entries.length; i++) {
-					entry = entries[i];
-					url = entry.media$group.media$content[0].url;
-					width = entry.media$group.media$content[0].width;
-					height = entry.media$group.media$content[0].height;
-					asp = width / height;
-					author = entry.media$group.media$credit[0].$t;
-					myUtils.addImage(images, url, author, asp);
-				}
-				localStorage.authorImages = JSON.stringify(images);
+				localStorage.authorImages = JSON.stringify(processPhotos(JSON.parse(xhr.response)));
 			};
 
 			xhr.open('GET', request, true);
