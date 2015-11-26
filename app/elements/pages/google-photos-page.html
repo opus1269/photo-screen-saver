@@ -91,9 +91,9 @@
 			<paper-material elevation="1">
 				<paper-toolbar class="page-toolbar">
 					<div class="flex">Google Photos Albums</div>
-					<paper-icon-button id="deselect" icon="check-box-outline-blank" on-tap="_albumsDeselectAllTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
+					<paper-icon-button id="deselect" icon="check-box-outline-blank" on-tap="_deselectTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
 					<paper-tooltip for="deselect" position="left" offset="0">Deselect all albums</paper-tooltip>
-					<paper-icon-button id="refresh" icon="refresh" on-tap="_albumRefreshTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
+					<paper-icon-button id="refresh" icon="refresh" on-tap="_refreshTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
 					<paper-tooltip for="refresh" position="left" offset="0">Refresh album list</paper-tooltip>
 					<paper-toggle-button id="googlePhotosToggle" checked="{{useGoogle}}"></paper-toggle-button>
 					<paper-tooltip for="googlePhotosToggle" position="left" offset="0">Enable/disable use of albums</paper-tooltip>
@@ -111,7 +111,7 @@
 				</div>
 
 				<div class="list-container" hidden$="[[waitForLoad]]">
-					<template is="dom-repeat" id="albumsTemplate" items="{{albums}}">
+					<template is="dom-repeat" id="t" items="{{albums}}">
 						<div class="list-item" id="[[item.uid]]" disabled$="[[!useGoogle]]">
 							<iron-label>
 								<paper-item class="center horizontal layout" tabindex="-1">
@@ -148,10 +148,11 @@
 
 			albums: {
 				type: Array,
+				notify: true,
 				value: []
 			},
 
-			albumSelections: {
+			selections: {
 				type: Array,
 				value: []
 			},
@@ -182,8 +183,12 @@
 			this.set('waitForLoad', true);
 			gPhotos.loadAlbumList(function(error, albums) {
 				if (!error) {
-					this.albums = albums;
+					this.splice('albums', 0, this.albums.length);
+					for (var i = 0; i < albums.length; i++) {
+						this.push('albums', JSON.parse(JSON.stringify(albums[i])));
+					}
 					this._selectAlbums();
+					gPhotos.updateImages();
 				} else {
 					this.dialogTextEl.innerHTML = error;
 					this.dialogEl.open();
@@ -194,11 +199,11 @@
 
 		// set the checked state of the albums
 		_selectAlbums: function() {
-			this.albumSelections = JSON.parse(localStorage.albumSelections);
+			this.selections = JSON.parse(localStorage.albumSelections);
 			for (var i = 0; i < this.albums.length; i++) {
-				for (var j = 0; j < this.albumSelections.length; j++) {
-					if (this.albums[i].id === this.albumSelections[j].id) {
-						this.albums[i].checked = true;
+				for (var j = 0; j < this.selections.length; j++) {
+					if (this.albums[i].id === this.selections[j].id) {
+						this.set('albums.' + i + '.checked', true);
 						break;
 					}
 				}
@@ -206,38 +211,35 @@
 		},
 
 		// refresh the album list
-		_albumRefreshTapped: function() {
+		_refreshTapped: function() {
 			this.loadAlbumList();
 		},
 
 		// handle interactive album selections
 		_albumSelectChange: function(event) {
 			var item = event.model.item;
-			var index = this.albumSelections.map(function(e) {return e.id;}).indexOf(item.id);
+			var index = this.selections.map(function(e) {return e.id;}).indexOf(item.id);
 
 			if (index !== -1) {
-				this.splice('albumSelections', index, 1);
+				this.selections.splice(index, 1);
 			}
 
 			if (item.checked) {
-				this.push('albumSelections', {id: item.id, photos: item.photos});
+				this.selections.push({id: item.id, photos: item.photos});
 			}
 
-			localStorage.albumSelections = JSON.stringify(this.albumSelections);
+			localStorage.albumSelections = JSON.stringify(this.selections);
 		},
 
 		// deselect all albums
-		_albumsDeselectAllTapped: function() {
-			var model;
-
+		_deselectTapped: function() {
 			for (var i = 0; i < this.albums.length; i++) {
 				if (this.albums[i].checked) {
-					model = this.$.albumsTemplate.modelForElement(document.querySelector('#' + this.albums[i].uid));
-					model.set('item.checked', false);
+					this.set('albums.' + i + '.checked', false);
 				}
 			}
-			this.splice('albumSelections', 0, this.albumSelections.length);
-			localStorage.albumSelections = JSON.stringify(this.albumSelections);
+			this.selections.splice(0, this.selections.length);
+			localStorage.albumSelections = JSON.stringify(this.selections);
 		}
 
 	});

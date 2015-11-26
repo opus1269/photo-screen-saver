@@ -170,6 +170,12 @@ function processUseAuthors() {
 	}
 }
 
+function processUseGoogle() {
+	if (JSON.parse(localStorage.useGoogle)) {
+		gPhotos.updateImages();
+	}
+}
+
 function processUseChromecast() {
 	localStorage.removeItem('ccImages');
 	if (JSON.parse(localStorage.useChromecast)) {
@@ -212,6 +218,7 @@ function processState(key) {
 		'useYesterday500px': processUseYesterday500px,
 		'useInterestingFlickr': processUseInterestingFlickr,
 		'useAuthors': processUseAuthors,
+		'useGoogle': processUseGoogle,
 	};
 	var noop = function() {};
 	var called = [];
@@ -357,6 +364,7 @@ function onAlarm(alarm) {
 			processUsePopular500px();
 			processUseYesterday500px();
 			processUseInterestingFlickr();
+			processUseGoogle();
 			break;
 		case 'close':
 			// close screensavers

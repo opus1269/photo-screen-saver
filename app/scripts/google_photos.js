@@ -166,6 +166,32 @@ var gPhotos = (function() {
 					})(i);
 				}
 			});
+		},
+
+		// update the photos in the selected albums
+		updateImages: function() {
+			var ct = 0;
+			var items = JSON.parse(localStorage.albumSelections);
+			var newItems = [];
+
+			for (var i = 0; i < items.length; i++) {
+				(function(index) {
+					loadPicasaAlbum(items[index].id, function(error, photos) {
+						if (error) {
+							console.log(error);
+						} else if (photos.length) {
+							newItems.push({id: items[index].id, photos: photos});
+						}
+
+						if (ct === (items.length - 1)) {
+							localStorage.albumSelections = JSON.stringify(newItems);
+							return;
+						}
+						ct++;
+					});
+				})(i);
+			}
 		}
+
 	};
 })();
