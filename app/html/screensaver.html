@@ -22,9 +22,8 @@
 			<neon-animated-pages id="pages" animate-initial-selection class="fit">
 				<template is="dom-repeat" id="repeatTemplate" items="{{items}}">
 					<slide-animatable ani-type="{{transitionType}}" class="fit">
-						<section>
+						<section id="item[[index]]">
 							<iron-image
-								id="{{item.name}}"
 								class="image"
 								src="{{item.path}}"
 								width="{{item.width}}"
@@ -32,8 +31,8 @@
 								sizing="{{item.sizingType}}"
 								preload>
 							</iron-image>
-							<div id="{{item.timeID}}" class="time">{{item.time}}</div>
-							<div id="{{item.authorID}}" class="author">{{item.label}}<sup id="sup"></sup></div>
+							<div class="time">{{item.time}}</div>
+							<div class="author">{{item.label}}<sup id="sup"></sup></div>
 						</section>
 					</slide-animatable>
 				</template>
