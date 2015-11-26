@@ -198,22 +198,21 @@ function processUseInterestingFlickr() {
 	}
 }
 
-// Map processing functions to localStorage values
-var STATE_MAP =  {
-	'enabled': processEnabled,
-	'keepAwake': processKeepAwake,
-	'activeStart': processKeepAwake,
-	'activeStop':  processKeepAwake,
-	'allowSuspend': processKeepAwake,
-	'idleTime': processIdleTime,
-	'useChromecast': processUseChromecast,
-	'usePopular500px': processUsePopular500px,
-	'useYesterday500px': processUseYesterday500px,
-	'useInterestingFlickr': processUseInterestingFlickr,
-	'useAuthors': processUseAuthors,
-};
-
 function processState(key) {
+	// Map processing functions to localStorage values
+	var STATE_MAP =  {
+		'enabled': processEnabled,
+		'keepAwake': processKeepAwake,
+		'activeStart': processKeepAwake,
+		'activeStop':  processKeepAwake,
+		'allowSuspend': processKeepAwake,
+		'idleTime': processIdleTime,
+		'useChromecast': processUseChromecast,
+		'usePopular500px': processUsePopular500px,
+		'useYesterday500px': processUseYesterday500px,
+		'useInterestingFlickr': processUseInterestingFlickr,
+		'useAuthors': processUseAuthors,
+	};
 	var noop = function() {};
 	var called = [];
 	var fn;
