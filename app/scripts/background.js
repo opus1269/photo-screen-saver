@@ -12,7 +12,12 @@ function initData() {
 	var oldVer = parseInt(localStorage.version,10);
 
 	// latest version
-	localStorage.version = '3';
+	localStorage.version = '4';
+
+	// Add the new version 4 values
+	if (!oldVer || (oldVer < 4)) {
+		localStorage.useEditors500px = 'false';
+	}
 
 	// Add the new version 3 values
 	if (!oldVer || (oldVer < 3)) {
@@ -183,6 +188,13 @@ function processUseChromecast() {
 	}
 }
 
+function processUseEditors500px() {
+	localStorage.removeItem('editors500pxImages');
+	if (JSON.parse(localStorage.useEditors500px)) {
+		use500px.loadImages('editors', 'editors500pxImages');
+	}
+}
+
 function processUsePopular500px() {
 	localStorage.removeItem('popular500pxImages');
 	if (JSON.parse(localStorage.usePopular500px)) {
@@ -214,6 +226,7 @@ function processState(key) {
 		'allowSuspend': processKeepAwake,
 		'idleTime': processIdleTime,
 		'useChromecast': processUseChromecast,
+		'useEditors500px': processUseEditors500px,
 		'usePopular500px': processUsePopular500px,
 		'useYesterday500px': processUseYesterday500px,
 		'useInterestingFlickr': processUseInterestingFlickr,
@@ -361,6 +374,7 @@ function onAlarm(alarm) {
 			break;
 		case 'updatePhotos':
 			// get the latest for the live photo streams
+			processUseEditors500px();
 			processUsePopular500px();
 			processUseYesterday500px();
 			processUseInterestingFlickr();

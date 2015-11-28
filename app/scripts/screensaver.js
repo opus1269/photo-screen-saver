@@ -213,6 +213,7 @@ t.getPhotoArray = function() {
 
 	arr = arr.concat(t.getPhotos('useGoogle', 'albumSelections','Google User', true));
 	arr = arr.concat(t.getPhotos('useChromecast', 'ccImages','Google'));
+	arr = arr.concat(t.getPhotos('useEditors500px', 'editors500pxImages','500'));
 	arr = arr.concat(t.getPhotos('usePopular500px', 'popular500pxImages','500'));
 	arr = arr.concat(t.getPhotos('useYesterday500px', 'yesterday500pxImages','500'));
 	arr = arr.concat(t.getPhotos('useInterestingFlickr', 'flickrInterestingImages','flickr'));
