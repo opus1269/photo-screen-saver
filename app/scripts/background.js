@@ -359,7 +359,7 @@ function onAlarm(alarm) {
 			if (JSON.parse(localStorage.keepAwake)) {
 				chrome.power.requestKeepAwake('display');
 			}
-			var interval	= parseInt(localStorage.idleTime, 10) * 60;
+			var interval = parseInt(localStorage.idleTime, 10) * 60;
 			chrome.idle.queryState(interval, function(state) {
 				// display screensaver if the idle time criteria is met
 				if (state === 'idle') {
