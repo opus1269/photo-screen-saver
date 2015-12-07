@@ -20,7 +20,6 @@
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.0",
     "neon-elements": "PolymerElements/neon-elements#^1.0.0",
-    "iron-label": "PolymerElements/iron-label#^1.0.1",
     "paper-time-picker": "git://github.com/opus1269/paper-time-picker.git#Mine",
     "iron-image": "git://github.com/opus1269/iron-image.git#bicknellr/state"
   }
