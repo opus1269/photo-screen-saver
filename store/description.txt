@@ -2,7 +2,8 @@ This extension displays a screensaver composed of a slide show of photos in vari
 
 *   The users own Google Photos Albums
 *   Background photos used by the Chromecast media streaming device
-*   Popular and fresh photos from 500px
+*   Several photostreams from 500px
+*   Several photo subreddits from reddit
 *   Interesting photos from Flickr
 
 Many options are available to control the appearance of the slide show including:

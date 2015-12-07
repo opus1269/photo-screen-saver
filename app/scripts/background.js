@@ -12,7 +12,14 @@ function initData() {
 	var oldVer = parseInt(localStorage.version,10);
 
 	// latest version
-	localStorage.version = '4';
+	localStorage.version = '5';
+
+	// Add the new version 5 values
+	if (!oldVer || (oldVer < 5)) {
+		localStorage.useSpaceReddit = 'false';
+		localStorage.useEarthReddit = 'false';
+		localStorage.useAnimalReddit = 'false';
+	}
 
 	// Add the new version 4 values
 	if (!oldVer || (oldVer < 4)) {
@@ -209,6 +216,27 @@ function processUseYesterday500px() {
 	}
 }
 
+function processUseSpaceReddit() {
+	localStorage.removeItem('spaceRedditImages');
+	if (JSON.parse(localStorage.useSpaceReddit)) {
+		reddit.loadImages('r/spaceporn/', 'spaceRedditImages');
+	}
+}
+
+function processUseEarthReddit() {
+	localStorage.removeItem('earthRedditImages');
+	if (JSON.parse(localStorage.useEarthReddit)) {
+		reddit.loadImages('r/EarthPorn/', 'earthRedditImages');
+	}
+}
+
+function processUseAnimalReddit() {
+	localStorage.removeItem('animalRedditImages');
+	if (JSON.parse(localStorage.useAnimalReddit)) {
+		reddit.loadImages('r/animalporn/', 'animalRedditImages');
+	}
+}
+
 function processUseInterestingFlickr() {
 	localStorage.removeItem('flickrInterestingImages');
 	if (JSON.parse(localStorage.useInterestingFlickr)) {
@@ -229,6 +257,9 @@ function processState(key) {
 		'useEditors500px': processUseEditors500px,
 		'usePopular500px': processUsePopular500px,
 		'useYesterday500px': processUseYesterday500px,
+		'useSpaceReddit': processUseSpaceReddit,
+		'useEarthReddit': processUseEarthReddit,
+		'useAnimalReddit': processUseAnimalReddit,
 		'useInterestingFlickr': processUseInterestingFlickr,
 		'useAuthors': processUseAuthors,
 		'useGoogle': processUseGoogle,
@@ -377,6 +408,9 @@ function onAlarm(alarm) {
 			processUseEditors500px();
 			processUsePopular500px();
 			processUseYesterday500px();
+			processUseSpaceReddit();
+			processUseEarthReddit();
+			processUseAnimalReddit();
 			processUseInterestingFlickr();
 			processUseGoogle();
 			break;

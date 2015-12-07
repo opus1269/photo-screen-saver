@@ -119,6 +119,11 @@ t.showPhotoInfo = function() {
 				chrome.tabs.create({url: url});
 			}
 			break;
+		case 'reddit':
+			if (item.ex) {
+				chrome.tabs.create({url: item.ex});
+			}
+			break;
 		default:
 			break;
 	}
@@ -216,6 +221,9 @@ t.getPhotoArray = function() {
 	arr = arr.concat(t.getPhotos('useEditors500px', 'editors500pxImages','500'));
 	arr = arr.concat(t.getPhotos('usePopular500px', 'popular500pxImages','500'));
 	arr = arr.concat(t.getPhotos('useYesterday500px', 'yesterday500pxImages','500'));
+	arr = arr.concat(t.getPhotos('useSpaceReddit', 'spaceRedditImages','reddit'));
+	arr = arr.concat(t.getPhotos('useEarthReddit', 'earthRedditImages','reddit'));
+	arr = arr.concat(t.getPhotos('useAnimalReddit', 'animalRedditImages','reddit'));
 	arr = arr.concat(t.getPhotos('useInterestingFlickr', 'flickrInterestingImages','flickr'));
 	arr = arr.concat(t.getPhotos('useAuthors', 'authorImages','Google'));
 

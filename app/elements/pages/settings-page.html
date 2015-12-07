@@ -133,10 +133,12 @@
 						<setting-toggle name="useEditors500px"
 										main-label="500px - editors' choice"
 										secondary-label="Editors' choice photos from the 500px photo sharing site"
+										noseparator
 										disabled$="[[!enabled]]"></setting-toggle>
 						<setting-toggle name="usePopular500px"
 										main-label="500px - popular"
 										secondary-label="Popular photos from the 500px photo sharing site"
+										noseparator
 										disabled$="[[!enabled]]"></setting-toggle>
 						<setting-toggle name="useYesterday500px"
 										main-label="500px - fresh"
@@ -146,11 +148,25 @@
 										main-label="Flickr - interesting"
 										secondary-label="Interesting photos from the Flickr photo sharing site, updated daily"
 										disabled$="[[!enabled]]"></setting-toggle>
+						<setting-toggle name="useSpaceReddit"
+										main-label="reddit - space"
+										secondary-label="Primarily celestial photos from reddit, updated daily"
+										noseparator
+										disabled$="[[!enabled]]"></setting-toggle>
+						<setting-toggle name="useEarthReddit"
+										main-label="reddit - earth"
+										secondary-label="Primarily landscape photos from reddit, updated daily"
+										noseparator
+										disabled$="[[!enabled]]"></setting-toggle>
+						<setting-toggle name="useAnimalReddit"
+										main-label="reddit - animal"
+										secondary-label="Animal photos from reddit, updated daily"
+										disabled$="[[!enabled]]"></setting-toggle>
 						<setting-toggle name="useAuthors"
 										main-label="Extension developer"
 										secondary-label="Photos from the guy who wrote this"
 										disabled$="[[!enabled]]"></setting-toggle>
-						<paper-item tabindex="-1">Click mouse to view the website for Flickr and 500px photos</paper-item>
+						<paper-item tabindex="-1">Click mouse to view the website for Flickr, 500px and reddit photos</paper-item>
 						<paper-item tabindex="-1">This product uses the Flickr API but is not endorsed or certified by Flickr</paper-item>
 					</div>
 				</iron-pages>

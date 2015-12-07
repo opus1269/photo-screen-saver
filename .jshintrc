@@ -29,6 +29,8 @@
 		"gPhotos": true,
 		"use500px": true,
 		"flickr": true,
+		"Snoocore": true,
+		"reddit": true,
 		"KeyframeEffect": true,
 		"ga": true
 	}

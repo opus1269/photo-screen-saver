@@ -13,7 +13,7 @@ var myUtils = (function() {
 
 	return {
 
-		MIN_IN_DAY:  MIN_IN_DAY,
+		MIN_IN_DAY: MIN_IN_DAY,
 
 		MSEC_IN_DAY: MSEC_IN_DAY,
 
@@ -27,11 +27,23 @@ var myUtils = (function() {
 			}
 		},
 
-		// from:
+		// get the current Chrome version
 		// http://stackoverflow.com/questions/4900436/detect-version-of-chrome-installed
 		getChromeVersion: function() {
 			var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
 			return raw ? parseInt(raw[2], 10) : false;
+		},
+
+		// get a global unique identifier
+		// http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+		getGuid: function() {
+			function s4() {
+				return Math.floor((1 + Math.random()) * 0x10000)
+				.toString(16)
+				.substring(1);
+			}
+			return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+			s4() + '-' + s4() + s4() + s4();
 		},
 
 		// add an image to an array

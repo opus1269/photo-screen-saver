@@ -38,6 +38,11 @@ var path = {
 		dist: base.dist + 'assets/',
 		dev: base.dev + 'assets/'
 	},
+	lib: {
+		src: base.src + 'lib/',
+		dist: base.dist + 'lib/',
+		dev: base.dev + 'lib/'
+	},
 	bower: {
 		src: base.src + 'bower_components/',
 		dist: base.dist + 'bower_components/',
@@ -46,12 +51,14 @@ var path = {
 };
 
 var files = {
+	manifest: base.src + 'manifest.json',
 	scripts: path.scripts.src + '*.*',
 	html: path.html.src + '*.*',
 	styles: path.styles.src + '**/*.*',
 	elements: path.elements.src + '**/*.*',
 	images: path.images.src + '*.*',
 	assets: path.assets.src + '*.*',
+	lib: path.lib.src + '*.*',
 	bower: [path.bower.src + '**/*', '!' + path.bower.src + '**/test/*', '!' + path.bower.src + '**/demo/*']
 };
 
@@ -143,6 +150,14 @@ gulp.task('styles', function() {
 	.pipe(isProd ? gulp.dest(path.styles.dist) : gulp.dest(path.styles.dev));
 });
 
+// images
+gulp.task('images', function() {
+	return gulp.src(files.images)
+	.pipe(plugins.changed(isProd ? path.images.dist : path.images.dev))
+	.pipe(plugins.imagemin({progressive: true, interlaced: true}))
+	.pipe(isProd ? gulp.dest(path.images.dist) : gulp.dest(path.images.dev));
+});
+
 // assets
 gulp.task('assets', function() {
 	return gulp.src(files.assets)
@@ -150,12 +165,11 @@ gulp.task('assets', function() {
 	.pipe(isProd ? gulp.dest(path.assets.dist) : gulp.dest(path.assets.dev));
 });
 
-// images
-gulp.task('images', function() {
-	return gulp.src(files.images)
-	.pipe(plugins.changed(isProd ? path.images.dist : path.images.dev))
-	.pipe(plugins.imagemin({progressive: true, interlaced: true}))
-	.pipe(isProd ? gulp.dest(path.images.dist) : gulp.dest(path.images.dev));
+// lib
+gulp.task('lib', function() {
+	return gulp.src(files.lib)
+	.pipe(plugins.changed(isProd ? path.lib.dist : path.lib.dev))
+	.pipe(isProd ? gulp.dest(path.lib.dist) : gulp.dest(path.lib.dev));
 });
 
 // vulcanize for production
@@ -176,15 +190,16 @@ gulp.task('zip', function() {
 });
 
 // track changes in development
-gulp.task('watch', ['manifest', 'scripts', 'html', 'styles',	'elements', 'images', 'assets'], function() {
+gulp.task('watch', ['manifest', 'scripts', 'html', 'styles',	'elements', 'images', 'assets', 'lib'], function() {
 
-	gulp.watch(base.src + 'manifest.json', ['manifest']).on('change', onChange);
+	gulp.watch(files.manifest, ['manifest']).on('change', onChange);
 	gulp.watch([files.scripts, 'gulpfile.js'], ['scripts']).on('change', onChange);
 	gulp.watch(files.html, ['html']).on('change', onChange);
 	gulp.watch(files.styles, ['styles']).on('change', onChange);
 	gulp.watch(files.elements, ['elements']).on('change', onChange);
 	gulp.watch(files.images, ['images']).on('change', onChange);
 	gulp.watch(files.assets, ['assets']).on('change', onChange);
+	gulp.watch(files.lib, ['lib']).on('change', onChange);
 
 });
 
@@ -195,7 +210,7 @@ gulp.task('default', ['watch']);
 gulp.task('dev', function(callback) {
 	isProd = false;
 
-	runSequence('clean', ['bower', 'manifest', 'html', 'scripts', 'styles',	'elements', 'images', 'assets'], callback);
+	runSequence('clean', ['bower', 'manifest', 'html', 'scripts', 'styles',	'elements', 'images', 'assets', 'lib'], callback);
 });
 
 // Production build
@@ -203,7 +218,7 @@ gulp.task('prod', function(callback) {
 	isProd = true;
 	isProdTest = false;
 
-	runSequence('clean', ['manifest', 'html', 'scripts', 'styles',	'vulcanize', 'images', 'assets'], 'zip', callback);
+	runSequence('clean', ['manifest', 'html', 'scripts', 'styles',	'vulcanize', 'images', 'assets', 'lib'], 'zip', callback);
 });
 
 // Production test build
@@ -211,5 +226,5 @@ gulp.task('prodTest', function(callback) {
 	isProd = true;
 	isProdTest = true;
 
-	runSequence('clean', ['manifest', 'html', 'scripts', 'styles',	'vulcanize', 'images', 'assets'], 'zip', callback);
+	runSequence('clean', ['manifest', 'html', 'scripts', 'styles',	'vulcanize', 'images', 'assets', 'lib'], 'zip', callback);
 });

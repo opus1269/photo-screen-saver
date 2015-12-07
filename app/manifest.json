@@ -35,10 +35,14 @@
 		"alarms",
 		"contextMenus",
 		"https://chrome.google.com/",
-		"https://picasaweb.google.com/"
+		"https://picasaweb.google.com/",
+		"https://oauth.reddit.com/",
+		"https://www.reddit.com/"
 	],
 	"background": {
 		"scripts": [
+			"/lib/Snoocore-browser.min.js",
+			"/scripts/reddit.js",
 			"/scripts/google_photos.js",
 			"/scripts/chromecast.js",
 			"/scripts/use500px.js",
