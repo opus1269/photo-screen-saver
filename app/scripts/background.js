@@ -9,64 +9,49 @@ function initData() {
 	// using local storage as a quick and dirty replacement for MVC
 	// not using chrome.storage 'cause the async nature of it complicates things
 	// just remember to use parse methods because all values are strings
-	var oldVer = parseInt(localStorage.version,10);
 
-	// latest version
 	localStorage.version = '5';
 
-	// Add the new version 5 values
-	if (!oldVer || (oldVer < 5)) {
-		localStorage.useSpaceReddit = 'false';
-		localStorage.useEarthReddit = 'false';
-		localStorage.useAnimalReddit = 'false';
-	}
+	var VALS = {
+		'enabled': 'true',
+		'idleTime': '10', // minutes
+		'transitionTime': '30', // seconds
+		'skip': 'true',
+		'shuffle': 'true',
+		'photoSizing': '0',
+		'photoTransition': '4',
+		'showTime': '1', // 12 hr format default
+		'showPhotog': 'true',
+		'background': '"background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)"',
+		'keepAwake': 'false',
+		'allDisplays': 'false',
+		'activeStart': '"00:00"', // 24 hr time
+		'activeStop': '"00:00"', // 24 hr time
+		'allowSuspend': 'false',
+		'useSpaceReddit': 'false',
+		'useEarthReddit': 'false',
+		'useAnimalReddit': 'false',
+		'useEditors500px': 'false',
+		'usePopular500px': 'false',
+		'useYesterday500px': 'false',
+		'useInterestingFlickr': 'false',
+		'useChromecast': 'true',
+		'useAuthors': 'false',
+		'useGoogle': 'true',
+		'albumSelections': '[]',
+		'useFlickr': 'true',
+		'useFlickrSelections': '[]',
+		'use500px': 'true',
+		'use500pxSelections': '[]',
+		'useReddit': 'true',
+		'useRedditSelections': '[]',
+	};
 
-	// Add the new version 4 values
-	if (!oldVer || (oldVer < 4)) {
-		localStorage.useEditors500px = 'false';
-	}
-
-	// Add the new version 3 values
-	if (!oldVer || (oldVer < 3)) {
-		localStorage.background = '"background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)"';
-		// these not implemented yet
-		localStorage.useFlickr = 'true';
-		localStorage.useFlickrSelections = '[]';
-		localStorage.use500px = 'true';
-		localStorage.use500pxSelections = '[]';
-	}
-
-	// Add the new version 2 values
-	if (!oldVer || (oldVer < 2)) {
-		localStorage.allDisplays = 'false';
-		localStorage.activeStart = '"00:00"'; // 24 hr time
-		localStorage.activeStop = '"00:00"';	// 24 hr time
-		localStorage.allowSuspend = 'false';
-		localStorage.showTime = '1'; // 12 hour format
-		localStorage.showPhotog = 'true';
-		localStorage.usePopular500px = 'false';
-		localStorage.useYesterday500px = 'false';
-		localStorage.useInterestingFlickr = 'false';
-		//localStorage.useFavoriteFlickr = 'false'; // no longer used
-	}
-
-	// values from the beginning of time
-	if (!oldVer) {
-		localStorage.enabled = 'true';
-		localStorage.idleTime = '10'; // minutes
-		localStorage.transitionTime = '30'; // seconds
-		localStorage.skip = 'true';
-		localStorage.shuffle = 'true';
-		localStorage.keepAwake = 'false';
-		localStorage.photoSizing = '0';
-		localStorage.photoTransition = '4';
-		localStorage.useChromecast = 'true';
-		localStorage.useAuthors = 'false';
-		localStorage.useGoogle = 'true';
-		localStorage.albumSelections = '[]';
-		//localStorage.isPreview = 'false'; // no longer used
-		//localStorage.windowID = '-1';	// no longer used
-	}
+	Object.keys(VALS).forEach(function(key) {
+		if (!localStorage.getItem(key)) {
+			localStorage.setItem(key, VALS[key]);
+		}
+	});
 
 	// remove unused variables
 	localStorage.removeItem('isPreview');
