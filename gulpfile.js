@@ -177,7 +177,7 @@ gulp.task('vulcanize', function() {
 	return gulp.src(path.elements.src + 'elements.html')
 	.pipe(plugins.vulcanize({stripComments: true, inlineCss: true, inlineScripts: true}))
 	.pipe(plugins.crisper({scriptInHead: false}))
-	.pipe(plugins.if('*.html', plugins.minifyInline()))
+	.pipe(plugins.if('*.html', plugins.minifyInline({css: false}))) // can't handle polymer css
 	.pipe(plugins.if('*.js', plugins.uglify()))
 	.pipe(gulp.dest(path.elements.dist));
 });
