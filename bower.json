@@ -21,6 +21,7 @@
     "paper-elements": "PolymerElements/paper-elements#^1.0.0",
     "neon-elements": "PolymerElements/neon-elements#^1.0.0",
     "paper-time-picker": "opus1269/paper-time-picker#Mine",
+    "iron-flex-layout": "opus1269/iron-flex-layout#fix-css",
     "iron-image": "opus1269/iron-image#bicknellr/state"
   }
 }
