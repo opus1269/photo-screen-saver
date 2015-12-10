@@ -28,6 +28,7 @@
 		"InfoPage": true,
 		"gPhotos": true,
 		"use500px": true,
+		"photoSources": true,
 		"flickr": true,
 		"Snoocore": true,
 		"reddit": true,

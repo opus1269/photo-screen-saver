@@ -185,51 +185,6 @@ t.isBadAspect = function(aspect) {
 	return false;
 };
 
-// add a type identifying the source of a photo
-t.addType = function(arr, type) {
-	for (var i = 0; i < arr.length; i++) {
-		arr[i].type = type;
-	}
-};
-
-// get an array of photos from localStorage
-t.getPhotos = function(use, name, type, isArray) {
-	var ret = [];
-	if (isArray) {
-		if (JSON.parse(localStorage.getItem(use))) {
-			var items = JSON.parse(localStorage.getItem(name));
-			for (var i = 0; i < items.length; i++) {
-				ret = ret.concat(items[i].photos);
-				if (ret) {t.addType(ret, type);}
-			}
-		}
-	} else {
-		if (JSON.parse(localStorage.getItem(use))) {
-			ret = JSON.parse(localStorage.getItem(name));
-			if (ret) {t.addType(ret, type);}
-		}
-	}
-	return ret;
-};
-
-// build the array of all selected photos
-t.getPhotoArray = function() {
-	var arr = [];
-
-	arr = arr.concat(t.getPhotos('useGoogle', 'albumSelections','Google User', true));
-	arr = arr.concat(t.getPhotos('useChromecast', 'ccImages','Google'));
-	arr = arr.concat(t.getPhotos('useEditors500px', 'editors500pxImages','500'));
-	arr = arr.concat(t.getPhotos('usePopular500px', 'popular500pxImages','500'));
-	arr = arr.concat(t.getPhotos('useYesterday500px', 'yesterday500pxImages','500'));
-	arr = arr.concat(t.getPhotos('useSpaceReddit', 'spaceRedditImages','reddit'));
-	arr = arr.concat(t.getPhotos('useEarthReddit', 'earthRedditImages','reddit'));
-	arr = arr.concat(t.getPhotos('useAnimalReddit', 'animalRedditImages','reddit'));
-	arr = arr.concat(t.getPhotos('useInterestingFlickr', 'flickrInterestingImages','flickr'));
-	arr = arr.concat(t.getPhotos('useAuthors', 'authorImages','Google'));
-
-	return arr;
-};
-
 t.ignorePhoto = function(item) {
 	var ret = false;
 	var skip = JSON.parse(localStorage.skip);
@@ -253,7 +208,7 @@ t.loadImages = function() {
 	t.itemsAll = [];
 	this.splice('items', 0, t.items.length);
 
-	arr = t.getPhotoArray();
+	arr = photoSources.getAllPhotos();
 
 	if (JSON.parse(localStorage.shuffle)) {
 		// randomize the order

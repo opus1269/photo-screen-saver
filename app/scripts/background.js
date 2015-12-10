@@ -160,75 +160,7 @@ function processIdleTime() {
 	chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
 }
 
-function processUseAuthors() {
-	localStorage.removeItem('authorImages');
-	if (JSON.parse(localStorage.useAuthors)) {
-		gPhotos.loadAuthorImages();
-	}
-}
-
-function processUseGoogle() {
-	if (JSON.parse(localStorage.useGoogle)) {
-		gPhotos.updateImages();
-	}
-}
-
-function processUseChromecast() {
-	localStorage.removeItem('ccImages');
-	if (JSON.parse(localStorage.useChromecast)) {
-		chromeCast.loadImages();
-	}
-}
-
-function processUseEditors500px() {
-	localStorage.removeItem('editors500pxImages');
-	if (JSON.parse(localStorage.useEditors500px)) {
-		use500px.loadImages('editors', 'editors500pxImages');
-	}
-}
-
-function processUsePopular500px() {
-	localStorage.removeItem('popular500pxImages');
-	if (JSON.parse(localStorage.usePopular500px)) {
-		use500px.loadImages('popular', 'popular500pxImages');
-	}
-}
-
-function processUseYesterday500px() {
-	localStorage.removeItem('yesterday500pxImages');
-	if (JSON.parse(localStorage.useYesterday500px)) {
-		use500px.loadImages('fresh_yesterday', 'yesterday500pxImages');
-	}
-}
-
-function processUseSpaceReddit() {
-	localStorage.removeItem('spaceRedditImages');
-	if (JSON.parse(localStorage.useSpaceReddit)) {
-		reddit.loadImages('r/spaceporn/', 'spaceRedditImages');
-	}
-}
-
-function processUseEarthReddit() {
-	localStorage.removeItem('earthRedditImages');
-	if (JSON.parse(localStorage.useEarthReddit)) {
-		reddit.loadImages('r/EarthPorn/', 'earthRedditImages');
-	}
-}
-
-function processUseAnimalReddit() {
-	localStorage.removeItem('animalRedditImages');
-	if (JSON.parse(localStorage.useAnimalReddit)) {
-		reddit.loadImages('r/animalporn/', 'animalRedditImages');
-	}
-}
-
-function processUseInterestingFlickr() {
-	localStorage.removeItem('flickrInterestingImages');
-	if (JSON.parse(localStorage.useInterestingFlickr)) {
-		flickr.loadImages();
-	}
-}
-
+// process changes to localStorage settings
 function processState(key) {
 	// Map processing functions to localStorage values
 	var STATE_MAP =  {
@@ -237,17 +169,7 @@ function processState(key) {
 		'activeStart': processKeepAwake,
 		'activeStop':  processKeepAwake,
 		'allowSuspend': processKeepAwake,
-		'idleTime': processIdleTime,
-		'useChromecast': processUseChromecast,
-		'useEditors500px': processUseEditors500px,
-		'usePopular500px': processUsePopular500px,
-		'useYesterday500px': processUseYesterday500px,
-		'useSpaceReddit': processUseSpaceReddit,
-		'useEarthReddit': processUseEarthReddit,
-		'useAnimalReddit': processUseAnimalReddit,
-		'useInterestingFlickr': processUseInterestingFlickr,
-		'useAuthors': processUseAuthors,
-		'useGoogle': processUseGoogle,
+		'idleTime': processIdleTime
 	};
 	var noop = function() {};
 	var called = [];
@@ -262,8 +184,15 @@ function processState(key) {
 				return fn();
 			}
 		});
+		// process photo SOURCES
+		photoSources.processAll();
 	} else {
-		(STATE_MAP[key] || noop)();
+		// individual change
+		if (photoSources.contains(key)) {
+			photoSources.process(key);
+		} else {
+			(STATE_MAP[key] || noop)();
+		}
 	}
 }
 
@@ -390,14 +319,7 @@ function onAlarm(alarm) {
 			break;
 		case 'updatePhotos':
 			// get the latest for the live photo streams
-			processUseEditors500px();
-			processUsePopular500px();
-			processUseYesterday500px();
-			processUseSpaceReddit();
-			processUseEarthReddit();
-			processUseAnimalReddit();
-			processUseInterestingFlickr();
-			processUseGoogle();
+			photoSources.processDaily();
 			break;
 		case 'close':
 			// close screensavers

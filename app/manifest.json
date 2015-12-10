@@ -48,6 +48,7 @@
 			"/scripts/use500px.js",
 			"/scripts/flickr.js",
 			"/scripts/utils.js",
+			"/scripts/photo_sources.js",
 			"/scripts/background.js"
 		],
 		"persistent": false
