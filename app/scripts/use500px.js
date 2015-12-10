@@ -8,7 +8,7 @@ var use500px = (function() {
 	var URL = 'https://api.500px.com/v1/';
 	var KEY = 'iyKV6i6wu0R8QUea9mIXvEsQxIF0tMRVXopwYcFC';
 	var MAX_PHOTOS = 100; // 100 is api max
-	// categroies to use - we make them an array to overcome 100 photo limit per call
+	// categories to use - we make them an array to overcome 100 photo limit per call
 	var CATS = ['Nature,City and Architecture', 'Landscapes,Animals', 'Macro,Still Life,Underwater'];
 
 	return {
