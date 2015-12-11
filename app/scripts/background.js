@@ -4,274 +4,19 @@
 (function() {
 'use strict';
 
-// initialize the data in local storage
-function initData() {
-	// using local storage as a quick and dirty replacement for MVC
-	// not using chrome.storage 'cause the async nature of it complicates things
-	// just remember to use parse methods because all values are strings
-
-	localStorage.version = '5';
-
-	var VALS = {
-		'enabled': 'true',
-		'idleTime': '10', // minutes
-		'transitionTime': '30', // seconds
-		'skip': 'true',
-		'shuffle': 'true',
-		'photoSizing': '0',
-		'photoTransition': '4',
-		'showTime': '1', // 12 hr format default
-		'showPhotog': 'true',
-		'background': '"background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)"',
-		'keepAwake': 'false',
-		'allDisplays': 'false',
-		'activeStart': '"00:00"', // 24 hr time
-		'activeStop': '"00:00"', // 24 hr time
-		'allowSuspend': 'false',
-		'useSpaceReddit': 'false',
-		'useEarthReddit': 'false',
-		'useAnimalReddit': 'false',
-		'useEditors500px': 'false',
-		'usePopular500px': 'false',
-		'useYesterday500px': 'false',
-		'useInterestingFlickr': 'false',
-		'useChromecast': 'true',
-		'useAuthors': 'false',
-		'useGoogle': 'true',
-		'albumSelections': '[]',
-		'useFlickr': 'true',
-		'useFlickrSelections': '[]',
-		'use500px': 'true',
-		'use500pxSelections': '[]',
-		'useReddit': 'true',
-		'useRedditSelections': '[]',
-	};
-
-	Object.keys(VALS).forEach(function(key) {
-		if (!localStorage.getItem(key)) {
-			localStorage.setItem(key, VALS[key]);
-		}
-	});
-
-	// remove unused variables
-	localStorage.removeItem('isPreview');
-	localStorage.removeItem('windowID');
-	localStorage.removeItem('useFavoriteFlickr');
-}
-
-// set the text label displayed on the icon
-function setBadgeText() {
-	var text = '';
-	if (JSON.parse(localStorage.enabled)) {
-		text = isActive() ? '' : 'SLP';
-	} else {
-		text = JSON.parse(localStorage.keepAwake) ? 'PWR' : 'OFF';
-	}
-	chrome.browserAction.setBadgeText({text: text});
-}
-
-// return true if screensaver can be displayed
-function isActive() {
-	var enabled = JSON.parse(localStorage.enabled);
-	var keepAwake = JSON.parse(localStorage.keepAwake);
-	var aStart = JSON.parse(localStorage.activeStart);
-	var aStop = JSON.parse(localStorage.activeStop);
-
-	if (!enabled || (keepAwake && !myUtils.isInRange(aStart, aStop))) {
-		// not enabled or keepAwke is enabled and is in inactive range
-		return false;
-	}
-	return true;
-}
-
-// set state when the screensaver is in the non-active range
-function setInactiveState() {
-	JSON.parse(localStorage.allowSuspend) ? chrome.power.releaseKeepAwake() : chrome.power.requestKeepAwake('system');
-	closeScreenSavers();
-	setBadgeText();
-}
-
-// toggle enabled state
-function _toggleEnabled() {
-	localStorage.enabled =  !JSON.parse(localStorage.enabled);
-	// storage changed event not fired on same page as the change
-	processEnabled();
-}
-
-// enabled state of screensaver
-// note: this does not effect the keep awake settings so you could
-// use the extension as a display keep awake scheduler without
-// using the screensaver
-function processEnabled() {
-	// update context menu text
-	var label = JSON.parse(localStorage.enabled) ? 'Disable' : 'Enable';
-	chrome.contextMenus.update('ENABLE_MENU', {title: label});
-	setBadgeText();
-}
-
-// create active period scheduling alarms
-// also create a daily alarm to update live photostreams
-function processAlarms() {
-	var keepAwake = JSON.parse(localStorage.keepAwake);
-	var aStart = JSON.parse(localStorage.activeStart);
-	var aStop = JSON.parse(localStorage.activeStop);
-
-	if (keepAwake && aStart !== aStop) {
-		var startDelayMin = myUtils.getTimeDelta(aStart);
-		var stopDelayMin = myUtils.getTimeDelta(aStop);
-
-		chrome.alarms.create('activeStart', {
-			delayInMinutes: startDelayMin,
-			periodInMinutes: myUtils.MIN_IN_DAY
-		});
-		chrome.alarms.create('activeStop',{
-			delayInMinutes: stopDelayMin,
-			periodInMinutes: myUtils.MIN_IN_DAY
-		});
-
-		// if we are currently outside of the active range
-		// then set inactive state
-		if (!myUtils.isInRange(aStart, aStop)) {
-			setInactiveState();
-		}
-	} else {
-		chrome.alarms.clear('activeStart');
-		chrome.alarms.clear('activeStop');
-	}
-
-	// Add daily alarm to update 500px and flickr photos
-	chrome.alarms.get('updatePhotos', function(alarm) {
-		if (!alarm) {
-			chrome.alarms.create('updatePhotos', {
-				when: Date.now() + myUtils.MSEC_IN_DAY,
-				periodInMinutes: myUtils.MIN_IN_DAY
-			});
-		}
-	});
-}
-
-function processKeepAwake() {
-	JSON.parse(localStorage.keepAwake) ? chrome.power.requestKeepAwake('display') : chrome.power.releaseKeepAwake();
-	processAlarms();
-	setBadgeText();
-}
-
-function processIdleTime() {
-	chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
-}
-
-// process changes to localStorage settings
-function processState(key) {
-	// Map processing functions to localStorage values
-	var STATE_MAP =  {
-		'enabled': processEnabled,
-		'keepAwake': processKeepAwake,
-		'activeStart': processKeepAwake,
-		'activeStop':  processKeepAwake,
-		'allowSuspend': processKeepAwake,
-		'idleTime': processIdleTime
-	};
-	var noop = function() {};
-	var called = [];
-	var fn;
-
-	if (key === 'all') {
-		Object.keys(STATE_MAP).forEach(function(ky) {
-			fn = STATE_MAP[ky];
-			if (called.indexOf(fn) === -1) {
-				// track functions we have already called
-				called.push(fn);
-				return fn();
-			}
-		});
-		// process photo SOURCES
-		photoSources.processAll();
-	} else {
-		// individual change
-		if (photoSources.contains(key)) {
-			photoSources.process(key);
-		} else {
-			(STATE_MAP[key] || noop)();
-		}
-	}
-}
-
-// create a screensaver on every display
-function _openScreenSavers() {
-	chrome.system.display.getInfo(function(displayInfo) {
-		for (var i = 0; i < displayInfo.length; i++) {
-			_openScreenSaver(displayInfo[i]);
-		}
-	});
-}
-
-// create a screen saver window on the given display
-// if no display is specified use the current one
-function _openScreenSaver(display) {
-	var bounds = {};
-	if (display) {
-		bounds = display.bounds;
-	} else {
-		bounds.left = 0;
-		bounds.top = 0;
-		bounds.width = screen.width;
-		bounds.height = screen.height;
-	}
-	if (!bounds.left && !bounds.top && myUtils.getChromeVersion() >= 44) {
-		// Chrome supports fullscreen option on create since version 44
-		chrome.windows.create({
-			url: '/html/screensaver.html',
-			focused: true,
-			type: 'popup',
-			state: 'fullscreen'
-		});
-	} else {
-		chrome.windows.create({
-			url: '/html/screensaver.html',
-			left: bounds.left,
-			top: bounds.top,
-			width: bounds.width,
-			height: bounds.height,
-			focused: true,
-			type: 'popup'
-		}, function(win) {
-			chrome.windows.update(win.id, {state: 'fullscreen'});
-		});
-	}
-}
-
-// always request display screensaver through this call
-function displayScreenSaver(single) {
-	closeScreenSavers();
-	if (!single && JSON.parse(localStorage.allDisplays)) {
-		_openScreenSavers();
-	} else {
-		_openScreenSaver();
-	}
-}
-
-// close all the screensavers
-function closeScreenSavers() {
-	chrome.tabs.query({title: 'Photo Screen Saver Screensaver Page'}, function(t) {
-		for (var i = 0; i < t.length; i++) {
-			chrome.windows.remove(t[i].windowId);
-		}
-	});
-}
-
 // event: called when extension is installed or updated or Chrome is updated
 function onInstalled() {
 	// create menus on the right click menu of the extension icon
 	chrome.contextMenus.create({type: 'normal', id: 'ENABLE_MENU', title: 'Disable', contexts: ['browser_action']});
 	chrome.contextMenus.create({type: 'separator', id: 'SEP_MENU', contexts: ['browser_action']});
 
-	initData();
-	processState('all');
+	bgUtils.initData();
+	bgUtils.processState('all');
 }
 
 // event: called when Chrome first starts
 function onStartup() {
-	processState('all');
+	bgUtils.processState('all');
 }
 
 // event: display or focus options page
@@ -283,13 +28,13 @@ function onIconClicked() {
 
 // event: process the state when someone has changed the storage
 function onStorageChanged(event) {
-	processState(event.key);
+	bgUtils.processState(event.key);
 }
 
 // event: add or remove the screensavers as needed
 function onIdleStateChanged(state) {
-	if (state === 'idle' && isActive()) {
-		displayScreenSaver();
+	if (state === 'idle' && bgUtils.isActive()) {
+		bgUtils.displayScreenSaver();
 	} else {
 		// delay close a little to allow time to process mouse and keyboard
 		chrome.alarms.create('close', {when: Date.now() + 250});
@@ -301,21 +46,11 @@ function onAlarm(alarm) {
 	switch (alarm.name) {
 		case 'activeStart':
 			// entering active time range of keep awake
-			if (JSON.parse(localStorage.keepAwake)) {
-				chrome.power.requestKeepAwake('display');
-			}
-			var interval = parseInt(localStorage.idleTime, 10) * 60;
-			chrome.idle.queryState(interval, function(state) {
-				// display screensaver if the idle time criteria is met
-				if (state === 'idle') {
-					displayScreenSaver();
-				}
-			});
-			setBadgeText();
+			bgUtils.setActiveState();
 			break;
 		case 'activeStop':
 			// leaving active time range of keep awake
-			setInactiveState();
+			bgUtils.setInactiveState();
 			break;
 		case 'updatePhotos':
 			// get the latest for the live photo streams
@@ -323,7 +58,7 @@ function onAlarm(alarm) {
 			break;
 		case 'close':
 			// close screensavers
-			closeScreenSavers();
+			bgUtils.closeScreenSavers();
 			break;
 		default:
 			break;
@@ -333,21 +68,21 @@ function onAlarm(alarm) {
 // message: preview the screensaver
 function onMessage(request) {
 	if (request.preview === 'show') {
-		displayScreenSaver(true);
+		bgUtils.displayScreenSaver(true);
 	}
 }
 
 // event: context menu clicked
 function onMenuClicked(info) {
 	if (info.menuItemId === 'ENABLE_MENU') {
-		_toggleEnabled();
+		bgUtils.toggleEnabled();
 	}
 }
 
 // event: special key command
 function onKeyCommand(cmd) {
 	if (cmd === 'toggle-enabled') {
-		_toggleEnabled();
+		bgUtils.toggleEnabled();
 	}
 }
 

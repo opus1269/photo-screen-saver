@@ -22,6 +22,7 @@
 		"Platform": true,
 		"chrome": true,
 		"myUtils": true,
+		"bgUtils": true,
 		"chromeCast": true,
 		"GooglePhotosPage": true,
 		"FaqPage": true,
