@@ -7,13 +7,13 @@ var photoSources = (function() {
 
 	// a provider of photos for the screensaver
 	var PhotoSource = function(useName, photosName, type, rem, isDaily, isArray, loadFn, loadArgs) {
-		this.useName = useName || '';
-		this.photosName = photosName || '';
-		this.type = type || '';
-		this.rem = rem || false;
-		this.isDaily = isDaily || false;
-		this.isArray = isArray || false;
-		this.loadFn = loadFn || null;
+		this.useName = useName;
+		this.photosName = photosName;
+		this.type = type;
+		this.rem = rem;
+		this.isDaily = isDaily;
+		this.isArray = isArray;
+		this.loadFn = loadFn;
 		this.loadArgs = loadArgs || null;
 	};
 	PhotoSource.prototype.use = function() {
@@ -76,7 +76,7 @@ var photoSources = (function() {
 
 		// return all photos from all sources
 		getAllPhotos: function() {
-			var ret = [];			
+			var ret = [];
 			for (var i = 0; i < SOURCES.length; i++) {
 				ret = ret.concat(SOURCES[i].getPhotos());
 			}
