@@ -35,9 +35,7 @@
 		"alarms",
 		"contextMenus",
 		"https://chrome.google.com/",
-		"https://picasaweb.google.com/",
-		"https://oauth.reddit.com/",
-		"https://www.reddit.com/"
+		"https://picasaweb.google.com/"
 	],
 	"background": {
 		"scripts": [
