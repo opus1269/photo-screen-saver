@@ -129,7 +129,7 @@ gulp.task('scripts', ['lintjs'], function() {
 gulp.task('html', function() {
 	return gulp.src(files.html)
 	.pipe(plugins.changed(isProd ? path.html.dist : path.html.dev))
-	.pipe(isProd ? gutil.noop() : plugins.replace('<!--@@build:replace -->', '<!--'))
+	.pipe((isProd && !isProdTest) ? gutil.noop() : plugins.replace('<!--@@build:replace -->', '<!--'))
 	.pipe(isProd ? plugins.minifyHtml() : gutil.noop())
 	.pipe(isProd ? gulp.dest(path.html.dist) : gulp.dest(path.html.dev));
 });
@@ -177,7 +177,7 @@ gulp.task('vulcanize', function() {
 	return gulp.src(path.elements.src + 'elements.html')
 	.pipe(plugins.vulcanize({stripComments: true, inlineCss: true, inlineScripts: true}))
 	.pipe(plugins.crisper({scriptInHead: false}))
-	.pipe(plugins.if('*.html', plugins.minifyInline()))
+	.pipe(plugins.if('*.html', plugins.minifyInline({css: false})))
 	.pipe(plugins.if('*.js', plugins.uglify()))
 	.pipe(gulp.dest(path.elements.dist));
 });
