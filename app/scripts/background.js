@@ -22,7 +22,11 @@ function onStartup() {
 // event: display or focus options page
 function onIconClicked() {
 	chrome.tabs.query({title: 'Photo Screen Saver Options Page'}, function(t) {
-		t.length ? chrome.tabs.update(t[0].id, {'highlighted': true}) : chrome.tabs.create({url: '../html/options.html'});
+		if (t.length) {
+			chrome.tabs.update(t[0].id, {'highlighted': true});
+		} else {
+			chrome.tabs.create({url: '../html/options.html'});
+		}
 	});
 }
 
@@ -59,6 +63,16 @@ function onAlarm(alarm) {
 		case 'close':
 			// close screensavers
 			bgUtils.closeScreenSavers();
+			break;
+		case 'setBadgeText':
+			// set the icons text
+			var text = '';
+			if (JSON.parse(localStorage.enabled)) {
+				text = bgUtils.isActive() ? '' : 'SLP';
+			} else {
+				text = JSON.parse(localStorage.keepAwake) ? 'PWR' : 'OFF';
+			}
+			chrome.browserAction.setBadgeText({text: text});
 			break;
 		default:
 			break;

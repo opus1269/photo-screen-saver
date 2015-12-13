@@ -55,21 +55,94 @@ var bgUtils = (function() {
 		}
 	}
 
+	// add alarm to set the text on the icon
+	// always set badge text through this
+	function _updateBadgeText() {
+		// delay setting a little to make sure range check is good
+		chrome.alarms.create('setBadgeText', {when: Date.now() + 250});
+	}
+
+	// enabled state of screensaver
+	// note: this does not effect the keep awake settings so you could
+	// use the extension as a display keep awake scheduler without
+	// using the screensaver
+	function _processEnabled() {
+		// update context menu text
+		var label = JSON.parse(localStorage.enabled) ? 'Disable' : 'Enable';
+		chrome.contextMenus.update('ENABLE_MENU', {title: label});
+		_updateBadgeText();
+	}
+
+	// power scheduling features
+	function _processKeepAwake() {
+		JSON.parse(localStorage.keepAwake) ? chrome.power.requestKeepAwake('display') : chrome.power.releaseKeepAwake();
+		_updateRepeatingAlarms();
+		_updateBadgeText();
+	}
+
+	// wait time for screensaver after machine is idle
+	function _processIdleTime() {
+		chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
+	}
+
+	// create active period scheduling alarms
+	// create a daily alarm to update live photostreams
+	function _updateRepeatingAlarms() {
+		var keepAwake = JSON.parse(localStorage.keepAwake);
+		var aStart = JSON.parse(localStorage.activeStart);
+		var aStop = JSON.parse(localStorage.activeStop);
+
+		if (keepAwake && aStart !== aStop) {
+			var startDelayMin = _getTimeDelta(aStart);
+			var stopDelayMin = _getTimeDelta(aStop);
+
+			chrome.alarms.create('activeStart', {
+				delayInMinutes: startDelayMin,
+				periodInMinutes: MIN_IN_DAY
+			});
+			chrome.alarms.create('activeStop',{
+				delayInMinutes: stopDelayMin,
+				periodInMinutes: MIN_IN_DAY
+			});
+
+			// if we are currently outside of the active range
+			// then set inactive state
+			if (!_isInRange(aStart, aStop)) {
+				bgUtils.setInactiveState();
+			}
+		} else {
+			chrome.alarms.clear('activeStart');
+			chrome.alarms.clear('activeStop');
+		}
+
+		// Add daily alarm to update 500px and flickr photos
+		chrome.alarms.get('updatePhotos', function(alarm) {
+			if (!alarm) {
+				chrome.alarms.create('updatePhotos', {
+					when: Date.now() + MSEC_IN_DAY,
+					periodInMinutes: MIN_IN_DAY
+				});
+			}
+		});
+	}
+
 	// get time
 	// value format: '00:00'
-	function getTime(value) {
+	function _getTime(value) {
 		var date = new Date();
 
 		date.setHours(value.substr(0,2));
 		date.setMinutes(value.substr(3,2));
+		date.setSeconds(0);
+		date.setMilliseconds(0);
 		return date.getTime();
 	}
 
 	// calculate delta in time from now in minutes on a 24 hr basis
 	// value format: '00:00'
-	function getTimeDelta(value) {
+	function _getTimeDelta(value) {
 		var curTime = Date.now();
-		var time = getTime(value);
+		var time = _getTime(value);
 		var delayMin = (time - curTime) / 1000 / 60;
 
 		if (delayMin < 0) {
@@ -78,11 +151,11 @@ var bgUtils = (function() {
 		return delayMin;
 	}
 
-	// is the current time between start and stop
-	function isInRange(start, stop) {
+	// is the current time between start and stop inclusive
+	function _isInRange(start, stop) {
 		var curTime = Date.now();
-		var startTime = getTime(start);
-		var stopTime = getTime(stop);
+		var startTime = _getTime(start);
+		var stopTime = _getTime(stop);
 		var ret = false;
 
 		if (start === stop) {
@@ -90,11 +163,11 @@ var bgUtils = (function() {
 		}
 
 		if (stopTime > startTime) {
-			if ((curTime >= startTime) && (curTime < stopTime)) {
+			if ((curTime >= startTime) && (curTime <= stopTime)) {
 				ret = true;
 			}
 		} else {
-			if ((curTime >= startTime) || (curTime < stopTime)) {
+			if ((curTime >= startTime) || (curTime <= stopTime)) {
 				ret = true;
 			}
 		}
@@ -169,22 +242,11 @@ var bgUtils = (function() {
 			var aStart = JSON.parse(localStorage.activeStart);
 			var aStop = JSON.parse(localStorage.activeStop);
 
-			if (!enabled || (keepAwake && !isInRange(aStart, aStop))) {
+			if (!enabled || (keepAwake && !_isInRange(aStart, aStop))) {
 				// not enabled or keepAwke is enabled and is in inactive range
 				return false;
 			}
 			return true;
-		},
-
-		// set the text label displayed on the icon
-		setBadgeText: function() {
-			var text = '';
-			if (JSON.parse(localStorage.enabled)) {
-				text = bgUtils.isActive() ? '' : 'SLP';
-			} else {
-				text = JSON.parse(localStorage.keepAwake) ? 'PWR' : 'OFF';
-			}
-			chrome.browserAction.setBadgeText({text: text});
 		},
 
 		// set state when the screensaver is in the active range
@@ -199,95 +261,33 @@ var bgUtils = (function() {
 					bgUtils.displayScreenSaver();
 				}
 			});
-			bgUtils.setBadgeText();
+			_updateBadgeText();
 		},
 
 		// set state when the screensaver is in the non-active range
 		setInactiveState: function() {
 			JSON.parse(localStorage.allowSuspend) ? chrome.power.releaseKeepAwake() : chrome.power.requestKeepAwake('system');
 			bgUtils.closeScreenSavers();
-			bgUtils.setBadgeText();
+			_updateBadgeText();
 		},
 
 		// toggle enabled state
 		toggleEnabled: function() {
 			localStorage.enabled =  !JSON.parse(localStorage.enabled);
 			// storage changed event not fired on same page as the change
-			bgUtils.processEnabled();
-		},
-
-		// enabled state of screensaver
-		// note: this does not effect the keep awake settings so you could
-		// use the extension as a display keep awake scheduler without
-		// using the screensaver
-		processEnabled: function() {
-			// update context menu text
-			var label = JSON.parse(localStorage.enabled) ? 'Disable' : 'Enable';
-			chrome.contextMenus.update('ENABLE_MENU', {title: label});
-			bgUtils.setBadgeText();
-		},
-
-		processKeepAwake: function() {
-			JSON.parse(localStorage.keepAwake) ? chrome.power.requestKeepAwake('display') : chrome.power.releaseKeepAwake();
-			bgUtils.processAlarms();
-			bgUtils.setBadgeText();
-		},
-
-		processIdleTime: function() {
-			chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
-		},
-
-		// create active period scheduling alarms
-		// also create a daily alarm to update live photostreams
-		processAlarms: function() {
-			var keepAwake = JSON.parse(localStorage.keepAwake);
-			var aStart = JSON.parse(localStorage.activeStart);
-			var aStop = JSON.parse(localStorage.activeStop);
-
-			if (keepAwake && aStart !== aStop) {
-				var startDelayMin = getTimeDelta(aStart);
-				var stopDelayMin = getTimeDelta(aStop);
-
-				chrome.alarms.create('activeStart', {
-					delayInMinutes: startDelayMin,
-					periodInMinutes: MIN_IN_DAY
-				});
-				chrome.alarms.create('activeStop',{
-					delayInMinutes: stopDelayMin,
-					periodInMinutes: MIN_IN_DAY
-				});
-
-				// if we are currently outside of the active range
-				// then set inactive state
-				if (!isInRange(aStart, aStop)) {
-					bgUtils.setInactiveState();
-				}
-			} else {
-				chrome.alarms.clear('activeStart');
-				chrome.alarms.clear('activeStop');
-			}
-
-			// Add daily alarm to update 500px and flickr photos
-			chrome.alarms.get('updatePhotos', function(alarm) {
-				if (!alarm) {
-					chrome.alarms.create('updatePhotos', {
-						when: Date.now() + MSEC_IN_DAY,
-						periodInMinutes: MIN_IN_DAY
-					});
-				}
-			});
+			_processEnabled();
 		},
 
 		// process changes to localStorage settings
 		processState: function(key) {
 			// Map processing functions to localStorage values
 			var STATE_MAP =  {
-				'enabled': bgUtils.processEnabled,
-				'keepAwake': bgUtils.processKeepAwake,
-				'activeStart': bgUtils.processKeepAwake,
-				'activeStop':  bgUtils.processKeepAwake,
-				'allowSuspend': bgUtils.processKeepAwake,
-				'idleTime': bgUtils.processIdleTime
+				'enabled': _processEnabled,
+				'keepAwake': _processKeepAwake,
+				'activeStart': _processKeepAwake,
+				'activeStop':  _processKeepAwake,
+				'allowSuspend': _processKeepAwake,
+				'idleTime': _processIdleTime
 			};
 			var noop = function() {};
 			var called = [];
