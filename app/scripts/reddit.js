@@ -24,6 +24,21 @@ var reddit = (function() {
 		}
 	});
 
+	// parse the size from the submission title
+	// this is the old way reddit did it
+	var getSize  = function(title) {
+		var ret = {width: -1, height: -1};
+		var res;
+		var regex = /\[(\d*)\D*(\d*)\]/;
+
+		res = title.match(regex);
+		if (res) {
+			ret.width = parseInt(res[1], 10);
+			ret.height = parseInt(res[2], 10);
+		}
+		return ret;
+	};
+
 	// build the list of photos for one page of items
 	var processChildren = function(children, name) {
 		var data;
@@ -74,21 +89,6 @@ var reddit = (function() {
 		}
 		localStorage.setItem(name, JSON.stringify(tmp));
 
-	};
-
-	// parse the size from the submission title
-	// this is the old way reddit did it
-	var getSize  = function(title) {
-		var ret = {width: -1, height: -1};
-		var res;
-		var regex = /\[(\d*)\D*(\d*)\]/;
-
-		res = title.match(regex);
-		if (res) {
-			ret.width = parseInt(res[1], 10);
-			ret.height = parseInt(res[2], 10);
-		}
-		return ret;
 	};
 
 	return {

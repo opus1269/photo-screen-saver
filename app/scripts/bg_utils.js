@@ -11,121 +11,6 @@ var bgUtils = (function() {
 	// milli-seconds in day
 	var MSEC_IN_DAY = MIN_IN_DAY * 60 * 1000;
 
-	// create a screensaver on every display
-	function _openScreenSavers() {
-		chrome.system.display.getInfo(function(displayInfo) {
-			for (var i = 0; i < displayInfo.length; i++) {
-				_openScreenSaver(displayInfo[i]);
-			}
-		});
-	}
-
-	// create a screen saver window on the given display
-	// if no display is specified use the current one
-	function _openScreenSaver(display) {
-		var bounds = {};
-		if (display) {
-			bounds = display.bounds;
-		} else {
-			bounds.left = 0;
-			bounds.top = 0;
-			bounds.width = screen.width;
-			bounds.height = screen.height;
-		}
-		if (!bounds.left && !bounds.top && myUtils.getChromeVersion() >= 44) {
-			// Chrome supports fullscreen option on create since version 44
-			chrome.windows.create({
-				url: '/html/screensaver.html',
-				focused: true,
-				type: 'popup',
-				state: 'fullscreen'
-			});
-		} else {
-			chrome.windows.create({
-				url: '/html/screensaver.html',
-				left: bounds.left,
-				top: bounds.top,
-				width: bounds.width,
-				height: bounds.height,
-				focused: true,
-				type: 'popup'
-			}, function(win) {
-				chrome.windows.update(win.id, {state: 'fullscreen'});
-			});
-		}
-	}
-
-	// add alarm to set the text on the icon
-	// always set badge text through this
-	function _updateBadgeText() {
-		// delay setting a little to make sure range check is good
-		chrome.alarms.create('setBadgeText', {when: Date.now() + 250});
-	}
-
-	// enabled state of screensaver
-	// note: this does not effect the keep awake settings so you could
-	// use the extension as a display keep awake scheduler without
-	// using the screensaver
-	function _processEnabled() {
-		// update context menu text
-		var label = JSON.parse(localStorage.enabled) ? 'Disable' : 'Enable';
-		chrome.contextMenus.update('ENABLE_MENU', {title: label});
-		_updateBadgeText();
-	}
-
-	// power scheduling features
-	function _processKeepAwake() {
-		JSON.parse(localStorage.keepAwake) ? chrome.power.requestKeepAwake('display') : chrome.power.releaseKeepAwake();
-		_updateRepeatingAlarms();
-		_updateBadgeText();
-	}
-
-	// wait time for screensaver after machine is idle
-	function _processIdleTime() {
-		chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
-	}
-
-	// create active period scheduling alarms
-	// create a daily alarm to update live photostreams
-	function _updateRepeatingAlarms() {
-		var keepAwake = JSON.parse(localStorage.keepAwake);
-		var aStart = JSON.parse(localStorage.activeStart);
-		var aStop = JSON.parse(localStorage.activeStop);
-
-		if (keepAwake && aStart !== aStop) {
-			var startDelayMin = _getTimeDelta(aStart);
-			var stopDelayMin = _getTimeDelta(aStop);
-
-			chrome.alarms.create('activeStart', {
-				delayInMinutes: startDelayMin,
-				periodInMinutes: MIN_IN_DAY
-			});
-			chrome.alarms.create('activeStop',{
-				delayInMinutes: stopDelayMin,
-				periodInMinutes: MIN_IN_DAY
-			});
-
-			// if we are currently outside of the active range
-			// then set inactive state
-			if (!_isInRange(aStart, aStop)) {
-				bgUtils.setInactiveState();
-			}
-		} else {
-			chrome.alarms.clear('activeStart');
-			chrome.alarms.clear('activeStop');
-		}
-
-		// Add daily alarm to update 500px and flickr photos
-		chrome.alarms.get('updatePhotos', function(alarm) {
-			if (!alarm) {
-				chrome.alarms.create('updatePhotos', {
-					when: Date.now() + MSEC_IN_DAY,
-					periodInMinutes: MIN_IN_DAY
-				});
-			}
-		});
-	}
-
 	// get time
 	// value format: '00:00'
 	function _getTime(value) {
@@ -172,6 +57,121 @@ var bgUtils = (function() {
 			}
 		}
 		return ret;
+	}
+
+	// create a screen saver window on the given display
+	// if no display is specified use the current one
+	function _openScreenSaver(display) {
+		var bounds = {};
+		if (display) {
+			bounds = display.bounds;
+		} else {
+			bounds.left = 0;
+			bounds.top = 0;
+			bounds.width = screen.width;
+			bounds.height = screen.height;
+		}
+		if (!bounds.left && !bounds.top && myUtils.getChromeVersion() >= 44) {
+			// Chrome supports fullscreen option on create since version 44
+			chrome.windows.create({
+				url: '/html/screensaver.html',
+				focused: true,
+				type: 'popup',
+				state: 'fullscreen'
+			});
+		} else {
+			chrome.windows.create({
+				url: '/html/screensaver.html',
+				left: bounds.left,
+				top: bounds.top,
+				width: bounds.width,
+				height: bounds.height,
+				focused: true,
+				type: 'popup'
+			}, function(win) {
+				chrome.windows.update(win.id, {state: 'fullscreen'});
+			});
+		}
+	}
+
+	// create a screensaver on every display
+	function _openScreenSavers() {
+		chrome.system.display.getInfo(function(displayInfo) {
+			for (var i = 0; i < displayInfo.length; i++) {
+				_openScreenSaver(displayInfo[i]);
+			}
+		});
+	}
+
+	// add alarm to set the text on the icon
+	// always set badge text through this
+	function _updateBadgeText() {
+		// delay setting a little to make sure range check is good
+		chrome.alarms.create('setBadgeText', {when: Date.now() + 250});
+	}
+
+	// create active period scheduling alarms
+	// create a daily alarm to update live photostreams
+	function _updateRepeatingAlarms() {
+		var keepAwake = JSON.parse(localStorage.keepAwake);
+		var aStart = JSON.parse(localStorage.activeStart);
+		var aStop = JSON.parse(localStorage.activeStop);
+
+		if (keepAwake && aStart !== aStop) {
+			var startDelayMin = _getTimeDelta(aStart);
+			var stopDelayMin = _getTimeDelta(aStop);
+
+			chrome.alarms.create('activeStart', {
+				delayInMinutes: startDelayMin,
+				periodInMinutes: MIN_IN_DAY
+			});
+			chrome.alarms.create('activeStop',{
+				delayInMinutes: stopDelayMin,
+				periodInMinutes: MIN_IN_DAY
+			});
+
+			// if we are currently outside of the active range
+			// then set inactive state
+			if (!_isInRange(aStart, aStop)) {
+				bgUtils.setInactiveState();
+			}
+		} else {
+			chrome.alarms.clear('activeStart');
+			chrome.alarms.clear('activeStop');
+		}
+
+		// Add daily alarm to update 500px and flickr photos
+		chrome.alarms.get('updatePhotos', function(alarm) {
+			if (!alarm) {
+				chrome.alarms.create('updatePhotos', {
+					when: Date.now() + MSEC_IN_DAY,
+					periodInMinutes: MIN_IN_DAY
+				});
+			}
+		});
+	}
+
+	// enabled state of screensaver
+	// note: this does not effect the keep awake settings so you could
+	// use the extension as a display keep awake scheduler without
+	// using the screensaver
+	function _processEnabled() {
+		// update context menu text
+		var label = JSON.parse(localStorage.enabled) ? 'Disable' : 'Enable';
+		chrome.contextMenus.update('ENABLE_MENU', {title: label});
+		_updateBadgeText();
+	}
+
+	// power scheduling features
+	function _processKeepAwake() {
+		JSON.parse(localStorage.keepAwake) ? chrome.power.requestKeepAwake('display') : chrome.power.releaseKeepAwake();
+		_updateRepeatingAlarms();
+		_updateBadgeText();
+	}
+
+	// wait time for screensaver after machine is idle
+	function _processIdleTime() {
+		chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
 	}
 
 	return {
