@@ -132,23 +132,22 @@ t.showPhotoInfo = function() {
 // create the photo label
 t.getPhotoLabel = function(author, type, force) {
 	var ret = '';
-	var source = '';
 	var idx = type.search('User');
 
 	if (!force && !JSON.parse(localStorage.showPhotog) && (idx !== -1)) {
 		// don't show label for user photos, if requested
 		return ret;
 	}
-	if (type) {
-		if (idx !== -1) {
-			type = type.substring(0, idx - 1); // strip off 'User'
-		}
-		source = ' / ' + type ;
+
+	if (idx !== -1) {
+		// strip off 'User'
+		type = type.substring(0, idx - 1);
 	}
+
 	if (author) {
-		ret = author + source;
-	} else if (source) {
-		ret = 'Photo from ' + source.substring(3);
+		ret = author + ' / ' + type;
+	} else {
+		ret = 'Photo from ' + type;
 	}
 	return ret;
 };
@@ -178,19 +177,18 @@ t.setTime = function(idx) {
 t.isBadAspect = function(aspect) {
 	var CUT_OFF = 0.5;  // arbitrary
 
-	if (aspect && ((aspect < SCREEN_ASPECT - CUT_OFF) ||
-		(aspect > SCREEN_ASPECT + CUT_OFF))) {
+	if (aspect && ((aspect < SCREEN_ASPECT - CUT_OFF) || (aspect > SCREEN_ASPECT + CUT_OFF))) {
 		return true;
 	}
 	return false;
 };
 
+// check if the photo should not be displayed
 t.ignorePhoto = function(item) {
 	var ret = false;
 	var skip = JSON.parse(localStorage.skip);
-	// blah blah blah
-	if ((!item || !item.asp || isNaN(item.asp)) ||
-			(skip && ((t.photoSizing === 1) || (t.photoSizing === 3)) && t.isBadAspect(item.asp))) {
+
+	if ((!item || !item.asp || isNaN(item.asp)) || (skip && ((t.photoSizing === 1) || (t.photoSizing === 3)) && t.isBadAspect(item.asp))) {
 		// ignore photos that dont have aspect ratio or would look really bad when cropped or stretched
 		ret = true;
 	}
@@ -286,7 +284,6 @@ t.stretchPhoto = function(idx) {
 t.framePhoto = function(idx) {
 	var padding, border, borderBot;
 	var e = t.getEls(idx);
-	var img = e.image.$.img;
 	var width, height;
 	var frWidth, frHeight;
 	var aspect = e.item.aspectRatio;
@@ -311,17 +308,14 @@ t.framePhoto = function(idx) {
 	frWidth = width + border * 2;
 	frHeight = height + borderBot + border;
 
-	img.style.height = height + 'px';
-	img.style.width = width + 'px';
-
 	e.image.height = height;
 	e.image.width = width;
 	e.image.style.top = (screen.height - frHeight) / 2 + 'px';
 	e.image.style.left = (screen.width - frWidth) / 2 + 'px';
 	e.image.style.border = 0.5 + 'vh ridge WhiteSmoke';
+	e.image.style.borderBottom = 5 + 'vh solid WhiteSmoke';
 	e.image.style.borderRadius = '1.5vh';
 	e.image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
-	e.image.style.borderBottom = 5 + 'vh solid WhiteSmoke';
 
 	if (parseInt(localStorage.showTime, 10)) {
 		e.author.style.left = (screen.width - frWidth) / 2 + 10 + 'px';
@@ -350,7 +344,7 @@ t.framePhoto = function(idx) {
 // check if the photo threw a 404
 t.isError = function(idx) {
 	var e = t.getEls(idx);
-	return e.image.error;
+	return !e.image || e.image.error;
 };
 
 // check if the photo is loaded
@@ -406,11 +400,7 @@ t.super500px = function(idx) {
 	var e = t.getEls(idx);
 	var sup = e.author.querySelector('#sup');
 
-	if (e.item.type !== '500') {
-		sup.textContent = '';
-	} else {
-		sup.textContent = 'px';
-	}
+	e.item.type === '500' ? sup.textContent = 'px' : sup.textContent = '';
 };
 
 // final prep before display
