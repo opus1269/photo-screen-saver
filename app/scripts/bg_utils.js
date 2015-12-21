@@ -59,6 +59,20 @@ var bgUtils = (function() {
 		return ret;
 	}
 
+	// determine if there is a fullscreen chrome window running
+	// callback function(bool)
+	function _hasFullscreen(cb) {
+		chrome.windows.getAll({populate: false}, function(wins) {
+			for (var i = 0; i < wins.length; i++) {
+				if (wins[i].state === 'fullscreen') {
+					cb(true);
+					return;
+				}
+			}
+			cb(false);
+		});
+	}
+
 	// create a screen saver window on the given display
 	// if no display is specified use the current one
 	function _openScreenSaver(display) {
@@ -101,6 +115,16 @@ var bgUtils = (function() {
 				_openScreenSaver(displayInfo[i]);
 			}
 		});
+	}
+
+	// show the screensavers
+	function _displayScreenSaver(single) {
+		bgUtils.closeScreenSavers();
+		if (!single && JSON.parse(localStorage.allDisplays)) {
+			_openScreenSavers();
+		} else {
+			_openScreenSaver();
+		}
 	}
 
 	// add alarm to set the text on the icon
@@ -186,7 +210,7 @@ var bgUtils = (function() {
 			// not using chrome.storage 'cause the async nature of it complicates things
 			// just remember to use parse methods because all values are strings
 
-			localStorage.version = '5';
+			localStorage.version = '6';
 
 			var VALS = {
 				'enabled': 'true',
@@ -200,6 +224,7 @@ var bgUtils = (function() {
 				'showPhotog': 'true',
 				'background': '"background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)"',
 				'keepAwake': 'false',
+				'chromeFullscreen': 'true',
 				'allDisplays': 'false',
 				'activeStart': '"00:00"', // 24 hr time
 				'activeStop': '"00:00"', // 24 hr time
@@ -316,11 +341,15 @@ var bgUtils = (function() {
 
 		// always request display screensaver through this call
 		displayScreenSaver: function(single) {
-			bgUtils.closeScreenSavers();
-			if (!single && JSON.parse(localStorage.allDisplays)) {
-				_openScreenSavers();
+			if (JSON.parse(localStorage.chromeFullscreen)) {
+				// don't display if there is a fullscreen window
+				_hasFullscreen(function(bool) {
+					if (!bool) {
+						_displayScreenSaver(single);
+					}
+				});
 			} else {
-				_openScreenSaver();
+				_displayScreenSaver(single);
 			}
 		},
 
