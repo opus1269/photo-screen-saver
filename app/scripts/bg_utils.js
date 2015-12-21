@@ -59,12 +59,19 @@ var bgUtils = (function() {
 		return ret;
 	}
 
-	// determine if there is a fullscreen chrome window running
+	// determine if there is a fullscreen chrome window running on a display
 	// callback function(bool)
-	function _hasFullscreen(cb) {
+	function _checkFullscreen(bounds, cb) {
+		var win;
+		if (!JSON.parse(localStorage.chromeFullscreen)) {
+			cb(false);
+			return;
+		}
+
 		chrome.windows.getAll({populate: false}, function(wins) {
 			for (var i = 0; i < wins.length; i++) {
-				if (wins[i].state === 'fullscreen') {
+				win = wins[i];
+				if (win.state === 'fullscreen' && win.top === bounds.top && win.left === bounds.left) {
 					cb(true);
 					return;
 				}
@@ -73,18 +80,8 @@ var bgUtils = (function() {
 		});
 	}
 
-	// create a screen saver window on the given display
-	// if no display is specified use the current one
-	function _openScreenSaver(display) {
-		var bounds = {};
-		if (display) {
-			bounds = display.bounds;
-		} else {
-			bounds.left = 0;
-			bounds.top = 0;
-			bounds.width = screen.width;
-			bounds.height = screen.height;
-		}
+	// actually create the screensaver window
+	function _createScreenSaver(bounds) {
 		if (!bounds.left && !bounds.top && myUtils.getChromeVersion() >= 44) {
 			// Chrome supports fullscreen option on create since version 44
 			chrome.windows.create({
@@ -108,23 +105,34 @@ var bgUtils = (function() {
 		}
 	}
 
-	// create a screensaver on every display
+	// open a screen saver window on the given display
+	// if no display is specified use the current one
+	function _openScreenSaver(display) {
+		var bounds = {};
+		if (display) {
+			bounds = display.bounds;
+		} else {
+			bounds.left = 0;
+			bounds.top = 0;
+			bounds.width = screen.width;
+			bounds.height = screen.height;
+		}
+
+		_checkFullscreen(bounds, function(bool) {
+			// don't display if there is a fullscreen window
+			if (!bool) {
+				_createScreenSaver(bounds);
+			}
+		});
+	}
+
+	// open a screensaver on every display
 	function _openScreenSavers() {
 		chrome.system.display.getInfo(function(displayInfo) {
 			for (var i = 0; i < displayInfo.length; i++) {
 				_openScreenSaver(displayInfo[i]);
 			}
 		});
-	}
-
-	// show the screensavers
-	function _displayScreenSaver(single) {
-		bgUtils.closeScreenSavers();
-		if (!single && JSON.parse(localStorage.allDisplays)) {
-			_openScreenSavers();
-		} else {
-			_openScreenSaver();
-		}
 	}
 
 	// add alarm to set the text on the icon
@@ -339,17 +347,12 @@ var bgUtils = (function() {
 			}
 		},
 
-		// always request display screensaver through this call
+		// always request screensaver through this call
 		displayScreenSaver: function(single) {
-			if (JSON.parse(localStorage.chromeFullscreen)) {
-				// don't display if there is a fullscreen window
-				_hasFullscreen(function(bool) {
-					if (!bool) {
-						_displayScreenSaver(single);
-					}
-				});
+			if (!single && JSON.parse(localStorage.allDisplays)) {
+				_openScreenSavers();
 			} else {
-				_displayScreenSaver(single);
+				_openScreenSaver();
 			}
 		},
 
