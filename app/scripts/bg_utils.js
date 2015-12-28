@@ -218,11 +218,11 @@ var bgUtils = (function() {
 			// not using chrome.storage 'cause the async nature of it complicates things
 			// just remember to use parse methods because all values are strings
 
-			localStorage.version = '6';
+			localStorage.version = '7';
 
 			var VALS = {
 				'enabled': 'true',
-				'idleTime': '10', // minutes
+				'idleTime': '5', // minutes
 				'transitionTime': '30', // seconds
 				'skip': 'true',
 				'shuffle': 'true',
