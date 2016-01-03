@@ -10,15 +10,15 @@ body {
 /* Scrollbars */
 ::-webkit-scrollbar {
 	background: transparent;
-	width: 10px;
+	width: 8px;
 }
 ::-webkit-scrollbar-button {
 	background: transparent;
 	height: 0px;
 }
 ::-webkit-scrollbar-thumb {
-	background: rgba(33,150,243,1.0);
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
+	background: rgba(25,118,210,1.0);
+	-webkit-border-radius: 8px;
+	border-radius: 4px;
 	cursor: pointer;
 }
