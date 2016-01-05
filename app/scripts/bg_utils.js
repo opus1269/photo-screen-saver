@@ -60,68 +60,56 @@ var bgUtils = (function() {
 	}
 
 	// determine if there is a fullscreen chrome window running on a display
-	// callback function(bool)
-	function _checkFullscreen(bounds, cb) {
-		var win;
-		if (!JSON.parse(localStorage.chromeFullscreen)) {
-			cb(false);
-			return;
-		}
+	// callback function(isTrue)
+	function _hasFullscreen(display, callback) {
 
-		chrome.windows.getAll({populate: false}, function(wins) {
-			for (var i = 0; i < wins.length; i++) {
-				win = wins[i];
-				if (win.state === 'fullscreen' && win.top === bounds.top && win.left === bounds.left) {
-					cb(true);
-					return;
+		if (JSON.parse(localStorage.chromeFullscreen)) {
+			chrome.windows.getAll({populate: false}, function(wins) {
+				var win;
+				var left = display ? display.bounds.left : 0;
+				var top = display ? display.bounds.top : 0;
+				for (var i = 0; i < wins.length; i++) {
+					win = wins[i];
+					if (win.state === 'fullscreen' && (!display || (win.top === top && win.left === left))) {
+						callback(true);
+						return;
+					}
 				}
-			}
-			cb(false);
-		});
-	}
-
-	// actually create the screensaver window
-	function _createScreenSaver(bounds) {
-		if (!bounds.left && !bounds.top && myUtils.getChromeVersion() >= 44) {
-			// Chrome supports fullscreen option on create since version 44
-			chrome.windows.create({
-				url: '/html/screensaver.html',
-				focused: true,
-				type: 'popup',
-				state: 'fullscreen'
+				callback(false);
 			});
 		} else {
-			chrome.windows.create({
-				url: '/html/screensaver.html',
-				left: bounds.left,
-				top: bounds.top,
-				width: bounds.width,
-				height: bounds.height,
-				focused: true,
-				type: 'popup'
-			}, function(win) {
-				chrome.windows.update(win.id, {state: 'fullscreen'});
-			});
+			callback(false);
 		}
 	}
 
 	// open a screen saver window on the given display
-	// if no display is specified use the current one
 	function _openScreenSaver(display) {
-		var bounds = {};
-		if (display) {
-			bounds = display.bounds;
-		} else {
-			bounds.left = 0;
-			bounds.top = 0;
-			bounds.width = screen.width;
-			bounds.height = screen.height;
-		}
-
-		_checkFullscreen(bounds, function(bool) {
+		_hasFullscreen(display, function(isTrue) {
 			// don't display if there is a fullscreen window
-			if (!bool) {
-				_createScreenSaver(bounds);
+			var left = display ? display.bounds.left : 0;
+			var top = display ? display.bounds.top : 0;
+			if (!isTrue) {
+				if (myUtils.getChromeVersion() >= 44 && !display) {
+					// Chrome supports fullscreen option on create since version 44
+					chrome.windows.create({
+						url: '/html/screensaver.html',
+						focused: true,
+						type: 'popup',
+						state: 'fullscreen'
+					});
+				} else {
+					chrome.windows.create({
+						url: '/html/screensaver.html',
+						left: left,
+						top: top,
+						width: 1,
+						height: 1,
+						focused: true,
+						type: 'popup'
+					}, function(win) {
+						chrome.windows.update(win.id, {state: 'fullscreen'});
+					});
+				}
 			}
 		});
 	}
@@ -129,8 +117,12 @@ var bgUtils = (function() {
 	// open a screensaver on every display
 	function _openScreenSavers() {
 		chrome.system.display.getInfo(function(displayInfo) {
-			for (var i = 0; i < displayInfo.length; i++) {
-				_openScreenSaver(displayInfo[i]);
+			if (displayInfo.length === 1) {
+				_openScreenSaver(null);
+			} else {
+				for (var i = 0; i < displayInfo.length; i++) {
+					_openScreenSaver(displayInfo[i]);
+				}
 			}
 		});
 	}
@@ -352,7 +344,7 @@ var bgUtils = (function() {
 			if (!single && JSON.parse(localStorage.allDisplays)) {
 				_openScreenSavers();
 			} else {
-				_openScreenSaver();
+				_openScreenSaver(null);
 			}
 		},
 
