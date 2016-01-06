@@ -74,9 +74,18 @@ It is implemented using Vanilla JavaScript and [Polymer](https://www.polymer-pro
 
   ***
 
+* **Can I manually display the screensaver?**
+
+  Yes. You can right click on the extension icon and select "Display screensaver".
+  There is also a keyboard shortcut: Alt+Shift+D
+
+  This will display the screensaver regardless of any other settings.
+
+  ***
+
 * **Can you add support for accessing the photos in my 500<sup>px</sup>/Flickr account?**
 
-  I believe this will be doable and plan on adding it soon.
+  I believe this will be doable and plan on adding it.
 
   ***
 
