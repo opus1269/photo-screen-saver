@@ -75,6 +75,9 @@ t.addEventListener('dom-change', function() {
 	// load the photos for the slide show
 	t.loadImages();
 
+	// setup events to listen for window closing
+	window.setTimeout(t.addWindowListeners, 1000);
+
 	// this will kick off the slideshow
 	if (!t.noPhotos) {
 		this.fire('pages-ready');
@@ -481,17 +484,27 @@ t.addEventListener('pages-ready', function() {
 	t.timer = window.setTimeout(t.runShow, t.waitTime);
 });
 
-// display source of photo and close window
-window.addEventListener('click', function() {
-	t.showPhotoInfo();
-	window.close();
-}, false);
+// listen for close window triggering events
+t.addWindowListeners = function() {
+	// close screensaver windows
+	window.addEventListener('mousemove', function(event) {
+		if (event.movementX > 0 || event.movementY > 0) {
+			chrome.runtime.sendMessage({command: 'close'});
+		}
+	}, false);
 
-// close preview window on Enter (prob won't work on Chrome OS)
-window.addEventListener('keydown', function(event) {
-	if (event.keyIdentifier === 'Enter') {
-		window.close();
-	}
-}, false);
+	// display source of photo and close screensaver windows
+	window.addEventListener('click', function(event) {
+		if (event.button === 0) {
+			t.showPhotoInfo();
+			chrome.runtime.sendMessage({command: 'close'});
+		}
+	}, false);
+
+	// close screensaver windows (prob won't work on Chrome OS)
+	window.addEventListener('keypress', function() {
+		chrome.runtime.sendMessage({command: 'close'});
+	}, false);
+};
 
 })();

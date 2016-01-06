@@ -87,14 +87,14 @@ t.info = function(index) {
 t.preview = function() {
 	// select previous page
 	t.async(function() {t.$.mainMenu.select(t.prevRoute);}, 500);
-	chrome.runtime.sendMessage({preview: 'show'});
+	chrome.runtime.sendMessage({command: 'preview'});
 };
 
 // list of pages
 t.pages = [
 	{label: 'Settings', route: 'page-settings', icon: 'settings', obj: null, ready: true},
 	{label: 'Google Photos Albums', route: 'page-google-photos', icon: 'cloud', obj: t.googlePhotos, ready: false},
-	{label: 'Preview (Click or <Enter> to close)', route: 'page-preview', icon: 'pageview', obj: t.preview, ready: true},
+	{label: 'Preview Screensaver', route: 'page-preview', icon: 'pageview', obj: t.preview, ready: true},
 	{label: 'Frequently Asked Questions', route: 'page-faq', icon: 'help', obj: t.faq, ready: false},
 	{label: 'Information For Nerds', route: 'page-info', icon: 'info', obj: t.info, ready: false},
 	{label: 'Request Support', route: 'page-support', icon: 'help', obj: EXT_URI + 'support', ready: true},
