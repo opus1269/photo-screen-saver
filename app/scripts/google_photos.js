@@ -11,7 +11,7 @@ var gPhotos = (function() {
 	// perform a request using OAuth 2.0 authentication
 	// callback function(error, httpStatus, responseText)
 	function authenticatedXhr(method, url, callback) {
-		var retry = true;
+		var retry = 0;
 		var error = null;
 		(function getTokenAndXhr() {
 			chrome.identity.getAuthToken({'interactive': true},
@@ -27,11 +27,11 @@ var gPhotos = (function() {
 				xhr.send();
 
 				xhr.onload = function() {
-					if (this.status === 401 && retry) {
+					if (this.status === 401 && retry < 5) {
 						// This status may indicate that the cached
-						// access token was invalid. Retry once with
+						// access token was invalid. Retry up to 5 times with
 						// a fresh token.
-						retry = false;
+						retry++;
 						chrome.identity.removeCachedAuthToken({'token': accessToken}, getTokenAndXhr);
 						return;
 					}
