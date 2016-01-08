@@ -61,7 +61,7 @@ var bgUtils = (function() {
 
 	// determine if there is a fullscreen chrome window running on a display
 	// callback function(isTrue)
-	function _hasFullscreenWindow(display, callback) {
+	function _hasFullscreen(display, callback) {
 
 		if (JSON.parse(localStorage.chromeFullscreen)) {
 			chrome.windows.getAll({populate: false}, function(wins) {
@@ -84,7 +84,7 @@ var bgUtils = (function() {
 
 	// open a screen saver window on the given display
 	function _openScreenSaver(display) {
-		_hasFullscreenWindow(display, function(isTrue) {
+		_hasFullscreen(display, function(isTrue) {
 			// don't display if there is a fullscreen window
 			var left = display ? display.bounds.left : 0;
 			var top = display ? display.bounds.top : 0;
@@ -182,9 +182,7 @@ var bgUtils = (function() {
 	function _processEnabled() {
 		// update context menu text
 		var label = JSON.parse(localStorage.enabled) ? 'Disable' : 'Enable';
-		try {
-			chrome.contextMenus.update('ENABLE_MENU', {title: label});
-		} catch (e) {}
+		chrome.contextMenus.update('ENABLE_MENU', {title: label});
 		_updateBadgeText();
 	}
 
@@ -339,18 +337,6 @@ var bgUtils = (function() {
 					(STATE_MAP[key] || noop)();
 				}
 			}
-		},
-
-		// determine if there is a screensaver window actve
-		// callback function(isTrue)
-		hasScreenSaverWindow: function(callback) {
-			chrome.tabs.query({title: 'Photo Screen Saver Screensaver Page'}, function(t) {
-				if (t.length) {
-					callback(true);
-				} else {
-					callback(false);
-				}
-			});
 		},
 
 		// always request screensaver through this call

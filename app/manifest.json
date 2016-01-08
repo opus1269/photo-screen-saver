@@ -11,12 +11,6 @@
 				"default": "Alt+Shift+Q"
 			},
 			"description": "Toggle enabled state"
-		},
-		"display-screensaver": {
-			"suggested_key": {
-				"default": "Alt+Shift+D"
-			},
-			"description": "Display the screensaver"
 		}
 	},
 	"icons": {

@@ -8,7 +8,6 @@
 function onInstalled() {
 	// create menus on the right click menu of the extension icon
 	chrome.contextMenus.create({type: 'normal', id: 'ENABLE_MENU', title: 'Disable', contexts: ['browser_action']});
-	chrome.contextMenus.create({type: 'normal', id: 'DISPLAY_MENU', title: 'Display screensaver', contexts: ['browser_action']});
 	chrome.contextMenus.create({type: 'separator', id: 'SEP_MENU', contexts: ['browser_action']});
 
 	bgUtils.initData();
@@ -38,16 +37,12 @@ function onStorageChanged(event) {
 
 // event: add or remove the screensavers as needed
 function onIdleStateChanged(state) {
-	bgUtils.hasScreenSaverWindow(function(isTrue) {
-		if (state === 'idle') {
-			if (bgUtils.isActive() && !isTrue) {
-				// display if the screensaver is active and none currently exist
-				bgUtils.displayScreenSaver();
-			}
-		} else if (isTrue) {
-			chrome.runtime.sendMessage({command: 'close'});
-		}
-	});
+	if (state === 'idle' && bgUtils.isActive()) {
+		bgUtils.displayScreenSaver();
+	} else {
+		// delay close a little to allow time to process mouse and keyboard
+		chrome.alarms.create('close', {when: Date.now() + 250});
+	}
 }
 
 // event: alarm triggered
@@ -86,13 +81,8 @@ function onAlarm(alarm) {
 
 // message: preview the screensaver
 function onMessage(request) {
-	if (request.command === 'preview') {
-		// preview screensaver
+	if (request.preview === 'show') {
 		bgUtils.displayScreenSaver(true);
-	} else if (request.command === 'close') {
-		// close all screensavers
-		// delay close a little to allow time to process mouse and keyboard
-		chrome.alarms.create('close', {when: Date.now() + 250});
 	}
 }
 
@@ -100,17 +90,13 @@ function onMessage(request) {
 function onMenuClicked(info) {
 	if (info.menuItemId === 'ENABLE_MENU') {
 		bgUtils.toggleEnabled();
-	} else if (info.menuItemId === 'DISPLAY_MENU') {
-		bgUtils.displayScreenSaver();
 	}
 }
 
-// event: keyboard shortcut
+// event: special key command
 function onKeyCommand(cmd) {
 	if (cmd === 'toggle-enabled') {
 		bgUtils.toggleEnabled();
-	} else if (cmd === 'display-screensaver') {
-		bgUtils.displayScreenSaver();
 	}
 }
 
