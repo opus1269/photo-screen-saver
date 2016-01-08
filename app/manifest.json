@@ -3,7 +3,7 @@
 	"name": "Photo Screen Saver",
 	"short_name": "Photo Screen Saver",
 	"description": "A screensaver with multiple photo sources",
-	"version": "1.4.2",
+	"version": "1.4.0",
 	"minimum_chrome_version": "38",
 	"commands": {
 		"toggle-enabled": {
