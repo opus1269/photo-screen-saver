@@ -182,8 +182,12 @@ var bgUtils = (function() {
 	function _processEnabled() {
 		// update context menu text
 		var label = JSON.parse(localStorage.enabled) ? 'Disable' : 'Enable';
-		chrome.contextMenus.update('ENABLE_MENU', {title: label});
 		_updateBadgeText();
+		chrome.contextMenus.update('ENABLE_MENU', {title: label}, function() {
+			if (chrome.runtime.lastError) {
+				console.log(chrome.runtime.lastError.message);
+			}
+		});
 	}
 
 	// power scheduling features
@@ -298,7 +302,7 @@ var bgUtils = (function() {
 
 		// toggle enabled state
 		toggleEnabled: function() {
-			localStorage.enabled =  !JSON.parse(localStorage.enabled);
+			localStorage.enabled = !JSON.parse(localStorage.enabled);
 			// storage changed event not fired on same page as the change
 			_processEnabled();
 		},
@@ -306,11 +310,11 @@ var bgUtils = (function() {
 		// process changes to localStorage settings
 		processState: function(key) {
 			// Map processing functions to localStorage values
-			var STATE_MAP =  {
+			var STATE_MAP = {
 				'enabled': _processEnabled,
 				'keepAwake': _processKeepAwake,
 				'activeStart': _processKeepAwake,
-				'activeStop':  _processKeepAwake,
+				'activeStop': _processKeepAwake,
 				'allowSuspend': _processKeepAwake,
 				'idleTime': _processIdleTime
 			};
