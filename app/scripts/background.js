@@ -21,13 +21,7 @@ function onStartup() {
 
 // event: display or focus options page
 function onIconClicked() {
-	chrome.tabs.query({title: 'Photo Screen Saver Options Page'}, function(t) {
-		if (t.length) {
-			chrome.tabs.update(t[0].id, {'highlighted': true});
-		} else {
-			chrome.tabs.create({url: '../html/options.html'});
-		}
-	});
+	bgUtils.showOptionsTab();
 }
 
 // event: process the state when someone has changed the storage
@@ -81,7 +75,7 @@ function onAlarm(alarm) {
 
 // message: preview the screensaver
 function onMessage(request) {
-	if (request.preview === 'show') {
+	if (request.window === 'show') {
 		bgUtils.displayScreenSaver(true);
 	}
 }

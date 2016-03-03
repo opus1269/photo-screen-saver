@@ -72,6 +72,9 @@ t.addEventListener('dom-change', function() {
 		});
 	}
 
+	// listen for request to close screensaver
+	chrome.runtime.onMessage.addListener(t.onMessage);
+
 	// load the photos for the slide show
 	t.loadImages();
 
@@ -493,5 +496,12 @@ window.addEventListener('keydown', function(event) {
 		window.close();
 	}
 }, false);
+
+// message: close screensaver
+t.onMessage = function(request) {
+	if (request.window === 'close') {
+		window.close();
+	}
+};
 
 })();

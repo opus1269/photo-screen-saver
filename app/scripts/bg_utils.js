@@ -264,6 +264,17 @@ var bgUtils = (function() {
 			localStorage.removeItem('useFavoriteFlickr');
 		},
 
+		// send message to the option tab to focus it.
+		// if not found, create it
+		showOptionsTab: function() {
+			chrome.runtime.sendMessage({window: 'highlight'}, null, function(response) {
+				if (!response) {
+					// no one listening
+					chrome.tabs.create({url: '../html/options.html'});
+				}
+			});
+		},
+
 		// return true if screensaver can be displayed
 		isActive: function() {
 			var enabled = JSON.parse(localStorage.enabled);
@@ -352,13 +363,9 @@ var bgUtils = (function() {
 			}
 		},
 
-		// close all the screensavers
+		// send message to the screensavers to close themselves
 		closeScreenSavers: function() {
-			chrome.tabs.query({title: 'Photo Screen Saver Screensaver Page'}, function(t) {
-				for (var i = 0; i < t.length; i++) {
-					chrome.windows.remove(t[i].windowId);
-				}
-			});
+			chrome.runtime.sendMessage({window: 'close'});
 		}
 
 	};

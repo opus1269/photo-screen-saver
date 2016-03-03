@@ -16,6 +16,14 @@ var t = document.querySelector('#t');
 t.route = 'page-settings';
 t.prevRoute = 'page-settings';
 
+// Listen for template bound event to know when bindings
+// have resolved and content has been stamped to the page
+t.addEventListener('dom-change', function() {
+
+	// listen for request to make ourselves highlighted
+	chrome.runtime.onMessage.addListener(t.onMessage);
+});
+
 // handle main menu selections
 t.onDataRouteClick = function(event) {
 
@@ -87,7 +95,7 @@ t.info = function(index) {
 t.preview = function() {
 	// select previous page
 	t.async(function() {t.$.mainMenu.select(t.prevRoute);}, 500);
-	chrome.runtime.sendMessage({preview: 'show'});
+	chrome.runtime.sendMessage({window: 'show'});
 };
 
 // list of pages
@@ -111,6 +119,16 @@ t.closeDrawer = function() {
 	var drawerPanel = document.querySelector('#paperDrawerPanel');
 	if (drawerPanel.narrow) {
 		drawerPanel.closeDrawer();
+	}
+};
+
+// message: highlight ourselves and tell the sender we are here
+t.onMessage = function(request, sender, response) {
+	if (request.window === 'highlight') {
+		chrome.tabs.getCurrent(function(t) {
+			chrome.tabs.update(t.id, {'highlighted': true});
+		});
+		response(JSON.stringify({message: 'OK'}));
 	}
 };
 
