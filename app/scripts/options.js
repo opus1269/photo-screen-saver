@@ -37,7 +37,6 @@ t.onDataRouteClick = function(event) {
 	if (!t.pages[index].obj) {
 		// some pages are just pages
 		t.route = t.pages[index].route;
-		t.$.scrollPanel.scroller.style.overflow = 'auto';
 		t.scrollPageToTop();
 	} else if (typeof t.pages[index].obj === 'string') {
 		// some pages are url links
@@ -62,7 +61,6 @@ t.googlePhotos = function(index) {
 	t.route = t.pages[index].route;
 	t.scrollPageToTop();
 	// hide main scrollbar - page has own scroller
-	t.$.scrollPanel.scroller.style.overflow = 'hidden';
 };
 
 // show the faq page
@@ -74,7 +72,6 @@ t.faq = function(index) {
 		Polymer.dom(t.$.faqInsertion).appendChild(el);
 	}
 	t.route = t.pages[index].route;
-	t.$.scrollPanel.scroller.style.overflow = 'auto';
 	t.scrollPageToTop();
 };
 
@@ -87,7 +84,6 @@ t.info = function(index) {
 		Polymer.dom(t.$.infoInsertion).appendChild(el);
 	}
 	t.route = t.pages[index].route;
-	t.$.scrollPanel.scroller.style.overflow = 'auto';
 	t.scrollPageToTop();
 };
 
