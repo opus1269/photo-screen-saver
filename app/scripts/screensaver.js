@@ -287,6 +287,7 @@ t.stretchPhoto = function(idx) {
 t.framePhoto = function(idx) {
 	var padding, border, borderBot;
 	var e = t.getEls(idx);
+	var img = e.image.$.img;
 	var width, height;
 	var frWidth, frHeight;
 	var aspect = e.item.aspectRatio;
@@ -310,6 +311,9 @@ t.framePhoto = function(idx) {
 	// size with the frame
 	frWidth = width + border * 2;
 	frHeight = height + borderBot + border;
+
+	img.style.height = height + 'px';
+	img.style.width = width + 'px';
 
 	e.image.height = height;
 	e.image.width = width;
