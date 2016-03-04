@@ -120,7 +120,7 @@ var gPhotos = (function() {
 		// load the users list of albums, including the photos in each
 		// callback function(error, albumList)
 		loadAlbumList: function(callback) {
-			var albumListQuery = '?v=2&thumbsize=72&alt=json';
+			var albumListQuery = '?v=2&thumbsize=72&visibility=all&kind=album&alt=json';
 			var request = PICASA_PATH + 'default/' + albumListQuery;
 
 			authenticatedXhr('GET',request, function(error, httpStatus, responseText) {
