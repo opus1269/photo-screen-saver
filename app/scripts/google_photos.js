@@ -7,11 +7,13 @@ var gPhotos = (function() {
 
 	var PICASA_PATH = 'https://picasaweb.google.com/data/feed/api/user/';
 	var PHOTOS_QUERY = '?imgmax=1600&thumbsize=72&fields=entry(media:group/media:content,media:group/media:credit)&v=2&alt=json';
+	var MAX_RETRY = 5;
 
 	// perform a request using OAuth 2.0 authentication
 	// callback function(error, httpStatus, responseText)
 	function authenticatedXhr(method, url, callback) {
-		var retry = 0;
+		var retryToken = 0;
+		var retryError = 0;
 		var error = null;
 		(function getTokenAndXhr() {
 			chrome.identity.getAuthToken({'interactive': true},
@@ -27,12 +29,20 @@ var gPhotos = (function() {
 				xhr.send();
 
 				xhr.onload = function() {
-					if (this.status === 401 && retry < 5) {
+					if (this.status === 401 && retryToken < MAX_RETRY) {
 						// This status may indicate that the cached
-						// access token was invalid. Retry up to 5 times with
+						// access token was invalid. Retry a few times with
 						// a fresh token.
-						retry++;
+						retryToken++;
 						chrome.identity.removeCachedAuthToken({'token': accessToken}, getTokenAndXhr);
+						return;
+					}
+
+					if (this.status !== 200 && retryError < MAX_RETRY) {
+						// Some error, retry a few times
+						retryError++;
+						console.log('Http error: ' + this.status + ' try again : ' + retryError);
+						getTokenAndXhr();
 						return;
 					}
 
