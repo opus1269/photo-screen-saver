@@ -94,6 +94,8 @@ var reddit = (function() {
 	return {
 
 		loadImages: function(subreddit, name) {
+			var originalItems = JSON.parse(localStorage.getItem(name));
+			localStorage.removeItem(name);
 			return snoocore(subreddit + 'hot').listing({
 				limit: MAX_PHOTOS
 			}).then(function(slice) {
@@ -102,6 +104,8 @@ var reddit = (function() {
 			}).then(function(slice) {
 				processChildren(slice.children, name);
 			}).catch(function(reason) {
+				// failed, restore original items
+				localStorage.setItem(name, JSON.stringify(originalItems));
 				console.log('error: ', reason);
 			});
 		}
