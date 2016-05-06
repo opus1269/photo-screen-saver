@@ -63,9 +63,9 @@
 					<!-- Error dialog -->
 					<paper-dialog id="errorDialog" modal entry-animation="scale-up-animation"
 						exit-animation="fade-out-animation">
-						<h2>Request failed. Select refresh to try again.</h2>
+						<h2 id="dialogTitle"></h2>
 						<paper-dialog-scrollable>
-							<p id="dialogTextEl"></p>
+							<p id="dialogText"></p>
 						</paper-dialog-scrollable>
 						<div class="buttons">
 							<paper-button dialog-dismiss>OK</paper-button>

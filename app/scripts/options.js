@@ -53,14 +53,13 @@ t.googlePhotos = function(index) {
 	if (!t.pages[index].ready) {
 		// create the page the first time
 		t.pages[index].ready = true;
-		t.gPhotosPage = new GooglePhotosPage('gPhotosPage', t.$.errorDialog, t.$.dialogTextEl);
+		t.gPhotosPage = new GooglePhotosPage('gPhotosPage', t.$.errorDialog, t.$.dialogTitle, t.$.dialogText);
 		Polymer.dom(t.$.googlePhotosInsertion).appendChild(t.gPhotosPage);
 	} else {
 		t.gPhotosPage.loadAlbumList();
 	}
 	t.route = t.pages[index].route;
 	t.scrollPageToTop();
-	// hide main scrollbar - page has own scroller
 };
 
 // show the faq page

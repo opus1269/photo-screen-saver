@@ -29,6 +29,27 @@ var myUtils = (function() {
 		},
 
 		/**
+		 * Save a value to localStorage only if there is enough room
+		 *
+		 * @param {String} key localStorage Key
+		 * @param {Object} value localStorage Value
+		 * @return {Boolean} true if value was set successfully
+		 */
+		localStorageSafeSet: function(key, value) {
+			var ret = true;
+			var oldValue = localStorage.getItem(key);
+			try {
+				localStorage.setItem(key, value);
+			} catch (e) {
+				ret = false;
+				// revert to old value
+				localStorage.setItem(key, oldValue);
+			}
+
+			return ret;
+		},
+
+		/**
 		 * Randomly sort an Array in place
 		 *
 		 * @param {Array} array array to sort

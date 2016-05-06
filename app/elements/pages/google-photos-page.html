@@ -3,10 +3,12 @@
 -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+
 <link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-label/iron-label.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
@@ -93,12 +95,36 @@
 			<paper-material elevation="1">
 				<paper-toolbar class="page-toolbar">
 					<div class="flex">Google Photos Albums</div>
-					<paper-icon-button id="deselect" icon="check-box-outline-blank" on-tap="_deselectTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
-					<paper-tooltip for="deselect" position="left" offset="0">Deselect all albums</paper-tooltip>
-					<paper-icon-button id="refresh" icon="refresh" on-tap="_refreshTapped" disabled$="[[!useGoogle]]"></paper-icon-button>
-					<paper-tooltip for="refresh" position="left" offset="0">Refresh album list</paper-tooltip>
-					<paper-toggle-button id="googlePhotosToggle" checked="{{useGoogle}}"></paper-toggle-button>
-					<paper-tooltip for="googlePhotosToggle" position="left" offset="0">Enable/disable use of albums</paper-tooltip>
+					<paper-icon-button
+							id="select"
+							icon="check-box"
+							on-tap="_selectAllTapped"
+							disabled$="[[!useGoogle]]"></paper-icon-button>
+					<paper-tooltip
+							for="select"
+							position="left" offset="0">Select all albums</paper-tooltip>
+					<paper-icon-button
+							id="deselect"
+							icon="check-box-outline-blank"
+							on-tap="_deselectAllTapped"
+							disabled$="[[!useGoogle]]"></paper-icon-button>
+					<paper-tooltip
+							for="deselect"
+							position="left" offset="0">Deselect all albums</paper-tooltip>
+					<paper-icon-button
+							id="refresh"
+							icon="refresh"
+							on-tap="_refreshTapped"
+							disabled$="[[!useGoogle]]"></paper-icon-button>
+					<paper-tooltip
+							for="refresh"
+							position="left" offset="0">Refresh album list</paper-tooltip>
+					<paper-toggle-button
+							id="googlePhotosToggle"
+							checked="{{useGoogle}}"></paper-toggle-button>
+					<paper-tooltip
+							for="googlePhotosToggle"
+							position="left" offset="0">Enable/disable use of albums</paper-tooltip>
 					<iron-localstorage name="useGoogle" value="{{useGoogle}}"></iron-localstorage>
 				</paper-toolbar>
 			</paper-material>
@@ -140,9 +166,10 @@
 		is: 'google-photos-page',
 
 		// so we can lazily create the page
-		factoryImpl: function(id, dialogEl, dialogTextEl) {
+		factoryImpl: function(id, dialogEl, dialogTitleEl, dialogTextEl) {
 			this.setAttribute('id', id);
 			this.dialogEl = dialogEl;
+			this.dialogTitleEl = dialogTitleEl;
 			this.dialogTextEl = dialogTextEl;
 		},
 
@@ -165,6 +192,11 @@
 			},
 
 			dialogEl: {
+				type: Object,
+				value: {}
+			},
+
+			dialogTitleEl: {
 				type: Object,
 				value: {}
 			},
@@ -192,6 +224,7 @@
 					this._selectAlbums();
 					gPhotos.updateImages();
 				} else {
+					this.dialogTitleEl.innerHTML = 'Request failed. Select refresh to try again.';
 					this.dialogTextEl.innerHTML = error;
 					this.dialogEl.open();
 				}
@@ -219,6 +252,7 @@
 
 		// handle interactive album selections
 		_albumSelectChange: function(event) {
+			var oldSelections = JSON.parse(localStorage.albumSelections);
 			var item = event.model.item;
 			var index = this.selections.map(function(e) {return e.id;}).indexOf(item.id);
 
@@ -230,18 +264,52 @@
 				this.selections.push({id: item.id, photos: item.photos});
 			}
 
-			localStorage.albumSelections = JSON.stringify(this.selections);
+			if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
+				// exceeded storage limits, revert and show error
+				this._onStoreLimitExceeded(oldSelections);
+			}
+		},
+
+		// select all albums
+		_selectAllTapped: function() {
+			var oldSelections = JSON.parse(localStorage.albumSelections);
+			var item;
+			for (var i = 0; i < this.albums.length; i++) {
+				item = this.albums[i];
+				if (!item.checked) {
+					this.set('albums.' + i + '.checked', true);
+					this.selections.push({id: item.id, photos: item.photos});
+				}
+			}
+			if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
+				// exceeded storage limits, revert and show error
+				this._onStoreLimitExceeded(oldSelections);
+			}
 		},
 
 		// deselect all albums
-		_deselectTapped: function() {
+		_deselectAllTapped: function() {
+			this._uncheckAll();
+			this.selections.splice(0, this.selections.length);
+			localStorage.albumSelections = JSON.stringify(this.selections);
+		},
+
+		// uncheck all albums
+		_uncheckAll: function() {
 			for (var i = 0; i < this.albums.length; i++) {
 				if (this.albums[i].checked) {
 					this.set('albums.' + i + '.checked', false);
 				}
 			}
-			this.selections.splice(0, this.selections.length);
-			localStorage.albumSelections = JSON.stringify(this.selections);
+		},
+
+		_onStoreLimitExceeded: function(oldValue) {
+			this._uncheckAll();
+			localStorage.albumSelections = JSON.stringify(oldValue);
+			this._selectAlbums();
+			this.dialogTitleEl.innerHTML = 'Exceeded storage limits.';
+			this.dialogTextEl.innerHTML = 'Select fewer albums.';
+			this.dialogEl.open();
 		}
 
 	});
