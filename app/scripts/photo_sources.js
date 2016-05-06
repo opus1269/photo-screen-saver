@@ -5,33 +5,70 @@
 var photoSources = (function() {
 	'use strict';
 
-	// a provider of photos for the screensaver
-	var PhotoSource = function(useName, photosName, type, rem, isDaily, isArray, loadFn, loadArgs) {
+	/**
+	 * A potential source of photos for the screen saver
+	 *
+	 * @param {String} useName The key for the boolean value that indicates if the source is selected
+	 * @param {String} photosName The key for the collection of photos
+	 * @param {String} type A descriptor of the photo source
+	 * @param {Boolean} isDaily Should the source be updated daily
+	 * @param {Boolean} isArray Is the source an Array of photo Arrays
+	 * @param {function} loadFn functions to call to process the photos
+	 * @param {Array} loadArgs Arguments to the loadFn
+	 * @constructor
+	 *
+	 */
+	var PhotoSource = function(useName, photosName, type, isDaily, isArray, loadFn, loadArgs) {
 		this.useName = useName;
 		this.photosName = photosName;
 		this.type = type;
-		this.rem = rem;
 		this.isDaily = isDaily;
 		this.isArray = isArray;
 		this.loadFn = loadFn;
 		this.loadArgs = loadArgs || null;
 	};
+
+	/**
+	 * Determine if this source has been selected for display
+	 *
+	 * @return {Boolean} true is selected
+	 */
 	PhotoSource.prototype.use = function() {
 		return JSON.parse(localStorage.getItem(this.useName));
 	};
+
+	/**
+	 * Process the given photo source.
+	 * This normally requires a https call
+	 * and may fail for various reasons
+	 *
+	 */
 	PhotoSource.prototype.process = function() {
-		if (this.rem) {
-			localStorage.removeItem(this.photosName);
-		}
 		if (this.use()) {
 			this.loadFn.apply(this, this.loadArgs);
+		} else {
+			localStorage.removeItem(this.photosName);
 		}
 	};
+
+	/**
+	 * Add the type specifier (source of the photo) for each photo object in the array
+
+	 * @param {Array} arr an array of photo objects
+	 * @private
+	 */
 	PhotoSource.prototype._addType = function(arr) {
 		for (var i = 0; i < arr.length; i++) {
 			arr[i].type = this.type;
 		}
 	};
+
+	/**
+	 * Get all the photos
+
+	 * @returns {Array} The Array of photos
+	 *
+	 */
 	PhotoSource.prototype.getPhotos = function() {
 		var ret = [];
 		if (this.use()) {
@@ -55,26 +92,26 @@ var photoSources = (function() {
 
 	// Array of PhotoSources
 	var SOURCES = [
-		new PhotoSource('useGoogle', 'albumSelections','Google User', false, true, true, gPhotos.updateImages, null),
-		new PhotoSource('useChromecast', 'ccImages','Google', true, false, false, chromeCast.loadImages, null),
-		new PhotoSource('useEditors500px', 'editors500pxImages','500', true, true, false, use500px.loadImages, ['editors', 'editors500pxImages']),
-		new PhotoSource('usePopular500px', 'popular500pxImages','500', true, true, false, use500px.loadImages, ['popular', 'popular500pxImages']),
-		new PhotoSource('useYesterday500px', 'yesterday500pxImages','500', true, true, false, use500px.loadImages, ['fresh_yesterday', 'yesterday500pxImages']),
-		new PhotoSource('useSpaceReddit', 'spaceRedditImages','reddit', true, true, false, reddit.loadImages, ['r/spaceporn/', 'spaceRedditImages']),
-		new PhotoSource('useEarthReddit', 'earthRedditImages','reddit', true, true, false, reddit.loadImages, ['r/EarthPorn/', 'earthRedditImages']),
-		new PhotoSource('useAnimalReddit', 'animalRedditImages','reddit', true, true, false, reddit.loadImages, ['r/animalporn/', 'animalRedditImages']),
-		new PhotoSource('useInterestingFlickr', 'flickrInterestingImages','flickr', true, true, false, flickr.loadImages, null),
-		new PhotoSource('useAuthors', 'authorImages','Google', true, false, false, gPhotos.loadAuthorImages, null)
+		new PhotoSource('useGoogle', 'albumSelections','Google User', true, true, gPhotos.updateImages, null),
+		new PhotoSource('useChromecast', 'ccImages','Google', false, false, chromeCast.loadImages, null),
+		new PhotoSource('useEditors500px', 'editors500pxImages','500', true, false, use500px.loadImages, ['editors', 'editors500pxImages']),
+		new PhotoSource('usePopular500px', 'popular500pxImages','500', true, false, use500px.loadImages, ['popular', 'popular500pxImages']),
+		new PhotoSource('useYesterday500px', 'yesterday500pxImages','500', true, false, use500px.loadImages, ['fresh_yesterday', 'yesterday500pxImages']),
+		new PhotoSource('useSpaceReddit', 'spaceRedditImages','reddit', true, false, reddit.loadImages, ['r/spaceporn/', 'spaceRedditImages']),
+		new PhotoSource('useEarthReddit', 'earthRedditImages','reddit', true, false, reddit.loadImages, ['r/EarthPorn/', 'earthRedditImages']),
+		new PhotoSource('useAnimalReddit', 'animalRedditImages','reddit', true, false, reddit.loadImages, ['r/animalporn/', 'animalRedditImages']),
+		new PhotoSource('useInterestingFlickr', 'flickrInterestingImages','flickr', true, false, flickr.loadImages, null),
+		new PhotoSource('useAuthors', 'authorImages','Google', false, false, gPhotos.loadAuthorImages, null)
 	];
 
 	return {
 
-		// return all photo sources
-		getAll: function() {
-			return SOURCES;
-		},
-
-		// return all photos from all sources
+		/**
+		 * Get all the photos from all selected sources. These will be
+		 * used by the screen saver.
+		 *
+		 * @returns {Array} Array of photos to display in screen saver
+		 */
 		getAllPhotos: function() {
 			var ret = [];
 			for (var i = 0; i < SOURCES.length; i++) {
@@ -83,7 +120,12 @@ var photoSources = (function() {
 			return ret;
 		},
 
-		// return true is useName is a photoSource
+		/**
+		 * Determine if a given string is a photo source
+		 *
+		 * @param {String} useName String to check
+		 * @returns {boolean} true if photo source
+		 */
 		contains: function(useName) {
 			for (var i = 0; i < SOURCES.length; i++) {
 				if (SOURCES[i].useName === useName) {
@@ -93,7 +135,14 @@ var photoSources = (function() {
 			return false;
 		},
 
-		// process the given photo source
+		/**
+		 * Process the given photo source and save to localStorage.
+		 * This normally requires a https call
+		 * and may fail for various reasons
+		 *
+		 * @param useName The photo source to retrieve
+		 
+		 */
 		process: function(useName) {
 			for (var i = 0; i < SOURCES.length; i++) {
 				if (SOURCES[i].useName === useName) {
@@ -103,14 +152,25 @@ var photoSources = (function() {
 			}
 		},
 
-		// process all photo sources
+		/**
+		 * Process all the selected photo sources and save to localStorage.
+		 * This normally requires a https call
+		 * and may fail for various reasons
+		 *
+		 */
 		processAll: function() {
 			for (var i = 0; i < SOURCES.length; i++) {
 				SOURCES[i].process();
 			}
 		},
 
-		// process the daily updated photo sources
+		/**
+		 * Process all the selected photo sources that are to be updated every day
+		 * and save to localStorage.
+		 * This normally requires a https call
+		 * and may fail for various reasons
+		 *
+		 */
 		processDaily: function() {
 			for (var i = 0; i < SOURCES.length; i++) {
 				if (SOURCES[i].isDaily) {

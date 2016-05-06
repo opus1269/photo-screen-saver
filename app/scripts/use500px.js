@@ -14,7 +14,10 @@ var use500px = (function() {
 	return {
 
 		loadImages: function(type, name) {
+			var originalItems = JSON.parse(localStorage.getItem(name));
+			localStorage.removeItem(name);
 			var xhr = [];
+			var done = [false, false, false];
 			for (var j = 0; j < CATS.length; j++) {
 				(function(index) {
 					var request = URL + 'photos/' + '?consumer_key=' + KEY +
@@ -22,7 +25,6 @@ var use500px = (function() {
 						'&sort=rating' + '&image_size=2048';
 
 					xhr.push(new XMLHttpRequest());
-
 					xhr[index].onload = function() {
 						var response = JSON.parse(xhr[index].response);
 						if (response.error) {
@@ -46,10 +48,26 @@ var use500px = (function() {
 								tmp = images;
 							}
 							localStorage.setItem(name, JSON.stringify(tmp));
+							done[index] = true;
+							if (done[0] && done[1] && done[2]) {
+								var vals = JSON.parse(localStorage.getItem(name));
+								if (!vals || !vals.length) {
+									// failed, restore original items
+									localStorage.setItem(name, JSON.stringify(originalItems));
+								}
+							}
 						}
 					};
 
 					xhr[index].onerror = function(e) {
+						done[index] = true;
+						if (done[0] && done[1] && done[2]) {
+							var vals = JSON.parse(localStorage.getItem(name));
+							if (!vals || !vals.length) {
+								// failed, restore original items
+								localStorage.setItem(name, JSON.stringify(originalItems));
+							}
+						}
 						console.log('xhr',index,e);
 					};
 

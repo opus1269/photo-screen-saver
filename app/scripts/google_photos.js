@@ -120,7 +120,10 @@ var gPhotos = (function() {
 			var xhr = new XMLHttpRequest();
 
 			xhr.onload = function() {
-				localStorage.authorImages = JSON.stringify(processPhotos(JSON.parse(xhr.response)));
+				var photos = processPhotos(JSON.parse(xhr.response));
+				if (photos && photos.length) {
+					localStorage.authorImages = JSON.stringify(photos);
+				}
 			};
 
 			xhr.open('GET', request, true);
@@ -194,7 +197,12 @@ var gPhotos = (function() {
 						}
 
 						if (ct === (items.length - 1)) {
-							localStorage.albumSelections = JSON.stringify(newItems);
+							if (newItems && newItems.length) {
+								// make sure at least some of the albums came through
+								// can't check vs. original length because some albums
+								// may have been deleted.
+								localStorage.albumSelections = JSON.stringify(newItems);
+							}
 							return;
 						}
 						ct++;

@@ -33,7 +33,9 @@ var flickr = (function() {
 							myUtils.addImage(images, photo.url_k, photo.ownername, asp, photo.owner);
 						}
 					}
-					localStorage.flickrInterestingImages = JSON.stringify(images);
+					if (images || images.length > 0) {
+						localStorage.flickrInterestingImages = JSON.stringify(images);
+					}
 				}
 			};
 
