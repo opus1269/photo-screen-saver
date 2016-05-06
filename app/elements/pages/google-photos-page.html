@@ -21,6 +21,7 @@
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
 <script src="../../scripts/google_photos.js"></script>
+<script src="../../scripts/photo_sources.js"></script>
 
 <dom-module id="google-photos-page">
 	<template>
@@ -221,8 +222,15 @@
 					for (var i = 0; i < albums.length; i++) {
 						this.push('albums', JSON.parse(JSON.stringify(albums[i])));
 					}
-					this._selectAlbums();
-					gPhotos.updateImages();
+					photoSources.process('useGoogle', function(error) {
+						if (error) {
+							this.dialogTitleEl.innerHTML = 'Request failed. Select refresh to try again.';
+							this.dialogTextEl.innerHTML = error;
+							this.dialogEl.open();
+						} else {
+							this._selectAlbums();
+						}
+					}.bind(this));
 				} else {
 					this.dialogTitleEl.innerHTML = 'Request failed. Select refresh to try again.';
 					this.dialogTextEl.innerHTML = error;
@@ -230,6 +238,53 @@
 				}
 				this.set('waitForLoad', false);
 			}.bind(this));
+		},
+
+		// refresh the album list
+		_refreshTapped: function() {
+			this.loadAlbumList();
+		},
+
+		// select all albums
+		_selectAllTapped: function() {
+			var item;
+			for (var i = 0; i < this.albums.length; i++) {
+				item = this.albums[i];
+				if (!item.checked) {
+					this.set('albums.' + i + '.checked', true);
+					this.selections.push({id: item.id, photos: item.photos});
+				}
+			}
+			if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
+				// exceeded storage limits, show error and reset selected state
+				this._onStoreLimitExceeded();
+			}
+		},
+
+		// deselect all albums
+		_deselectAllTapped: function() {
+			this._uncheckAll();
+			this.selections.splice(0, this.selections.length);
+			localStorage.albumSelections = JSON.stringify(this.selections);
+		},
+
+		// handle tap on checkbox for an album
+		_albumSelectChange: function(event) {
+			var item = event.model.item;
+			var index = this.selections.map(function(e) {return e.id;}).indexOf(item.id);
+
+			if (index !== -1) {
+				this.selections.splice(index, 1);
+			}
+
+			if (item.checked) {
+				this.selections.push({id: item.id, photos: item.photos});
+			}
+
+			if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
+				// exceeded storage limits, show error and reset selected state
+				this._onStoreLimitExceeded();
+			}
 		},
 
 		// set the checked state of the albums
@@ -245,55 +300,6 @@
 			}
 		},
 
-		// refresh the album list
-		_refreshTapped: function() {
-			this.loadAlbumList();
-		},
-
-		// handle interactive album selections
-		_albumSelectChange: function(event) {
-			var oldSelections = JSON.parse(localStorage.albumSelections);
-			var item = event.model.item;
-			var index = this.selections.map(function(e) {return e.id;}).indexOf(item.id);
-
-			if (index !== -1) {
-				this.selections.splice(index, 1);
-			}
-
-			if (item.checked) {
-				this.selections.push({id: item.id, photos: item.photos});
-			}
-
-			if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
-				// exceeded storage limits, revert and show error
-				this._onStoreLimitExceeded(oldSelections);
-			}
-		},
-
-		// select all albums
-		_selectAllTapped: function() {
-			var oldSelections = JSON.parse(localStorage.albumSelections);
-			var item;
-			for (var i = 0; i < this.albums.length; i++) {
-				item = this.albums[i];
-				if (!item.checked) {
-					this.set('albums.' + i + '.checked', true);
-					this.selections.push({id: item.id, photos: item.photos});
-				}
-			}
-			if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
-				// exceeded storage limits, revert and show error
-				this._onStoreLimitExceeded(oldSelections);
-			}
-		},
-
-		// deselect all albums
-		_deselectAllTapped: function() {
-			this._uncheckAll();
-			this.selections.splice(0, this.selections.length);
-			localStorage.albumSelections = JSON.stringify(this.selections);
-		},
-
 		// uncheck all albums
 		_uncheckAll: function() {
 			for (var i = 0; i < this.albums.length; i++) {
@@ -303,9 +309,8 @@
 			}
 		},
 
-		_onStoreLimitExceeded: function(oldValue) {
+		_onStoreLimitExceeded: function() {
 			this._uncheckAll();
-			localStorage.albumSelections = JSON.stringify(oldValue);
 			this._selectAlbums();
 			this.dialogTitleEl.innerHTML = 'Exceeded storage limits.';
 			this.dialogTextEl.innerHTML = 'Select fewer albums.';

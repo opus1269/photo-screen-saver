@@ -13,19 +13,21 @@ var photoSources = (function() {
 	 * @param {String} type A descriptor of the photo source
 	 * @param {Boolean} isDaily Should the source be updated daily
 	 * @param {Boolean} isArray Is the source an Array of photo Arrays
-	 * @param {function} loadFn functions to call to process the photos
+	 * @param {String} loadObj the function wrapper for a photo source as a string
+	 * @param {String} loadFn function to call to retrieve the photo collection as a string
 	 * @param {Array} loadArgs Arguments to the loadFn
 	 * @constructor
 	 *
 	 */
-	var PhotoSource = function(useName, photosName, type, isDaily, isArray, loadFn, loadArgs) {
+	var PhotoSource = function(useName, photosName, type, isDaily, isArray, loadObj, loadFn, loadArgs) {
 		this.useName = useName;
 		this.photosName = photosName;
 		this.type = type;
 		this.isDaily = isDaily;
 		this.isArray = isArray;
+		this.loadObj = loadObj;
 		this.loadFn = loadFn;
-		this.loadArgs = loadArgs || null;
+		this.loadArgs = loadArgs || [];
 	};
 
 	/**
@@ -41,19 +43,61 @@ var photoSources = (function() {
 	 * Process the given photo source.
 	 * This normally requires a https call
 	 * and may fail for various reasons
+	 * Save to localStorage if there is enough room.
 	 *
+	 * @param {function} callback (error) non-null on error
 	 */
-	PhotoSource.prototype.process = function() {
+	PhotoSource.prototype.process = function(callback) {
+		// callback(error)
+		callback = callback || function() {};
+
 		if (this.use()) {
-			this.loadFn.apply(this, this.loadArgs);
+			var self = this;
+			var err = null;
+			// convert string to function
+			var fn = window[this.loadObj][this.loadFn];
+			if (this.loadArgs.length === 2) {
+				fn(this.loadArgs[0], this.loadArgs[1], function(error, photos) {
+					err = self._savePhotos(error, photos);
+				});
+			} else {
+				fn(function(error, photos) {
+					err = self._savePhotos(error, photos);
+				});
+			}
+			callback(err);
+			return;
 		} else {
 			localStorage.removeItem(this.photosName);
 		}
+		callback(null);
+	};
+
+	/**
+	 * Save the photos to localStorage in a safe manner
+	 *
+	 * @param {String} error non-null if retrieval failed
+	 * @param {Array} photos an array of photo objects
+	 *
+	 * @return {String} non-null on error
+	 * @private
+	 */
+	PhotoSource.prototype._savePhotos = function(error, photos) {
+		var ret = null;
+		if (error) {console.log('error ', error);
+			ret = error;
+		} else if (!photos || !photos.length) {
+			ret = 'No photos retrieved.';
+		} else if (!myUtils.localStorageSafeSet(this.photosName, JSON.stringify(photos))) {
+			ret = 'Exceeded storage capacity.';
+		}
+
+		return ret;
 	};
 
 	/**
 	 * Add the type specifier (source of the photo) for each photo object in the array
-
+	 *
 	 * @param {Array} arr an array of photo objects
 	 * @private
 	 */
@@ -65,7 +109,7 @@ var photoSources = (function() {
 
 	/**
 	 * Get all the photos
-
+	 *
 	 * @returns {Array} The Array of photos
 	 *
 	 */
@@ -92,16 +136,26 @@ var photoSources = (function() {
 
 	// Array of PhotoSources
 	var SOURCES = [
-		new PhotoSource('useGoogle', 'albumSelections','Google User', true, true, gPhotos.updateImages, null),
-		new PhotoSource('useChromecast', 'ccImages','Google', false, false, chromeCast.loadImages, null),
-		new PhotoSource('useEditors500px', 'editors500pxImages','500', true, false, use500px.loadImages, ['editors', 'editors500pxImages']),
-		new PhotoSource('usePopular500px', 'popular500pxImages','500', true, false, use500px.loadImages, ['popular', 'popular500pxImages']),
-		new PhotoSource('useYesterday500px', 'yesterday500pxImages','500', true, false, use500px.loadImages, ['fresh_yesterday', 'yesterday500pxImages']),
-		new PhotoSource('useSpaceReddit', 'spaceRedditImages','reddit', true, false, reddit.loadImages, ['r/spaceporn/', 'spaceRedditImages']),
-		new PhotoSource('useEarthReddit', 'earthRedditImages','reddit', true, false, reddit.loadImages, ['r/EarthPorn/', 'earthRedditImages']),
-		new PhotoSource('useAnimalReddit', 'animalRedditImages','reddit', true, false, reddit.loadImages, ['r/animalporn/', 'animalRedditImages']),
-		new PhotoSource('useInterestingFlickr', 'flickrInterestingImages','flickr', true, false, flickr.loadImages, null),
-		new PhotoSource('useAuthors', 'authorImages','Google', false, false, gPhotos.loadAuthorImages, null)
+		new PhotoSource('useGoogle', 'albumSelections','Google User',
+			true, true, 'gPhotos', 'loadImages', []),
+		new PhotoSource('useChromecast', 'ccImages','Google',
+			false, false, 'chromeCast', 'loadImages', []),
+		new PhotoSource('useEditors500px', 'editors500pxImages','500',
+			true, false, 'use500px', 'loadImages', ['editors', 'editors500pxImages']),
+		new PhotoSource('usePopular500px', 'popular500pxImages','500',
+			true, false, 'use500px', 'loadImages', ['popular', 'popular500pxImages']),
+		new PhotoSource('useYesterday500px', 'yesterday500pxImages','500',
+			true, false, 'use500px', 'loadImages', ['fresh_yesterday', 'yesterday500pxImages']),
+		new PhotoSource('useSpaceReddit', 'spaceRedditImages','reddit',
+			true, false, 'reddit', 'loadImages', ['r/spaceporn/', 'spaceRedditImages']),
+		new PhotoSource('useEarthReddit', 'earthRedditImages','reddit',
+			true, false, 'reddit', 'loadImages', ['r/EarthPorn/', 'earthRedditImages']),
+		new PhotoSource('useAnimalReddit', 'animalRedditImages','reddit',
+			true, false, 'reddit', 'loadImages', ['r/animalporn/', 'animalRedditImages']),
+		new PhotoSource('useInterestingFlickr', 'flickrInterestingImages','flickr',
+			true, false, 'flickr', 'loadImages', []),
+		new PhotoSource('useAuthors', 'authorImages','Google',
+			false, false, 'gPhotos', 'loadAuthorImages', [])
 	];
 
 	return {
@@ -140,14 +194,19 @@ var photoSources = (function() {
 		 * This normally requires a https call
 		 * and may fail for various reasons
 		 *
-		 * @param useName The photo source to retrieve
-		 
+		 * @param {String} useName The photo source to retrieve
+		 * @param {function} callback (error) non-null on error
+		 *
 		 */
-		process: function(useName) {
+		process: function(useName, callback) {
+			// callback(error)
+			callback = callback || function() {};
+
 			for (var i = 0; i < SOURCES.length; i++) {
 				if (SOURCES[i].useName === useName) {
-					SOURCES[i].process();
-					break;
+					SOURCES[i].process(function(error) {
+						callback(error);
+					});
 				}
 			}
 		},

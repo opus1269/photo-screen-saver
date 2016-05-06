@@ -13,9 +13,11 @@ var use500px = (function() {
 
 	return {
 
-		loadImages: function(type, name) {
-			var originalItems = JSON.parse(localStorage.getItem(name));
-			localStorage.removeItem(name);
+		loadImages: function(type, name, callback) {
+			// callback(error, photos)
+			callback = callback || function() {};
+			
+			var photos = [];
 			var xhr = [];
 			var done = [false, false, false];
 			for (var j = 0; j < CATS.length; j++) {
@@ -28,7 +30,7 @@ var use500px = (function() {
 					xhr[index].onload = function() {
 						var response = JSON.parse(xhr[index].response);
 						if (response.error) {
-							console.log(response.error);
+							callback(response.error);
 						} else {
 							var images = [];
 							var asp;
@@ -39,36 +41,17 @@ var use500px = (function() {
 									myUtils.addImage(images, photo.images[0].url, photo.user.fullname, asp);
 								}
 							}
-							var tmp = [];
-							if (localStorage.getItem(name)) {
-								tmp = JSON.parse(localStorage.getItem(name));
-								tmp = tmp.concat(images);
-								myUtils.shuffleArray(tmp);
-							} else {
-								tmp = images;
-							}
-							localStorage.setItem(name, JSON.stringify(tmp));
+							photos = photos.concat(images);
 							done[index] = true;
 							if (done[0] && done[1] && done[2]) {
-								var vals = JSON.parse(localStorage.getItem(name));
-								if (!vals || !vals.length) {
-									// failed, restore original items
-									localStorage.setItem(name, JSON.stringify(originalItems));
-								}
+								// success
+								callback(null, photos);
 							}
 						}
 					};
 
 					xhr[index].onerror = function(e) {
-						done[index] = true;
-						if (done[0] && done[1] && done[2]) {
-							var vals = JSON.parse(localStorage.getItem(name));
-							if (!vals || !vals.length) {
-								// failed, restore original items
-								localStorage.setItem(name, JSON.stringify(originalItems));
-							}
-						}
-						console.log('xhr',index,e);
+						callback(e);
 					};
 
 					xhr[index].open('GET', request, true);

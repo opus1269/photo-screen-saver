@@ -13,16 +13,26 @@ var flickr = (function() {
 
 	return {
 
-		loadImages: function() {
+		/**
+		 * retrieve flickr photos
+		 *
+		 * @param {function} callback
+		 *
+		 */
+		loadImages: function(callback) {
+			// callback(error, photos)
+			callback = callback || function() {};
+
 			var request = URL + '?method=flickr.interestingness.getList' +
 				'&api_key=' + KEY + '&extras=owner_name,url_k,media' +
 				'&per_page=' + MAX_PHOTOS + '&format=json' + '&nojsoncallback=1';
+
 			var xhr = new XMLHttpRequest();
 
 			xhr.onload = function() {
 				var response = JSON.parse(xhr.response);
 				if (response.stat !== 'ok') {
-					console.log(response.message);
+					callback(response.message);
 				} else {
 					var images = [];
 					var asp;
@@ -33,14 +43,12 @@ var flickr = (function() {
 							myUtils.addImage(images, photo.url_k, photo.ownername, asp, photo.owner);
 						}
 					}
-					if (images || images.length > 0) {
-						localStorage.flickrInterestingImages = JSON.stringify(images);
-					}
+					callback(null, images);
 				}
 			};
 
 			xhr.onerror = function(e) {
-				console.log('xhr',e);
+				callback(e);
 			};
 
 			xhr.open('GET', request, true);

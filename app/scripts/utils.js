@@ -32,18 +32,18 @@ var myUtils = (function() {
 		 * Save a value to localStorage only if there is enough room
 		 *
 		 * @param {String} key localStorage Key
-		 * @param {Object} value localStorage Value
+		 * @param {String} value JSON stringified value to save
 		 * @return {Boolean} true if value was set successfully
 		 */
 		localStorageSafeSet: function(key, value) {
 			var ret = true;
-			var oldValue = localStorage.getItem(key);
+			var oldValue = JSON.parse(localStorage.getItem(key));
 			try {
 				localStorage.setItem(key, value);
 			} catch (e) {
 				ret = false;
 				// revert to old value
-				localStorage.setItem(key, oldValue);
+				localStorage.setItem(key, JSON.stringify(oldValue));
 			}
 
 			return ret;

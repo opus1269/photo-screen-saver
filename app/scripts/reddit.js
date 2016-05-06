@@ -39,8 +39,13 @@ var reddit = (function() {
 		return ret;
 	};
 
-	// build the list of photos for one page of items
-	var processChildren = function(children, name) {
+	/** build the list of photos for one page of items
+	 *
+	 * @param {Array} children Array of photos returned from reddit
+	 * @returns {Array} Array of images in our format, stripped of NSFW and big and small photos
+	 * 
+	 */
+	var processChildren = function(children) {
 		var data;
 		var item;
 		var images = [];
@@ -80,33 +85,26 @@ var reddit = (function() {
 				myUtils.addImage(images, url, data.author, asp, data.url);
 			}
 		}
-		var tmp = [];
-		if (localStorage.getItem(name)) {
-			tmp = JSON.parse(localStorage.getItem(name));
-			tmp = tmp.concat(images);
-		} else {
-			tmp = images;
-		}
-		localStorage.setItem(name, JSON.stringify(tmp));
-
+		return images;
 	};
 
 	return {
 
-		loadImages: function(subreddit, name) {
-			var originalItems = JSON.parse(localStorage.getItem(name));
-			localStorage.removeItem(name);
-			return snoocore(subreddit + 'hot').listing({
+		loadImages: function(subreddit, name, callback) {
+			// callback(error, photos)
+			callback = callback || function() {};
+			var newPhotos = [];
+
+			snoocore(subreddit + 'hot').listing({
 				limit: MAX_PHOTOS
 			}).then(function(slice) {
-				processChildren(slice.children, name);
+				newPhotos = newPhotos.concat(processChildren(slice.children));
 				return slice.next();
 			}).then(function(slice) {
-				processChildren(slice.children, name);
+				newPhotos = newPhotos.concat(processChildren(slice.children));
+				callback(null, newPhotos);
 			}).catch(function(reason) {
-				// failed, restore original items
-				localStorage.setItem(name, JSON.stringify(originalItems));
-				console.log('error: ', reason);
+				callback(reason);
 			});
 		}
 	};

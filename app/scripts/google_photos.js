@@ -112,18 +112,33 @@ var gPhotos = (function() {
 
 	return {
 
-		// load and store the developers photos default photo source
-		loadAuthorImages: function() {
+		/**
+		 * Get my photo album
+		 *
+		 * @param {function} callback (error, photos)
+		 * 
+		 */
+		loadAuthorImages: function(callback) {
+			// callback(error, photos)
+			callback = callback || function() {};
+
 			var authorID = '103839696200462383083';
 			var authorAlbum = '6117481612859013089';
 			var request = PICASA_PATH + authorID + '/albumid/' + authorAlbum + '/' + PHOTOS_QUERY;
+
 			var xhr = new XMLHttpRequest();
 
 			xhr.onload = function() {
-				var photos = processPhotos(JSON.parse(xhr.response));
-				if (photos && photos.length) {
-					localStorage.authorImages = JSON.stringify(photos);
+				if (xhr.status === 200) {
+					var photos = processPhotos(JSON.parse(xhr.responseText));
+					callback(null, photos);
+				} else {
+					callback(xhr.responseText);
 				}
+			};
+
+			xhr.onerror = function(e) {
+				callback(e);
 			};
 
 			xhr.open('GET', request, true);
@@ -133,6 +148,9 @@ var gPhotos = (function() {
 		// load the users list of albums, including the photos in each
 		// callback function(error, albumList)
 		loadAlbumList: function(callback) {
+			// callback(error, albums)
+			callback = callback || function() {};
+
 			var albumListQuery = '?v=2&thumbsize=72&visibility=all&kind=album&alt=json';
 			var request = PICASA_PATH + 'default/' + albumListQuery;
 
@@ -181,8 +199,15 @@ var gPhotos = (function() {
 			});
 		},
 
-		// update the photos in the selected albums
-		updateImages: function() {
+		/** retrieve the photos in the selected albums
+		 *
+		 * @param {function} callback (error, items) Array of Array of album photos on success
+		 *
+		 */
+		loadImages: function(callback) {
+			// callback(error, items)
+			callback = callback || function() {};
+
 			var ct = 0;
 			var items = JSON.parse(localStorage.albumSelections);
 			var newItems = [];
@@ -191,18 +216,15 @@ var gPhotos = (function() {
 				(function(index) {
 					loadPicasaAlbum(items[index].id, function(error, photos) {
 						if (error) {
+							// this may just mean the user deleted an album
 							console.log(error);
 						} else if (photos.length) {
 							newItems.push({id: items[index].id, photos: photos});
 						}
 
 						if (ct === (items.length - 1)) {
-							if (newItems && newItems.length) {
-								// make sure at least some of the albums came through
-								// can't check vs. original length because some albums
-								// may have been deleted.
-								localStorage.albumSelections = JSON.stringify(newItems);
-							}
+							// done
+							callback(null, newItems);
 							return;
 						}
 						ct++;

@@ -5,22 +5,35 @@
 var chromeCast = (function() {
 	'use strict';
 
-	var ccImages;
-
 	return {
 
-		// read chromecast.json and save to localStorage
-		loadImages: function() {
+		/** get the photos from chromecast.json
+		 *
+		 * @param callback (error, photos)
+		 */
+		loadImages: function(callback) {
+			// callback(error, photos)
+			callback = callback || function() {};
+			var photos = [];
+
 			var xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState === 4 && xhr.status === 200) {
-					ccImages = JSON.parse(xhr.responseText);
-					for (var i = 0; i < ccImages.length; i++) {
-						ccImages[i].asp = 16 / 9;
+
+			xhr.onload = function() {
+				if (xhr.status === 200) {
+					photos = JSON.parse(xhr.responseText);
+					for (var i = 0; i < photos.length; i++) {
+						photos[i].asp = 16 / 9;
 					}
-					localStorage.ccImages = JSON.stringify(ccImages);
+					callback(null, photos);
+				} else {
+					callback(xhr.responseText);
 				}
 			};
+
+			xhr.onerror = function(e) {
+				callback(e);
+			};
+
 			xhr.open('GET', '/assets/chromecast.json', true);
 			xhr.send();
 		}
