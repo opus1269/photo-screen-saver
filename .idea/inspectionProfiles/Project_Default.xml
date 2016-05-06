@@ -1,0 +1,66 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="36">
+            <item index="0" class="java.lang.String" itemvalue="include" />
+            <item index="1" class="java.lang.String" itemvalue="noink" />
+            <item index="2" class="java.lang.String" itemvalue="on-tap" />
+            <item index="3" class="java.lang.String" itemvalue="disabled$" />
+            <item index="4" class="java.lang.String" itemvalue="hidden$" />
+            <item index="5" class="java.lang.String" itemvalue="alt" />
+            <item index="6" class="java.lang.String" itemvalue="iron-label-target" />
+            <item index="7" class="java.lang.String" itemvalue="on-change" />
+            <item index="8" class="java.lang.String" itemvalue="two-line" />
+            <item index="9" class="java.lang.String" itemvalue="active" />
+            <item index="10" class="java.lang.String" itemvalue="items" />
+            <item index="11" class="java.lang.String" itemvalue="selected" />
+            <item index="12" class="java.lang.String" itemvalue="main-label" />
+            <item index="13" class="java.lang.String" itemvalue="secondary-label" />
+            <item index="14" class="java.lang.String" itemvalue="indent" />
+            <item index="15" class="java.lang.String" itemvalue="modal" />
+            <item index="16" class="java.lang.String" itemvalue="entry-animation" />
+            <item index="17" class="java.lang.String" itemvalue="exit-animation" />
+            <item index="18" class="java.lang.String" itemvalue="dialog-dismiss" />
+            <item index="19" class="java.lang.String" itemvalue="dialog-confirm" />
+            <item index="20" class="java.lang.String" itemvalue="autofocus" />
+            <item index="21" class="java.lang.String" itemvalue="style$" />
+            <item index="22" class="java.lang.String" itemvalue="on-iron-localstorage-load-empty" />
+            <item index="23" class="java.lang.String" itemvalue="no-label-float" />
+            <item index="24" class="java.lang.String" itemvalue="value" />
+            <item index="25" class="java.lang.String" itemvalue="min" />
+            <item index="26" class="java.lang.String" itemvalue="max" />
+            <item index="27" class="java.lang.String" itemvalue="step" />
+            <item index="28" class="java.lang.String" itemvalue="responsive-width" />
+            <item index="29" class="java.lang.String" itemvalue="drawer-width" />
+            <item index="30" class="java.lang.String" itemvalue="fixed" />
+            <item index="31" class="java.lang.String" itemvalue="attr-for-selected" />
+            <item index="32" class="java.lang.String" itemvalue="on-click" />
+            <item index="33" class="java.lang.String" itemvalue="data-route" />
+            <item index="34" class="java.lang.String" itemvalue="animate-initial-selection" />
+            <item index="35" class="java.lang.String" itemvalue="ani-type" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="7">
+            <item index="0" class="java.lang.String" itemvalue="nobr" />
+            <item index="1" class="java.lang.String" itemvalue="noembed" />
+            <item index="2" class="java.lang.String" itemvalue="comment" />
+            <item index="3" class="java.lang.String" itemvalue="noscript" />
+            <item index="4" class="java.lang.String" itemvalue="embed" />
+            <item index="5" class="java.lang.String" itemvalue="script" />
+            <item index="6" class="java.lang.String" itemvalue="iron-selector" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+  </profile>
+</component>

@@ -42,7 +42,7 @@
 					<iron-label for="settingsToggle" class="center horizontal layout flex">
 						<div class="flex">Screensaver <span hidden$="[[!enabled]]">On</span><span hidden$="[[enabled]]">Off</span></div>
 						<paper-toggle-button id="settingsToggle" checked="{{enabled}}"></paper-toggle-button>
-						<paper-tooltip for="settingsToggle" position="left" offset="0">Enable/disable the screesaver</paper-tooltip>
+						<paper-tooltip for="settingsToggle" position="left" offset="0">Enable/disable the screen saver</paper-tooltip>
 					</iron-label>
 					<iron-localstorage name="enabled" value="{{enabled}}"></iron-localstorage>
 					<paper-tabs selected="{{selected}}" class="middle fit">
@@ -92,7 +92,7 @@
 										main-label="Choose background style"
 										secondary-label="Set the background for the slide show"
 										noseparator
-										disabled$="[[!enabled]]"></setting-toggle>
+										disabled$="[[!enabled]]"></setting-background>
 					</div>
 					<div>
 						<setting-toggle name="allDisplays"
@@ -105,7 +105,7 @@
 										disabled$="[[!enabled]]"></setting-toggle>
 						<setting-toggle id="keepAwake" name="keepAwake"
 										main-label="Keep awake"
-										secondary-label="Prevent display from sleeping	(always active if start and stop tmes are equal)"
+										secondary-label="Prevent display from sleeping	(always active if start and stop times are equal)"
 										checked="{{keepEnabled}}"></setting-toggle>
 						<paper-tooltip for="keepAwake" position="top" offset="0">
 										The Keep awake features are available even if the screensaver is

@@ -16,8 +16,14 @@ Example:
 @demo demo/index.html
 @hero hero.svg
 -->
+<dom-module id="google-analytics-tracker">
+	<template>
+		<content></content>
+	</template>
+</dom-module>
+
 <script>
-'use-strict';
+'use strict';
 
 Polymer({
 	is: 'google-analytics-tracker',
@@ -27,19 +33,19 @@ Polymer({
 		/**
 		* The product ID you wish to use
 		*
-		* @type {{name: string, image: string}}
 		*/
 		id: {
-			type: String
+			type: String,
+			value: ''
 		},
 
 		/**
 		* The page URI to send
 		*
-		* @type {{name: string, image: string}}
 		*/
 		page: {
-			type: String
+			type: String,
+			value: ''
 		}
 
 	},
