@@ -16,8 +16,8 @@ var bgUtils = (function() {
 	function _getTime(value) {
 		var date = new Date();
 
-		date.setHours(value.substr(0,2));
-		date.setMinutes(value.substr(3,2));
+		date.setHours(parseInt(value.substr(0,2)));
+		date.setMinutes(parseInt(value.substr(3,2)));
 		date.setSeconds(0);
 		date.setMilliseconds(0);
 		return date.getTime();
@@ -164,7 +164,7 @@ var bgUtils = (function() {
 			chrome.alarms.clear('activeStop');
 		}
 
-		// Add daily alarm to update 500px and flickr photos
+		// Add daily alarm to update photo sources that request this
 		chrome.alarms.get('updatePhotos', function(alarm) {
 			if (!alarm) {
 				chrome.alarms.create('updatePhotos', {
@@ -249,7 +249,7 @@ var bgUtils = (function() {
 				'use500px': 'true',
 				'use500pxSelections': '[]',
 				'useReddit': 'true',
-				'useRedditSelections': '[]',
+				'useRedditSelections': '[]'
 			};
 
 			Object.keys(VALS).forEach(function(key) {
@@ -282,11 +282,10 @@ var bgUtils = (function() {
 			var aStart = JSON.parse(localStorage.activeStart);
 			var aStop = JSON.parse(localStorage.activeStop);
 
-			if (!enabled || (keepAwake && !_isInRange(aStart, aStop))) {
-				// not enabled or keepAwke is enabled and is in inactive range
-				return false;
-			}
-			return true;
+			// do not display if screen saver is not enabled or
+			// keepAwake scheduler is enabled and is in the inactive range
+			return !(!enabled || (keepAwake && !_isInRange(aStart, aStop)));
+
 		},
 
 		// set state when the screensaver is in the active range
@@ -306,7 +305,8 @@ var bgUtils = (function() {
 
 		// set state when the screensaver is in the non-active range
 		setInactiveState: function() {
-			JSON.parse(localStorage.allowSuspend) ? chrome.power.releaseKeepAwake() : chrome.power.requestKeepAwake('system');
+			JSON.parse(localStorage.allowSuspend) ? chrome.power.releaseKeepAwake() :
+				chrome.power.requestKeepAwake('system');
 			bgUtils.closeScreenSavers();
 			_updateBadgeText();
 		},
@@ -363,7 +363,7 @@ var bgUtils = (function() {
 			}
 		},
 
-		// send message to the screensavers to close themselves
+		// send message to the screen savers to close themselves
 		closeScreenSavers: function() {
 			chrome.runtime.sendMessage({window: 'close'});
 		}
