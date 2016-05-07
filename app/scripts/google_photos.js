@@ -220,9 +220,16 @@ var gPhotos = (function() {
 								albumList.push(album);
 							}
 							if (ct === (entries.length - 1)) {
-								albumList.sort(function(a, b) {
-									return a.index - b.index;
-								});
+								if (albumList) {
+									albumList.sort(function(a, b) {
+										return a.index - b.index;
+									});
+									// renumber
+									for (var j = 0; j < albumList.length; j++) {
+										albumList[j].index = j;
+										albumList[j].uid = 'album' + j;
+									}
+								}
 								callback(null, albumList);
 							}
 							ct++;

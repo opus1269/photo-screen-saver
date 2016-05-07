@@ -251,13 +251,14 @@
 			for (var i = 0; i < this.albums.length; i++) {
 				item = this.albums[i];
 				if (!item.checked) {
-					this.set('albums.' + i + '.checked', true);
 					this.selections.push({id: item.id, photos: item.photos});
+					if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
+						// exceeded storage limits
+						this.selections.pop();
+						break;
+					}
+					this.set('albums.' + i + '.checked', true);
 				}
-			}
-			if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
-				// exceeded storage limits, show error and reset selected state
-				this._onStoreLimitExceeded();
 			}
 		},
 
@@ -282,8 +283,9 @@
 			}
 
 			if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
-				// exceeded storage limits, show error and reset selected state
-				this._onStoreLimitExceeded();
+				// exceeded storage limits
+				this.selections.pop();
+				this.set('albums.' + item.index + '.checked', false);
 			}
 		},
 
@@ -307,14 +309,6 @@
 					this.set('albums.' + i + '.checked', false);
 				}
 			}
-		},
-
-		_onStoreLimitExceeded: function() {
-			this._uncheckAll();
-			this._selectAlbums();
-			this.dialogTitleEl.innerHTML = 'Exceeded storage limits.';
-			this.dialogTextEl.innerHTML = 'Select fewer albums.';
-			this.dialogEl.open();
 		}
 
 	});

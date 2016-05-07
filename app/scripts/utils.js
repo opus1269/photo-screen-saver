@@ -43,7 +43,6 @@ var myUtils = (function() {
 			try {
 				localStorage.setItem(key, value);
 			} catch (e) {
-				console.log('exceeded storage', e);
 				ret = false;
 				if (oldValue) {
 					// revert to old value
@@ -57,6 +56,8 @@ var myUtils = (function() {
 						localStorage.setItem(keyBool, 'false');
 					}
 				}
+				// notify listeners
+				chrome.runtime.sendMessage({message: 'storageExceeded', name: keyBool});
 			}
 
 			return ret;

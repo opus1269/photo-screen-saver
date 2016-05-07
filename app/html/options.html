@@ -63,9 +63,9 @@
 					<!-- Error dialog -->
 					<paper-dialog id="errorDialog" modal entry-animation="scale-up-animation"
 						exit-animation="fade-out-animation">
-						<h2 id="dialogTitle"></h2>
+						<h2 id="dialogTitle">[[dialogTitle]]</h2>
 						<paper-dialog-scrollable>
-							<p id="dialogText"></p>
+							<p id="dialogText">[[dialogText]]</p>
 						</paper-dialog-scrollable>
 						<div class="buttons">
 							<paper-button dialog-dismiss>OK</paper-button>
@@ -76,7 +76,7 @@
 					                     entry-animation="fade-in-animation" exit-animation="fade-out-animation">
 						<neon-animatable data-route="page-settings">
 							<section>
-								<settings-page></settings-page>
+								<settings-page id="settingsPage"></settings-page>
 							</section>
 						</neon-animatable>
 						<neon-animatable data-route="page-google-photos">

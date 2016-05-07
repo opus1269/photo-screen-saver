@@ -10,6 +10,10 @@ var EXT_URI = 'https://chrome.google.com/webstore/detail/photo-screen-saver/kohp
 // auto-binding template
 var t = document.querySelector('#t');
 
+// Error dialog
+t.dialogTitle = '';
+t.dialogText = '';
+
 // current and previous route
 // several menu items open a new tab or window and we
 // need to keep the selected menu item and the current page in sync
@@ -20,7 +24,7 @@ t.prevRoute = 'page-settings';
 // have resolved and content has been stamped to the page
 t.addEventListener('dom-change', function() {
 
-	// listen for request to make ourselves highlighted
+	// listen for app messages
 	chrome.runtime.onMessage.addListener(t.onMessage);
 });
 
@@ -117,6 +121,13 @@ t.closeDrawer = function() {
 	}
 };
 
+// display error dialog
+t.onShowErrorDialog	= function(event) {
+	t.dialogTitle = event.detail.title;
+	t.dialogText = event.detail.text;
+	t.$.errorDialog.open();
+};
+
 // message: highlight ourselves and tell the sender we are here
 t.onMessage = function(request, sender, response) {
 	if (request.window === 'highlight') {
@@ -124,6 +135,10 @@ t.onMessage = function(request, sender, response) {
 			chrome.tabs.update(t.id, {'highlighted': true});
 		});
 		response(JSON.stringify({message: 'OK'}));
+	} else if (request.message === 'storageExceeded') {
+		t.dialogTitle = 'Exceeded Storage Limits';
+		t.dialogText = 'Deselect other photo sources and try again.';
+		t.$.errorDialog.open();
 	}
 };
 
