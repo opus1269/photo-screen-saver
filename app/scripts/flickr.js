@@ -16,7 +16,7 @@ var flickr = (function() {
 		/**
 		 * retrieve flickr photos
 		 *
-		 * @param {function} callback
+		 * @param {function} callback (error, photos)
 		 *
 		 */
 		loadImages: function(callback) {

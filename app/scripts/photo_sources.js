@@ -56,8 +56,8 @@ var photoSources = (function() {
 			var err = null;
 			// convert string to function
 			var fn = window[this.loadObj][this.loadFn];
-			if (this.loadArgs.length === 2) {
-				fn(this.loadArgs[0], this.loadArgs[1], function(error, photos) {
+			if (this.loadArgs.length === 1) {
+				fn(this.loadArgs[0], function(error, photos) {
 					err = self._savePhotos(error, photos);
 				});
 			} else {
@@ -134,24 +134,28 @@ var photoSources = (function() {
 		return ret;
 	};
 
-	// Array of PhotoSources
+	/** 
+	 * Array of PhotoSources
+	 * 
+	 * @type {*[]}
+	 */
 	var SOURCES = [
 		new PhotoSource('useGoogle', 'albumSelections','Google User',
 			true, true, 'gPhotos', 'loadImages', []),
 		new PhotoSource('useChromecast', 'ccImages','Google',
 			false, false, 'chromeCast', 'loadImages', []),
 		new PhotoSource('useEditors500px', 'editors500pxImages','500',
-			true, false, 'use500px', 'loadImages', ['editors', 'editors500pxImages']),
+			true, false, 'use500px', 'loadImages', ['editors']),
 		new PhotoSource('usePopular500px', 'popular500pxImages','500',
-			true, false, 'use500px', 'loadImages', ['popular', 'popular500pxImages']),
+			true, false, 'use500px', 'loadImages', ['popular']),
 		new PhotoSource('useYesterday500px', 'yesterday500pxImages','500',
-			true, false, 'use500px', 'loadImages', ['fresh_yesterday', 'yesterday500pxImages']),
+			true, false, 'use500px', 'loadImages', ['fresh_yesterday']),
 		new PhotoSource('useSpaceReddit', 'spaceRedditImages','reddit',
-			true, false, 'reddit', 'loadImages', ['r/spaceporn/', 'spaceRedditImages']),
+			true, false, 'reddit', 'loadImages', ['r/spaceporn/']),
 		new PhotoSource('useEarthReddit', 'earthRedditImages','reddit',
-			true, false, 'reddit', 'loadImages', ['r/EarthPorn/', 'earthRedditImages']),
+			true, false, 'reddit', 'loadImages', ['r/EarthPorn/']),
 		new PhotoSource('useAnimalReddit', 'animalRedditImages','reddit',
-			true, false, 'reddit', 'loadImages', ['r/animalporn/', 'animalRedditImages']),
+			true, false, 'reddit', 'loadImages', ['r/animalporn/']),
 		new PhotoSource('useInterestingFlickr', 'flickrInterestingImages','flickr',
 			true, false, 'flickr', 'loadImages', []),
 		new PhotoSource('useAuthors', 'authorImages','Google',

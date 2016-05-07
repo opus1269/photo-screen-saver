@@ -7,9 +7,11 @@ var chromeCast = (function() {
 
 	return {
 
-		/** get the photos from chromecast.json
+		/**
+		 * get the photos from chromecast.json
 		 *
-		 * @param callback (error, photos)
+		 * @param {function} callback (error, photos)
+		 *
 		 */
 		loadImages: function(callback) {
 			// callback(error, photos)

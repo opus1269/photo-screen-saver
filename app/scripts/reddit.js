@@ -39,11 +39,12 @@ var reddit = (function() {
 		return ret;
 	};
 
-	/** build the list of photos for one page of items
+	/**
+	 * Build the list of photos for one page of items
 	 *
 	 * @param {Array} children Array of photos returned from reddit
 	 * @returns {Array} Array of images in our format, stripped of NSFW and big and small photos
-	 * 
+	 *
 	 */
 	var processChildren = function(children) {
 		var data;
@@ -90,19 +91,27 @@ var reddit = (function() {
 
 	return {
 
-		loadImages: function(subreddit, name, callback) {
+		/**
+		 * Retrieve the array of reddit photos
+		 *
+		 * @param {string} subreddit name of photo subreddit
+		 * @param {function} callback error, photos) Array of photos on success
+		 *
+		 */
+		loadImages: function(subreddit, callback) {
 			// callback(error, photos)
 			callback = callback || function() {};
-			var newPhotos = [];
+			
+			var photos = [];
 
 			snoocore(subreddit + 'hot').listing({
 				limit: MAX_PHOTOS
 			}).then(function(slice) {
-				newPhotos = newPhotos.concat(processChildren(slice.children));
+				photos = photos.concat(processChildren(slice.children));
 				return slice.next();
 			}).then(function(slice) {
-				newPhotos = newPhotos.concat(processChildren(slice.children));
-				callback(null, newPhotos);
+				photos = photos.concat(processChildren(slice.children));
+				callback(null, photos);
 			}).catch(function(reason) {
 				callback(reason);
 			});

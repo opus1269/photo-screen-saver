@@ -6,12 +6,22 @@ var gPhotos = (function() {
 	'use strict';
 
 	var PICASA_PATH = 'https://picasaweb.google.com/data/feed/api/user/';
-	var PHOTOS_QUERY = '?imgmax=1600&thumbsize=72&fields=entry(media:group/media:content,media:group/media:credit)&v=2&alt=json';
+	var PHOTOS_QUERY =
+		'?imgmax=1600&thumbsize=72&fields=entry(media:group/media:content,media:group/media:credit)&v=2&alt=json';
 	var MAX_RETRY = 5;
 
-	// perform a request using OAuth 2.0 authentication
-	// callback function(error, httpStatus, responseText)
+	/**
+	 * Perform an http request using OAuth 2.0 authentication
+	 *
+	 * @param {string} method request type "POST" "GET" etc.
+	 * @param {string} url url to call
+	 * @param {string} callback (error, httpStatus, responseText)
+	 *
+	 */
 	function authenticatedXhr(method, url, callback) {
+		// callback(error, httpStatus, responseText)
+		callback = callback || function() {};
+
 		var retryToken = 0;
 		var retryError = 0;
 		var error = null;
@@ -64,7 +74,12 @@ var gPhotos = (function() {
 		})();
 	}
 
-	// determine if a Picasa entry is an image
+	/** Determine if a Picasa entry is an image
+	 *
+	 * @param {Object} entry Picasa media object
+	 * @returns {boolean} true if entry is a photo
+	 *
+	 */
 	function isImage(entry) {
 		var content = entry.media$group.media$content;
 		for (var i = 0; i < content.length ; i++) {
@@ -75,7 +90,13 @@ var gPhotos = (function() {
 		return true;
 	}
 
-	// return the array of photos
+	/**
+	 * Extract the Picasa photos into an Array
+	 *
+	 * @param {Object} root root object from Picasa API call
+	 * @returns {Array} Array of photo objects
+	 *
+	 */
 	function processPhotos(root) {
 		var feed = root.feed;
 		var entries = feed.entry || [], entry;
@@ -96,9 +117,17 @@ var gPhotos = (function() {
 		return photos;
 	}
 
-	// load the photos for the given album
-	// callback function(error, photos);
+	/**
+	 * Retrieve the photos for the given album id
+	 *
+	 * @param {Integer} id Picasa album id
+	 * @param {function} callback (error, photos)
+	 *
+	 */
 	function loadPicasaAlbum(id, callback) {
+		// callback(error, photos)
+		callback = callback || function() {};
+
 		var request = PICASA_PATH + 'default/albumid/' + id + '/' + PHOTOS_QUERY;
 
 		authenticatedXhr('GET',request, function(error, httpStatus, responseText) {
@@ -145,8 +174,12 @@ var gPhotos = (function() {
 			xhr.send();
 		},
 
-		// load the users list of albums, including the photos in each
-		// callback function(error, albumList)
+		/**
+		 * Retrieve the users list of albums, including the photos in each
+		 *
+		 * @param {function} callback (error, albumList)
+		 *
+		 */
 		loadAlbumList: function(callback) {
 			// callback(error, albums)
 			callback = callback || function() {};
@@ -199,7 +232,8 @@ var gPhotos = (function() {
 			});
 		},
 
-		/** retrieve the photos in the selected albums
+		/**
+		 * Retrieve the photos in the selected albums
 		 *
 		 * @param {function} callback (error, items) Array of Array of album photos on success
 		 *
