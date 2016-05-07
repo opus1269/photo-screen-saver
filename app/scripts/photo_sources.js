@@ -68,7 +68,9 @@ var photoSources = (function() {
 			callback(err);
 			return;
 		} else {
-			localStorage.removeItem(this.photosName);
+			if (this.useName !== 'useGoogle') {
+				localStorage.removeItem(this.photosName);
+			}
 		}
 		callback(null);
 	};
@@ -84,11 +86,12 @@ var photoSources = (function() {
 	 */
 	PhotoSource.prototype._savePhotos = function(error, photos) {
 		var ret = null;
+		var keyBool = (this.useName === 'useGoogle') ?  null : this.useName;
 		if (error) {console.log('error ', error);
 			ret = error;
 		} else if (!photos || !photos.length) {
 			ret = 'No photos retrieved.';
-		} else if (!myUtils.localStorageSafeSet(this.photosName, JSON.stringify(photos))) {
+		} else if (!myUtils.localStorageSafeSet(this.photosName, JSON.stringify(photos), keyBool)) {
 			ret = 'Exceeded storage capacity.';
 		}
 

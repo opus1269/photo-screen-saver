@@ -33,17 +33,30 @@ var myUtils = (function() {
 		 *
 		 * @param {String} key localStorage Key
 		 * @param {String} value JSON stringified value to save
+		 * @param {String} keyBool optional key to a boolean value
+		 *                 that is true if the primary key has non-empty value
 		 * @return {Boolean} true if value was set successfully
 		 */
-		localStorageSafeSet: function(key, value) {
+		localStorageSafeSet: function(key, value, keyBool) {
 			var ret = true;
 			var oldValue = JSON.parse(localStorage.getItem(key));
 			try {
 				localStorage.setItem(key, value);
 			} catch (e) {
+				console.log('exceeded storage', e);
 				ret = false;
-				// revert to old value
-				localStorage.setItem(key, JSON.stringify(oldValue));
+				if (oldValue) {
+					// revert to old value
+					localStorage.setItem(key, JSON.stringify(oldValue));
+				}
+				if (keyBool) {
+					// revert to old value
+					if (oldValue && oldValue.length) {
+						localStorage.setItem(keyBool, 'true');
+					} else {
+						localStorage.setItem(keyBool, 'false');
+					}
+				}
 			}
 
 			return ret;
