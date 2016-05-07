@@ -11,8 +11,14 @@ var bgUtils = (function() {
 	// milli-seconds in day
 	var MSEC_IN_DAY = MIN_IN_DAY * 60 * 1000;
 
-	// get time
-	// value format: '00:00'
+	/**
+	 * Convert string to time
+	 *
+	 * @param {String} value format: 'hh:mm' 24 hour time
+	 * @returns {number} time in milliSec from base
+	 * @private
+	 *
+	 */
 	function _getTime(value) {
 		var date = new Date();
 
@@ -23,8 +29,13 @@ var bgUtils = (function() {
 		return date.getTime();
 	}
 
-	// calculate delta in time from now in minutes on a 24 hr basis
-	// value format: '00:00'
+	/**
+	 * Calculate time delta from now on a 24 hr basis
+	 *
+	 * @param {String} value format: 'hh:mm' 24 hour time
+	 * @returns {number} time delta in minutes
+	 * @private
+	 */
 	function _getTimeDelta(value) {
 		var curTime = Date.now();
 		var time = _getTime(value);
@@ -36,7 +47,14 @@ var bgUtils = (function() {
 		return delayMin;
 	}
 
-	// is the current time between start and stop inclusive
+	/**
+	 * Determine if current time is between start and stop, inclusive
+	 *
+	 * @param {String} start format: 'hh:mm' 24 hour time
+	 * @param {String} stop format: 'hh:mm' 24 hour time
+	 * @returns {boolean} true if in the given range
+	 * @private
+	 */
 	function _isInRange(start, stop) {
 		var curTime = Date.now();
 		var startTime = _getTime(start);
@@ -59,9 +77,16 @@ var bgUtils = (function() {
 		return ret;
 	}
 
-	// determine if there is a fullscreen chrome window running on a display
-	// callback function(isTrue)
+	/***
+	 * Determine if there is a full screen chrome window running on a display
+	 *
+	 * @param {DisplayInfo} display a connected display
+	 * @param callback (boolean) true if there is a full screen window on the display
+	 * @private
+	 */
 	function _hasFullscreen(display, callback) {
+		// callback(boolean)
+		callback = callback || function() {};
 
 		if (JSON.parse(localStorage.chromeFullscreen)) {
 			chrome.windows.getAll({populate: false}, function(wins) {
@@ -82,7 +107,12 @@ var bgUtils = (function() {
 		}
 	}
 
-	// open a screen saver window on the given display
+	/**
+	 * Open a screen saver window on the given display
+	 *
+	 * @param {DisplayInfo} display a connected display
+	 * @private
+	 */
 	function _openScreenSaver(display) {
 		_hasFullscreen(display, function(isTrue) {
 			// don't display if there is a fullscreen window
@@ -114,7 +144,11 @@ var bgUtils = (function() {
 		});
 	}
 
-	// open a screensaver on every display
+	/**
+	 * Open a screensaver on every display
+	 *
+	 * @private
+	 */
 	function _openScreenSavers() {
 		chrome.system.display.getInfo(function(displayInfo) {
 			if (displayInfo.length === 1) {
@@ -127,20 +161,27 @@ var bgUtils = (function() {
 		});
 	}
 
-	// add alarm to set the text on the icon
-	// always set badge text through this
+	/**
+	 * Set the icon badge text
+	 *
+	 * @private
+	 */
 	function _updateBadgeText() {
 		// delay setting a little to make sure range check is good
 		chrome.alarms.create('setBadgeText', {when: Date.now() + 250});
 	}
 
-	// create active period scheduling alarms
-	// create a daily alarm to update live photostreams
+	/**
+	 * Set the repeating alarms states
+	 *
+	 * @private
+	 */
 	function _updateRepeatingAlarms() {
 		var keepAwake = JSON.parse(localStorage.keepAwake);
 		var aStart = JSON.parse(localStorage.activeStart);
 		var aStop = JSON.parse(localStorage.activeStop);
 
+		// create keep awake active period scheduling alarms
 		if (keepAwake && aStart !== aStop) {
 			var startDelayMin = _getTimeDelta(aStart);
 			var stopDelayMin = _getTimeDelta(aStop);
@@ -175,10 +216,15 @@ var bgUtils = (function() {
 		});
 	}
 
-	// enabled state of screensaver
-	// note: this does not effect the keep awake settings so you could
-	// use the extension as a display keep awake scheduler without
-	// using the screensaver
+	/**
+	 * Set state based on screen saver enabled flag
+	 *
+	 * Note: this does not effect the keep awake settings so you could
+	 * use the extension as a display keep awake scheduler without
+	 * using the screensaver
+	 *
+	 * @private
+	 */
 	function _processEnabled() {
 		// update context menu text
 		var label = JSON.parse(localStorage.enabled) ? 'Disable' : 'Enable';
@@ -190,14 +236,22 @@ var bgUtils = (function() {
 		});
 	}
 
-	// power scheduling features
+	/**
+	 * Set power scheduling features
+	 *
+	 * @private
+	 */
 	function _processKeepAwake() {
 		JSON.parse(localStorage.keepAwake) ? chrome.power.requestKeepAwake('display') : chrome.power.releaseKeepAwake();
 		_updateRepeatingAlarms();
 		_updateBadgeText();
 	}
 
-	// wait time for screensaver after machine is idle
+	/**
+	 * Set wait time for screen saver display after machine is idle
+	 *
+	 * @private
+	 */
 	function _processIdleTime() {
 		chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
 	}
@@ -208,7 +262,10 @@ var bgUtils = (function() {
 
 		MSEC_IN_DAY: MSEC_IN_DAY,
 
-		// initialize the data in local storage
+		/**
+		 * Initialize the localStorage items
+		 *
+		 */
 		initData: function() {
 			// using local storage as a quick and dirty replacement for MVC
 			// not using chrome.storage 'cause the async nature of it complicates things
@@ -264,18 +321,24 @@ var bgUtils = (function() {
 			localStorage.removeItem('useFavoriteFlickr');
 		},
 
-		// send message to the option tab to focus it.
-		// if not found, create it
+		/**
+		 * Display the options tab
+		 */
 		showOptionsTab: function() {
+			// send message to the option tab to focus it.
 			chrome.runtime.sendMessage({window: 'highlight'}, null, function(response) {
 				if (!response) {
-					// no one listening
+					// no one listening, create it
 					chrome.tabs.create({url: '../html/options.html'});
 				}
 			});
 		},
 
-		// return true if screensaver can be displayed
+		/**
+		 * Determine if the screen saver can be displayed
+		 *
+		 * @returns {boolean} true if can display
+		 */
 		isActive: function() {
 			var enabled = JSON.parse(localStorage.enabled);
 			var keepAwake = JSON.parse(localStorage.keepAwake);
@@ -288,7 +351,10 @@ var bgUtils = (function() {
 
 		},
 
-		// set state when the screensaver is in the active range
+		/**
+		 * Set state when the screensaver is in the active time range
+		 *
+		 */
 		setActiveState: function() {
 			if (JSON.parse(localStorage.keepAwake)) {
 				chrome.power.requestKeepAwake('display');
@@ -303,7 +369,10 @@ var bgUtils = (function() {
 			_updateBadgeText();
 		},
 
-		// set state when the screensaver is in the non-active range
+		/**
+		 * Set state when the screensaver is in the inactive time range
+		 *
+		 */
 		setInactiveState: function() {
 			JSON.parse(localStorage.allowSuspend) ? chrome.power.releaseKeepAwake() :
 				chrome.power.requestKeepAwake('system');
@@ -311,14 +380,22 @@ var bgUtils = (function() {
 			_updateBadgeText();
 		},
 
-		// toggle enabled state
+		/**
+		 * Toggle enabled state of the screen saver
+		 *
+		 */
 		toggleEnabled: function() {
 			localStorage.enabled = !JSON.parse(localStorage.enabled);
 			// storage changed event not fired on same page as the change
 			_processEnabled();
 		},
 
-		// process changes to localStorage settings
+		/**
+		 * Process changes to localStorage items
+		 *
+		 * @param {string} key the item that changed 'all' for everything
+		 *
+		 */
 		processState: function(key) {
 			// Map processing functions to localStorage values
 			var STATE_MAP = {
@@ -354,7 +431,13 @@ var bgUtils = (function() {
 			}
 		},
 
-		// always request screensaver through this call
+		/**
+		 * Display the screen saver(s)
+		 *
+		 * !Important: Always request screensaver through this call
+		 *
+		 * @param {boolean} single if true only show on one display
+		 */
 		displayScreenSaver: function(single) {
 			if (!single && JSON.parse(localStorage.allDisplays)) {
 				_openScreenSavers();
@@ -363,8 +446,11 @@ var bgUtils = (function() {
 			}
 		},
 
-		// send message to the screen savers to close themselves
+		/**
+		 * Close all the screen saver windows
+		 */
 		closeScreenSavers: function() {
+			// send message to the screen savers to close themselves
 			chrome.runtime.sendMessage({window: 'close'});
 		}
 
