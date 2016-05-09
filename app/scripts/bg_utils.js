@@ -300,13 +300,7 @@ var bgUtils = (function() {
 				'useChromecast': 'true',
 				'useAuthors': 'false',
 				'useGoogle': 'true',
-				'albumSelections': '[]',
-				'useFlickr': 'true',
-				'useFlickrSelections': '[]',
-				'use500px': 'true',
-				'use500pxSelections': '[]',
-				'useReddit': 'true',
-				'useRedditSelections': '[]'
+				'albumSelections': '[]'
 			};
 
 			Object.keys(VALS).forEach(function(key) {
@@ -319,6 +313,12 @@ var bgUtils = (function() {
 			localStorage.removeItem('isPreview');
 			localStorage.removeItem('windowID');
 			localStorage.removeItem('useFavoriteFlickr');
+			localStorage.removeItem('useFlickr');
+			localStorage.removeItem('useFlickrSelections');
+			localStorage.removeItem('use500px');
+			localStorage.removeItem('use500pxSelections');
+			localStorage.removeItem('useReddit');
+			localStorage.removeItem('useRedditSelections');
 		},
 
 		/**
