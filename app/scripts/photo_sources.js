@@ -87,7 +87,8 @@ var photoSources = (function() {
 	PhotoSource.prototype._savePhotos = function(error, photos) {
 		var ret = null;
 		var keyBool = (this.useName === 'useGoogle') ?  null : this.useName;
-		if (error) {console.log('error ', error);
+		if (error) {
+			console.log('source: ', this.useName, 'error: ', error);
 			ret = error;
 		} else if (!photos || !photos.length) {
 			ret = 'No photos retrieved.';
