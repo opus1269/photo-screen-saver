@@ -41,11 +41,33 @@
 				<paper-toolbar class="page-toolbar medium-tall">
 					<iron-label for="settingsToggle" class="center horizontal layout flex">
 						<div class="flex">Screensaver <span hidden$="[[!enabled]]">On</span><span hidden$="[[enabled]]">Off</span></div>
-						<paper-toggle-button id="settingsToggle" checked="{{enabled}}"></paper-toggle-button>
-						<paper-tooltip for="settingsToggle" position="left" offset="0">Enable/disable the screen saver</paper-tooltip>
 					</iron-label>
+					<paper-icon-button
+							id="select"
+							icon="check-box"
+							on-tap="_selectAllTapped"
+							hidden$="[[menuHidden]]"
+							disabled$="[[!enabled]]"></paper-icon-button>
+					<paper-tooltip
+							for="select"
+							position="left" offset="0">Select all albums</paper-tooltip>
+					<paper-icon-button
+							id="deselect"
+							icon="check-box-outline-blank"
+							on-tap="_deselectAllTapped"
+							hidden$="[[menuHidden]]"
+							disabled$="[[!enabled]]"></paper-icon-button>
+					<paper-tooltip
+							for="deselect"
+							position="left" offset="0">Deselect all albums</paper-tooltip>
+					<paper-toggle-button
+							id="settingsToggle"
+							checked="{{enabled}}"></paper-toggle-button>
+					<paper-tooltip
+							for="settingsToggle"
+							position="left" offset="0">Enable/disable the screen saver</paper-tooltip>
 					<iron-localstorage name="enabled" value="{{enabled}}"></iron-localstorage>
-					<paper-tabs selected="{{selected}}" class="middle fit">
+					<paper-tabs selected="{{selectedTab}}" class="middle fit">
 						<paper-tab>SLIDE SHOW CONTROLS</paper-tab>
 						<paper-tab>DISPLAY CONTROLS</paper-tab>
 						<paper-tab>DEFAULT PHOTO SOURCES</paper-tab>
@@ -54,7 +76,7 @@
 			</paper-material>
 
 			<div class="page-content">
-				<iron-pages selected="{{selected}}">
+				<iron-pages selected="{{selectedTab}}">
 					<div>
 						<setting-slider name="idleTime"
 										label="Wait time (minutes)"
@@ -183,14 +205,51 @@
 	Polymer({
 		is: 'settings-page',
 
-		selected: {
-			type: Number,
-			value: 0,
-			notify: true
+		properties: {
+
+			selectedTab: {
+				type: Number,
+				value: 0,
+				notify: true
+			},
+
+			menuHidden: {
+				type: Boolean,
+				computed: '_computeMenuHidden(selectedTab)'
+			}
 		},
 
 		ready: function() {
-			this.set('selected', 0);
+			this.set('selectedTab', 0);
+		},
+
+		// select all photo sources
+		_selectAllTapped: function() {
+			this._setPhotoSourceChecked(true);
+		},
+
+		// deselect all photo sources
+		_deselectAllTapped: function() {
+			this._setPhotoSourceChecked(false);
+		},
+
+		_computeMenuHidden: function(selectedTab) {
+			return (selectedTab !== 2);
+		},
+
+		_setPhotoSourceChecked: function(state) {
+			var useNames = photoSources.getUseNames();
+			var name;
+			var query;
+			var el;
+			for (var i = 0; i < useNames.length; i++) {
+				name = useNames[i];
+				query = '[name=' + name + ']';
+				el = document.querySelector(query);
+				if (name !== 'useGoogle') {
+					el.setChecked(state);
+				}
+			}
 		}
 
 	});
