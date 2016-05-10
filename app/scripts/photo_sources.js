@@ -169,6 +169,19 @@ var photoSources = (function() {
 	return {
 
 		/**
+		 * Get all the keys of useage boolean variables
+		 *
+		 * @returns {Array} Array of keys of useage boolean variables
+		 */
+		getUseNames: function() {
+			var ret = [];
+			for (var i = 0; i < SOURCES.length; i++) {
+				ret = ret.concat(SOURCES[i].useName);
+			}
+			return ret;
+		},
+
+		/**
 		 * Get all the photos from all selected sources. These will be
 		 * used by the screen saver.
 		 *
