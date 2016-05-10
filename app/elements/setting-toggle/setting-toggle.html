@@ -108,7 +108,20 @@ Polymer({
 
 	},
 
-	// initialize value if it is not in localstorage
+	/**
+	 * Set the checked state of the toggle
+	 *
+	 * {boolean} checked checked state
+	 */
+	setChecked: function(checked) {
+		this.checked = checked;
+	},
+
+	/**
+	 * Initialize value if it is not in localStorage
+	 *
+	 * @private
+	 */
 	_init: function() {
 		this.set('checked', 'false');
 	}
