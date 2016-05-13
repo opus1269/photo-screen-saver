@@ -253,7 +253,7 @@ var bgUtils = (function() {
 	 * @private
 	 */
 	function _processIdleTime() {
-		chrome.idle.setDetectionInterval(parseInt(localStorage.idleTime, 10) * 60);
+		chrome.idle.setDetectionInterval(myUtils.getInt('idleTime') * 60);
 	}
 
 	return {
@@ -359,11 +359,11 @@ var bgUtils = (function() {
 			if (JSON.parse(localStorage.keepAwake)) {
 				chrome.power.requestKeepAwake('display');
 			}
-			var interval = parseInt(localStorage.idleTime, 10) * 60;
+			var interval = myUtils.getInt('idleTime') * 60;
 			chrome.idle.queryState(interval, function(state) {
 				// display screensaver if the idle time criteria is met
 				if (state === 'idle') {
-					bgUtils.displayScreenSaver();
+					bgUtils.displayScreenSaver(false);
 				}
 			});
 			_updateBadgeText();

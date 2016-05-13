@@ -29,6 +29,16 @@ var myUtils = (function() {
 		},
 
 		/**
+		 * Get integer value from localStorage
+		 *
+		 * @param {String} key key to get value for
+		 *
+		 */
+		getInt: function(key) {
+			return parseInt(localStorage.getItem(key),10);
+		},
+
+		/**
 		 * Save a value to localStorage only if there is enough room
 		 *
 		 * @param {String} key localStorage Key
