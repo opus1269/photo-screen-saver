@@ -13,7 +13,7 @@
 			}
 
 			.page-toolbar {
-				 font: var(--paper-font-title);
+				 @apply(--paper-font-title);
 				 background-color: var(--light-primary-color);
 				 margin-bottom: 10px;
 			 }
@@ -46,7 +46,7 @@
 				@apply(--layout-horizontal);
 		 	}
 
-			paper-button([raised]) {
+			paper-button[raised] {
 				background: #FAFAFA;
 			}
 
@@ -81,7 +81,7 @@
 			}
 
 			hr {
-				margin: 0px 10px;
+				margin: 0 10px;
 				border: none;
 				border-top: 1px #CCCCCC solid;
 			}
