@@ -20,7 +20,6 @@
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.0",
     "neon-elements": "PolymerElements/neon-elements#^1.0.0",
-    "paper-time-picker": "opus1269/paper-time-picker#Mine",
-    "iron-image": "opus1269/iron-image#bicknellr/state"
+    "paper-time-picker": "bendavis78/paper-time-picker#^1.1.2"
   }
 }
