@@ -39,12 +39,12 @@ Polymer({
 					'entry': {
 						name: 'fade-in-animation',
 						node: this,
-						timing: {duration: 2000, easing: 'ease-in-out-sine'}
+						timing: {duration: 2000, easing: 'cubic-bezier(0.455, 0.03, 0.515, 0.955)'}
 					},
 					'exit': {
 						name: 'fade-out-animation',
 						node: this,
-						timing: {duration: 2000, easing: 'ease-in-out-sine'}
+						timing: {duration: 2000, easing: 'cubic-bezier(0.455, 0.03, 0.515, 0.955)'}
 					}
 				};
 			}
@@ -74,13 +74,25 @@ Polymer({
 				exit = 'slide-left-animation';
 				break;
 			case 3:
-				entry = 'slide-down-animation';
+				entry = 'slide-from-top-animation';
 				exit = 'slide-up-animation';
 				break;
 			case 4:
 				entry = 'spin-up-animation';
 				exit = 'spin-down-animation';
 				dur = 3000;
+				break;
+			case 5:
+				entry = 'slide-from-bottom-animation';
+				exit = 'slide-down-animation';
+				break;
+			case 6:
+				entry = 'slide-from-bottom-animation';
+				exit = 'slide-up-animation';
+				break;
+			case 7:
+				entry = 'slide-from-left-animation';
+				exit = 'slide-left-animation';
 				break;
 			default:
 				break;
