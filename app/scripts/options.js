@@ -34,7 +34,7 @@ t.onDataRouteClick = function(event) {
 	// Close drawer after menu item is selected if drawerPanel is narrow
 	t.closeDrawer();
 
-	var index = t.pages.map(function(e) {return e.route;}).indexOf(event.srcElement.id);
+	var index = t.pages.map(function(e) {return e.route;}).indexOf(event.currentTarget.id);
 
 	t.prevRoute = t.route;
 
