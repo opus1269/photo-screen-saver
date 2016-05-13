@@ -14,10 +14,10 @@ body {
 }
 ::-webkit-scrollbar-button {
 	background: transparent;
-	height: 0px;
+	height: 0;
 }
 ::-webkit-scrollbar-thumb {
-	background: rgba(25,118,210,1.0);
+	background: rgba(48, 63, 159, 1);
 	-webkit-border-radius: 8px;
 	border-radius: 4px;
 	cursor: pointer;
