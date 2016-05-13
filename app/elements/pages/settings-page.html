@@ -3,17 +3,22 @@
 -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+
 <link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-label/iron-label.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
 <link rel="import" href="../setting-toggle/setting-toggle.html">
 <link rel="import" href="../setting-slider/setting-slider.html">
 <link rel="import" href="../setting-dropdown/setting-dropdown.html">
@@ -40,7 +45,10 @@
 			<paper-material elevation="1">
 				<paper-toolbar class="page-toolbar medium-tall">
 					<iron-label for="settingsToggle" class="center horizontal layout flex">
-						<div class="flex">Screensaver <span hidden$="[[!enabled]]">On</span><span hidden$="[[enabled]]">Off</span></div>
+						<div class="flex">Screensaver
+							<span hidden$="[[!enabled]]">On</span>
+							<span hidden$="[[enabled]]">Off</span>
+						</div>
 					</iron-label>
 					<paper-icon-button
 							id="select"
