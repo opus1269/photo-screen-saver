@@ -49,7 +49,10 @@
 					<div class="setting-label" secondary hidden$="[[!secondaryLabel]]">{{secondaryLabel}}</div>
 					<paper-ripple center></paper-ripple>
 				</paper-item-body>
-				<paper-toggle-button id="toggle" checked="{{checked}}" disabled$="[[disabled]]"></paper-toggle-button>
+				<paper-toggle-button
+						id="toggle" class="setting-toggle-button"
+						checked="{{checked}}" disabled$="[[disabled]]">
+				</paper-toggle-button>
 			</paper-item>
 		</iron-label>
 		<hr hidden$="[[noseparator]]" />
