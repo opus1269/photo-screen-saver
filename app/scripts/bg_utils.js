@@ -88,7 +88,7 @@ var bgUtils = (function() {
 		// callback(boolean)
 		callback = callback || function() {};
 
-		if (JSON.parse(localStorage.chromeFullscreen)) {
+		if (myUtils.getBool('chromeFullscreen')) {
 			chrome.windows.getAll({populate: false}, function(wins) {
 				var win;
 				var left = display ? display.bounds.left : 0;
@@ -177,9 +177,9 @@ var bgUtils = (function() {
 	 * @private
 	 */
 	function _updateRepeatingAlarms() {
-		var keepAwake = JSON.parse(localStorage.keepAwake);
-		var aStart = JSON.parse(localStorage.activeStart);
-		var aStop = JSON.parse(localStorage.activeStop);
+		var keepAwake = myUtils.getBool('keepAwake');
+		var aStart = myUtils.getBool('activeStart');
+		var aStop = myUtils.getBool('activeStop');
 
 		// create keep awake active period scheduling alarms
 		if (keepAwake && aStart !== aStop) {
@@ -227,7 +227,7 @@ var bgUtils = (function() {
 	 */
 	function _processEnabled() {
 		// update context menu text
-		var label = JSON.parse(localStorage.enabled) ? 'Disable' : 'Enable';
+		var label = myUtils.getBool('enabled') ? 'Disable' : 'Enable';
 		_updateBadgeText();
 		chrome.contextMenus.update('ENABLE_MENU', {title: label}, function() {
 			if (chrome.runtime.lastError) {
@@ -242,7 +242,9 @@ var bgUtils = (function() {
 	 * @private
 	 */
 	function _processKeepAwake() {
-		JSON.parse(localStorage.keepAwake) ? chrome.power.requestKeepAwake('display') : chrome.power.releaseKeepAwake();
+		myUtils.getBool('keepAwake') ?
+			chrome.power.requestKeepAwake('display') :
+			chrome.power.releaseKeepAwake();
 		_updateRepeatingAlarms();
 		_updateBadgeText();
 	}

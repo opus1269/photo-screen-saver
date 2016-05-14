@@ -43,10 +43,21 @@ var myUtils = (function() {
 		 * Get boolean value from localStorage
 		 *
 		 * @param {String} key key to get value for
-		 * @returns {Boollean} value as boolean
+		 * @returns {Boolean} value as boolean
 		 *
 		 */
 		getBool: function(key) {
+			return JSON.parse(localStorage.getItem(key));
+		},
+
+		/**
+		 * Get JSON value from localStorage
+		 *
+		 * @param {String} key key to get value for
+		 * @returns {JSON} value as JSON Object
+		 *
+		 */
+		getJSON: function(key) {
 			return JSON.parse(localStorage.getItem(key));
 		},
 
@@ -61,7 +72,7 @@ var myUtils = (function() {
 		 */
 		localStorageSafeSet: function(key, value, keyBool) {
 			var ret = true;
-			var oldValue = JSON.parse(localStorage.getItem(key));
+			var oldValue = myUtils.getJSON(key);
 			try {
 				localStorage.setItem(key, value);
 			} catch (e) {
@@ -133,7 +144,7 @@ var myUtils = (function() {
 		 * @param {Array} images Array of image objects
 		 * @param {String} url The url to the photo
 		 * @param {String} author The photographer
-		 * @param {Double} asp The aspect ratio of the photo
+		 * @param {Number} asp The aspect ratio of the photo
 		 * @param {Object} ex Optional, additional information about the photo
 		 */
 		addImage: function(images, url, author, asp, ex) {

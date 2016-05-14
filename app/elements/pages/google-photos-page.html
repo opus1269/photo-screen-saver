@@ -290,7 +290,7 @@
 
 		// set the checked state of the albums
 		_selectAlbums: function() {
-			this.selections = JSON.parse(localStorage.albumSelections);
+			this.selections = myUtils.getJSON('albumSelections');
 			for (var i = 0; i < this.albums.length; i++) {
 				for (var j = 0; j < this.selections.length; j++) {
 					if (this.albums[i].id === this.selections[j].id) {

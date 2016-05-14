@@ -250,7 +250,7 @@ var gPhotos = (function() {
 			callback = callback || function() {};
 
 			var ct = 0;
-			var items = JSON.parse(localStorage.albumSelections);
+			var items = myUtils.getJSON('albumSelections');
 			var newItems = [];
 
 			for (var i = 0; i < items.length; i++) {

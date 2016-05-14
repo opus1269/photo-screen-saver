@@ -11,7 +11,7 @@
 	var MAX_PAGES = 20;
 
 	// selected background image
-	var background = JSON.parse(localStorage.background);
+	var background = myUtils.getJSON('background');
 	document.body.style.background = background.substring(11);
 
 	// main auto-bind template

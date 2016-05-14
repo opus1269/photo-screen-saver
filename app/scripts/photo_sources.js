@@ -121,7 +121,7 @@ var photoSources = (function() {
 		var ret = [];
 		if (this.use()) {
 			if (this.isArray) {
-				var items = JSON.parse(localStorage.getItem(this.photosName));
+				var items = myUtils.getJSON(this.photosName);
 				for (var i = 0; i < items.length; i++) {
 					ret = ret.concat(items[i].photos);
 					if (ret) {
@@ -129,7 +129,7 @@ var photoSources = (function() {
 					}
 				}
 			} else {
-				ret = JSON.parse(localStorage.getItem(this.photosName));
+				ret = myUtils.getJSON(this.photosName);
 				if (ret) {
 					this._addType(ret);
 				}
