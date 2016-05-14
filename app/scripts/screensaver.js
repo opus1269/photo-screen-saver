@@ -47,9 +47,17 @@
 		t.rep = t.$.repeatTemplate;
 		t.p = t.$.pages;
 		t.transitionType = myUtils.getInt('photoTransition');
+		if (t.transitionType === 8) {
+			// pick random transition
+			t.transitionType = myUtils.getRandomInt(0, 7);
+		}
 		t.transitionTime = myUtils.getInt('transitionTime') * 1000;
 		t.waitTime = t.transitionTime;
 		t.photoSizing = myUtils.getInt('photoSizing');
+		if (t.photoSizing === 4) {
+			// pick random sizing
+			t.photoSizing = myUtils.getRandomInt(0, 3);
+		}
 		switch (t.photoSizing) {
 			case 0:
 				t.sizingType = 'contain';

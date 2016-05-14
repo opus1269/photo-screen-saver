@@ -74,6 +74,17 @@ var myUtils = (function() {
 		},
 
 		/**
+		 * Returns a random integer between min and max inclusive
+		 *
+		 * @param {Integer} min
+		 * @param {Integer} max
+		 * @returns {Integer} random int
+		 */
+		getRandomInt: function(min, max) {
+			return Math.floor(Math.random() * (max - min + 1)) + min;
+		},
+
+		/**
 		 * Randomly sort an Array in place
 		 *
 		 * @param {Array} array array to sort
