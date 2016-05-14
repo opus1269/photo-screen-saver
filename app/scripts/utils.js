@@ -10,7 +10,7 @@ var myUtils = (function() {
 		/**
 		 * Get the Chrome version
 		 *
-		 * @return {Integer} Chrome major version
+		 * @returns {Integer} Chrome major version
 		 */
 		getChromeVersion: function() {
 			// http://stackoverflow.com/questions/4900436/detect-version-of-chrome-installed
@@ -22,7 +22,7 @@ var myUtils = (function() {
 		 * Determine if a String is null or whitespace only
 		 *
 		 * @param {String} str str to check
-		 * @return {Boolean} true is str is whitespace (or null)
+		 * @returns {Boolean} true is str is whitespace (or null)
 		 */
 		isWhiteSpace: function(str) {
 			return (!str || str.length === 0 || /^\s*$/.test(str));
@@ -32,10 +32,22 @@ var myUtils = (function() {
 		 * Get integer value from localStorage
 		 *
 		 * @param {String} key key to get value for
+		 * @returns {Integer} value as integer
 		 *
 		 */
 		getInt: function(key) {
 			return parseInt(localStorage.getItem(key),10);
+		},
+
+		/**
+		 * Get boolean value from localStorage
+		 *
+		 * @param {String} key key to get value for
+		 * @returns {Boollean} value as boolean
+		 *
+		 */
+		getBool: function(key) {
+			return JSON.parse(localStorage.getItem(key));
 		},
 
 		/**
@@ -45,7 +57,7 @@ var myUtils = (function() {
 		 * @param {String} value JSON stringified value to save
 		 * @param {String} keyBool optional key to a boolean value
 		 *                 that is true if the primary key has non-empty value
-		 * @return {Boolean} true if value was set successfully
+		 * @returns {Boolean} true if value was set successfully
 		 */
 		localStorageSafeSet: function(key, value, keyBool) {
 			var ret = true;
@@ -102,7 +114,7 @@ var myUtils = (function() {
 		/**
 		 * Get a globally unique identifier
 		 *
-		 * @return {String} a GUID
+		 * @returns {String} a GUID
 		 */
 		getGuid: function() {
 			// http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript

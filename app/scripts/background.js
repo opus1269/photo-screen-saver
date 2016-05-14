@@ -61,10 +61,10 @@ function onAlarm(alarm) {
 		case 'setBadgeText':
 			// set the icons text
 			var text = '';
-			if (JSON.parse(localStorage.enabled)) {
+			if (myUtils.getBool('enabled')) {
 				text = bgUtils.isActive() ? '' : 'SLP';
 			} else {
-				text = JSON.parse(localStorage.keepAwake) ? 'PWR' : 'OFF';
+				text = myUtils.getBool('keepAwake') ? 'PWR' : 'OFF';
 			}
 			chrome.browserAction.setBadgeText({text: text});
 			break;

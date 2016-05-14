@@ -192,7 +192,7 @@
 		var ret = '';
 		var idx = type.search('User');
 
-		if (!force && !JSON.parse(localStorage.showPhotog) && (idx !== -1)) {
+		if (!force && !myUtils.getBool('showPhotog') && (idx !== -1)) {
 			// don't show label for user's own photos, if requested
 			return ret;
 		}
@@ -265,7 +265,7 @@
 	 */
 	t.ignorePhoto = function(item) {
 		var ret = false;
-		var skip = JSON.parse(localStorage.skip);
+		var skip = myUtils.getBool('skip');
 
 		if ((!item || !item.asp || isNaN(item.asp)) ||
 			(skip && ((t.photoSizing === 1) || (t.photoSizing === 3)) &&
@@ -292,7 +292,7 @@
 
 		arr = photoSources.getSelectedPhotos();
 
-		if (JSON.parse(localStorage.shuffle)) {
+		if (myUtils.getBool('shuffle')) {
 			// randomize the order
 			myUtils.shuffleArray(arr);
 		}
@@ -392,7 +392,7 @@
 		borderBot = screen.height * 0.05;
 		padding = screen.height * 0.025;
 
-		if (!JSON.parse(localStorage.showPhotog)) {
+		if (!myUtils.getBool('showPhotog')) {
 			// force use of photo label for this view
 			var label = t.getPhotoLabel(e.item.author, e.item.type, true);
 			var model = t.rep.modelForElement(e.image);

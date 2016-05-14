@@ -36,7 +36,7 @@ var photoSources = (function() {
 	 * @return {Boolean} true is selected
 	 */
 	PhotoSource.prototype.use = function() {
-		return JSON.parse(localStorage.getItem(this.useName));
+		return myUtils.getBool(this.useName);
 	};
 
 	/**

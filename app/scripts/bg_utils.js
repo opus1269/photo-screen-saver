@@ -351,10 +351,10 @@ var bgUtils = (function() {
 		 * @returns {boolean} true if can display
 		 */
 		isActive: function() {
-			var enabled = JSON.parse(localStorage.enabled);
-			var keepAwake = JSON.parse(localStorage.keepAwake);
-			var aStart = JSON.parse(localStorage.activeStart);
-			var aStop = JSON.parse(localStorage.activeStop);
+			var enabled = myUtils.getBool('enabled');
+			var keepAwake = myUtils.getBool('keepAwake');
+			var aStart = myUtils.getBool('activeStart');
+			var aStop = myUtils.getBool('activeStop');
 
 			// do not display if screen saver is not enabled or
 			// keepAwake scheduler is enabled and is in the inactive range
@@ -367,7 +367,7 @@ var bgUtils = (function() {
 		 *
 		 */
 		setActiveState: function() {
-			if (JSON.parse(localStorage.keepAwake)) {
+			if (myUtils.getBool('keepAwake')) {
 				chrome.power.requestKeepAwake('display');
 			}
 			var interval = myUtils.getInt('idleTime') * 60;
@@ -385,7 +385,7 @@ var bgUtils = (function() {
 		 *
 		 */
 		setInactiveState: function() {
-			JSON.parse(localStorage.allowSuspend) ? chrome.power.releaseKeepAwake() :
+			myUtils.getBool('allowSuspend') ? chrome.power.releaseKeepAwake() :
 				chrome.power.requestKeepAwake('system');
 			bgUtils.closeScreenSavers();
 			_updateBadgeText();
@@ -396,7 +396,7 @@ var bgUtils = (function() {
 		 *
 		 */
 		toggleEnabled: function() {
-			localStorage.enabled = !JSON.parse(localStorage.enabled);
+			localStorage.enabled = !myUtils.getBool('enabled');
 			// storage changed event not fired on same page as the change
 			_processEnabled();
 		},
@@ -450,7 +450,7 @@ var bgUtils = (function() {
 		 * @param {boolean} single if true only show on one display
 		 */
 		displayScreenSaver: function(single) {
-			if (!single && JSON.parse(localStorage.allDisplays)) {
+			if (!single && myUtils.getBool('allDisplays')) {
 				_openScreenSavers();
 			} else {
 				_openScreenSaver(null);
