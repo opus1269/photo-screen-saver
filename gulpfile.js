@@ -83,6 +83,11 @@ function onChange(event) {
 	gutil.log('File', gutil.colors.cyan(event.path.replace(/.*(?=app)/i, '')), 'was', gutil.colors.magenta(event.type));
 }
 
+// clean all output directories
+gulp.task('clean-all', function() {
+	return del(['dist', 'dev']);
+});
+
 // clean output directories
 gulp.task('clean', function() {
 	return del(isProd ? 'dist' : 'dev');
