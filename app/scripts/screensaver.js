@@ -10,7 +10,7 @@
 	// max number of animated pages
 	var MAX_PAGES = 20;
 
-	// use the selected background
+	// selected background image
 	var background = JSON.parse(localStorage.background);
 	document.body.style.background = background.substring(11);
 
@@ -27,25 +27,65 @@
 	t.itemsAll = [];
 	t.curIdx = 0;
 
-	// array of photos max(MAX_PAGES) currently loaded into the animatable pages
+	// array of photos max(MAX_PAGES) currently loaded into the neon-animated-pages
 	// always changing subset of itemsAll
 	t.items = [];
 
 	// the last selected page
 	t.lastSelected = -1;
 
-	// set to true after first full page animation
+	// true after first full page animation
 	t.started = false;
 
 	// Flag to indicate the screen saver has no photos
 	t.noPhotos = false;
 
-	// Listen for template bound event to know when bindings
-	// have resolved and content has been stamped to the page
+	/**
+	 * Event Listener for template bound event to know when bindings
+	 * have resolved and content has been stamped to the page
+	 */
 	t.addEventListener('dom-change', function() {
 
 		t.rep = t.$.repeatTemplate;
 		t.p = t.$.pages;
+
+		t.processZoom();
+
+		t.processPhotoTransitions();
+
+		t.processPhotoSizing();
+
+		// listen for request to close screensaver
+		chrome.runtime.onMessage.addListener(t.onMessage);
+
+		// load the photos for the slide show
+		t.loadImages();
+
+		if (!t.noPhotos) {
+			// kick off the slide show if there are photos selected
+			this.fire('pages-ready');
+		}
+
+	});
+
+	/**
+	 * Process Chrome window Zoom factor
+	 */
+	t.processZoom = function() {
+		if (myUtils.getChromeVersion() >= 42) {
+			// override zoom factor to 1.0 - chrome 42 and later
+			chrome.tabs.getZoom(function(zoomFactor) {
+				if ((zoomFactor <= 0.99) || (zoomFactor >= 1.01)) {
+					chrome.tabs.setZoom(1.0);
+				}
+			});
+		}
+	};
+
+	/**
+	 * Process settings related to between photo transition
+	 */
+	t.processPhotoTransitions = function() {
 		t.transitionType = myUtils.getInt('photoTransition');
 		if (t.transitionType === 8) {
 			// pick random transition
@@ -53,6 +93,12 @@
 		}
 		t.transitionTime = myUtils.getInt('transitionTime') * 1000;
 		t.waitTime = t.transitionTime;
+	};
+
+	/**
+	 * Process settings related to photo appearance
+	 */
+	t.processPhotoSizing = function() {
 		t.photoSizing = myUtils.getInt('photoSizing');
 		if (t.photoSizing === 4) {
 			// pick random sizing
@@ -72,30 +118,15 @@
 			default:
 				break;
 		}
+	};
 
-		if (myUtils.getChromeVersion() >= 42) {
-			// override zoom factor - chrome 42 and later
-			chrome.tabs.getZoom(function(zoomFactor) {
-				if ((zoomFactor <= 0.99) || (zoomFactor >= 1.01)) {
-					chrome.tabs.setZoom(1.0);
-				}
-			});
-		}
-
-		// listen for request to close screensaver
-		chrome.runtime.onMessage.addListener(t.onMessage);
-
-		// load the photos for the slide show
-		t.loadImages();
-
-		// this will kick off the slideshow
-		if (!t.noPhotos) {
-			this.fire('pages-ready');
-		}
-
-	});
-
-	// get references to the important elements of a slide
+	/**
+	 * Get references to the important elements of a slide
+	 *
+	 * @param {Integer} idx index into {@link t.items}
+	 * @returns {Object} Object containing the DOM elements of a slide
+	 *
+	 */
 	t.getEls = function(idx) {
 		var el = t.p.querySelector('#item' + idx);
 		var ret = {};
@@ -106,7 +137,10 @@
 		return ret;
 	};
 
-	// show more info on the current photo
+	/**
+	 * Create a new tab with a link to the
+	 * original source of the current slide show photo, if possible
+	 */
 	t.showPhotoInfo = function() {
 		if (t.noPhotos) {
 			return;
@@ -114,20 +148,23 @@
 		var e = t.getEls(t.p.selected);
 		var item = e.item;
 		var path = item.path;
-		var type = item.type;
-		var re, id, url;
+		var regex;
+		var id;
+		var url;
 
-		switch (type) {
+		switch (item.type) {
 			case '500':
-				re = /(\/[^\/]*){4}/;
-				id = path.match(re);
+				// parse photo id
+				regex = /(\/[^\/]*){4}/;
+				id = path.match(regex);
 				url = 'http://500px.com/photo' + id[1];
 				chrome.tabs.create({url: url});
 				break;
 			case 'flickr':
 				if (item.ex) {
-					re = /(\/[^\/]*){4}(_.*_)/;
-					id = path.match(re);
+					// parse photo id
+					regex = /(\/[^\/]*){4}(_.*_)/;
+					id = path.match(regex);
 					url = 'https://www.flickr.com/photos/' + item.ex + id[1];
 					chrome.tabs.create({url: url});
 				}
@@ -142,13 +179,21 @@
 		}
 	};
 
-	// create the photo label
+	/**
+	 * Create the photo label
+	 *
+	 * @param {String} author photographer
+	 * @param {String} type Photo source type
+	 * @param {Boolean} force require display of label if true
+	 * @returns {string} label describing the photo source and photographer name
+	 *
+	 */
 	t.getPhotoLabel = function(author, type, force) {
 		var ret = '';
 		var idx = type.search('User');
 
 		if (!force && !JSON.parse(localStorage.showPhotog) && (idx !== -1)) {
-			// don't show label for user photos, if requested
+			// don't show label for user's own photos, if requested
 			return ret;
 		}
 
@@ -160,66 +205,92 @@
 		if (author) {
 			ret = author + ' / ' + type;
 		} else {
+			// no photographer name
 			ret = 'Photo from ' + type;
 		}
 		return ret;
 	};
 
-	// set the time label
+	/**
+	 * Build and set the time string
+	 *
+	 * @param {Integer} idx index into {@link t.items}
+	 */
 	t.setTime = function(idx) {
 		var format = myUtils.getInt('showTime');
-		if (!format) {
-			return;
-		}
 		var e = t.getEls(idx);
 		var model = t.rep.modelForElement(e.time);
 		var date = new Date();
+		var timeStr;
 
-		if (format === 1) {
-			var time = date.toLocaleTimeString(
+		if (format === 0) {
+			// don't show time
+			timeStr = '';
+		} else if (format === 1) {
+			// 12 hour format
+			timeStr = date.toLocaleTimeString(
 				'en-us', {hour: 'numeric', minute: '2-digit',  hour12: true});
-			if (time.endsWith('M')) {time = time.substring(0, time.length - 3);}
-			model.set('item.time', time);
+			if (timeStr.endsWith('M')) {
+				// strip off AM/PM
+				timeStr = timeStr.substring(0, timeStr.length - 3);
+			}
 		} else {
-			model.set('item.time', date.toLocaleTimeString(navigator.language,
-				{hour: 'numeric', minute: '2-digit', hour12: false}));
+			// 24 hour format
+			timeStr = date.toLocaleTimeString(navigator.language,
+				{hour: 'numeric', minute: '2-digit', hour12: false});
 		}
+		model.set('item.time', timeStr);
 	};
 
-	// check if a photo would look bad cropped or streched
+	/**
+	 * Determine if a photo would look bad zoomed or stretched on the screen
+	 *
+	 * @param {Number} aspect aspect ratio of photo
+	 * @returns {boolean} true if a photo aspect ratio differs substantially from the screens'
+	 *
+	 */
 	t.isBadAspect = function(aspect) {
-		var CUT_OFF = 0.5;  // arbitrary
+		// arbitrary
+		var CUT_OFF = 0.5;
 
-		if (aspect && ((aspect < SCREEN_ASPECT - CUT_OFF) || (aspect > SCREEN_ASPECT + CUT_OFF))) {
-			return true;
-		}
-		return false;
+		return (aspect && ((aspect < SCREEN_ASPECT - CUT_OFF) || (aspect > SCREEN_ASPECT + CUT_OFF)));
 	};
 
-	// check if the photo should not be displayed
+	/**
+	 * Determine if a photo should not be displayed
+	 *
+	 * @param {Object} item the photo item
+	 * @returns {boolean} true if the photo should not be displayed
+	 *
+	 */
 	t.ignorePhoto = function(item) {
 		var ret = false;
 		var skip = JSON.parse(localStorage.skip);
 
-		if ((!item || !item.asp || isNaN(item.asp)) || (skip && ((t.photoSizing === 1) || (t.photoSizing === 3)) && t.isBadAspect(item.asp))) {
-			// ignore photos that dont have aspect ratio or would look really bad when cropped or stretched
+		if ((!item || !item.asp || isNaN(item.asp)) ||
+			(skip && ((t.photoSizing === 1) || (t.photoSizing === 3)) &&
+			t.isBadAspect(item.asp))) {
+			// ignore photos that don't have aspect ratio
+			// or would look bad with cropped or stretched sizing options
 			ret = true;
 		}
 		return ret;
 	};
 
-	// perform final processing on the selected photo sources and
-	// populate the pages
+	/**
+	 * Build the Array of photos that will be displayed
+	 * and populate the neon-animated-pages
+	 */
 	t.loadImages = function() {
 		var count = 0;
 		var author;
 		var photoLabel;
-		var arr = [];
+		var arr;
 
 		t.itemsAll = [];
 		this.splice('items', 0, t.items.length);
 
-		arr = photoSources.getAllPhotos();
+		arr = photoSources.getSelectedPhotos();
 
 		if (JSON.parse(localStorage.shuffle)) {
 			// randomize the order
@@ -246,6 +317,7 @@
 					height: screen.height,
 					ex: arr[i].ex
 				});
+
 				if (count < MAX_PAGES) {
 					// add a new animatable page - shallow copy
 					t.push('items', JSON.parse(JSON.stringify(t.itemsAll[count])));
@@ -256,17 +328,23 @@
 		}
 
 		if (!count) {
+			// No usable photos, display static image
 			t.$.noPhotos.style.visibility = 'visible';
 			t.noPhotos = true;
 		}
 
 	};
 
-	// position the text when using Letterbox
+	/**
+	 * Finalize DOM for a letter boxed photo
+	 *
+	 * @param {Integer} idx index into {@link t.items}
+	 */
 	t.letterboxPhoto = function(idx) {
 		var e = t.getEls(idx);
 		var aspect = e.item.aspectRatio;
-		var right,bottom;
+		var right;
+		var bottom;
 
 		if (aspect < SCREEN_ASPECT) {
 			right = (100 - aspect / SCREEN_ASPECT * 100) / 2;
@@ -283,7 +361,11 @@
 		}
 	};
 
-	// strech photo
+	/**
+	 * Finalize DOM for a stretched photo
+	 *
+	 * @param {Integer} idx index into {@link t.items}
+	 */
 	t.stretchPhoto = function(idx) {
 		var e = t.getEls(idx);
 		var img = e.image.$.img;
@@ -292,8 +374,11 @@
 		img.style.objectFit = 'fill';
 	};
 
-	// show photo centered, with padding, border and shadow
-	// show it either scaled up or reduced to fit
+	/**
+	 * Finalize DOM for a framed photo
+	 *
+	 * @param {Integer} idx index into {@link t.items}
+	 */
 	t.framePhoto = function(idx) {
 		var padding, border, borderBot;
 		var e = t.getEls(idx);
@@ -358,19 +443,34 @@
 
 	};
 
-	// check if the photo threw a 404
+	/**
+	 * Determine if a photo failed to load (usually 404 error)
+	 *
+	 * @param {Integer} idx index into {@link t.items}
+	 * @returns {boolean} true if image load failed
+	 */
 	t.isError = function(idx) {
 		var e = t.getEls(idx);
 		return !e.image || e.image.error;
 	};
 
-	// check if the photo is loaded
+	/**
+	 * Determine if a photo has finished loading
+	 *
+	 * @param {Integer} idx index into {@link t.items}
+	 * @returns {boolean} true if image is loaded
+	 */
 	t.isLoaded = function(idx) {
 		var e = t.getEls(idx);
 		return e.image && e.image.loaded;
 	};
 
-	// try to find a photo that is ready to display
+	/**
+	 * Try to find a photo that has finished loading
+	 *
+	 * @param {Integer} idx index into {@link t.items}
+	 * @returns {Integer} index into t.items of a loaded photo, -1 if none are loaded
+	 */
 	t.findLoadedPhoto = function(idx) {
 		if (t.isLoaded(idx)) {
 			return idx;
@@ -384,7 +484,12 @@
 		return -1;
 	};
 
-	// splice in the next photo from the master array
+	/**
+	 * Splice in the next photo from the master array
+	 *
+	 * @param {Integer} idx index into {@link t.items}
+	 * @param {Boolean} error true if the photo at idx is bad (didn't load)
+	 */
 	t.replacePhoto = function(idx, error) {
 		var item;
 
@@ -412,7 +517,12 @@
 		}
 	};
 
-	// add superscript to 500px
+	/**
+	 * Add superscript to the label for 500px photos
+	 *
+	 * @param {Integer} idx index into {@link t.items}
+	 *
+	 */
 	t.super500px = function(idx) {
 		var e = t.getEls(idx);
 		var sup = e.author.querySelector('#sup');
@@ -420,7 +530,12 @@
 		e.item.type === '500' ? sup.textContent = 'px' : sup.textContent = '';
 	};
 
-	// final prep before display
+	/**
+	 * Finalize DOM for a photo
+	 *
+	 * @param {Integer} idx index into {@link t.items}
+	 *
+	 */
 	t.prepPhoto = function(idx) {
 		t.setTime(idx);
 		t.super500px(idx);
@@ -439,7 +554,13 @@
 		}
 	};
 
-	// get the next photo to display
+	/**
+	 * Get the next photo to display
+	 *
+	 * @param {Integer} idx index into {@link t.items}
+	 * @returns {Integer} next index into {@link t.items} to display, -1 if none are ready
+	 *
+	 */
 	t.getNextPhoto = function(idx) {
 		var ret = t.findLoadedPhoto(idx);
 		if (ret === -1) {
@@ -452,7 +573,10 @@
 		return ret;
 	};
 
-	// called at fixed time intervals to cycle through the pages
+	/**
+	 * Called at fixed time intervals to cycle through the photos
+	 * Runs forever
+	 */
 	t.runShow = function() {
 		var curPage = (t.p.selected === undefined) ? 0 : t.p.selected;
 		var prevPage = (curPage > 0) ? curPage - 1 : t.items.length - 1;
@@ -479,10 +603,10 @@
 
 		selected = t.getNextPhoto(selected);
 		if (selected !== -1) {
-
+			// If a new photo is ready, prep it
 			t.prepPhoto(selected);
 
-			// set the next selected so the animation runs
+			// update t.p.selected so the animation runs
 			t.lastSelected = t.p.selected;
 			t.p.selected = selected;
 		}
@@ -491,27 +615,42 @@
 		t.timer = window.setTimeout(t.runShow, t.waitTime);
 	};
 
-	// This will run to infinity... and beyond
-	// each call to t.runShow will set another timeout
+	/**
+	 * Event listener to start slide show.
+	 * It will run to infinity... and beyond
+	 * each call to t.runShow will set another timeout
+	 */
 	t.addEventListener('pages-ready', function() {
+		// slight delay at beginning so we have a smooth start
 		t.waitTime = 2000;
 		t.timer = window.setTimeout(t.runShow, t.waitTime);
 	});
 
-	// display source of photo and close window
+	/**
+	 * Event listener for mouse clicks
+	 * Show link to original photo if possible and end slide show
+	 */
 	window.addEventListener('click', function() {
 		t.showPhotoInfo();
 		window.close();
 	}, false);
 
-	// close preview window on Enter (prob won't work on Chrome OS)
+	/**
+	 * Event listener for Enter key press
+	 * Close preview window on Enter (prob won't work on Chrome OS)
+	 */
 	window.addEventListener('keydown', function(event) {
 		if (event.keyIdentifier === 'Enter') {
 			window.close();
 		}
 	}, false);
 
-	// message: close screensaver
+	/**
+	 * Listen for app messages
+	 *
+	 * @param {JSON} request
+	 *
+	 */
 	t.onMessage = function(request) {
 		if (request.window === 'close') {
 			window.close();
