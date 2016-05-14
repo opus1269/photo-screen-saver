@@ -265,8 +265,10 @@ var bgUtils = (function() {
 		/**
 		 * Initialize the localStorage items
 		 *
+		 * @param {Boolean} restore if true force restore to defaults
+		 *
 		 */
-		initData: function() {
+		initData: function(restore) {
 			// using local storage as a quick and dirty replacement for MVC
 			// not using chrome.storage 'cause the async nature of it complicates things
 			// just remember to use parse methods because all values are strings
@@ -303,11 +305,20 @@ var bgUtils = (function() {
 				'albumSelections': '[]'
 			};
 
-			Object.keys(VALS).forEach(function(key) {
-				if (!localStorage.getItem(key)) {
-					localStorage.setItem(key, VALS[key]);
-				}
-			});
+			if (restore) {
+				Object.keys(VALS).forEach(function(key) {
+					if ((key !== 'useGoogle') && (key !== 'albumSelections')) {
+						// skip Google photos settings
+						localStorage.setItem(key, VALS[key]);
+					}
+				});
+			} else {
+				Object.keys(VALS).forEach(function(key) {
+					if (!localStorage.getItem(key)) {
+						localStorage.setItem(key, VALS[key]);
+					}
+				});
+			}
 
 			// remove unused variables
 			localStorage.removeItem('isPreview');

@@ -10,7 +10,7 @@ function onInstalled() {
 	chrome.contextMenus.create({type: 'normal', id: 'ENABLE_MENU', title: 'Disable', contexts: ['browser_action']});
 	chrome.contextMenus.create({type: 'separator', id: 'SEP_MENU', contexts: ['browser_action']});
 
-	bgUtils.initData();
+	bgUtils.initData(false);
 	bgUtils.processState('all');
 }
 
@@ -77,6 +77,9 @@ function onAlarm(alarm) {
 function onMessage(request) {
 	if (request.window === 'show') {
 		bgUtils.displayScreenSaver(true);
+	} else if (request.message === 'restoreDefaults') {
+		bgUtils.initData(true);
+		bgUtils.processState('all');
 	}
 }
 

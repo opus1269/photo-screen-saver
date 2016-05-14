@@ -69,6 +69,14 @@
 					<paper-tooltip
 							for="deselect"
 							position="left" offset="0">Deselect all albums</paper-tooltip>
+					<paper-icon-button
+							id="restore"
+							icon="settings-backup-restore"
+							on-tap="_restoreDefaultsTapped"
+							disabled$="[[!enabled]]"></paper-icon-button>
+					<paper-tooltip
+							for="restore"
+							position="left" offset="0">Restore default settings</paper-tooltip>
 					<paper-toggle-button
 							id="settingsToggle"
 							checked="{{enabled}}"></paper-toggle-button>
@@ -268,6 +276,11 @@
 		// deselect all photo sources
 		_deselectAllTapped: function() {
 			this._setPhotoSourceChecked(false);
+		},
+
+		// restore default settings
+		_restoreDefaultsTapped: function() {
+			chrome.runtime.sendMessage({message: 'restoreDefaults'});
 		},
 
 		_computeMenuHidden: function(selectedTab) {
