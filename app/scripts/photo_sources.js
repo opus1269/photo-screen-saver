@@ -187,7 +187,7 @@ var photoSources = (function() {
 		 *
 		 * @returns {Array} Array of photos to display in screen saver
 		 */
-		getAllPhotos: function() {
+		getSelectedPhotos: function() {
 			var ret = [];
 			for (var i = 0; i < SOURCES.length; i++) {
 				ret = ret.concat(SOURCES[i].getPhotos());
