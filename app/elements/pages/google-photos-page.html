@@ -56,6 +56,12 @@
 			margin: 40px auto;
 		}
 
+		.list-note {
+			@apply(--paper-font-title);
+			border: 1px #CCCCCC;
+			border-bottom-style: solid;
+		}
+
 		.list-item {
 			position: relative;
 			border: 1px #CCCCCC;
@@ -128,6 +134,8 @@
 					<iron-localstorage name="useGoogle" value="{{useGoogle}}"></iron-localstorage>
 				</paper-toolbar>
 			</paper-material>
+
+			<paper-item class="list-note" hidden$="[[waitForLoad]]">Note: Shared albums may not be available.  See the FAQ for more info.</paper-item>
 
 			<div class="page-content">
 
