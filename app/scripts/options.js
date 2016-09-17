@@ -126,7 +126,7 @@
 		{label: 'Settings', route: 'page-settings', icon: 'settings', obj: null, ready: true},
 		{label: 'Google Photos Albums', route: 'page-google-photos', icon: 'cloud', obj: t.googlePhotos, ready: false},
 		{label: 'Preview (Click or <Enter> to close)', route: 'page-preview', icon: 'pageview', obj: t.preview, ready: true},
-		{label: 'Frequently Asked Questions', route: 'page-faq', icon: 'help', obj: t.faq, ready: false},
+		{label: 'Frequently Asked Questions (FAQ)', route: 'page-faq', icon: 'help', obj: t.faq, ready: false},
 		{label: 'Information For Nerds', route: 'page-info', icon: 'info', obj: t.info, ready: false},
 		{label: 'Request Support', route: 'page-support', icon: 'help', obj: EXT_URI + 'support', ready: true},
 		{label: 'Rate Extension', route: 'page-rate', icon: 'grade', obj: EXT_URI + 'reviews', ready: true}
