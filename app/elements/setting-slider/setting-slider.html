@@ -9,6 +9,8 @@
 
 <link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 
 <dom-module id="setting-slider">
 	<template>
@@ -50,10 +52,19 @@
 		<div>
 			<paper-item id="label" class="setting-label" tabindex="-1">{{label}}</paper-item>
 			<div class="horizontal layout">
-				<paper-slider class="flex" editable value="{{value}}" min="{{min}}" max="{{max}}" step="{{step}}" disabled$="[[disabled]]"></paper-slider>
+				<paper-slider class="flex" editable value="{{displayValue}}" min="{{unit.min}}" max="{{unit.max}}" step="{{unit.step}}" disabled$="[[disabled]]"></paper-slider>
+				<paper-dropdown-menu disabled$="[[disabled]]" noink no-label-float>
+					<paper-menu class="dropdown-content" selected="{{unitValue}}">
+						<template is="dom-repeat" as="unit" items="[[units]]">
+							<paper-item>[[unit.name]]</paper-item>
+						</template>
+					</paper-menu>
+				</paper-dropdown-menu>
+				<array-selector id="selector" items="[[units]]" selected="{{unit}}"></array-selector>
 			</div>
 		</div>
-		<iron-localstorage name="{{name}}" value="{{value}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
+		<iron-localstorage name="{{name}}" value="{{baseValue}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
+		<iron-localstorage name="{{name}}_unit" value="{{unitValue}}" on-iron-localstorage-load-empty="_initUnit"></iron-localstorage>
 		<hr hidden$="[[noseparator]]" />
 
 	</template>
@@ -82,19 +93,24 @@ Polymer({
 			value: ''
 		},
 
-		min: {
+		baseValue: {
 			type: Number,
-			value: 1
+			value: 10
 		},
 
-		max: {
+		displayValue: {
 			type: Number,
-			value: 100
+			value: 10
 		},
 
-		step: {
+		unitValue: {
 			type: Number,
-			value: 1
+			value: 0
+		},
+
+		units: {
+			type: Array,
+			value: function() { return []; }
 		},
 
 		sectionTitle: {
@@ -114,9 +130,85 @@ Polymer({
 
 	},
 
+	observers: [
+		'_unitChanged(unitValue, units)',
+		'_updateBaseValue(displayValue)',
+		'_updateDisplayValue(baseValue)'
+	],
+
 	// initialize value if it is not in localstorage
 	_init: function() {
-		this.set('value', '10');
+		this.set('baseValue', 10);
+	},
+
+	// initialize unit if it is not in localstorage
+	_initUnit: function() {
+		this.set('unitValue', 0);
+	},
+
+	//	_computeBaseValue: function(displayValue, unitValue, units) {
+	//		console.log('compute = ', displayValue, unitValue, units);
+	//		var unit = units[unitValue];
+	//		var val = displayValue * unit.mult;
+	//		val = 10;
+	//		console.log('unit = ', unit, unit.mult, val);
+	//		return 10;
+	//	}
+
+	//	// update the baseValue on UI changes
+	//	_updateValue: function(displayValue, unitValue, units, baseValue) {
+	//		//var unit = units[unitValue];
+	//
+	//		//this.displayValue = baseValue / unit.mult ;
+	//
+	//		//this.$.selector.select(unit);
+	//
+	//		//	this.baseValue = unit.mult * displayValue;
+	//
+	//		console.log('_updateValue = ', this.displayValue, this.unitValue, this.baseValue);
+	//		//console.log('oldbase = ', baseValue);
+	//		//		console.log('units = ', this.$.selector.get('items'));
+	//		//		console.log('unit = ', this.$.selector.get('selected'));
+	//
+	//	},
+
+	// update the baseValue on UI changes
+	_updateBaseValue: function(displayValue) {
+		if (this.units) {
+			var unit = this.units[this.unitValue];
+
+			//this.displayValue = baseValue / unit.mult ;
+
+			//this.$.selector.select(unit);
+
+			this.baseValue = unit.mult * displayValue;
+
+			console.log('_updateBaseValue = ', this.displayValue, this.unitValue, this.baseValue);
+		}
+
+	},
+
+	// update the displayValue on baseValue change
+	_updateDisplayValue: function(baseValue) {
+		if (this.units) {
+			var unit = this.units[this.unitValue];
+
+			this.displayValue = baseValue / unit.mult;
+
+			console.log('_updateDisplayValue = ', this.displayValue, this.unitValue, this.baseValue);
+		}
+
+	},
+
+	// update the baseValue on unit change
+	_unitChanged: function(unitValue, units) {
+		var unit = units[unitValue];
+
+		this.$.selector.select(unit);
+		this._updateBaseValue(this.displayValue);
+
+		console.log('_unitChanged = ', this.displayValue, this.unitValue, this.baseValue);
+
 	}
 
 });
