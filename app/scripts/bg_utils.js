@@ -275,17 +275,25 @@ var bgUtils = (function() {
 			// not using chrome.storage 'cause the async nature of it complicates things
 			// just remember to use parse methods because all values are strings
 
-			localStorage.version = '7';
+			var str;
+			var trans;
+			var idle;
+
+			var oldVersion = localStorage.getItem('version');
+
+			localStorage.version = '8';
 
 			var VALS = {
 				'enabled': 'true',
+				'idleTime_unit': '{"base": 5, "display": 5, "unit": 0}', // minutes
 				'idleTime': '5', // minutes
+				'transitionTime_unit': '{"base": 30, "display": 30, "unit": 0}', // seconds
 				'transitionTime': '30', // seconds
 				'skip': 'true',
 				'shuffle': 'true',
 				'photoSizing': '0',
 				'photoTransition': '4',
-				'showTime': '1', // 12 hr format default
+				'showTime': '1', // 12 hr format
 				'showPhotog': 'true',
 				'background': '"background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)"',
 				'keepAwake': 'false',
@@ -306,6 +314,20 @@ var bgUtils = (function() {
 				'useGoogle': 'true',
 				'albumSelections': '[]'
 			};
+
+			if (oldVersion < 8) {
+				// change due to adding units to setting-slider
+				trans = localStorage.getItem('transitionTime');
+				if (trans) {
+					str = '{"base": ' + trans + ', "display": ' + trans + ', "unit": 0}';
+					localStorage.setItem('transitionTime_unit', str);
+				}
+				idle = localStorage.getItem('idleTime');
+				if (idle) {
+					str = '{"base": ' + idle + ', "display": ' + idle + ', "unit": 0}';
+					localStorage.setItem('idleTime_unit', str);
+				}
+			}
 
 			if (restore) {
 				Object.keys(VALS).forEach(function(key) {
