@@ -46,6 +46,20 @@
 				cursor: pointer;
 			}
 
+			:host > paper-item {
+				padding-top: 10px;
+				padding-bottom: 10px;
+			}
+
+			:host paper-dropdown-menu {
+				width: 175px;
+				padding-right: 16px;
+
+				--paper-input-container-input: {
+					text-align: right;
+				};
+			}
+
 		</style>
 
 		<div class="section-title setting-label" tabindex="-1" hidden$="[[!sectionTitle]]">{{sectionTitle}}</div>
@@ -63,8 +77,7 @@
 				<array-selector id="selector" items="[[units]]" selected="{{unit}}"></array-selector>
 			</div>
 		</div>
-		<iron-localstorage name="{{name}}" value="{{baseValue}}" on-iron-localstorage-load-empty="_initBaseValue"></iron-localstorage>
-		<iron-localstorage name="{{name}}_unit" value="{{value}}" on-iron-localstorage-load-empty="_initValue"></iron-localstorage>
+		<iron-localstorage name="{{name}}" value="{{value}}" on-iron-localstorage-load-empty="_initValue"></iron-localstorage>
 		<hr hidden$="[[noseparator]]" />
 
 	</template>
@@ -98,12 +111,6 @@ Polymer({
 			value: function() { return {'base': 10, 'display': 10, 'unit': 0}; }
 		},
 
-		baseValue: {
-			type: Number,
-			notify: true,
-			value: 10
-		},
-
 		units: {
 			type: Array,
 			value: function() { return []; }
@@ -130,11 +137,6 @@ Polymer({
 		'_unitChanged(value.unit, units)'
 	],
 
-	// initialize baseValue if it is not in localstorage
-	_initBaseValue: function() {
-		this.baseValue = 10;
-	},
-
 	// initialize value if it is not in localstorage
 	_initValue: function() {
 		this.value = {
@@ -147,13 +149,11 @@ Polymer({
 	// set the base value
 	_setBase: function() {
 		this.set('value.base', this.unit.mult * this.value.display);
-		this.set('baseValue', this.value.base);
 	},
 
 	// event: user changed slider value
 	_sliderValueChanged: function() {
 		this._setBase();
-		console.log('_sliderValueChanged = ', this.value);
 	},
 
 	// observer: display unit changed
@@ -162,9 +162,6 @@ Polymer({
 
 		this.$.selector.select(unit);
 		this._setBase();
-
-		console.log('_unitChanged = ', this.value, this.unit);
-
 	}
 
 });
