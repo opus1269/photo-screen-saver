@@ -73,7 +73,7 @@ function onAlarm(alarm) {
 	}
 }
 
-// message: preview the screensaver
+// message: respond to messages sent by app
 function onMessage(request) {
 	if (request.window === 'show') {
 		bgUtils.displayScreenSaver(true);
