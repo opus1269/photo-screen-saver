@@ -52,9 +52,9 @@
 		<div>
 			<paper-item id="label" class="setting-label" tabindex="-1">{{label}}</paper-item>
 			<div class="horizontal layout">
-				<paper-slider class="flex" editable value="{{displayValue}}" min="{{unit.min}}" max="{{unit.max}}" step="{{unit.step}}" disabled$="[[disabled]]"></paper-slider>
+				<paper-slider class="flex" editable value="{{value.display}}" min="{{unit.min}}" max="{{unit.max}}" step="{{unit.step}}" disabled$="[[disabled]]" on-change="_sliderValueChanged"></paper-slider>
 				<paper-dropdown-menu disabled$="[[disabled]]" noink no-label-float>
-					<paper-menu class="dropdown-content" selected="{{unitValue}}">
+					<paper-menu class="dropdown-content" selected="{{value.unit}}">
 						<template is="dom-repeat" as="unit" items="[[units]]">
 							<paper-item>[[unit.name]]</paper-item>
 						</template>
@@ -63,8 +63,8 @@
 				<array-selector id="selector" items="[[units]]" selected="{{unit}}"></array-selector>
 			</div>
 		</div>
-		<iron-localstorage name="{{name}}" value="{{baseValue}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
-		<iron-localstorage name="{{name}}_unit" value="{{unitValue}}" on-iron-localstorage-load-empty="_initUnit"></iron-localstorage>
+		<iron-localstorage name="{{name}}" value="{{baseValue}}" on-iron-localstorage-load-empty="_initBaseValue"></iron-localstorage>
+		<iron-localstorage name="{{name}}_unit" value="{{value}}" on-iron-localstorage-load-empty="_initValue"></iron-localstorage>
 		<hr hidden$="[[noseparator]]" />
 
 	</template>
@@ -93,19 +93,15 @@ Polymer({
 			value: ''
 		},
 
+		value: {
+			type: Object,
+			value: function() { return {'base': 10, 'display': 10, 'unit': 0}; }
+		},
+
 		baseValue: {
 			type: Number,
+			notify: true,
 			value: 10
-		},
-
-		displayValue: {
-			type: Number,
-			value: 10
-		},
-
-		unitValue: {
-			type: Number,
-			value: 0
 		},
 
 		units: {
@@ -131,83 +127,43 @@ Polymer({
 	},
 
 	observers: [
-		'_unitChanged(unitValue, units)',
-		'_updateBaseValue(displayValue)',
-		'_updateDisplayValue(baseValue)'
+		'_unitChanged(value.unit, units)'
 	],
 
+	// initialize baseValue if it is not in localstorage
+	_initBaseValue: function() {
+		this.baseValue = 10;
+	},
+
 	// initialize value if it is not in localstorage
-	_init: function() {
-		this.set('baseValue', 10);
+	_initValue: function() {
+		this.value = {
+			base: 10,
+			display: 10,
+			unit: 0
+		};
 	},
 
-	// initialize unit if it is not in localstorage
-	_initUnit: function() {
-		this.set('unitValue', 0);
+	// set the base value
+	_setBase: function() {
+		this.set('value.base', this.unit.mult * this.value.display);
+		this.set('baseValue', this.value.base);
 	},
 
-	//	_computeBaseValue: function(displayValue, unitValue, units) {
-	//		console.log('compute = ', displayValue, unitValue, units);
-	//		var unit = units[unitValue];
-	//		var val = displayValue * unit.mult;
-	//		val = 10;
-	//		console.log('unit = ', unit, unit.mult, val);
-	//		return 10;
-	//	}
-
-	//	// update the baseValue on UI changes
-	//	_updateValue: function(displayValue, unitValue, units, baseValue) {
-	//		//var unit = units[unitValue];
-	//
-	//		//this.displayValue = baseValue / unit.mult ;
-	//
-	//		//this.$.selector.select(unit);
-	//
-	//		//	this.baseValue = unit.mult * displayValue;
-	//
-	//		console.log('_updateValue = ', this.displayValue, this.unitValue, this.baseValue);
-	//		//console.log('oldbase = ', baseValue);
-	//		//		console.log('units = ', this.$.selector.get('items'));
-	//		//		console.log('unit = ', this.$.selector.get('selected'));
-	//
-	//	},
-
-	// update the baseValue on UI changes
-	_updateBaseValue: function(displayValue) {
-		if (this.units) {
-			var unit = this.units[this.unitValue];
-
-			//this.displayValue = baseValue / unit.mult ;
-
-			//this.$.selector.select(unit);
-
-			this.baseValue = unit.mult * displayValue;
-
-			console.log('_updateBaseValue = ', this.displayValue, this.unitValue, this.baseValue);
-		}
-
+	// event: user changed slider value
+	_sliderValueChanged: function() {
+		this._setBase();
+		console.log('_sliderValueChanged = ', this.value);
 	},
 
-	// update the displayValue on baseValue change
-	_updateDisplayValue: function(baseValue) {
-		if (this.units) {
-			var unit = this.units[this.unitValue];
-
-			this.displayValue = baseValue / unit.mult;
-
-			console.log('_updateDisplayValue = ', this.displayValue, this.unitValue, this.baseValue);
-		}
-
-	},
-
-	// update the baseValue on unit change
+	// observer: display unit changed
 	_unitChanged: function(unitValue, units) {
 		var unit = units[unitValue];
 
 		this.$.selector.select(unit);
-		this._updateBaseValue(this.displayValue);
+		this._setBase();
 
-		console.log('_unitChanged = ', this.displayValue, this.unitValue, this.baseValue);
+		console.log('_unitChanged = ', this.value, this.unit);
 
 	}
 
