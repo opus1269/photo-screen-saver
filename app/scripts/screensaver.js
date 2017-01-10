@@ -91,7 +91,8 @@
 			// pick random transition
 			t.transitionType = myUtils.getRandomInt(0, 7);
 		}
-		t.transitionTime = myUtils.getInt('transitionTime') * 1000;
+		var trans = myUtils.getJSON('transitionTime');
+		t.transitionTime = trans.base * 1000;
 		t.waitTime = t.transitionTime;
 	};
 
@@ -302,7 +303,7 @@
 			if (!t.ignorePhoto(arr[i])) {
 
 				arr[i].author ? author = arr[i].author : author = '';
-				photoLabel = t.getPhotoLabel(author, arr[i].type);
+				photoLabel = t.getPhotoLabel(author, arr[i].type, false);
 
 				t.itemsAll.push({
 					name: 'photo' + count,
@@ -580,11 +581,10 @@
 	t.runShow = function() {
 		var curPage = (t.p.selected === undefined) ? 0 : t.p.selected;
 		var prevPage = (curPage > 0) ? curPage - 1 : t.items.length - 1;
-		var nextPage = (curPage === t.items.length - 1) ? 0 : curPage + 1;
-		var selected = nextPage;
+		var selected = (curPage === t.items.length - 1) ? 0 : curPage + 1;
 
 		// replace the previous selected with the next one from master array
-		t.replacePhoto(t.lastSelected);
+		t.replacePhoto(t.lastSelected, false);
 
 		if (t.isError(prevPage)) {
 			// broken link, mark it and replace it
