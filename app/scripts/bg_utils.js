@@ -15,15 +15,15 @@ var bgUtils = (function() {
 	 * Convert string to time
 	 *
 	 * @param {String} value format: 'hh:mm' 24 hour time
-	 * @returns {number} time in milliSec from base
+	 * @returns {Integer} time in milliSec from base
 	 * @private
 	 *
 	 */
 	function _getTime(value) {
 		var date = new Date();
 
-		date.setHours(parseInt(value.substr(0,2)));
-		date.setMinutes(parseInt(value.substr(3,2)));
+		date.setHours(parseInt(value.substr(0, 2)));
+		date.setMinutes(parseInt(value.substr(3, 2)));
 		date.setSeconds(0);
 		date.setMilliseconds(0);
 		return date.getTime();
@@ -33,7 +33,7 @@ var bgUtils = (function() {
 	 * Calculate time delta from now on a 24 hr basis
 	 *
 	 * @param {String} value format: 'hh:mm' 24 hour time
-	 * @returns {number} time delta in minutes
+	 * @returns {Integer} time delta in minutes
 	 * @private
 	 */
 	function _getTimeDelta(value) {
@@ -52,7 +52,7 @@ var bgUtils = (function() {
 	 *
 	 * @param {String} start format: 'hh:mm' 24 hour time
 	 * @param {String} stop format: 'hh:mm' 24 hour time
-	 * @returns {boolean} true if in the given range
+	 * @returns {Boolean} true if in the given range
 	 * @private
 	 */
 	function _isInRange(start, stop) {
@@ -105,6 +105,17 @@ var bgUtils = (function() {
 		} else {
 			callback(false);
 		}
+	}
+
+	/**
+	 * Get the idle time in seconds
+	 *
+	 * @returns {Integer} idle time in seconds
+	 * @private
+	 */
+	function _getIdleSeconds() {
+		var idle = myUtils.getJSON('idleTime');
+		return idle.base * 60;
 	}
 
 	/**
@@ -190,7 +201,7 @@ var bgUtils = (function() {
 				delayInMinutes: startDelayMin,
 				periodInMinutes: MIN_IN_DAY
 			});
-			chrome.alarms.create('activeStop',{
+			chrome.alarms.create('activeStop', {
 				delayInMinutes: stopDelayMin,
 				periodInMinutes: MIN_IN_DAY
 			});
@@ -255,7 +266,7 @@ var bgUtils = (function() {
 	 * @private
 	 */
 	function _processIdleTime() {
-		chrome.idle.setDetectionInterval(myUtils.getInt('idleTime') * 60);
+		chrome.idle.setDetectionInterval(_getIdleSeconds());
 	}
 
 	return {
@@ -285,10 +296,8 @@ var bgUtils = (function() {
 
 			var VALS = {
 				'enabled': 'true',
-				'idleTime_unit': '{"base": 5, "display": 5, "unit": 0}', // minutes
-				'idleTime': '5', // minutes
-				'transitionTime_unit': '{"base": 30, "display": 30, "unit": 0}', // seconds
-				'transitionTime': '30', // seconds
+				'idleTime': '{"base": 5, "display": 5, "unit": 0}', // minutes
+				'transitionTime': '{"base": 30, "display": 30, "unit": 0}', // seconds
 				'skip': 'true',
 				'shuffle': 'true',
 				'photoSizing': '0',
@@ -316,16 +325,16 @@ var bgUtils = (function() {
 			};
 
 			if (oldVersion < 8) {
-				// change due to adding units to setting-slider
+				// change setting-slider values due to adding units
 				trans = localStorage.getItem('transitionTime');
 				if (trans) {
 					str = '{"base": ' + trans + ', "display": ' + trans + ', "unit": 0}';
-					localStorage.setItem('transitionTime_unit', str);
+					localStorage.setItem('transitionTime', str);
 				}
 				idle = localStorage.getItem('idleTime');
 				if (idle) {
 					str = '{"base": ' + idle + ', "display": ' + idle + ', "unit": 0}';
-					localStorage.setItem('idleTime_unit', str);
+					localStorage.setItem('idleTime', str);
 				}
 			}
 
@@ -372,7 +381,7 @@ var bgUtils = (function() {
 		/**
 		 * Determine if the screen saver can be displayed
 		 *
-		 * @returns {boolean} true if can display
+		 * @returns {Boolean} true if can display
 		 */
 		isActive: function() {
 			var enabled = myUtils.getBool('enabled');
@@ -394,7 +403,7 @@ var bgUtils = (function() {
 			if (myUtils.getBool('keepAwake')) {
 				chrome.power.requestKeepAwake('display');
 			}
-			var interval = myUtils.getInt('idleTime') * 60;
+			var interval = _getIdleSeconds();
 			chrome.idle.queryState(interval, function(state) {
 				// display screensaver if the idle time criteria is met
 				if (state === 'idle') {
@@ -471,7 +480,7 @@ var bgUtils = (function() {
 		 *
 		 * !Important: Always request screensaver through this call
 		 *
-		 * @param {boolean} single if true only show on one display
+		 * @param {Boolean} single if true only show on one display
 		 */
 		displayScreenSaver: function(single) {
 			if (!single && myUtils.getBool('allDisplays')) {
