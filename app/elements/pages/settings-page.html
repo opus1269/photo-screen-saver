@@ -27,7 +27,7 @@
 
 <dom-module id="settings-page">
 	<template>
-		<style include="iron-flex iron-flex-alignment iron-flex-factors iron-positioning"></style>
+		<style include="iron-flex iron-flex-alignment"></style>
 		<style include="shared-styles"></style>
 		<style>
 
@@ -97,13 +97,18 @@
 					<div>
 						<setting-slider
 								name="idleTime"
-								label="Wait time (minutes)"
-								min="1" max="60" step="1"
+								label="Wait time"
+								units='[{"name": "minutes", "min": 1, "max": 60, "step": 1, "mult": 1},
+								 {"name": "hours", "min": 1, "max": 24, "step": 1, "mult": 60},
+								  {"name": "days", "min": 1, "max": 365, "step": 1, "mult": 1440}]'
 								disabled$="[[!enabled]]"></setting-slider>
 						<setting-slider
 								name="transitionTime"
-								label="Photo transition time (seconds)"
-								min="4" max="60" step="1"
+								label="Photo transition time"
+								units='[{"name": "seconds", "min": 4, "max": 60, "step": 1, "mult": 1},
+								 {"name": "minutes", "min": 1, "max": 60, "step": 1, "mult": 60},
+								  {"name": "hours", "min": 1, "max": 24, "step": 1, "mult": 3600},
+								   {"name": "days", "min": 1, "max": 365, "step": 1, "mult": 86400}]'
 								disabled$="[[!enabled]]"></setting-slider>
 						<setting-dropdown
 								name="photoSizing"
@@ -113,7 +118,8 @@
 						<setting-dropdown
 								name="photoTransition"
 								label="Photo transition method"
-								items='["Scale up", "Fade", "Slide from right", "Slide down", "Spin up", "Slide up", "Slide from bottom", "Slide right", "Random"]'
+								items='["Scale up", "Fade", "Slide from right", "Slide down", "Spin up", "Slide up",
+								 "Slide from bottom", "Slide right", "Random"]'
 								disabled$="[[!enabled]]"></setting-dropdown>
 						<setting-toggle
 								name="shuffle"
@@ -156,7 +162,8 @@
 						<setting-toggle
 								id="keepAwake" name="keepAwake"
 								main-label="Keep awake"
-								secondary-label="Prevent display from sleeping (always active if start and stop times are equal)"
+								secondary-label="Prevent display from sleeping
+								 (always active if start and stop times are equal)"
 								checked="{{keepEnabled}}"></setting-toggle>
 						<paper-tooltip for="keepAwake" position="top" offset="0">
 							The Keep awake features are available even if the screensaver is
