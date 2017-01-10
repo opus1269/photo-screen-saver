@@ -36,7 +36,7 @@ var myUtils = (function() {
 		 *
 		 */
 		getInt: function(key) {
-			return parseInt(localStorage.getItem(key),10);
+			return parseInt(localStorage.getItem(key), 10);
 		},
 
 		/**
