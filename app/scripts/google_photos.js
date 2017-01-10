@@ -15,7 +15,7 @@ var gPhotos = (function() {
 	 *
 	 * @param {string} method request type "POST" "GET" etc.
 	 * @param {string} url url to call
-	 * @param {string} callback (error, httpStatus, responseText)
+	 * @param {function} callback (error, httpStatus, responseText)
 	 *
 	 */
 	function authenticatedXhr(method, url, callback) {
@@ -130,7 +130,7 @@ var gPhotos = (function() {
 
 		var request = PICASA_PATH + 'default/albumid/' + id + '/' + PHOTOS_QUERY;
 
-		authenticatedXhr('GET',request, function(error, httpStatus, responseText) {
+		authenticatedXhr('GET', request, function(error, httpStatus, responseText) {
 			if (error) {
 				callback(error);
 				return;
@@ -187,7 +187,7 @@ var gPhotos = (function() {
 			var albumListQuery = '?v=2&thumbsize=72&visibility=all&kind=album&alt=json';
 			var request = PICASA_PATH + 'default/' + albumListQuery;
 
-			authenticatedXhr('GET',request, function(error, httpStatus, responseText) {
+			authenticatedXhr('GET', request, function(error, httpStatus, responseText) {
 				if (error) {
 					callback(error);
 					return;
