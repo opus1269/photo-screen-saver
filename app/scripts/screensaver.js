@@ -640,7 +640,7 @@
 	 * Close preview window on Enter (prob won't work on Chrome OS)
 	 */
 	window.addEventListener('keydown', function(event) {
-		if (event.keyIdentifier === 'Enter') {
+		if (event.key === 'Enter') {
 			window.close();
 		}
 	}, false);
