@@ -4,7 +4,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="36">
+          <list size="39">
             <item index="0" class="java.lang.String" itemvalue="include" />
             <item index="1" class="java.lang.String" itemvalue="noink" />
             <item index="2" class="java.lang.String" itemvalue="on-tap" />
@@ -41,6 +41,9 @@
             <item index="33" class="java.lang.String" itemvalue="data-route" />
             <item index="34" class="java.lang.String" itemvalue="animate-initial-selection" />
             <item index="35" class="java.lang.String" itemvalue="ani-type" />
+            <item index="36" class="java.lang.String" itemvalue="on-iron-select" />
+            <item index="37" class="java.lang.String" itemvalue="as" />
+            <item index="38" class="java.lang.String" itemvalue="is" />
           </list>
         </value>
       </option>
@@ -49,7 +52,7 @@
     <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="7">
+          <list size="8">
             <item index="0" class="java.lang.String" itemvalue="nobr" />
             <item index="1" class="java.lang.String" itemvalue="noembed" />
             <item index="2" class="java.lang.String" itemvalue="comment" />
@@ -57,6 +60,7 @@
             <item index="4" class="java.lang.String" itemvalue="embed" />
             <item index="5" class="java.lang.String" itemvalue="script" />
             <item index="6" class="java.lang.String" itemvalue="iron-selector" />
+            <item index="7" class="java.lang.String" itemvalue="array-selector" />
           </list>
         </value>
       </option>
