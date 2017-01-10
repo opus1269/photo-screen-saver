@@ -10,6 +10,9 @@
 	// max number of animated pages
 	var MAX_PAGES = 20;
 
+	// repeating alarm for updating time label
+	var CLOCK_ALARM = 'updateTimeLabel';
+
 	// selected background image
 	var background = myUtils.getJSON('background');
 	document.body.style.background = background.substring(11);
@@ -91,9 +94,28 @@
 			// pick random transition
 			t.transitionType = myUtils.getRandomInt(0, 7);
 		}
+
 		var trans = myUtils.getJSON('transitionTime');
 		t.transitionTime = trans.base * 1000;
 		t.waitTime = t.transitionTime;
+
+		var showTime = myUtils.getInt('showTime');
+		if ((showTime !== 0) && (trans.base > 60)) {
+			// add repeating alarm to update time label
+			// if transition time is more than 1 minute
+			// and time label is showing
+
+			chrome.alarms.onAlarm.addListener(t.onAlarm);
+
+			chrome.alarms.get(CLOCK_ALARM, function(alarm) {
+				if (!alarm) {
+					chrome.alarms.create(CLOCK_ALARM, {
+						when: Date.now(),
+						periodInMinutes: 1
+					});
+				}
+			});
+		}
 	};
 
 	/**
@@ -186,7 +208,7 @@
 	 * @param {String} author photographer
 	 * @param {String} type Photo source type
 	 * @param {Boolean} force require display of label if true
-	 * @returns {string} label describing the photo source and photographer name
+	 * @returns {String} label describing the photo source and photographer name
 	 *
 	 */
 	t.getPhotoLabel = function(author, type, force) {
@@ -261,7 +283,7 @@
 	 * Determine if a photo should not be displayed
 	 *
 	 * @param {Object} item the photo item
-	 * @returns {boolean} true if the photo should not be displayed
+	 * @returns {Boolean} true if the photo should not be displayed
 	 *
 	 */
 	t.ignorePhoto = function(item) {
@@ -448,7 +470,7 @@
 	 * Determine if a photo failed to load (usually 404 error)
 	 *
 	 * @param {Integer} idx index into {@link t.items}
-	 * @returns {boolean} true if image load failed
+	 * @returns {Boolean} true if image load failed
 	 */
 	t.isError = function(idx) {
 		var e = t.getEls(idx);
@@ -459,7 +481,7 @@
 	 * Determine if a photo has finished loading
 	 *
 	 * @param {Integer} idx index into {@link t.items}
-	 * @returns {boolean} true if image is loaded
+	 * @returns {Boolean} true if image is loaded
 	 */
 	t.isLoaded = function(idx) {
 		var e = t.getEls(idx);
@@ -616,6 +638,41 @@
 	};
 
 	/**
+	 * Listen for app messages
+	 *
+	 * @param {JSON} request
+	 *
+	 */
+	t.onMessage = function(request) {
+		if (request.window === 'close') {
+			t.closeWindow();
+		}
+	};
+
+	/**
+	 * Listen for alarms
+	 *
+	 * @param {Object} alarm
+	 */
+	t.onAlarm = function(alarm) {
+		if (alarm.name === CLOCK_ALARM) {
+			// update time label
+			if (t.p.selected !== undefined) {
+				t.setTime(t.p.selected);
+			}
+		}
+	};
+
+	/**
+	 * Close ourselves
+	 */
+	t.closeWindow = function() {
+		chrome.alarms.clear(CLOCK_ALARM, function() {
+			window.close();
+		});
+	};
+
+	/**
 	 * Event listener to start slide show.
 	 * It will run to infinity... and beyond
 	 * each call to t.runShow will set another timeout
@@ -632,29 +689,18 @@
 	 */
 	window.addEventListener('click', function() {
 		t.showPhotoInfo();
-		window.close();
+		t.closeWindow();
 	}, false);
 
 	/**
 	 * Event listener for Enter key press
 	 * Close preview window on Enter (prob won't work on Chrome OS)
+	 *
 	 */
 	window.addEventListener('keydown', function(event) {
 		if (event.key === 'Enter') {
-			window.close();
+			t.closeWindow();
 		}
 	}, false);
-
-	/**
-	 * Listen for app messages
-	 *
-	 * @param {JSON} request
-	 *
-	 */
-	t.onMessage = function(request) {
-		if (request.window === 'close') {
-			window.close();
-		}
-	};
 
 })();
