@@ -184,7 +184,7 @@ var gPhotos = (function() {
 			// callback(error, albums)
 			callback = callback || function() {};
 
-			var albumListQuery = '?v=2&thumbsize=72&visibility=all&kind=album&alt=json';
+			var albumListQuery = '?v=2&thumbsize=72&max-results=20000&visibility=all&kind=album&alt=json';
 			var request = PICASA_PATH + 'default/' + albumListQuery;
 
 			authenticatedXhr('GET', request, function(error, httpStatus, responseText) {
