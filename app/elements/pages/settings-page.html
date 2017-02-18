@@ -254,60 +254,60 @@
 </dom-module>
 
 <script>
-	Polymer({
-		is: 'settings-page',
+Polymer({
+	is: 'settings-page',
 
-		properties: {
+	properties: {
 
-			selectedTab: {
-				type: Number,
-				value: 0,
-				notify: true
-			},
-
-			menuHidden: {
-				type: Boolean,
-				computed: '_computeMenuHidden(selectedTab)'
-			}
+		selectedTab: {
+			type: Number,
+			value: 0,
+			notify: true
 		},
 
-		ready: function() {
-			this.set('selectedTab', 0);
-		},
+		menuHidden: {
+			type: Boolean,
+			computed: '_computeMenuHidden(selectedTab)'
+		}
+	},
 
-		// select all photo sources
-		_selectAllTapped: function() {
-			this._setPhotoSourceChecked(true);
-		},
+	ready: function() {
+		this.set('selectedTab', 0);
+	},
 
-		// deselect all photo sources
-		_deselectAllTapped: function() {
-			this._setPhotoSourceChecked(false);
-		},
+	// select all photo sources
+	_selectAllTapped: function() {
+		this._setPhotoSourceChecked(true);
+	},
 
-		// restore default settings
-		_restoreDefaultsTapped: function() {
-			chrome.runtime.sendMessage({message: 'restoreDefaults'});
-		},
+	// deselect all photo sources
+	_deselectAllTapped: function() {
+		this._setPhotoSourceChecked(false);
+	},
 
-		_computeMenuHidden: function(selectedTab) {
-			return (selectedTab !== 2);
-		},
+	// restore default settings
+	_restoreDefaultsTapped: function() {
+		chrome.runtime.sendMessage({message: 'restoreDefaults'});
+	},
 
-		_setPhotoSourceChecked: function(state) {
-			var useNames = photoSources.getUseNames();
-			var name;
-			var query;
-			var el;
-			for (var i = 0; i < useNames.length; i++) {
-				name = useNames[i];
-				query = '[name=' + name + ']';
-				el = document.querySelector(query);
-				if (name !== 'useGoogle') {
-					el.setChecked(state);
-				}
+	_computeMenuHidden: function(selectedTab) {
+		return (selectedTab !== 2);
+	},
+
+	_setPhotoSourceChecked: function(state) {
+		var useNames = photoSources.getUseNames();
+		var name;
+		var query;
+		var el;
+		for (var i = 0; i < useNames.length; i++) {
+			name = useNames[i];
+			query = '[name=' + name + ']';
+			el = document.querySelector(query);
+			if (name !== 'useGoogle') {
+				el.setChecked(state);
 			}
 		}
+	}
 
-	});
+});
 </script>

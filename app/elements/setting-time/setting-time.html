@@ -119,7 +119,7 @@ Polymer({
 
 	// initialize value if it is not in localstorage
 	_init: function() {
-		this.set('value','00:00');
+		this.set('value', '00:00');
 	},
 
 	_valueChanged: function() {
@@ -138,10 +138,10 @@ Polymer({
 
 	// '00:00' 24 hr time
 	_formatTime: function(timeString) {
-		var hour = parseInt(timeString.substr(0,2), 10);
+		var hour = parseInt(timeString.substr(0, 2), 10);
 		var period = (hour % 24) < 12 ? 'AM' : 'PM';
 		hour = hour % 12 || 12;
-		return hour + timeString.substr(2,3) + ' ' + period;
+		return hour + timeString.substr(2, 3) + ' ' + period;
 	}
 
 });

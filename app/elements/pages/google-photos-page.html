@@ -170,153 +170,153 @@
 </dom-module>
 
 <script>
-	GooglePhotosPage = Polymer({
-		is: 'google-photos-page',
+GooglePhotosPage = Polymer({
+	is: 'google-photos-page',
 
-		// so we can lazily create the page
-		factoryImpl: function(id, dialogEl, dialogTitleEl, dialogTextEl) {
-			this.setAttribute('id', id);
-			this.dialogEl = dialogEl;
-			this.dialogTitleEl = dialogTitleEl;
-			this.dialogTextEl = dialogTextEl;
+	// so we can lazily create the page
+	factoryImpl: function(id, dialogEl, dialogTitleEl, dialogTextEl) {
+		this.setAttribute('id', id);
+		this.dialogEl = dialogEl;
+		this.dialogTitleEl = dialogTitleEl;
+		this.dialogTextEl = dialogTextEl;
+	},
+
+	properties: {
+
+		albums: {
+			type: Array,
+			notify: true,
+			value: []
 		},
 
-		properties: {
-
-			albums: {
-				type: Array,
-				notify: true,
-				value: []
-			},
-
-			selections: {
-				type: Array,
-				value: []
-			},
-
-			waitForLoad: {
-				type: Boolean,
-				value: false
-			},
-
-			dialogEl: {
-				type: Object,
-				value: {}
-			},
-
-			dialogTitleEl: {
-				type: Object,
-				value: {}
-			},
-
-			dialogTextEl: {
-				type: Object,
-				value: {}
-			}
-
+		selections: {
+			type: Array,
+			value: []
 		},
 
-		ready: function() {
-			this.loadAlbumList();
+		waitForLoad: {
+			type: Boolean,
+			value: false
 		},
 
-		// Query Picasa for the list of the users albums
-		loadAlbumList: function() {
-			this.set('waitForLoad', true);
-			gPhotos.loadAlbumList(function(error, albums) {
-				if (!error) {
-					this.splice('albums', 0, this.albums.length);
-					for (var i = 0; i < albums.length; i++) {
-						this.push('albums', JSON.parse(JSON.stringify(albums[i])));
-					}
-					photoSources.process('useGoogle', function(error) {
-						if (error) {
-							this.dialogTitleEl.innerHTML = 'Request failed. Select refresh to try again.';
-							this.dialogTextEl.innerHTML = error;
-							this.dialogEl.open();
-						} else {
-							this._selectAlbums();
-						}
-					}.bind(this));
-				} else {
-					this.dialogTitleEl.innerHTML = 'Request failed. Select refresh to try again.';
-					this.dialogTextEl.innerHTML = error;
-					this.dialogEl.open();
+		dialogEl: {
+			type: Object,
+			value: {}
+		},
+
+		dialogTitleEl: {
+			type: Object,
+			value: {}
+		},
+
+		dialogTextEl: {
+			type: Object,
+			value: {}
+		}
+
+	},
+
+	ready: function() {
+		this.loadAlbumList();
+	},
+
+	// Query Picasa for the list of the users albums
+	loadAlbumList: function() {
+		this.set('waitForLoad', true);
+		gPhotos.loadAlbumList(function(error, albums) {
+			if (!error) {
+				this.splice('albums', 0, this.albums.length);
+				for (var i = 0; i < albums.length; i++) {
+					this.push('albums', JSON.parse(JSON.stringify(albums[i])));
 				}
-				this.set('waitForLoad', false);
-			}.bind(this));
-		},
-
-		// refresh the album list
-		_refreshTapped: function() {
-			this.loadAlbumList();
-		},
-
-		// select all albums
-		_selectAllTapped: function() {
-			var item;
-			for (var i = 0; i < this.albums.length; i++) {
-				item = this.albums[i];
-				if (!item.checked) {
-					this.selections.push({id: item.id, photos: item.photos});
-					if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
-						// exceeded storage limits
-						this.selections.pop();
-						break;
+				photoSources.process('useGoogle', function(error) {
+					if (error) {
+						this.dialogTitleEl.innerHTML = 'Request failed. Select refresh to try again.';
+						this.dialogTextEl.innerHTML = error;
+						this.dialogEl.open();
+					} else {
+						this._selectAlbums();
 					}
-					this.set('albums.' + i + '.checked', true);
-				}
+				}.bind(this));
+			} else {
+				this.dialogTitleEl.innerHTML = 'Request failed. Select refresh to try again.';
+				this.dialogTextEl.innerHTML = error;
+				this.dialogEl.open();
 			}
-		},
+			this.set('waitForLoad', false);
+		}.bind(this));
+	},
 
-		// deselect all albums
-		_deselectAllTapped: function() {
-			this._uncheckAll();
-			this.selections.splice(0, this.selections.length);
-			localStorage.albumSelections = JSON.stringify(this.selections);
-		},
+	// refresh the album list
+	_refreshTapped: function() {
+		this.loadAlbumList();
+	},
 
-		// handle tap on checkbox for an album
-		_albumSelectChange: function(event) {
-			var item = event.model.item;
-			var index = this.selections.map(function(e) {return e.id;}).indexOf(item.id);
-
-			if (index !== -1) {
-				this.selections.splice(index, 1);
-			}
-
-			if (item.checked) {
+	// select all albums
+	_selectAllTapped: function() {
+		var item;
+		for (var i = 0; i < this.albums.length; i++) {
+			item = this.albums[i];
+			if (!item.checked) {
 				this.selections.push({id: item.id, photos: item.photos});
-			}
-
-			if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
-				// exceeded storage limits
-				this.selections.pop();
-				this.set('albums.' + item.index + '.checked', false);
-			}
-		},
-
-		// set the checked state of the albums
-		_selectAlbums: function() {
-			this.selections = myUtils.getJSON('albumSelections');
-			for (var i = 0; i < this.albums.length; i++) {
-				for (var j = 0; j < this.selections.length; j++) {
-					if (this.albums[i].id === this.selections[j].id) {
-						this.set('albums.' + i + '.checked', true);
-						break;
-					}
+				if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
+					// exceeded storage limits
+					this.selections.pop();
+					break;
 				}
+				this.set('albums.' + i + '.checked', true);
 			}
-		},
+		}
+	},
 
-		// uncheck all albums
-		_uncheckAll: function() {
-			for (var i = 0; i < this.albums.length; i++) {
-				if (this.albums[i].checked) {
-					this.set('albums.' + i + '.checked', false);
+	// deselect all albums
+	_deselectAllTapped: function() {
+		this._uncheckAll();
+		this.selections.splice(0, this.selections.length);
+		localStorage.albumSelections = JSON.stringify(this.selections);
+	},
+
+	// handle tap on checkbox for an album
+	_albumSelectChange: function(event) {
+		var item = event.model.item;
+		var index = this.selections.map(function(e) {return e.id;}).indexOf(item.id);
+
+		if (index !== -1) {
+			this.selections.splice(index, 1);
+		}
+
+		if (item.checked) {
+			this.selections.push({id: item.id, photos: item.photos});
+		}
+
+		if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
+			// exceeded storage limits
+			this.selections.pop();
+			this.set('albums.' + item.index + '.checked', false);
+		}
+	},
+
+	// set the checked state of the albums
+	_selectAlbums: function() {
+		this.selections = myUtils.getJSON('albumSelections');
+		for (var i = 0; i < this.albums.length; i++) {
+			for (var j = 0; j < this.selections.length; j++) {
+				if (this.albums[i].id === this.selections[j].id) {
+					this.set('albums.' + i + '.checked', true);
+					break;
 				}
 			}
 		}
+	},
 
-	});
+	// uncheck all albums
+	_uncheckAll: function() {
+		for (var i = 0; i < this.albums.length; i++) {
+			if (this.albums[i].checked) {
+				this.set('albums.' + i + '.checked', false);
+			}
+		}
+	}
+
+});
 </script>

@@ -55,7 +55,7 @@
 			chrome.tabs.create({url: t.pages[index].obj});
 		} else {
 			// some pages have functions to view them
-			t.pages[index].obj(index,event);
+			t.pages[index].obj(index, event);
 		}
 	};
 
