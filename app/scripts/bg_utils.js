@@ -370,7 +370,7 @@ var bgUtils = (function() {
 		 */
 		showOptionsTab: function() {
 			// send message to the option tab to focus it.
-			chrome.runtime.sendMessage({window: 'highlight'}, null, function(response) {
+			chrome.runtime.sendMessage({message: 'highlight'}, null, function(response) {
 				if (!response) {
 					// no one listening, create it
 					chrome.tabs.create({url: '../html/options.html'});
@@ -495,7 +495,9 @@ var bgUtils = (function() {
 		 */
 		closeScreenSavers: function() {
 			// send message to the screen savers to close themselves
-			chrome.runtime.sendMessage({window: 'close'});
+			chrome.runtime.sendMessage({
+				message: 'close'
+			}, function(response) {});
 		}
 
 	};

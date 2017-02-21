@@ -287,7 +287,9 @@ Polymer({
 
 	// restore default settings
 	_restoreDefaultsTapped: function() {
-		chrome.runtime.sendMessage({message: 'restoreDefaults'});
+		chrome.runtime.sendMessage({
+			message: 'restoreDefaults'
+		}, function(response) {});
 	},
 
 	_computeMenuHidden: function(selectedTab) {

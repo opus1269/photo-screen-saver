@@ -644,7 +644,7 @@
 	 *
 	 */
 	t.onMessage = function(request) {
-		if (request.window === 'close') {
+		if (request.message === 'close') {
 			t.closeWindow();
 		}
 	};

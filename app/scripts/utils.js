@@ -90,7 +90,10 @@ var myUtils = (function() {
 					}
 				}
 				// notify listeners
-				chrome.runtime.sendMessage({message: 'storageExceeded', name: keyBool});
+				chrome.runtime.sendMessage({
+					message: 'storageExceeded',
+					name: keyBool
+				}, function(response) {});
 			}
 
 			return ret;

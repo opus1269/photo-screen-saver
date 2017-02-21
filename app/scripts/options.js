@@ -118,7 +118,9 @@
 	t.preview = function() {
 		// select previous page
 		t.async(function() {t.$.mainMenu.select(t.prevRoute);}, 500);
-		chrome.runtime.sendMessage({window: 'show'});
+		chrome.runtime.sendMessage({
+			message: 'show'
+		}, function(response) {});
 	};
 
 	// list of pages
@@ -170,7 +172,7 @@
 	 *
 	 */
 	t.onMessage = function(request, sender, response) {
-		if (request.window === 'highlight') {
+		if (request.message === 'highlight') {
 			// highlight ourselves and let the sender know we are here
 			chrome.tabs.getCurrent(function(t) {
 				chrome.tabs.update(t.id, {'highlighted': true});

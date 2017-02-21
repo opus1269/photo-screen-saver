@@ -128,7 +128,7 @@
 	 *
 	 */
 	function onMessage(request) {
-		if (request.window === 'show') {
+		if (request.message === 'show') {
 			bgUtils.displayScreenSaver(true);
 		} else if (request.message === 'restoreDefaults') {
 			bgUtils.initData(true);
