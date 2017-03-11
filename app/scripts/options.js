@@ -152,18 +152,6 @@
 	};
 
 	/**
-	 * Event Listener for display of Error Dialog
-	 *
-	 * @param {Event} event
-	 *
-	 */
-	t.onShowErrorDialog	= function(event) {
-		t.dialogTitle = event.detail.title;
-		t.dialogText = event.detail.text;
-		t.$.errorDialog.open();
-	};
-
-	/**
 	 * Listen for app messages
 	 *
 	 * @param {JSON} request object

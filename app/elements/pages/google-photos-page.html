@@ -12,6 +12,9 @@
 
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
@@ -139,6 +142,18 @@
 
 			<div class="page-content">
 
+				<!-- Error dialog -->
+				<paper-dialog id="errorDialog" modal entry-animation="scale-up-animation"
+				              exit-animation="fade-out-animation">
+					<h2 id="dialogTitle"></h2>
+					<paper-dialog-scrollable>
+						<p id="dialogText"></p>
+					</paper-dialog-scrollable>
+					<div class="buttons">
+						<paper-button dialog-dismiss>OK</paper-button>
+					</div>
+				</paper-dialog>
+
 				<div class="waiter" hidden$="[[!waitForLoad]]">
 					<div class="horizontal center-justified layout">
 						<paper-spinner alt="Loading Albums" active="[[waitForLoad]]"></paper-spinner>
@@ -174,15 +189,11 @@ GooglePhotosPage = Polymer({
 	is: 'google-photos-page',
 
 	// so we can lazily create the page
-	factoryImpl: function(id, dialogEl, dialogTitleEl, dialogTextEl) {
+	factoryImpl: function(id) {
 		this.setAttribute('id', id);
-		this.dialogEl = dialogEl;
-		this.dialogTitleEl = dialogTitleEl;
-		this.dialogTextEl = dialogTextEl;
 	},
 
 	properties: {
-
 		albums: {
 			type: Array,
 			notify: true,
@@ -197,23 +208,7 @@ GooglePhotosPage = Polymer({
 		waitForLoad: {
 			type: Boolean,
 			value: false
-		},
-
-		dialogEl: {
-			type: Object,
-			value: {}
-		},
-
-		dialogTitleEl: {
-			type: Object,
-			value: {}
-		},
-
-		dialogTextEl: {
-			type: Object,
-			value: {}
 		}
-
 	},
 
 	ready: function() {
@@ -231,17 +226,21 @@ GooglePhotosPage = Polymer({
 				}
 				photoSources.process('useGoogle', function(error) {
 					if (error) {
-						this.dialogTitleEl.innerHTML = 'Request failed. Select refresh to try again.';
-						this.dialogTextEl.innerHTML = error;
-						this.dialogEl.open();
+						this.set('waitForLoad', false);
+						this.$.dialogTitle.innerHTML =
+							'Request failed. Select refresh to try again.';
+						this.$.dialogText.innerHTML = error;
+						this.$.errorDialog.open();
 					} else {
 						this._selectAlbums();
 					}
 				}.bind(this));
 			} else {
-				this.dialogTitleEl.innerHTML = 'Request failed. Select refresh to try again.';
-				this.dialogTextEl.innerHTML = error;
-				this.dialogEl.open();
+				this.set('waitForLoad', false);
+				this.$.dialogTitle.innerHTML =
+					'Request failed. Select refresh to try again.';
+				this.$.dialogText.innerHTML = error;
+				this.$.errorDialog.open();
 			}
 			this.set('waitForLoad', false);
 		}.bind(this));
