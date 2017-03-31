@@ -5,16 +5,26 @@
 	'use strict';
 
 	/**
-	 * Event: Called when extension is installed or updated or Chrome is updated
+	 * Event: Fired when the extension is first installed,<br />
+	 * when the extension is updated to a new version,<br />
+	 * and when Chrome is updated to a new version.
 	 *
+	 * @see https://developer.chromse.com/extensions/runtime#event-onInstalled
+	 * @param {object} details - type of event
+	 * @private
 	 */
-	function onInstalled() {
+	function onInstalled(details) {
 		// create menus on the right click menu of the extension icon
 		chrome.contextMenus.create({type: 'normal', id: 'ENABLE_MENU', title: 'Disable', contexts: ['browser_action']});
 		chrome.contextMenus.create({type: 'separator', id: 'SEP_MENU', contexts: ['browser_action']});
 
 		bgUtils.initData(false);
 		bgUtils.processState('all');
+
+		if (details.reason === 'install') {
+			// extension installed, show main view
+			bgUtils.showOptionsTab();
+		}
 	}
 
 	/**
