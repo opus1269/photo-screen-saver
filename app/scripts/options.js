@@ -32,16 +32,16 @@
 	/**
 	 * Event Listener for main menu clicks
 	 * Route to proper page
-	 *
 	 * @param {Event} event
-	 *
 	 */
 	t.onDataRouteClick = function(event) {
 
 		// Close drawer after menu item is selected if drawerPanel is narrow
 		t.closeDrawer();
 
-		var index = t.pages.map(function(e) {return e.route;}).indexOf(event.currentTarget.id);
+		var index = t.pages.map(function(e) {
+			return e.route;
+		}).indexOf(event.currentTarget.id);
 
 		t.prevRoute = t.route;
 
@@ -61,9 +61,7 @@
 
 	/**
 	 * Show the Google Photos page
-	 *
 	 * @param {Integer} index index into t.pages Array
-	 *
 	 */
 	t.googlePhotos = function(index) {
 		if (!t.pages[index].ready) {
@@ -80,9 +78,7 @@
 
 	/**
 	 * Show the FAQ page
-	 *
 	 * @param {Integer} index index into t.pages Array
-	 *
 	 */
 	t.faq = function(index) {
 		if (!t.pages[index].ready) {
@@ -97,9 +93,7 @@
 
 	/**
 	 * Show the Information for Nerds page
-	 *
 	 * @param {Integer} index index into t.pages Array
-	 *
 	 */
 	t.info = function(index) {
 		if (!t.pages[index].ready) {
@@ -117,7 +111,9 @@
 	 */
 	t.preview = function() {
 		// select previous page
-		t.async(function() {t.$.mainMenu.select(t.prevRoute);}, 500);
+		t.async(function() {
+			t.$.mainMenu.select(t.prevRoute);
+		}, 500);
 		chrome.runtime.sendMessage({
 			message: 'show'
 		}, function(response) {});
@@ -127,7 +123,7 @@
 	t.pages = [
 		{label: 'Settings', route: 'page-settings', icon: 'settings', obj: null, ready: true},
 		{label: 'Google Photos Albums', route: 'page-google-photos', icon: 'cloud', obj: t.googlePhotos, ready: false},
-		{label: 'Preview (Click or <Enter> to close)', route: 'page-preview', icon: 'pageview', obj: t.preview, ready: true},
+		{label: 'Preview (Click or \<Enter\> to close)', route: 'page-preview', icon: 'pageview', obj: t.preview, ready: true},
 		{label: 'Frequently Asked Questions (FAQ)', route: 'page-faq', icon: 'help', obj: t.faq, ready: false},
 		{label: 'Information For Nerds', route: 'page-info', icon: 'info', obj: t.info, ready: false},
 		{label: 'Request Support', route: 'page-support', icon: 'help', obj: EXT_URI + 'support', ready: true},
@@ -153,11 +149,9 @@
 
 	/**
 	 * Listen for app messages
-	 *
 	 * @param {JSON} request object
 	 * @param {Object} sender MessageSender object
 	 * @param {function} response function to callback to sender
-	 *
 	 */
 	t.onMessage = function(request, sender, response) {
 		if (request.message === 'highlight') {

@@ -1,6 +1,7 @@
 /*
 @@license
 */
+/* exported bgUtils */
 var bgUtils = (function() {
 	'use strict';
 
@@ -12,7 +13,6 @@ var bgUtils = (function() {
 
 	/**
 	 * Convert string to time
-	 *
 	 * @param {String} value format: 'hh:mm' 24 hour time
 	 * @return {Integer} time in milliSec from base
 	 * @private
@@ -30,7 +30,6 @@ var bgUtils = (function() {
 
 	/**
 	 * Calculate time delta from now on a 24 hr basis
-	 *
 	 * @param {String} value format: 'hh:mm' 24 hour time
 	 * @return {Integer} time delta in minutes
 	 * @private
@@ -48,7 +47,6 @@ var bgUtils = (function() {
 
 	/**
 	 * Determine if current time is between start and stop, inclusive
-	 *
 	 * @param {String} start format: 'hh:mm' 24 hour time
 	 * @param {String} stop format: 'hh:mm' 24 hour time
 	 * @return {Boolean} true if in the given range

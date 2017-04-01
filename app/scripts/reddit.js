@@ -1,11 +1,9 @@
 /*
 @@license
 */
-/*exported reddit*/
+/* exported reddit*/
 var reddit = (function() {
 	'use strict';
-	/*jshint camelcase: false*/
-	// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 
 	var KEY = 'bATkDOUNW_tOlg';
 	var MAX_PHOTOS = 100;
@@ -26,7 +24,7 @@ var reddit = (function() {
 
 	// parse the size from the submission title
 	// this is the old way reddit did it
-	var getSize  = function(title) {
+	var getSize = function(title) {
 		var ret = {width: -1, height: -1};
 		var res;
 		var regex = /\[(\d*)\D*(\d*)\]/;
@@ -41,10 +39,8 @@ var reddit = (function() {
 
 	/**
 	 * Build the list of photos for one page of items
-	 *
 	 * @param {Array} children Array of photos returned from reddit
 	 * @return {Array} Array of images in our format, stripped of NSFW and big and small photos
-	 *
 	 */
 	var processChildren = function(children) {
 		var data;
@@ -93,10 +89,8 @@ var reddit = (function() {
 
 		/**
 		 * Retrieve the array of reddit photos
-		 *
 		 * @param {string} subreddit name of photo subreddit
 		 * @param {function} callback error, photos) Array of photos on success
-		 *
 		 */
 		loadImages: function(subreddit, callback) {
 			// callback(error, photos)

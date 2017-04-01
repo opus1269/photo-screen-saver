@@ -1,7 +1,7 @@
 /*
 @@license
 */
-/*exported chromeCast*/
+/* exported chromeCast */
 var chromeCast = (function() {
 	'use strict';
 
@@ -9,9 +9,7 @@ var chromeCast = (function() {
 
 		/**
 		 * get the photos from chromecast.json
-		 *
 		 * @param {function} callback (error, photos)
-		 *
 		 */
 		loadImages: function(callback) {
 			// callback(error, photos)

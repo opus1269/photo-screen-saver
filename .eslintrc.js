@@ -41,7 +41,6 @@ module.exports = {
 	'rules': {
 		'linebreak-style': ['off', 'windows'],
 		'max-len': ['warn', 180],
-		'one-var': 'off',
 		'no-var': 'off',
 		'no-console': 'warn',
 		'no-unused-vars': 'warn',
@@ -52,5 +51,6 @@ module.exports = {
 		'new-cap': ['error', {'capIsNewExceptions': ['Polymer']}],
 		'quotes': ['error', 'single'],
 		'quote-props': ['error', 'consistent'],
+		'prefer-rest-params': 'off',
 	},
 };

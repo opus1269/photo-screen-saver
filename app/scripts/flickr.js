@@ -1,11 +1,9 @@
 /*
 @@license
 */
-/*exported flickr*/
+/* exported flickr*/
 var flickr = (function() {
 	'use strict';
-	/*jshint camelcase: false*/
-	// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 
 	var URL = 'https://api.flickr.com/services/rest/';
 	var KEY = '1edd9926740f0e0d01d4ecd42de60ac6';
@@ -15,9 +13,7 @@ var flickr = (function() {
 
 		/**
 		 * retrieve flickr photos
-		 *
 		 * @param {function} callback (error, photos)
-		 *
 		 */
 		loadImages: function(callback) {
 			// callback(error, photos)

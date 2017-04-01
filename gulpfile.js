@@ -78,7 +78,10 @@ var plugins = require('gulp-load-plugins')({
 	replaceString: /\bgulp[\-.]/
 });
 
-// print which file changed
+/**
+ * print which file changed
+ * @param {event} event - the event
+ */
 function onChange(event) {
 	gutil.log('File', gutil.colors.cyan(event.path.replace(/.*(?=app)/i, '')), 'was', gutil.colors.magenta(event.type));
 }

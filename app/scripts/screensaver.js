@@ -66,7 +66,9 @@
 
 		if (!t.noPhotos) {
 			// kick off the slide show if there are photos selected
-			this.fire('pages-ready');
+			// slight delay at beginning so we have a smooth start
+			t.waitTime = 2000;
+			t.timer = window.setTimeout(t.runShow, t.waitTime);
 		}
 
 	});
@@ -145,10 +147,8 @@
 
 	/**
 	 * Get references to the important elements of a slide
-	 *
 	 * @param {Integer} idx index into {@link t.items}
 	 * @return {Object} Object containing the DOM elements of a slide
-	 *
 	 */
 	t.getEls = function(idx) {
 		var el = t.p.querySelector('#item' + idx);
@@ -204,12 +204,10 @@
 
 	/**
 	 * Create the photo label
-	 *
 	 * @param {String} author photographer
 	 * @param {String} type Photo source type
 	 * @param {Boolean} force require display of label if true
 	 * @return {String} label describing the photo source and photographer name
-	 *
 	 */
 	t.getPhotoLabel = function(author, type, force) {
 		var ret = '';
@@ -236,7 +234,6 @@
 
 	/**
 	 * Build and set the time string
-	 *
 	 * @param {Integer} idx index into {@link t.items}
 	 */
 	t.setTime = function(idx) {
@@ -252,7 +249,7 @@
 		} else if (format === 1) {
 			// 12 hour format
 			timeStr = date.toLocaleTimeString(
-				'en-us', {hour: 'numeric', minute: '2-digit',  hour12: true});
+				'en-us', {hour: 'numeric', minute: '2-digit', hour12: true});
 			if (timeStr.endsWith('M')) {
 				// strip off AM/PM
 				timeStr = timeStr.substring(0, timeStr.length - 3);
@@ -267,10 +264,8 @@
 
 	/**
 	 * Determine if a photo would look bad zoomed or stretched on the screen
-	 *
 	 * @param {Number} aspect aspect ratio of photo
 	 * @return {boolean} true if a photo aspect ratio differs substantially from the screens'
-	 *
 	 */
 	t.isBadAspect = function(aspect) {
 		// arbitrary
@@ -281,10 +276,8 @@
 
 	/**
 	 * Determine if a photo should not be displayed
-	 *
 	 * @param {Object} item the photo item
 	 * @return {Boolean} true if the photo should not be displayed
-	 *
 	 */
 	t.ignorePhoto = function(item) {
 		var ret = false;
@@ -360,7 +353,6 @@
 
 	/**
 	 * Finalize DOM for a letter boxed photo
-	 *
 	 * @param {Integer} idx index into {@link t.items}
 	 */
 	t.letterboxPhoto = function(idx) {
@@ -386,7 +378,6 @@
 
 	/**
 	 * Finalize DOM for a stretched photo
-	 *
 	 * @param {Integer} idx index into {@link t.items}
 	 */
 	t.stretchPhoto = function(idx) {
@@ -399,15 +390,18 @@
 
 	/**
 	 * Finalize DOM for a framed photo
-	 *
 	 * @param {Integer} idx index into {@link t.items}
 	 */
 	t.framePhoto = function(idx) {
-		var padding, border, borderBot;
+		var padding;
+		var border;
+		var borderBot;
 		var e = t.getEls(idx);
 		var img = e.image.$.img;
-		var width, height;
-		var frWidth, frHeight;
+		var width;
+		var height;
+		var frWidth;
+		var frHeight;
 		var aspect = e.item.aspectRatio;
 
 		// scale to screen size
@@ -468,7 +462,6 @@
 
 	/**
 	 * Determine if a photo failed to load (usually 404 error)
-	 *
 	 * @param {Integer} idx index into {@link t.items}
 	 * @return {Boolean} true if image load failed
 	 */
@@ -479,7 +472,6 @@
 
 	/**
 	 * Determine if a photo has finished loading
-	 *
 	 * @param {Integer} idx index into {@link t.items}
 	 * @return {Boolean} true if image is loaded
 	 */
@@ -490,7 +482,6 @@
 
 	/**
 	 * Try to find a photo that has finished loading
-	 *
 	 * @param {Integer} idx index into {@link t.items}
 	 * @return {Integer} index into t.items of a loaded photo, -1 if none are loaded
 	 */
@@ -499,17 +490,20 @@
 			return idx;
 		}
 		for (var i = idx + 1; i < t.items.length; i++) {
-			if (t.isLoaded(i)) {return i;}
+			if (t.isLoaded(i)) {
+				return i;
+			}
 		}
 		for (i = 0; i < idx; i++) {
-			if (t.isLoaded(i)) {return i;}
+			if (t.isLoaded(i)) {
+				return i;
+			}
 		}
 		return -1;
 	};
 
 	/**
 	 * Splice in the next photo from the master array
-	 *
 	 * @param {Integer} idx index into {@link t.items}
 	 * @param {Boolean} error true if the photo at idx is bad (didn't load)
 	 */
@@ -519,7 +513,9 @@
 		if (error) {
 			// bad url, mark it
 			var e = t.getEls(idx);
-			var index = t.itemsAll.map(function(ev) {return ev.name;}).indexOf(e.item.name);
+			var index = t.itemsAll.map(function(ev) {
+				return ev.name;
+			}).indexOf(e.item.name);
 			if (index !== -1) {
 				t.itemsAll[index].name = 'skip';
 			}
@@ -542,9 +538,7 @@
 
 	/**
 	 * Add superscript to the label for 500px photos
-	 *
 	 * @param {Integer} idx index into {@link t.items}
-	 *
 	 */
 	t.super500px = function(idx) {
 		var e = t.getEls(idx);
@@ -555,9 +549,7 @@
 
 	/**
 	 * Finalize DOM for a photo
-	 *
 	 * @param {Integer} idx index into {@link t.items}
-	 *
 	 */
 	t.prepPhoto = function(idx) {
 		t.setTime(idx);
@@ -579,10 +571,8 @@
 
 	/**
 	 * Get the next photo to display
-	 *
 	 * @param {Integer} idx index into {@link t.items}
 	 * @return {Integer} next index into {@link t.items} to display, -1 if none are ready
-	 *
 	 */
 	t.getNextPhoto = function(idx) {
 		var ret = t.findLoadedPhoto(idx);
@@ -639,9 +629,7 @@
 
 	/**
 	 * Listen for app messages
-	 *
 	 * @param {JSON} request
-	 *
 	 */
 	t.onMessage = function(request) {
 		if (request.message === 'close') {
@@ -651,7 +639,6 @@
 
 	/**
 	 * Listen for alarms
-	 *
 	 * @param {Object} alarm
 	 */
 	t.onAlarm = function(alarm) {
@@ -673,17 +660,6 @@
 	};
 
 	/**
-	 * Event listener to start slide show.
-	 * It will run to infinity... and beyond
-	 * each call to t.runShow will set another timeout
-	 */
-	t.addEventListener('pages-ready', function() {
-		// slight delay at beginning so we have a smooth start
-		t.waitTime = 2000;
-		t.timer = window.setTimeout(t.runShow, t.waitTime);
-	});
-
-	/**
 	 * Event listener for mouse clicks
 	 * Show link to original photo if possible and end slide show
 	 */
@@ -695,7 +671,6 @@
 	/**
 	 * Event listener for Enter key press
 	 * Close preview window on Enter (prob won't work on Chrome OS)
-	 *
 	 */
 	window.addEventListener('keydown', function(event) {
 		if (event.key === 'Enter') {

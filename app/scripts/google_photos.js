@@ -1,7 +1,7 @@
 /*
 @@license
 */
-/*exported gPhotos*/
+/* exported gPhotos*/
 var gPhotos = (function() {
 	'use strict';
 
@@ -12,11 +12,9 @@ var gPhotos = (function() {
 
 	/**
 	 * Perform an http request using OAuth 2.0 authentication
-	 *
 	 * @param {string} method request type "POST" "GET" etc.
 	 * @param {string} url url to call
 	 * @param {function} callback (error, httpStatus, responseText)
-	 *
 	 */
 	function authenticatedXhr(method, url, callback) {
 		// callback(error, httpStatus, responseText)
@@ -51,7 +49,6 @@ var gPhotos = (function() {
 					if (this.status !== 200 && retryError < MAX_RETRY) {
 						// Some error, retry a few times
 						retryError++;
-						console.log('Http error: ' + this.status + ' try again : ' + retryError);
 						getTokenAndXhr();
 						return;
 					}
@@ -75,14 +72,12 @@ var gPhotos = (function() {
 	}
 
 	/** Determine if a Picasa entry is an image
-	 *
 	 * @param {Object} entry Picasa media object
 	 * @return {boolean} true if entry is a photo
-	 *
 	 */
 	function isImage(entry) {
 		var content = entry.media$group.media$content;
-		for (var i = 0; i < content.length ; i++) {
+		for (var i = 0; i < content.length; i++) {
 			if (content[i].medium !== 'image') {
 				return false;
 			}
@@ -92,16 +87,19 @@ var gPhotos = (function() {
 
 	/**
 	 * Extract the Picasa photos into an Array
-	 *
 	 * @param {Object} root root object from Picasa API call
 	 * @return {Array} Array of photo objects
-	 *
 	 */
 	function processPhotos(root) {
 		var feed = root.feed;
-		var entries = feed.entry || [], entry;
+		var entries = feed.entry || [];
+		var entry;
 		var photos = [];
-		var url,author,width,height,asp;
+		var url;
+		var author;
+		var width;
+		var height;
+		var asp;
 
 		for (var i = 0; i < entries.length; i++) {
 			entry = entries[i];
@@ -119,10 +117,8 @@ var gPhotos = (function() {
 
 	/**
 	 * Retrieve the photos for the given album id
-	 *
 	 * @param {Integer} id Picasa album id
 	 * @param {function} callback (error, photos)
-	 *
 	 */
 	function loadPicasaAlbum(id, callback) {
 		// callback(error, photos)
@@ -143,9 +139,7 @@ var gPhotos = (function() {
 
 		/**
 		 * Get my photo album
-		 *
 		 * @param {function} callback (error, photos)
-		 * 
 		 */
 		loadAuthorImages: function(callback) {
 			// callback(error, photos)
@@ -176,9 +170,7 @@ var gPhotos = (function() {
 
 		/**
 		 * Retrieve the users list of albums, including the photos in each
-		 *
 		 * @param {function} callback (error, albumList)
-		 *
 		 */
 		loadAlbumList: function(callback) {
 			// callback(error, albums)
@@ -196,7 +188,8 @@ var gPhotos = (function() {
 				var root = JSON.parse(responseText);
 				var feed = root.feed;
 				var entries = feed.entry || [];
-				var albumList = [], album;
+				var albumList = [];
+				var album;
 				var ct = 0;
 
 				for (var i = 0; i < entries.length; ++i) {
@@ -241,9 +234,7 @@ var gPhotos = (function() {
 
 		/**
 		 * Retrieve the photos in the selected albums
-		 *
 		 * @param {function} callback (error, items) Array of Array of album photos on success
-		 *
 		 */
 		loadImages: function(callback) {
 			// callback(error, items)
@@ -256,10 +247,7 @@ var gPhotos = (function() {
 			for (var i = 0; i < items.length; i++) {
 				(function(index) {
 					loadPicasaAlbum(items[index].id, function(error, photos) {
-						if (error) {
-							// this may just mean the user deleted an album
-							console.log(error);
-						} else if (photos.length) {
+						if (photos.length) {
 							newItems.push({id: items[index].id, photos: photos});
 						}
 
@@ -273,6 +261,5 @@ var gPhotos = (function() {
 				})(i);
 			}
 		}
-
 	};
 })();

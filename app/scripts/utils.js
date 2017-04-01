@@ -1,7 +1,7 @@
 /*
 @@license
 */
-/*exported myUtils*/
+/* exported myUtils*/
 var myUtils = (function() {
 	'use strict';
 
@@ -9,7 +9,6 @@ var myUtils = (function() {
 
 		/**
 		 * Get the Chrome version
-		 *
 		 * @return {Integer} Chrome major version
 		 */
 		getChromeVersion: function() {
@@ -20,7 +19,6 @@ var myUtils = (function() {
 
 		/**
 		 * Determine if a String is null or whitespace only
-		 *
 		 * @param {String} str str to check
 		 * @return {Boolean} true is str is whitespace (or null)
 		 */
@@ -30,7 +28,6 @@ var myUtils = (function() {
 
 		/**
 		 * Get integer value from localStorage
-		 *
 		 * @param {String} key key to get value for
 		 * @return {Integer} value as integer
 		 *
@@ -41,10 +38,8 @@ var myUtils = (function() {
 
 		/**
 		 * Get boolean value from localStorage
-		 *
 		 * @param {String} key key to get value for
 		 * @return {Boolean} value as boolean
-		 *
 		 */
 		getBool: function(key) {
 			return JSON.parse(localStorage.getItem(key));
@@ -52,10 +47,8 @@ var myUtils = (function() {
 
 		/**
 		 * Get JSON value from localStorage
-		 *
 		 * @param {String} key key to get value for
 		 * @return {JSON} value as JSON Object
-		 *
 		 */
 		getJSON: function(key) {
 			return JSON.parse(localStorage.getItem(key));
@@ -63,7 +56,6 @@ var myUtils = (function() {
 
 		/**
 		 * Save a value to localStorage only if there is enough room
-		 *
 		 * @param {String} key localStorage Key
 		 * @param {String} value JSON stringified value to save
 		 * @param {String} keyBool optional key to a boolean value
@@ -101,7 +93,6 @@ var myUtils = (function() {
 
 		/**
 		 * Returns a random integer between min and max inclusive
-		 *
 		 * @param {Integer} min
 		 * @param {Integer} max
 		 * @return {Integer} random int
@@ -112,7 +103,6 @@ var myUtils = (function() {
 
 		/**
 		 * Randomly sort an Array in place
-		 *
 		 * @param {Array} array array to sort
 		 */
 		shuffleArray: function(array) {
@@ -127,11 +117,13 @@ var myUtils = (function() {
 
 		/**
 		 * Get a globally unique identifier
-		 *
 		 * @return {String} a GUID
 		 */
 		getGuid: function() {
 			// http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+			/**
+			 * @return {string} string
+			 */
 			function s4() {
 				return Math.floor((1 + Math.random()) * 0x10000)
 					.toString(16)
@@ -143,7 +135,6 @@ var myUtils = (function() {
 
 		/**
 		 * Add an image object to an existing Array
-		 *
 		 * @param {Array} images Array of image objects
 		 * @param {String} url The url to the photo
 		 * @param {String} author The photographer

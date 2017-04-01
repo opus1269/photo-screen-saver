@@ -1,7 +1,7 @@
 /*
 @@license
 */
-/*exported use500px*/
+/* exported use500px*/
 var use500px = (function() {
 	'use strict';
 
@@ -16,10 +16,8 @@ var use500px = (function() {
 
 		/**
 		 * Retrieve the array of reddit photos
-		 *
 		 * @param {string} type name of 500px gallery
 		 * @param {function} callback error, photos) Array of photos on success
-		 *
 		 */
 		loadImages: function(type, callback) {
 			// callback(error, photos)

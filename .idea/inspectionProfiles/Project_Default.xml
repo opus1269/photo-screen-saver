@@ -53,7 +53,7 @@
     <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="15">
+          <list size="29">
             <item index="0" class="java.lang.String" itemvalue="nobr" />
             <item index="1" class="java.lang.String" itemvalue="noembed" />
             <item index="2" class="java.lang.String" itemvalue="comment" />
@@ -69,11 +69,27 @@
             <item index="12" class="java.lang.String" itemvalue="paper-toggle-button" />
             <item index="13" class="java.lang.String" itemvalue="iron-localstorage" />
             <item index="14" class="java.lang.String" itemvalue="paper-ripple" />
+            <item index="15" class="java.lang.String" itemvalue="content" />
+            <item index="16" class="java.lang.String" itemvalue="paper-material" />
+            <item index="17" class="java.lang.String" itemvalue="paper-toolbar" />
+            <item index="18" class="java.lang.String" itemvalue="paper-icon-button" />
+            <item index="19" class="java.lang.String" itemvalue="paper-tooltip" />
+            <item index="20" class="java.lang.String" itemvalue="paper-dialog" />
+            <item index="21" class="java.lang.String" itemvalue="paper-dialog-scrollable" />
+            <item index="22" class="java.lang.String" itemvalue="paper-button" />
+            <item index="23" class="java.lang.String" itemvalue="paper-spinner" />
+            <item index="24" class="java.lang.String" itemvalue="paper-checkbox" />
+            <item index="25" class="java.lang.String" itemvalue="iron-image" />
+            <item index="26" class="java.lang.String" itemvalue="paper-dropdown-menu" />
+            <item index="27" class="java.lang.String" itemvalue="paper-menu" />
+            <item index="28" class="java.lang.String" itemvalue="paper-slider" />
           </list>
         </value>
       </option>
       <option name="myCustomValuesEnabled" value="true" />
     </inspection_tool>
+    <inspection_tool class="JSLastCommaInArrayLiteral" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="JSLastCommaInObjectLiteral" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="LoggerInitializedWithForeignClass" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="loggerClassName" value="org.apache.log4j.Logger,org.slf4j.LoggerFactory,org.apache.commons.logging.LogFactory,java.util.logging.Logger" />
       <option name="loggerFactoryMethodName" value="getLogger,getLogger,getLog,getLogger" />

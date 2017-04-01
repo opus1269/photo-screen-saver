@@ -112,12 +112,16 @@ Polymer({
 		value: {
 			type: Object,
 			notify: true,
-			value: function() { return {'base': 10, 'display': 10, 'unit': 0}; }
+			value: function() {
+				return {'base': 10, 'display': 10, 'unit': 0};
+			}
 		},
 
 		units: {
 			type: Array,
-			value: function() { return []; }
+			value: function() {
+				return [];
+			}
 		},
 
 		sectionTitle: {

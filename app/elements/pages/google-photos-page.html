@@ -278,7 +278,9 @@ GooglePhotosPage = Polymer({
 	// handle tap on checkbox for an album
 	_albumSelectChange: function(event) {
 		var item = event.model.item;
-		var index = this.selections.map(function(e) {return e.id;}).indexOf(item.id);
+		var index = this.selections.map(function(e) {
+			return e.id;
+		}).indexOf(item.id);
 
 		if (index !== -1) {
 			this.selections.splice(index, 1);
@@ -288,7 +290,7 @@ GooglePhotosPage = Polymer({
 			this.selections.push({id: item.id, photos: item.photos});
 		}
 
-		if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
+		if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections), null)) {
 			// exceeded storage limits
 			this.selections.pop();
 			this.set('albums.' + item.index + '.checked', false);
