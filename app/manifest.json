@@ -3,7 +3,7 @@
 	"name": "Photo Screen Saver",
 	"short_name": "Photo Screen Saver",
 	"description": "A screensaver with multiple photo sources, including your own Google Photos.",
-	"version": "1.8.3",
+	"version": "1.8.4",
 	"minimum_chrome_version": "38",
 	"commands": {
 		"toggle-enabled": {
