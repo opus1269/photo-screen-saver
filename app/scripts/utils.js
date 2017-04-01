@@ -10,7 +10,7 @@ var myUtils = (function() {
 		/**
 		 * Get the Chrome version
 		 *
-		 * @returns {Integer} Chrome major version
+		 * @return {Integer} Chrome major version
 		 */
 		getChromeVersion: function() {
 			// http://stackoverflow.com/questions/4900436/detect-version-of-chrome-installed
@@ -22,7 +22,7 @@ var myUtils = (function() {
 		 * Determine if a String is null or whitespace only
 		 *
 		 * @param {String} str str to check
-		 * @returns {Boolean} true is str is whitespace (or null)
+		 * @return {Boolean} true is str is whitespace (or null)
 		 */
 		isWhiteSpace: function(str) {
 			return (!str || str.length === 0 || /^\s*$/.test(str));
@@ -32,7 +32,7 @@ var myUtils = (function() {
 		 * Get integer value from localStorage
 		 *
 		 * @param {String} key key to get value for
-		 * @returns {Integer} value as integer
+		 * @return {Integer} value as integer
 		 *
 		 */
 		getInt: function(key) {
@@ -43,7 +43,7 @@ var myUtils = (function() {
 		 * Get boolean value from localStorage
 		 *
 		 * @param {String} key key to get value for
-		 * @returns {Boolean} value as boolean
+		 * @return {Boolean} value as boolean
 		 *
 		 */
 		getBool: function(key) {
@@ -54,7 +54,7 @@ var myUtils = (function() {
 		 * Get JSON value from localStorage
 		 *
 		 * @param {String} key key to get value for
-		 * @returns {JSON} value as JSON Object
+		 * @return {JSON} value as JSON Object
 		 *
 		 */
 		getJSON: function(key) {
@@ -68,7 +68,7 @@ var myUtils = (function() {
 		 * @param {String} value JSON stringified value to save
 		 * @param {String} keyBool optional key to a boolean value
 		 *                 that is true if the primary key has non-empty value
-		 * @returns {Boolean} true if value was set successfully
+		 * @return {Boolean} true if value was set successfully
 		 */
 		localStorageSafeSet: function(key, value, keyBool) {
 			var ret = true;
@@ -104,7 +104,7 @@ var myUtils = (function() {
 		 *
 		 * @param {Integer} min
 		 * @param {Integer} max
-		 * @returns {Integer} random int
+		 * @return {Integer} random int
 		 */
 		getRandomInt: function(min, max) {
 			return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -128,7 +128,7 @@ var myUtils = (function() {
 		/**
 		 * Get a globally unique identifier
 		 *
-		 * @returns {String} a GUID
+		 * @return {String} a GUID
 		 */
 		getGuid: function() {
 			// http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript

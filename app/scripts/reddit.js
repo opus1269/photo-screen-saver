@@ -43,7 +43,7 @@ var reddit = (function() {
 	 * Build the list of photos for one page of items
 	 *
 	 * @param {Array} children Array of photos returned from reddit
-	 * @returns {Array} Array of images in our format, stripped of NSFW and big and small photos
+	 * @return {Array} Array of images in our format, stripped of NSFW and big and small photos
 	 *
 	 */
 	var processChildren = function(children) {

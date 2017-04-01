@@ -77,7 +77,7 @@ var gPhotos = (function() {
 	/** Determine if a Picasa entry is an image
 	 *
 	 * @param {Object} entry Picasa media object
-	 * @returns {boolean} true if entry is a photo
+	 * @return {boolean} true if entry is a photo
 	 *
 	 */
 	function isImage(entry) {
@@ -94,7 +94,7 @@ var gPhotos = (function() {
 	 * Extract the Picasa photos into an Array
 	 *
 	 * @param {Object} root root object from Picasa API call
-	 * @returns {Array} Array of photo objects
+	 * @return {Array} Array of photo objects
 	 *
 	 */
 	function processPhotos(root) {

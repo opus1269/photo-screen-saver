@@ -147,7 +147,7 @@
 	 * Get references to the important elements of a slide
 	 *
 	 * @param {Integer} idx index into {@link t.items}
-	 * @returns {Object} Object containing the DOM elements of a slide
+	 * @return {Object} Object containing the DOM elements of a slide
 	 *
 	 */
 	t.getEls = function(idx) {
@@ -208,7 +208,7 @@
 	 * @param {String} author photographer
 	 * @param {String} type Photo source type
 	 * @param {Boolean} force require display of label if true
-	 * @returns {String} label describing the photo source and photographer name
+	 * @return {String} label describing the photo source and photographer name
 	 *
 	 */
 	t.getPhotoLabel = function(author, type, force) {
@@ -269,7 +269,7 @@
 	 * Determine if a photo would look bad zoomed or stretched on the screen
 	 *
 	 * @param {Number} aspect aspect ratio of photo
-	 * @returns {boolean} true if a photo aspect ratio differs substantially from the screens'
+	 * @return {boolean} true if a photo aspect ratio differs substantially from the screens'
 	 *
 	 */
 	t.isBadAspect = function(aspect) {
@@ -283,7 +283,7 @@
 	 * Determine if a photo should not be displayed
 	 *
 	 * @param {Object} item the photo item
-	 * @returns {Boolean} true if the photo should not be displayed
+	 * @return {Boolean} true if the photo should not be displayed
 	 *
 	 */
 	t.ignorePhoto = function(item) {
@@ -470,7 +470,7 @@
 	 * Determine if a photo failed to load (usually 404 error)
 	 *
 	 * @param {Integer} idx index into {@link t.items}
-	 * @returns {Boolean} true if image load failed
+	 * @return {Boolean} true if image load failed
 	 */
 	t.isError = function(idx) {
 		var e = t.getEls(idx);
@@ -481,7 +481,7 @@
 	 * Determine if a photo has finished loading
 	 *
 	 * @param {Integer} idx index into {@link t.items}
-	 * @returns {Boolean} true if image is loaded
+	 * @return {Boolean} true if image is loaded
 	 */
 	t.isLoaded = function(idx) {
 		var e = t.getEls(idx);
@@ -492,7 +492,7 @@
 	 * Try to find a photo that has finished loading
 	 *
 	 * @param {Integer} idx index into {@link t.items}
-	 * @returns {Integer} index into t.items of a loaded photo, -1 if none are loaded
+	 * @return {Integer} index into t.items of a loaded photo, -1 if none are loaded
 	 */
 	t.findLoadedPhoto = function(idx) {
 		if (t.isLoaded(idx)) {
@@ -581,7 +581,7 @@
 	 * Get the next photo to display
 	 *
 	 * @param {Integer} idx index into {@link t.items}
-	 * @returns {Integer} next index into {@link t.items} to display, -1 if none are ready
+	 * @return {Integer} next index into {@link t.items} to display, -1 if none are ready
 	 *
 	 */
 	t.getNextPhoto = function(idx) {

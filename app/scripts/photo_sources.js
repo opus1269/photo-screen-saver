@@ -114,7 +114,7 @@ var photoSources = (function() {
 	/**
 	 * Get all the photos
 	 *
-	 * @returns {Array} The Array of photos
+	 * @return {Array} The Array of photos
 	 *
 	 */
 	PhotoSource.prototype.getPhotos = function() {
@@ -171,7 +171,7 @@ var photoSources = (function() {
 		/**
 		 * Get all the keys of useage boolean variables
 		 *
-		 * @returns {Array} Array of keys of useage boolean variables
+		 * @return {Array} Array of keys of useage boolean variables
 		 */
 		getUseNames: function() {
 			var ret = [];
@@ -185,7 +185,7 @@ var photoSources = (function() {
 		 * Get all the photos from all selected sources. These will be
 		 * used by the screen saver.
 		 *
-		 * @returns {Array} Array of photos to display in screen saver
+		 * @return {Array} Array of photos to display in screen saver
 		 */
 		getSelectedPhotos: function() {
 			var ret = [];
@@ -199,7 +199,7 @@ var photoSources = (function() {
 		 * Determine if a given string is a photo source
 		 *
 		 * @param {String} useName String to check
-		 * @returns {boolean} true if photo source
+		 * @return {boolean} true if photo source
 		 */
 		contains: function(useName) {
 			for (var i = 0; i < SOURCES.length; i++) {
