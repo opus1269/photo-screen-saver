@@ -1,7 +1,6 @@
 /*
 @@license
 */
-/*exported bgUtils*/
 var bgUtils = (function() {
 	'use strict';
 
@@ -15,7 +14,7 @@ var bgUtils = (function() {
 	 * Convert string to time
 	 *
 	 * @param {String} value format: 'hh:mm' 24 hour time
-	 * @returns {Integer} time in milliSec from base
+	 * @return {Integer} time in milliSec from base
 	 * @private
 	 *
 	 */
@@ -33,7 +32,7 @@ var bgUtils = (function() {
 	 * Calculate time delta from now on a 24 hr basis
 	 *
 	 * @param {String} value format: 'hh:mm' 24 hour time
-	 * @returns {Integer} time delta in minutes
+	 * @return {Integer} time delta in minutes
 	 * @private
 	 */
 	function _getTimeDelta(value) {
@@ -52,7 +51,7 @@ var bgUtils = (function() {
 	 *
 	 * @param {String} start format: 'hh:mm' 24 hour time
 	 * @param {String} stop format: 'hh:mm' 24 hour time
-	 * @returns {Boolean} true if in the given range
+	 * @return {Boolean} true if in the given range
 	 * @private
 	 */
 	function _isInRange(start, stop) {
@@ -77,11 +76,10 @@ var bgUtils = (function() {
 		return ret;
 	}
 
-	/***
+	/**
 	 * Determine if there is a full screen chrome window running on a display
-	 *
-	 * @param {DisplayInfo} display a connected display
-	 * @param callback (boolean) true if there is a full screen window on the display
+	 * @param {object} display a connected display
+	 * @param {function} callback - true if there is a full screen window on the display
 	 * @private
 	 */
 	function _hasFullscreen(display, callback) {
@@ -109,8 +107,7 @@ var bgUtils = (function() {
 
 	/**
 	 * Get the idle time in seconds
-	 *
-	 * @returns {Integer} idle time in seconds
+	 * @return {Integer} idle time in seconds
 	 * @private
 	 */
 	function _getIdleSeconds() {
@@ -120,8 +117,7 @@ var bgUtils = (function() {
 
 	/**
 	 * Open a screen saver window on the given display
-	 *
-	 * @param {DisplayInfo} display a connected display
+	 * @param {object} display a connected display
 	 * @private
 	 */
 	function _openScreenSaver(display) {
@@ -157,7 +153,6 @@ var bgUtils = (function() {
 
 	/**
 	 * Open a screensaver on every display
-	 *
 	 * @private
 	 */
 	function _openScreenSavers() {
@@ -174,7 +169,6 @@ var bgUtils = (function() {
 
 	/**
 	 * Set the icon badge text
-	 *
 	 * @private
 	 */
 	function _updateBadgeText() {
@@ -184,7 +178,6 @@ var bgUtils = (function() {
 
 	/**
 	 * Set the repeating alarms states
-	 *
 	 * @private
 	 */
 	function _updateRepeatingAlarms() {
@@ -229,11 +222,9 @@ var bgUtils = (function() {
 
 	/**
 	 * Set state based on screen saver enabled flag
-	 *
 	 * Note: this does not effect the keep awake settings so you could
 	 * use the extension as a display keep awake scheduler without
 	 * using the screensaver
-	 *
 	 * @private
 	 */
 	function _processEnabled() {
@@ -249,7 +240,6 @@ var bgUtils = (function() {
 
 	/**
 	 * Set power scheduling features
-	 *
 	 * @private
 	 */
 	function _processKeepAwake() {
@@ -262,7 +252,6 @@ var bgUtils = (function() {
 
 	/**
 	 * Set wait time for screen saver display after machine is idle
-	 *
 	 * @private
 	 */
 	function _processIdleTime() {
@@ -277,7 +266,6 @@ var bgUtils = (function() {
 
 		/**
 		 * Initialize the localStorage items
-		 *
 		 * @param {Boolean} restore if true force restore to defaults
 		 *
 		 */
@@ -380,14 +368,13 @@ var bgUtils = (function() {
 
 		/**
 		 * Determine if the screen saver can be displayed
-		 *
-		 * @returns {Boolean} true if can display
+		 * @return {Boolean} true if can display
 		 */
 		isActive: function() {
 			var enabled = myUtils.getBool('enabled');
 			var keepAwake = myUtils.getBool('keepAwake');
-			var aStart = myUtils.getBool('activeStart');
-			var aStop = myUtils.getBool('activeStop');
+			var aStart = myUtils.getJSON('activeStart');
+			var aStop = myUtils.getJSON('activeStop');
 
 			// do not display if screen saver is not enabled or
 			// keepAwake scheduler is enabled and is in the inactive range
@@ -397,7 +384,6 @@ var bgUtils = (function() {
 
 		/**
 		 * Set state when the screensaver is in the active time range
-		 *
 		 */
 		setActiveState: function() {
 			if (myUtils.getBool('keepAwake')) {
@@ -415,7 +401,6 @@ var bgUtils = (function() {
 
 		/**
 		 * Set state when the screensaver is in the inactive time range
-		 *
 		 */
 		setInactiveState: function() {
 			myUtils.getBool('allowSuspend') ? chrome.power.releaseKeepAwake() :
@@ -426,7 +411,6 @@ var bgUtils = (function() {
 
 		/**
 		 * Toggle enabled state of the screen saver
-		 *
 		 */
 		toggleEnabled: function() {
 			localStorage.enabled = !myUtils.getBool('enabled');
@@ -436,9 +420,7 @@ var bgUtils = (function() {
 
 		/**
 		 * Process changes to localStorage items
-		 *
 		 * @param {string} key the item that changed 'all' for everything
-		 *
 		 */
 		processState: function(key) {
 			// Map processing functions to localStorage values
@@ -451,24 +433,19 @@ var bgUtils = (function() {
 				'idleTime': _processIdleTime
 			};
 			var noop = function() {};
-			var called = [];
 			var fn;
 
 			if (key === 'all') {
 				Object.keys(STATE_MAP).forEach(function(ky) {
 					fn = STATE_MAP[ky];
-					if (called.indexOf(fn) === -1) {
-						// track functions we have already called
-						called.push(fn);
-						return fn();
-					}
+					return fn();
 				});
 				// process photo SOURCES
 				photoSources.processAll();
 			} else {
 				// individual change
 				if (photoSources.contains(key)) {
-					photoSources.process(key);
+					photoSources.process(key, function() {});
 				} else {
 					(STATE_MAP[key] || noop)();
 				}
@@ -477,9 +454,7 @@ var bgUtils = (function() {
 
 		/**
 		 * Display the screen saver(s)
-		 *
 		 * !Important: Always request screensaver through this call
-		 *
 		 * @param {Boolean} single if true only show on one display
 		 */
 		displayScreenSaver: function(single) {
