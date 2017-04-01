@@ -111,15 +111,12 @@ gulp.task('bower', function() {
 // Lint JavaScript
 gulp.task('lintjs', function() {
 	return gulp.src([files.scripts, files.elements, 'gulpfile.js'])
-	.pipe(plugins.changed(path.scripts.dev))
-	.pipe(plugins.changed(path.elements.dev))
-	.pipe(plugins.changed(base.dev))
-	.pipe(plugins.if('*.html', plugins.htmlExtract())) // jscs needs extract
-	.pipe(plugins.jshint())
-	.pipe(plugins.jscs())
-	.pipe(plugins.jscsStylish.combineWithHintResults())
-	.pipe(plugins.jshint.reporter('jshint-stylish'))
-	.pipe(plugins.jshint.reporter('fail'));
+		.pipe(plugins.changed(path.scripts.dev))
+		.pipe(plugins.changed(path.elements.dev))
+		.pipe(plugins.changed(base.dev))
+		.pipe(plugins.eslint())
+		.pipe(plugins.eslint.format())
+		.pipe(plugins.eslint.failAfterError());
 });
 
 // scripts - lint first

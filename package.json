@@ -22,16 +22,17 @@
   "private": true,
   "devDependencies": {
     "del": "^2.2.2",
+    "eslint": "^3.19.0",
+    "eslint-config-google": "^0.7.1",
+    "eslint-plugin-html": "^2.0.1",
     "gulp": "^3.9.1",
     "gulp-changed": "^1.3.2",
     "gulp-crisper": "^1.1.0",
     "gulp-debug": "^3.1.0",
+    "gulp-eslint": "^3.0.1",
     "gulp-html-extract": "^0.2.0",
     "gulp-if": "^2.0.2",
-    "gulp-imagemin": "^3.1.1",
-    "gulp-jscs": "^4.0.0",
-    "gulp-jscs-stylish": "^1.4.0",
-    "gulp-jshint": "^2.0.4",
+    "gulp-imagemin": "^3.2.0",
     "gulp-load-plugins": "^1.5.0",
     "gulp-minify-css": "^1.2.4",
     "gulp-minify-html": "^1.0.6",
@@ -39,13 +40,11 @@
     "gulp-replace": "^0.5.4",
     "gulp-size": "^2.1.0",
     "gulp-strip-line": "0.0.1",
-    "gulp-uglify": "^2.0.1",
+    "gulp-uglify": "^2.1.2",
     "gulp-util": "^3.0.8",
     "gulp-vulcanize": "^6.1.0",
     "gulp-zip": "^4.0.0",
-    "jshint": "^2.9.4",
-    "jshint-stylish": "^2.2.1",
     "run-sequence": "^1.2.2",
-    "vulcanize": "^1.15.3"
+    "vulcanize": "^1.15.4"
   }
 }
