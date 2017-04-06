@@ -8,7 +8,6 @@
 	 * Event: Fired when the extension is first installed,<br />
 	 * when the extension is updated to a new version,<br />
 	 * and when Chrome is updated to a new version.
-	 *
 	 * @see https://developer.chromse.com/extensions/runtime#event-onInstalled
 	 * @param {object} details - type of event
 	 * @private
@@ -29,7 +28,6 @@
 
 	/**
 	 * Event: Called when Chrome first starts
-	 *
 	 */
 	function onStartup() {
 		bgUtils.processState('all');
@@ -37,7 +35,6 @@
 
 	/**
 	 * Event: Called when user clicks on extension icon
-	 *
 	 */
 	function onIconClicked() {
 		bgUtils.showOptionsTab();
@@ -45,9 +42,8 @@
 
 	/**
 	 * Event: Called when item in local storage changes
-	 *
 	 * @param {Event} event
-	 *
+	 * @param {String} event.key - key of changed item
 	 */
 	function onStorageChanged(event) {
 		bgUtils.processState(event.key);
@@ -55,24 +51,26 @@
 
 	/**
 	 * Event: Called when computer idle state changes
-	 *
-	 * @param {String} state current state of computer
-	 *
+	 * @param {String} state - current state of computer
 	 */
 	function onIdleStateChanged(state) {
-		if (state === 'idle' && bgUtils.isActive()) {
-			bgUtils.displayScreenSaver();
-		} else {
-			// delay close a little to allow time to process mouse and keyboard
-			chrome.alarms.create('close', {when: Date.now() + 250});
-		}
+		bgUtils.isShowing(function(isShowing) {
+			if (state === 'idle' && bgUtils.isActive() && !isShowing) {
+				bgUtils.displayScreenSaver();
+			} else {
+				if (!myUtils.isWin()) {
+					// Windows 10 Creator triggers an 'active' state
+					// when the window is created so we have to let
+					// the screen savers handle their closing
+					bgUtils.closeScreenSavers();
+				}
+			}
+		});
 	}
 
 	/**
 	 * Event: Called when alarm is raised
-	 *
 	 * @param {Object} alarm chrome.alarms.Alarm
-	 *
 	 */
 	function onAlarm(alarm) {
 		switch (alarm.name) {
@@ -87,10 +85,6 @@
 			case 'updatePhotos':
 				// get the latest for the live photo streams
 				photoSources.processDaily();
-				break;
-			case 'close':
-				// close screen savers
-				bgUtils.closeScreenSavers();
 				break;
 			case 'setBadgeText':
 				// set the icons text
@@ -109,9 +103,7 @@
 
 	/**
 	 * Event: Called when chrome menu is clicked
-	 *
 	 * @param {Object} info
-	 *
 	 */
 	function onMenuClicked(info) {
 		if (info.menuItemId === 'ENABLE_MENU') {
@@ -121,9 +113,7 @@
 
 	/**
 	 * Event: Called when registered key combination is pressed
-	 *
 	 * @param {String} cmd
-	 *
 	 */
 	function onKeyCommand(cmd) {
 		if (cmd === 'toggle-enabled') {
@@ -133,9 +123,7 @@
 
 	/**
 	 * Message: Called when chrome message is sent
-	 *
 	 * @param {Object} request
-	 *
 	 */
 	function onMessage(request) {
 		if (request.message === 'show') {

@@ -92,6 +92,14 @@ var myUtils = (function() {
 		},
 
 		/**
+		 * true if we are MS windows
+		 * @return {boolean} true if MS windows
+		 */
+		isWin: function() {
+			return localStorage.getItem('os') === 'win';
+		},
+
+		/**
 		 * Returns a random integer between min and max inclusive
 		 * @param {Integer} min
 		 * @param {Integer} max

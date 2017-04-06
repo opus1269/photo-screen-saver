@@ -231,7 +231,8 @@ var bgUtils = (function() {
 		_updateBadgeText();
 		chrome.contextMenus.update('ENABLE_MENU', {title: label}, function() {
 			if (chrome.runtime.lastError) {
-				console.log(chrome.runtime.lastError.message);
+				// noinspection UnnecessaryReturnStatementJS
+				return;
 			}
 		});
 	}
@@ -264,8 +265,7 @@ var bgUtils = (function() {
 
 		/**
 		 * Initialize the localStorage items
-		 * @param {Boolean} restore if true force restore to defaults
-		 *
+		 * @param {Boolean} restore - if true, restore to defaults
 		 */
 		initData: function(restore) {
 			// using local storage as a quick and dirty replacement for MVC
@@ -278,7 +278,7 @@ var bgUtils = (function() {
 
 			var oldVersion = localStorage.getItem('version');
 
-			localStorage.version = '8';
+			localStorage.version = '9';
 
 			var VALS = {
 				'enabled': 'true',
@@ -325,9 +325,12 @@ var bgUtils = (function() {
 			}
 
 			if (restore) {
+				// restore defaults
 				Object.keys(VALS).forEach(function(key) {
-					if ((key !== 'useGoogle') && (key !== 'albumSelections')) {
-						// skip Google photos settings
+					if ((key !== 'useGoogle') &&
+						(key !== 'albumSelections') &&
+						(key !== 'os')) {
+						// skip Google photos settings and os
 						localStorage.setItem(key, VALS[key]);
 					}
 				});
@@ -377,7 +380,25 @@ var bgUtils = (function() {
 			// do not display if screen saver is not enabled or
 			// keepAwake scheduler is enabled and is in the inactive range
 			return !(!enabled || (keepAwake && !_isInRange(aStart, aStop)));
+		},
 
+		/**
+		 * Determine if the screen saver is currently showing
+		 * @param {function} callback - callback(isShowing)
+		 */
+		isShowing: function(callback) {
+			// callback(isShowing)
+			callback = callback || function() {};
+
+			// send message to the screen saver to see if he is around
+			chrome.runtime.sendMessage({message: 'isShowing'}, null, function(response) {
+				if (response) {
+					// screen saver responded
+					callback(true);
+				} else {
+					callback(false);
+				}
+			});
 		},
 
 		/**
@@ -440,6 +461,12 @@ var bgUtils = (function() {
 				});
 				// process photo SOURCES
 				photoSources.processAll();
+				// set os, if not already
+				if (!localStorage.getItem('os')) {
+					chrome.runtime.getPlatformInfo(function(info) {
+						localStorage.setItem('os', info.os);
+					});
+				}
 			} else {
 				// individual change
 				if (photoSources.contains(key)) {

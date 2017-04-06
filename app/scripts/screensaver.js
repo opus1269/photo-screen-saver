@@ -43,6 +43,9 @@
 	// Flag to indicate the screen saver has no photos
 	t.noPhotos = false;
 
+	// Starting mouse position
+	t.startMouse = {x: null, y: null};
+
 	/**
 	 * Event Listener for template bound event to know when bindings
 	 * have resolved and content has been stamped to the page
@@ -628,12 +631,19 @@
 	};
 
 	/**
-	 * Listen for app messages
-	 * @param {JSON} request
+	 * Event: Fired when a message is sent from either an extension process<br>
+	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
+	 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
+	 * @param {object} request - details for the message
+	 * @param {object} sender - MessageSender object
+	 * @param {function} response - function to call once after processing
 	 */
-	t.onMessage = function(request) {
+	t.onMessage = function(request, sender, response) {
 		if (request.message === 'close') {
 			t.closeWindow();
+		} else if(request.message === 'isShowing') {
+			// let people know we are here
+			response({message: 'OK'});
 		}
 	};
 
@@ -654,14 +664,15 @@
 	 * Close ourselves
 	 */
 	t.closeWindow = function() {
-		chrome.alarms.clear(CLOCK_ALARM, function() {
+		setTimeout(function() {
+			// delay a little to process events
 			window.close();
-		});
+		}, 750);
 	};
 
 	/**
 	 * Event listener for mouse clicks
-	 * Show link to original photo if possible and end slide show
+	 * Show link to original photo if possible and close windows
 	 */
 	window.addEventListener('click', function() {
 		t.showPhotoInfo();
@@ -669,12 +680,29 @@
 	}, false);
 
 	/**
-	 * Event listener for Enter key press
-	 * Close preview window on Enter (prob won't work on Chrome OS)
+	 * Event listener for key press
+	 * Close window (prob won't work on Chrome OS)
 	 */
-	window.addEventListener('keydown', function(event) {
-		if (event.key === 'Enter') {
-			t.closeWindow();
+	window.addEventListener('keydown', function() {
+		t.closeWindow();
+	}, false);
+
+	/**
+	 * Event listener for mouse move
+	 * Close window (prob won't work on Chrome OS)
+	 */
+	window.addEventListener('mousemove', function(event) {
+		if (t.startMouse.x && t.startMouse.y) {
+			var deltaX = Math.abs(event.clientX - t.startMouse.x);
+			var deltaY = Math.abs(event.clientY - t.startMouse.y);
+			if (Math.max(deltaX, deltaY) > 20) {
+				// close after a minimum amount of mouse movement
+				t.closeWindow();
+			}
+		} else {
+			// first move, set values
+			t.startMouse.x = event.clientX;
+			t.startMouse.y = event.clientY;
 		}
 	}, false);
 
