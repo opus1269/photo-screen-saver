@@ -650,6 +650,7 @@
 	/**
 	 * Listen for alarms
 	 * @param {Object} alarm
+	 * @param {String} alarm.name - alarm type
 	 */
 	t.onAlarm = function(alarm) {
 		if (alarm.name === CLOCK_ALARM) {
@@ -664,6 +665,11 @@
 	 * Close ourselves
 	 */
 	t.closeWindow = function() {
+		// send message to other screen savers to close themselves
+		chrome.runtime.sendMessage({
+			message: 'close'
+		}, function(response) {});
+
 		setTimeout(function() {
 			// delay a little to process events
 			window.close();
@@ -689,13 +695,13 @@
 
 	/**
 	 * Event listener for mouse move
-	 * Close window (prob won't work on Chrome OS)
+	 * Close window
 	 */
 	window.addEventListener('mousemove', function(event) {
 		if (t.startMouse.x && t.startMouse.y) {
 			var deltaX = Math.abs(event.clientX - t.startMouse.x);
 			var deltaY = Math.abs(event.clientY - t.startMouse.y);
-			if (Math.max(deltaX, deltaY) > 20) {
+			if (Math.max(deltaX, deltaY) > 10) {
 				// close after a minimum amount of mouse movement
 				t.closeWindow();
 			}
