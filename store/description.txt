@@ -7,6 +7,8 @@ This extension displays a screensaver composed of a slide show of photos in vari
 *   Several photo subreddits from reddit
 *   Interesting photos from Flickr
 
+Note: Photos from the local file system are not supported.
+
 Many options are available to control the appearance of the slide show including:
 
 *   Wait time after machine becomes idle to display screensaver
@@ -33,4 +35,3 @@ This program does not store or transmit any sensitive or personal user data.
 Authentication with the Picasa API, which is used to access the users Google Photos is performed with OAUTH2 using encrypted https.
 
 https://github.com/opus1269/photo-screen-saver/blob/master/PRIVACY.md
-
