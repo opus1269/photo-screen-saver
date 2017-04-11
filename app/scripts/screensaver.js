@@ -103,6 +103,7 @@
 		var trans = myUtils.getJSON('transitionTime');
 		t.transitionTime = trans.base * 1000;
 		t.waitTime = t.transitionTime;
+		t.waitForLoad = true;
 
 		var showTime = myUtils.getInt('showTime');
 		if ((showTime !== 0) && (trans.base > 60)) {
@@ -464,82 +465,6 @@
 	};
 
 	/**
-	 * Determine if a photo failed to load (usually 404 error)
-	 * @param {Integer} idx index into {@link t.items}
-	 * @return {Boolean} true if image load failed
-	 */
-	t.isError = function(idx) {
-		var e = t.getEls(idx);
-		return !e.image || e.image.error;
-	};
-
-	/**
-	 * Determine if a photo has finished loading
-	 * @param {Integer} idx index into {@link t.items}
-	 * @return {Boolean} true if image is loaded
-	 */
-	t.isLoaded = function(idx) {
-		var e = t.getEls(idx);
-		return e.image && e.image.loaded;
-	};
-
-	/**
-	 * Try to find a photo that has finished loading
-	 * @param {Integer} idx index into {@link t.items}
-	 * @return {Integer} index into t.items of a loaded photo, -1 if none are loaded
-	 */
-	t.findLoadedPhoto = function(idx) {
-		if (t.isLoaded(idx)) {
-			return idx;
-		}
-		for (var i = idx + 1; i < t.items.length; i++) {
-			if (t.isLoaded(i)) {
-				return i;
-			}
-		}
-		for (i = 0; i < idx; i++) {
-			if (t.isLoaded(i)) {
-				return i;
-			}
-		}
-		return -1;
-	};
-
-	/**
-	 * Splice in the next photo from the master array
-	 * @param {Integer} idx index into {@link t.items}
-	 * @param {Boolean} error true if the photo at idx is bad (didn't load)
-	 */
-	t.replacePhoto = function(idx, error) {
-		var item;
-
-		if (error) {
-			// bad url, mark it
-			var e = t.getEls(idx);
-			var index = t.itemsAll.map(function(ev) {
-				return ev.name;
-			}).indexOf(e.item.name);
-			if (index !== -1) {
-				t.itemsAll[index].name = 'skip';
-			}
-		}
-
-		if (t.started && t.itemsAll.length > t.items.length) {
-			for (var i = t.curIdx; i < t.itemsAll.length; i++) {
-				// find a url that is ok, AFAWK
-				item = t.itemsAll[i];
-				if (item.name !== 'skip') {
-					t.curIdx = i;
-					break;
-				}
-			}
-			// splice in the next image at this page
-			t.rep.splice('items', idx, 1, JSON.parse(JSON.stringify(item)));
-			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
-		}
-	};
-
-	/**
 	 * Add superscript to the label for 500px photos
 	 * @param {Integer} idx index into {@link t.items}
 	 */
@@ -573,6 +498,113 @@
 	};
 
 	/**
+	 * Determine if a photo failed to load (usually 404 error)
+	 * @param {Integer} idx index into {@link t.items}
+	 * @return {Boolean} true if image load failed
+	 */
+	t.isError = function(idx) {
+		var e = t.getEls(idx);
+		return !e.image || e.image.error;
+	};
+
+	/**
+	 * Determine if a photo has finished loading
+	 * @param {Integer} idx index into {@link t.items}
+	 * @return {Boolean} true if image is loaded
+	 */
+	t.isLoaded = function(idx) {
+		var e = t.getEls(idx);
+		return e.image && e.image.loaded;
+	};
+
+	/**
+	 * Try to find a photo that has finished loading
+	 * @param {Integer} idx index into {@link t.items}
+	 * @return {Integer} index into t.items of a loaded photo, -1 if none are loaded
+	 */
+	t.findLoadedPhoto = function(idx) {
+		if (t.isLoaded(idx)) {
+			return idx;
+		}
+		for (var i = idx + 1; i < t.items.length; i++) {
+			if ((i !== t.lastSelected) &&
+				(i !== t.p.selected) &&
+				t.isLoaded(i)) {
+				return i;
+			}
+		}
+		for (i = 0; i < idx; i++) {
+			if ((i !== t.lastSelected) &&
+				(i !== t.p.selected) &&
+				t.isLoaded(i)) {
+				return i;
+			}
+		}
+		return -1;
+	};
+
+	/**
+	 * Add the next photo from the master array
+	 * @param {Integer} idx index into {@link t.items}
+	 * @param {Boolean} error true if the photo at idx is bad (didn't load)
+	 */
+	t.replacePhoto = function(idx, error) {
+		var item;
+
+		if (error) {
+			// bad url, mark it
+			var e = t.getEls(idx);
+			var index = t.itemsAll.map(function(ev) {
+				return ev.name;
+			}).indexOf(e.item.name);
+			if (index !== -1) {
+				t.itemsAll[index].name = 'skip';
+			}
+		}
+
+		if (t.started && (t.itemsAll.length > t.items.length)) {
+			for (var i = t.curIdx; i < t.itemsAll.length; i++) {
+				// find a url that is ok, AFAWK
+				item = t.itemsAll[i];
+				if (item.name !== 'skip') {
+					t.curIdx = i;
+					break;
+				}
+			}
+			// add the next image from the master list to this page
+			t.rep.set('items.' + idx, JSON.parse(JSON.stringify(item)));
+			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
+		}
+	};
+
+	/**
+	 * Replace the active photos with new photos from the master array
+	 */
+	t.replaceAllPhotos = function() {
+		if (t.itemsAll.length > t.items.length) {
+			var pos = 0;
+			var item;
+			var newIdx = t.curIdx;
+			for (var i = t.curIdx; i < t.itemsAll.length; i++) {
+				newIdx = i;
+				item = t.itemsAll[i];
+				if (item.name !== 'skip') {
+					if ((pos !== t.lastSelected) &&
+						(pos !== t.p.selected)) {
+						// don't replace the last two
+						t.rep.set('items.' + pos, JSON.parse(JSON.stringify(item)));
+					}
+					pos++;
+					if (pos === t.items.length) {
+						break;
+					}
+				}
+			}
+			t.curIdx = (newIdx === t.itemsAll.length - 1) ? 0 : newIdx + 1;
+		}
+	};
+
+	/**
 	 * Get the next photo to display
 	 * @param {Integer} idx index into {@link t.items}
 	 * @return {Integer} next index into {@link t.items} to display, -1 if none are ready
@@ -580,8 +612,17 @@
 	t.getNextPhoto = function(idx) {
 		var ret = t.findLoadedPhoto(idx);
 		if (ret === -1) {
-			// no photos ready.. wait a second and try again
-			t.waitTime = 1000;
+			if (t.waitForLoad) {
+				// no photos ready.. wait a little and try again the first time
+				t.waitTime = 2000;
+				t.waitForLoad = false;
+			} else {
+				// tried waiting for load, now replace the current photos
+				t.waitTime = 200;
+				t.replaceAllPhotos();
+				idx = (idx === t.items.length - 1) ? 0 : idx + 1;
+				ret = t.findLoadedPhoto(idx);
+			}
 		} else if (t.waitTime !== t.transitionTime) {
 			// photo found, set the waitTime back to transition time in case it was changed
 			t.waitTime = t.transitionTime;
