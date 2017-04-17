@@ -37,6 +37,7 @@
 					<!-- Drawer Content -->
 					<paper-menu class="list" id="mainMenu" attr-for-selected="id" selected="[[route]]">
 						<template is="dom-repeat" items="[[pages]]">
+							<hr hidden$="[[!item.divider]]"/>
 							<paper-item id="[[item.route]]" class="center horizontal layout" on-click="onDataRouteClick">
 								<iron-icon icon="[[item.icon]]"></iron-icon>
 								<span>[[item.label]]</span>

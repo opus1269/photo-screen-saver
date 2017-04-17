@@ -7,6 +7,15 @@
 	// path to the extension
 	var EXT_URI = 'https://chrome.google.com/webstore/detail/photo-screen-saver/kohpcmlfdjfdggcjmjhhbcbankgmppgc/';
 
+	/**
+	 * Path to my pushy clipboard extension
+	 * @type {string}
+	 * @default
+	 */
+	var PUSHY_URI =
+		'https://chrome.google.com/webstore/detail/pushy-clipboard/' +
+		'jemdfhaheennfkehopbpkephjlednffd';
+
 	// auto-binding template
 	var t = document.querySelector('#t');
 
@@ -35,7 +44,6 @@
 	 * @param {Event} event
 	 */
 	t.onDataRouteClick = function(event) {
-
 		// Close drawer after menu item is selected if drawerPanel is narrow
 		t.closeDrawer();
 
@@ -121,13 +129,14 @@
 
 	// list of pages
 	t.pages = [
-		{label: 'Settings', route: 'page-settings', icon: 'settings', obj: null, ready: true},
-		{label: 'Google Photos Albums', route: 'page-google-photos', icon: 'cloud', obj: t.googlePhotos, ready: false},
-		{label: 'Preview', route: 'page-preview', icon: 'pageview', obj: t.preview, ready: true},
-		{label: 'Frequently Asked Questions (FAQ)', route: 'page-faq', icon: 'help', obj: t.faq, ready: false},
-		{label: 'Information For Nerds', route: 'page-info', icon: 'info', obj: t.info, ready: false},
-		{label: 'Request Support', route: 'page-support', icon: 'help', obj: EXT_URI + 'support', ready: true},
-		{label: 'Rate Extension', route: 'page-rate', icon: 'grade', obj: EXT_URI + 'reviews', ready: true}
+		{label: 'Settings', route: 'page-settings', icon: 'settings', obj: null, ready: true, divider: false},
+		{label: 'Google Photos Albums', route: 'page-google-photos', icon: 'cloud', obj: t.googlePhotos, ready: false, divider: false},
+		{label: 'Preview', route: 'page-preview', icon: 'pageview', obj: t.preview, ready: true, divider: false},
+		{label: 'Frequently Asked Questions (FAQ)', route: 'page-faq', icon: 'help', obj: t.faq, ready: false, divider: false},
+		{label: 'Information For Nerds', route: 'page-info', icon: 'info', obj: t.info, ready: false, divider: false},
+		{label: 'Request Support', route: 'page-support', icon: 'help', obj: EXT_URI + 'support', ready: true, divider: true},
+		{label: 'Rate Extension', route: 'page-rate', icon: 'grade', obj: EXT_URI + 'reviews', ready: true, divider: false},
+		{label: 'Try Pushy Clipboard', route: 'page-pushy', icon: 'extension', obj: PUSHY_URI, ready: true, divider: true}
 	];
 
 	/**
