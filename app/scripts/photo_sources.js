@@ -1,23 +1,53 @@
 /*
-@@license
-*/
-/* exported photoSources */
-var photoSources = (function() {
+ *  Copyright (c) 2015-2017, Michael A. Updike All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  Redistributions of source code must retain the above copyright notice,
+ *  this list of conditions and the following disclaimer.
+ *
+ *  Redistributions in binary form must reproduce the above copyright notice,
+ *  this list of conditions and the following disclaimer in the documentation
+ *  and/or other materials provided with the distribution.
+ *
+ *  Neither the name of the copyright holder nor the names of its contributors
+ *  may be used to endorse or promote products derived from this software
+ *  without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+(function() {
 	'use strict';
 
 	/**
 	 * A potential source of photos for the screen saver
-	 * @param {String} useName The key for the boolean value that indicates if the source is selected
+	 * @param {String} useName The key for the boolean value that indicates
+	 * if the source is selected
 	 * @param {String} photosName The key for the collection of photos
 	 * @param {String} type A descriptor of the photo source
 	 * @param {Boolean} isDaily Should the source be updated daily
 	 * @param {Boolean} isArray Is the source an Array of photo Arrays
-	 * @param {String} loadObj the function wrapper for a photo source as a string
-	 * @param {String} loadFn function to call to retrieve the photo collection as a string
+	 * @param {String} loadObj the function wrapper for a photo source
+	 * as a string
+	 * @param {String} loadFn function to call to retrieve the photo collection
+	 * as a string
 	 * @param {Array} loadArgs Arguments to the loadFn
 	 * @constructor
+	 * @alias PhotoSource
 	 */
-	var PhotoSource = function(useName, photosName, type, isDaily, isArray, loadObj, loadFn, loadArgs) {
+	const PhotoSource = function(useName, photosName, type, isDaily, isArray,
+								loadObj, loadFn, loadArgs) {
 		this.useName = useName;
 		this.photosName = photosName;
 		this.type = type;
@@ -30,10 +60,10 @@ var photoSources = (function() {
 
 	/**
 	 * Determine if this source has been selected for display
-	 * @return {Boolean} true is selected
+	 * @return {Boolean} true if selected
 	 */
 	PhotoSource.prototype.use = function() {
-		return myUtils.getBool(this.useName);
+		return app.Utils.getBool(this.useName);
 	};
 
 	/**
@@ -41,17 +71,17 @@ var photoSources = (function() {
 	 * This normally requires a https call
 	 * and may fail for various reasons
 	 * Save to localStorage if there is enough room.
-	 * @param {function} callback (error) non-null on error
+	 * @param {function} callback (error)
 	 */
 	PhotoSource.prototype.process = function(callback) {
 		// callback(error)
 		callback = callback || function() {};
 
 		if (this.use()) {
-			var self = this;
-			var err = null;
+			const self = this;
+			let err = null;
 			// convert string to function
-			var fn = window[this.loadObj][this.loadFn];
+			const fn = window.app[this.loadObj][this.loadFn];
 			if (this.loadArgs.length === 1) {
 				fn(this.loadArgs[0], function(error, photos) {
 					err = self._savePhotos(error, photos);
@@ -79,26 +109,31 @@ var photoSources = (function() {
 	 * @private
 	 */
 	PhotoSource.prototype._savePhotos = function(error, photos) {
-		var ret = null;
-		var keyBool = (this.useName === 'useGoogle') ? null : this.useName;
+		let ret = null;
+		const keyBool = (this.useName === 'useGoogle') ? null : this.useName;
 		if (error) {
 			ret = error;
 		} else if (!photos || !photos.length) {
 			ret = 'No photos retrieved.';
-		} else if (!myUtils.localStorageSafeSet(this.photosName, JSON.stringify(photos), keyBool)) {
-			ret = 'Exceeded storage capacity.';
+		} else {
+			const value = JSON.stringify(photos);
+			const set = app.Utils.safeSet(this.photosName, value, keyBool);
+			if (!set) {
+				ret = 'Exceeded storage capacity.';
+			}
 		}
 
 		return ret;
 	};
 
 	/**
-	 * Add the type specifier (source of the photo) for each photo object in the array
+	 * Add the type specifier (source of the photo) for each
+	 * photo object in the array
 	 * @param {Array} arr an array of photo objects
 	 * @private
 	 */
 	PhotoSource.prototype._addType = function(arr) {
-		for (var i = 0; i < arr.length; i++) {
+		for (let i = 0; i < arr.length; i++) {
 			arr[i].type = this.type;
 		}
 	};
@@ -108,18 +143,18 @@ var photoSources = (function() {
 	 * @return {Array} The Array of photos
 	 */
 	PhotoSource.prototype.getPhotos = function() {
-		var ret = [];
+		let ret = [];
 		if (this.use()) {
 			if (this.isArray) {
-				var items = myUtils.getJSON(this.photosName);
-				for (var i = 0; i < items.length; i++) {
+				const items = app.Utils.getJSON(this.photosName);
+				for (let i = 0; i < items.length; i++) {
 					ret = ret.concat(items[i].photos);
 					if (ret) {
 						this._addType(ret);
 					}
 				}
 			} else {
-				ret = myUtils.getJSON(this.photosName);
+				ret = app.Utils.getJSON(this.photosName);
 				if (ret) {
 					this._addType(ret);
 				}
@@ -128,118 +163,118 @@ var photoSources = (function() {
 		return ret;
 	};
 
-	/** 
+	/**
 	 * Array of PhotoSources
-	 * @type {*[]}
+	 * @type {Array}
 	 */
-	var SOURCES = [
+	PhotoSource.SOURCES = [
 		new PhotoSource('useGoogle', 'albumSelections', 'Google User',
-			true, true, 'gPhotos', 'loadImages', []),
+			true, true, 'GooglePhotos', 'loadImages', []),
 		new PhotoSource('useChromecast', 'ccImages', 'Google',
-			false, false, 'chromeCast', 'loadImages', []),
+			false, false, 'ChromeCast', 'loadImages', []),
 		new PhotoSource('useEditors500px', 'editors500pxImages', '500',
-			true, false, 'use500px', 'loadImages', ['editors']),
+			true, false, 'Use500px', 'loadImages', ['editors']),
 		new PhotoSource('usePopular500px', 'popular500pxImages', '500',
-			true, false, 'use500px', 'loadImages', ['popular']),
+			true, false, 'Use500px', 'loadImages', ['popular']),
 		new PhotoSource('useYesterday500px', 'yesterday500pxImages', '500',
-			true, false, 'use500px', 'loadImages', ['fresh_yesterday']),
+			true, false, 'Use500px', 'loadImages', ['fresh_yesterday']),
 		new PhotoSource('useSpaceReddit', 'spaceRedditImages', 'reddit',
-			true, false, 'reddit', 'loadImages', ['r/spaceporn/']),
+			true, false, 'Reddit', 'loadImages', ['r/spaceporn/']),
 		new PhotoSource('useEarthReddit', 'earthRedditImages', 'reddit',
-			true, false, 'reddit', 'loadImages', ['r/EarthPorn/']),
+			true, false, 'Reddit', 'loadImages', ['r/EarthPorn/']),
 		new PhotoSource('useAnimalReddit', 'animalRedditImages', 'reddit',
-			true, false, 'reddit', 'loadImages', ['r/animalporn/']),
-		new PhotoSource('useInterestingFlickr', 'flickrInterestingImages', 'flickr',
-			true, false, 'flickr', 'loadImages', []),
+			true, false, 'Reddit', 'loadImages', ['r/animalporn/']),
+		new PhotoSource('useInterestingFlickr', 'flickrInterestingImages',
+			'flickr', true, false, 'Flickr', 'loadImages', []),
 		new PhotoSource('useAuthors', 'authorImages', 'Google',
-			false, false, 'gPhotos', 'loadAuthorImages', [])
+			false, false, 'GooglePhotos', 'loadAuthorImages', []),
 	];
 
-	return {
+	/**
+	 * Get all the keys of useage boolean variables
+	 * @return {Array} Array of keys of useage boolean variables
+	 */
+	PhotoSource.getUseNames = function() {
+		let ret = [];
+		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
+			ret = ret.concat(PhotoSource.SOURCES[i].useName);
+		}
+		return ret;
+	};
 
-		/**
-		 * Get all the keys of useage boolean variables
-		 * @return {Array} Array of keys of useage boolean variables
-		 */
-		getUseNames: function() {
-			var ret = [];
-			for (var i = 0; i < SOURCES.length; i++) {
-				ret = ret.concat(SOURCES[i].useName);
+	/**
+	 * Get all the photos from all selected sources. These will be
+	 * used by the screen saver.
+	 * @return {Array} Array of photos to display in screen saver
+	 */
+	PhotoSource.getSelectedPhotos = function() {
+		let ret = [];
+		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
+			ret = ret.concat(PhotoSource.SOURCES[i].getPhotos());
+		}
+		return ret;
+	};
+
+	/**
+	 * Determine if a given string is a photo source
+	 * @param {String} useName String to check
+	 * @return {boolean} true if photo source
+	 */
+	PhotoSource.contains = function(useName) {
+		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
+			if (PhotoSource.SOURCES[i].useName === useName) {
+				return true;
 			}
-			return ret;
-		},
+		}
+		return false;
+	};
 
-		/**
-		 * Get all the photos from all selected sources. These will be
-		 * used by the screen saver.
-		 * @return {Array} Array of photos to display in screen saver
-		 */
-		getSelectedPhotos: function() {
-			var ret = [];
-			for (var i = 0; i < SOURCES.length; i++) {
-				ret = ret.concat(SOURCES[i].getPhotos());
-			}
-			return ret;
-		},
+	/**
+	 * Process the given photo source and save to localStorage.
+	 * This normally requires a https call
+	 * and may fail for various reasons
+	 * @param {String} useName The photo source to retrieve
+	 * @param {function} callback (error) non-null on error
+	 *
+	 */
+	PhotoSource.process = function(useName, callback) {
+		// callback(error)
+		callback = callback || function() {};
 
-		/**
-		 * Determine if a given string is a photo source
-		 * @param {String} useName String to check
-		 * @return {boolean} true if photo source
-		 */
-		contains: function(useName) {
-			for (var i = 0; i < SOURCES.length; i++) {
-				if (SOURCES[i].useName === useName) {
-					return true;
-				}
-			}
-			return false;
-		},
-
-		/**
-		 * Process the given photo source and save to localStorage.
-		 * This normally requires a https call
-		 * and may fail for various reasons
-		 * @param {String} useName The photo source to retrieve
-		 * @param {function} callback (error) non-null on error
-		 *
-		 */
-		process: function(useName, callback) {
-			// callback(error)
-			callback = callback || function() {};
-
-			for (var i = 0; i < SOURCES.length; i++) {
-				if (SOURCES[i].useName === useName) {
-					SOURCES[i].process(function(error) {
-						callback(error);
-					});
-				}
-			}
-		},
-
-		/**
-		 * Process all the selected photo sources and save to localStorage.
-		 * This normally requires a https call
-		 * and may fail for various reasons
-		 */
-		processAll: function() {
-			for (var i = 0; i < SOURCES.length; i++) {
-				SOURCES[i].process();
-			}
-		},
-
-		/**
-		 * Process all the selected photo sources that are to be updated every day
-		 * and save to localStorage.
-		 * This normally requires a https call
-		 * and may fail for various reasons
-		 */
-		processDaily: function() {
-			for (var i = 0; i < SOURCES.length; i++) {
-				if (SOURCES[i].isDaily) {
-					SOURCES[i].process();
-				}
+		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
+			if (PhotoSource.SOURCES[i].useName === useName) {
+				PhotoSource.SOURCES[i].process(function(error) {
+					callback(error);
+				});
 			}
 		}
 	};
-})();
+
+	/**
+	 * Process all the selected photo sources and save to localStorage.
+	 * This normally requires a https call
+	 * and may fail for various reasons
+	 */
+	PhotoSource.processAll = function() {
+		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
+			PhotoSource.SOURCES[i].process();
+		}
+	};
+
+	/**
+	 * Process all the selected photo sources that are to be
+	 * updated every day and save to localStorage.
+	 * This normally requires a https call
+	 * and may fail for various reasons
+	 */
+	PhotoSource.processDaily = function() {
+		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
+			if (PhotoSource.SOURCES[i].isDaily) {
+				PhotoSource.SOURCES[i].process();
+			}
+		}
+	};
+
+	window.app = window.app || {};
+	app.PhotoSource = PhotoSource;
+})(window);

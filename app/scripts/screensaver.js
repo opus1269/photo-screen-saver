@@ -4,21 +4,33 @@
 (function() {
 	'use strict';
 
-	// aspect ratio of screen
-	var SCREEN_ASPECT = screen.width / screen.height;
+	/**
+	 * Display a screen saver
+	 * @namespace ScreenSaver
+	 */
+
+	/**
+	 * aspect ratio of screen
+	 * @type {int}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf ScreenSaver
+	 */
+	const SCREEN_ASPECT = screen.width / screen.height;
 
 	// max number of animated pages
-	var MAX_PAGES = 20;
+	const MAX_PAGES = 20;
 
 	// repeating alarm for updating time label
-	var CLOCK_ALARM = 'updateTimeLabel';
+	const CLOCK_ALARM = 'updateTimeLabel';
 
 	// selected background image
-	var background = myUtils.getJSON('background');
+	const background = app.Utils.getJSON('background');
 	document.body.style.background = background.substring(11);
 
 	// main auto-bind template
-	var t = document.querySelector('#t');
+	const t = document.querySelector('#t');
 
 	// repeat template
 	t.rep = null;
@@ -30,8 +42,8 @@
 	t.itemsAll = [];
 	t.curIdx = 0;
 
-	// array of photos max(MAX_PAGES) currently loaded into the neon-animated-pages
-	// always changing subset of itemsAll
+	// array of photos max(MAX_PAGES) currently loaded into the
+	// neon-animated-pages always changing subset of itemsAll
 	t.items = [];
 
 	// the last selected page
@@ -80,7 +92,7 @@
 	 * Process Chrome window Zoom factor
 	 */
 	t.processZoom = function() {
-		if (myUtils.getChromeVersion() >= 42) {
+		if (app.Utils.getChromeVersion() >= 42) {
 			// override zoom factor to 1.0 - chrome 42 and later
 			chrome.tabs.getZoom(function(zoomFactor) {
 				if ((zoomFactor <= 0.99) || (zoomFactor >= 1.01)) {
@@ -94,18 +106,18 @@
 	 * Process settings related to between photo transition
 	 */
 	t.processPhotoTransitions = function() {
-		t.transitionType = myUtils.getInt('photoTransition');
+		t.transitionType = app.Utils.getInt('photoTransition');
 		if (t.transitionType === 8) {
 			// pick random transition
-			t.transitionType = myUtils.getRandomInt(0, 7);
+			t.transitionType = app.Utils.getRandomInt(0, 7);
 		}
 
-		var trans = myUtils.getJSON('transitionTime');
+		const trans = app.Utils.getJSON('transitionTime');
 		t.transitionTime = trans.base * 1000;
 		t.waitTime = t.transitionTime;
 		t.waitForLoad = true;
 
-		var showTime = myUtils.getInt('showTime');
+		const showTime = app.Utils.getInt('showTime');
 		if ((showTime !== 0) && (trans.base > 60)) {
 			// add repeating alarm to update time label
 			// if transition time is more than 1 minute
@@ -117,7 +129,7 @@
 				if (!alarm) {
 					chrome.alarms.create(CLOCK_ALARM, {
 						when: Date.now(),
-						periodInMinutes: 1
+						periodInMinutes: 1,
 					});
 				}
 			});
@@ -128,10 +140,10 @@
 	 * Process settings related to photo appearance
 	 */
 	t.processPhotoSizing = function() {
-		t.photoSizing = myUtils.getInt('photoSizing');
+		t.photoSizing = app.Utils.getInt('photoSizing');
 		if (t.photoSizing === 4) {
 			// pick random sizing
-			t.photoSizing = myUtils.getRandomInt(0, 3);
+			t.photoSizing = app.Utils.getRandomInt(0, 3);
 		}
 		switch (t.photoSizing) {
 			case 0:
@@ -155,8 +167,8 @@
 	 * @return {Object} Object containing the DOM elements of a slide
 	 */
 	t.getEls = function(idx) {
-		var el = t.p.querySelector('#item' + idx);
-		var ret = {};
+		const el = t.p.querySelector('#item' + idx);
+		const ret = {};
 		ret.item = t.items[idx];
 		ret.image = el.querySelector('.image');
 		ret.author = el.querySelector('.author');
@@ -172,12 +184,12 @@
 		if (t.noPhotos) {
 			return;
 		}
-		var e = t.getEls(t.p.selected);
-		var item = e.item;
-		var path = item.path;
-		var regex;
-		var id;
-		var url;
+		const e = t.getEls(t.p.selected);
+		const item = e.item;
+		const path = item.path;
+		let regex;
+		let id;
+		let url;
 
 		switch (item.type) {
 			case '500':
@@ -214,10 +226,10 @@
 	 * @return {String} label describing the photo source and photographer name
 	 */
 	t.getPhotoLabel = function(author, type, force) {
-		var ret = '';
-		var idx = type.search('User');
+		let ret = '';
+		const idx = type.search('User');
 
-		if (!force && !myUtils.getBool('showPhotog') && (idx !== -1)) {
+		if (!force && !app.Utils.getBool('showPhotog') && (idx !== -1)) {
 			// don't show label for user's own photos, if requested
 			return ret;
 		}
@@ -241,11 +253,11 @@
 	 * @param {Integer} idx index into {@link t.items}
 	 */
 	t.setTime = function(idx) {
-		var format = myUtils.getInt('showTime');
-		var e = t.getEls(idx);
-		var model = t.rep.modelForElement(e.time);
-		var date = new Date();
-		var timeStr;
+		const format = app.Utils.getInt('showTime');
+		const e = t.getEls(idx);
+		const model = t.rep.modelForElement(e.time);
+		const date = new Date();
+		let timeStr;
 
 		if (format === 0) {
 			// don't show time
@@ -269,13 +281,16 @@
 	/**
 	 * Determine if a photo would look bad zoomed or stretched on the screen
 	 * @param {Number} aspect aspect ratio of photo
-	 * @return {boolean} true if a photo aspect ratio differs substantially from the screens'
+	 * @return {boolean} true if a photo aspect ratio differs substantially
+	 * from the screens'
 	 */
 	t.isBadAspect = function(aspect) {
 		// arbitrary
-		var CUT_OFF = 0.5;
+		const CUT_OFF = 0.5;
 
-		return (aspect && ((aspect < SCREEN_ASPECT - CUT_OFF) || (aspect > SCREEN_ASPECT + CUT_OFF)));
+		return (aspect &&
+		((aspect < SCREEN_ASPECT - CUT_OFF) ||
+		(aspect > SCREEN_ASPECT + CUT_OFF)));
 	};
 
 	/**
@@ -284,8 +299,8 @@
 	 * @return {Boolean} true if the photo should not be displayed
 	 */
 	t.ignorePhoto = function(item) {
-		var ret = false;
-		var skip = myUtils.getBool('skip');
+		let ret = false;
+		const skip = app.Utils.getBool('skip');
 
 		if ((!item || !item.asp || isNaN(item.asp)) ||
 			(skip && ((t.photoSizing === 1) || (t.photoSizing === 3)) &&
@@ -302,22 +317,22 @@
 	 * and populate the neon-animated-pages
 	 */
 	t.loadImages = function() {
-		var count = 0;
-		var author;
-		var photoLabel;
-		var arr;
+		let count = 0;
+		let author;
+		let photoLabel;
+		let arr;
 
 		t.itemsAll = [];
 		this.splice('items', 0, t.items.length);
 
-		arr = photoSources.getSelectedPhotos();
+		arr = app.PhotoSource.getSelectedPhotos();
 
-		if (myUtils.getBool('shuffle')) {
+		if (app.Utils.getBool('shuffle')) {
 			// randomize the order
-			myUtils.shuffleArray(arr);
+			app.Utils.shuffleArray(arr);
 		}
 
-		for (var i = 0; i < arr.length; i++) {
+		for (let i = 0; i < arr.length; i++) {
 
 			if (!t.ignorePhoto(arr[i])) {
 
@@ -335,12 +350,13 @@
 					aspectRatio: arr[i].asp,
 					width: screen.width,
 					height: screen.height,
-					ex: arr[i].ex
+					ex: arr[i].ex,
 				});
 
 				if (count < MAX_PAGES) {
 					// add a new animatable page - shallow copy
-					t.push('items', JSON.parse(JSON.stringify(t.itemsAll[count])));
+					t.push('items',
+						JSON.parse(JSON.stringify(t.itemsAll[count])));
 					t.curIdx++;
 				}
 				count++;
@@ -360,10 +376,10 @@
 	 * @param {Integer} idx index into {@link t.items}
 	 */
 	t.letterboxPhoto = function(idx) {
-		var e = t.getEls(idx);
-		var aspect = e.item.aspectRatio;
-		var right;
-		var bottom;
+		const e = t.getEls(idx);
+		const aspect = e.item.aspectRatio;
+		let right;
+		let bottom;
 
 		if (aspect < SCREEN_ASPECT) {
 			right = (100 - aspect / SCREEN_ASPECT * 100) / 2;
@@ -385,8 +401,8 @@
 	 * @param {Integer} idx index into {@link t.items}
 	 */
 	t.stretchPhoto = function(idx) {
-		var e = t.getEls(idx);
-		var img = e.image.$.img;
+		const e = t.getEls(idx);
+		const img = e.image.$.img;
 		img.style.width = '100%';
 		img.style.height = '100%';
 		img.style.objectFit = 'fill';
@@ -397,26 +413,26 @@
 	 * @param {Integer} idx index into {@link t.items}
 	 */
 	t.framePhoto = function(idx) {
-		var padding;
-		var border;
-		var borderBot;
-		var e = t.getEls(idx);
-		var img = e.image.$.img;
-		var width;
-		var height;
-		var frWidth;
-		var frHeight;
-		var aspect = e.item.aspectRatio;
+		let padding;
+		let border;
+		let borderBot;
+		const e = t.getEls(idx);
+		const img = e.image.$.img;
+		let width;
+		let height;
+		let frWidth;
+		let frHeight;
+		const aspect = e.item.aspectRatio;
 
 		// scale to screen size
 		border = screen.height * 0.005;
 		borderBot = screen.height * 0.05;
 		padding = screen.height * 0.025;
 
-		if (!myUtils.getBool('showPhotog')) {
+		if (!app.Utils.getBool('showPhotog')) {
 			// force use of photo label for this view
-			var label = t.getPhotoLabel(e.item.author, e.item.type, true);
-			var model = t.rep.modelForElement(e.image);
+			const label = t.getPhotoLabel(e.item.author, e.item.type, true);
+			const model = t.rep.modelForElement(e.image);
 			model.set('item.label', label);
 		}
 
@@ -440,7 +456,7 @@
 		e.image.style.borderRadius = '1.5vh';
 		e.image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
 
-		if (myUtils.getInt('showTime')) {
+		if (app.Utils.getInt('showTime')) {
 			e.author.style.left = (screen.width - frWidth) / 2 + 10 + 'px';
 			e.author.style.textAlign = 'left';
 		} else {
@@ -469,8 +485,8 @@
 	 * @param {Integer} idx index into {@link t.items}
 	 */
 	t.super500px = function(idx) {
-		var e = t.getEls(idx);
-		var sup = e.author.querySelector('#sup');
+		const e = t.getEls(idx);
+		const sup = e.author.querySelector('#sup');
 
 		e.item.type === '500' ? sup.textContent = 'px' : sup.textContent = '';
 	};
@@ -503,7 +519,7 @@
 	 * @return {Boolean} true if image load failed
 	 */
 	t.isError = function(idx) {
-		var e = t.getEls(idx);
+		const e = t.getEls(idx);
 		return !e.image || e.image.error;
 	};
 
@@ -513,27 +529,28 @@
 	 * @return {Boolean} true if image is loaded
 	 */
 	t.isLoaded = function(idx) {
-		var e = t.getEls(idx);
+		const e = t.getEls(idx);
 		return e.image && e.image.loaded;
 	};
 
 	/**
 	 * Try to find a photo that has finished loading
 	 * @param {Integer} idx index into {@link t.items}
-	 * @return {Integer} index into t.items of a loaded photo, -1 if none are loaded
+	 * @return {Integer} index into t.items of a loaded photo,
+	 * -1 if none are loaded
 	 */
 	t.findLoadedPhoto = function(idx) {
 		if (t.isLoaded(idx)) {
 			return idx;
 		}
-		for (var i = idx + 1; i < t.items.length; i++) {
+		for (let i = idx + 1; i < t.items.length; i++) {
 			if ((i !== t.lastSelected) &&
 				(i !== t.p.selected) &&
 				t.isLoaded(i)) {
 				return i;
 			}
 		}
-		for (i = 0; i < idx; i++) {
+		for (let i = 0; i < idx; i++) {
 			if ((i !== t.lastSelected) &&
 				(i !== t.p.selected) &&
 				t.isLoaded(i)) {
@@ -549,12 +566,12 @@
 	 * @param {Boolean} error true if the photo at idx is bad (didn't load)
 	 */
 	t.replacePhoto = function(idx, error) {
-		var item;
+		let item;
 
 		if (error) {
 			// bad url, mark it
-			var e = t.getEls(idx);
-			var index = t.itemsAll.map(function(ev) {
+			const e = t.getEls(idx);
+			const index = t.itemsAll.map(function(ev) {
 				return ev.name;
 			}).indexOf(e.item.name);
 			if (index !== -1) {
@@ -563,7 +580,7 @@
 		}
 
 		if (t.started && (t.itemsAll.length > t.items.length)) {
-			for (var i = t.curIdx; i < t.itemsAll.length; i++) {
+			for (let i = t.curIdx; i < t.itemsAll.length; i++) {
 				// find a url that is ok, AFAWK
 				item = t.itemsAll[i];
 				if (item.name !== 'skip') {
@@ -582,17 +599,18 @@
 	 */
 	t.replaceAllPhotos = function() {
 		if (t.itemsAll.length > t.items.length) {
-			var pos = 0;
-			var item;
-			var newIdx = t.curIdx;
-			for (var i = t.curIdx; i < t.itemsAll.length; i++) {
+			let pos = 0;
+			let item;
+			let newIdx = t.curIdx;
+			for (let i = t.curIdx; i < t.itemsAll.length; i++) {
 				newIdx = i;
 				item = t.itemsAll[i];
 				if (item.name !== 'skip') {
 					if ((pos !== t.lastSelected) &&
 						(pos !== t.p.selected)) {
 						// don't replace the last two
-						t.rep.set('items.' + pos, JSON.parse(JSON.stringify(item)));
+						t.rep.set('items.' + pos,
+							JSON.parse(JSON.stringify(item)));
 					}
 					pos++;
 					if (pos === t.items.length) {
@@ -607,10 +625,11 @@
 	/**
 	 * Get the next photo to display
 	 * @param {Integer} idx index into {@link t.items}
-	 * @return {Integer} next index into {@link t.items} to display, -1 if none are ready
+	 * @return {Integer} next index into {@link t.items} to display,
+	 * -1 if none are ready
 	 */
 	t.getNextPhoto = function(idx) {
-		var ret = t.findLoadedPhoto(idx);
+		let ret = t.findLoadedPhoto(idx);
 		if (ret === -1) {
 			if (t.waitForLoad) {
 				// no photos ready.. wait a little and try again the first time
@@ -624,7 +643,8 @@
 				ret = t.findLoadedPhoto(idx);
 			}
 		} else if (t.waitTime !== t.transitionTime) {
-			// photo found, set the waitTime back to transition time in case it was changed
+			// photo found, set the waitTime back to transition time in case
+			// it was changed
 			t.waitTime = t.transitionTime;
 		}
 		return ret;
@@ -635,9 +655,9 @@
 	 * Runs forever
 	 */
 	t.runShow = function() {
-		var curPage = (t.p.selected === undefined) ? 0 : t.p.selected;
-		var prevPage = (curPage > 0) ? curPage - 1 : t.items.length - 1;
-		var selected = (curPage === t.items.length - 1) ? 0 : curPage + 1;
+		const curPage = (t.p.selected === undefined) ? 0 : t.p.selected;
+		const prevPage = (curPage > 0) ? curPage - 1 : t.items.length - 1;
+		let selected = (curPage === t.items.length - 1) ? 0 : curPage + 1;
 
 		// replace the previous selected with the next one from master array
 		t.replacePhoto(t.lastSelected, false);
@@ -708,8 +728,8 @@
 	t.closeWindow = function() {
 		// send message to other screen savers to close themselves
 		chrome.runtime.sendMessage({
-			message: 'close'
-		}, function(response) {});
+			message: 'close',
+		}, function() {});
 
 		setTimeout(function() {
 			// delay a little to process events
@@ -740,8 +760,8 @@
 	 */
 	window.addEventListener('mousemove', function(event) {
 		if (t.startMouse.x && t.startMouse.y) {
-			var deltaX = Math.abs(event.clientX - t.startMouse.x);
-			var deltaY = Math.abs(event.clientY - t.startMouse.y);
+			const deltaX = Math.abs(event.clientX - t.startMouse.x);
+			const deltaY = Math.abs(event.clientY - t.startMouse.y);
 			if (Math.max(deltaX, deltaY) > 10) {
 				// close after a minimum amount of mouse movement
 				t.closeWindow();

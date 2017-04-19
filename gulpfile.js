@@ -1,56 +1,85 @@
+/*
+ *  Copyright (c) 2015-2017, Michael A. Updike All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  Redistributions of source code must retain the above copyright notice,
+ *  this list of conditions and the following disclaimer.
+ *
+ *  Redistributions in binary form must reproduce the above copyright notice,
+ *  this list of conditions and the following disclaimer in the documentation
+ *  and/or other materials provided with the distribution.
+ *
+ *  Neither the name of the copyright holder nor the names of its contributors
+ *  may be used to endorse or promote products derived from this software
+ *  without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 'use strict';
 
 // paths and files
-var base = {
+const base = {
 	src: 'app/',
 	dist: 'dist/app/',
 	dev: 'dev/app/',
-	store: 'store/'
+	store: 'store/',
 };
-var path = {
+const path = {
 	scripts: {
 		src: base.src + 'scripts/',
 		dist: base.dist + 'scripts/',
-		dev: base.dev + 'scripts/'
+		dev: base.dev + 'scripts/',
 	},
 	html: {
 		src: base.src + 'html/',
 		dist: base.dist + 'html/',
-		dev: base.dev + 'html/'
+		dev: base.dev + 'html/',
 	},
 	elements: {
 		src: base.src + 'elements/',
 		dist: base.dist + 'elements/',
-		dev: base.dev + 'elements/'
+		dev: base.dev + 'elements/',
 	},
 	styles: {
 		src: base.src + 'styles/',
 		dist: base.dist + 'styles/',
-		dev: base.dev + 'styles/'
+		dev: base.dev + 'styles/',
 	},
 	images: {
 		src: base.src + 'images/',
 		dist: base.dist + 'images/',
-		dev: base.dev + 'images/'
+		dev: base.dev + 'images/',
 	},
 	assets: {
 		src: base.src + 'assets/',
 		dist: base.dist + 'assets/',
-		dev: base.dev + 'assets/'
+		dev: base.dev + 'assets/',
 	},
 	lib: {
 		src: base.src + 'lib/',
 		dist: base.dist + 'lib/',
-		dev: base.dev + 'lib/'
+		dev: base.dev + 'lib/',
 	},
 	bower: {
 		src: base.src + 'bower_components/',
 		dist: base.dist + 'bower_components/',
-		dev: base.dev + 'bower_components/'
-	}
+		dev: base.dev + 'bower_components/',
+	},
 };
 
-var files = {
+const files = {
 	manifest: base.src + 'manifest.json',
 	scripts: path.scripts.src + '*.*',
 	html: path.html.src + '*.*',
@@ -59,23 +88,27 @@ var files = {
 	images: path.images.src + '*.*',
 	assets: path.assets.src + '*.*',
 	lib: path.lib.src + '*.*',
-	bower: [path.bower.src + '**/*', '!' + path.bower.src + '**/test/*', '!' + path.bower.src + '**/demo/*']
+	bower: [
+		path.bower.src + '**/*',
+		'!' + path.bower.src + '**/test/*',
+		'!' + path.bower.src + '**/demo/*',
+	],
 };
 
 // flag for production release build
-var isProd = false;
+let isProd = false;
 // flag to keep key in production build for testing purposes
-var isProdTest = false;
+let isProdTest = false;
 
-var gulp = require('gulp');
-var del = require('del');
-var runSequence = require('run-sequence');
-var gutil = require('gulp-util');
+const gulp = require('gulp');
+const del = require('del');
+const runSequence = require('run-sequence');
+const gutil = require('gulp-util');
 
 // load the rest
-var plugins = require('gulp-load-plugins')({
+const plugins = require('gulp-load-plugins')({
 	pattern: ['gulp-*', 'gulp.*'],
-	replaceString: /\bgulp[\-.]/
+	replaceString: /\bgulp[\-.]/,
 });
 
 /**
@@ -83,8 +116,38 @@ var plugins = require('gulp-load-plugins')({
  * @param {event} event - the event
  */
 function onChange(event) {
-	gutil.log('File', gutil.colors.cyan(event.path.replace(/.*(?=app)/i, '')), 'was', gutil.colors.magenta(event.type));
+	gutil.log('File', gutil.colors.cyan(event.path.replace(/.*(?=app)/i, '')),
+		'was', gutil.colors.magenta(event.type));
 }
+
+// Default - watch for changes in development
+gulp.task('default', ['watch']);
+
+// Development build
+gulp.task('dev', function(callback) {
+	isProd = false;
+
+	runSequence('clean', ['bower', 'manifest', 'html', 'scripts', 'styles',
+		'elements', 'images', 'assets', 'lib'], callback);
+});
+
+// Production build
+gulp.task('prod', function(callback) {
+	isProd = true;
+	isProdTest = false;
+
+	runSequence('clean', ['manifest', 'html', 'scripts', 'styles', 'vulcanize',
+		'images', 'assets', 'lib'], 'zip', callback);
+});
+
+// Production test build
+gulp.task('prodTest', function(callback) {
+	isProd = true;
+	isProdTest = true;
+
+	runSequence('clean', ['manifest', 'html', 'scripts', 'styles', 'vulcanize',
+		'images', 'assets', 'lib'], 'zip', callback);
+});
 
 // clean all output directories
 gulp.task('clean-all', function() {
@@ -134,7 +197,8 @@ gulp.task('scripts', ['lintjs'], function() {
 gulp.task('html', function() {
 	return gulp.src(files.html)
 	.pipe(plugins.changed(isProd ? path.html.dist : path.html.dev))
-	.pipe((isProd && !isProdTest) ? gutil.noop() : plugins.replace('<!--@@build:replace -->', '<!--'))
+	.pipe((isProd && !isProdTest) ? gutil.noop() :
+		plugins.replace('<!--@@build:replace -->', '<!--'))
 	.pipe(isProd ? plugins.minifyHtml() : gutil.noop())
 	.pipe(isProd ? gulp.dest(path.html.dist) : gulp.dest(path.html.dev));
 });
@@ -180,7 +244,8 @@ gulp.task('lib', function() {
 // vulcanize for production
 gulp.task('vulcanize', function() {
 	return gulp.src(path.elements.src + 'elements.html')
-	.pipe(plugins.vulcanize({stripComments: true, inlineCss: true, inlineScripts: true}))
+	.pipe(plugins.vulcanize({stripComments: true, inlineCss: true,
+		inlineScripts: true}))
 	.pipe(plugins.crisper({scriptInHead: false}))
 	.pipe(plugins.if('*.html', plugins.minifyInline({css: false})))
 	.pipe(plugins.if('*.js', plugins.uglify()))
@@ -190,15 +255,18 @@ gulp.task('vulcanize', function() {
 // compress for the Chrome Web Store
 gulp.task('zip', function() {
 	return gulp.src(base.dist + '**')
-	.pipe(!isProdTest ? plugins.zip('store.zip') : plugins.zip('store-test.zip'))
+	.pipe(!isProdTest ?
+		plugins.zip('store.zip') : plugins.zip('store-test.zip'))
 	.pipe(!isProdTest ? gulp.dest(base.store) : gulp.dest('dist'));
 });
 
 // track changes in development
-gulp.task('watch', ['manifest', 'scripts', 'html', 'styles',	'elements', 'images', 'assets', 'lib'], function() {
+gulp.task('watch', ['manifest', 'scripts', 'html', 'styles', 'elements',
+	'images', 'assets', 'lib'], function() {
 
 	gulp.watch(files.manifest, ['manifest']).on('change', onChange);
-	gulp.watch([files.scripts, 'gulpfile.js'], ['scripts']).on('change', onChange);
+	gulp.watch([files.scripts, 'gulpfile.js'], ['scripts'])
+		.on('change', onChange);
 	gulp.watch(files.html, ['html']).on('change', onChange);
 	gulp.watch(files.styles, ['styles']).on('change', onChange);
 	gulp.watch(files.elements, ['elements']).on('change', onChange);
@@ -208,28 +276,3 @@ gulp.task('watch', ['manifest', 'scripts', 'html', 'styles',	'elements', 'images
 
 });
 
-// Default - watch for changes in development
-gulp.task('default', ['watch']);
-
-// Development build
-gulp.task('dev', function(callback) {
-	isProd = false;
-
-	runSequence('clean', ['bower', 'manifest', 'html', 'scripts', 'styles',	'elements', 'images', 'assets', 'lib'], callback);
-});
-
-// Production build
-gulp.task('prod', function(callback) {
-	isProd = true;
-	isProdTest = false;
-
-	runSequence('clean', ['manifest', 'html', 'scripts', 'styles',	'vulcanize', 'images', 'assets', 'lib'], 'zip', callback);
-});
-
-// Production test build
-gulp.task('prodTest', function(callback) {
-	isProd = true;
-	isProdTest = true;
-
-	runSequence('clean', ['manifest', 'html', 'scripts', 'styles',	'vulcanize', 'images', 'assets', 'lib'], 'zip', callback);
-});

@@ -68,53 +68,50 @@
 
 <script>
 'use strict';
-
 Polymer({
 	is: 'setting-time',
 
 	hostAttributes: {
 		role: 'group',
-		tabIndex: -1
+		tabIndex: -1,
 	},
 
 	properties: {
-
 		name: {
 			type: String,
-			value: 'store'
+			value: 'store',
 		},
 
 		value: {
 			type: String,
 			value: '00:00',
-			observer: '_valueChanged'
+			observer: '_valueChanged',
 		},
 
 		timeLabel: {
 			type: String,
-			value: 'unknown'
+			value: 'unknown',
 		},
 
 		mainLabel: {
 			type: String,
-			value: ''
+			value: '',
 		},
 
 		secondaryLabel: {
 			type: String,
-			value: ''
+			value: '',
 		},
 
 		sectionTitle: {
 			type: String,
-			value: ''
+			value: '',
 		},
 
 		noseparator: {
 			type: Boolean,
-			value: false
-		}
-
+			value: false,
+		},
 	},
 
 	// initialize value if it is not in localstorage
@@ -131,18 +128,17 @@ Polymer({
 	},
 
 	_onTimeSelected: function() {
-		var picker = this.$.timePicker;
+		const picker = this.$.timePicker;
 		this.set('value', ('0' + picker.hour).substr(-2) +
 		':' + ('0' + picker.minute).substr(-2));
 	},
 
 	// '00:00' 24 hr time
 	_formatTime: function(timeString) {
-		var hour = parseInt(timeString.substr(0, 2), 10);
-		var period = (hour % 24) < 12 ? 'AM' : 'PM';
+		let hour = parseInt(timeString.substr(0, 2), 10);
+		const period = (hour % 24) < 12 ? 'AM' : 'PM';
 		hour = hour % 12 || 12;
 		return hour + timeString.substr(2, 3) + ' ' + period;
-	}
-
+	},
 });
 </script>

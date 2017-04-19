@@ -6,13 +6,24 @@ module.exports = {
 
 	'env': {
 		'browser': true,
+		'es6': true,
 	},
 
 	'plugins': [
-		'html'
+		'html',
 	],
 
 	'globals': {
+		'app': true,
+		'Background': true,
+		'BGUtils': true,
+		'ChromeCast': true,
+		'Flickr': true,
+		'GooglePhotos': true,
+		'PhotoSource': true,
+		'Reddit': true,
+		'Use500px': true,
+		'Utils': true,
 		'require': true,
 		'chrome': true,
 		'runtime': true,
@@ -23,28 +34,21 @@ module.exports = {
 		'gapi': true,
 		'self': true,
 		'clients': true,
-		'myUtils': true,
-		'bgUtils': true,
-		'chromeCast': true,
 		'GooglePhotosPage': true,
 		'FaqPage': true,
 		'InfoPage': true,
-		'gPhotos': true,
-		'use500px': true,
-		'photoSources': true,
-		'flickr': true,
 		'Snoocore': true,
-		'reddit': true,
 		'ga': true,
 	},
 
 	'rules': {
 		'linebreak-style': ['off', 'windows'],
-		'max-len': ['warn', 180],
-		'no-var': 'off',
+		'max-len': ['warn', 80],
+		'eqeqeq': ['error', 'always'],
+		'no-var': 'warn',
 		'no-console': 'warn',
 		'no-unused-vars': 'warn',
-		'comma-dangle': ['off', 'always'],
+		'comma-dangle': ['warn', 'always-multiline'],
 		'no-trailing-spaces': 'off',
 		'padded-blocks': 'off',
 		'require-jsdoc': 'warn',

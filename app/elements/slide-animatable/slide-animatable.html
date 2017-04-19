@@ -21,13 +21,12 @@
 
 <script>
 'use strict';
-
 Polymer({
 
 	is: 'slide-animatable',
 
 	behaviors: [
-		Polymer.NeonAnimatableBehavior
+		Polymer.NeonAnimatableBehavior,
 	],
 
 	properties: {
@@ -39,28 +38,33 @@ Polymer({
 					'entry': {
 						name: 'fade-in-animation',
 						node: this,
-						timing: {duration: 2000, easing: 'cubic-bezier(0.455, 0.03, 0.515, 0.955)'}
+						timing: {
+							duration: 2000,
+							easing: 'cubic-bezier(0.455, 0.03, 0.515, 0.955)',
+						},
 					},
 					'exit': {
 						name: 'fade-out-animation',
 						node: this,
-						timing: {duration: 2000, easing: 'cubic-bezier(0.455, 0.03, 0.515, 0.955)'}
-					}
+						timing: {
+							duration: 2000,
+							easing: 'cubic-bezier(0.455, 0.03, 0.515, 0.955)',
+						},
+					},
 				};
-			}
+			},
 		},
 
 		aniType: {
 			type: Number,
-			observer: '_aniChanged'
-		}
-
+			observer: '_aniChanged',
+		},
 	},
 
 	_aniChanged: function(newValue) {
-		var entry;
-		var exit;
-		var dur = 2000;
+		let entry;
+		let exit;
+		let dur = 2000;
 
 		switch (newValue) {
 			case 0:
@@ -97,6 +101,8 @@ Polymer({
 				exit = 'slide-left-animation';
 				break;
 			default:
+				entry = 'fade-in-animation';
+				exit = 'fade-out-animation';
 				break;
 		}
 
@@ -104,7 +110,6 @@ Polymer({
 		this.animationConfig.entry.timing.duration = dur;
 		this.animationConfig.exit.name = exit;
 		this.animationConfig.exit.timing.duration = dur;
-	}
-
+	},
 });
 </script>

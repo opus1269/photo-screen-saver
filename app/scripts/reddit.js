@@ -1,33 +1,122 @@
 /*
-@@license
-*/
-/* exported reddit*/
-var reddit = (function() {
+ *  Copyright (c) 2015-2017, Michael A. Updike All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  Redistributions of source code must retain the above copyright notice,
+ *  this list of conditions and the following disclaimer.
+ *
+ *  Redistributions in binary form must reproduce the above copyright notice,
+ *  this list of conditions and the following disclaimer in the documentation
+ *  and/or other materials provided with the distribution.
+ *
+ *  Neither the name of the copyright holder nor the names of its contributors
+ *  may be used to endorse or promote products derived from this software
+ *  without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+window.app = window.app || {};
+app.Reddit = (function() {
 	'use strict';
 
-	var KEY = 'bATkDOUNW_tOlg';
-	var MAX_PHOTOS = 100;
-	var MIN_SIZE = 750;
-	var MAX_SIZE = 3500;
+	/**
+	 * Interface to Reddit API
+	 * @namespace Reddit
+	 */
 
-	// Expose reddit
-	var snoocore = new Snoocore({
+	/**
+	 * Extensions redirect uri
+	 * @type {string}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf Reddit
+	 */
+	const REDIRECT_URI =
+		'https://kohpcmlfdjfdggcjmjhhbcbankgmppgc.chromiumapp.org/reddit';
+
+	/**
+	 * Reddit rest API authorization key
+	 * @type {string}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf Reddit
+	 */
+	const KEY = 'bATkDOUNW_tOlg';
+
+	/**
+	 * Max photos to return
+	 * @type {int}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf Reddit
+	 */
+	const MAX_PHOTOS = 100;
+	/**
+	 * Min size of photo to use
+	 * @type {int}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf Reddit
+	 */
+	const MIN_SIZE = 750;
+
+	/**
+	 * Max size of photo to use
+	 * @type {int}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf Reddit
+	 */
+	const MAX_SIZE = 3500;
+
+	/**
+	 * Expose reddit API
+	 * @type {function}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf Reddit
+	 */
+	const snoocore = new Snoocore({
 		userAgent: 'photo-screen-saver',
 		throttle: 0,
 		oauth: {
 			type: 'implicit',
 			key: KEY,
-			redirectUri: 'https://kohpcmlfdjfdggcjmjhhbcbankgmppgc.chromiumapp.org/reddit',
-			scope: ['read']
-		}
+			redirectUri: REDIRECT_URI,
+			scope: ['read'],
+		},
 	});
 
-	// parse the size from the submission title
-	// this is the old way reddit did it
-	var getSize = function(title) {
-		var ret = {width: -1, height: -1};
-		var res;
-		var regex = /\[(\d*)\D*(\d*)\]/;
+	/**
+	 * Parse the size from the submission title.
+	 * this is the old way reddit did it
+	 * @param {string} title - submission title
+	 * @return {{width: number, height: number}} Photo size
+	 * @private
+	 * @memberOf Reddit
+	 */
+	function _getSize(title) {
+		let ret = {width: -1, height: -1};
+		let res;
+		const regex = /\[(\d*)\D*(\d*)\]/;
 
 		res = title.match(regex);
 		if (res) {
@@ -35,23 +124,26 @@ var reddit = (function() {
 			ret.height = parseInt(res[2], 10);
 		}
 		return ret;
-	};
+	}
 
 	/**
 	 * Build the list of photos for one page of items
 	 * @param {Array} children Array of photos returned from reddit
-	 * @return {Array} Array of images in our format, stripped of NSFW and big and small photos
+	 * @return {Array} Array of images in our format,
+	 * stripped of NSFW and big and small photos
+	 * @private
+	 * @memberOf Reddit
 	 */
-	var processChildren = function(children) {
-		var data;
-		var item;
-		var images = [];
-		var url;
-		var width = 1;
-		var height = 1;
-		var asp;
+	const _processChildren = function(children) {
+		let data;
+		let item;
+		const images = [];
+		let url;
+		let width = 1;
+		let height = 1;
+		let asp;
 
-		for (var j = 0; j < children.length; j++) {
+		for (let j = 0; j < children.length; j++) {
 			data = children[j].data;
 			if (data.over_18) {
 				// skip NSFW
@@ -71,15 +163,16 @@ var reddit = (function() {
 				}
 			} else if (data.title) {
 				// old way of specifying images
-				var size = getSize(data.title);
+				const size = _getSize(data.title);
 				url = data.url;
 				width = size.width;
 				height = size.height;
 			}
 
 			asp = width / height;
-			if (asp && !isNaN(asp) && Math.max(width, height) >= MIN_SIZE && Math.max(width, height) <= MAX_SIZE) {
-				myUtils.addImage(images, url, data.author, asp, data.url);
+			if (asp && !isNaN(asp) && (Math.max(width, height) >= MIN_SIZE) &&
+				(Math.max(width, height) <= MAX_SIZE)) {
+				app.Utils.addImage(images, url, data.author, asp, data.url);
 			}
 		}
 		return images;
@@ -90,25 +183,26 @@ var reddit = (function() {
 		/**
 		 * Retrieve the array of reddit photos
 		 * @param {string} subreddit name of photo subreddit
-		 * @param {function} callback error, photos) Array of photos on success
+		 * @param {function} callback (error, photos) Array of photos on success
+		 * @memberOf Reddit
 		 */
 		loadImages: function(subreddit, callback) {
 			// callback(error, photos)
 			callback = callback || function() {};
 			
-			var photos = [];
+			let photos = [];
 
 			snoocore(subreddit + 'hot').listing({
-				limit: MAX_PHOTOS
+				limit: MAX_PHOTOS,
 			}).then(function(slice) {
-				photos = photos.concat(processChildren(slice.children));
+				photos = photos.concat(_processChildren(slice.children));
 				return slice.next();
 			}).then(function(slice) {
-				photos = photos.concat(processChildren(slice.children));
+				photos = photos.concat(_processChildren(slice.children));
 				callback(null, photos);
 			}).catch(function(reason) {
 				callback(reason);
 			});
-		}
+		},
 	};
 })();

@@ -88,25 +88,23 @@
 
 <script>
 'use strict';
-
 Polymer({
 	is: 'setting-slider',
 
 	hostAttributes: {
 		role: 'group',
-		tabIndex: -1
+		tabIndex: -1,
 	},
 
 	properties: {
-
 		name: {
 			type: String,
-			value: 'store'
+			value: 'store',
 		},
 
 		label: {
 			type: String,
-			value: ''
+			value: '',
 		},
 
 		value: {
@@ -114,31 +112,30 @@ Polymer({
 			notify: true,
 			value: function() {
 				return {'base': 10, 'display': 10, 'unit': 0};
-			}
+			},
 		},
 
 		units: {
 			type: Array,
 			value: function() {
 				return [];
-			}
+			},
 		},
 
 		sectionTitle: {
 			type: String,
-			value: ''
+			value: '',
 		},
 
 		disabled: {
 			type: Boolean,
-			value: false
+			value: false,
 		},
 
 		noseparator: {
 			type: Boolean,
-			value: false
-		}
-
+			value: false,
+		},
 	},
 
 	// initialize value if it is not in localstorage
@@ -146,7 +143,7 @@ Polymer({
 		this.value = {
 			base: 10,
 			display: 10,
-			unit: 0
+			unit: 0,
 		};
 	},
 
@@ -164,7 +161,6 @@ Polymer({
 	_unitChanged: function() {
 		this.$.selector.select(this.units[this.value.unit]);
 		this._setBase();
-	}
-
+	},
 });
 </script>

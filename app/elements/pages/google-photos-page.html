@@ -1,6 +1,32 @@
 <!--
-@@license
--->
+  ~  Copyright (c) 2015-2017, Michael A. Updike All rights reserved.
+  ~
+  ~  Redistribution and use in source and binary forms, with or without
+  ~  modification, are permitted provided that the following conditions are met:
+  ~
+  ~  Redistributions of source code must retain the above copyright notice,
+  ~  this list of conditions and the following disclaimer.
+  ~
+  ~  Redistributions in binary form must reproduce the above copyright notice,
+  ~  this list of conditions and the following disclaimer in the documentation
+  ~  and/or other materials provided with the distribution.
+  ~
+  ~  Neither the name of the copyright holder nor the names of its contributors
+  ~  may be used to endorse or promote products derived from this software
+  ~  without specific prior written permission.
+  ~
+  ~  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  ~  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  ~  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  ~  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  ~  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  ~  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  ~  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  ~  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  ~  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  ~  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+  ~  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 
@@ -197,18 +223,18 @@ GooglePhotosPage = Polymer({
 		albums: {
 			type: Array,
 			notify: true,
-			value: []
+			value: [],
 		},
 
 		selections: {
 			type: Array,
-			value: []
+			value: [],
 		},
 
 		waitForLoad: {
 			type: Boolean,
-			value: false
-		}
+			value: false,
+		},
 	},
 
 	ready: function() {
@@ -218,13 +244,13 @@ GooglePhotosPage = Polymer({
 	// Query Picasa for the list of the users albums
 	loadAlbumList: function() {
 		this.set('waitForLoad', true);
-		gPhotos.loadAlbumList(function(error, albums) {
+		app.GooglePhotos.loadAlbumList(function(error, albums) {
 			if (!error) {
 				this.splice('albums', 0, this.albums.length);
-				for (var i = 0; i < albums.length; i++) {
+				for (let i = 0; i < albums.length; i++) {
 					this.push('albums', JSON.parse(JSON.stringify(albums[i])));
 				}
-				photoSources.process('useGoogle', function(error) {
+				app.PhotoSource.process('useGoogle', function(error) {
 					if (error) {
 						this.set('waitForLoad', false);
 						this.$.dialogTitle.innerHTML =
@@ -253,12 +279,14 @@ GooglePhotosPage = Polymer({
 
 	// select all albums
 	_selectAllTapped: function() {
-		var item;
-		for (var i = 0; i < this.albums.length; i++) {
+		let item;
+		for (let i = 0; i < this.albums.length; i++) {
 			item = this.albums[i];
 			if (!item.checked) {
 				this.selections.push({id: item.id, photos: item.photos});
-				if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections))) {
+				const value = JSON.stringify(this.selections);
+				const set = app.Utils.safeSet('albumSelections', value, null);
+				if (!set) {
 					// exceeded storage limits
 					this.selections.pop();
 					break;
@@ -277,8 +305,8 @@ GooglePhotosPage = Polymer({
 
 	// handle tap on checkbox for an album
 	_albumSelectChange: function(event) {
-		var item = event.model.item;
-		var index = this.selections.map(function(e) {
+		const item = event.model.item;
+		const index = this.selections.map(function(e) {
 			return e.id;
 		}).indexOf(item.id);
 
@@ -290,7 +318,9 @@ GooglePhotosPage = Polymer({
 			this.selections.push({id: item.id, photos: item.photos});
 		}
 
-		if (!myUtils.localStorageSafeSet('albumSelections', JSON.stringify(this.selections), null)) {
+		const value = JSON.stringify(this.selections);
+		const set = app.Utils.safeSet('albumSelections', value, null);
+		if (!set) {
 			// exceeded storage limits
 			this.selections.pop();
 			this.set('albums.' + item.index + '.checked', false);
@@ -299,9 +329,9 @@ GooglePhotosPage = Polymer({
 
 	// set the checked state of the albums
 	_selectAlbums: function() {
-		this.selections = myUtils.getJSON('albumSelections');
-		for (var i = 0; i < this.albums.length; i++) {
-			for (var j = 0; j < this.selections.length; j++) {
+		this.selections = app.Utils.getJSON('albumSelections');
+		for (let i = 0; i < this.albums.length; i++) {
+			for (let j = 0; j < this.selections.length; j++) {
 				if (this.albums[i].id === this.selections[j].id) {
 					this.set('albums.' + i + '.checked', true);
 					break;
@@ -312,12 +342,11 @@ GooglePhotosPage = Polymer({
 
 	// uncheck all albums
 	_uncheckAll: function() {
-		for (var i = 0; i < this.albums.length; i++) {
+		for (let i = 0; i < this.albums.length; i++) {
 			if (this.albums[i].checked) {
 				this.set('albums.' + i + '.checked', false);
 			}
 		}
-	}
-
+	},
 });
 </script>

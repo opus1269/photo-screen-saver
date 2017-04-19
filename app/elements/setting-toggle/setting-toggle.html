@@ -63,53 +63,50 @@
 
 <script>
 'use strict';
-
 Polymer({
 	is: 'setting-toggle',
 
 	hostAttributes: {
 		role: 'group',
-		tabIndex: -1
+		tabIndex: -1,
 	},
 
 	properties: {
-
 		name: {
 			type: String,
-			value: 'store'
+			value: 'store',
 		},
 
 		checked: {
 			type: Boolean,
 			value: false,
-			notify: true
+			notify: true,
 		},
 
 		mainLabel: {
 			type: String,
-			value: ''
+			value: '',
 		},
 
 		secondaryLabel: {
 			type: String,
-			value: ''
+			value: '',
 		},
 
 		sectionTitle: {
 			type: String,
-			value: ''
+			value: '',
 		},
 
 		disabled: {
 			type: Boolean,
-			value: false
+			value: false,
 		},
 
 		noseparator: {
 			type: Boolean,
-			value: false
-		}
-
+			value: false,
+		},
 	},
 
 	/**
@@ -126,7 +123,6 @@ Polymer({
 	 */
 	_init: function() {
 		this.set('checked', 'false');
-	}
-
+	},
 });
 </script>
