@@ -2,6 +2,7 @@
   <dictionary name="mike">
     <words>
       <w>afawk</w>
+      <w>albumid</w>
       <w>bezier</w>
       <w>bfea</w>
       <w>chromebook</w>
@@ -13,6 +14,7 @@
       <w>keydown</w>
       <w>mousemove</w>
       <w>mozilla</w>
+      <w>nojsoncallback</w>
       <w>pageview</w>
       <w>photog</w>
       <w>photostreams</w>
