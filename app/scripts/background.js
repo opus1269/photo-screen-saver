@@ -113,7 +113,7 @@
 	 */
 	function onIdleStateChanged(state) {
 		app.BGUtils.isShowing(function(isShowing) {
-			if (state === 'idle' && app.BGUtils.isActive() && !isShowing) {
+			if (state === 'idle' && app.Alarm.isActive() && !isShowing) {
 				app.BGUtils.displayScreenSaver();
 			} else {
 				if (!app.Utils.isWin()) {
@@ -124,37 +124,6 @@
 				}
 			}
 		});
-	}
-
-	/**
-	 * Event: Fired when an alarm has elapsed.
-	 * @see https://developer.chrome.com/apps/alarms#event-onAlarm
-	 * @param {object} alarm - details on alarm
-	 * @param {string} alarm.name - name of alarm
-	 * @private
-	 * @memberOf Background
-	 */
-	function onAlarm(alarm) {
-		switch (alarm.name) {
-			case 'activeStart':
-				// entering active time range of keep awake
-				app.BGUtils.setActiveState();
-				break;
-			case 'activeStop':
-				// leaving active time range of keep awake
-				app.BGUtils.setInactiveState();
-				break;
-			case 'updatePhotos':
-				// get the latest for the live photo streams
-				app.PhotoSource.processDaily();
-				break;
-			case 'setBadgeText':
-				// set the icons text
-				app.BGUtils.setBadgeText();
-				break;
-			default:
-				break;
-		}
 	}
 
 	/**
@@ -222,9 +191,6 @@
 
 	// listen for changes to the idle state of the computer
 	chrome.idle.onStateChanged.addListener(onIdleStateChanged);
-
-	// listen for alarms
-	chrome.alarms.onAlarm.addListener(onAlarm);
 
 	// listen for request to display preview of screensaver
 	chrome.runtime.onMessage.addListener(onMessage);

@@ -37,91 +37,6 @@ app.BGUtils = (function() {
 	 */
 
 	/**
-	 * minutes in day
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf BGUtils
-	 */
-	const MIN_IN_DAY = 60 * 24;
-
-	/**
-	 * milli-seconds in day
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf BGUtils
-	 */
-	const MSEC_IN_DAY = MIN_IN_DAY * 60 * 1000;
-
-	/**
-	 * Convert string to time
-	 * @param {String} value format: 'hh:mm' 24 hour time
-	 * @return {Integer} time in milliSec from base
-	 * @private
-	 * @memberOf BGUtils
-	 */
-	function _getTime(value) {
-		const date = new Date();
-
-		date.setHours(parseInt(value.substr(0, 2)));
-		date.setMinutes(parseInt(value.substr(3, 2)));
-		date.setSeconds(0);
-		date.setMilliseconds(0);
-		return date.getTime();
-	}
-
-	/**
-	 * Calculate time delta from now on a 24 hr basis
-	 * @param {String} value format: 'hh:mm' 24 hour time
-	 * @return {int} time delta in minutes
-	 * @private
-	 * @memberOf BGUtils
-	 */
-	function _getTimeDelta(value) {
-		const curTime = Date.now();
-		const time = _getTime(value);
-		let delayMin = (time - curTime) / 1000 / 60;
-
-		if (delayMin < 0) {
-			delayMin = MIN_IN_DAY + delayMin;
-		}
-		return delayMin;
-	}
-
-	/**
-	 * Determine if current time is between start and stop, inclusive
-	 * @param {String} start format: 'hh:mm' 24 hour time
-	 * @param {String} stop format: 'hh:mm' 24 hour time
-	 * @return {Boolean} true if in the given range
-	 * @private
-	 * @memberOf BGUtils
-	 */
-	function _isInRange(start, stop) {
-		const curTime = Date.now();
-		const startTime = _getTime(start);
-		const stopTime = _getTime(stop);
-		let ret = false;
-
-		if (start === stop) {
-			return true;
-		}
-
-		if (stopTime > startTime) {
-			if ((curTime >= startTime) && (curTime <= stopTime)) {
-				ret = true;
-			}
-		} else {
-			if ((curTime >= startTime) || (curTime <= stopTime)) {
-				ret = true;
-			}
-		}
-		return ret;
-	}
-
-	/**
 	 * Determine if there is a full screen chrome window running on a display
 	 * @param {object} display a connected display
 	 * @param {function} callback (boolean) - true if there is a full screen
@@ -149,17 +64,6 @@ app.BGUtils = (function() {
 		} else {
 			callback(false);
 		}
-	}
-
-	/**
-	 * Get the idle time in seconds
-	 * @return {Integer} idle time in seconds
-	 * @private
-	 * @memberOf BGUtils
-	 */
-	function _getIdleSeconds() {
-		const idle = app.Utils.getJSON('idleTime');
-		return idle.base * 60;
 	}
 
 	/**
@@ -218,61 +122,6 @@ app.BGUtils = (function() {
 	}
 
 	/**
-	 * Set the icon badge text
-	 * @private
-	 * @memberOf BGUtils
-	 */
-	function _updateBadgeText() {
-		// delay setting a little to make sure range check is good
-		chrome.alarms.create('setBadgeText', {when: Date.now() + 250});
-	}
-
-	/**
-	 * Set the repeating alarms states
-	 * @private
-	 * @memberOf BGUtils
-	 */
-	function _updateRepeatingAlarms() {
-		const keepAwake = app.Utils.getBool('keepAwake');
-		const aStart = app.Utils.getBool('activeStart');
-		const aStop = app.Utils.getBool('activeStop');
-
-		// create keep awake active period scheduling alarms
-		if (keepAwake && aStart !== aStop) {
-			const startDelayMin = _getTimeDelta(aStart);
-			const stopDelayMin = _getTimeDelta(aStop);
-
-			chrome.alarms.create('activeStart', {
-				delayInMinutes: startDelayMin,
-				periodInMinutes: MIN_IN_DAY,
-			});
-			chrome.alarms.create('activeStop', {
-				delayInMinutes: stopDelayMin,
-				periodInMinutes: MIN_IN_DAY,
-			});
-
-			// if we are currently outside of the active range
-			// then set inactive state
-			if (!_isInRange(aStart, aStop)) {
-				app.BGUtils.setInactiveState();
-			}
-		} else {
-			chrome.alarms.clear('activeStart');
-			chrome.alarms.clear('activeStop');
-		}
-
-		// Add daily alarm to update photo sources that request this
-		chrome.alarms.get('updatePhotos', function(alarm) {
-			if (!alarm) {
-				chrome.alarms.create('updatePhotos', {
-					when: Date.now() + MSEC_IN_DAY,
-					periodInMinutes: MIN_IN_DAY,
-				});
-			}
-		});
-	}
-
-	/**
 	 * Set state based on screen saver enabled flag
 	 * Note: this does not effect the keep awake settings so you could
 	 * use the extension as a display keep awake scheduler without
@@ -283,7 +132,7 @@ app.BGUtils = (function() {
 	function _processEnabled() {
 		// update context menu text
 		const label = app.Utils.getBool('enabled') ? 'Disable' : 'Enable';
-		_updateBadgeText();
+		app.Alarm.updateBadgeText();
 		chrome.contextMenus.update('ENABLE_MENU', {title: label}, function() {
 			if (chrome.runtime.lastError) {
 				// noinspection UnnecessaryReturnStatementJS
@@ -301,8 +150,8 @@ app.BGUtils = (function() {
 		app.Utils.getBool('keepAwake') ?
 			chrome.power.requestKeepAwake('display') :
 			chrome.power.releaseKeepAwake();
-		_updateRepeatingAlarms();
-		_updateBadgeText();
+		app.Alarm.updateRepeatingAlarms();
+		app.Alarm.updateBadgeText();
 	}
 
 	/**
@@ -311,15 +160,10 @@ app.BGUtils = (function() {
 	 * @memberOf BGUtils
 	 */
 	function _processIdleTime() {
-		chrome.idle.setDetectionInterval(_getIdleSeconds());
+		chrome.idle.setDetectionInterval(app.BGUtils.getIdleSeconds());
 	}
 
 	return {
-
-		MIN_IN_DAY: MIN_IN_DAY,
-
-		MSEC_IN_DAY: MSEC_IN_DAY,
-
 		/**
 		 * Initialize the localStorage items
 		 * @param {Boolean} restore - if true, restore to defaults
@@ -418,6 +262,16 @@ app.BGUtils = (function() {
 		},
 
 		/**
+		 * Get the idle time in seconds
+		 * @return {Integer} idle time in seconds
+		 * @memberOf BGUtils
+		 */
+		getIdleSeconds: function() {
+			const idle = app.Utils.getJSON('idleTime');
+			return idle.base * 60;
+		},
+
+		/**
 		 * Display the options tab
 		 * @memberOf BGUtils
 		 */
@@ -431,88 +285,6 @@ app.BGUtils = (function() {
 					chrome.tabs.create({url: '../html/options.html'});
 				}
 			});
-		},
-
-		/**
-		 * Set the Badge text on the icon
-		 * @memberOf BGUtils
-		 */
-		setBadgeText: function() {
-			let text = '';
-			if (app.Utils.getBool('enabled')) {
-				text = app.BGUtils.isActive() ? '' : 'SLP';
-			} else {
-				text = app.Utils.getBool('keepAwake') ? 'PWR' : 'OFF';
-			}
-			chrome.browserAction.setBadgeText({text: text});
-		},
-
-		/**
-		 * Determine if the screen saver can be displayed
-		 * @return {Boolean} true if can display
-		 * @memberOf BGUtils
-		 */
-		isActive: function() {
-			const enabled = app.Utils.getBool('enabled');
-			const keepAwake = app.Utils.getBool('keepAwake');
-			const aStart = app.Utils.getJSON('activeStart');
-			const aStop = app.Utils.getJSON('activeStop');
-
-			// do not display if screen saver is not enabled or
-			// keepAwake scheduler is enabled and is in the inactive range
-			return !(!enabled || (keepAwake && !_isInRange(aStart, aStop)));
-		},
-
-		/**
-		 * Determine if the screen saver is currently showing
-		 * @param {function} callback - callback(isShowing)
-		 * @memberOf BGUtils
-		 */
-		isShowing: function(callback) {
-			// callback(isShowing)
-			callback = callback || function() {};
-
-			// send message to the screen saver to see if he is around
-			chrome.runtime.sendMessage({
-				message: 'isShowing',
-			}, null, function(response) {
-				if (response) {
-					// screen saver responded
-					callback(true);
-				} else {
-					callback(false);
-				}
-			});
-		},
-
-		/**
-		 * Set state when the screensaver is in the active time range
-		 * @memberOf BGUtils
-		 */
-		setActiveState: function() {
-			if (app.Utils.getBool('keepAwake')) {
-				chrome.power.requestKeepAwake('display');
-			}
-			const interval = _getIdleSeconds();
-			chrome.idle.queryState(interval, function(state) {
-				// display screensaver if the idle time criteria is met
-				if (state === 'idle') {
-					app.BGUtils.displayScreenSaver(false);
-				}
-			});
-			_updateBadgeText();
-		},
-
-		/**
-		 * Set state when the screensaver is in the inactive time range
-		 * @memberOf BGUtils
-		 */
-		setInactiveState: function() {
-			const suspend = app.Utils.getBool('allowSuspend');
-			suspend ? chrome.power.releaseKeepAwake() :
-				chrome.power.requestKeepAwake('system');
-			app.BGUtils.closeScreenSavers();
-			_updateBadgeText();
 		},
 
 		/**
@@ -567,6 +339,27 @@ app.BGUtils = (function() {
 		},
 
 		/**
+		 * Determine if the screen saver is currently showing
+		 * @param {function} callback - callback(isShowing)
+		 * @memberOf BGUtils
+		 */
+		isShowing: function(callback) {
+			callback = callback || function() {};
+
+			// send message to the screen saver to see if he is around
+			chrome.runtime.sendMessage({
+				message: 'isShowing',
+			}, null, function(response) {
+				if (response) {
+					// screen saver responded
+					callback(true);
+				} else {
+					callback(false);
+				}
+			});
+		},
+
+		/**
 		 * Display the screen saver(s)
 		 * !Important: Always request screensaver through this call
 		 * @param {Boolean} single if true only show on one display
@@ -590,6 +383,5 @@ app.BGUtils = (function() {
 				message: 'close',
 			}, function(response) {});
 		},
-
 	};
 })();
