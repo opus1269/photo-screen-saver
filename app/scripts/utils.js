@@ -128,6 +128,16 @@ app.Utils = (function() {
 		},
 
 		/**
+		 * Get the idle time in seconds
+		 * @return {Integer} idle time in seconds
+		 * @memberOf Utils
+		 */
+		getIdleSeconds: function() {
+			const idle = app.Utils.getJSON('idleTime');
+			return idle.base * 60;
+		},
+
+		/**
 		 * true if we are MS windows
 		 * @return {boolean} true if MS windows
 		 * @memberOf Utils

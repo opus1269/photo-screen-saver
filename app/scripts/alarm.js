@@ -168,11 +168,11 @@ app.Alarm = (function() {
 		if (app.Utils.getBool('keepAwake')) {
 			chrome.power.requestKeepAwake('display');
 		}
-		const interval = app.BGUtils.getIdleSeconds();
+		const interval = app.Utils.getIdleSeconds();
 		chrome.idle.queryState(interval, function(state) {
 			// display screensaver if the idle time criteria is met
 			if (state === 'idle') {
-				app.BGUtils.displayScreenSaver(false);
+				app.SSControl.display(false);
 			}
 		});
 		app.Alarm.updateBadgeText();
@@ -189,7 +189,7 @@ app.Alarm = (function() {
 		} else {
 			chrome.power.requestKeepAwake('system');
 		}
-		app.BGUtils.closeScreenSavers();
+		app.SSControl.close();
 		app.Alarm.updateBadgeText();
 	}
 

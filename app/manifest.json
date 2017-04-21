@@ -48,6 +48,7 @@
 			"/scripts/utils.js",
 			"/scripts/photo_sources.js",
 			"/scripts/alarm.js",
+			"/scripts/ss_controller.js",
 			"/scripts/bg_utils.js",
 			"/scripts/background.js"
 		],

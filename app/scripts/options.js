@@ -174,7 +174,7 @@
 			t.$.mainMenu.select(t.prevRoute);
 		}, 500);
 		chrome.runtime.sendMessage({
-			message: 'show',
+			message: 'showScreensaver',
 		}, function() {});
 	};
 

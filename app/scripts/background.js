@@ -101,32 +101,6 @@
 	}
 
 	/**
-	 * Event: Fired when the system changes to an active, idle or locked state.
-	 * The event fires with "locked" if the screen is locked or the screensaver
-	 * activates, "idle" if the system is unlocked and the user has not
-	 * generated any input for a specified number of seconds, and "active"
-	 * when the user generates input on an idle system.
-	 * @see https://developer.chrome.com/extensions/idle#event-onStateChanged
-	 * @param {String} state - current state of computer
-	 * @private
-	 * @memberOf Background
-	 */
-	function onIdleStateChanged(state) {
-		app.BGUtils.isShowing(function(isShowing) {
-			if (state === 'idle' && app.Alarm.isActive() && !isShowing) {
-				app.BGUtils.displayScreenSaver();
-			} else {
-				if (!app.Utils.isWin()) {
-					// Windows 10 Creator triggers an 'active' state
-					// when the window is created so we have to let
-					// the screen savers handle their closing
-					app.BGUtils.closeScreenSavers();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Event: Fired when a context menu item is clicked.
 	 * @see https://developer.chrome.com/extensions/contextMenus#event-onClicked
 	 * @param {Object} info - info. on the clicked menu
@@ -167,10 +141,8 @@
 	 * @private
 	 * @memberOf Background
 	 */
-	function onMessage(request, sender, response) {
-		if (request.message === 'show') {
-			app.BGUtils.displayScreenSaver(true);
-		} else if (request.message === 'restoreDefaults') {
+	function onChromeMessage(request, sender, response) {
+		if (request.message === 'restoreDefaults') {
 			app.BGUtils.initData(true);
 			app.BGUtils.processState('all');
 		}
@@ -189,11 +161,8 @@
 	// listen for changes to the stored data
 	addEventListener('storage', onStorageChanged, false);
 
-	// listen for changes to the idle state of the computer
-	chrome.idle.onStateChanged.addListener(onIdleStateChanged);
-
-	// listen for request to display preview of screensaver
-	chrome.runtime.onMessage.addListener(onMessage);
+	// listen for chrome messages
+	chrome.runtime.onMessage.addListener(onChromeMessage);
 
 	// listen for clicks on context menus
 	chrome.contextMenus.onClicked.addListener(onMenuClicked);
