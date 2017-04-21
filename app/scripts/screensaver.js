@@ -61,6 +61,7 @@
 	/**
 	 * Event Listener for template bound event to know when bindings
 	 * have resolved and content has been stamped to the page
+	 * @memberOf ScreenSaver
 	 */
 	t.addEventListener('dom-change', function() {
 
@@ -92,6 +93,7 @@
 
 	/**
 	 * Process Chrome window Zoom factor
+	 * @memberOf ScreenSaver
 	 */
 	t.processZoom = function() {
 		if (app.Utils.getChromeVersion() >= 42) {
@@ -106,6 +108,7 @@
 
 	/**
 	 * Process settings related to between photo transition
+	 * @memberOf ScreenSaver
 	 */
 	t.processPhotoTransitions = function() {
 		t.transitionType = app.Utils.getInt('photoTransition');
@@ -140,6 +143,7 @@
 
 	/**
 	 * Process settings related to photo appearance
+	 * @memberOf ScreenSaver
 	 */
 	t.processPhotoSizing = function() {
 		t.photoSizing = app.Utils.getInt('photoSizing');
@@ -166,6 +170,7 @@
 	/**
 	 * Build the Array of photos that will be displayed
 	 * and populate the neon-animated-pages
+	 * @memberOf ScreenSaver
 	 */
 	t.loadImages = function() {
 		let count = 0;
@@ -203,6 +208,7 @@
 	 * @param {Integer} idx index into {@link t.items}
 	 * @return {Integer} index into t.items of a loaded photo,
 	 * -1 if none are loaded
+	 * @memberOf ScreenSaver
 	 */
 	t.findLoadedPhoto = function(idx) {
 		if (app.PhotoView.isLoaded(idx)) {
@@ -229,6 +235,7 @@
 	 * Add the next photo from the master array
 	 * @param {Integer} idx index into {@link t.items}
 	 * @param {Boolean} error true if the photo at idx is bad (didn't load)
+	 * @memberOf ScreenSaver
 	 */
 	t.replacePhoto = function(idx, error) {
 		let item;
@@ -261,6 +268,7 @@
 
 	/**
 	 * Replace the active photos with new photos from the master array
+	 * @memberOf ScreenSaver
 	 */
 	t.replaceAllPhotos = function() {
 		if (t.itemsAll.length > t.items.length) {
@@ -292,6 +300,7 @@
 	 * @param {Integer} idx index into {@link t.items}
 	 * @return {Integer} next index into {@link t.items} to display,
 	 * -1 if none are ready
+	 * @memberOf ScreenSaver
 	 */
 	t.getNextPhoto = function(idx) {
 		let ret = t.findLoadedPhoto(idx);
@@ -318,6 +327,7 @@
 	/**
 	 * Called at fixed time intervals to cycle through the photos
 	 * Runs forever
+	 * @memberOf ScreenSaver
 	 */
 	t.runShow = function() {
 		const curPage = (t.p.selected === undefined) ? 0 : t.p.selected;
@@ -363,6 +373,7 @@
 	 * @param {object} request - details for the message
 	 * @param {object} sender - MessageSender object
 	 * @param {function} response - function to call once after processing
+	 * @memberOf ScreenSaver
 	 */
 	t.onMessage = function(request, sender, response) {
 		if (request.message === 'close') {
@@ -377,6 +388,7 @@
 	 * Listen for alarms
 	 * @param {Object} alarm
 	 * @param {String} alarm.name - alarm type
+	 * @memberOf ScreenSaver
 	 */
 	t.onAlarm = function(alarm) {
 		if (alarm.name === CLOCK_ALARM) {
@@ -389,6 +401,7 @@
 
 	/**
 	 * Close ourselves
+	 * @memberOf ScreenSaver
 	 */
 	t.closeWindow = function() {
 		// send message to other screen savers to close themselves
