@@ -4,7 +4,6 @@
   "description": "<a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/kohpcmlfdjfdggcjmjhhbcbankgmppgc\">",
   "main": "background.js",
   "scripts": {
-    "install": "npm install",
     "update_savedev": "npm update --save-dev",
     "prune": "npm prune",
     "delete_all": "rmdir node_modules /s /q"
@@ -22,29 +21,29 @@
   "private": true,
   "devDependencies": {
     "del": "^2.2.2",
-    "eslint": "^3.19.0",
+    "eslint": "^3.16.1",
     "eslint-config-google": "^0.7.1",
     "eslint-plugin-html": "^2.0.1",
     "gulp": "^3.9.1",
     "gulp-changed": "^2.0.0",
+    "gulp-clean-css": "^3.0.3",
     "gulp-crisper": "^1.1.0",
-    "gulp-debug": "^3.1.0",
     "gulp-eslint": "^3.0.1",
-    "gulp-html-extract": "^0.3.0",
+    "gulp-html-extract": "^0.2.0",
     "gulp-if": "^2.0.2",
-    "gulp-imagemin": "^3.2.0",
+    "gulp-imagemin": "^3.1.1",
     "gulp-load-plugins": "^1.5.0",
-    "gulp-minify-css": "^1.2.4",
     "gulp-minify-html": "^1.0.6",
     "gulp-minify-inline": "^0.2.1",
     "gulp-replace": "^0.5.4",
     "gulp-size": "^2.1.0",
     "gulp-strip-line": "0.0.1",
-    "gulp-uglify": "^2.1.2",
+    "gulp-uglify": "^2.0.1",
     "gulp-util": "^3.0.8",
     "gulp-vulcanize": "^6.1.0",
     "gulp-zip": "^4.0.0",
     "run-sequence": "^1.2.2",
-    "vulcanize": "^1.15.4"
+    "uglify-js-harmony": "^2.7.5",
+    "vulcanize": "^1.15.3"
   }
 }
