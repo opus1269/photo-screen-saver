@@ -67,6 +67,8 @@
 		t.rep = t.$.repeatTemplate;
 		t.p = t.$.pages;
 
+		t.time = 'time';
+
 		t.processZoom();
 
 		t.processPhotoTransitions();
@@ -177,85 +179,10 @@
 	};
 
 	/**
-	 * Create a new tab with a link to the
-	 * original source of the current slide show photo, if possible
-	 */
-	t.showPhotoInfo = function() {
-		if (t.noPhotos) {
-			return;
-		}
-		const e = t.getEls(t.p.selected);
-		const item = e.item;
-		const path = item.path;
-		let regex;
-		let id;
-		let url;
-
-		switch (item.type) {
-			case '500':
-				// parse photo id
-				regex = /(\/[^\/]*){4}/;
-				id = path.match(regex);
-				url = 'http://500px.com/photo' + id[1];
-				chrome.tabs.create({url: url});
-				break;
-			case 'flickr':
-				if (item.ex) {
-					// parse photo id
-					regex = /(\/[^\/]*){4}(_.*_)/;
-					id = path.match(regex);
-					url = 'https://www.flickr.com/photos/' + item.ex + id[1];
-					chrome.tabs.create({url: url});
-				}
-				break;
-			case 'reddit':
-				if (item.ex) {
-					chrome.tabs.create({url: item.ex});
-				}
-				break;
-			default:
-				break;
-		}
-	};
-
-	/**
-	 * Create the photo label
-	 * @param {String} author photographer
-	 * @param {String} type Photo source type
-	 * @param {Boolean} force require display of label if true
-	 * @return {String} label describing the photo source and photographer name
-	 */
-	t.getPhotoLabel = function(author, type, force) {
-		let ret = '';
-		const idx = type.search('User');
-
-		if (!force && !app.Utils.getBool('showPhotog') && (idx !== -1)) {
-			// don't show label for user's own photos, if requested
-			return ret;
-		}
-
-		if (idx !== -1) {
-			// strip off 'User'
-			type = type.substring(0, idx - 1);
-		}
-
-		if (author) {
-			ret = author + ' / ' + type;
-		} else {
-			// no photographer name
-			ret = 'Photo from ' + type;
-		}
-		return ret;
-	};
-
-	/**
 	 * Build and set the time string
-	 * @param {Integer} idx index into {@link t.items}
 	 */
-	t.setTime = function(idx) {
+	t.setTime = function() {
 		const format = app.Utils.getInt('showTime');
-		const e = t.getEls(idx);
-		const model = t.rep.modelForElement(e.time);
 		const date = new Date();
 		let timeStr;
 
@@ -275,41 +202,7 @@
 			timeStr = date.toLocaleTimeString(navigator.language,
 				{hour: 'numeric', minute: '2-digit', hour12: false});
 		}
-		model.set('item.time', timeStr);
-	};
-
-	/**
-	 * Determine if a photo would look bad zoomed or stretched on the screen
-	 * @param {Number} aspect aspect ratio of photo
-	 * @return {boolean} true if a photo aspect ratio differs substantially
-	 * from the screens'
-	 */
-	t.isBadAspect = function(aspect) {
-		// arbitrary
-		const CUT_OFF = 0.5;
-
-		return (aspect &&
-		((aspect < SCREEN_ASPECT - CUT_OFF) ||
-		(aspect > SCREEN_ASPECT + CUT_OFF)));
-	};
-
-	/**
-	 * Determine if a photo should not be displayed
-	 * @param {Object} item the photo item
-	 * @return {Boolean} true if the photo should not be displayed
-	 */
-	t.ignorePhoto = function(item) {
-		let ret = false;
-		const skip = app.Utils.getBool('skip');
-
-		if ((!item || !item.asp || isNaN(item.asp)) ||
-			(skip && ((t.photoSizing === 1) || (t.photoSizing === 3)) &&
-			t.isBadAspect(item.asp))) {
-			// ignore photos that don't have aspect ratio
-			// or would look bad with cropped or stretched sizing options
-			ret = true;
-		}
-		return ret;
+		t.set('time', timeStr);
 	};
 
 	/**
@@ -318,8 +211,6 @@
 	 */
 	t.loadImages = function() {
 		let count = 0;
-		let author;
-		let photoLabel;
 		let arr;
 
 		t.itemsAll = [];
@@ -334,24 +225,10 @@
 
 		for (let i = 0; i < arr.length; i++) {
 
-			if (!t.ignorePhoto(arr[i])) {
-
-				arr[i].author ? author = arr[i].author : author = '';
-				photoLabel = t.getPhotoLabel(author, arr[i].type, false);
-
-				t.itemsAll.push({
-					name: 'photo' + count,
-					path: arr[i].url,
-					author: author,
-					type: arr[i].type,
-					label: photoLabel,
-					time: '',
-					sizingType: t.sizingType,
-					aspectRatio: arr[i].asp,
-					width: screen.width,
-					height: screen.height,
-					ex: arr[i].ex,
-				});
+			if (!app.Photo.ignore(arr[i].asp, SCREEN_ASPECT, t.photoSizing)) {
+				const photo =
+					new app.Photo('photo' + count, arr[i]);
+				t.itemsAll.push(photo);
 
 				if (count < MAX_PAGES) {
 					// add a new animatable page - shallow copy
@@ -413,16 +290,20 @@
 	 * @param {Integer} idx index into {@link t.items}
 	 */
 	t.framePhoto = function(idx) {
+		const e = t.getEls(idx);
+		const author = e.author;
+		const time = e.time;
+		const image = e.image;
+		const img = image.$.img;
+		const photo = e.item;
+		const aspect = photo.aspectRatio;
 		let padding;
 		let border;
 		let borderBot;
-		const e = t.getEls(idx);
-		const img = e.image.$.img;
 		let width;
 		let height;
 		let frWidth;
 		let frHeight;
-		const aspect = e.item.aspectRatio;
 
 		// scale to screen size
 		border = screen.height * 0.005;
@@ -431,8 +312,8 @@
 
 		if (!app.Utils.getBool('showPhotog')) {
 			// force use of photo label for this view
-			const label = t.getPhotoLabel(e.item.author, e.item.type, true);
-			const model = t.rep.modelForElement(e.image);
+			const label = photo.buildLabel(true);
+			const model = t.rep.modelForElement(image);
 			model.set('item.label', label);
 		}
 
@@ -447,37 +328,36 @@
 		img.style.height = height + 'px';
 		img.style.width = width + 'px';
 
-		e.image.height = height;
-		e.image.width = width;
-		e.image.style.top = (screen.height - frHeight) / 2 + 'px';
-		e.image.style.left = (screen.width - frWidth) / 2 + 'px';
-		e.image.style.border = 0.5 + 'vh ridge WhiteSmoke';
-		e.image.style.borderBottom = 5 + 'vh solid WhiteSmoke';
-		e.image.style.borderRadius = '1.5vh';
-		e.image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
+		image.height = height;
+		image.width = width;
+		image.style.top = (screen.height - frHeight) / 2 + 'px';
+		image.style.left = (screen.width - frWidth) / 2 + 'px';
+		image.style.border = 0.5 + 'vh ridge WhiteSmoke';
+		image.style.borderBottom = 5 + 'vh solid WhiteSmoke';
+		image.style.borderRadius = '1.5vh';
+		image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
 
 		if (app.Utils.getInt('showTime')) {
-			e.author.style.left = (screen.width - frWidth) / 2 + 10 + 'px';
-			e.author.style.textAlign = 'left';
+			author.style.left = (screen.width - frWidth) / 2 + 10 + 'px';
+			author.style.textAlign = 'left';
 		} else {
-			e.author.style.left = '0';
-			e.author.style.width = screen.width + 'px';
-			e.author.style.textAlign = 'center';
+			author.style.left = '0';
+			author.style.width = screen.width + 'px';
+			author.style.textAlign = 'center';
 		}
-		e.author.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
-		e.author.style.color = 'black';
-		e.author.style.opacity = 0.9;
-		e.author.style.fontSize = '2.5vh';
-		e.author.style.fontWeight = 300;
+		author.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
+		author.style.color = 'black';
+		author.style.opacity = 0.9;
+		author.style.fontSize = '2.5vh';
+		author.style.fontWeight = 300;
 
-		e.time.style.right = (screen.width - frWidth) / 2 + 10 + 'px';
-		e.time.style.textAlign = 'right';
-		e.time.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
-		e.time.style.color = 'black';
-		e.time.style.opacity = 0.9;
-		e.time.style.fontSize = '3vh';
-		e.time.style.fontWeight = 300;
-
+		time.style.right = (screen.width - frWidth) / 2 + 10 + 'px';
+		time.style.textAlign = 'right';
+		time.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
+		time.style.color = 'black';
+		time.style.opacity = 0.9;
+		time.style.fontSize = '3vh';
+		time.style.fontWeight = 300;
 	};
 
 	/**
@@ -496,7 +376,7 @@
 	 * @param {Integer} idx index into {@link t.items}
 	 */
 	t.prepPhoto = function(idx) {
-		t.setTime(idx);
+		t.setTime();
 		t.super500px(idx);
 		switch (t.photoSizing) {
 			case 0:
@@ -717,7 +597,7 @@
 		if (alarm.name === CLOCK_ALARM) {
 			// update time label
 			if (t.p.selected !== undefined) {
-				t.setTime(t.p.selected);
+				t.setTime();
 			}
 		}
 	};
@@ -742,7 +622,9 @@
 	 * Show link to original photo if possible and close windows
 	 */
 	window.addEventListener('click', function() {
-		t.showPhotoInfo();
+		if (t.p.selected) {
+			app.Photo.showSource(t.items[t.p.selected]);
+		}
 		t.closeWindow();
 	}, false);
 

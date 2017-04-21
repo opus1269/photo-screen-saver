@@ -20,6 +20,7 @@ module.exports = {
 		'ChromeCast': true,
 		'Flickr': true,
 		'GooglePhotos': true,
+		'Photo': true,
 		'PhotoSource': true,
 		'Reddit': true,
 		'SSControl': true,
