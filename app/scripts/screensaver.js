@@ -26,8 +26,8 @@
 	const CLOCK_ALARM = 'updateTimeLabel';
 
 	// selected background image
-	const background = app.Utils.getJSON('background');
-	document.body.style.background = background.substring(11);
+	document.body.style.background =
+		app.Utils.getJSON('background').substring(11);
 
 	// main auto-bind template
 	const t = document.querySelector('#t');
@@ -164,59 +164,12 @@
 	};
 
 	/**
-	 * Get references to the important elements of a slide
-	 * @param {Integer} idx index into {@link t.items}
-	 * @return {Object} Object containing the DOM elements of a slide
-	 */
-	t.getEls = function(idx) {
-		const el = t.p.querySelector('#item' + idx);
-		const ret = {};
-		ret.item = t.items[idx];
-		ret.image = el.querySelector('.image');
-		ret.author = el.querySelector('.author');
-		ret.time = el.querySelector('.time');
-		return ret;
-	};
-
-	/**
-	 * Build and set the time string
-	 */
-	t.setTime = function() {
-		const format = app.Utils.getInt('showTime');
-		const date = new Date();
-		let timeStr;
-
-		if (format === 0) {
-			// don't show time
-			timeStr = '';
-		} else if (format === 1) {
-			// 12 hour format
-			timeStr = date.toLocaleTimeString(
-				'en-us', {hour: 'numeric', minute: '2-digit', hour12: true});
-			if (timeStr.endsWith('M')) {
-				// strip off AM/PM
-				timeStr = timeStr.substring(0, timeStr.length - 3);
-			}
-		} else {
-			// 24 hour format
-			timeStr = date.toLocaleTimeString(navigator.language,
-				{hour: 'numeric', minute: '2-digit', hour12: false});
-		}
-		t.set('time', timeStr);
-	};
-
-	/**
 	 * Build the Array of photos that will be displayed
 	 * and populate the neon-animated-pages
 	 */
 	t.loadImages = function() {
 		let count = 0;
-		let arr;
-
-		t.itemsAll = [];
-		this.splice('items', 0, t.items.length);
-
-		arr = app.PhotoSource.getSelectedPhotos();
+		const arr = app.PhotoSource.getSelectedPhotos();
 
 		if (app.Utils.getBool('shuffle')) {
 			// randomize the order
@@ -224,10 +177,8 @@
 		}
 
 		for (let i = 0; i < arr.length; i++) {
-
 			if (!app.Photo.ignore(arr[i].asp, SCREEN_ASPECT, t.photoSizing)) {
-				const photo =
-					new app.Photo('photo' + count, arr[i]);
+				const photo = new app.Photo('photo' + count, arr[i]);
 				t.itemsAll.push(photo);
 
 				if (count < MAX_PAGES) {
@@ -245,172 +196,6 @@
 			t.$.noPhotos.style.visibility = 'visible';
 			t.noPhotos = true;
 		}
-
-	};
-
-	/**
-	 * Finalize DOM for a letter boxed photo
-	 * @param {Integer} idx index into {@link t.items}
-	 */
-	t.letterboxPhoto = function(idx) {
-		const e = t.getEls(idx);
-		const aspect = e.item.aspectRatio;
-		let right;
-		let bottom;
-
-		if (aspect < SCREEN_ASPECT) {
-			right = (100 - aspect / SCREEN_ASPECT * 100) / 2;
-			e.author.style.right = (right + 1) + 'vw';
-			e.author.style.bottom = '';
-			e.time.style.right = (right + 1) + 'vw';
-			e.time.style.bottom = '';
-		} else {
-			bottom = (100 - SCREEN_ASPECT / aspect * 100) / 2;
-			e.author.style.bottom = (bottom + 1) + 'vh';
-			e.author.style.right = '';
-			e.time.style.bottom = (bottom + 3.5) + 'vh';
-			e.time.style.right = '';
-		}
-	};
-
-	/**
-	 * Finalize DOM for a stretched photo
-	 * @param {Integer} idx index into {@link t.items}
-	 */
-	t.stretchPhoto = function(idx) {
-		const e = t.getEls(idx);
-		const img = e.image.$.img;
-		img.style.width = '100%';
-		img.style.height = '100%';
-		img.style.objectFit = 'fill';
-	};
-
-	/**
-	 * Finalize DOM for a framed photo
-	 * @param {Integer} idx index into {@link t.items}
-	 */
-	t.framePhoto = function(idx) {
-		const e = t.getEls(idx);
-		const author = e.author;
-		const time = e.time;
-		const image = e.image;
-		const img = image.$.img;
-		const photo = e.item;
-		const aspect = photo.aspectRatio;
-		let padding;
-		let border;
-		let borderBot;
-		let width;
-		let height;
-		let frWidth;
-		let frHeight;
-
-		// scale to screen size
-		border = screen.height * 0.005;
-		borderBot = screen.height * 0.05;
-		padding = screen.height * 0.025;
-
-		if (!app.Utils.getBool('showPhotog')) {
-			// force use of photo label for this view
-			const label = photo.buildLabel(true);
-			const model = t.rep.modelForElement(image);
-			model.set('item.label', label);
-		}
-
-		height = Math.min((screen.width - padding * 2 - border * 2) / aspect,
-							screen.height - padding * 2 - border - borderBot);
-		width = height * aspect;
-
-		// size with the frame
-		frWidth = width + border * 2;
-		frHeight = height + borderBot + border;
-
-		img.style.height = height + 'px';
-		img.style.width = width + 'px';
-
-		image.height = height;
-		image.width = width;
-		image.style.top = (screen.height - frHeight) / 2 + 'px';
-		image.style.left = (screen.width - frWidth) / 2 + 'px';
-		image.style.border = 0.5 + 'vh ridge WhiteSmoke';
-		image.style.borderBottom = 5 + 'vh solid WhiteSmoke';
-		image.style.borderRadius = '1.5vh';
-		image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
-
-		if (app.Utils.getInt('showTime')) {
-			author.style.left = (screen.width - frWidth) / 2 + 10 + 'px';
-			author.style.textAlign = 'left';
-		} else {
-			author.style.left = '0';
-			author.style.width = screen.width + 'px';
-			author.style.textAlign = 'center';
-		}
-		author.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
-		author.style.color = 'black';
-		author.style.opacity = 0.9;
-		author.style.fontSize = '2.5vh';
-		author.style.fontWeight = 300;
-
-		time.style.right = (screen.width - frWidth) / 2 + 10 + 'px';
-		time.style.textAlign = 'right';
-		time.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
-		time.style.color = 'black';
-		time.style.opacity = 0.9;
-		time.style.fontSize = '3vh';
-		time.style.fontWeight = 300;
-	};
-
-	/**
-	 * Add superscript to the label for 500px photos
-	 * @param {Integer} idx index into {@link t.items}
-	 */
-	t.super500px = function(idx) {
-		const e = t.getEls(idx);
-		const sup = e.author.querySelector('#sup');
-
-		e.item.type === '500' ? sup.textContent = 'px' : sup.textContent = '';
-	};
-
-	/**
-	 * Finalize DOM for a photo
-	 * @param {Integer} idx index into {@link t.items}
-	 */
-	t.prepPhoto = function(idx) {
-		t.setTime();
-		t.super500px(idx);
-		switch (t.photoSizing) {
-			case 0:
-				t.letterboxPhoto(idx);
-				break;
-			case 2:
-				t.framePhoto(idx);
-				break;
-			case 3:
-				t.stretchPhoto(idx);
-				break;
-			default:
-				break;
-		}
-	};
-
-	/**
-	 * Determine if a photo failed to load (usually 404 error)
-	 * @param {Integer} idx index into {@link t.items}
-	 * @return {Boolean} true if image load failed
-	 */
-	t.isError = function(idx) {
-		const e = t.getEls(idx);
-		return !e.image || e.image.error;
-	};
-
-	/**
-	 * Determine if a photo has finished loading
-	 * @param {Integer} idx index into {@link t.items}
-	 * @return {Boolean} true if image is loaded
-	 */
-	t.isLoaded = function(idx) {
-		const e = t.getEls(idx);
-		return e.image && e.image.loaded;
 	};
 
 	/**
@@ -420,20 +205,20 @@
 	 * -1 if none are loaded
 	 */
 	t.findLoadedPhoto = function(idx) {
-		if (t.isLoaded(idx)) {
+		if (app.PhotoView.isLoaded(idx)) {
 			return idx;
 		}
 		for (let i = idx + 1; i < t.items.length; i++) {
 			if ((i !== t.lastSelected) &&
 				(i !== t.p.selected) &&
-				t.isLoaded(i)) {
+				app.PhotoView.isLoaded(i)) {
 				return i;
 			}
 		}
 		for (let i = 0; i < idx; i++) {
 			if ((i !== t.lastSelected) &&
 				(i !== t.p.selected) &&
-				t.isLoaded(i)) {
+				app.PhotoView.isLoaded(i)) {
 				return i;
 			}
 		}
@@ -450,10 +235,10 @@
 
 		if (error) {
 			// bad url, mark it
-			const e = t.getEls(idx);
-			const index = t.itemsAll.map(function(ev) {
-				return ev.name;
-			}).indexOf(e.item.name);
+			const name = app.PhotoView.getName(idx);
+			const index = t.itemsAll.map(function(item) {
+				return item.name;
+			}).indexOf(name);
 			if (index !== -1) {
 				t.itemsAll[index].name = 'skip';
 			}
@@ -542,7 +327,7 @@
 		// replace the previous selected with the next one from master array
 		t.replacePhoto(t.lastSelected, false);
 
-		if (t.isError(prevPage)) {
+		if (app.PhotoView.isError(prevPage)) {
 			// broken link, mark it and replace it
 			t.replacePhoto(prevPage, true);
 		}
@@ -560,7 +345,7 @@
 		selected = t.getNextPhoto(selected);
 		if (selected !== -1) {
 			// If a new photo is ready, prep it
-			t.prepPhoto(selected);
+			app.PhotoView.prep(selected, t);
 
 			// update t.p.selected so the animation runs
 			t.lastSelected = t.p.selected;
@@ -597,7 +382,7 @@
 		if (alarm.name === CLOCK_ALARM) {
 			// update time label
 			if (t.p.selected !== undefined) {
-				t.setTime();
+				app.PhotoView.setTime(t);
 			}
 		}
 	};

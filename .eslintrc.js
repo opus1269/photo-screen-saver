@@ -22,6 +22,7 @@ module.exports = {
 		'GooglePhotos': true,
 		'Photo': true,
 		'PhotoSource': true,
+		'PhotoView': true,
 		'Reddit': true,
 		'SSControl': true,
 		'Use500px': true,
