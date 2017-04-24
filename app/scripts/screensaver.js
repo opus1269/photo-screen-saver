@@ -11,7 +11,7 @@
 
 	/**
 	 * aspect ratio of screen
-	 * @type {int}
+	 * @type {Number}
 	 * @const
 	 * @private
 	 * @memberOf ScreenSaver

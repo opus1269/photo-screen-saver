@@ -49,7 +49,7 @@ app.PhotoView = (function() {
 
 	/**
 	 * Aspect ratio of screen
-	 * @type {int}
+	 * @type {Number}
 	 * @const
 	 * @default
 	 * @private

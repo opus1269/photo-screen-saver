@@ -179,31 +179,62 @@
 	};
 
 	/**
+	 * Manage an html page that is inserted on demand<br />
+	 * May also be a url link to external site
+	 * @typedef page
+	 * @type {object}
+	 * @property {string} label - label for Nav menu
+	 * @property {string} route - element name route to page
+	 * @property {string} icon - icon for Nav Menu
+	 * @property {object|null} obj - something to be done when selected
+	 * @property {boolean} ready - true if html is inserted
+	 * @property {boolean} divider - true for divider before item
+	 * @memberOf Options
+	 */
+
+	/**
 	 * Array of pages
-	 * @type {Array}
+	 * @type {Options.page[]}
 	 * @memberOf Options
 	 */
 	t.pages = [
-		{label: 'Settings', route: 'page-settings',
-			icon: 'myicons:settings', obj: null, ready: true, divider: false},
-		{label: 'Google Photos Albums', route: 'page-google-photos',
+		{
+			label: 'Settings', route: 'page-settings',
+			icon: 'myicons:settings', obj: null, ready: true, divider: false,
+		},
+		{
+			label: 'Google Photos Albums', route: 'page-google-photos',
 			icon: 'myicons:cloud', obj: t.googlePhotos, ready: false,
-			divider: false},
-		{label: 'Preview', route: 'page-preview',
+			divider: false,
+		},
+		{
+			label: 'Preview', route: 'page-preview',
 			icon: 'myicons:pageview', obj: t.preview, ready: true,
-			divider: false},
-		{label: 'Frequently Asked Questions (FAQ)', route: 'page-faq',
-			icon: 'myicons:help', obj: t.faq, ready: false, divider: false},
-		{label: 'Information For Nerds', route: 'page-info',
-			icon: 'myicons:info', obj: t.info, ready: false, divider: false},
-		{label: 'Request Support', route: 'page-support',
+			divider: false,
+		},
+		{
+			label: 'Frequently Asked Questions (FAQ)', route: 'page-faq',
+			icon: 'myicons:help', obj: t.faq, ready: false, divider: false,
+		},
+		{
+			label: 'Information For Nerds', route: 'page-info',
+			icon: 'myicons:info', obj: t.info, ready: false, divider: false,
+		},
+		{
+			label: 'Request Support', route: 'page-support',
 			icon: 'myicons:help', obj: `${EXT_URI}support`, ready: true,
-			divider: true},
-		{label: 'Rate Extension', route: 'page-rate',
+			divider: true,
+		},
+		{
+			label: 'Rate Extension', route: 'page-rate',
 			icon: 'myicons:grade', obj: `${EXT_URI}reviews`, ready: true,
-			divider: false},
-		{label: 'Try Pushy Clipboard', route: 'page-pushy',
-			icon: 'myicons:extension', obj: PUSHY_URI, ready: true, divider: true},
+			divider: false,
+		},
+		{
+			label: 'Try Pushy Clipboard', route: 'page-pushy',
+			icon: 'myicons:extension', obj: PUSHY_URI, ready: true,
+			divider: true,
+		},
 	];
 
 	/**
