@@ -34,7 +34,6 @@
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-label/iron-label.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
-<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
@@ -50,6 +49,8 @@
 <link rel="import" href="../setting-dropdown/setting-dropdown.html">
 <link rel="import" href="../setting-time/setting-time.html">
 <link rel="import" href="../setting-background/setting-background.html">
+
+<link rel="import" href="../my_icons.html">
 
 <dom-module id="settings-page">
 	<template>
@@ -79,7 +80,7 @@
 					</iron-label>
 					<paper-icon-button
 							id="select"
-							icon="check-box"
+							icon="myicons:check-box"
 							on-tap="_selectAllTapped"
 							hidden$="[[menuHidden]]"
 							disabled$="[[!enabled]]"></paper-icon-button>
@@ -88,7 +89,7 @@
 							position="left" offset="0">Select all sources</paper-tooltip>
 					<paper-icon-button
 							id="deselect"
-							icon="check-box-outline-blank"
+							icon="myicons:check-box-outline-blank"
 							on-tap="_deselectAllTapped"
 							hidden$="[[menuHidden]]"
 							disabled$="[[!enabled]]"></paper-icon-button>
@@ -97,7 +98,7 @@
 							position="left" offset="0">Deselect all sources</paper-tooltip>
 					<paper-icon-button
 							id="restore"
-							icon="settings-backup-restore"
+							icon="myicons:settings-backup-restore"
 							on-tap="_restoreDefaultsTapped"
 							disabled$="[[!enabled]]"></paper-icon-button>
 					<paper-tooltip

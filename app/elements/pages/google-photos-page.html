@@ -33,7 +33,6 @@
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/iron-label/iron-label.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
@@ -49,6 +48,8 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="../my_icons.html">
 
 <dom-module id="google-photos-page">
 	<template>
@@ -132,7 +133,7 @@
 					<div class="flex">Google Photos Albums</div>
 					<paper-icon-button
 							id="select"
-							icon="check-box"
+							icon="myicons:check-box"
 							on-tap="_selectAllTapped"
 							disabled$="[[!useGoogle]]"></paper-icon-button>
 					<paper-tooltip
@@ -140,7 +141,7 @@
 							position="left" offset="0">Select all albums</paper-tooltip>
 					<paper-icon-button
 							id="deselect"
-							icon="check-box-outline-blank"
+							icon="myicons:check-box-outline-blank"
 							on-tap="_deselectAllTapped"
 							disabled$="[[!useGoogle]]"></paper-icon-button>
 					<paper-tooltip
@@ -148,7 +149,7 @@
 							position="left" offset="0">Deselect all albums</paper-tooltip>
 					<paper-icon-button
 							id="refresh"
-							icon="refresh"
+							icon="myicons:refresh"
 							on-tap="_refreshTapped"
 							disabled$="[[!useGoogle]]"></paper-icon-button>
 					<paper-tooltip
