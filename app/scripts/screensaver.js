@@ -13,23 +13,42 @@
 	 * aspect ratio of screen
 	 * @type {int}
 	 * @const
-	 * @default
 	 * @private
 	 * @memberOf ScreenSaver
 	 */
 	const SCREEN_ASPECT = screen.width / screen.height;
 
-	// max number of animated pages
+	/**
+	 * max number of animated pages
+	 * @type {int}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf ScreenSaver
+	 */
 	const MAX_PAGES = 20;
 
-	// repeating alarm for updating time label
+	/**
+	 * repeating alarm for updating time label
+	 * @type {String}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf ScreenSaver
+	 */
 	const CLOCK_ALARM = 'updateTimeLabel';
 
 	// selected background image
 	document.body.style.background =
 		app.Utils.getJSON('background').substring(11);
 
-	// main auto-bind template
+	/**
+	 * main auto-bind template
+	 * @type {Object}
+	 * @const
+	 * @private
+	 * @memberOf ScreenSaver
+	 */
 	const t = document.querySelector('#t');
 
 	// repeat template
@@ -64,16 +83,12 @@
 	 * @memberOf ScreenSaver
 	 */
 	t.addEventListener('dom-change', function() {
-
 		t.rep = t.$.repeatTemplate;
 		t.p = t.$.pages;
-
 		t.time = 'time';
 
 		t.processZoom();
-
 		t.processPhotoTransitions();
-
 		t.processPhotoSizing();
 
 		// listen for request to close screensaver
@@ -346,7 +361,7 @@
 			// special case for first page. neon-animated-pages is configured
 			// to run the entry animation for the first selection
 			selected = curPage;
-		}	else if (!t.started) {
+		} else if (!t.started) {
 			// special case for first full animation. next time ready to start
 			// splicing in the new images
 			t.started = true;
