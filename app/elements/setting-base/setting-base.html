@@ -36,9 +36,15 @@
 	<template>
 		<style include="shared-styles"></style>
 
-		<div class="section-title setting-label" tabindex="-1" hidden$="[[!sectionTitle]]">[[sectionTitle]]</div>
+		<div class="section-title setting-label" tabindex="-1"
+			 hidden$="[[!sectionTitle]]">
+			[[sectionTitle]]
+		</div>
 		<content></content>
 		<hr hidden$="[[noseparator]]" />
+		<iron-localstorage name="[[name]]" value="{{value}}"
+						   on-iron-localstorage-load-empty="_init">
+		</iron-localstorage>
 	</template>
 </dom-module>
 
@@ -53,6 +59,22 @@
 		},
 
 		properties: {
+			name: {
+				type: String,
+				value: 'store',
+			},
+
+			value: {
+				type: Object,
+				value: '',
+				notify: true,
+			},
+
+			defaultValue: {
+				type: Object,
+				value: '',
+			},
+
 			sectionTitle: {
 				type: String,
 				value: '',
@@ -62,6 +84,35 @@
 				type: Boolean,
 				value: false,
 			},
+
+			disabled: {
+				type: Boolean,
+				value: false,
+			},
+		},
+
+		/**
+		 * Get the value of the item
+		 * @return {Object} value - value of item
+		 */
+		getValue: function() {
+			return this.value;
+		},
+
+		/**
+		 * Set the value of the item
+		 * @param {Object} value - value of item
+		 */
+		setValue: function(value) {
+			this.value = value;
+		},
+
+		/**
+		 * Initialize value if it is not in localStorage
+		 * @private
+		 */
+		_init: function() {
+			this.set('value', this.defaultValue);
 		},
 	});
 </script>

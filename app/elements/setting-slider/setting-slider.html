@@ -82,7 +82,11 @@
 			}
 		</style>
 
-		<setting-base section-title="[[sectionTitle]]" noseparator="[[noseparator]]">
+		<setting-base id="base"
+					  name="[[name]]" value="{{value}}"
+					  default-value='{"base": 10, "display": 10, "unit": 0}'
+					  section-title="[[sectionTitle]]"
+					  noseparator="[[noseparator]]" disabled="[[disabled]]">
 			<paper-item id="label" class="setting-label" tabindex="-1">{{label}}</paper-item>
 			<div class="horizontal layout">
 				<paper-slider class="flex" editable value="{{value.display}}"
@@ -97,8 +101,6 @@
 				</paper-dropdown-menu>
 				<array-selector id="selector" items="[[units]]" selected="{{unit}}"></array-selector>
 			</div>
-			<iron-localstorage name="{{name}}" value="{{value}}"
-							   on-iron-localstorage-load-empty="_initValue"></iron-localstorage>
 		</setting-base>
 	</template>
 </dom-module>
@@ -108,28 +110,10 @@
 Polymer({
 	is: 'setting-slider',
 
-	hostAttributes: {
-		role: 'group',
-		tabIndex: -1,
-	},
-
 	properties: {
-		name: {
-			type: String,
-			value: 'store',
-		},
-
 		label: {
 			type: String,
 			value: '',
-		},
-
-		value: {
-			type: Object,
-			notify: true,
-			value: function() {
-				return {'base': 10, 'display': 10, 'unit': 0};
-			},
 		},
 
 		units: {
@@ -143,40 +127,30 @@ Polymer({
 			type: String,
 			value: '',
 		},
-
-		disabled: {
-			type: Boolean,
-			value: false,
-		},
-
-		noseparator: {
-			type: Boolean,
-			value: false,
-		},
 	},
 
-	// initialize value if it is not in localstorage
-	_initValue: function() {
-		this.value = {
-			base: 10,
-			display: 10,
-			unit: 0,
-		};
-	},
-
-	// set the base value
+	/**
+	 * set the base value
+	 */
 	_setBase: function() {
-		this.set('value.base', this.unit.mult * this.value.display);
+		const value = this.$.base.getValue();
+		value.base = this.unit.mult * value.display;
+		this.$.base.setValue(value);
 	},
 
-	// event: user changed slider value
+	/**
+	 * Event: user changed slider value
+	 */
 	_sliderValueChanged: function() {
 		this._setBase();
 	},
 
-	// event: display unit changed
+	/**
+	 * Event: display unit changed
+	 */
 	_unitChanged: function() {
-		this.$.selector.select(this.units[this.value.unit]);
+		const value = this.$.base.getValue();
+		this.$.selector.select(this.units[value.unit]);
 		this._setBase();
 	},
 });

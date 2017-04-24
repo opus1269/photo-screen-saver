@@ -102,7 +102,10 @@
 			</div>
 		</paper-dialog>
 
-		<setting-base section-title="[[sectionTitle]]" noseparator="[[noseparator]]">
+		<setting-base id="base"
+					  name="[[name]]" value="{{value}}" default-value="background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)"
+					  section-title="[[sectionTitle]]"
+					  noseparator="[[noseparator]]" disabled="[[disabled]]">
 			<paper-item class="center horizontal layout" on-tap="_onTap">
 				<paper-item-body class="flex" two-line>
 					<div class="setting-label" hidden$="[[!mainLabel]]">{{mainLabel}}</div>
@@ -111,7 +114,6 @@
 				<div class="selected-background" style$="[[value]]" disabled$="[[disabled]]"></div>
 				<paper-ripple center></paper-ripple>
 			</paper-item>
-			<iron-localstorage name="{{name}}" value="{{value}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
 		</setting-base>
 	</template>
 </dom-module>
@@ -122,21 +124,9 @@ Polymer({
 	is: 'setting-background',
 
 	properties: {
-
-		name: {
-			type: String,
-			value: 'store',
-		},
-
 		selected: {
 			type: String,
 			value: 'b1',
-			notify: true,
-		},
-
-		value: {
-			type: String,
-			value: 'background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)',
 			notify: true,
 		},
 
@@ -149,17 +139,6 @@ Polymer({
 			type: String,
 			value: '',
 		},
-
-		disabled: {
-			type: Boolean,
-			value: false,
-		},
-	},
-
-	// initialize value if it is not in localstorage
-	_init: function() {
-		this.set('value',
-			'background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)');
 	},
 
 	_onTap: function() {
@@ -169,7 +148,7 @@ Polymer({
 	// save the currently selected background
 	_onOK: function() {
 		const el = document.getElementById(this.selected);
-		this.set('value', 'background:' + el.style.background);
+		this.$.base.setValue('background:' + el.style.background);
 	},
 });
 </script>

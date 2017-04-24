@@ -62,7 +62,10 @@
 			}
 		</style>
 
-		<setting-base section-title="[[sectionTitle]]" noseparator="[[noseparator]]">
+		<setting-base id="base"
+					  name="[[name]]" value="{{value}}" default-value="00:00"
+					  section-title="[[sectionTitle]]"
+					  noseparator="[[noseparator]]" disabled="[[disabled]]">
 			<paper-item class="center horizontal layout" on-tap="_onTap">
 				<paper-item-body class="flex" two-line>
 					<div class="setting-label" hidden$="[[!mainLabel]]">{{mainLabel}}</div>
@@ -71,11 +74,10 @@
 				</paper-item-body>
 				<div class="setting-label" >[[timeLabel]]</div>
 			</paper-item>
-			<iron-localstorage id="store" name="{{name}}" value="{{value}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
 		</setting-base>
 
 		<paper-dialog id="dialog" modal class="paper-time-picker-dialog">
-			<paper-time-picker id="timePicker" hour="24" minute="0"></paper-time-picker>
+			<paper-time-picker id="timePicker" time="[[timeLabel]]"></paper-time-picker>
 			<div class="buttons">
 				<paper-button dialog-dismiss>Cancel</paper-button>
 				<paper-button dialog-confirm on-tap="_onTimeSelected">OK</paper-button>
@@ -89,26 +91,10 @@
 Polymer({
 	is: 'setting-time',
 
-	hostAttributes: {
-		role: 'group',
-		tabIndex: -1,
-	},
-
 	properties: {
-		name: {
-			type: String,
-			value: 'store',
-		},
-
-		value: {
-			type: String,
-			value: '00:00',
-			observer: '_valueChanged',
-		},
-
 		timeLabel: {
 			type: String,
-			value: 'unknown',
+			value: '12:00 AM',
 		},
 
 		mainLabel: {
@@ -122,26 +108,42 @@ Polymer({
 		},
 	},
 
-	// initialize value if it is not in localstorage
-	_init: function() {
-		this.set('value', '00:00');
+	ready: function() {
+		const self = this;
+		this.$.base.addEventListener('value-changed', function(e) {
+			// <setting-base> value changed event
+			const value = e.detail.value;
+			const timeStr = self._formatTime(value);
+			self.set('timeLabel', timeStr);
+		});
 	},
 
-	_valueChanged: function() {
-		this.set('timeLabel', this._formatTime(this.get('value')));
-	},
-
+	/**
+	 * Event: Display time picker on tap
+	 * @private
+	 */
 	_onTap: function() {
 		this.$.dialog.open();
 	},
 
+	/**
+	 * Event: Set time on tap of OK button
+	 * @private
+	 */
 	_onTimeSelected: function() {
 		const picker = this.$.timePicker;
-		this.set('value', ('0' + picker.hour).substr(-2) +
-		':' + ('0' + picker.minute).substr(-2));
+		const hour = ('0' + picker.hour).substr(-2);
+		const min = ('0' + picker.minute).substr(-2);
+		const value = `${hour}:${min}`;
+		this.$.base.setValue(value);
 	},
 
-	// '00:00' 24 hr time
+	/**
+	 * Get the time suitable for display
+	 * @param {String} timeString - format '00:00'
+	 * @return {String} formatted time
+	 * @private
+	 */
 	_formatTime: function(timeString) {
 		let hour = parseInt(timeString.substr(0, 2), 10);
 		const period = (hour % 24) < 12 ? 'AM' : 'PM';

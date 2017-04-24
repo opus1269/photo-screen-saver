@@ -5,7 +5,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="40">
+          <list size="42">
             <item index="0" class="java.lang.String" itemvalue="include" />
             <item index="1" class="java.lang.String" itemvalue="noink" />
             <item index="2" class="java.lang.String" itemvalue="on-tap" />
@@ -46,6 +46,8 @@
             <item index="37" class="java.lang.String" itemvalue="as" />
             <item index="38" class="java.lang.String" itemvalue="is" />
             <item index="39" class="java.lang.String" itemvalue="unresolved" />
+            <item index="40" class="java.lang.String" itemvalue="name" />
+            <item index="41" class="java.lang.String" itemvalue="noseparator" />
           </list>
         </value>
       </option>
