@@ -50,7 +50,7 @@
 				color: var(--disabled-text-color);
 			}
 
-			:host paper-item {
+			:host #main-item {
 				padding-top: 10px;
 				padding-bottom: 10px;
 			}
@@ -68,7 +68,7 @@
 					  name="[[name]]" value="{{value}}" default-value="0"
 					  section-title="[[sectionTitle]]"
 					  noseparator="[[noseparator]]" disabled="[[disabled]]">
-			<paper-item class="center horizontal layout" tabindex="-1">
+			<paper-item id="main-item" class="center horizontal layout" tabindex="-1">
 				<div class="setting-label flex">{{label}}</div>
 				<paper-dropdown-menu disabled$="[[disabled]]" noink no-label-float>
 					<paper-menu class="dropdown-content" selected="{{value}}">
