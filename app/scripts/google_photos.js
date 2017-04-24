@@ -97,7 +97,7 @@ app.GooglePhotos = (function() {
 				xhr.send();
 
 				xhr.onload = function() {
-					if (this.status === 401 && retryToken < MAX_RETRY) {
+					if ((this.status === 401) && retryToken) {
 						// This status may indicate that the cached
 						// access token was invalid. Retry with a fresh token.
 						retryToken = false;
@@ -107,7 +107,7 @@ app.GooglePhotos = (function() {
 						return;
 					}
 
-					if (this.status !== 200 && retryError < MAX_RETRY) {
+					if ((this.status !== 200) && (retryError < MAX_RETRY)) {
 						// Some error, retry a few times
 						retryError++;
 						getTokenAndXhr();
