@@ -25,7 +25,7 @@
     "eslint-config-google": "^0.7.1",
     "eslint-plugin-html": "^2.0.1",
     "gulp": "^3.9.1",
-    "gulp-changed": "^2.0.0",
+    "gulp-changed": "^3.0.0",
     "gulp-clean-css": "^3.0.3",
     "gulp-crisper": "^1.1.0",
     "gulp-eslint": "^3.0.1",
