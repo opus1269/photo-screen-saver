@@ -28,9 +28,12 @@
   ~  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import"
+	  href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import"
+	  href="../../bower_components/iron-localstorage/iron-localstorage.html">
 
 <dom-module id="setting-base">
 	<template>
@@ -41,10 +44,12 @@
 			[[sectionTitle]]
 		</div>
 		<content></content>
-		<hr hidden$="[[noseparator]]" />
-		<iron-localstorage name="[[name]]" value="{{value}}"
-						   on-iron-localstorage-load-empty="_init">
-		</iron-localstorage>
+		<hr hidden$="[[noseparator]]"/>
+		<template is="dom-if" if="[[!nosave]]">
+			<iron-localstorage name="[[name]]" value="{{value}}"
+							   on-iron-localstorage-load-empty="_init">
+			</iron-localstorage>
+		</template>
 	</template>
 </dom-module>
 
@@ -85,6 +90,11 @@
 				value: false,
 			},
 
+			nosave: {
+				type: Boolean,
+				value: false,
+			},
+
 			disabled: {
 				type: Boolean,
 				value: false,
@@ -92,11 +102,11 @@
 		},
 
 		/**
-		 * Get the value of the item
-		 * @return {Object} value - value of item
+		 * Get a copy of the value of the item
+		 * @return {Object} value - shallow copyv of value
 		 */
 		getValue: function() {
-			return this.value;
+			return JSON.parse(JSON.stringify(this.value));
 		},
 
 		/**
@@ -104,7 +114,7 @@
 		 * @param {Object} value - value of item
 		 */
 		setValue: function(value) {
-			this.value = value;
+			this.set('value', value);
 		},
 
 		/**
