@@ -1,5 +1,5 @@
 {
-  "name": "PhotoScreenSaver",
+  "name": "photo-screen-saver",
   "authors": [
     "Michael A. Updike <igreilly1269@gmail.com>"
   ],
@@ -16,10 +16,10 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.0.0",
+    "polymer": "Polymer/polymer#^1.1.0",
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.0",
-    "neon-elements": "PolymerElements/neon-elements#^1.0.0",
-    "paper-time-picker": "bendavis78/paper-time-picker#^1.1.2"
+    "neon-animation": "PolymerElements/neon-animation#^1.2.0",
+    "paper-time-picker": "bendavis78/paper-time-picker#^1.1.4"
   }
 }
