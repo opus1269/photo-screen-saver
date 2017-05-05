@@ -4,11 +4,16 @@
     <option name="PER_PROJECT_SETTINGS">
       <value>
         <option name="RIGHT_MARGIN" value="80" />
+        <option name="HTML_ATTRIBUTE_WRAP" value="0" />
         <JSCodeStyleSettings>
           <option name="FORCE_SEMICOLON_STYLE" value="true" />
           <option name="SPACE_BEFORE_FUNCTION_LEFT_PARENTH" value="false" />
           <option name="USE_DOUBLE_QUOTES" value="false" />
         </JSCodeStyleSettings>
+        <JSON>
+          <option name="OBJECT_WRAPPING" value="0" />
+          <option name="ARRAY_WRAPPING" value="0" />
+        </JSON>
         <MarkdownNavigatorCodeStyleSettings>
           <option name="RIGHT_MARGIN" value="72" />
         </MarkdownNavigatorCodeStyleSettings>
@@ -16,6 +21,7 @@
           <option name="ENABLED" value="false" />
         </editorconfig>
         <codeStyleSettings language="HTML">
+          <option name="WRAP_ON_TYPING" value="0" />
           <indentOptions>
             <option name="USE_TAB_CHARACTER" value="true" />
           </indentOptions>
