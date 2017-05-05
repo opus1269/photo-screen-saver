@@ -37,6 +37,8 @@
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
+<link rel="import" href="../localize-behavior/localize-behavior.html">
+
 <dom-module id="setting-background">
 	<template>
 		<style include="iron-flex iron-flex-alignment"></style>
@@ -87,7 +89,7 @@
 
 		<paper-dialog id="dialog" modal entry-animation="scale-up-animation"
 			exit-animation="fade-out-animation">
-			<h2>Select background style</h2>
+			<h2>{{localize('setting_bg_dialog_title')}}</h2>
 			<iron-selector class="container horizontal layout wrap" attr-for-selected="id" selected="{{selected}}">
 				<div id="b1" class="background" style="background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)"></div>
 				<div id="b2" class="background" style="background:linear-gradient(to bottom, #003973 10%, #E5E5BE 90%)"></div>
@@ -97,8 +99,8 @@
 				<div id="b6" class="background" style="background:black"></div>
 			</iron-selector>
 			<div class="buttons">
-				<paper-button dialog-dismiss>CANCEL</paper-button>
-				<paper-button dialog-confirm autofocus on-tap="_onOK">OK</paper-button>
+				<paper-button dialog-dismiss>{{localize('cancel')}}</paper-button>
+				<paper-button dialog-confirm autofocus on-tap="_onOK">{{localize('ok')}}</paper-button>
 			</div>
 		</paper-dialog>
 
@@ -122,6 +124,10 @@
 'use strict';
 Polymer({
 	is: 'setting-background',
+
+	behaviors: [
+		app.LocalizeBehavior,
+	],
 
 	properties: {
 		selected: {

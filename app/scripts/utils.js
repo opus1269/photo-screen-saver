@@ -50,6 +50,16 @@ app.Utils = (function() {
 		},
 
 		/**
+		 * Get the i18n string
+		 * @param {String} messageName - key in message.json
+		 * @return {String} internationalized string
+		 * @memberOf Utils
+		 */
+		localize: function(messageName) {
+			return chrome.i18n.getMessage(messageName);
+		},
+
+		/**
 		 * Determine if a String is null or whitespace only
 		 * @param {String} str str to check
 		 * @return {Boolean} true is str is whitespace (or null)

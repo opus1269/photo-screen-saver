@@ -16,6 +16,7 @@ const path = {
 	images: base.src + 'images/',
 	assets: base.src + 'assets/',
 	lib: base.src + 'lib/',
+	locales: base.src + '_locales/',
 	bower: base.src + 'bower_components/',
 };
 const files = {
@@ -27,6 +28,7 @@ const files = {
 	images: path.images + '*.*',
 	assets: path.assets + '*.*',
 	lib: path.lib + '**/*.*',
+	locales: path.locales + '**/*.*',
 	bower: [path.bower + '**/*', '!' + path.bower + '**/test/*',
 		'!' + path.bower + '**/demo/*'],
 };
@@ -80,7 +82,7 @@ gulp.task('default', ['watch']);
 
 // track changes in development
 gulp.task('watch', ['manifest', 'scripts', 'html', 'styles', 'elements',
-		'images', 'assets', 'lib'],
+		'images', 'assets', 'lib', 'locales'],
 	function() {
 		gulp.watch(files.manifest, ['manifest']).on('change', onChange);
 		gulp.watch([files.scripts, 'gulpfile.js', '.eslintrc.js',
@@ -91,6 +93,7 @@ gulp.task('watch', ['manifest', 'scripts', 'html', 'styles', 'elements',
 		gulp.watch(files.images, ['images']).on('change', onChange);
 		gulp.watch(files.assets, ['assets']).on('change', onChange);
 		gulp.watch(files.lib, ['lib']).on('change', onChange);
+		gulp.watch(files.locales, ['locales']).on('change', onChange);
 	});
 
 // Development build
@@ -105,7 +108,7 @@ gulp.task('prod', function(callback) {
 	isProd = true;
 	isProdTest = false;
 	runSequence('clean', ['manifest', 'html', 'scripts', 'styles', 'vulcanize',
-		'images', 'assets', 'lib'], 'zip', callback);
+		'images', 'assets', 'lib', 'locales'], 'zip', callback);
 });
 
 // Production test build
@@ -113,7 +116,7 @@ gulp.task('prodTest', function(callback) {
 	isProd = true;
 	isProdTest = true;
 	runSequence('clean', ['manifest', 'html', 'scripts', 'styles', 'vulcanize',
-		'images', 'assets', 'lib'], 'zip', callback);
+		'images', 'assets', 'lib', 'locales'], 'zip', callback);
 });
 
 // clean output directories
@@ -205,6 +208,13 @@ gulp.task('assets', function() {
 // lib
 gulp.task('lib', function() {
 	return gulp.src(files.lib, {base: '.'})
+		.pipe(plugins.changed(isProd ? base.dist : base.dev))
+		.pipe(isProd ? gulp.dest(base.dist) : gulp.dest(base.dev));
+});
+
+// locales
+gulp.task('locales', function() {
+	return gulp.src(files.locales, {base: '.'})
 		.pipe(plugins.changed(isProd ? base.dist : base.dev))
 		.pipe(isProd ? gulp.dest(base.dist) : gulp.dest(base.dev));
 });

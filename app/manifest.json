@@ -1,16 +1,17 @@
 {
 	"manifest_version": 2,
-	"name": "Photo Screen Saver",
-	"short_name": "Photo Screen Saver",
-	"description": "A screensaver with multiple photo sources, including your own Google Photos.",
+	"name": "__MSG_chrome_extension_name__",
+	"short_name": "__MSG_chrome_extension_name__",
+	"description": "__MSG_chrome_extension_description__",
 	"version": "1.8.8",
 	"minimum_chrome_version": "38",
+	"default_locale": "en_US",
 	"commands": {
 		"toggle-enabled": {
 			"suggested_key": {
 				"default": "Alt+Shift+Q"
 			},
-			"description": "Toggle enabled state"
+			"description": "__MSG_toggle_enabled__"
 		}
 	},
 	"icons": {
@@ -55,7 +56,7 @@
 		"persistent": false
 	},
 	"browser_action": {
-		"default_title": "Photo Screen Saver - click for options",
+		"default_title": "__MSG_browser_action_title__",
 		"default_icon": "/images/icon_19.png"
 	},
 	"options_page": "/html/options.html"

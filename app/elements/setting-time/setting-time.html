@@ -37,6 +37,8 @@
 
 <link rel="import" href="../../bower_components/paper-time-picker/paper-time-picker.html">
 
+<link rel="import" href="../localize-behavior/localize-behavior.html">
+
 <dom-module id="setting-time">
 	<template>
 		<style include="iron-flex iron-flex-alignment"></style>
@@ -79,8 +81,8 @@
 		<paper-dialog id="dialog" modal class="paper-time-picker-dialog">
 			<paper-time-picker id="timePicker" time="[[timeLabel]]"></paper-time-picker>
 			<div class="buttons">
-				<paper-button dialog-dismiss>Cancel</paper-button>
-				<paper-button dialog-confirm on-tap="_onTimeSelected">OK</paper-button>
+				<paper-button dialog-dismiss>{{localize('cancel')}}</paper-button>
+				<paper-button dialog-confirm on-tap="_onTimeSelected">{{localize('ok')}}</paper-button>
 			</div>
 		</paper-dialog>
 	</template>
@@ -90,6 +92,10 @@
 'use strict';
 Polymer({
 	is: 'setting-time',
+
+	behaviors: [
+		app.LocalizeBehavior,
+	],
 
 	properties: {
 		timeLabel: {
