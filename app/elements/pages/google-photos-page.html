@@ -49,6 +49,8 @@
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
+<link rel="import" href="../localize-behavior/localize-behavior.html">
+
 <link rel="import" href="../my_icons.html">
 
 <dom-module id="google-photos-page">
@@ -130,42 +132,44 @@
 		<paper-material elevation="1" class="page-container">
 			<paper-material elevation="1">
 				<paper-toolbar class="page-toolbar">
-					<div class="flex">Google Photos Albums</div>
+					<div class="flex">{{localize('google_title')}}</div>
 					<paper-icon-button
 							id="select"
 							icon="myicons:check-box"
 							on-tap="_selectAllTapped"
 							disabled$="[[!useGoogle]]"></paper-icon-button>
-					<paper-tooltip
-							for="select"
-							position="left" offset="0">Select all albums</paper-tooltip>
+					<paper-tooltip for="select" position="left" offset="0">
+						{{localize('tooltip_select')}}
+					</paper-tooltip>
 					<paper-icon-button
 							id="deselect"
 							icon="myicons:check-box-outline-blank"
 							on-tap="_deselectAllTapped"
 							disabled$="[[!useGoogle]]"></paper-icon-button>
-					<paper-tooltip
-							for="deselect"
-							position="left" offset="0">Deselect all albums</paper-tooltip>
+					<paper-tooltip for="deselect" position="left" offset="0">
+						{{localize('tooltip_deselect')}}
+					</paper-tooltip>
 					<paper-icon-button
 							id="refresh"
 							icon="myicons:refresh"
 							on-tap="_refreshTapped"
 							disabled$="[[!useGoogle]]"></paper-icon-button>
-					<paper-tooltip
-							for="refresh"
-							position="left" offset="0">Refresh album list</paper-tooltip>
+					<paper-tooltip for="refresh" position="left" offset="0">
+						{{localize('tooltip_refresh')}}
+					</paper-tooltip>
 					<paper-toggle-button
 							id="googlePhotosToggle"
 							checked="{{useGoogle}}"></paper-toggle-button>
-					<paper-tooltip
-							for="googlePhotosToggle"
-							position="left" offset="0">Enable/disable use of albums</paper-tooltip>
+					<paper-tooltip for="googlePhotosToggle" position="left" offset="0">
+						{{localize('tooltip_google_toggle')}}
+					</paper-tooltip>
 					<iron-localstorage name="useGoogle" value="{{useGoogle}}"></iron-localstorage>
 				</paper-toolbar>
 			</paper-material>
 
-			<paper-item class="list-note" hidden$="[[waitForLoad]]">Note: Shared albums may not be available.  See the FAQ for more info.</paper-item>
+			<paper-item class="list-note" hidden$="[[waitForLoad]]">
+				{{localize('google_shared_albums_note')}}
+			</paper-item>
 
 			<div class="page-content">
 
@@ -177,15 +181,17 @@
 						<p id="dialogText"></p>
 					</paper-dialog-scrollable>
 					<div class="buttons">
-						<paper-button dialog-dismiss>OK</paper-button>
+						<paper-button dialog-dismiss>{{localize('ok')}}</paper-button>
 					</div>
 				</paper-dialog>
 
 				<div class="waiter" hidden$="[[!waitForLoad]]">
 					<div class="horizontal center-justified layout">
-						<paper-spinner alt="Loading Albums" active="[[waitForLoad]]"></paper-spinner>
+						<paper-spinner alt="{{localize('google_loading')}}" active="[[waitForLoad]]"></paper-spinner>
 					</div>
-					<paper-item class="horizontal center-justified layout">Loading Albums</paper-item>
+					<paper-item class="horizontal center-justified layout">
+						{{localize('google_loading')}}
+					</paper-item>
 				</div>
 
 				<div class="list-container" hidden$="[[waitForLoad]]">
@@ -196,7 +202,7 @@
 									<paper-checkbox iron-label-target checked="{{item.checked}}" on-change="_albumSelectChange" disabled$="[[!useGoogle]]"></paper-checkbox>
 									<paper-item-body class="flex" two-line>
 										<div class="setting-label">{{item.name}}</div>
-										<div class="setting-label" secondary><span>[[item.ct]]</span><span>&nbsp;photos</span></div>
+										<div class="setting-label" secondary>{{_computePhotoLabel(item.ct)}}</div>
 										<paper-ripple center></paper-ripple>
 									</paper-item-body>
 									<iron-image src="[[item.thumb]]" sizing="cover" preload disabled$="[[!useGoogle]]"></iron-image>
@@ -212,13 +218,18 @@
 </dom-module>
 
 <script>
-GooglePhotosPage = Polymer({
+'use strict';
+window.GooglePhotosPage = Polymer({
 	is: 'google-photos-page',
 
 	// so we can lazily create the page
 	factoryImpl: function(id) {
 		this.setAttribute('id', id);
 	},
+
+	behaviors: [
+		app.LocalizeBehavior,
+	],
 
 	properties: {
 		albums: {
@@ -242,7 +253,10 @@ GooglePhotosPage = Polymer({
 		this.loadAlbumList();
 	},
 
-	// Query Picasa for the list of the users albums
+	/**
+	 * Query Picasa for the list of the users albums
+	 * @private
+	 */
 	loadAlbumList: function() {
 		this.set('waitForLoad', true);
 		app.GooglePhotos.loadAlbumList(function(error, albums) {
@@ -255,7 +269,7 @@ GooglePhotosPage = Polymer({
 					if (error) {
 						this.set('waitForLoad', false);
 						this.$.dialogTitle.innerHTML =
-							'Request failed. Select refresh to try again.';
+							app.Utils.localize('err_request_failed');
 						this.$.dialogText.innerHTML = error;
 						this.$.errorDialog.open();
 					} else {
@@ -265,7 +279,7 @@ GooglePhotosPage = Polymer({
 			} else {
 				this.set('waitForLoad', false);
 				this.$.dialogTitle.innerHTML =
-					'Request failed. Select refresh to try again.';
+					app.Utils.localize('err_request_failed');
 				this.$.dialogText.innerHTML = error;
 				this.$.errorDialog.open();
 			}
@@ -273,12 +287,18 @@ GooglePhotosPage = Polymer({
 		}.bind(this));
 	},
 
-	// refresh the album list
+	/**
+	 * Event: Handle tap on refresh album list icon
+	 * @private
+	 */
 	_refreshTapped: function() {
 		this.loadAlbumList();
 	},
 
-	// select all albums
+	/**
+	 * Event: Handle tap on select all albums icon
+	 * @private
+	 */
 	_selectAllTapped: function() {
 		let item;
 		for (let i = 0; i < this.albums.length; i++) {
@@ -297,14 +317,22 @@ GooglePhotosPage = Polymer({
 		}
 	},
 
-	// deselect all albums
+	/**
+	 * Event: Handle tap on deselect all albums icon
+	 * @private
+	 */
 	_deselectAllTapped: function() {
 		this._uncheckAll();
 		this.selections.splice(0, this.selections.length);
 		localStorage.albumSelections = JSON.stringify(this.selections);
 	},
 
-	// handle tap on checkbox for an album
+	/**
+	 * Event: Handle tap on checkbox for an album
+	 * @param {Event} event
+	 * @param {Event} event.model
+	 * @private
+	 */
 	_albumSelectChange: function(event) {
 		const item = event.model.item;
 		const index = this.selections.map(function(e) {
@@ -328,7 +356,10 @@ GooglePhotosPage = Polymer({
 		}
 	},
 
-	// set the checked state of the albums
+	/**
+	 * Set the checked state of the stored albums
+	 * @private
+	 */
 	_selectAlbums: function() {
 		this.selections = app.Utils.getJSON('albumSelections');
 		for (let i = 0; i < this.albums.length; i++) {
@@ -341,13 +372,30 @@ GooglePhotosPage = Polymer({
 		}
 	},
 
-	// uncheck all albums
+	/**
+	 * Uncheck all albums
+	 * @private
+	 */
 	_uncheckAll: function() {
 		for (let i = 0; i < this.albums.length; i++) {
 			if (this.albums[i].checked) {
 				this.set('albums.' + i + '.checked', false);
 			}
 		}
+	},
+
+	/**
+	 * Computed property: Set photo count label on album entry
+	 * @param {int} count - number of photos in album
+	 * @return {string} i18n label
+	 * @private
+	 */
+	_computePhotoLabel: function(count) {
+		let ret = `${count} ${app.Utils.localize('photos')}`;
+		if (count === 1) {
+			ret = `${count} ${app.Utils.localize('photo')}`;
+		}
+		return ret;
 	},
 });
 </script>
