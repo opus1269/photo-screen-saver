@@ -57,7 +57,7 @@
 				<paper-scroll-header-panel>
 					<!-- Drawer Toolbar -->
 					<paper-toolbar id="drawerToolbar">
-						<span class="paper-font-title">Menu</span>
+						<span class="paper-font-title">{{computeMenu()}}</span>
 					</paper-toolbar>
 					<!-- Drawer Content -->
 					<paper-menu class="list" id="mainMenu" attr-for-selected="id" selected="[[route]]">
@@ -81,7 +81,9 @@
 						<span class="flex"></span>
 						<!-- Application name -->
 						<div class="middle middle-container center horizontal layout">
-							<div class="paper-font-headline app-name">Photo Screen Saver</div>
+							<div class="paper-font-headline app-name">
+								{{computeTitle()}}
+							</div>
 						</div>
 					</paper-toolbar>
 				</paper-material>

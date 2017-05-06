@@ -49,7 +49,7 @@
 		chrome.contextMenus.create({
 			type: 'normal',
 			id: 'ENABLE_MENU',
-			title: 'Disable',
+			title: app.Utils.localize('disable'),
 			contexts: ['browser_action'],
 		});
 		chrome.contextMenus.create({

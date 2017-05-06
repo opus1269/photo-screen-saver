@@ -66,83 +66,89 @@
 		<paper-material elevation="1" id="infoPage" class="page-container">
 			<paper-material elevation="1">
 				<paper-toolbar class="page-toolbar">
-					<div>Information For Nerds</div>
+					<div>{{localize('info_title')}}</div>
 				</paper-toolbar>
 			</paper-material>
 			<div id="infoContainer" class="page-content">
-				<div class="section-title">Source Code</div>
+				<div class="section-title">{{localize('info_source')}}</div>
 				<div class="horizontal center layout">
 					<a class="button-a" href="https://github.com/opus1269/photo-screen-saver/" target="_blank" tabindex="-1">
 						<paper-button raised noink>
-							<iron-icon src="/images/github.png"></iron-icon> VIEW ON GITHUB
+							<iron-icon src="/images/github.png"></iron-icon>
+							{{localize('github')}}
 						</paper-button>
 					</a>
 				</div>
 				<hr>
-				<div class="section-title">APIs & Specifications</div>
+				<div class="section-title">{{localize('info_apis')}}</div>
 				<div class="horizontal center layout">
 					<a class="button-a" href="https://developer.chrome.com/extensions" target="_blank" tabindex="-1">
 						<paper-button raised noink>
-							<iron-icon src="/images/extension.png"></iron-icon> CHROME EXTENSION
+							<iron-icon src="/images/extension.png"></iron-icon>
+							{{localize('chrome_ext')}}
 						</paper-button>
 					</a>
 					<a class="button-a" href="https://www.polymer-project.org/" target="_blank" tabindex="-1">
 						<paper-button raised noink>
-							<iron-icon src="/images/polymer.png"></iron-icon> POLYMER
+							<iron-icon src="/images/polymer.png"></iron-icon>
+							{{localize('polymer')}}
 						</paper-button>
 					</a>
 					<a class="button-a" href="http://www.google.com/design/spec/material-design/introduction.html#" target="_blank" tabindex="-1">
 						<paper-button raised noink>
-							<iron-icon src="/images/material.png"></iron-icon> MATERIAL DESIGN
+							<iron-icon src="/images/material.png"></iron-icon>
+							{{localize('material')}}
 						</paper-button>
 					</a>
 				</div>
 				<p>
-					This extension has been built entirely with Polymer and vanilla JavaScript.	 Polymer treats everything as a
-					<a href="http://webcomponents.org/" target="_blank">Web Component</a> I have never used things like AngularJS
-					(or even JQuery) so I can't really evaluate the pros and cons of this approach.	 In addition, there is nothing
-					in Polymer that prevents you from using it with these other solutions.
+					{{localize('info_apis_body1')}}&nbsp
+					<a href="http://webcomponents.org/" target="_blank">{{localize('info_apis_body2')}}</a>&nbsp
+					{{localize('info_apis_body3')}}
+
 				</p>
 				<hr>
-				<div class="section-title">Photo Libraries</div>
+				<div class="section-title">{{localize('info_libs')}}</div>
 				<div class="horizontal center layout">
 					<a class="button-a" href="https://developers.google.com/picasa-web/" target="_blank" tabindex="-1">
 						<paper-button raised noink>
-							<iron-icon src="/images/picasa.png"></iron-icon> PICASA API
+							<iron-icon src="/images/picasa.png"></iron-icon>
+							{{localize('picasa')}}
 						</paper-button>
 					</a>
 					<a class="button-a" href="http://www.google.com/chrome/devices/chromecast" target="_blank" tabindex="-1">
 						<paper-button raised noink>
-							<iron-icon src="/images/chromecast.png"></iron-icon> CHROMECAST
+							<iron-icon src="/images/chromecast.png"></iron-icon>
+							{{localize('chromecast')}}
 						</paper-button>
 					</a>
 				</div>
 				<p>
-					It is unfortunate, but there is no Google Photos API, so the only way to interact with it is the Picasa Web API.
-					The <a href="https://github.com/dconnolly/chromecast-backgrounds" target="_blank">Chromecast photos</a>
-					are a snapshot in time of those used for the backdrop.
+					{{localize('info_libs_body1')}}&nbsp
+					The <a href="https://github.com/dconnolly/chromecast-backgrounds" target="_blank">{{localize('info_libs_body2')}}</a>&nbsp
+					{{localize('info_libs_body3')}}
 				</p>
 				<p>
-					<strong>Note:</strong> This program is read only for your Google photos despite what the permissions popup says. The Picasa API does not have
-					a read only scope.
+					<strong>{{localize('note')}}</strong>&nbsp{{localize('info_libs_body4')}}
 				</p>
 				<hr>
-				<div class="section-title">Web Development Documentation</div>
+				<div class="section-title">{{localize('info_web')}}</div>
 				<div class="horizontal center layout">
 					<a class="button-a" href="https://developer.mozilla.org/en-US/docs/Web" target="_blank" tabindex="-1">
 						<paper-button raised noink>
-							<iron-icon src="/images/mdn.png"></iron-icon> MDN
+							<iron-icon src="/images/mdn.png"></iron-icon>
+							{{localize('mdn')}}
 						</paper-button>
 					</a>
 					<a class="button-a" href="http://www.w3schools.com/default.asp" target="_blank" tabindex="-1">
 						<paper-button raised noink>
-							<iron-icon src="/images/w3schools.png"></iron-icon> W3SCHOOLS
+							<iron-icon src="/images/w3schools.png"></iron-icon>
+							{{localize('w3')}}
 						</paper-button>
 					</a>
 				</div>
 				<p>
-					This was my first time doing Web development and the learning curve is pretty steep. These sites provides
-					good tutorials and reference materials on the HTML-CSS-JavaScript paradigm.
+					{{localize('info_web_body')}}
 				</p>
 			</div>
 			<content></content>
@@ -151,7 +157,13 @@
 </dom-module>
 
 <script>
-InfoPage = Polymer({
-	is: 'info-page',
-});
+	'use strict';
+	window.app = window.app || {};
+	app.InfoPage = Polymer({
+		is: 'info-page',
+
+		behaviors: [
+			app.LocalizeBehavior,
+		],
+	});
 </script>

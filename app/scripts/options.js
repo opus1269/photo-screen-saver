@@ -36,6 +36,20 @@
 	 */
 
 	/**
+	 * Manage an html page that is inserted on demand<br />
+	 * May also be a url link to external site
+	 * @typedef page
+	 * @type {object}
+	 * @property {string} label - label for Nav menu
+	 * @property {string} route - element name route to page
+	 * @property {string} icon - icon for Nav Menu
+	 * @property {?object} obj - something to be done when selected
+	 * @property {boolean} ready - true if html is inserted
+	 * @property {boolean} divider - true for divider before item
+	 * @memberOf Options
+	 */
+
+	/**
 	 * Path to the extension
 	 * @type {string}
 	 * @const
@@ -59,7 +73,13 @@
 		'https://chrome.google.com/webstore/detail/pushy-clipboard/' +
 		'jemdfhaheennfkehopbpkephjlednffd';
 
-	// auto-binding template
+	/**
+	 * auto-binding template
+	 * @type {Object}
+	 * @const
+	 * @private
+	 * @memberOf Options
+	 */
 	const t = document.querySelector('#t');
 
 	// Error dialog
@@ -71,6 +91,24 @@
 	// need to keep the selected menu item and the current page in sync
 	t.route = 'page-settings';
 	t.prevRoute = 'page-settings';
+
+	/**
+	 * Computed property: Page title
+	 * @return {string} i18n title
+	 * @memberOf Options
+	 */
+	t.computeTitle = function() {
+		return app.Utils.localize('chrome_extension_name');
+	};
+
+	/**
+	 * Computed property: Menu label
+	 * @return {string} i18n label
+	 * @memberOf Options
+	 */
+	t.computeMenu = function() {
+		return app.Utils.localize('menu');
+	};
 
 	/**
 	 * Event Listener for template bound event to know when bindings
@@ -114,7 +152,7 @@
 
 	/**
 	 * Show the Google Photos page
-	 * @param {Integer} index index into t.pages Array
+	 * @param {int} index index into t.pages Array
 	 * @memberOf Options
 	 */
 	t.googlePhotos = function(index) {
@@ -122,7 +160,7 @@
 			// create the page the first time
 			t.pages[index].ready = true;
 			t.gPhotosPage =
-				new GooglePhotosPage('gPhotosPage', t.$.errorDialog,
+				new app.GooglePhotosPage('gPhotosPage', t.$.errorDialog,
 					t.$.dialogTitle, t.$.dialogText);
 			Polymer.dom(t.$.googlePhotosInsertion).appendChild(t.gPhotosPage);
 		} else {
@@ -134,14 +172,14 @@
 
 	/**
 	 * Show the FAQ page
-	 * @param {Integer} index index into t.pages Array
+	 * @param {int} index index into t.pages Array
 	 * @memberOf Options
 	 */
 	t.faq = function(index) {
 		if (!t.pages[index].ready) {
 			// create the page the first time
 			t.pages[index].ready = true;
-			const el = new FaqPage();
+			const el = new app.FaqPage();
 			Polymer.dom(t.$.faqInsertion).appendChild(el);
 		}
 		t.route = t.pages[index].route;
@@ -150,14 +188,14 @@
 
 	/**
 	 * Show the Information for Nerds page
-	 * @param {Integer} index index into t.pages Array
+	 * @param {int} index index into t.pages Array
 	 * @memberOf Options
 	 */
 	t.info = function(index) {
 		if (!t.pages[index].ready) {
 			// create the page the first time
 			t.pages[index].ready = true;
-			const el = new InfoPage();
+			const el = new app.InfoPage();
 			Polymer.dom(t.$.infoInsertion).appendChild(el);
 		}
 		t.route = t.pages[index].route;
@@ -179,59 +217,45 @@
 	};
 
 	/**
-	 * Manage an html page that is inserted on demand<br />
-	 * May also be a url link to external site
-	 * @typedef page
-	 * @type {object}
-	 * @property {string} label - label for Nav menu
-	 * @property {string} route - element name route to page
-	 * @property {string} icon - icon for Nav Menu
-	 * @property {object|null} obj - something to be done when selected
-	 * @property {boolean} ready - true if html is inserted
-	 * @property {boolean} divider - true for divider before item
-	 * @memberOf Options
-	 */
-
-	/**
 	 * Array of pages
 	 * @type {Options.page[]}
 	 * @memberOf Options
 	 */
 	t.pages = [
 		{
-			label: 'Settings', route: 'page-settings',
+			label: app.Utils.localize('menu_settings'), route: 'page-settings',
 			icon: 'myicons:settings', obj: null, ready: true, divider: false,
 		},
 		{
-			label: 'Google Photos Albums', route: 'page-google-photos',
-			icon: 'myicons:cloud', obj: t.googlePhotos, ready: false,
-			divider: false,
+			label: app.Utils.localize('menu_google'),
+			route: 'page-google-photos', icon: 'myicons:cloud',
+			obj: t.googlePhotos, ready: false, divider: false,
 		},
 		{
-			label: 'Preview', route: 'page-preview',
+			label: app.Utils.localize('menu_preview'), route: 'page-preview',
 			icon: 'myicons:pageview', obj: t.preview, ready: true,
 			divider: false,
 		},
 		{
-			label: 'Frequently Asked Questions (FAQ)', route: 'page-faq',
+			label: app.Utils.localize('menu_faq'), route: 'page-faq',
 			icon: 'myicons:help', obj: t.faq, ready: false, divider: false,
 		},
 		{
-			label: 'Information For Nerds', route: 'page-info',
+			label: app.Utils.localize('menu_info'), route: 'page-info',
 			icon: 'myicons:info', obj: t.info, ready: false, divider: false,
 		},
 		{
-			label: 'Request Support', route: 'page-support',
+			label: app.Utils.localize('menu_support'), route: 'page-support',
 			icon: 'myicons:help', obj: `${EXT_URI}support`, ready: true,
 			divider: true,
 		},
 		{
-			label: 'Rate Extension', route: 'page-rate',
+			label: app.Utils.localize('menu_rate'), route: 'page-rate',
 			icon: 'myicons:grade', obj: `${EXT_URI}reviews`, ready: true,
 			divider: false,
 		},
 		{
-			label: 'Try Pushy Clipboard', route: 'page-pushy',
+			label: app.Utils.localize('menu_pushy'), route: 'page-pushy',
 			icon: 'myicons:extension', obj: PUSHY_URI, ready: true,
 			divider: true,
 		},
@@ -278,8 +302,8 @@
 		} else if (request.message === 'storageExceeded') {
 			// Display Error Dialog if a save action exceeded the
 			// localStorage limit
-			t.dialogTitle = 'Exceeded Storage Limits';
-			t.dialogText = 'Deselect other photo sources and try again.';
+			t.dialogTitle = app.Utils.localize('err_storage_title');
+			t.dialogText = app.Utils.localize('err_storage_desc');
 			t.$.errorDialog.open();
 		}
 		return false;

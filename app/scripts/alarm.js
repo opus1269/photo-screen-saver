@@ -201,9 +201,12 @@ app.Alarm = (function() {
 	function _setBadgeText() {
 		let text = '';
 		if (app.Utils.getBool('enabled')) {
-			text = app.Alarm.isActive() ? '' : 'SLP';
+			text = app.Alarm.isActive() ?
+				'' : app.Utils.localize('sleep_abbrev');
 		} else {
-			text = app.Utils.getBool('keepAwake') ? 'PWR' : 'OFF';
+			text = app.Utils.getBool('keepAwake') ?
+				app.Utils.localize('power_abbrev') :
+				app.Utils.localize('off_abbrev');
 		}
 		chrome.browserAction.setBadgeText({text: text});
 	}
@@ -238,9 +241,7 @@ app.Alarm = (function() {
 		}
 	}
 
-	/**
-	 * Listen for alarms
-	 */
+	// Listen for alarms
 	chrome.alarms.onAlarm.addListener(_onAlarm);
 
 	return {

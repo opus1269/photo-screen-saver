@@ -145,12 +145,13 @@
 </dom-module>
 
 <script>
-'use strict';
-window.FaqPage = Polymer({
-	is: 'faq-page',
+	'use strict';
+	window.app = window.app || {};
+	app.FaqPage = Polymer({
+		is: 'faq-page',
 
-	behaviors: [
-		app.LocalizeBehavior,
-	],
-});
+		behaviors: [
+			app.LocalizeBehavior,
+		],
+	});
 </script>

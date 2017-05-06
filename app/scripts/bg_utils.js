@@ -46,7 +46,8 @@ app.BGUtils = (function() {
 	 */
 	function _processEnabled() {
 		// update context menu text
-		const label = app.Utils.getBool('enabled') ? 'Disable' : 'Enable';
+		const label = app.Utils.getBool('enabled') ?
+			app.Utils.localize('disable') : app.Utils.localize('enable');
 		app.Alarm.updateBadgeText();
 		chrome.contextMenus.update('ENABLE_MENU', {title: label}, function() {
 			if (chrome.runtime.lastError) {
