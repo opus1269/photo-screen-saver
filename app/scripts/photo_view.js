@@ -39,9 +39,9 @@ app.PhotoView = (function() {
 	/**
 	 * Important components of a photo view
 	 * @typedef {Object} Elements
-	 * @property {HTMLElement} image - paper-image
-	 * @property {HTMLElement} author - label
-	 * @property {HTMLElement} time - label
+	 * @property {Element} image - paper-image
+	 * @property {Element} author - label
+	 * @property {Element} time - label
 	 * @property {Object} model - template model
 	 * @property {Object} item - photo item
 	 * @memberOf PhotoView
