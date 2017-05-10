@@ -33,8 +33,68 @@ app.BGUtils = (function() {
 
 	/**
 	 * Helper methods for Background script
-	 * @namespace BGUtils
+	 * @namespace app.BGUtils
 	 */
+
+
+	/**
+	 * Version of localStorage - update when items are added, removed, changed
+	 * @type {int}
+	 * @default
+	 * @const
+	 * @private
+	 * @memberOf Background
+	 */
+	const DATA_VERSION = 10;
+
+	/**
+	 * Default values in localStorage
+	 * @type {{enabled: boolean,
+	 * idleTime: string, transitionTime: string, skip: boolean,
+	 * shuffle: boolean, photoSizing: number, photoTransition: number,
+	 * showTime: number, showPhotog: boolean, background: string,
+	 * keepAwake: boolean, chromeFullscreen: boolean, allDisplays: boolean,
+	 * activeStart: string, activeStop: string, allowSuspend: boolean,
+	 * useSpaceReddit: boolean, useEarthReddit: boolean,
+	 * useAnimalReddit: boolean, useEditors500px: boolean,
+	 * usePopular500px: boolean, useYesterday500px: boolean,
+	 * useInterestingFlickr: boolean, useChromecast: boolean,
+	 * useAuthors: boolean, useGoogle: boolean, albumSelections: Array}}
+	 * @const
+	 * @private
+	 * @memberOf app.BGUtils
+	 */
+	const DEF_VALS = {
+		'version': DATA_VERSION,
+		'enabled': true,
+		'idleTime': '{"base": 5, "display": 5, "unit": 0}', // minutes
+		'transitionTime': '{"base": 30, "display": 30, "unit": 0}', // seconds
+		'skip': true,
+		'shuffle': true,
+		'photoSizing': 0,
+		'photoTransition': 4,
+		'showTime': 2, // 24 hr format
+		'showPhotog': true,
+		'background':
+			'"background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)"',
+		'keepAwake': false,
+		'chromeFullscreen': true,
+		'allDisplays': false,
+		'activeStart': '"00:00"', // 24 hr time
+		'activeStop': '"00:00"', // 24 hr time
+		'allowSuspend': false,
+		'useSpaceReddit': false,
+		'useEarthReddit': false,
+		'useAnimalReddit': false,
+		'useEditors500px': false,
+		'usePopular500px': false,
+		'useYesterday500px': false,
+		'useInterestingFlickr': false,
+		'useChromecast': true,
+		'useAuthors': false,
+		'useGoogle': true,
+		'albumSelections': [],
+	};
 
 	/**
 	 * Set state based on screen saver enabled flag
@@ -42,7 +102,7 @@ app.BGUtils = (function() {
 	 * use the extension as a display keep awake scheduler without
 	 * using the screensaver
 	 * @private
-	 * @memberOf BGUtils
+	 * @memberOf app.BGUtils
 	 */
 	function _processEnabled() {
 		// update context menu text
@@ -60,7 +120,7 @@ app.BGUtils = (function() {
 	/**
 	 * Set power scheduling features
 	 * @private
-	 * @memberOf BGUtils
+	 * @memberOf app.BGUtils
 	 */
 	function _processKeepAwake() {
 		app.Utils.getBool('keepAwake') ?
@@ -73,17 +133,32 @@ app.BGUtils = (function() {
 	/**
 	 * Set wait time for screen saver display after machine is idle
 	 * @private
-	 * @memberOf BGUtils
+	 * @memberOf app.BGUtils
 	 */
 	function _processIdleTime() {
 		chrome.idle.setDetectionInterval(app.Utils.getIdleSeconds());
+	}
+
+	/**
+	 * Get default time format based on locale
+	 * @return {int}
+	 * @private
+	 * @memberOf app.BGUtils
+	 */
+	function _getTimeFormat() {
+		let ret = 2; // 24 hr
+		const format = app.Utils.localize('time_format');
+		if (format && (format === '12')) {
+			ret = 1;
+		}
+		return ret;
 	}
 
 	return {
 		/**
 		 * Initialize the localStorage items
 		 * @param {Boolean} restore - if true, restore to defaults
-		 * @memberOf BGUtils
+		 * @memberOf app.BGUtils
 		 */
 		initData: function(restore) {
 			// using local storage as a quick and dirty replacement for MVC
@@ -91,41 +166,7 @@ app.BGUtils = (function() {
 			// complicates things
 			// just remember to use parse methods because all values are strings
 
-			const oldVersion = localStorage.getItem('version');
-
-			localStorage.version = '9';
-
-			const VALS = {
-				'enabled': 'true',
-				'idleTime': '{"base": 5, "display": 5, "unit": 0}', // minutes
-				'transitionTime':
-					'{"base": 30, "display": 30, "unit": 0}', // seconds
-				'skip': 'true',
-				'shuffle': 'true',
-				'photoSizing': '0',
-				'photoTransition': '4',
-				'showTime': '1', // 12 hr format
-				'showPhotog': 'true',
-				'background':
-					'"background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)"',
-				'keepAwake': 'false',
-				'chromeFullscreen': 'true',
-				'allDisplays': 'false',
-				'activeStart': '"00:00"', // 24 hr time
-				'activeStop': '"00:00"', // 24 hr time
-				'allowSuspend': 'false',
-				'useSpaceReddit': 'false',
-				'useEarthReddit': 'false',
-				'useAnimalReddit': 'false',
-				'useEditors500px': 'false',
-				'usePopular500px': 'false',
-				'useYesterday500px': 'false',
-				'useInterestingFlickr': 'false',
-				'useChromecast': 'true',
-				'useAuthors': 'false',
-				'useGoogle': 'true',
-				'albumSelections': '[]',
-			};
+			const oldVersion = app.Utils.getInt('version');
 
 			if (oldVersion < 8) {
 				let str;
@@ -133,53 +174,44 @@ app.BGUtils = (function() {
 				let idle;
 
 				// change setting-slider values due to adding units
-				trans = localStorage.getItem('transitionTime');
+				trans = app.Utils.get('transitionTime');
 				if (trans) {
 					str = '{"base": ' + trans + ', "display": ' + trans +
 						', "unit": 0}';
-					localStorage.setItem('transitionTime', str);
+					app.Utils.set('transitionTime', str);
 				}
-				idle = localStorage.getItem('idleTime');
+				idle = app.Utils.get('idleTime');
 				if (idle) {
 					str = '{"base": ' + idle + ', "display": ' + idle +
 						', "unit": 0}';
-					localStorage.setItem('idleTime', str);
+					app.Utils.set('idleTime', str);
 				}
 			}
 
 			if (restore) {
 				// restore defaults
-				Object.keys(VALS).forEach(function(key) {
+				Object.keys(DEF_VALS).forEach(function(key) {
 					if ((key !== 'useGoogle') &&
 						(key !== 'albumSelections') &&
 						(key !== 'os')) {
 						// skip Google photos settings and os
-						localStorage.setItem(key, VALS[key]);
+						app.Utils.set(key, DEF_VALS[key]);
 					}
+					app.Utils.set('showTime', _getTimeFormat());
 				});
 			} else {
-				Object.keys(VALS).forEach(function(key) {
-					if (!localStorage.getItem(key)) {
-						localStorage.setItem(key, VALS[key]);
+				app.Utils.set('showTime', _getTimeFormat());
+				Object.keys(DEF_VALS).forEach(function(key) {
+					if (!app.Utils.get(key)) {
+						app.Utils.set(key, DEF_VALS[key]);
 					}
 				});
 			}
-
-			// remove unused variables
-			localStorage.removeItem('isPreview');
-			localStorage.removeItem('windowID');
-			localStorage.removeItem('useFavoriteFlickr');
-			localStorage.removeItem('useFlickr');
-			localStorage.removeItem('useFlickrSelections');
-			localStorage.removeItem('use500px');
-			localStorage.removeItem('use500pxSelections');
-			localStorage.removeItem('useReddit');
-			localStorage.removeItem('useRedditSelections');
 		},
 
 		/**
 		 * Display the options tab
-		 * @memberOf BGUtils
+		 * @memberOf app.BGUtils
 		 */
 		showOptionsTab: function() {
 			// send message to the option tab to focus it.
@@ -195,10 +227,10 @@ app.BGUtils = (function() {
 
 		/**
 		 * Toggle enabled state of the screen saver
-		 * @memberOf BGUtils
+		 * @memberOf app.BGUtils
 		 */
 		toggleEnabled: function() {
-			localStorage.enabled = !app.Utils.getBool('enabled');
+			app.Utils.set('enabled', !app.Utils.getBool('enabled'));
 			// storage changed event not fired on same page as the change
 			_processEnabled();
 		},
@@ -206,7 +238,7 @@ app.BGUtils = (function() {
 		/**
 		 * Process changes to localStorage items
 		 * @param {string} key the item that changed 'all' for everything
-		 * @memberOf BGUtils
+		 * @memberOf app.BGUtils
 		 */
 		processState: function(key) {
 			// Map processing functions to localStorage values
@@ -229,9 +261,9 @@ app.BGUtils = (function() {
 				// process photo SOURCES
 				app.PhotoSource.processAll();
 				// set os, if not already
-				if (!localStorage.getItem('os')) {
+				if (!app.Utils.get('os')) {
 					chrome.runtime.getPlatformInfo(function(info) {
-						localStorage.setItem('os', info.os);
+						app.Utils.set('os', info.os);
 					});
 				}
 			} else {
