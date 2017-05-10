@@ -33,7 +33,7 @@ app.Utils = (function() {
 
 	/**
 	 * Utility methods
-	 * @namespace Utils
+	 * @namespace app.Utils
 	 */
 
 	return {
@@ -42,7 +42,7 @@ app.Utils = (function() {
 		 * Get the Chrome version
 		 * @see http://stackoverflow.com/a/4900484/4468645
 		 * @return {Integer} Chrome major version
-		 * @memberOf Utils
+		 * @memberOf app.Utils
 		 */
 		getChromeVersion: function() {
 			const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
@@ -53,7 +53,7 @@ app.Utils = (function() {
 		 * Get the i18n string
 		 * @param {String} messageName - key in message.json
 		 * @return {String} internationalized string
-		 * @memberOf Utils
+		 * @memberOf app.Utils
 		 */
 		localize: function(messageName) {
 			return chrome.i18n.getMessage(messageName);
@@ -63,7 +63,7 @@ app.Utils = (function() {
 		 * Determine if a String is null or whitespace only
 		 * @param {String} str str to check
 		 * @return {Boolean} true is str is whitespace (or null)
-		 * @memberOf Utils
+		 * @memberOf app.Utils
 		 */
 		isWhiteSpace: function(str) {
 			return (!str || str.length === 0 || /^\s*$/.test(str));
@@ -73,7 +73,7 @@ app.Utils = (function() {
 		 * Get integer value from localStorage
 		 * @param {String} key key to get value for
 		 * @return {Integer} value as integer
-		 * @memberOf Utils
+		 * @memberOf app.Utils
 		 */
 		getInt: function(key) {
 			return parseInt(localStorage.getItem(key), 10);
@@ -83,7 +83,7 @@ app.Utils = (function() {
 		 * Get boolean value from localStorage
 		 * @param {String} key key to get value for
 		 * @return {Boolean} value as boolean
-		 * @memberOf Utils
+		 * @memberOf app.Utils
 		 */
 		getBool: function(key) {
 			return JSON.parse(localStorage.getItem(key));
@@ -93,10 +93,38 @@ app.Utils = (function() {
 		 * Get JSON value from localStorage
 		 * @param {String} key key to get value for
 		 * @return {JSON} value as JSON Object
-		 * @memberOf Utils
+		 * @memberOf app.Utils
 		 */
 		getJSON: function(key) {
 			return JSON.parse(localStorage.getItem(key));
+		},
+
+		/**
+		 * Get a JSON parsed value from localStorage
+		 * @param {string} key - key to get value for
+		 * @return {?JSON} JSON object, null if key does not exist
+		 * @memberOf app.Utils
+		 */
+		get: function(key) {
+			let item = localStorage.getItem(key);
+			if (item !== null) {
+				item = JSON.parse(item);
+			}
+			return item;
+		},
+
+		/**
+		 * JSON stringify and save a value to localStorage
+		 * @param {string} key - key to set value for
+		 * @param {?Object} value - new value, if null remove item
+		 * @memberOf app.Utils
+		 */
+		set: function(key, value) {
+			if (value !== null) {
+				localStorage.setItem(key, JSON.stringify(value));
+			} else {
+				localStorage.removeItem(key);
+			}
 		},
 
 		/**
@@ -106,7 +134,7 @@ app.Utils = (function() {
 		 * @param {String} keyBool optional key to a boolean value
 		 *                 that is true if the primary key has non-empty value
 		 * @return {Boolean} true if value was set successfully
-		 * @memberOf Utils
+		 * @memberOf app.Utils
 		 */
 		safeSet: function(key, value, keyBool) {
 			let ret = true;
@@ -140,7 +168,7 @@ app.Utils = (function() {
 		/**
 		 * Get the idle time in seconds
 		 * @return {Integer} idle time in seconds
-		 * @memberOf Utils
+		 * @memberOf app.Utils
 		 */
 		getIdleSeconds: function() {
 			const idle = app.Utils.getJSON('idleTime');
@@ -150,7 +178,7 @@ app.Utils = (function() {
 		/**
 		 * true if we are MS windows
 		 * @return {boolean} true if MS windows
-		 * @memberOf Utils
+		 * @memberOf app.Utils
 		 */
 		isWin: function() {
 			return localStorage.getItem('os') === 'win';
@@ -161,7 +189,7 @@ app.Utils = (function() {
 		 * @param {Integer} min
 		 * @param {Integer} max
 		 * @return {Integer} random int
-		 * @memberOf Utils
+		 * @memberOf app.Utils
 		 */
 		getRandomInt: function(min, max) {
 			return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -171,7 +199,7 @@ app.Utils = (function() {
 		 * Randomly sort an Array in place
 		 * Fisher-Yates shuffle algorithm.
 		 * @param {Array} array array to sort
-		 * @memberOf Utils
+		 * @memberOf app.Utils
 		 */
 		shuffleArray: function(array) {
 			for (let i = array.length - 1; i > 0; i--) {
@@ -189,7 +217,7 @@ app.Utils = (function() {
 		 * @param {String} author The photographer
 		 * @param {Number} asp The aspect ratio of the photo
 		 * @param {Object} ex Optional, additional information about the photo
-		 * @memberOf Utils
+		 * @memberOf app.Utils
 		 */
 		addImage: function(images, url, author, asp, ex) {
 			const image = {url: url, author: author, asp: asp.toPrecision(3)};
