@@ -152,7 +152,7 @@ app.SSControl = (function() {
 	 * @see https://developer.chrome.com/extensions/idle#event-onStateChanged
 	 * @param {String} state - current state of computer
 	 * @private
-	 * @memberOf Background
+	 * @memberOf SSControl
 	 */
 	function _onIdleStateChanged(state) {
 		_isShowing(function(isShowing) {
