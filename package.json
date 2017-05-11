@@ -43,7 +43,7 @@
     "gulp-vulcanize": "^6.1.0",
     "gulp-zip": "^4.0.0",
     "run-sequence": "^1.2.2",
-    "uglify-js-harmony": "^2.7.5",
+    "uglify-js-harmony": "^2.7.7",
     "vulcanize": "^1.15.3"
   }
 }
