@@ -129,6 +129,13 @@ gulp.task('clean-all', function() {
 	return del([base.dist, base.dev]);
 });
 
+// Generate JSDoc
+gulp.task('doc', function(cb) {
+	const config = require('./jsdoc.json');
+	gulp.src(['README.md', files.scripts], {read: false})
+		.pipe(plugins.jsdoc3(config, cb));
+});
+
 // manifest.json
 gulp.task('manifest', function() {
 	return gulp.src(base.src + 'manifest.json', {base: '.'})
