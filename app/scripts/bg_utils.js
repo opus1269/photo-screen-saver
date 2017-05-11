@@ -201,9 +201,10 @@ app.BGUtils = (function() {
 
 			if (oldVersion < 10) {
 				// was setting this without quotes before
-				chrome.runtime.getPlatformInfo(function(info) {
-					app.Utils.set('os', info.os);
-				});
+				const oldOS = localStorage.getItem('os');
+				if (oldOS) {
+					app.Utils.set('os', oldOS);
+				}
 			}
 
 			if (oldVersion < 8) {
