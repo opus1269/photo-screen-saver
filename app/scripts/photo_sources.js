@@ -145,16 +145,21 @@
 		if (this.use()) {
 			if (this.isArray) {
 				const items = app.Utils.get(this.photosName);
-				for (let i = 0; i < items.length; i++) {
-					ret = ret.concat(items[i].photos);
-					if (ret) {
-						this._addType(ret);
+				if (items) {
+					// could be that items have not been retrieved yet
+					for (let i = 0; i < items.length; i++) {
+						ret = ret.concat(items[i].photos);
+						if (ret) {
+							this._addType(ret);
+						}
 					}
 				}
 			} else {
 				ret = app.Utils.get(this.photosName);
 				if (ret) {
 					this._addType(ret);
+				} else {
+					ret = [];
 				}
 			}
 		}
