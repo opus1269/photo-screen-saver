@@ -6,7 +6,7 @@
     "message": "A screensaver with multiple photo sources, including your own Google Photos."
   },
   "browser_action_title": {
-    "message": "Photo Screensaver - click for options"
+    "message": "Photo Screen Saver - click for options"
   },
   "toggle_enabled": {
     "message": "Toggle enabled state"
@@ -89,15 +89,15 @@
   },
   "off_abbrev": {
     "message": "OFF",
-    "description": "All Caps. 3 letter abbreviation for OFF"
+    "description": "All Caps. max 3 letter abbreviation for OFF"
   },
   "sleep_abbrev": {
     "message": "SLP",
-    "description": "All Caps. 3 letter abbreviation for SLEEP"
+    "description": "All Caps. max 3 letter abbreviation for SLEEP"
   },
   "power_abbrev": {
     "message": "PWR",
-    "description": "All Caps. 3 letter abbreviation for POWER"
+    "description": "All Caps. max 3 letter abbreviation for POWER"
   },
   "menu": {
     "message": "Menu"
@@ -457,5 +457,9 @@
   },
   "err_storage_desc": {
     "message": "Deselect other photo sources and try again."
+  },
+  "time_format": {
+    "message": "12",
+    "description": "For translators: Set to 12 for AM/PM format or 24"
   }
 }
