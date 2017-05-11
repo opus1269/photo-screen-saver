@@ -124,7 +124,7 @@ app.Utils = (function() {
 		/**
 		 * Save a value to localStorage only if there is enough room
 		 * @param {!string} key - localStorage Key
-		 * @param {string} value - JSON stringified value to save
+		 * @param {object} value - value to save
 		 * @param {string} [keyBool] - key to a boolean value
 		 *                 that is true if the primary key has non-empty value
 		 * @return {boolean} true if value was set successfully
