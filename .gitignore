@@ -1,12 +1,14 @@
 node_modules
-dev
-dist
-app/bower_components
+/dev
+/dist
 bower_components
 .tmp
 *.db
 *- Copy*
 
+/JSDoc
+
+# IntelliJ
 *.iml
 .gradle
 /local.properties
