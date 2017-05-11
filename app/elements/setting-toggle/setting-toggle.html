@@ -102,6 +102,12 @@ Polymer({
 			type: String,
 			value: '',
 		},
+
+		checked: {
+			type: Boolean,
+			value: false,
+			notify: true,
+		},
 	},
 
 	/**
@@ -109,7 +115,7 @@ Polymer({
 	 * @param {boolean} checked - checked state
 	 */
 	setChecked: function(checked) {
-		this.$.base.setValue(checked);
+		this.set('checked', checked);
 	},
 });
 </script>
