@@ -1,0 +1,469 @@
+{
+  "chrome_extension_name": {
+    "message": "שומר מסך תמונה"
+  },
+  "chrome_extension_description": {
+    "message": "שומר מסך עם מקורות תמונה מרובים, כולל אלבומי Google שלך."
+  },
+  "browser_action_title": {
+    "message": "תמונה שומר מסך - לחץ על אפשרויות"
+  },
+  "toggle_enabled": {
+    "message": "מצב מופעלת מופעלת"
+  },
+  "screensaver": {
+    "message": "שומר מסך"
+  },
+  "on": {
+    "message": "עַל"
+  },
+  "off": {
+    "message": "כבוי"
+  },
+  "disable": {
+    "message": "השבת"
+  },
+  "enable": {
+    "message": "לְאַפשֵׁר"
+  },
+  "ok": {
+    "message": "בסדר",
+    "description": "All Caps"
+  },
+  "cancel": {
+    "message": "לְבַטֵל",
+    "description": "All Caps"
+  },
+  "polymer": {
+    "message": "פּוֹלִימֵר",
+    "description": "All Caps"
+  },
+  "github": {
+    "message": "צפה בגיתוב",
+    "description": "All Caps"
+  },
+  "w3": {
+    "message": "W3SCHOOLS",
+    "description": "All Caps"
+  },
+  "mdn": {
+    "message": "MDN",
+    "description": "All Caps"
+  },
+  "chromecast": {
+    "message": "כרומקסט",
+    "description": "All Caps"
+  },
+  "picasa": {
+    "message": "PICASA",
+    "description": "All Caps"
+  },
+  "material": {
+    "message": "עיצוב חומר",
+    "description": "All Caps"
+  },
+  "chrome_ext": {
+    "message": "הרחבת כרום",
+    "description": "All Caps"
+  },
+  "note": {
+    "message": "הערה:"
+  },
+  "photo": {
+    "message": "תמונה"
+  },
+  "photos": {
+    "message": "תמונות"
+  },
+  "seconds": {
+    "message": "שניות"
+  },
+  "minutes": {
+    "message": "דקות"
+  },
+  "hours": {
+    "message": "שעות"
+  },
+  "days": {
+    "message": "ימים"
+  },
+  "off_abbrev": {
+    "message": "כבוי",
+    "description": "All Caps. max 3 letter abbreviation for OFF"
+  },
+  "sleep_abbrev": {
+    "message": "SLP",
+    "description": "All Caps. max 3 letter abbreviation for SLEEP"
+  },
+  "power_abbrev": {
+    "message": "PWR",
+    "description": "All Caps. max 3 letter abbreviation for POWER"
+  },
+  "menu": {
+    "message": "תַפרִיט"
+  },
+  "menu_settings": {
+    "message": "הגדרות"
+  },
+  "menu_google": {
+    "message": "אלבומי Google"
+  },
+  "menu_preview": {
+    "message": "תצוגה מקדימה"
+  },
+  "menu_faq": {
+    "message": "שאלות נפוצות"
+  },
+  "menu_info": {
+    "message": "מידע עבור nerds"
+  },
+  "menu_support": {
+    "message": "בקש תמיכה"
+  },
+  "menu_rate": {
+    "message": "דרג תוסף"
+  },
+  "menu_pushy": {
+    "message": "נסה הרחבת לוח דחוס"
+  },
+  "menu_letterbox": {
+    "message": "תיבת דואר"
+  },
+  "menu_zoom": {
+    "message": "זום (חיתוך במאי)"
+  },
+  "menu_frame": {
+    "message": "מִסגֶרֶת"
+  },
+  "menu_full": {
+    "message": "מלא (מאי לעוות)"
+  },
+  "menu_random": {
+    "message": "אַקרַאִי"
+  },
+  "menu_scale_up": {
+    "message": "קנה מידה"
+  },
+  "menu_fade": {
+    "message": "לִדעוֹך"
+  },
+  "menu_slide_from_right": {
+    "message": "החלק ימינה"
+  },
+  "menu_slide_down": {
+    "message": "החלק מטה"
+  },
+  "menu_spin_up": {
+    "message": "ספין"
+  },
+  "menu_slide_up": {
+    "message": "החלק למעלה"
+  },
+  "menu_slide_from_bottom": {
+    "message": "החלק מלמטה"
+  },
+  "menu_slide_right": {
+    "message": "החלק ימינה"
+  },
+  "tooltip_select": {
+    "message": "בחר הכל"
+  },
+  "tooltip_deselect": {
+    "message": "הסר סימון מהכל"
+  },
+  "tooltip_restore": {
+    "message": "שחזר הגדרות ברירת מחדל"
+  },
+  "tooltip_refresh": {
+    "message": "רשימת רענון"
+  },
+  "tooltip_keep_awake": {
+    "message": "התכונות 'שמור שמור' זמינות גם אם שומר המסך מושבת, כך שתוכל להשתמש באפליקציה כתזמון כוח כללי. הסמל יוצג 'PWR' במצב זה."
+  },
+  "tooltip_settings_toggle": {
+    "message": "הפעל / השבת את שומר המסך"
+  },
+  "tooltip_google_toggle": {
+    "message": "הפעלה / השבתה של שימוש באלבומים"
+  },
+  "setting_idle_time": {
+    "message": "זמן המתנה"
+  },
+  "setting_transition_time": {
+    "message": "זמן מעבר צילום"
+  },
+  "setting_photo_sizing": {
+    "message": "מצב תצוגת תמונות"
+  },
+  "setting_photo_transition": {
+    "message": "שיטת מעבר תמונה"
+  },
+  "setting_show_time": {
+    "message": "הצג זמן"
+  },
+  "setting_shuffle": {
+    "message": "לְעַרְבֵּב"
+  },
+  "setting_shuffle_desc": {
+    "message": "הצג תמונות בסדר אקראי"
+  },
+  "setting_skip": {
+    "message": "דלג על תמונות יחס גובה קיצוני"
+  },
+  "setting_skip_desc": {
+    "message": "אל תציג תמונות מסוימות במצב זום ומצב מלא"
+  },
+  "setting_photog": {
+    "message": "הצג שם לתמונות שבבעלותך"
+  },
+  "setting_photog_desc": {
+    "message": "הערה: תמיד מוצג במצב פריימים"
+  },
+  "setting_bg": {
+    "message": "רקע כללי"
+  },
+  "setting_bg_desc": {
+    "message": "הגדר את תמונת הרקע עבור שומר המסך"
+  },
+  "setting_bg_dialog_title": {
+    "message": "בחר תמונת רקע"
+  },
+  "setting_all_displays": {
+    "message": "כל התצוגות"
+  },
+  "setting_all_displays_desc": {
+    "message": "הצג שומר מסך בכל הצגים המחוברים"
+  },
+  "setting_full_screen": {
+    "message": "אל תציג את חלונות Chrome במסך מלא"
+  },
+  "setting_full_screen_desc": {
+    "message": "שימושי אם אתה צופה בסרטונים"
+  },
+  "setting_keep_awake": {
+    "message": "הישאר ער"
+  },
+  "setting_keep_awake_desc": {
+    "message": "מניעת תצוגה משינה (פעילה תמיד אם זמני ההתחלה והעיצוב שווים)"
+  },
+  "setting_start_time": {
+    "message": "שומר מסך / שמור ער זמן התחלה פעיל"
+  },
+  "setting_start_time_desc": {
+    "message": "אפשר להציג את שומר המסך, החל מהרגע הזה"
+  },
+  "setting_stop_time": {
+    "message": "שומר מסך / שמור זמן עצור פעיל להפסיק"
+  },
+  "setting_stop_time_desc": {
+    "message": "לאחר מכן, הצג שומר מסך לא מאפשר"
+  },
+  "setting_suspend": {
+    "message": "אפשר להשהות את המערכת"
+  },
+  "setting_suspend_desc": {
+    "message": "המחשב עשוי להירדם במהלך זמן לא פעיל"
+  },
+  "setting_chromecast": {
+    "message": "Chromecast"
+  },
+  "setting_chromecast_desc": {
+    "message": "תמונות רקע מסוימות מהמכשיר Chromecast"
+  },
+  "setting_500editors": {
+    "message": "500px - בחירת העורכים"
+  },
+  "setting_500editors_desc": {
+    "message": "בחירת תמונות מ 500px"
+  },
+  "setting_500popular": {
+    "message": "500px - פופולרי"
+  },
+  "setting_500popular_desc": {
+    "message": "תמונות פופולריות מ 500px"
+  },
+  "setting_500yest": {
+    "message": "500px - טרי"
+  },
+  "setting_500yest_desc": {
+    "message": "תמונות אחרונות מ 500px, מתעדכן מדי יום"
+  },
+  "setting_flickr_int": {
+    "message": "פליקר - מעניין"
+  },
+  "setting_flickr_int_desc": {
+    "message": "תמונות מעניינות מהפליקר, מתעדכנות מדי יום"
+  },
+  "setting_reddit_space": {
+    "message": "Reddit - רווח"
+  },
+  "setting_reddit_space_desc": {
+    "message": "בעיקר תמונות שמימיות מ reddit, מתעדכן מדי יום"
+  },
+  "setting_reddit_earth": {
+    "message": "Reddit - אדמה"
+  },
+  "setting_reddit_earth_desc": {
+    "message": "בעיקר הנוף תמונות reddit, מתעדכן מדי יום"
+  },
+  "setting_reddit_animal": {
+    "message": "Reddit - בעל חיים"
+  },
+  "setting_reddit_animal_desc": {
+    "message": "תמונות חיות מ reddit, מתעדכן מדי יום"
+  },
+  "setting_mine": {
+    "message": "מפתח הרחבה"
+  },
+  "setting_mine_desc": {
+    "message": "תמונות של הבחור שכתב את זה"
+  },
+  "setting_click_to_view": {
+    "message": "לחץ על העכבר כדי להציג את האתר עבור תמונות Flickr, 500px ו- reddit"
+  },
+  "setting_flickr_api": {
+    "message": "מוצר זה משתמש בממשק ה- API של Flickr אך אינו מאושר או מאושר על ידי Flickr"
+  },
+  "tab_slideshow": {
+    "message": "SLIDE הצג פקדים",
+    "description": "All Caps"
+  },
+  "tab_display": {
+    "message": "פקדי תצוגה",
+    "description": "All Caps"
+  },
+  "tab_sources": {
+    "message": "מקורות צילומים",
+    "description": "All Caps"
+  },
+  "google_title": {
+    "message": "אלבומי Google Photos"
+  },
+  "google_shared_albums_note": {
+    "message": "הערה: ייתכן שאלבומים משותפים אינם זמינים. עיין בשאלות הנפוצות לקבלת מידע נוסף."
+  },
+  "google_loading": {
+    "message": "טוען אלבומים"
+  },
+  "faq_title": {
+    "message": "שאלות נפוצות"
+  },
+  "faq_1": {
+    "message": "כיצד ניתן להסיר את ההתקנה?"
+  },
+  "faq_1_body": {
+    "message": "לחץ לחיצה ימנית על הסמל בסרגל הכלים של הדפדפן ובחר 'הסר מ- Chrome ...'",
+    "description": "Values in single quotes are set by Chrome browser please check"
+  },
+  "faq_2": {
+    "message": "מדוע לא מוצגים כל האלבומים שלי באלבומי Google?"
+  },
+  "faq_2_body": {
+    "message": "ממשק ה- API ש- Google מספקת לממשק עם אלבומי Google אינו תומך באופן מלא באלבומים המשותפים החדשים. כדי להמיר אלבום משותף קיים לפורמט שבו תומך שומר המסך, בחר את האלבום, לחץ על 'אפשרויות שיתוף' וקבע את האפשרות 'שתף'."
+  },
+  "faq_3": {
+    "message": "קיבלתי שגיאה של Status: 500 בניסיון לטעון את אלבומי Google שלי. מה זה אומר?"
+  },
+  "faq_3_body": {
+    "message": "זוהי שגיאה בשרת המספק את התמונות. זוהי כנראה בעיה זמנית מאוד - נסה שוב מאוחר יותר."
+  },
+  "faq_4": {
+    "message": "מדוע תווית הזמן שגויה ב- Chromebook שלי?"
+  },
+  "faq_4_body": {
+    "message": "אם יש לך בעיה זו, עבור אל 'הגדרות' -> 'הצג הגדרות מתקדמות' ובקטע 'תאריך ושעה' בטל את הסימון של 'הגדר אזור זמן באופן אוטומטי באמצעות המיקום שלך'. יהיה עליך להתחיל מחדש כדי שהשינוי ייכנס לתוקף.",
+    "description": "Values in single quotes are set by Chrome browser please check"
+  },
+  "faq_5": {
+    "message": "מה המשמעות של התוויות על הסמל?"
+  },
+  "faq_5_body1": {
+    "message": "ללא תווית: שומר המסך מאופשר ויוצג כאשר המחשב אינו פעיל."
+  },
+  "faq_5_body2": {
+    "message": "OFF: שומר המסך מושבת."
+  },
+  "faq_5_body3": {
+    "message": "SLP: הזמן הוא בטווח הלא פעיל של המתזמן. שומר המסך לא יוצג."
+  },
+  "faq_5_body4": {
+    "message": "PWR: המתזמן יעבד את ההגדרות הערוכות, אך שומר המסך לעולם לא יוצג."
+  },
+  "faq_6": {
+    "message": "יש לי את שמור להתעורר, אבל התצוגה שלי לא ישן. למה?"
+  },
+  "faq_6_body1": {
+    "message": "יישומים אחרים עשויים למנוע את הצפייה בתצוגה או במחשב."
+  },
+  "faq_6_body2": {
+    "message": "במכשירי Chrome רבים, התצוגה לא תישאר אם שומר המסך פועל. אתה יכול להשתמש שומר מסך / שמור על תזמון תכונה כדי לשלוט כאשר שומר המסך מוצג."
+  },
+  "faq_7": {
+    "message": "יש לי לשמור על ער, אבל המערכת שלי היא כיבוי. למה?"
+  },
+  "faq_7_body": {
+    "message": "תכונות שמור ער הם בקשות למחשב ואין צורך לכבד. בקשת התצוגה כמעט תמיד מכובדת, אך בקשת המערכת אינה. בפרט, רבים של המחשב יהיה לשים את המחשב לישון אם יש לך להגדיר לעשות את זה."
+  },
+  "faq_8": {
+    "message": "האם באפשרותך להוסיף תמיכה בשימוש בקבצים מהמחשב המקומי שלי?"
+  },
+  "faq_8_body": {
+    "message": "כברירת מחדל, הרחבות אינן מורשות לגשת למערכת הקבצים המקומית."
+  },
+  "info_title": {
+    "message": "מידע עבור חנונים"
+  },
+  "info_source": {
+    "message": "קוד מקור"
+  },
+  "info_apis": {
+    "message": "APIs ומפרטים"
+  },
+  "info_apis_body1": {
+    "message": "תוסף זה נבנה כולו עם פולימר וניל JavaScript. פולימר מתייחס לכל דבר כמו"
+  },
+  "info_apis_body2": {
+    "message": "רכיב אינטרנט"
+  },
+  "info_apis_body3": {
+    "message": "מעולם לא השתמשתי דברים כמו AngularJS (או אפילו JQuery) אז אני לא יכול באמת להעריך את היתרונות והחסרונות של גישה זו. בנוסף, אין שום דבר פולימר שמונע ממך להשתמש בו עם פתרונות אחרים."
+  },
+  "info_libs": {
+    "message": "ספריות תמונות"
+  },
+  "info_libs_body1": {
+    "message": "לצערנו, אין ממשק API של אלבומי Google, לכן הדרך היחידה לקיים אינטראקציה עם זה היא ממשק API של Picasa Web. ממשק API זה מיישם רק קבוצת משנה של תכונות אלבומי Google."
+  },
+  "info_libs_body2": {
+    "message": "תמונות Chromecast"
+  },
+  "info_libs_body3": {
+    "message": "הם תמונה בזמן של אלה המשמשים את הרקע."
+  },
+  "info_libs_body4": {
+    "message": "תוסף זה נקרא רק עבור תמונות Google שלך, למרות מה שההרשאות הקופצות מציינות. ל- API של Picasa אין טווח לקריאה בלבד."
+  },
+  "info_web": {
+    "message": "תיעוד Web Development"
+  },
+  "info_web_body": {
+    "message": "זו היתה הפעם הראשונה שלי עושה פיתוח האינטרנט ואת עקומת הלמידה הוא די תלול. אתרים אלה מספקים מדריכים טובים וחומרי עזר על הפרדיגמה HTML-CSS-JavaScript."
+  },
+  "err_request_failed": {
+    "message": "בקשה נכשלה. בחר רענון כדי לנסות שוב."
+  },
+  "err_storage_title": {
+    "message": "חריגה ממגבלות האחסון"
+  },
+  "err_storage_desc": {
+    "message": "בטל את הסימון של מקורות תמונה אחרים ונסה שוב."
+  },
+  "time_format": {
+    "message": "12",
+    "description": "For translators: Set to 12 for AM/PM format or 24"
+  },
+  "translationInfo": {
+    "message": "Google Translate API",
+    "description": "Add your name and contact info, if you want"
+  }
+}

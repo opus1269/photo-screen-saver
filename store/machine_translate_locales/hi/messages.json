@@ -1,0 +1,469 @@
+{
+  "chrome_extension_name": {
+    "message": "फोटो स्क्रीन सेवर"
+  },
+  "chrome_extension_description": {
+    "message": "आपके Google फ़ोटो सहित कई फोटो स्रोतों के साथ एक स्क्रीनसेवर"
+  },
+  "browser_action_title": {
+    "message": "फोटो स्क्रीन सेवर - विकल्प के लिए क्लिक करें"
+  },
+  "toggle_enabled": {
+    "message": "टॉगल सक्षम स्थिति"
+  },
+  "screensaver": {
+    "message": "स्क्रीन सेवर"
+  },
+  "on": {
+    "message": "पर"
+  },
+  "off": {
+    "message": "बंद"
+  },
+  "disable": {
+    "message": "अक्षम"
+  },
+  "enable": {
+    "message": "सक्षम करें"
+  },
+  "ok": {
+    "message": "ठीक",
+    "description": "All Caps"
+  },
+  "cancel": {
+    "message": "रद्द करना",
+    "description": "All Caps"
+  },
+  "polymer": {
+    "message": "पॉलीमर",
+    "description": "All Caps"
+  },
+  "github": {
+    "message": "जिथब पर देखें",
+    "description": "All Caps"
+  },
+  "w3": {
+    "message": "W3Schools",
+    "description": "All Caps"
+  },
+  "mdn": {
+    "message": "MDN",
+    "description": "All Caps"
+  },
+  "chromecast": {
+    "message": "CHROMECAST",
+    "description": "All Caps"
+  },
+  "picasa": {
+    "message": "PICASA",
+    "description": "All Caps"
+  },
+  "material": {
+    "message": "सामग्री डिजाइन",
+    "description": "All Caps"
+  },
+  "chrome_ext": {
+    "message": "क्रोम एक्सटेंशन",
+    "description": "All Caps"
+  },
+  "note": {
+    "message": "ध्यान दें:"
+  },
+  "photo": {
+    "message": "तस्वीर"
+  },
+  "photos": {
+    "message": "तस्वीरें"
+  },
+  "seconds": {
+    "message": "सेकंड"
+  },
+  "minutes": {
+    "message": "मिनट"
+  },
+  "hours": {
+    "message": "घंटे"
+  },
+  "days": {
+    "message": "दिन"
+  },
+  "off_abbrev": {
+    "message": "बंद",
+    "description": "All Caps. max 3 letter abbreviation for OFF"
+  },
+  "sleep_abbrev": {
+    "message": "एसएलपी",
+    "description": "All Caps. max 3 letter abbreviation for SLEEP"
+  },
+  "power_abbrev": {
+    "message": "PWR",
+    "description": "All Caps. max 3 letter abbreviation for POWER"
+  },
+  "menu": {
+    "message": "मेन्यू"
+  },
+  "menu_settings": {
+    "message": "सेटिंग्स"
+  },
+  "menu_google": {
+    "message": "Google फ़ोटो एल्बम"
+  },
+  "menu_preview": {
+    "message": "पूर्वावलोकन"
+  },
+  "menu_faq": {
+    "message": "अक्सर पूछे जाने वाले प्रश्न (अक्सर पूछे जाने वाले प्रश्न)"
+  },
+  "menu_info": {
+    "message": "नर्स के लिए जानकारी"
+  },
+  "menu_support": {
+    "message": "अनुरोध समर्थन"
+  },
+  "menu_rate": {
+    "message": "दर एक्सटेंशन"
+  },
+  "menu_pushy": {
+    "message": "पुशी क्लिपबोर्ड एक्सटेंशन की कोशिश करें"
+  },
+  "menu_letterbox": {
+    "message": "पत्र पात्र"
+  },
+  "menu_zoom": {
+    "message": "ज़ूम (मई फसल)"
+  },
+  "menu_frame": {
+    "message": "ढांचा"
+  },
+  "menu_full": {
+    "message": "पूर्ण (मई विकृत)"
+  },
+  "menu_random": {
+    "message": "बिना सोचे समझे"
+  },
+  "menu_scale_up": {
+    "message": "स्केल अप"
+  },
+  "menu_fade": {
+    "message": "मुरझाना"
+  },
+  "menu_slide_from_right": {
+    "message": "दाएं से स्लाइड करें"
+  },
+  "menu_slide_down": {
+    "message": "नीचे खिसकना"
+  },
+  "menu_spin_up": {
+    "message": "घूम जाओ"
+  },
+  "menu_slide_up": {
+    "message": "ऊपर चढ़ाइए"
+  },
+  "menu_slide_from_bottom": {
+    "message": "नीचे से स्लाइड"
+  },
+  "menu_slide_right": {
+    "message": "स्लाइड सही"
+  },
+  "tooltip_select": {
+    "message": "सभी का चयन करे"
+  },
+  "tooltip_deselect": {
+    "message": "सभी को अचिन्हिंत करें"
+  },
+  "tooltip_restore": {
+    "message": "डिफ़ॉल्ट सेटिंग्स को पुनर्स्थापित करें"
+  },
+  "tooltip_refresh": {
+    "message": "सूची ताज़ा करे"
+  },
+  "tooltip_keep_awake": {
+    "message": "स्क्रीनसेवर अक्षम होने के बावजूद भी जागृत सुविधाओं को उपलब्ध कराएं, ताकि आप ऐप को सामान्य बिजली अनुसूचक के रूप में इस्तेमाल कर सकें। इस स्थिति में जब आइकन 'पीडब्लूआर' प्रदर्शित करेगा।"
+  },
+  "tooltip_settings_toggle": {
+    "message": "स्क्रीनसेवर को सक्षम / अक्षम करें"
+  },
+  "tooltip_google_toggle": {
+    "message": "एल्बमों को सक्षम / अक्षम करें का उपयोग करें"
+  },
+  "setting_idle_time": {
+    "message": "प्रतीक्षा समय"
+  },
+  "setting_transition_time": {
+    "message": "फोटो संक्रमण का समय"
+  },
+  "setting_photo_sizing": {
+    "message": "फोटो प्रदर्शन मोड"
+  },
+  "setting_photo_transition": {
+    "message": "फोटो संक्रमण विधि"
+  },
+  "setting_show_time": {
+    "message": "शो टाइम"
+  },
+  "setting_shuffle": {
+    "message": "मिश्रण"
+  },
+  "setting_shuffle_desc": {
+    "message": "यादृच्छिक क्रम में वर्तमान फ़ोटो"
+  },
+  "setting_skip": {
+    "message": "चरम पहलू अनुपात तस्वीरें छोड़ें"
+  },
+  "setting_skip_desc": {
+    "message": "ज़ूम और पूर्ण मोड में कुछ फ़ोटो प्रदर्शित न करें"
+  },
+  "setting_photog": {
+    "message": "अपने खुद के फोटो के लिए नाम दिखाएं"
+  },
+  "setting_photog_desc": {
+    "message": "नोट: फ़्रेम मोड में हमेशा दिखाता है"
+  },
+  "setting_bg": {
+    "message": "पृष्ठभूमि"
+  },
+  "setting_bg_desc": {
+    "message": "स्क्रीनसेवर के लिए पृष्ठभूमि छवि सेट करें"
+  },
+  "setting_bg_dialog_title": {
+    "message": "पृष्ठभूमि चित्र को चुनें"
+  },
+  "setting_all_displays": {
+    "message": "सभी प्रदर्शित करता है"
+  },
+  "setting_all_displays_desc": {
+    "message": "सभी कनेक्टेड डिस्प्ले पर स्क्रीनसेवर दिखाएं"
+  },
+  "setting_full_screen": {
+    "message": "पूर्ण स्क्रीन क्रोम विंडो पर प्रदर्शित न करें"
+  },
+  "setting_full_screen_desc": {
+    "message": "यदि आप वीडियो देख रहे हैं तो उपयोगी है"
+  },
+  "setting_keep_awake": {
+    "message": "जागते रहना"
+  },
+  "setting_keep_awake_desc": {
+    "message": "स्लीपिंग से प्रदर्शन को रोकें (हमेशा प्रारंभ और रोक बार समान होने पर)"
+  },
+  "setting_start_time": {
+    "message": "स्क्रीनसेवर / जाग सक्रिय सक्रिय समय रखें"
+  },
+  "setting_start_time_desc": {
+    "message": "स्क्रीनसेवर डिस्प्ले को अनुमति दें, इस समय से शुरू करें"
+  },
+  "setting_stop_time": {
+    "message": "स्क्रीनसेवर / जाग सक्रिय सक्रियण समय रखें"
+  },
+  "setting_stop_time_desc": {
+    "message": "इस समय के बाद स्क्रीनसेवर प्रदर्शन अस्वीकार करें"
+  },
+  "setting_suspend": {
+    "message": "सिस्टम को निलंबित करने की अनुमति दें"
+  },
+  "setting_suspend_desc": {
+    "message": "निष्क्रिय समय के दौरान कंप्यूटर सो सकता है"
+  },
+  "setting_chromecast": {
+    "message": "Chromecast"
+  },
+  "setting_chromecast_desc": {
+    "message": "Chromecast डिवाइस से कुछ पृष्ठभूमि फ़ोटो"
+  },
+  "setting_500editors": {
+    "message": "500 पीएक्स - संपादक का विकल्प"
+  },
+  "setting_500editors_desc": {
+    "message": "500 पीएक्स की पसंद तस्वीरें"
+  },
+  "setting_500popular": {
+    "message": "500px - लोकप्रिय"
+  },
+  "setting_500popular_desc": {
+    "message": "500 पीएक्स से लोकप्रिय फोटो"
+  },
+  "setting_500yest": {
+    "message": "500px - ताजा"
+  },
+  "setting_500yest_desc": {
+    "message": "500px से हाल ही की तस्वीरें, दैनिक अद्यतन"
+  },
+  "setting_flickr_int": {
+    "message": "फ़्लिकर - दिलचस्प"
+  },
+  "setting_flickr_int_desc": {
+    "message": "फ़्लिकर से दिलचस्प तस्वीरें, दैनिक अपडेट किया गया"
+  },
+  "setting_reddit_space": {
+    "message": "Reddit - space"
+  },
+  "setting_reddit_space_desc": {
+    "message": "लालदी से मुख्य रूप से आकाशीय फोटो, दैनिक अपडेट किया गया"
+  },
+  "setting_reddit_earth": {
+    "message": "Reddit - पृथ्वी"
+  },
+  "setting_reddit_earth_desc": {
+    "message": "रेडमिट से मुख्य रूप से लैंडस्केप फोटो, दैनिक अपडेट किया गया"
+  },
+  "setting_reddit_animal": {
+    "message": "Reddit - जानवर"
+  },
+  "setting_reddit_animal_desc": {
+    "message": "Reddit से पशु फ़ोटो, दैनिक अपडेट किया गया"
+  },
+  "setting_mine": {
+    "message": "एक्सटेंशन डेवलपर"
+  },
+  "setting_mine_desc": {
+    "message": "उस व्यक्ति की तस्वीरें जो इसने लिखी हैं"
+  },
+  "setting_click_to_view": {
+    "message": "फ़्लिकर, 500 पिक्स और रेडडिट फोटो के लिए वेबसाइट देखने के लिए माउस क्लिक करें"
+  },
+  "setting_flickr_api": {
+    "message": "यह उत्पाद फ़्लिकर एपीआई का उपयोग करता है, लेकिन फ़्लिकर द्वारा इसकी पुष्टि या प्रमाणित नहीं किया गया है"
+  },
+  "tab_slideshow": {
+    "message": "स्लाइड शो नियंत्रण",
+    "description": "All Caps"
+  },
+  "tab_display": {
+    "message": "प्रदर्शन नियंत्रण",
+    "description": "All Caps"
+  },
+  "tab_sources": {
+    "message": "फोटो स्रोत",
+    "description": "All Caps"
+  },
+  "google_title": {
+    "message": "Google फ़ोटो एल्बम"
+  },
+  "google_shared_albums_note": {
+    "message": "नोट: साझा एल्बम संभवतः उपलब्ध नहीं हो सकते हैं अधिक जानकारी के लिए अक्सर पूछे जाने वाले प्रश्न देखें।"
+  },
+  "google_loading": {
+    "message": "एल्बम लोड हो रहा है"
+  },
+  "faq_title": {
+    "message": "अक्सर पूछे जाने वाले प्रश्न"
+  },
+  "faq_1": {
+    "message": "मैं इसे कैसे अनइंस्टॉल करूं?"
+  },
+  "faq_1_body": {
+    "message": "ब्राउज़र टूलबार में आइकन पर राइट क्लिक करें और 'क्रोम से निकालें ...' का चयन करें",
+    "description": "Values in single quotes are set by Chrome browser please check"
+  },
+  "faq_2": {
+    "message": "मेरे सारे Google फ़ोटो एल्बम क्यों नहीं दिख रहे हैं?"
+  },
+  "faq_2_body": {
+    "message": "एपीआई जो Google Google फ़ोटो के साथ इंटरफेस प्रदान करता है वह नई साझा एल्बमों का पूरी तरह से समर्थन नहीं करता है। किसी मौजूदा साझा एल्बम को स्क्रीन सेवर का समर्थन करने वाले प्रारूप में कनवर्ट करने के लिए, एल्बम का चयन करें, 'साझाकरण विकल्प' पर क्लिक करें और 'साझा करें' विकल्प को अनसेट न करें"
+  },
+  "faq_3": {
+    "message": "मुझे अपनी Google फ़ोटो एल्बम लोड करने की कोशिश में एक स्थिति: 500 त्रुटि मिली। इसका क्या मतलब है?"
+  },
+  "faq_3_body": {
+    "message": "यह सर्वर पर एक त्रुटि है जो फ़ोटो प्रदान करता है यह शायद एक बहुत अस्थायी समस्या है - कृपया बाद में फिर से प्रयास करें।"
+  },
+  "faq_4": {
+    "message": "मेरे Chromebook पर टाइम लेबल गलत क्यों है?"
+  },
+  "faq_4_body": {
+    "message": "यदि आपको यह समस्या है, तो 'सेटिंग' -> 'उन्नत सेटिंग दिखाएं' पर जाएं और 'दिनांक और समय' अनुभाग में 'अपना स्थान का उपयोग करके स्वचालित रूप से समय क्षेत्र सेट करें' को अनचेक करें। परिवर्तन को प्रभावी बनाने के लिए आपको फिर से शुरू करना होगा।",
+    "description": "Values in single quotes are set by Chrome browser please check"
+  },
+  "faq_5": {
+    "message": "आइकन पर लेबल क्या मतलब है?"
+  },
+  "faq_5_body1": {
+    "message": "कोई लेबल नहीं: स्क्रीनसेवर सक्षम है और कंप्यूटर बेकार होने पर प्रदर्शित किया जाएगा।"
+  },
+  "faq_5_body2": {
+    "message": "बंद: स्क्रीनसेवर अक्षम है"
+  },
+  "faq_5_body3": {
+    "message": "एसएलपी: समय शेड्यूलर की निष्क्रिय श्रेणी में है। स्क्रीनसेवर प्रदर्शित नहीं करेगा।"
+  },
+  "faq_5_body4": {
+    "message": "पीडब्लूआर: शेड्यूलर जाग सेटिंग्स को बनाए रखने की प्रक्रिया करेगा, लेकिन स्क्रीनसेवर कभी प्रदर्शित नहीं करेगा।"
+  },
+  "faq_6": {
+    "message": "मेरे पास जागृत रहें, लेकिन मेरा प्रदर्शन सो नहीं रहा है। ऐसा क्यों है?"
+  },
+  "faq_6_body1": {
+    "message": "अन्य अनुप्रयोग नींद से प्रदर्शन या कंप्यूटर को रोका जा सकता है।"
+  },
+  "faq_6_body2": {
+    "message": "कई क्रोम ओएस डिवाइसों पर स्क्रीनसेवर चल रहा है तो डिस्प्ले नहीं सोएगा। आप स्क्रीनसेवर का उपयोग कर सकते हैं / स्क्रीन पर प्रदर्शित होने पर नियंत्रित करने के लिए जाग शेड्यूलिंग सुविधा रखें।"
+  },
+  "faq_7": {
+    "message": "मुझे जागते रहें, लेकिन मेरा सिस्टम बंद हो रहा है ऐसा क्यों है?"
+  },
+  "faq_7_body": {
+    "message": "जागृत रहें सुविधाओं को कंप्यूटर के लिए अनुरोध कर रहे हैं और सम्मानित नहीं होना चाहिए। प्रदर्शन अनुरोध लगभग हमेशा सम्मानित किया जाता है, लेकिन सिस्टम अनुरोध नहीं है। विशेष रूप से, कई पीसी कंप्यूटर को सोएगा यदि आप उन्हें ऐसा करने के लिए सेट करते हैं।"
+  },
+  "faq_8": {
+    "message": "क्या आप अपने स्थानीय कंप्यूटर से फ़ाइलों का उपयोग करने के लिए समर्थन जोड़ सकते हैं?"
+  },
+  "faq_8_body": {
+    "message": "डिफ़ॉल्ट रूप से, एक्सटेंशन को स्थानीय फाइल सिस्टम तक पहुंचने की अनुमति नहीं है"
+  },
+  "info_title": {
+    "message": "नर्स के लिए जानकारी"
+  },
+  "info_source": {
+    "message": "सोर्स कोड"
+  },
+  "info_apis": {
+    "message": "एपीआई और विनिर्देश"
+  },
+  "info_apis_body1": {
+    "message": "यह एक्सटेंशन पूरी तरह से पॉलिमर और वेनिला जावास्क्रिप्ट के साथ बनाया गया है पॉलिमर सब कुछ एक के रूप में व्यवहार करता है"
+  },
+  "info_apis_body2": {
+    "message": "वेब घटक"
+  },
+  "info_apis_body3": {
+    "message": "मैंने कभी भी अंगरीयजेएस (या यहां तक ​​कि जेक्य) जैसी चीजों का इस्तेमाल नहीं किया है, इसलिए मैं इस दृष्टिकोण के पेशेवरों और विपक्ष का मूल्यांकन नहीं कर सकता। इसके अलावा, पॉलिमर में कुछ भी ऐसा नहीं है जो इसे इन अन्य समाधानों के साथ प्रयोग से रोकता है"
+  },
+  "info_libs": {
+    "message": "फोटो लाइब्रेरी"
+  },
+  "info_libs_body1": {
+    "message": "दुर्भाग्य से, कोई Google फ़ोटो API नहीं है, इसलिए इसका एकमात्र तरीका Picasa वेब API है। यह API केवल Google फ़ोटो सुविधाओं का एक सबसेट लागू करता है"
+  },
+  "info_libs_body2": {
+    "message": "Chromecast फ़ोटो"
+  },
+  "info_libs_body3": {
+    "message": "पृष्ठभूमि के लिए इस्तेमाल किए जाने वाले समय के एक स्नैपशॉट हैं"
+  },
+  "info_libs_body4": {
+    "message": "यह एक्सटेंशन केवल आपके Google फ़ोटो के लिए पढ़ा जाता है, इसके बावजूद अनुमति पॉपअप क्या कहता है पिकासा एपीआई में केवल पढ़ने योग्य क्षेत्र नहीं है।"
+  },
+  "info_web": {
+    "message": "वेब विकास प्रलेखन"
+  },
+  "info_web_body": {
+    "message": "यह मेरी पहली बार वेब विकास कर रहा था और सीखने की अवस्था बहुत तेज है। ये साइट एचटीएमएल-सीएसएस-जावास्क्रिप्ट पैराडाइम पर अच्छे ट्यूटोरियल और संदर्भ सामग्री प्रदान करते हैं।"
+  },
+  "err_request_failed": {
+    "message": "अनुरोध विफल रहा। पुन: प्रयास करने के लिए रीफ़्रेश करें चुनें।"
+  },
+  "err_storage_title": {
+    "message": "भंडारण सीमा पार हो गई"
+  },
+  "err_storage_desc": {
+    "message": "अन्य फोटो स्रोतों को अचयनित करें और फिर से प्रयास करें"
+  },
+  "time_format": {
+    "message": "12",
+    "description": "For translators: Set to 12 for AM/PM format or 24"
+  },
+  "translationInfo": {
+    "message": "Google Translate API",
+    "description": "Add your name and contact info, if you want"
+  }
+}

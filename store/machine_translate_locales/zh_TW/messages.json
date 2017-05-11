@@ -1,0 +1,469 @@
+{
+  "chrome_extension_name": {
+    "message": "照片屏幕保護程序"
+  },
+  "chrome_extension_description": {
+    "message": "包含多個照片來源的屏幕保護程序，包括您的Google相冊。"
+  },
+  "browser_action_title": {
+    "message": "照片屏幕保護程序 - 點擊選項"
+  },
+  "toggle_enabled": {
+    "message": "切換啟用狀態"
+  },
+  "screensaver": {
+    "message": "屏幕保護"
+  },
+  "on": {
+    "message": "上"
+  },
+  "off": {
+    "message": "離"
+  },
+  "disable": {
+    "message": "禁用"
+  },
+  "enable": {
+    "message": "啟用"
+  },
+  "ok": {
+    "message": "好",
+    "description": "All Caps"
+  },
+  "cancel": {
+    "message": "取消",
+    "description": "All Caps"
+  },
+  "polymer": {
+    "message": "聚合物",
+    "description": "All Caps"
+  },
+  "github": {
+    "message": "查看GITHUB",
+    "description": "All Caps"
+  },
+  "w3": {
+    "message": "W3Schools的",
+    "description": "All Caps"
+  },
+  "mdn": {
+    "message": "MDN",
+    "description": "All Caps"
+  },
+  "chromecast": {
+    "message": "CHROMECAST",
+    "description": "All Caps"
+  },
+  "picasa": {
+    "message": "PICASA",
+    "description": "All Caps"
+  },
+  "material": {
+    "message": "材料設計",
+    "description": "All Caps"
+  },
+  "chrome_ext": {
+    "message": "鉻延伸",
+    "description": "All Caps"
+  },
+  "note": {
+    "message": "注意："
+  },
+  "photo": {
+    "message": "照片"
+  },
+  "photos": {
+    "message": "相片"
+  },
+  "seconds": {
+    "message": "秒"
+  },
+  "minutes": {
+    "message": "分鐘"
+  },
+  "hours": {
+    "message": "小時"
+  },
+  "days": {
+    "message": "天"
+  },
+  "off_abbrev": {
+    "message": "關閉",
+    "description": "All Caps. max 3 letter abbreviation for OFF"
+  },
+  "sleep_abbrev": {
+    "message": "SLP",
+    "description": "All Caps. max 3 letter abbreviation for SLEEP"
+  },
+  "power_abbrev": {
+    "message": "PWR",
+    "description": "All Caps. max 3 letter abbreviation for POWER"
+  },
+  "menu": {
+    "message": "菜單"
+  },
+  "menu_settings": {
+    "message": "設置"
+  },
+  "menu_google": {
+    "message": "Google相冊"
+  },
+  "menu_preview": {
+    "message": "預習"
+  },
+  "menu_faq": {
+    "message": "常見問題（FAQ）"
+  },
+  "menu_info": {
+    "message": "書呆子信息"
+  },
+  "menu_support": {
+    "message": "請求支持"
+  },
+  "menu_rate": {
+    "message": "費率延長"
+  },
+  "menu_pushy": {
+    "message": "嘗試推送剪貼板擴展"
+  },
+  "menu_letterbox": {
+    "message": "信箱"
+  },
+  "menu_zoom": {
+    "message": "縮放（可能會裁剪）"
+  },
+  "menu_frame": {
+    "message": "幀"
+  },
+  "menu_full": {
+    "message": "滿（可能扭曲）"
+  },
+  "menu_random": {
+    "message": "隨機"
+  },
+  "menu_scale_up": {
+    "message": "放大"
+  },
+  "menu_fade": {
+    "message": "褪色"
+  },
+  "menu_slide_from_right": {
+    "message": "從右邊滑出"
+  },
+  "menu_slide_down": {
+    "message": "滑下"
+  },
+  "menu_spin_up": {
+    "message": "旋轉起來"
+  },
+  "menu_slide_up": {
+    "message": "向上滑動"
+  },
+  "menu_slide_from_bottom": {
+    "message": "從底部滑出"
+  },
+  "menu_slide_right": {
+    "message": "向右滑動"
+  },
+  "tooltip_select": {
+    "message": "全選"
+  },
+  "tooltip_deselect": {
+    "message": "全部取消選擇"
+  },
+  "tooltip_restore": {
+    "message": "恢復默認設置"
+  },
+  "tooltip_refresh": {
+    "message": "刷新列表"
+  },
+  "tooltip_keep_awake": {
+    "message": "即使屏幕保護程序被禁用，Keep Wake功能也可用，因此您可以將該應用程序用作通用電源調度程序。在此狀態下，該圖標將顯示“PWR”。"
+  },
+  "tooltip_settings_toggle": {
+    "message": "啟用/禁用屏幕保護程序"
+  },
+  "tooltip_google_toggle": {
+    "message": "啟用/禁用相冊的使用"
+  },
+  "setting_idle_time": {
+    "message": "等待時間"
+  },
+  "setting_transition_time": {
+    "message": "照片轉換時間"
+  },
+  "setting_photo_sizing": {
+    "message": "照片顯示模式"
+  },
+  "setting_photo_transition": {
+    "message": "照片過渡方法"
+  },
+  "setting_show_time": {
+    "message": "開演時間"
+  },
+  "setting_shuffle": {
+    "message": "拖曳"
+  },
+  "setting_shuffle_desc": {
+    "message": "以隨機順序呈現照片"
+  },
+  "setting_skip": {
+    "message": "跳過極限寬高比照片"
+  },
+  "setting_skip_desc": {
+    "message": "不要在縮放和完全模式下顯示某些照片"
+  },
+  "setting_photog": {
+    "message": "顯示您擁有的照片的名稱"
+  },
+  "setting_photog_desc": {
+    "message": "注意：始終以幀模式顯示"
+  },
+  "setting_bg": {
+    "message": "背景"
+  },
+  "setting_bg_desc": {
+    "message": "設置屏幕保護程序的背景圖像"
+  },
+  "setting_bg_dialog_title": {
+    "message": "選擇背景圖片"
+  },
+  "setting_all_displays": {
+    "message": "所有顯示"
+  },
+  "setting_all_displays_desc": {
+    "message": "在所有連接的顯示器上顯示屏幕保護程序"
+  },
+  "setting_full_screen": {
+    "message": "不要在全屏Chrome窗口上顯示"
+  },
+  "setting_full_screen_desc": {
+    "message": "有用的，如果你正在看視頻"
+  },
+  "setting_keep_awake": {
+    "message": "保持清醒"
+  },
+  "setting_keep_awake_desc": {
+    "message": "防止睡眠顯示（如果啟動和停止時間相等，始終處於活動狀態）"
+  },
+  "setting_start_time": {
+    "message": "屏保/保持喚醒活動開始時間"
+  },
+  "setting_start_time_desc": {
+    "message": "允許屏幕保護程序顯示，從此開始"
+  },
+  "setting_stop_time": {
+    "message": "屏保/保持喚醒活動停止時間"
+  },
+  "setting_stop_time_desc": {
+    "message": "此時不允許屏幕保護程序顯示"
+  },
+  "setting_suspend": {
+    "message": "允許系統掛起"
+  },
+  "setting_suspend_desc": {
+    "message": "計算機可能在非活動時間內睡覺"
+  },
+  "setting_chromecast": {
+    "message": "的Chromecast"
+  },
+  "setting_chromecast_desc": {
+    "message": "來自Chromecast設備的一些背景照片"
+  },
+  "setting_500editors": {
+    "message": "500px  - 編輯選擇"
+  },
+  "setting_500editors_desc": {
+    "message": "選擇照片從500像素"
+  },
+  "setting_500popular": {
+    "message": "500px  - 受歡迎"
+  },
+  "setting_500popular_desc": {
+    "message": "500px的熱門照片"
+  },
+  "setting_500yest": {
+    "message": "500px  - 新鮮"
+  },
+  "setting_500yest_desc": {
+    "message": "最近的照片從500px，每天更新"
+  },
+  "setting_flickr_int": {
+    "message": "Flickr  - 有趣"
+  },
+  "setting_flickr_int_desc": {
+    "message": "Flickr有趣的照片，每天更新"
+  },
+  "setting_reddit_space": {
+    "message": "reddit  - 空間"
+  },
+  "setting_reddit_space_desc": {
+    "message": "主要來自reddit的天文照片，每天更新"
+  },
+  "setting_reddit_earth": {
+    "message": "地球"
+  },
+  "setting_reddit_earth_desc": {
+    "message": "主要來自reddit的風景照片，每天更新"
+  },
+  "setting_reddit_animal": {
+    "message": "reddit  - 動物"
+  },
+  "setting_reddit_animal_desc": {
+    "message": "來自reddit的動物照片，每日更新"
+  },
+  "setting_mine": {
+    "message": "擴展開發者"
+  },
+  "setting_mine_desc": {
+    "message": "寫這個的人的照片"
+  },
+  "setting_click_to_view": {
+    "message": "點擊鼠標查看Flickr的網站，500px和reddit的照片"
+  },
+  "setting_flickr_api": {
+    "message": "本產品使用Flickr API，但未經Flickr認證或認證"
+  },
+  "tab_slideshow": {
+    "message": "幻燈片控制",
+    "description": "All Caps"
+  },
+  "tab_display": {
+    "message": "顯示控制",
+    "description": "All Caps"
+  },
+  "tab_sources": {
+    "message": "照片來源",
+    "description": "All Caps"
+  },
+  "google_title": {
+    "message": "Google相簿"
+  },
+  "google_shared_albums_note": {
+    "message": "注意：共享相冊可能不可用。有關更多信息，請參閱常見問題。"
+  },
+  "google_loading": {
+    "message": "載入專輯"
+  },
+  "faq_title": {
+    "message": "經常問的問題"
+  },
+  "faq_1": {
+    "message": "如何卸載？"
+  },
+  "faq_1_body": {
+    "message": "右鍵單擊瀏覽器工具欄中的圖標，然後選擇“從Chrome移除...”",
+    "description": "Values in single quotes are set by Chrome browser please check"
+  },
+  "faq_2": {
+    "message": "為什麼我所有的Google相冊都不顯示？"
+  },
+  "faq_2_body": {
+    "message": "Google提供的與Google相冊接口的API並不完全支持新的共享相冊。要將現有的共享相冊轉換為屏幕保護程序支持的格式，請選擇相冊，單擊“共享選項”，並取消設置“共享”選項。"
+  },
+  "faq_3": {
+    "message": "我收到一個狀態：500錯誤，試圖加載我的Google相冊。這意味著什麼？"
+  },
+  "faq_3_body": {
+    "message": "這是提供照片的服務器上的錯誤。這可能是一個非常臨時的問題 - 請稍後再試。"
+  },
+  "faq_4": {
+    "message": "為什麼Chromebook上的時間標籤不正確？"
+  },
+  "faq_4_body": {
+    "message": "如果您遇到此問題，請轉到“設置” - >“顯示高級設置”，然後在“日期和時間”部分中，取消選中“使用您的位置自動設置時區”。您需要重新啟動才能使更改生效。",
+    "description": "Values in single quotes are set by Chrome browser please check"
+  },
+  "faq_5": {
+    "message": "圖標上的標籤是什麼意思？"
+  },
+  "faq_5_body1": {
+    "message": "無標籤：屏幕保護程序已啟用，並在計算機空閒時顯示。"
+  },
+  "faq_5_body2": {
+    "message": "OFF：屏幕保護程序已禁用。"
+  },
+  "faq_5_body3": {
+    "message": "SLP：時間在調度程序的非活動範圍內。屏幕保護程序不會顯示。"
+  },
+  "faq_5_body4": {
+    "message": "PWR：調度程序將處理保持喚醒設置，但屏幕保護程序將永遠不會顯示。"
+  },
+  "faq_6": {
+    "message": "我的Keep保持關閉，但我的顯示器沒有睡覺。這是為什麼？"
+  },
+  "faq_6_body1": {
+    "message": "其他應用可能阻止顯示器或計算機睡眠。"
+  },
+  "faq_6_body2": {
+    "message": "在許多Chrome操作系統設備上，如果屏幕保護程序正在運行，顯示屏將不會休眠。您可以使用屏幕保護程序/保持喚醒調度功能來控制顯示屏幕保護程序的時間。"
+  },
+  "faq_7": {
+    "message": "我有Keep保持清醒，但我的系統正在關閉。這是為什麼？"
+  },
+  "faq_7_body": {
+    "message": "保持喚醒功能是對計算機的請求，不必得到尊重。顯示請求幾乎總是被兌現，但係統請求不是。特別是，如果你有這樣做，許多電腦會把電腦都睡覺。"
+  },
+  "faq_8": {
+    "message": "可以添加從本地計算機使用文件的支持嗎？"
+  },
+  "faq_8_body": {
+    "message": "默認情況下，擴展名不允許訪問本地文件系統。"
+  },
+  "info_title": {
+    "message": "信息為神經"
+  },
+  "info_source": {
+    "message": "源代碼"
+  },
+  "info_apis": {
+    "message": "API和規格"
+  },
+  "info_apis_body1": {
+    "message": "這個擴展完全由聚合物和香草JavaScript構建。聚合物將一切都視為一種"
+  },
+  "info_apis_body2": {
+    "message": "Web組件"
+  },
+  "info_apis_body3": {
+    "message": "我從來沒有使用像AngularJS（甚至是JQuery）這樣的東西，所以我無法真正評估這種方法的利弊。此外，Polymer中沒有什麼可以阻止您使用這些其他解決方案。"
+  },
+  "info_libs": {
+    "message": "照片庫"
+  },
+  "info_libs_body1": {
+    "message": "不幸的是，沒有Google Photos API，因此與Picasa Web API進行互動的唯一方法是。此API僅實現Google照片功能的一部分。"
+  },
+  "info_libs_body2": {
+    "message": "Chromecast照片"
+  },
+  "info_libs_body3": {
+    "message": "是用於背景的那些時間的快照。"
+  },
+  "info_libs_body4": {
+    "message": "此擴展程序僅適用於您的Google照片，儘管權限彈出窗口顯示。 Picasa API沒有隻讀範圍。"
+  },
+  "info_web": {
+    "message": "Web開發文檔"
+  },
+  "info_web_body": {
+    "message": "這是我第一次做Web開發，學習曲線很陡。這些網站為HTML-CSS-JavaScript範例提供了很好的教程和參考資料。"
+  },
+  "err_request_failed": {
+    "message": "請求失敗選擇刷新以重試。"
+  },
+  "err_storage_title": {
+    "message": "超出存儲限制"
+  },
+  "err_storage_desc": {
+    "message": "取消選擇其他照片來源，然後重試。"
+  },
+  "time_format": {
+    "message": "12",
+    "description": "For translators: Set to 12 for AM/PM format or 24"
+  },
+  "translationInfo": {
+    "message": "Google Translate API",
+    "description": "Add your name and contact info, if you want"
+  }
+}

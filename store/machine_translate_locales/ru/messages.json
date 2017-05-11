@@ -1,0 +1,469 @@
+{
+  "chrome_extension_name": {
+    "message": "Заставка для фотографий"
+  },
+  "chrome_extension_description": {
+    "message": "Заставка с несколькими источниками фотографий, включая ваш Google Фото."
+  },
+  "browser_action_title": {
+    "message": "Заставка фотографий - нажмите для выбора параметров"
+  },
+  "toggle_enabled": {
+    "message": "Включить состояние включения"
+  },
+  "screensaver": {
+    "message": "Хранитель экрана"
+  },
+  "on": {
+    "message": "На"
+  },
+  "off": {
+    "message": "от"
+  },
+  "disable": {
+    "message": "запрещать"
+  },
+  "enable": {
+    "message": "включить"
+  },
+  "ok": {
+    "message": "ОК",
+    "description": "All Caps"
+  },
+  "cancel": {
+    "message": "ОТМЕНА",
+    "description": "All Caps"
+  },
+  "polymer": {
+    "message": "ПОЛИМЕР",
+    "description": "All Caps"
+  },
+  "github": {
+    "message": "ВЗГЛЯД НА GITHUB",
+    "description": "All Caps"
+  },
+  "w3": {
+    "message": "w3schools",
+    "description": "All Caps"
+  },
+  "mdn": {
+    "message": "MDN",
+    "description": "All Caps"
+  },
+  "chromecast": {
+    "message": "CHROMECAST",
+    "description": "All Caps"
+  },
+  "picasa": {
+    "message": "PICASA",
+    "description": "All Caps"
+  },
+  "material": {
+    "message": "МАТЕРИАЛЬНЫЙ ДИЗАЙН",
+    "description": "All Caps"
+  },
+  "chrome_ext": {
+    "message": "РАСШИРЕНИЕ ХРОМА",
+    "description": "All Caps"
+  },
+  "note": {
+    "message": "Заметка:"
+  },
+  "photo": {
+    "message": "Фото"
+  },
+  "photos": {
+    "message": "фото"
+  },
+  "seconds": {
+    "message": "секунд"
+  },
+  "minutes": {
+    "message": "минут"
+  },
+  "hours": {
+    "message": "часов"
+  },
+  "days": {
+    "message": "дней"
+  },
+  "off_abbrev": {
+    "message": "OFF",
+    "description": "All Caps. max 3 letter abbreviation for OFF"
+  },
+  "sleep_abbrev": {
+    "message": "SLP",
+    "description": "All Caps. max 3 letter abbreviation for SLEEP"
+  },
+  "power_abbrev": {
+    "message": "PWR",
+    "description": "All Caps. max 3 letter abbreviation for POWER"
+  },
+  "menu": {
+    "message": "Меню"
+  },
+  "menu_settings": {
+    "message": "настройки"
+  },
+  "menu_google": {
+    "message": "Альбомы Google Фото"
+  },
+  "menu_preview": {
+    "message": "предварительный просмотр"
+  },
+  "menu_faq": {
+    "message": "Часто задаваемые вопросы (FAQ)"
+  },
+  "menu_info": {
+    "message": "Информация для ботаников"
+  },
+  "menu_support": {
+    "message": "Запросить поддержку"
+  },
+  "menu_rate": {
+    "message": "Продление ставки"
+  },
+  "menu_pushy": {
+    "message": "Попробуйте расширение Pushing Clipboard"
+  },
+  "menu_letterbox": {
+    "message": "Letterbox"
+  },
+  "menu_zoom": {
+    "message": "Масштаб (может обрезаться)"
+  },
+  "menu_frame": {
+    "message": "Рамка"
+  },
+  "menu_full": {
+    "message": "Полный (может искажаться)"
+  },
+  "menu_random": {
+    "message": "случайный"
+  },
+  "menu_scale_up": {
+    "message": "Увеличить масштаб"
+  },
+  "menu_fade": {
+    "message": "увядать"
+  },
+  "menu_slide_from_right": {
+    "message": "Слайд справа"
+  },
+  "menu_slide_down": {
+    "message": "Скользить вниз"
+  },
+  "menu_spin_up": {
+    "message": "Раскрутить"
+  },
+  "menu_slide_up": {
+    "message": "Скользить вверх"
+  },
+  "menu_slide_from_bottom": {
+    "message": "Слайд снизу"
+  },
+  "menu_slide_right": {
+    "message": "Слайд справа"
+  },
+  "tooltip_select": {
+    "message": "Выбрать все"
+  },
+  "tooltip_deselect": {
+    "message": "Убрать выделение со всего"
+  },
+  "tooltip_restore": {
+    "message": "Восстановить настройки по умолчанию"
+  },
+  "tooltip_refresh": {
+    "message": "Обновить список"
+  },
+  "tooltip_keep_awake": {
+    "message": "Функции Keep awake доступны, даже если заставка отключена, поэтому вы можете использовать это приложение в качестве общего планировщика питания. Значок отобразит «PWR», когда он находится в этом состоянии."
+  },
+  "tooltip_settings_toggle": {
+    "message": "Включение / выключение экранной заставки"
+  },
+  "tooltip_google_toggle": {
+    "message": "Включить / отключить использование альбомов"
+  },
+  "setting_idle_time": {
+    "message": "Время ожидания"
+  },
+  "setting_transition_time": {
+    "message": "Время перехода фотографии"
+  },
+  "setting_photo_sizing": {
+    "message": "Режим отображения фотографий"
+  },
+  "setting_photo_transition": {
+    "message": "Метод фотопереходов"
+  },
+  "setting_show_time": {
+    "message": "Время для шоу"
+  },
+  "setting_shuffle": {
+    "message": "шарканье"
+  },
+  "setting_shuffle_desc": {
+    "message": "Представить фотографии в произвольном порядке"
+  },
+  "setting_skip": {
+    "message": "Пропускать фотографии с большим соотношением сторон"
+  },
+  "setting_skip_desc": {
+    "message": "Не показывать определенные фотографии в режимах масштабирования и полного режима"
+  },
+  "setting_photog": {
+    "message": "Показывать название ваших фотографий"
+  },
+  "setting_photog_desc": {
+    "message": "Примечание: всегда отображается в режиме кадра"
+  },
+  "setting_bg": {
+    "message": "Задний план"
+  },
+  "setting_bg_desc": {
+    "message": "Установка фонового изображения для экранной заставки"
+  },
+  "setting_bg_dialog_title": {
+    "message": "Выбрать фоновое изображение"
+  },
+  "setting_all_displays": {
+    "message": "Все дисплеи"
+  },
+  "setting_all_displays_desc": {
+    "message": "Показывать экранную заставку на всех подключенных дисплеях"
+  },
+  "setting_full_screen": {
+    "message": "Не отображать окна Chrome во весь экран"
+  },
+  "setting_full_screen_desc": {
+    "message": "Полезно, если вы смотрите видео"
+  },
+  "setting_keep_awake": {
+    "message": "Бодрствовать"
+  },
+  "setting_keep_awake_desc": {
+    "message": "Запрет отображения спящего режима (всегда активен, если время начала и окончания равно)"
+  },
+  "setting_start_time": {
+    "message": "Заставка / Поддерживать активное время начала бодрствования"
+  },
+  "setting_start_time_desc": {
+    "message": "Показать экранную заставку, начиная с этого времени"
+  },
+  "setting_stop_time": {
+    "message": "Хранитель экрана / Активный период остановки активного бодрствования"
+  },
+  "setting_stop_time_desc": {
+    "message": "Отключить показ экрана заставки"
+  },
+  "setting_suspend": {
+    "message": "Разрешить приостановку системы"
+  },
+  "setting_suspend_desc": {
+    "message": "Компьютер может спать в неактивное время"
+  },
+  "setting_chromecast": {
+    "message": "Chromecast"
+  },
+  "setting_chromecast_desc": {
+    "message": "Некоторые фоновые фотографии с устройства Chromecast"
+  },
+  "setting_500editors": {
+    "message": "500px - выбор редакции"
+  },
+  "setting_500editors_desc": {
+    "message": "Выбор фотографий от 500 пикселей"
+  },
+  "setting_500popular": {
+    "message": "500px - популярный"
+  },
+  "setting_500popular_desc": {
+    "message": "Популярные фото от 500px"
+  },
+  "setting_500yest": {
+    "message": "500px - свежий"
+  },
+  "setting_500yest_desc": {
+    "message": "Новые фотографии из 500px, обновляется ежедневно"
+  },
+  "setting_flickr_int": {
+    "message": "Flickr - интересный"
+  },
+  "setting_flickr_int_desc": {
+    "message": "Интересные фотографии с Flickr, обновленные ежедневно"
+  },
+  "setting_reddit_space": {
+    "message": "Reddit - пробел"
+  },
+  "setting_reddit_space_desc": {
+    "message": "В первую очередь астрономические фотографии из reddit, обновляемые ежедневно"
+  },
+  "setting_reddit_earth": {
+    "message": "Reddit - earth"
+  },
+  "setting_reddit_earth_desc": {
+    "message": "В первую очередь пейзажные фотографии от reddit, обновляемые ежедневно"
+  },
+  "setting_reddit_animal": {
+    "message": "Reddit - животные"
+  },
+  "setting_reddit_animal_desc": {
+    "message": "Фото животных из reddit, обновляется ежедневно"
+  },
+  "setting_mine": {
+    "message": "Разработчик расширений"
+  },
+  "setting_mine_desc": {
+    "message": "Фотографии от парня, написавшего это"
+  },
+  "setting_click_to_view": {
+    "message": "Щелкните мышью, чтобы просмотреть веб-сайт для фотографий Flickr, 500px и reddit."
+  },
+  "setting_flickr_api": {
+    "message": "Этот продукт использует API Flickr, но не одобрен или не сертифицирован Flickr"
+  },
+  "tab_slideshow": {
+    "message": "УПРАВЛЕНИЕ СЛАЙД-ШОУ",
+    "description": "All Caps"
+  },
+  "tab_display": {
+    "message": "УПРАВЛЕНИЕ ДИСПЛЕЕМ",
+    "description": "All Caps"
+  },
+  "tab_sources": {
+    "message": "ИСТОЧНИКИ ФОТО",
+    "description": "All Caps"
+  },
+  "google_title": {
+    "message": "Альбомы Google Фото"
+  },
+  "google_shared_albums_note": {
+    "message": "Примечание. Доступные альбомы могут быть недоступны. Подробнее см. В разделе «Вопросы и ответы»."
+  },
+  "google_loading": {
+    "message": "Загрузка альбомов"
+  },
+  "faq_title": {
+    "message": "Часто задаваемые вопросы"
+  },
+  "faq_1": {
+    "message": "Как удалить это?"
+  },
+  "faq_1_body": {
+    "message": "Щелкните правой кнопкой мыши значок на панели инструментов браузера и выберите «Удалить из Chrome ...».",
+    "description": "Values in single quotes are set by Chrome browser please check"
+  },
+  "faq_2": {
+    "message": "Почему не отображаются все мои альбомы из Google Фото?"
+  },
+  "faq_2_body": {
+    "message": "API, который Google предоставляет для взаимодействия с Google Фото, не полностью поддерживает новые общие альбомы. Чтобы преобразовать существующий общий альбом в формат, поддерживаемый экранной заставкой, выберите альбом, нажмите «Параметры совместного доступа» и отключите параметр «Поделиться»."
+  },
+  "faq_3": {
+    "message": "При загрузке альбомов Google Фото произошла ошибка Status: 500. Что это значит?"
+  },
+  "faq_3_body": {
+    "message": "Это ошибка на сервере, которая предоставляет фотографии. Вероятно, это очень временная проблема. Повторите попытку позже."
+  },
+  "faq_4": {
+    "message": "Почему на моем Chromebook некорректная метка времени?"
+  },
+  "faq_4_body": {
+    "message": "Если у вас есть эта проблема, перейдите в «Настройки» -> «Показать дополнительные настройки», а в разделе «Дата и время» снимите флажок «Установить часовой пояс автоматически, используя свое местоположение». Чтобы изменения вступили в силу, вам потребуется перезапустить его.",
+    "description": "Values in single quotes are set by Chrome browser please check"
+  },
+  "faq_5": {
+    "message": "Что означают метки на значке?"
+  },
+  "faq_5_body1": {
+    "message": "Нет метки: Заставка включена и будет отображаться, когда компьютер находится в режиме ожидания."
+  },
+  "faq_5_body2": {
+    "message": "OFF: Заставка отключена."
+  },
+  "faq_5_body3": {
+    "message": "SLP: время находится в неактивном диапазоне планировщика. Заставка не отображается."
+  },
+  "faq_5_body4": {
+    "message": "PWR: планировщик будет обрабатывать параметры бодрствования, но экранная заставка никогда не будет отображаться."
+  },
+  "faq_6": {
+    "message": "У меня есть Keep, но я не сплю. Почему это?"
+  },
+  "faq_6_body1": {
+    "message": "Другие приложения могут препятствовать спящему дисплею или компьютеру."
+  },
+  "faq_6_body2": {
+    "message": "На многих устройствах Chrome OS дисплей не будет спать, если заставка работает. Вы можете использовать функцию «Заставка / Keep awake scheduling» для управления отображением заставки."
+  },
+  "faq_7": {
+    "message": "У меня включен Keep, но моя система отключается. Почему это?"
+  },
+  "faq_7_body": {
+    "message": "Функции Keep awake - это запросы к компьютеру и их не нужно уважать. Запрос на просмотр почти всегда выполняется, но системный запрос не выполняется. В частности, многие ПК переведут компьютер в спящий режим, если вы их настроили на это."
+  },
+  "faq_8": {
+    "message": "Можете ли вы добавить поддержку для использования файлов с моего локального компьютера?"
+  },
+  "faq_8_body": {
+    "message": "По умолчанию расширениям не разрешен доступ к локальной файловой системе."
+  },
+  "info_title": {
+    "message": "Информация для ботаников"
+  },
+  "info_source": {
+    "message": "Исходный код"
+  },
+  "info_apis": {
+    "message": "API и спецификации"
+  },
+  "info_apis_body1": {
+    "message": "Это расширение построено полностью с использованием Polymer и ванильного JavaScript. Полимер рассматривает все как"
+  },
+  "info_apis_body2": {
+    "message": "Веб-компонент"
+  },
+  "info_apis_body3": {
+    "message": "Я никогда не использовал такие вещи, как AngularJS (или даже JQuery), поэтому я не могу оценить плюсы и минусы такого подхода. Кроме того, в Полимере нет ничего, что мешало бы вам использовать его с другими решениями."
+  },
+  "info_libs": {
+    "message": "Библиотеки фотографий"
+  },
+  "info_libs_body1": {
+    "message": "К сожалению, API Google Photos отсутствует, поэтому единственным способом взаимодействия с ним является Веб-интерфейс Picasa. Этот API реализует только подмножество функций Google Фото."
+  },
+  "info_libs_body2": {
+    "message": "Фотографии Chromecast"
+  },
+  "info_libs_body3": {
+    "message": "Это моментальный снимок во времени тех, которые используются на заднем фоне."
+  },
+  "info_libs_body4": {
+    "message": "Это расширение читается только для ваших фотографий Google, несмотря на то, что говорит всплывающее окно разрешений. API Picasa не имеет области только для чтения."
+  },
+  "info_web": {
+    "message": "Документация по веб-разработке"
+  },
+  "info_web_body": {
+    "message": "Это был мой первый раз, когда я занимался веб-разработкой, и кривая обучения была довольно крутой. На этих сайтах представлены хорошие руководства и справочные материалы по парадигме HTML-CSS-JavaScript."
+  },
+  "err_request_failed": {
+    "message": "Запрос не выполнен. Выберите «Обновить», чтобы повторить попытку."
+  },
+  "err_storage_title": {
+    "message": "Превышен лимит хранения"
+  },
+  "err_storage_desc": {
+    "message": "Отмените выбор других источников фотографий и повторите попытку."
+  },
+  "time_format": {
+    "message": "12",
+    "description": "For translators: Set to 12 for AM/PM format or 24"
+  },
+  "translationInfo": {
+    "message": "Google Translate API",
+    "description": "Add your name and contact info, if you want"
+  }
+}

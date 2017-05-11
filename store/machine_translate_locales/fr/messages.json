@@ -1,0 +1,469 @@
+{
+  "chrome_extension_name": {
+    "message": "Économiseur d'écran photo"
+  },
+  "chrome_extension_description": {
+    "message": "Un économiseur d'écran avec plusieurs sources de photos, y compris vos Google Photos."
+  },
+  "browser_action_title": {
+    "message": "Photo Screen Saver - cliquez pour les options"
+  },
+  "toggle_enabled": {
+    "message": "Basculer état activé"
+  },
+  "screensaver": {
+    "message": "Économiseur d'écran"
+  },
+  "on": {
+    "message": "Sur"
+  },
+  "off": {
+    "message": "De"
+  },
+  "disable": {
+    "message": "Désactiver"
+  },
+  "enable": {
+    "message": "Activer"
+  },
+  "ok": {
+    "message": "D'accord",
+    "description": "All Caps"
+  },
+  "cancel": {
+    "message": "ANNULER",
+    "description": "All Caps"
+  },
+  "polymer": {
+    "message": "POLYMÈRE",
+    "description": "All Caps"
+  },
+  "github": {
+    "message": "VOIR SUR GITHUB",
+    "description": "All Caps"
+  },
+  "w3": {
+    "message": "W3SCHOOLS",
+    "description": "All Caps"
+  },
+  "mdn": {
+    "message": "MDN",
+    "description": "All Caps"
+  },
+  "chromecast": {
+    "message": "CHROMECAST",
+    "description": "All Caps"
+  },
+  "picasa": {
+    "message": "PICASA",
+    "description": "All Caps"
+  },
+  "material": {
+    "message": "CONCEPTION MATÉRIELLE",
+    "description": "All Caps"
+  },
+  "chrome_ext": {
+    "message": "EXTENSION CHROME",
+    "description": "All Caps"
+  },
+  "note": {
+    "message": "Remarque:"
+  },
+  "photo": {
+    "message": "photo"
+  },
+  "photos": {
+    "message": "Photos"
+  },
+  "seconds": {
+    "message": "Secondes"
+  },
+  "minutes": {
+    "message": "minutes"
+  },
+  "hours": {
+    "message": "heures"
+  },
+  "days": {
+    "message": "journées"
+  },
+  "off_abbrev": {
+    "message": "DE",
+    "description": "All Caps. max 3 letter abbreviation for OFF"
+  },
+  "sleep_abbrev": {
+    "message": "SLP",
+    "description": "All Caps. max 3 letter abbreviation for SLEEP"
+  },
+  "power_abbrev": {
+    "message": "PWR",
+    "description": "All Caps. max 3 letter abbreviation for POWER"
+  },
+  "menu": {
+    "message": "Menu"
+  },
+  "menu_settings": {
+    "message": "Paramètres"
+  },
+  "menu_google": {
+    "message": "Google Photos albums"
+  },
+  "menu_preview": {
+    "message": "Aperçu"
+  },
+  "menu_faq": {
+    "message": "Foire aux questions (FAQ)"
+  },
+  "menu_info": {
+    "message": "Information pour nerds"
+  },
+  "menu_support": {
+    "message": "Demander un support"
+  },
+  "menu_rate": {
+    "message": "Extension du tarif"
+  },
+  "menu_pushy": {
+    "message": "Essayez l'extension du Presse-papiers Pushy"
+  },
+  "menu_letterbox": {
+    "message": "Letterbox"
+  },
+  "menu_zoom": {
+    "message": "Zoom (Peut récolter)"
+  },
+  "menu_frame": {
+    "message": "Cadre"
+  },
+  "menu_full": {
+    "message": "Plein (peut déformer)"
+  },
+  "menu_random": {
+    "message": "au hasard"
+  },
+  "menu_scale_up": {
+    "message": "Équilibrer"
+  },
+  "menu_fade": {
+    "message": "Fade"
+  },
+  "menu_slide_from_right": {
+    "message": "Glisser de droite"
+  },
+  "menu_slide_down": {
+    "message": "Glisse vers le bas"
+  },
+  "menu_spin_up": {
+    "message": "Tournoiement en haut"
+  },
+  "menu_slide_up": {
+    "message": "Glisser vers le haut"
+  },
+  "menu_slide_from_bottom": {
+    "message": "Glisser de bas en bas"
+  },
+  "menu_slide_right": {
+    "message": "Glissez à droite"
+  },
+  "tooltip_select": {
+    "message": "Tout sélectionner"
+  },
+  "tooltip_deselect": {
+    "message": "Tout déselectionner"
+  },
+  "tooltip_restore": {
+    "message": "Restaurer les paramètres par défaut"
+  },
+  "tooltip_refresh": {
+    "message": "Rafraîchir la liste"
+  },
+  "tooltip_keep_awake": {
+    "message": "Les fonctionnalités Keep awake sont disponibles même si l'économiseur d'écran est désactivé, afin que vous puissiez utiliser l'application comme planificateur de puissance général. L'icône affichera 'PWR' dans cet état."
+  },
+  "tooltip_settings_toggle": {
+    "message": "Activer / désactiver l'économiseur d'écran"
+  },
+  "tooltip_google_toggle": {
+    "message": "Activer / désactiver l'utilisation des albums"
+  },
+  "setting_idle_time": {
+    "message": "Temps d'attente"
+  },
+  "setting_transition_time": {
+    "message": "Temps de transition photo"
+  },
+  "setting_photo_sizing": {
+    "message": "Mode d'affichage de la photo"
+  },
+  "setting_photo_transition": {
+    "message": "Méthode de transition photo"
+  },
+  "setting_show_time": {
+    "message": "Afficher l'heure"
+  },
+  "setting_shuffle": {
+    "message": "Shuffle"
+  },
+  "setting_shuffle_desc": {
+    "message": "Présenter les photos dans un ordre aléatoire"
+  },
+  "setting_skip": {
+    "message": "Sautez les images du ratio d'aspect extrême"
+  },
+  "setting_skip_desc": {
+    "message": "Ne pas afficher certaines photos dans Zoom et modes complets"
+  },
+  "setting_photog": {
+    "message": "Afficher le nom des photos que vous possédez"
+  },
+  "setting_photog_desc": {
+    "message": "Remarque: affiche toujours en mode cadre"
+  },
+  "setting_bg": {
+    "message": "Contexte"
+  },
+  "setting_bg_desc": {
+    "message": "Définir l'image de fond pour l'économiseur d'écran"
+  },
+  "setting_bg_dialog_title": {
+    "message": "Sélectionnez l'image de fond"
+  },
+  "setting_all_displays": {
+    "message": "Tous les affichages"
+  },
+  "setting_all_displays_desc": {
+    "message": "Afficher l'économiseur d'écran sur tous les écrans connectés"
+  },
+  "setting_full_screen": {
+    "message": "Ne pas afficher sur l'écran plein Chrome Windows"
+  },
+  "setting_full_screen_desc": {
+    "message": "Utile si vous regardez des vidéos"
+  },
+  "setting_keep_awake": {
+    "message": "Reste éveillé"
+  },
+  "setting_keep_awake_desc": {
+    "message": "Empêche l'affichage de dormir (toujours actif si les temps de démarrage et d'arrêt sont égaux)"
+  },
+  "setting_start_time": {
+    "message": "Économiseur d'écran / Keep awake active start time"
+  },
+  "setting_start_time_desc": {
+    "message": "Autoriser l'affichage de l'écran de veille, à partir de ce moment"
+  },
+  "setting_stop_time": {
+    "message": "Économiseur d'écran / Gardez le temps d'arrêt actif éveillé"
+  },
+  "setting_stop_time_desc": {
+    "message": "Désactiver l'affichage de l'économiseur d'écran après ce temps"
+  },
+  "setting_suspend": {
+    "message": "Autoriser le système à suspendre"
+  },
+  "setting_suspend_desc": {
+    "message": "L'ordinateur peut dormir pendant le temps d'inactivité"
+  },
+  "setting_chromecast": {
+    "message": "Chromecast"
+  },
+  "setting_chromecast_desc": {
+    "message": "Certaines photos de fond de l'appareil Chromecast"
+  },
+  "setting_500editors": {
+    "message": "500px - choix des éditeurs"
+  },
+  "setting_500editors_desc": {
+    "message": "Choix de photos de 500px"
+  },
+  "setting_500popular": {
+    "message": "500px - populaire"
+  },
+  "setting_500popular_desc": {
+    "message": "Photos populaires de 500px"
+  },
+  "setting_500yest": {
+    "message": "500px - frais"
+  },
+  "setting_500yest_desc": {
+    "message": "Photos récentes du 500px, mises à jour quotidiennement"
+  },
+  "setting_flickr_int": {
+    "message": "Flickr - intéressant"
+  },
+  "setting_flickr_int_desc": {
+    "message": "Des photos intéressantes du Flickr, mises à jour quotidiennement"
+  },
+  "setting_reddit_space": {
+    "message": "Reddit - espace"
+  },
+  "setting_reddit_space_desc": {
+    "message": "Des photos principalement célestes de Reddit, mises à jour quotidiennement"
+  },
+  "setting_reddit_earth": {
+    "message": "Reddit - terre"
+  },
+  "setting_reddit_earth_desc": {
+    "message": "Principalement des photos de paysage de Reddit, mis à jour quotidiennement"
+  },
+  "setting_reddit_animal": {
+    "message": "Reddit - animal"
+  },
+  "setting_reddit_animal_desc": {
+    "message": "Photos d'animaux de Reddit, mis à jour quotidiennement"
+  },
+  "setting_mine": {
+    "message": "Développeur d'extension"
+  },
+  "setting_mine_desc": {
+    "message": "Des photos du gars qui a écrit ceci"
+  },
+  "setting_click_to_view": {
+    "message": "Cliquez sur la souris pour voir le site Web pour les photos Flickr, 500px et Reddit"
+  },
+  "setting_flickr_api": {
+    "message": "Ce produit utilise l'API Flickr mais n'est pas approuvé ou certifié par Flickr"
+  },
+  "tab_slideshow": {
+    "message": "CONTROLE DE DIAPOSITIF",
+    "description": "All Caps"
+  },
+  "tab_display": {
+    "message": "COMMANDES D'AFFICHAGE",
+    "description": "All Caps"
+  },
+  "tab_sources": {
+    "message": "SOURCES PHOTO",
+    "description": "All Caps"
+  },
+  "google_title": {
+    "message": "Google Photos Albums"
+  },
+  "google_shared_albums_note": {
+    "message": "Remarque: les albums partagés peuvent ne pas être disponibles. Consultez les FAQ pour plus d'informations."
+  },
+  "google_loading": {
+    "message": "Chargement des albums"
+  },
+  "faq_title": {
+    "message": "Questions fréquemment posées"
+  },
+  "faq_1": {
+    "message": "Comment puis-je désinstaller cela?"
+  },
+  "faq_1_body": {
+    "message": "Faites un clic droit sur l'icône dans la barre d'outils du navigateur et sélectionnez 'Supprimer du Chrome ...'",
+    "description": "Values in single quotes are set by Chrome browser please check"
+  },
+  "faq_2": {
+    "message": "Pourquoi tous mes albums Google Photos ne sont-ils pas affichés?"
+  },
+  "faq_2_body": {
+    "message": "L'API que Google fournit pour l'interface avec Google Photos ne supporte pas entièrement les nouveaux albums partagés. Pour convertir un album partagé existant en un format, l'économiseur d'écran prend en charge, sélectionnez l'album, cliquez sur «Options de partage» et désactivez l'option «Partager»."
+  },
+  "faq_3": {
+    "message": "J'ai reçu une erreur Status: 500 en essayant de charger mes albums Google Photos. Qu'est-ce que ça veut dire?"
+  },
+  "faq_3_body": {
+    "message": "Il s'agit d'une erreur sur le serveur qui fournit les photos. C'est probablement un problème très temporaire - réessayez plus tard."
+  },
+  "faq_4": {
+    "message": "Pourquoi l'étiquette de temps est-elle incorrecte sur mon Chromebook?"
+  },
+  "faq_4_body": {
+    "message": "Si vous avez ce problème, allez dans 'Paramètres' -> 'Afficher les paramètres avancés' et dans la section \"Date et heure\", décochez la case \"Définir le fuseau horaire automatiquement en utilisant votre emplacement\". Vous devrez recommencer pour que la modification prenne effet.",
+    "description": "Values in single quotes are set by Chrome browser please check"
+  },
+  "faq_5": {
+    "message": "Que signifient les étiquettes sur l'icône?"
+  },
+  "faq_5_body1": {
+    "message": "Pas d'étiquette: l'économiseur d'écran est activé et s'affiche lorsque l'ordinateur est inactif."
+  },
+  "faq_5_body2": {
+    "message": "OFF: l'économiseur d'écran est désactivé."
+  },
+  "faq_5_body3": {
+    "message": "SLP: le temps est dans la gamme inactif du planificateur. L'économiseur d'écran ne s'affiche pas."
+  },
+  "faq_5_body4": {
+    "message": "PWR: Le planificateur traitera les paramètres de maintien éveillé, mais l'économiseur d'écran ne s'affichera jamais."
+  },
+  "faq_6": {
+    "message": "J'ai le Keep réveillé, mais mon écran ne dort pas. Pourquoi donc?"
+  },
+  "faq_6_body1": {
+    "message": "D'autres applications peuvent empêcher l'affichage ou l'ordinateur de dormir."
+  },
+  "faq_6_body2": {
+    "message": "Sur de nombreux appareils Chrome OS, l'affichage ne couchera pas si l'économiseur d'écran est en cours d'exécution. Vous pouvez utiliser la fonction Économiseur d'écran / Garder la planification éveillée pour contrôler lorsque l'économiseur d'écran s'affiche."
+  },
+  "faq_7": {
+    "message": "J'ai le Keep réveillé, mais mon système s'arrête. Pourquoi donc?"
+  },
+  "faq_7_body": {
+    "message": "Les fonctions Keep awake sont des demandes à l'ordinateur et ne doivent pas être honorées. La demande d'affichage est presque toujours honorée, mais la demande du système n'est pas correcte. En particulier, de nombreux PC mettent l'ordinateur en veille si vous les avez configurés pour le faire."
+  },
+  "faq_8": {
+    "message": "Pouvez-vous ajouter un support pour l'utilisation de fichiers depuis mon ordinateur local?"
+  },
+  "faq_8_body": {
+    "message": "Par défaut, les extensions ne sont pas autorisées à accéder au système de fichiers local."
+  },
+  "info_title": {
+    "message": "Information pour Nerds"
+  },
+  "info_source": {
+    "message": "Code source"
+  },
+  "info_apis": {
+    "message": "API et spécifications"
+  },
+  "info_apis_body1": {
+    "message": "Cette extension a été entièrement construite avec Polymer et vanilla JavaScript. Polymer traite tout comme un"
+  },
+  "info_apis_body2": {
+    "message": "Composant Web"
+  },
+  "info_apis_body3": {
+    "message": "Je n'ai jamais utilisé des choses comme AngularJS (ou même JQuery), de sorte que je ne peux pas vraiment évaluer les avantages et les inconvénients de cette approche. En outre, il n'y a rien dans Polymer qui vous empêche de l'utiliser avec ces autres solutions."
+  },
+  "info_libs": {
+    "message": "Bibliothèques de photos"
+  },
+  "info_libs_body1": {
+    "message": "Malheureusement, il n'y a pas d'API Google Photos, donc la seule façon d'interagir avec elle est l'API Web Picasa. Cette API ne met en œuvre qu'un sous-ensemble des fonctionnalités Google Photos."
+  },
+  "info_libs_body2": {
+    "message": "Chromecast photos"
+  },
+  "info_libs_body3": {
+    "message": "Sont un instantané dans le temps de ceux utilisés pour la toile de fond."
+  },
+  "info_libs_body4": {
+    "message": "Cette extension est lue uniquement pour vos photos Google en dépit de ce que les autorisations affichent. L'API Picasa n'a pas de portée en lecture seule."
+  },
+  "info_web": {
+    "message": "Documentation sur le développement Web"
+  },
+  "info_web_body": {
+    "message": "C'était la première fois que je faisais du développement Web et que la courbe d'apprentissage était assez raide. Ces sites fournissent de bons tutoriels et des documents de référence sur le paradigme HTML-CSS-JavaScript."
+  },
+  "err_request_failed": {
+    "message": "Demande échoué. Sélectionnez Rafraîchir pour réessayer."
+  },
+  "err_storage_title": {
+    "message": "Limites de stockage dépassées"
+  },
+  "err_storage_desc": {
+    "message": "Désélectionnez d'autres sources de photos et réessayez."
+  },
+  "time_format": {
+    "message": "12",
+    "description": "For translators: Set to 12 for AM/PM format or 24"
+  },
+  "translationInfo": {
+    "message": "Google Translate API",
+    "description": "Add your name and contact info, if you want"
+  }
+}
