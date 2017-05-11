@@ -165,6 +165,24 @@ app.BGUtils = (function() {
 		});
 	}
 
+	/**
+	 * Convert a setting-slider value due to addition of units
+	 * @param {!string} key - localStorage key
+	 * @private
+	 * @memberOf app.BGUtils
+	 */
+	function _convertSliderValue(key) {
+		const value = app.Utils.get(key);
+		if (value) {
+			const newValue = {
+				base: value,
+				display: value,
+				unit: 0,
+			};
+			app.Utils.set(key, newValue);
+		}
+	}
+
 	return {
 		/**
 		 * Initialize the data saved in localStorage
@@ -208,23 +226,9 @@ app.BGUtils = (function() {
 			}
 
 			if (oldVersion < 8) {
-				let str;
-				let trans;
-				let idle;
-
 				// change setting-slider values due to adding units
-				trans = app.Utils.get('transitionTime');
-				if (trans) {
-					str = '{"base": ' + trans + ', "display": ' + trans +
-						', "unit": 0}';
-					app.Utils.set('transitionTime', str);
-				}
-				idle = app.Utils.get('idleTime');
-				if (idle) {
-					str = '{"base": ' + idle + ', "display": ' + idle +
-						', "unit": 0}';
-					app.Utils.set('idleTime', str);
-				}
+				_convertSliderValue('transitionTime');
+				_convertSliderValue('idleTime');
 			}
 
 			_saveDefaults();
