@@ -161,8 +161,8 @@ app.SSControl = (function() {
 			} else {
 				if (!app.Utils.isWin()) {
 					// Windows 10 Creator triggers an 'active' state
-					// when the window is created so we have to let
-					// the screen savers handle their closing
+					// when the window is created so we have to skip
+					// closing here
 					app.SSControl.close();
 				}
 			}
