@@ -1,0 +1,465 @@
+{
+  "chrome_extension_name": {
+    "message": "Photo Screen Saver"
+  },
+  "chrome_extension_description": {
+    "message": "A screensaver with multiple photo sources, including your Google Photos."
+  },
+  "browser_action_title": {
+    "message": "Photo Screen Saver - click for options"
+  },
+  "toggle_enabled": {
+    "message": "Toggle enabled state"
+  },
+  "screensaver": {
+    "message": "Screensaver"
+  },
+  "on": {
+    "message": "On"
+  },
+  "off": {
+    "message": "Off"
+  },
+  "disable": {
+    "message": "Disable"
+  },
+  "enable": {
+    "message": "Enable"
+  },
+  "ok": {
+    "message": "OK",
+    "description": "All Caps"
+  },
+  "cancel": {
+    "message": "CANCEL",
+    "description": "All Caps"
+  },
+  "polymer": {
+    "message": "POLYMER",
+    "description": "All Caps"
+  },
+  "github": {
+    "message": "VIEW ON GITHUB",
+    "description": "All Caps"
+  },
+  "w3": {
+    "message": "W3SCHOOLS",
+    "description": "All Caps"
+  },
+  "mdn": {
+    "message": "MDN",
+    "description": "All Caps"
+  },
+  "chromecast": {
+    "message": "CHROMECAST",
+    "description": "All Caps"
+  },
+  "picasa": {
+    "message": "PICASA",
+    "description": "All Caps"
+  },
+  "material": {
+    "message": "MATERIAL DESIGN",
+    "description": "All Caps"
+  },
+  "chrome_ext": {
+    "message": "CHROME EXTENSION",
+    "description": "All Caps"
+  },
+  "note": {
+    "message": "Note:"
+  },
+  "photo": {
+    "message": "photo"
+  },
+  "photos": {
+    "message": "photos"
+  },
+  "seconds": {
+    "message": "seconds"
+  },
+  "minutes": {
+    "message": "minutes"
+  },
+  "hours": {
+    "message": "hours"
+  },
+  "days": {
+    "message": "days"
+  },
+  "off_abbrev": {
+    "message": "OFF",
+    "description": "All Caps. max 3 letter abbreviation for OFF"
+  },
+  "sleep_abbrev": {
+    "message": "SLP",
+    "description": "All Caps. max 3 letter abbreviation for SLEEP"
+  },
+  "power_abbrev": {
+    "message": "PWR",
+    "description": "All Caps. max 3 letter abbreviation for POWER"
+  },
+  "menu": {
+    "message": "Menu"
+  },
+  "menu_settings": {
+    "message": "Settings"
+  },
+  "menu_google": {
+    "message": "Google Photos albums"
+  },
+  "menu_preview": {
+    "message": "Preview"
+  },
+  "menu_faq": {
+    "message": "Frequently asked questions (FAQ)"
+  },
+  "menu_info": {
+    "message": "Information for nerds"
+  },
+  "menu_support": {
+    "message": "Request support"
+  },
+  "menu_rate": {
+    "message": "Rate extension"
+  },
+  "menu_pushy": {
+    "message": "Try Pushy Clipboard extension"
+  },
+  "menu_letterbox": {
+    "message": "Letterbox"
+  },
+  "menu_zoom": {
+    "message": "Zoom (May crop)"
+  },
+  "menu_frame": {
+    "message": "Frame"
+  },
+  "menu_full": {
+    "message": "Full (May distort)"
+  },
+  "menu_random": {
+    "message": "Random"
+  },
+  "menu_scale_up": {
+    "message": "Scale up"
+  },
+  "menu_fade": {
+    "message": "Fade"
+  },
+  "menu_slide_from_right": {
+    "message": "Slide from right"
+  },
+  "menu_slide_down": {
+    "message": "Slide down"
+  },
+  "menu_spin_up": {
+    "message": "Spin up"
+  },
+  "menu_slide_up": {
+    "message": "Slide up"
+  },
+  "menu_slide_from_bottom": {
+    "message": "Slide from bottom"
+  },
+  "menu_slide_right": {
+    "message": "Slide right"
+  },
+  "tooltip_select": {
+    "message": "Select all"
+  },
+  "tooltip_deselect": {
+    "message": "Deselect all"
+  },
+  "tooltip_restore": {
+    "message": "Restore default settings"
+  },
+  "tooltip_refresh": {
+    "message": "Refresh list"
+  },
+  "tooltip_keep_awake": {
+    "message": "The Keep awake features are available even if the screensaver is disabled, so you can use the app as a general power scheduler. The icon will display 'PWR' when in this state."
+  },
+  "tooltip_settings_toggle": {
+    "message": "Enable/disable the screensaver"
+  },
+  "tooltip_google_toggle": {
+    "message": "Enable/disable use of albums"
+  },
+  "setting_idle_time": {
+    "message": "Wait time"
+  },
+  "setting_transition_time": {
+    "message": "Photo transition time"
+  },
+  "setting_photo_sizing": {
+    "message": "Photo display mode"
+  },
+  "setting_photo_transition": {
+    "message": "Photo transition method"
+  },
+  "setting_show_time": {
+    "message": "Show time"
+  },
+  "setting_shuffle": {
+    "message": "Shuffle"
+  },
+  "setting_shuffle_desc": {
+    "message": "Present photos in random order"
+  },
+  "setting_skip": {
+    "message": "Skip extreme aspect ratio photos"
+  },
+  "setting_skip_desc": {
+    "message": "Do not display certain photos in Zoom and Full modes"
+  },
+  "setting_photog": {
+    "message": "Show name for photos you own"
+  },
+  "setting_photog_desc": {
+    "message": "Note: Always shows in Frame mode"
+  },
+  "setting_bg": {
+    "message": "Background"
+  },
+  "setting_bg_desc": {
+    "message": "Set the background image for the screensaver"
+  },
+  "setting_bg_dialog_title": {
+    "message": "Select background image"
+  },
+  "setting_all_displays": {
+    "message": "All displays"
+  },
+  "setting_all_displays_desc": {
+    "message": "Show screensaver on all connected displays"
+  },
+  "setting_full_screen": {
+    "message": "Do not display over full screen Chrome windows"
+  },
+  "setting_full_screen_desc": {
+    "message": "Useful if you are watching videos"
+  },
+  "setting_keep_awake": {
+    "message": "Keep awake"
+  },
+  "setting_keep_awake_desc": {
+    "message": "Prevent display from sleeping (always active if start and stop times are equal)"
+  },
+  "setting_start_time": {
+    "message": "Screensaver/Keep awake active start time"
+  },
+  "setting_start_time_desc": {
+    "message": "Allow screensaver display, starting at this time"
+  },
+  "setting_stop_time": {
+    "message": "Screensaver/Keep awake active stop time"
+  },
+  "setting_stop_time_desc": {
+    "message": "Disallow screensaver display after this time"
+  },
+  "setting_suspend": {
+    "message": "Allow system suspend"
+  },
+  "setting_suspend_desc": {
+    "message": "Computer may sleep during inactive time"
+  },
+  "setting_chromecast": {
+    "message": "Chromecast"
+  },
+  "setting_chromecast_desc": {
+    "message": "Some backdrop photos from the Chromecast device"
+  },
+  "setting_500editors": {
+    "message": "500px - editors' choice"
+  },
+  "setting_500editors_desc": {
+    "message": "Choice photos from 500px"
+  },
+  "setting_500popular": {
+    "message": "500px - popular"
+  },
+  "setting_500popular_desc": {
+    "message": "Popular photos from 500px"
+  },
+  "setting_500yest": {
+    "message": "500px - fresh"
+  },
+  "setting_500yest_desc": {
+    "message": "Recent photos from the 500px, updated daily"
+  },
+  "setting_flickr_int": {
+    "message": "Flickr - interesting"
+  },
+  "setting_flickr_int_desc": {
+    "message": "Interesting photos from the Flickr, updated daily"
+  },
+  "setting_reddit_space": {
+    "message": "reddit - space"
+  },
+  "setting_reddit_space_desc": {
+    "message": "Primarily celestial photos from reddit, updated daily"
+  },
+  "setting_reddit_earth": {
+    "message": "reddit - earth"
+  },
+  "setting_reddit_earth_desc": {
+    "message": "Primarily landscape photos from reddit, updated daily"
+  },
+  "setting_reddit_animal": {
+    "message": "reddit - animal"
+  },
+  "setting_reddit_animal_desc": {
+    "message": "Animal photos from reddit, updated daily"
+  },
+  "setting_mine": {
+    "message": "Extension developer"
+  },
+  "setting_mine_desc": {
+    "message": "Photos from the guy who wrote this"
+  },
+  "setting_click_to_view": {
+    "message": "Click mouse to view the website for Flickr, 500px and reddit photos"
+  },
+  "setting_flickr_api": {
+    "message": "This product uses the Flickr API but is not endorsed or certified by Flickr"
+  },
+  "tab_slideshow": {
+    "message": "SLIDE SHOW CONTROLS",
+    "description": "All Caps"
+  },
+  "tab_display": {
+    "message": "DISPLAY CONTROLS",
+    "description": "All Caps"
+  },
+  "tab_sources": {
+    "message": "PHOTO SOURCES",
+    "description": "All Caps"
+  },
+  "google_title": {
+    "message": "Google Photos Albums"
+  },
+  "google_shared_albums_note": {
+    "message": "Note: Shared albums may not be available.  See the FAQ for more info."
+  },
+  "google_loading": {
+    "message": "Loading Albums"
+  },
+  "faq_title": {
+    "message": "Frequently Asked Questions"
+  },
+  "faq_1": {
+    "message": "How do I uninstall this?"
+  },
+  "faq_1_body": {
+    "message": "Right click on the icon in the browser toolbar and select 'Remove from Chrome...'",
+    "description": "Values in single quotes are set by Chrome browser please check"
+  },
+  "faq_2": {
+    "message": "Why aren't all my Google Photos albums showing?"
+  },
+  "faq_2_body": {
+    "message": "The API that Google provides to interface with Google Photos does not fully support the new shared albums.  To convert an existing shared album to a format the screen saver supports, select the album, click on 'Sharing Options' and unset the 'Share' option."
+  },
+  "faq_3": {
+    "message": "I received a Status: 500 error trying to load my Google Photos albums. What does that mean?"
+  },
+  "faq_3_body": {
+    "message": "This is an error on the Server that provides the photos. This is probably a very temporary issue - please try again later."
+  },
+  "faq_4": {
+    "message": "Why is the time label incorrect on my Chromebook?"
+  },
+  "faq_4_body": {
+    "message": "If you have this problem, go to 'Settings' -> 'Show Advanced Settings' and in the 'Date and time' section uncheck the 'Set time zone automatically using your location'. You will need to re-start for the change to take effect.",
+    "description": "Values in single quotes are set by Chrome browser please check"
+  },
+  "faq_5": {
+    "message": "What do the labels on the icon mean?"
+  },
+  "faq_5_body1": {
+    "message": "No label: Screensaver is enabled and will be displayed when the computer is idle."
+  },
+  "faq_5_body2": {
+    "message": "OFF: Screensaver is disabled."
+  },
+  "faq_5_body3": {
+    "message": "SLP: The time is in the inactive range of the scheduler. Screensaver will not display."
+  },
+  "faq_5_body4": {
+    "message": "PWR: The scheduler will process the keep awake settings, but the screensaver will never display."
+  },
+  "faq_6": {
+    "message": "I have the Keep awake off, but my display is not sleeping. Why is that?"
+  },
+  "faq_6_body1": {
+    "message": "Other applications may be preventing the display or computer from sleeping."
+  },
+  "faq_6_body2": {
+    "message": "On many Chrome OS devices the display will not sleep if the screensaver is running. You can use the Screensaver/Keep awake scheduling feature to control when the screensaver is displayed."
+  },
+  "faq_7": {
+    "message": "I have the Keep awake on, but my system is shutting down. Why is that?"
+  },
+  "faq_7_body": {
+    "message": "The Keep awake features are requests to the computer and do not have to be honored. The display request is almost always honored, but the system request isn't. In particular, many PC's will put the computer to sleep if you have them set to do this."
+  },
+  "faq_8": {
+    "message": "Can you add support for using files from my local computer?"
+  },
+  "faq_8_body": {
+    "message": "By default, extensions are not allowed to access the local filesystem."
+  },
+  "info_title": {
+    "message": "Information For Nerds"
+  },
+  "info_source": {
+    "message": "Source Code"
+  },
+  "info_apis": {
+    "message": "APIs & Specifications"
+  },
+  "info_apis_body1": {
+    "message": "This extension has been built entirely with Polymer and vanilla JavaScript.  Polymer treats everything as a"
+  },
+  "info_apis_body2": {
+    "message": "Web Component"
+  },
+  "info_apis_body3": {
+    "message": "I have never used things like AngularJS (or even JQuery) so I can't really evaluate the pros and cons of this approach.  In addition, there is nothing in Polymer that prevents you from using it with these other solutions."
+  },
+  "info_libs": {
+    "message": "Photo Libraries"
+  },
+  "info_libs_body1": {
+    "message": "Unfortunately, there is no Google Photos API, so the only way to interact with it is the Picasa Web API. This API only implements a subset of the Google Photos features."
+  },
+  "info_libs_body2": {
+    "message": "Chromecast photos"
+  },
+  "info_libs_body3": {
+    "message": "are a snapshot in time of those used for the backdrop."
+  },
+  "info_libs_body4": {
+    "message": "This extension is read only for your Google photos despite what the permissions popup says. The Picasa API does not have a read only scope."
+  },
+  "info_web": {
+    "message": "Web Development Documentation"
+  },
+  "info_web_body": {
+    "message": "This was my first time doing Web development and the learning curve is pretty steep. These sites provides good tutorials and reference materials on the HTML-CSS-JavaScript paradigm."
+  },
+  "err_request_failed": {
+    "message": "Request failed. Select refresh to try again."
+  },
+  "err_storage_title": {
+    "message": "Exceeded storage limits"
+  },
+  "err_storage_desc": {
+    "message": "Deselect other photo sources and try again."
+  },
+  "time_format": {
+    "message": "12",
+    "description": "For translators: Set to 12 for AM/PM format or 24"
+  }
+}
