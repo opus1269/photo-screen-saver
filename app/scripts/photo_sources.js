@@ -116,8 +116,7 @@
 		} else if (!photos || !photos.length) {
 			ret = 'No photos retrieved.';
 		} else {
-			const value = JSON.stringify(photos);
-			const set = app.Utils.safeSet(this.photosName, value, keyBool);
+			const set = app.Utils.safeSet(this.photosName, photos, keyBool);
 			if (!set) {
 				ret = 'Exceeded storage capacity.';
 			}

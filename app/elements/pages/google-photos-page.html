@@ -305,8 +305,8 @@ app.GooglePhotosPage = Polymer({
 			item = this.albums[i];
 			if (!item.checked) {
 				this.selections.push({id: item.id, photos: item.photos});
-				const value = JSON.stringify(this.selections);
-				const set = app.Utils.safeSet('albumSelections', value, null);
+				const set =
+					app.Utils.safeSet('albumSelections', this.selections, null);
 				if (!set) {
 					// exceeded storage limits
 					this.selections.pop();
@@ -347,8 +347,7 @@ app.GooglePhotosPage = Polymer({
 			this.selections.push({id: item.id, photos: item.photos});
 		}
 
-		const value = JSON.stringify(this.selections);
-		const set = app.Utils.safeSet('albumSelections', value, null);
+		const set = app.Utils.safeSet('albumSelections', this.selections, null);
 		if (!set) {
 			// exceeded storage limits
 			this.selections.pop();
