@@ -36,7 +36,6 @@ app.BGUtils = (function() {
 	 * @namespace app.BGUtils
 	 */
 
-
 	/**
 	 * Version of localStorage - update when items are added, removed, changed
 	 * @type {int}
@@ -49,8 +48,8 @@ app.BGUtils = (function() {
 
 	/**
 	 * Default values in localStorage
-	 * @type {{enabled: boolean,
-	 * idleTime: string, transitionTime: string, skip: boolean,
+	 * @type {{enabled: boolean, version int
+	 * idleTime: {}, transitionTime: {}, skip: boolean,
 	 * shuffle: boolean, photoSizing: number, photoTransition: number,
 	 * showTime: number, showPhotog: boolean, background: string,
 	 * keepAwake: boolean, chromeFullscreen: boolean, allDisplays: boolean,
@@ -64,24 +63,23 @@ app.BGUtils = (function() {
 	 * @private
 	 * @memberOf app.BGUtils
 	 */
-	const DEF_VALS = {
+	const DEF_VALUES = {
 		'version': DATA_VERSION,
 		'enabled': true,
-		'idleTime': '{"base": 5, "display": 5, "unit": 0}', // minutes
-		'transitionTime': '{"base": 30, "display": 30, "unit": 0}', // seconds
+		'idleTime': {'base': 5, 'display': 5, 'unit': 0}, // minutes
+		'transitionTime': {'base': 30, 'display': 30, 'unit': 0}, // seconds
 		'skip': true,
 		'shuffle': true,
 		'photoSizing': 0,
 		'photoTransition': 4,
 		'showTime': 2, // 24 hr format
 		'showPhotog': true,
-		'background':
-			'"background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)"',
+		'background': 'background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)',
 		'keepAwake': false,
 		'chromeFullscreen': true,
 		'allDisplays': false,
-		'activeStart': '"00:00"', // 24 hr time
-		'activeStop': '"00:00"', // 24 hr time
+		'activeStart': '00:00', // 24 hr time
+		'activeStop': '00:00', // 24 hr time
 		'allowSuspend': false,
 		'useSpaceReddit': false,
 		'useEarthReddit': false,
@@ -154,19 +152,59 @@ app.BGUtils = (function() {
 		return ret;
 	}
 
+	/**
+	 * Save the {@link DEF_VALUES} array to localStorage
+	 * @private
+	 * @memberOf app.BGUtils
+	 */
+	function _saveDefaults() {
+		Object.keys(DEF_VALUES).forEach(function(key) {
+			if (app.Utils.get(key) === null) {
+				app.Utils.set(key, DEF_VALUES[key]);
+			}
+		});
+	}
+
 	return {
 		/**
-		 * Initialize the localStorage items
-		 * @param {Boolean} restore - if true, restore to defaults
+		 * Initialize the data saved in localStorage
 		 * @memberOf app.BGUtils
 		 */
-		initData: function(restore) {
-			// using local storage as a quick and dirty replacement for MVC
-			// not using chrome.storage 'cause the async nature of it
-			// complicates things
-			// just remember to use parse methods because all values are strings
+		initializeData: function() {
+			_saveDefaults();
 
+			// set operating system
+			chrome.runtime.getPlatformInfo(function(info) {
+				app.Utils.set('os', info.os);
+			});
+
+			// set time format based on locale
+			app.Utils.set('showTime', _getTimeFormat());
+
+			// update state
+			app.BGUtils.processState('all');
+		},
+
+		/**
+		 * Update the data saved in localStorage
+		 * @memberOf app.BGUtils
+		 */
+		updateData: function() {
+			// New items, changes, and removal of unused items can take place
+			// here when the version changes
 			const oldVersion = app.Utils.getInt('version');
+
+			if (DATA_VERSION > oldVersion) {
+				// update version number
+				app.Utils.set('version', DATA_VERSION);
+			}
+
+			if (oldVersion < 10) {
+				// was setting this without quotes before
+				chrome.runtime.getPlatformInfo(function(info) {
+					app.Utils.set('os', info.os);
+				});
+			}
 
 			if (oldVersion < 8) {
 				let str;
@@ -188,25 +226,30 @@ app.BGUtils = (function() {
 				}
 			}
 
-			if (restore) {
-				// restore defaults
-				Object.keys(DEF_VALS).forEach(function(key) {
-					if ((key !== 'useGoogle') &&
-						(key !== 'albumSelections') &&
-						(key !== 'os')) {
-						// skip Google photos settings and os
-						app.Utils.set(key, DEF_VALS[key]);
-					}
-					app.Utils.set('showTime', _getTimeFormat());
-				});
-			} else {
-				app.Utils.set('showTime', _getTimeFormat());
-				Object.keys(DEF_VALS).forEach(function(key) {
-					if (!app.Utils.get(key)) {
-						app.Utils.set(key, DEF_VALS[key]);
-					}
-				});
-			}
+			_saveDefaults();
+
+			// update state
+			app.BGUtils.processState('all');
+		},
+
+		/**
+		 * Restore defaults for data saved in localStorage
+		 * @memberOf app.BGUtils
+		 */
+		restoreDefaults: function() {
+			Object.keys(DEF_VALUES).forEach(function(key) {
+				if ((key !== 'useGoogle') &&
+					(key !== 'albumSelections')) {
+					// skip Google photos settings
+					app.Utils.set(key, DEF_VALUES[key]);
+				}
+			});
+
+			// restore default time format based on locale
+			app.Utils.set('showTime', _getTimeFormat());
+
+			// update state
+			app.BGUtils.processState('all');
 		},
 
 		/**

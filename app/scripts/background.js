@@ -32,7 +32,7 @@
 
 	/**
 	 * The background script for the extension.<br>
-	 * @namespace Background
+	 * @namespace app.Background
 	 */
 
 	/**
@@ -42,9 +42,9 @@
 	 * @see https://developer.chromse.com/extensions/runtime#event-onInstalled
 	 * @param {object} details - type of event
 	 * @private
-	 * @memberOf Background
+	 * @memberOf app.Background
 	 */
-	function onInstalled(details) {
+	function _onInstalled(details) {
 		// create menus on the right click menu of the extension icon
 		chrome.contextMenus.create({
 			type: 'normal',
@@ -58,12 +58,12 @@
 			contexts: ['browser_action'],
 		});
 
-		app.BGUtils.initData(false);
-		app.BGUtils.processState('all');
-
 		if (details.reason === 'install') {
-			// extension installed, show main view
+			app.BGUtils.initializeData();
 			app.BGUtils.showOptionsTab();
+		} else if (details.reason === 'update') {
+			// extension updated
+			app.BGUtils.updateData();
 		}
 	}
 
@@ -72,9 +72,9 @@
 	 * starts up
 	 * @see https://developer.chrome.com/extensions/runtime#event-onStartup
 	 * @private
-	 * @memberOf Background
+	 * @memberOf app.Background
 	 */
-	function onStartup() {
+	function _onStartup() {
 		app.BGUtils.processState('all');
 	}
 
@@ -82,9 +82,9 @@
 	 * Event: Fired when a browser action icon is clicked.
 	 * @see https://goo.gl/abVwKu
 	 * @private
-	 * @memberOf Background
+	 * @memberOf app.Background
 	 */
-	function onIconClicked() {
+	function _onIconClicked() {
 		app.BGUtils.showOptionsTab();
 	}
 
@@ -94,9 +94,9 @@
 	 * @param {Event} event
 	 * @param {string} event.key - storage item that changed
 	 * @private
-	 * @memberOf Background
+	 * @memberOf app.Background
 	 */
-	function onStorageChanged(event) {
+	function _onStorageChanged(event) {
 		app.BGUtils.processState(event.key);
 	}
 
@@ -106,9 +106,9 @@
 	 * @param {Object} info - info. on the clicked menu
 	 * @param {Object} info.menuItemId - menu name
 	 * @private
-	 * @memberOf Background
+	 * @memberOf app.Background
 	 */
-	function onMenuClicked(info) {
+	function _onMenuClicked(info) {
 		if (info.menuItemId === 'ENABLE_MENU') {
 			app.BGUtils.toggleEnabled();
 		}
@@ -120,9 +120,9 @@
 	 * @see https://developer.chrome.com/extensions/commands#event-onCommand
 	 * @param {String} cmd
 	 * @private
-	 * @memberOf Background
+	 * @memberOf app.Background
 	 */
-	function onKeyCommand(cmd) {
+	function _onKeyCommand(cmd) {
 		if (cmd === 'toggle-enabled') {
 			app.BGUtils.toggleEnabled();
 		}
@@ -136,37 +136,36 @@
 	 * @param {object} request - details for the message
 	 * @param {string} request.message - name of the message
 	 * @param {object} sender - MessageSender object
-	 * @param {function} response - function to call once after processing
+	 * @param {function} response - function _to call once after processing
 	 * @return {boolean} true if asynchronous
 	 * @private
-	 * @memberOf Background
+	 * @memberOf app.Background
 	 */
-	function onChromeMessage(request, sender, response) {
+	function _onChromeMessage(request, sender, response) {
 		if (request.message === 'restoreDefaults') {
-			app.BGUtils.initData(true);
-			app.BGUtils.processState('all');
+			app.BGUtils.restoreDefaults();
 		}
 		return false;
 	}
 
 	// listen for extension install or update
-	chrome.runtime.onInstalled.addListener(onInstalled);
+	chrome.runtime.onInstalled.addListener(_onInstalled);
 
 	// listen for Chrome starting
-	chrome.runtime.onStartup.addListener(onStartup);
+	chrome.runtime.onStartup.addListener(_onStartup);
 
 	// listen for click on the icon
-	chrome.browserAction.onClicked.addListener(onIconClicked);
+	chrome.browserAction.onClicked.addListener(_onIconClicked);
 
 	// listen for changes to the stored data
-	addEventListener('storage', onStorageChanged, false);
+	addEventListener('storage', _onStorageChanged, false);
 
 	// listen for chrome messages
-	chrome.runtime.onMessage.addListener(onChromeMessage);
+	chrome.runtime.onMessage.addListener(_onChromeMessage);
 
 	// listen for clicks on context menus
-	chrome.contextMenus.onClicked.addListener(onMenuClicked);
+	chrome.contextMenus.onClicked.addListener(_onMenuClicked);
 
 	// listen for special keyboard commands
-	chrome.commands.onCommand.addListener(onKeyCommand);
+	chrome.commands.onCommand.addListener(_onKeyCommand);
 })();
