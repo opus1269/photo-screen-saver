@@ -48,7 +48,7 @@ app.BGUtils = (function() {
 
 	/**
 	 * Default values in localStorage
-	 * @type {{enabled: boolean, version int
+	 * @type {{enabled: boolean, version: int,
 	 * idleTime: {}, transitionTime: {}, skip: boolean,
 	 * shuffle: boolean, photoSizing: number, photoTransition: number,
 	 * showTime: number, showPhotog: boolean, background: string,

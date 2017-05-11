@@ -33,7 +33,7 @@ app.GooglePhotos = (function() {
 
 	/**
 	 * Interface to Picasa API
-	 * @namespace GooglePhotos
+	 * @namespace app.GooglePhotos
 	 */
 
 	/**
@@ -42,7 +42,7 @@ app.GooglePhotos = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf GooglePhotos
+	 * @memberOf app.GooglePhotos
 	 */
 	const PICASA_URI = 'https://picasaweb.google.com/data/feed/api/user/';
 
@@ -52,7 +52,7 @@ app.GooglePhotos = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf GooglePhotos
+	 * @memberOf app.GooglePhotos
 	 */
 	const PHOTOS_QUERY =
 		'?imgmax=1600&thumbsize=72' +
@@ -65,17 +65,17 @@ app.GooglePhotos = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf GooglePhotos
+	 * @memberOf app.GooglePhotos
 	 */
 	const MAX_RETRY = 3;
 
 	/**
 	 * Perform an http request using OAuth 2.0 authentication
-	 * @param {string} method request type "POST" "GET" etc.
-	 * @param {string} url url to call
+	 * @param {string} method - request type "POST" "GET" etc.
+	 * @param {string} url - url to call
 	 * @param {function} callback (error, httpStatus, responseText)
 	 * @private
-	 * @memberOf GooglePhotos
+	 * @memberOf app.GooglePhotos
 	 */
 	function _authenticatedXhr(method, url, callback) {
 		callback = callback || function() {};
@@ -139,7 +139,7 @@ app.GooglePhotos = (function() {
 	 * @param {Object} entry - Picasa media object
 	 * @return {boolean} true if entry is a photo
 	 * @private
-	 * @memberOf GooglePhotos
+	 * @memberOf app.GooglePhotos
 	 */
 	function _isImage(entry) {
 		const content = entry.media$group.media$content;
@@ -153,10 +153,10 @@ app.GooglePhotos = (function() {
 
 	/**
 	 * Extract the Picasa photos into an Array
-	 * @param {Object} root root object from Picasa API call
+	 * @param {Object} root - root object from Picasa API call
 	 * @return {Array} Array of photo objects
 	 * @private
-	 * @memberOf GooglePhotos
+	 * @memberOf app.GooglePhotos
 	 */
 	function _processPhotos(root) {
 		const feed = root.feed;
@@ -185,10 +185,10 @@ app.GooglePhotos = (function() {
 
 	/**
 	 * Retrieve the photos for the given album id
-	 * @param {Integer} id Picasa album id
+	 * @param {int} id - Picasa album id
 	 * @param {function} callback (error, photos)
 	 * @private
-	 * @memberOf GooglePhotos
+	 * @memberOf app.GooglePhotos
 	 */
 	function loadPicasaAlbum(id, callback) {
 		callback = callback || function() {};
@@ -208,7 +208,7 @@ app.GooglePhotos = (function() {
 		/**
 		 * Get my photo album
 		 * @param {function} callback (error, photos)
-		 * @memberOf GooglePhotos
+		 * @memberOf app.GooglePhotos
 		 */
 		loadAuthorImages: function(callback) {
 			callback = callback || function() {};
@@ -238,7 +238,7 @@ app.GooglePhotos = (function() {
 		/**
 		 * Retrieve the users list of albums, including the photos in each
 		 * @param {function} callback (error, albumList)
-		 * @memberOf GooglePhotos
+		 * @memberOf app.GooglePhotos
 		 */
 		loadAlbumList: function(callback) {
 			callback = callback || function() {};
@@ -308,12 +308,12 @@ app.GooglePhotos = (function() {
 		 * Retrieve the photos in the selected albums
 		 * @param {function} callback (error, items)
 		 * Array of Array of album photos on success
-		 * @memberOf GooglePhotos
+		 * @memberOf app.GooglePhotos
 		 */
 		loadImages: function(callback) {
 			callback = callback || function() {};
 			let ct = 0;
-			const items = app.Utils.getJSON('albumSelections');
+			const items = app.Utils.get('albumSelections');
 			const newItems = [];
 
 			for (let i = 0; i < items.length; i++) {

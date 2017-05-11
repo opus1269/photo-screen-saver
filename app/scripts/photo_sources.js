@@ -32,17 +32,17 @@
 
 	/**
 	 * A potential source of photos for the screen saver
-	 * @param {String} useName The key for the boolean value that indicates
+	 * @param {string} useName - The key for the boolean value that indicates
 	 * if the source is selected
-	 * @param {String} photosName The key for the collection of photos
-	 * @param {String} type A descriptor of the photo source
-	 * @param {Boolean} isDaily Should the source be updated daily
-	 * @param {Boolean} isArray Is the source an Array of photo Arrays
-	 * @param {String} loadObj the function wrapper for a photo source
+	 * @param {string} photosName - The key for the collection of photos
+	 * @param {string} type - A descriptor of the photo source
+	 * @param {boolean} isDaily - Should the source be updated daily
+	 * @param {boolean} isArray - Is the source an Array of photo Arrays
+	 * @param {string} loadObj - the function wrapper for a photo source
 	 * as a string
-	 * @param {String} loadFn function to call to retrieve the photo collection
-	 * as a string
-	 * @param {Array} loadArgs Arguments to the loadFn
+	 * @param {string} loadFn - function to call to retrieve the photo
+	 * collection as a string
+	 * @param {Array} loadArgs - Arguments to the loadFn
 	 * @constructor
 	 * @alias PhotoSource
 	 */
@@ -60,7 +60,7 @@
 
 	/**
 	 * Determine if this source has been selected for display
-	 * @return {Boolean} true if selected
+	 * @return {boolean} true if selected
 	 */
 	PhotoSource.prototype.use = function() {
 		return app.Utils.getBool(this.useName);
@@ -103,9 +103,9 @@
 
 	/**
 	 * Save the photos to localStorage in a safe manner
-	 * @param {String} error non-null if retrieval failed
-	 * @param {Array} photos an array of photo objects
-	 * @return {String} non-null on error
+	 * @param {string} error - non-null if retrieval failed
+	 * @param {Array} photos - an array of photo objects
+	 * @return {string} non-null on error
 	 * @private
 	 */
 	PhotoSource.prototype._savePhotos = function(error, photos) {
@@ -122,14 +122,13 @@
 				ret = 'Exceeded storage capacity.';
 			}
 		}
-
 		return ret;
 	};
 
 	/**
 	 * Add the type specifier (source of the photo) for each
 	 * photo object in the array
-	 * @param {Array} arr an array of photo objects
+	 * @param {Array} arr - an array of photo objects
 	 * @private
 	 */
 	PhotoSource.prototype._addType = function(arr) {
@@ -146,7 +145,7 @@
 		let ret = [];
 		if (this.use()) {
 			if (this.isArray) {
-				const items = app.Utils.getJSON(this.photosName);
+				const items = app.Utils.get(this.photosName);
 				for (let i = 0; i < items.length; i++) {
 					ret = ret.concat(items[i].photos);
 					if (ret) {
@@ -154,7 +153,7 @@
 					}
 				}
 			} else {
-				ret = app.Utils.getJSON(this.photosName);
+				ret = app.Utils.get(this.photosName);
 				if (ret) {
 					this._addType(ret);
 				}
@@ -217,7 +216,7 @@
 
 	/**
 	 * Determine if a given string is a photo source
-	 * @param {String} useName String to check
+	 * @param {string} useName - String to check
 	 * @return {boolean} true if photo source
 	 */
 	PhotoSource.contains = function(useName) {
@@ -233,7 +232,7 @@
 	 * Process the given photo source and save to localStorage.
 	 * This normally requires a https call
 	 * and may fail for various reasons
-	 * @param {String} useName The photo source to retrieve
+	 * @param {string} useName - The photo source to retrieve
 	 * @param {function} callback (error) non-null on error
 	 *
 	 */

@@ -33,7 +33,7 @@ app.Alarm = (function() {
 
 	/**
 	 * Manage the chrome.alarm
-	 * @namespace Alarm
+	 * @namespace app.Alarm
 	 */
 
 	/**
@@ -42,7 +42,7 @@ app.Alarm = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	const ALARM_ACTIVATE = 'activeStart';
 
@@ -52,7 +52,7 @@ app.Alarm = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	const ALARM_DEACTIVATE = 'activeStop';
 
@@ -62,7 +62,7 @@ app.Alarm = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	const ALARM_UPDATE_PHOTOS = 'updatePhotos';
 
@@ -72,7 +72,7 @@ app.Alarm = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	const ALARM_BADGE = 'setBadgeText';
 
@@ -82,7 +82,7 @@ app.Alarm = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	const MIN_IN_DAY = 60 * 24;
 
@@ -92,7 +92,7 @@ app.Alarm = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	const MSEC_IN_DAY = MIN_IN_DAY * 60 * 1000;
 
@@ -101,7 +101,7 @@ app.Alarm = (function() {
 	 * @param {String} value - format: 'hh:mm' 24 hour time
 	 * @return {int} time in mSec from epoch
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	function _getTime(value) {
 		const date = new Date();
@@ -118,7 +118,7 @@ app.Alarm = (function() {
 	 * @param {String} value - format: 'hh:mm' 24 hour time
 	 * @return {int} time delta in minutes
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	function _getTimeDelta(value) {
 		const curTime = Date.now();
@@ -137,7 +137,7 @@ app.Alarm = (function() {
 	 * @param {String} stop - format: 'hh:mm' 24 hour time
 	 * @return {Boolean} true if in the given range
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	function _isInRange(start, stop) {
 		const curTime = Date.now();
@@ -162,7 +162,7 @@ app.Alarm = (function() {
 	/**
 	 * Set state when the screensaver is in the active time range
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	function _setActiveState() {
 		if (app.Utils.getBool('keepAwake')) {
@@ -181,7 +181,7 @@ app.Alarm = (function() {
 	/**
 	 * Set state when the screensaver is in the inactive time range
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	function _setInactiveState() {
 		if (app.Utils.getBool('allowSuspend')) {
@@ -196,7 +196,7 @@ app.Alarm = (function() {
 	/**
 	 * Set the Badge text on the icon
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	function _setBadgeText() {
 		let text = '';
@@ -216,7 +216,7 @@ app.Alarm = (function() {
 	 * @see https://developer.chrome.com/apps/alarms#event-onAlarm
 	 * @param {object} alarm - details on alarm
 	 * @private
-	 * @memberOf Alarm
+	 * @memberOf app.Alarm
 	 */
 	function _onAlarm(alarm) {
 		switch (alarm.name) {
@@ -247,7 +247,7 @@ app.Alarm = (function() {
 	return {
 		/**
 		 * Set the repeating alarms states
-		 * @memberOf Alarm
+		 * @memberOf app.Alarm
 		 */
 		updateRepeatingAlarms: function() {
 			const keepAwake = app.Utils.getBool('keepAwake');
@@ -291,7 +291,7 @@ app.Alarm = (function() {
 
 		/**
 		 * Set the icon badge text
-		 * @memberOf Alarm
+		 * @memberOf app.Alarm
 		 */
 		updateBadgeText: function() {
 			// delay setting a little to make sure range check is good
@@ -301,13 +301,13 @@ app.Alarm = (function() {
 		/**
 		 * Determine if the screen saver can be displayed
 		 * @return {Boolean} true if can display
-		 * @memberOf Alarm
+		 * @memberOf app.Alarm
 		 */
 		isActive: function() {
 			const enabled = app.Utils.getBool('enabled');
 			const keepAwake = app.Utils.getBool('keepAwake');
-			const aStart = app.Utils.getJSON('activeStart');
-			const aStop = app.Utils.getJSON('activeStop');
+			const aStart = app.Utils.get('activeStart');
+			const aStop = app.Utils.get('activeStop');
 
 			// do not display if screen saver is not enabled or
 			// keepAwake scheduler is enabled and is in the inactive range
