@@ -361,7 +361,7 @@ app.GooglePhotosPage = Polymer({
 	 * @private
 	 */
 	_selectAlbums: function() {
-		this.selections = app.Utils.getJSON('albumSelections');
+		this.selections = app.Utils.get('albumSelections');
 		for (let i = 0; i < this.albums.length; i++) {
 			for (let j = 0; j < this.selections.length; j++) {
 				if (this.albums[i].id === this.selections[j].id) {
