@@ -3,7 +3,7 @@
     "message": "Photo Screen Saver"
   },
   "chrome_extension_description": {
-    "message": "A screensaver with multiple photo sources, including your own Google Photos."
+    "message": "A screensaver with multiple photo sources, including your Google Photos."
   },
   "browser_action_title": {
     "message": "Photo Screen Saver - click for options"
