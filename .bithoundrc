@@ -44,6 +44,7 @@
     "**/extjs/welcome/**",
     "**/app/bower_components/**",
     "**/docs/**",
+    "**/docs/gen/scripts/**",
     "**/app/lib/**",
   ],
   "test": [
