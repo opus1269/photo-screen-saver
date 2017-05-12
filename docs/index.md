@@ -33,7 +33,7 @@ It is implemented using Vanilla JavaScript and [Polymer 1](https://www.polymer-p
 
 <br />
 
-### [GitHub Pages](https://opus1269.github.io/photo-screen-saver/)
+### [Code Documentation](gen/index.html)
 
 <br /><br />
 
