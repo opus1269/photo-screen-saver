@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Documentation Source: reddit.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cerulean.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Documentation</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.BGUtils.html">app.BGUtils</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="Photo.html">Photo</a></li><li><a href="PhotoSource.html">PhotoSource</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: reddit.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/*
+ *  Copyright (c) 2015-2017, Michael A. Updike All rights reserved.
+ *  Licensed under the BSD-3-Clause
+ *  https://opensource.org/licenses/BSD-3-Clause
+ *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
+ */
+window.app = window.app || {};
+app.Reddit = (function() {
+	'use strict';
+
+	/**
+	 * Interface to Reddit API
+	 * @namespace app.Reddit
+	 */
+
+	/**
+	 * Extensions redirect uri
+	 * @type {string}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf app.Reddit
+	 */
+	const REDIRECT_URI =
+		'https://kohpcmlfdjfdggcjmjhhbcbankgmppgc.chromiumapp.org/reddit';
+
+	/**
+	 * Reddit rest API authorization key
+	 * @type {string}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf app.Reddit
+	 */
+	const KEY = 'bATkDOUNW_tOlg';
+
+	/**
+	 * Max photos to return
+	 * @type {int}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf app.Reddit
+	 */
+	const MAX_PHOTOS = 100;
+	/**
+	 * Min size of photo to use
+	 * @type {int}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf app.Reddit
+	 */
+	const MIN_SIZE = 750;
+
+	/**
+	 * Max size of photo to use
+	 * @type {int}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf app.Reddit
+	 */
+	const MAX_SIZE = 3500;
+
+	/**
+	 * Expose reddit API
+	 * @type {function}
+	 * @const
+	 * @private
+	 * @memberOf app.Reddit
+	 */
+	const snoocore = new Snoocore({
+		userAgent: 'photo-screen-saver',
+		throttle: 0,
+		oauth: {
+			type: 'implicit',
+			key: KEY,
+			redirectUri: REDIRECT_URI,
+			scope: ['read'],
+		},
+	});
+
+	/**
+	 * Parse the size from the submission title.
+	 * this is the old way reddit did it
+	 * @param {string} title - submission title
+	 * @returns {{width: int, height: int}} Photo size
+	 * @private
+	 * @memberOf app.Reddit
+	 */
+	function _getSize(title) {
+		let ret = {width: -1, height: -1};
+		let res;
+		const regex = /\[(\d*)\D*(\d*)\]/;
+
+		res = title.match(regex);
+		if (res) {
+			ret.width = parseInt(res[1], 10);
+			ret.height = parseInt(res[2], 10);
+		}
+		return ret;
+	}
+
+	/**
+	 * Build the list of photos for one page of items
+	 * @param {Array} children Array of photos returned from reddit
+	 * @returns {Array} Array of images in our format,
+	 * stripped of NSFW and big and small photos
+	 * @private
+	 * @memberOf app.Reddit
+	 */
+	const _processChildren = function(children) {
+		let data;
+		let item;
+		const images = [];
+		let url;
+		let width = 1;
+		let height = 1;
+		let asp;
+
+		for (let j = 0; j &lt; children.length; j++) {
+			data = children[j].data;
+			if (data.over_18) {
+				// skip NSFW
+				continue;
+			} else if (data.preview &amp;&amp; data.preview.images) {
+				// new way. has full size image and array of reduced resolutions
+				item = data.preview.images[0];
+				url = item.source.url;
+				width = parseInt(item.source.width, 10);
+				height = parseInt(item.source.height, 10);
+				if (Math.max(width, height) > MAX_SIZE) {
+					// too big. get the largest reduced resolution image
+					item = item.resolutions[item.resolutions.length - 1];
+					url = item.url.replace(/&amp;amp;/g, '&amp;');
+					width = parseInt(item.width, 10);
+					height = parseInt(item.height, 10);
+				}
+			} else if (data.title) {
+				// old way of specifying images
+				const size = _getSize(data.title);
+				url = data.url;
+				width = size.width;
+				height = size.height;
+			}
+
+			asp = width / height;
+			if (asp &amp;&amp; !isNaN(asp) &amp;&amp; (Math.max(width, height) >= MIN_SIZE) &amp;&amp;
+				(Math.max(width, height) &lt;= MAX_SIZE)) {
+				app.Utils.addImage(images, url, data.author, asp, data.url);
+			}
+		}
+		return images;
+	};
+
+	return {
+		/**
+		 * Retrieve the array of reddit photos
+		 * @param {string} subreddit - name of photo subreddit
+		 * @param {function} callback (error, photos) Array of photos on success
+		 * @memberOf app.Reddit
+		 */
+		loadImages: function(subreddit, callback) {
+			// callback(error, photos)
+			callback = callback || function() {};
+			
+			let photos = [];
+
+			snoocore(subreddit + 'hot').listing({
+				limit: MAX_PHOTOS,
+			}).then(function(slice) {
+				photos = photos.concat(_processChildren(slice.children));
+				return slice.next();
+			}).then(function(slice) {
+				photos = photos.concat(_processChildren(slice.children));
+				callback(null, photos);
+			}).catch(function(reason) {
+				callback(reason);
+			});
+		},
+	};
+})();
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	DocStrap Copyright © 2012-2015 The contributors to the JSDoc3 and DocStrap projects.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
+	
+		on May 12th 2017, 7:24:42 am
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Documentation Source: background.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cerulean.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Documentation</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.BGUtils.html">app.BGUtils</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="Photo.html">Photo</a></li><li><a href="PhotoSource.html">PhotoSource</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: background.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/*
+ *  Copyright (c) 2015-2017, Michael A. Updike All rights reserved.
+ *  Licensed under the BSD-3-Clause
+ *  https://opensource.org/licenses/BSD-3-Clause
+ *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
+ */
+(function() {
+	'use strict';
+
+	/**
+	 * The background script for the extension.&lt;br>
+	 * @namespace app.Background
+	 */
+
+	/**
+	 * Event: Fired when the extension is first installed,&lt;br />
+	 * when the extension is updated to a new version,&lt;br />
+	 * and when Chrome is updated to a new version.
+	 * @see https://developer.chromse.com/extensions/runtime#event-onInstalled
+	 * @param {Object} details - type of event
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onInstalled(details) {
+		// create menus on the right click menu of the extension icon
+		chrome.contextMenus.create({
+			type: 'normal',
+			id: 'ENABLE_MENU',
+			title: app.Utils.localize('disable'),
+			contexts: ['browser_action'],
+		});
+		chrome.contextMenus.create({
+			type: 'separator',
+			id: 'SEP_MENU',
+			contexts: ['browser_action'],
+		});
+
+		if (details.reason === 'install') {
+			app.BGUtils.initializeData();
+			app.BGUtils.showOptionsTab();
+		} else if (details.reason === 'update') {
+			// extension updated
+			app.BGUtils.updateData();
+		}
+	}
+
+	/**
+	 * Event: Fired when a profile that has this extension installed first
+	 * starts up
+	 * @see https://developer.chrome.com/extensions/runtime#event-onStartup
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onStartup() {
+		app.BGUtils.processState('all');
+	}
+
+	/**
+	 * Event: Fired when a browser action icon is clicked.
+	 * @see https://goo.gl/abVwKu
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onIconClicked() {
+		app.BGUtils.showOptionsTab();
+	}
+
+	/**
+	 * Event: Fired when item in localStorage changes
+	 * @see https://developer.mozilla.org/en-US/docs/Web/Events/storage
+	 * @param {Event} event - StorageEvent
+	 * @param {string} event.key - storage item that changed
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onStorageChanged(event) {
+		app.BGUtils.processState(event.key);
+	}
+
+	/**
+	 * Event: Fired when a context menu item is clicked.
+	 * @see https://developer.chrome.com/extensions/contextMenus#event-onClicked
+	 * @param {Object} info - info. on the clicked menu
+	 * @param {Object} info.menuItemId - menu name
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onMenuClicked(info) {
+		if (info.menuItemId === 'ENABLE_MENU') {
+			app.BGUtils.toggleEnabled();
+		}
+	}
+
+	/**
+	 * Event: Fired when a registered command is activated using
+	 * a keyboard shortcut.
+	 * @see https://developer.chrome.com/extensions/commands#event-onCommand
+	 * @param {string} cmd - keyboard command
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onKeyCommand(cmd) {
+		if (cmd === 'toggle-enabled') {
+			app.BGUtils.toggleEnabled();
+		}
+	}
+
+	// noinspection JSUnusedLocalSymbols
+	/**
+	 * Event: Fired when a message is sent from either an extension process&lt;br>
+	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
+	 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
+	 * @param {Object} request - details for the message
+	 * @param {string} request.message - name of the message
+	 * @param {Object} sender - MessageSender object
+	 * @param {function} response - function _to call once after processing
+	 * @returns {boolean} true if asynchronous
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onChromeMessage(request, sender, response) {
+		if (request.message === 'restoreDefaults') {
+			app.BGUtils.restoreDefaults();
+		}
+		return false;
+	}
+
+	// listen for extension install or update
+	chrome.runtime.onInstalled.addListener(_onInstalled);
+
+	// listen for Chrome starting
+	chrome.runtime.onStartup.addListener(_onStartup);
+
+	// listen for click on the icon
+	chrome.browserAction.onClicked.addListener(_onIconClicked);
+
+	// listen for changes to the stored data
+	addEventListener('storage', _onStorageChanged, false);
+
+	// listen for chrome messages
+	chrome.runtime.onMessage.addListener(_onChromeMessage);
+
+	// listen for clicks on context menus
+	chrome.contextMenus.onClicked.addListener(_onMenuClicked);
+
+	// listen for special keyboard commands
+	chrome.commands.onCommand.addListener(_onKeyCommand);
+})();
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	DocStrap Copyright © 2012-2015 The contributors to the JSDoc3 and DocStrap projects.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
+	
+		on May 12th 2017, 7:24:42 am
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>
