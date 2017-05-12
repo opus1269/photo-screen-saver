@@ -31,10 +31,6 @@ It is implemented using Vanilla JavaScript and [Polymer 1](https://www.polymer-p
 
 [View in Chrome Web Store](https://chrome.google.com/webstore/detail/kohpcmlfdjfdggcjmjhhbcbankgmppgc)
 
-<br />
-
-[Code documention]((https://github.com/opus1269/photo-screen-saver/blob/master/docs/gen/index.html)
-
 <br /><br />
 
 [![bitHound Overall Score](https://www.bithound.io/github/opus1269/photo-screen-saver/badges/score.svg)](https://www.bithound.io/github/opus1269/photo-screen-saver)
