@@ -79,6 +79,12 @@
 
 <script>
 'use strict';
+
+/**
+ * Handle rendering of a photo in screen saver
+ * @namespace slider
+ */
+
 Polymer({
 	is: 'setting-slider',
 
@@ -102,7 +108,9 @@ Polymer({
 	},
 
 	/**
-	 * set the base value
+	 * Set the base value
+	 * @private
+	 * @memberOf slider
 	 */
 	_setBase: function() {
 		const value = this.$.base.getValue();

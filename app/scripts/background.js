@@ -17,7 +17,7 @@
 	 * when the extension is updated to a new version,<br />
 	 * and when Chrome is updated to a new version.
 	 * @see https://developer.chromse.com/extensions/runtime#event-onInstalled
-	 * @param {object} details - type of event
+	 * @param {Object} details - type of event
 	 * @private
 	 * @memberOf app.Background
 	 */
@@ -68,7 +68,7 @@
 	/**
 	 * Event: Fired when item in localStorage changes
 	 * @see https://developer.mozilla.org/en-US/docs/Web/Events/storage
-	 * @param {Event} event
+	 * @param {Event} event - StorageEvent
 	 * @param {string} event.key - storage item that changed
 	 * @private
 	 * @memberOf app.Background
@@ -95,7 +95,7 @@
 	 * Event: Fired when a registered command is activated using
 	 * a keyboard shortcut.
 	 * @see https://developer.chrome.com/extensions/commands#event-onCommand
-	 * @param {String} cmd
+	 * @param {string} cmd - keyboard command
 	 * @private
 	 * @memberOf app.Background
 	 */
@@ -110,11 +110,11 @@
 	 * Event: Fired when a message is sent from either an extension process<br>
 	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
 	 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-	 * @param {object} request - details for the message
+	 * @param {Object} request - details for the message
 	 * @param {string} request.message - name of the message
-	 * @param {object} sender - MessageSender object
+	 * @param {Object} sender - MessageSender object
 	 * @param {function} response - function _to call once after processing
-	 * @return {boolean} true if asynchronous
+	 * @returns {boolean} true if asynchronous
 	 * @private
 	 * @memberOf app.Background
 	 */

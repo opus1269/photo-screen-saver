@@ -10,16 +10,16 @@ app.SSControl = (function() {
 
 	/**
 	 * Controller for the screen saver
-	 * @namespace SSControl
+	 * @namespace app.SSControl
 	 */
 
 	/**
 	 * Determine if there is a full screen chrome window running on a display
-	 * @param {object} display a connected display
+	 * @param {Object} display - a connected display
 	 * @param {function} callback (boolean) - true if there is a full screen
 	 * window on the display
 	 * @private
-	 * @memberOf SSControl
+	 * @memberOf app.SSControl
 	 */
 	function _hasFullscreen(display, callback) {
 		callback = callback || function() {};
@@ -47,7 +47,7 @@ app.SSControl = (function() {
 	 * Determine if the screen saver is currently showing
 	 * @param {function} callback - callback(isShowing)
 	 * @private
-	 * @memberOf SSControl
+	 * @memberOf app.SSControl
 	 */
 	function _isShowing(callback) {
 		callback = callback || function() {};
@@ -67,9 +67,9 @@ app.SSControl = (function() {
 
 	/**
 	 * Open a screen saver window on the given display
-	 * @param {object} display a connected display
+	 * @param {Object} display a connected display
 	 * @private
-	 * @memberOf SSControl
+	 * @memberOf app.SSControl
 	 */
 	function _open(display) {
 		_hasFullscreen(display, function(isTrue) {
@@ -106,7 +106,7 @@ app.SSControl = (function() {
 	/**
 	 * Open a screensaver on every display
 	 * @private
-	 * @memberOf SSControl
+	 * @memberOf app.SSControl
 	 */
 	function _openOnAllDisplays() {
 		chrome.system.display.getInfo(function(displayInfo) {
@@ -127,9 +127,9 @@ app.SSControl = (function() {
 	 * generated any input for a specified number of seconds, and "active"
 	 * when the user generates input on an idle system.
 	 * @see https://developer.chrome.com/extensions/idle#event-onStateChanged
-	 * @param {String} state - current state of computer
+	 * @param {string} state - current state of computer
 	 * @private
-	 * @memberOf SSControl
+	 * @memberOf app.SSControl
 	 */
 	function _onIdleStateChanged(state) {
 		_isShowing(function(isShowing) {
@@ -151,13 +151,13 @@ app.SSControl = (function() {
 	 * Event: Fired when a message is sent from either an extension process<br>
 	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
 	 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-	 * @param {object} request - details for the message
+	 * @param {Object} request - details for the message
 	 * @param {string} request.message - name of the message
-	 * @param {object} sender - MessageSender object
+	 * @param {Object} sender - MessageSender object
 	 * @param {function} response - function to call once after processing
-	 * @return {boolean} true if asynchronous
+	 * @returns {boolean} true if asynchronous
 	 * @private
-	 * @memberOf SSControl
+	 * @memberOf app.SSControl
 	 */
 	function _onChromeMessage(request, sender, response) {
 		if (request.message === 'showScreensaver') {
@@ -177,8 +177,8 @@ app.SSControl = (function() {
 		/**
 		 * Display the screen saver(s)
 		 * !Important: Always request screensaver through this call
-		 * @param {Boolean} single if true only show on one display
-		 * @memberOf SSControl
+		 * @param {boolean} single - if true only show on one display
+		 * @memberOf app.SSControl
 		 */
 		display: function(single) {
 			if (!single && app.Utils.getBool('allDisplays')) {
@@ -190,7 +190,7 @@ app.SSControl = (function() {
 
 		/**
 		 * Close all the screen saver windows
-		 * @memberOf SSControl
+		 * @memberOf app.SSControl
 		 */
 		close: function() {
 			// send message to the screen savers to close themselves

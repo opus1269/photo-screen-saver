@@ -114,7 +114,7 @@ app.GooglePhotos = (function() {
 
 	/** Determine if a Picasa entry is an image
 	 * @param {Object} entry - Picasa media object
-	 * @return {boolean} true if entry is a photo
+	 * @returns {boolean} true if entry is a photo
 	 * @private
 	 * @memberOf app.GooglePhotos
 	 */
@@ -131,7 +131,7 @@ app.GooglePhotos = (function() {
 	/**
 	 * Extract the Picasa photos into an Array
 	 * @param {Object} root - root object from Picasa API call
-	 * @return {Array} Array of photo objects
+	 * @returns {Array} Array of photo objects
 	 * @private
 	 * @memberOf app.GooglePhotos
 	 */
@@ -181,7 +181,6 @@ app.GooglePhotos = (function() {
 	}
 
 	return {
-
 		/**
 		 * Get my photo album
 		 * @param {function} callback (error, photos)

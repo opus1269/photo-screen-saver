@@ -9,21 +9,21 @@
 
 	/**
 	 * Extension's Options page
-	 * @namespace Options
+	 * @namespace app.Options
 	 */
 
 	/**
 	 * Manage an html page that is inserted on demand<br />
 	 * May also be a url link to external site
 	 * @typedef page
-	 * @type {object}
+	 * @type {Object}
 	 * @property {string} label - label for Nav menu
 	 * @property {string} route - element name route to page
 	 * @property {string} icon - icon for Nav Menu
 	 * @property {?object} obj - something to be done when selected
 	 * @property {boolean} ready - true if html is inserted
 	 * @property {boolean} divider - true for divider before item
-	 * @memberOf Options
+	 * @memberOf app.Options
 	 */
 
 	/**
@@ -32,7 +32,7 @@
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Options
+	 * @memberOf app.Options
 	 */
 	const EXT_URI =
 		'https://chrome.google.com/webstore/detail/photo-screen-saver/' +
@@ -44,7 +44,7 @@
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Options
+	 * @memberOf app.Options
 	 */
 	const PUSHY_URI =
 		'https://chrome.google.com/webstore/detail/pushy-clipboard/' +
@@ -55,7 +55,7 @@
 	 * @type {Object}
 	 * @const
 	 * @private
-	 * @memberOf Options
+	 * @memberOf app.Options
 	 */
 	const t = document.querySelector('#t');
 
@@ -71,8 +71,8 @@
 
 	/**
 	 * Computed property: Page title
-	 * @return {string} i18n title
-	 * @memberOf Options
+	 * @returns {string} i18n title
+	 * @memberOf app.Options
 	 */
 	t.computeTitle = function() {
 		return app.Utils.localize('chrome_extension_name');
@@ -80,8 +80,8 @@
 
 	/**
 	 * Computed property: Menu label
-	 * @return {string} i18n label
-	 * @memberOf Options
+	 * @returns {string} i18n label
+	 * @memberOf app.Options
 	 */
 	t.computeMenu = function() {
 		return app.Utils.localize('menu');
@@ -90,7 +90,7 @@
 	/**
 	 * Event Listener for template bound event to know when bindings
 	 * have resolved and content has been stamped to the page
-	 * @memberOf Options
+	 * @memberOf app.Options
 	 */
 	t.addEventListener('dom-change', function() {
 		// listen for app messages
@@ -100,8 +100,8 @@
 	/**
 	 * Event Listener for main menu clicks
 	 * Route to proper page
-	 * @param {Event} event
-	 * @memberOf Options
+	 * @param {Event} event - ClickEvent
+	 * @memberOf app.Options
 	 */
 	t.onDataRouteClick = function(event) {
 		// Close drawer after menu item is selected if drawerPanel is narrow
@@ -130,7 +130,7 @@
 	/**
 	 * Show the Google Photos page
 	 * @param {int} index index into t.pages Array
-	 * @memberOf Options
+	 * @memberOf app.Options
 	 */
 	t.googlePhotos = function(index) {
 		if (!t.pages[index].ready) {
@@ -150,7 +150,7 @@
 	/**
 	 * Show the FAQ page
 	 * @param {int} index index into t.pages Array
-	 * @memberOf Options
+	 * @memberOf app.Options
 	 */
 	t.faq = function(index) {
 		if (!t.pages[index].ready) {
@@ -166,7 +166,7 @@
 	/**
 	 * Show the Information for Nerds page
 	 * @param {int} index index into t.pages Array
-	 * @memberOf Options
+	 * @memberOf app.Options
 	 */
 	t.info = function(index) {
 		if (!t.pages[index].ready) {
@@ -181,7 +181,7 @@
 
 	/**
 	 * Display a preview of the screen saver
-	 * @memberOf Options
+	 * @memberOf app.Options
 	 */
 	t.preview = function() {
 		// reselect previous page
@@ -195,8 +195,8 @@
 
 	/**
 	 * Array of pages
-	 * @type {Options.page[]}
-	 * @memberOf Options
+	 * @type {app.Options.page[]}
+	 * @memberOf app.Options
 	 */
 	t.pages = [
 		{
@@ -240,7 +240,7 @@
 
 	/**
 	 * Scroll page to top
-	 * @memberOf Options
+	 * @memberOf app.Options
 	 */
 	t.scrollPageToTop = function() {
 		t.$.scrollPanel.scrollToTop(true);
@@ -248,7 +248,7 @@
 
 	/**
 	 * Close drawer if drawerPanel is narrow
-	 * @memberOf Options
+	 * @memberOf app.Options
 	 */
 	t.closeDrawer = function() {
 		const drawerPanel = document.querySelector('#paperDrawerPanel');
@@ -261,13 +261,13 @@
 	 * Event: Fired when a message is sent from either an extension process<br>
 	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
 	 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-	 * @param {object} request - details for the message
+	 * @param {Object} request - details for the message
 	 * @param {string} request.message - name of the message
-	 * @param {object} sender - MessageSender object
+	 * @param {Object} sender - MessageSender object
 	 * @param {function} response - function to call once after processing
-	 * @return {boolean} true if asynchronous
+	 * @returns {boolean} true if asynchronous
 	 * @private
-	 * @memberOf Options
+	 * @memberOf app.Options
 	 */
 	t.onMessage = function(request, sender, response) {
 		if (request.message === 'highlight') {

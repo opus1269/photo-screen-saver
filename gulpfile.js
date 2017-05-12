@@ -69,8 +69,7 @@ const regex = new RegExp('^(.*?)' + base.app + '\\\\', 'g');
 
 /**
  * Output filenames that changed
- *
- * @param {Event} event
+ * @param {Event} event - change event
  */
 function onChange(event) {
 	gutil.log('File', gutil.colors.cyan(event.path.replace(regex, '')),
@@ -100,7 +99,7 @@ gulp.task('watch', ['manifest', 'scripts', 'html', 'styles', 'elements',
 gulp.task('dev', function(callback) {
 	isProd = false;
 	runSequence('clean', ['bower', 'manifest', 'html', 'scripts', 'styles',
-		'elements', 'images', 'assets', 'lib'], callback);
+		'elements', 'images', 'assets', 'lib', 'locales', 'doc'], callback);
 });
 
 // Production build
@@ -108,7 +107,7 @@ gulp.task('prod', function(callback) {
 	isProd = true;
 	isProdTest = false;
 	runSequence('clean', ['manifest', 'html', 'scripts', 'styles', 'vulcanize',
-		'images', 'assets', 'lib', 'locales'], 'zip', callback);
+		'images', 'assets', 'lib', 'locales', 'doc'], 'zip', callback);
 });
 
 // Production test build
@@ -116,7 +115,7 @@ gulp.task('prodTest', function(callback) {
 	isProd = true;
 	isProdTest = true;
 	runSequence('clean', ['manifest', 'html', 'scripts', 'styles', 'vulcanize',
-		'images', 'assets', 'lib', 'locales'], 'zip', callback);
+		'images', 'assets', 'lib', 'locales', 'doc'], 'zip', callback);
 });
 
 // clean output directories
@@ -132,7 +131,7 @@ gulp.task('clean-all', function() {
 // Generate JSDoc
 gulp.task('doc', function(cb) {
 	const config = require('./jsdoc.json');
-	gulp.src(['README.md', files.scripts], {read: false})
+	gulp.src(['README.md', files.scripts, files.elements], {read: false})
 		.pipe(plugins.jsdoc3(config, cb));
 });
 

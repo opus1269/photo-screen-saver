@@ -4,17 +4,13 @@
  *  https://opensource.org/licenses/BSD-3-Clause
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
-
-/*
-@@license
-*/
 window.app = window.app || {};
 app.Use500px = (function() {
 	'use strict';
 
 	/**
 	 * Interface to 500px API
-	 * @namespace Use500px
+	 * @namespace app.Use500px
 	 */
 
 	/**
@@ -23,7 +19,7 @@ app.Use500px = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Use500px
+	 * @memberOf app.Use500px
 	 */
 	const URL = 'https://api.500px.com/v1/';
 
@@ -33,7 +29,7 @@ app.Use500px = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Use500px
+	 * @memberOf app.Use500px
 	 */
 	const KEY = 'iyKV6i6wu0R8QUea9mIXvEsQxIF0tMRVXopwYcFC';
 
@@ -43,7 +39,7 @@ app.Use500px = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Use500px
+	 * @memberOf app.Use500px
 	 */
 	const MAX_PHOTOS = 100;
 
@@ -54,7 +50,7 @@ app.Use500px = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Use500px
+	 * @memberOf app.Use500px
 	 */
 	const CATS = [
 		'Nature,City and Architecture',
@@ -63,12 +59,11 @@ app.Use500px = (function() {
 	];
 
 	return {
-
 		/**
 		 * Retrieve the array of reddit photos
-		 * @param {string} type name of 500px gallery
+		 * @param {string} type - name of 500px gallery
 		 * @param {function} callback (error, photos) Array of photos on success
-		 * @memberOf Use500px
+		 * @memberOf app.Use500px
 		 */
 		loadImages: function(type, callback) {
 			callback = callback || function() {};

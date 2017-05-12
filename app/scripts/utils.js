@@ -14,11 +14,10 @@ app.Utils = (function() {
 	 */
 
 	return {
-
 		/**
 		 * Get the Chrome version
 		 * @see http://stackoverflow.com/a/4900484/4468645
-		 * @return {int} Chrome major version
+		 * @returns {int} Chrome major version
 		 * @memberOf app.Utils
 		 */
 		getChromeVersion: function() {
@@ -29,7 +28,7 @@ app.Utils = (function() {
 		/**
 		 * Get the i18n string
 		 * @param {string} messageName - key in message.json
-		 * @return {string} internationalized string
+		 * @returns {string} internationalized string
 		 * @memberOf app.Utils
 		 */
 		localize: function(messageName) {
@@ -39,7 +38,7 @@ app.Utils = (function() {
 		/**
 		 * Determine if a String is null or whitespace only
 		 * @param {?string} str - string to check
-		 * @return {boolean} true is str is whitespace (or null)
+		 * @returns {boolean} true is str is whitespace (or null)
 		 * @memberOf app.Utils
 		 */
 		isWhiteSpace: function(str) {
@@ -49,7 +48,7 @@ app.Utils = (function() {
 		/**
 		 * Get integer value from localStorage
 		 * @param {!string} key - key to get value for
-		 * @return {?int} value as integer
+		 * @returns {?int} value as integer
 		 * @memberOf app.Utils
 		 */
 		getInt: function(key) {
@@ -63,7 +62,7 @@ app.Utils = (function() {
 		/**
 		 * Get boolean value from localStorage
 		 * @param {!string} key - key to get value for
-		 * @return {?boolean} value as boolean
+		 * @returns {?boolean} value as boolean
 		 * @memberOf app.Utils
 		 */
 		getBool: function(key) {
@@ -73,7 +72,7 @@ app.Utils = (function() {
 		/**
 		 * Get a JSON parsed value from localStorage
 		 * @param {!string} key - key to get value for
-		 * @return {?JSON} JSON object, null if key does not exist
+		 * @returns {?JSON} JSON object, null if key does not exist
 		 * @memberOf app.Utils
 		 */
 		get: function(key) {
@@ -87,7 +86,7 @@ app.Utils = (function() {
 		/**
 		 * JSON stringify and save a value to localStorage
 		 * @param {!string} key - key to set value for
-		 * @param {?object} value - new value, if null remove item
+		 * @param {?Object} value - new value, if null remove item
 		 * @memberOf app.Utils
 		 */
 		set: function(key, value) {
@@ -101,10 +100,10 @@ app.Utils = (function() {
 		/**
 		 * Save a value to localStorage only if there is enough room
 		 * @param {!string} key - localStorage Key
-		 * @param {object} value - value to save
+		 * @param {Object} value - value to save
 		 * @param {string} [keyBool] - key to a boolean value
 		 *                 that is true if the primary key has non-empty value
-		 * @return {boolean} true if value was set successfully
+		 * @returns {boolean} true if value was set successfully
 		 * @memberOf app.Utils
 		 */
 		safeSet: function(key, value, keyBool) {
@@ -138,7 +137,7 @@ app.Utils = (function() {
 
 		/**
 		 * Get the idle time in seconds
-		 * @return {int} idle time in seconds
+		 * @returns {int} idle time in seconds
 		 * @memberOf app.Utils
 		 */
 		getIdleSeconds: function() {
@@ -148,7 +147,7 @@ app.Utils = (function() {
 
 		/**
 		 * true if we are MS windows
-		 * @return {boolean} true if MS windows
+		 * @returns {boolean} true if MS windows
 		 * @memberOf app.Utils
 		 */
 		isWin: function() {
@@ -159,7 +158,7 @@ app.Utils = (function() {
 		 * Returns a random integer between min and max inclusive
 		 * @param {int} min - min value
 		 * @param {int} max - max value
-		 * @return {int} random int
+		 * @returns {int} random int
 		 * @memberOf app.Utils
 		 */
 		getRandomInt: function(min, max) {
@@ -187,7 +186,7 @@ app.Utils = (function() {
 		 * @param {string} url - The url to the photo
 		 * @param {string} author - The photographer
 		 * @param {number} asp - The aspect ratio of the photo
-		 * @param {object} [ex] - Additional information about the photo
+		 * @param {Object} [ex] - Additional information about the photo
 		 * @memberOf app.Utils
 		 */
 		addImage: function(images, url, author, asp, ex) {

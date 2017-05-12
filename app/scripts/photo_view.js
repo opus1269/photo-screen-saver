@@ -9,8 +9,8 @@ app.PhotoView = (function() {
 	'use strict';
 
 	/**
-	 * Handle rendering of photo in screen saver
-	 * @namespace PhotoView
+	 * Handle rendering of a photo in screen saver
+	 * @namespace app.PhotoView
 	 */
 
 	/**
@@ -21,25 +21,24 @@ app.PhotoView = (function() {
 	 * @property {Element} time - label
 	 * @property {Object} model - template model
 	 * @property {Object} item - photo item
-	 * @memberOf PhotoView
+	 * @memberOf app.PhotoView
 	 */
 
 	/**
 	 * Aspect ratio of screen
-	 * @type {Number}
+	 * @type {number}
 	 * @const
-	 * @default
 	 * @private
-	 * @memberOf PhotoView
+	 * @memberOf app.PhotoView
 	 */
 	const SCREEN_ASPECT = screen.width / screen.height;
 
 	/**
 	 * Get references to the important elements of a slide
 	 * @param {int} idx - index into animated pages
-	 * @return {Elements} Object containing the elements of a slide
+	 * @returns {Elements} Object containing the elements of a slide
 	 * @private
-	 * @memberOf PhotoView
+	 * @memberOf app.PhotoView
 	 */
 	function _getElements(idx) {
 		const rep = document.querySelector('#repeatTemplate');
@@ -58,7 +57,7 @@ app.PhotoView = (function() {
 	 * Finalize DOM for a letter boxed photo
 	 * @param {int} idx - index into animated pages
 	 * @private
-	 * @memberOf PhotoView
+	 * @memberOf app.PhotoView
 	 */
 	function _letterbox(idx) {
 		const e = _getElements(idx);
@@ -85,7 +84,7 @@ app.PhotoView = (function() {
 	 * Finalize DOM for a stretched photo
 	 * @param {int} idx - index into animated pages
 	 * @private
-	 * @memberOf PhotoView
+	 * @memberOf app.PhotoView
 	 */
 	function _stretch(idx) {
 		const e = _getElements(idx);
@@ -99,7 +98,7 @@ app.PhotoView = (function() {
 	 * Finalize DOM for a framed photo
 	 * @param {int} idx - index into animated pages
 	 * @private
-	 * @memberOf PhotoView
+	 * @memberOf app.PhotoView
 	 */
 	function _frame(idx) {
 		const e = _getElements(idx);
@@ -176,7 +175,7 @@ app.PhotoView = (function() {
 	/**
 	 * Add superscript to the label for 500px photos
 	 * @param {int} idx - index into animated pages
-	 * @memberOf PhotoView
+	 * @memberOf app.PhotoView
 	 * @private
 	 */
 	function _super500px(idx) {
@@ -190,8 +189,8 @@ app.PhotoView = (function() {
 		/**
 		 * Get the name of the photo in this view
 		 * @param {int} idx - index into animated pages
-		 * @return {String} name of photo
-		 * @memberOf PhotoView
+		 * @returns {string} name of photo
+		 * @memberOf app.PhotoView
 		 */
 		getName: function(idx) {
 			const e = _getElements(idx);
@@ -201,8 +200,8 @@ app.PhotoView = (function() {
 		/**
 		 * Finalize DOM for a photo
 		 * @param {int} idx - index into animated pages
-		 * @param {object} t - Polymer template
-		 * @memberOf PhotoView
+		 * @param {Object} t - Polymer template
+		 * @memberOf app.PhotoView
 		 */
 		prep: function(idx, t) {
 			app.PhotoView.setTime(t);
@@ -225,8 +224,8 @@ app.PhotoView = (function() {
 		/**
 		 * Determine if a photo failed to load (usually 404 error)
 		 * @param {int} idx - index into animated pages
-		 * @return {boolean} true if image load failed
-		 * @memberOf PhotoView
+		 * @returns {boolean} true if image load failed
+		 * @memberOf app.PhotoView
 		 */
 		isError: function(idx) {
 			const e = _getElements(idx);
@@ -236,8 +235,8 @@ app.PhotoView = (function() {
 		/**
 		 * Determine if a photo has finished loading
 		 * @param {int} idx - index into animated pages
-		 * @return {boolean} true if image is loaded
-		 * @memberOf PhotoView
+		 * @returns {boolean} true if image is loaded
+		 * @memberOf app.PhotoView
 		 */
 		isLoaded: function(idx) {
 			const e = _getElements(idx);
@@ -246,8 +245,8 @@ app.PhotoView = (function() {
 
 		/**
 		 * Build and set the time string
-		 * @param {object} t - Polymer template
-		 * @memberOf PhotoView
+		 * @param {Object} t - Polymer template
+		 * @memberOf app.PhotoView
 		 */
 		setTime: function(t) {
 			const format = app.Utils.getInt('showTime');

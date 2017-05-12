@@ -10,15 +10,14 @@ app.ChromeCast = (function() {
 
 	/**
 	 * Interface to the chromecast photos
-	 * @namespace ChromeCast
+	 * @namespace app.ChromeCast
 	 */
 
 	return {
-
 		/**
 		 * Get the photos from chromecast.json
 		 * @param {function} callback (error, photos)
-		 * @memberOf ChromeCast
+		 * @memberOf app.ChromeCast
 		 */
 		loadImages: function(callback) {
 			callback = callback || function() {};

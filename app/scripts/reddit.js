@@ -10,7 +10,7 @@ app.Reddit = (function() {
 
 	/**
 	 * Interface to Reddit API
-	 * @namespace Reddit
+	 * @namespace app.Reddit
 	 */
 
 	/**
@@ -19,7 +19,7 @@ app.Reddit = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Reddit
+	 * @memberOf app.Reddit
 	 */
 	const REDIRECT_URI =
 		'https://kohpcmlfdjfdggcjmjhhbcbankgmppgc.chromiumapp.org/reddit';
@@ -30,7 +30,7 @@ app.Reddit = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Reddit
+	 * @memberOf app.Reddit
 	 */
 	const KEY = 'bATkDOUNW_tOlg';
 
@@ -40,7 +40,7 @@ app.Reddit = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Reddit
+	 * @memberOf app.Reddit
 	 */
 	const MAX_PHOTOS = 100;
 	/**
@@ -49,7 +49,7 @@ app.Reddit = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Reddit
+	 * @memberOf app.Reddit
 	 */
 	const MIN_SIZE = 750;
 
@@ -59,7 +59,7 @@ app.Reddit = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Reddit
+	 * @memberOf app.Reddit
 	 */
 	const MAX_SIZE = 3500;
 
@@ -67,9 +67,8 @@ app.Reddit = (function() {
 	 * Expose reddit API
 	 * @type {function}
 	 * @const
-	 * @default
 	 * @private
-	 * @memberOf Reddit
+	 * @memberOf app.Reddit
 	 */
 	const snoocore = new Snoocore({
 		userAgent: 'photo-screen-saver',
@@ -86,9 +85,9 @@ app.Reddit = (function() {
 	 * Parse the size from the submission title.
 	 * this is the old way reddit did it
 	 * @param {string} title - submission title
-	 * @return {{width: number, height: number}} Photo size
+	 * @returns {{width: int, height: int}} Photo size
 	 * @private
-	 * @memberOf Reddit
+	 * @memberOf app.Reddit
 	 */
 	function _getSize(title) {
 		let ret = {width: -1, height: -1};
@@ -106,10 +105,10 @@ app.Reddit = (function() {
 	/**
 	 * Build the list of photos for one page of items
 	 * @param {Array} children Array of photos returned from reddit
-	 * @return {Array} Array of images in our format,
+	 * @returns {Array} Array of images in our format,
 	 * stripped of NSFW and big and small photos
 	 * @private
-	 * @memberOf Reddit
+	 * @memberOf app.Reddit
 	 */
 	const _processChildren = function(children) {
 		let data;
@@ -156,12 +155,11 @@ app.Reddit = (function() {
 	};
 
 	return {
-
 		/**
 		 * Retrieve the array of reddit photos
-		 * @param {string} subreddit name of photo subreddit
+		 * @param {string} subreddit - name of photo subreddit
 		 * @param {function} callback (error, photos) Array of photos on success
-		 * @memberOf Reddit
+		 * @memberOf app.Reddit
 		 */
 		loadImages: function(subreddit, callback) {
 			// callback(error, photos)

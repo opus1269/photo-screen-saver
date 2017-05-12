@@ -9,7 +9,7 @@
 
 	/**
 	 * A photo for the screen saver
-	 * @param {String} name - unique name
+	 * @param {string} name - unique name
 	 * @param {Object} source - source item
 	 * @constructor
 	 * @alias Photo
@@ -28,8 +28,8 @@
 
 	/**
 	 * Create the photo label
-	 * @param {Boolean} force - require display of label if true
-	 * @return {String} label describing the photo source and photographer name
+	 * @param {boolean} force - require display of label if true
+	 * @returns {string} label describing the photo source and photographer name
 	 */
 	Photo.prototype.buildLabel = function(force) {
 		let ret = '';
@@ -57,9 +57,9 @@
 
 	/**
 	 * Determine if a photo would look bad zoomed or stretched on the screen
-	 * @param {Number} asp aspect ratio of photo
+	 * @param {number} asp aspect ratio of photo
 	 * @param {number} screenAsp - the screen aspect ratio
-	 * @return {boolean} true if a photo aspect ratio differs substantially
+	 * @returns {boolean} true if a photo aspect ratio differs substantially
 	 * from the screens'
 	 * @private
 	 */
@@ -74,7 +74,7 @@
 	 * @param {number} asp - aspect ratio
 	 * @param {number} screenAsp - the screen aspect ratio
 	 * @param {int} photoSizing - the sizing type
-	 * @return {Boolean} true if the photo should not be displayed
+	 * @returns {boolean} true if the photo should not be displayed
 	 */
 	Photo.ignore = function(asp, screenAsp, photoSizing) {
 		let ret = false;
@@ -93,7 +93,7 @@
 	/**
 	 * Create a new tab with a link to the
 	 * original source of the current photo, if possible
-	 * @param {object} item - a photo item
+	 * @param {Object} item - a photo item
 	 */
 	Photo.showSource = function(item) {
 		if (!item) {

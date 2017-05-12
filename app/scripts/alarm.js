@@ -75,8 +75,8 @@ app.Alarm = (function() {
 
 	/**
 	 * Convert string to time
-	 * @param {String} value - format: 'hh:mm' 24 hour time
-	 * @return {int} time in mSec from epoch
+	 * @param {string} value - format: 'hh:mm' 24 hour time
+	 * @returns {int} time in mSec from epoch
 	 * @private
 	 * @memberOf app.Alarm
 	 */
@@ -92,8 +92,8 @@ app.Alarm = (function() {
 
 	/**
 	 * Calculate time delta from now on a 24 hr basis
-	 * @param {String} value - format: 'hh:mm' 24 hour time
-	 * @return {int} time delta in minutes
+	 * @param {string} value - format: 'hh:mm' 24 hour time
+	 * @returns {int} time delta in minutes
 	 * @private
 	 * @memberOf app.Alarm
 	 */
@@ -110,9 +110,9 @@ app.Alarm = (function() {
 
 	/**
 	 * Determine if current time is between start and stop, inclusive
-	 * @param {String} start - format: 'hh:mm' 24 hour time
-	 * @param {String} stop - format: 'hh:mm' 24 hour time
-	 * @return {Boolean} true if in the given range
+	 * @param {string} start - format: 'hh:mm' 24 hour time
+	 * @param {string} stop - format: 'hh:mm' 24 hour time
+	 * @returns {boolean} true if in the given range
 	 * @private
 	 * @memberOf app.Alarm
 	 */
@@ -191,7 +191,7 @@ app.Alarm = (function() {
 	/**
 	 * Event: Fired when an alarm has elapsed.
 	 * @see https://developer.chrome.com/apps/alarms#event-onAlarm
-	 * @param {object} alarm - details on alarm
+	 * @param {Object} alarm - details on alarm
 	 * @private
 	 * @memberOf app.Alarm
 	 */
@@ -277,7 +277,7 @@ app.Alarm = (function() {
 
 		/**
 		 * Determine if the screen saver can be displayed
-		 * @return {Boolean} true if can display
+		 * @returns {boolean} true if can display
 		 * @memberOf app.Alarm
 		 */
 		isActive: function() {

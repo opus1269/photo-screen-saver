@@ -37,7 +37,7 @@
 
 	/**
 	 * Determine if this source has been selected for display
-	 * @return {boolean} true if selected
+	 * @returns {boolean} true if selected
 	 */
 	PhotoSource.prototype.use = function() {
 		return app.Utils.getBool(this.useName);
@@ -82,7 +82,7 @@
 	 * Save the photos to localStorage in a safe manner
 	 * @param {string} error - non-null if retrieval failed
 	 * @param {Array} photos - an array of photo objects
-	 * @return {string} non-null on error
+	 * @returns {string} non-null on error
 	 * @private
 	 */
 	PhotoSource.prototype._savePhotos = function(error, photos) {
@@ -115,7 +115,7 @@
 
 	/**
 	 * Get all the photos
-	 * @return {Array} The Array of photos
+	 * @returns {Array} The Array of photos
 	 */
 	PhotoSource.prototype.getPhotos = function() {
 		let ret = [];
@@ -172,7 +172,7 @@
 
 	/**
 	 * Get all the keys of useage boolean variables
-	 * @return {Array} Array of keys of useage boolean variables
+	 * @returns {Array} Array of keys of useage boolean variables
 	 */
 	PhotoSource.getUseNames = function() {
 		let ret = [];
@@ -185,7 +185,7 @@
 	/**
 	 * Get all the photos from all selected sources. These will be
 	 * used by the screen saver.
-	 * @return {Array} Array of photos to display in screen saver
+	 * @returns {Array} Array of photos to display in screen saver
 	 */
 	PhotoSource.getSelectedPhotos = function() {
 		let ret = [];
@@ -198,7 +198,7 @@
 	/**
 	 * Determine if a given string is a photo source
 	 * @param {string} useName - String to check
-	 * @return {boolean} true if photo source
+	 * @returns {boolean} true if photo source
 	 */
 	PhotoSource.contains = function(useName) {
 		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {

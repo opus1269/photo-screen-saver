@@ -19,7 +19,7 @@ app.BGUtils = (function() {
 	 * @default
 	 * @const
 	 * @private
-	 * @memberOf Background
+	 * @memberOf app.BGUtils
 	 */
 	const DATA_VERSION = 10;
 
@@ -116,7 +116,7 @@ app.BGUtils = (function() {
 
 	/**
 	 * Get default time format based on locale
-	 * @return {int}
+	 * @returns {int} 12 or 24
 	 * @private
 	 * @memberOf app.BGUtils
 	 */
@@ -130,7 +130,7 @@ app.BGUtils = (function() {
 	}
 
 	/**
-	 * Save the {@link DEF_VALUES} array to localStorage
+	 * Save the [DEF_VALUES]{@link app.BGUtils.DEF_VALUES} array to localStorage
 	 * @private
 	 * @memberOf app.BGUtils
 	 */

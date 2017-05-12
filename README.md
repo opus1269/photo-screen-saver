@@ -25,7 +25,7 @@ Works great on all platforms but may be especially useful for your Chromebook.
 
 It is free and advertising free.
 
-It is implemented using Vanilla JavaScript and [Polymer](https://www.polymer-project.org/1.0/).
+It is implemented using Vanilla JavaScript and [Polymer 1](https://www.polymer-project.org/1.0/start/).
 
 <br />
 

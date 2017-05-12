@@ -306,8 +306,8 @@ app.GooglePhotosPage = Polymer({
 
 	/**
 	 * Event: Handle tap on checkbox for an album
-	 * @param {Event} event
-	 * @param {Event} event.model
+	 * @param {Event} event - tap event
+	 * @param {Event} event.model - our model
 	 * @private
 	 */
 	_albumSelectChange: function(event) {
@@ -363,7 +363,7 @@ app.GooglePhotosPage = Polymer({
 	/**
 	 * Computed property: Set photo count label on album entry
 	 * @param {int} count - number of photos in album
-	 * @return {string} i18n label
+	 * @returns {string} i18n label
 	 * @private
 	 */
 	_computePhotoLabel: function(count) {

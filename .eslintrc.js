@@ -44,5 +44,18 @@ module.exports = {
 		'quotes': ['error', 'single'],
 		'quote-props': ['error', 'consistent'],
 		'prefer-rest-params': 'off',
+		'valid-jsdoc': ['error', {
+			'requireReturn': false,
+			'prefer': {
+				'return': 'returns',
+			},
+			'preferType': {
+				'Boolean': 'boolean',
+				'Number': 'number',
+				'object': 'Object',
+				'String': 'string',
+				'Integer': 'int',
+			},
+		}],
 	},
 };

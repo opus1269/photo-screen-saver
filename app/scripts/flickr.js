@@ -10,7 +10,7 @@ app.Flickr = (function() {
 
 	/**
 	 * Interface to flickr API
-	 * @namespace Flickr
+	 * @namespace app.Flickr
 	 */
 
 	/**
@@ -19,7 +19,7 @@ app.Flickr = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Flickr
+	 * @memberOf app.Flickr
 	 */
 	const URL = 'https://api.flickr.com/services/rest/';
 
@@ -29,7 +29,7 @@ app.Flickr = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Flickr
+	 * @memberOf app.Flickr
 	 */
 	const KEY = '1edd9926740f0e0d01d4ecd42de60ac6';
 
@@ -39,16 +39,15 @@ app.Flickr = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf Flickr
+	 * @memberOf app.Flickr
 	 */
 	const MAX_PHOTOS = 300;
 
 	return {
-
 		/**
 		 * Retrieve flickr photos
 		 * @param {function} callback (error, photos)
-		 * @memberOf Flickr
+		 * @memberOf app.Flickr
 		 */
 		loadImages: function(callback) {
 			callback = callback || function() {};

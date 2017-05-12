@@ -45,7 +45,7 @@
 	 */
 	const CLOCK_ALARM = 'updateTimeLabel';
 
-	// selected background image
+	// set selected background image
 	document.body.style.background =
 		app.Utils.get('background').substring(11);
 
@@ -64,12 +64,27 @@
 	// neon-animated-pages element
 	t.p = null;
 
-	// array of all the photos to use for slide show and an index into it
+	/**
+	 * array of all the photos to use for slide show
+	 * @type {Array}
+	 * @memberOf app.ScreenSaver
+	 */
 	t.itemsAll = [];
+
+	/**
+	 * Index into [t.itemsAll]{@link app.ScreenSaver.t.itemsAll}
+	 * @type {int}
+	 * @memberOf app.ScreenSaver
+	 */
 	t.curIdx = 0;
 
-	// array of photos max(MAX_PAGES) currently loaded into the
-	// neon-animated-pages always changing subset of itemsAll
+	/**
+	 * Array of photos [MAX_PAGES]{@link app.ScreenSaver.MAX_PAGES}
+	 * long, currently loaded into the neon-animated-pages.
+	 * Always changing subset of [t.itemsAll]{@link app.ScreenSaver.t.itemsAll}
+	 * @type {Array}
+	 * @memberOf app.ScreenSaver
+	 */
 	t.items = [];
 
 	// the last selected page
@@ -227,8 +242,8 @@
 
 	/**
 	 * Try to find a photo that has finished loading
-	 * @param {int} idx - index into {@link t.items}
-	 * @return {int} index into t.items of a loaded photo,
+	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
+	 * @returns {int} index into t.items of a loaded photo,
 	 * -1 if none are loaded
 	 * @memberOf app.ScreenSaver
 	 */
@@ -255,8 +270,8 @@
 
 	/**
 	 * Add the next photo from the master array
-	 * @param {int} idx - index into {@link t.items}
-	 * @param {boolean} error true if the photo at idx is bad (didn't load)
+	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
+	 * @param {boolean} error - true if the photo at idx didn't load
 	 * @memberOf app.ScreenSaver
 	 */
 	t.replacePhoto = function(idx, error) {
@@ -319,9 +334,9 @@
 
 	/**
 	 * Get the next photo to display
-	 * @param {int} idx - index into {@link t.items}
-	 * @return {int} next index into {@link t.items} to display,
-	 * -1 if none are ready
+	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
+	 * @returns {int} next - index into [t.items]{@link app.ScreenSaver.t.items}
+	 * to display, -1 if none are ready
 	 * @memberOf app.ScreenSaver
 	 */
 	t.getNextPhoto = function(idx) {
@@ -392,8 +407,8 @@
 	 * Event: Fired when a message is sent from either an extension process<br>
 	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
 	 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-	 * @param {object} request - details for the message
-	 * @param {object} sender - MessageSender object
+	 * @param {Object} request - details for the message
+	 * @param {Object} sender - MessageSender object
 	 * @param {function} response - function to call once after processing
 	 * @memberOf app.ScreenSaver
 	 */
@@ -408,7 +423,7 @@
 
 	/**
 	 * Listen for alarms
-	 * @param {Object} alarm
+	 * @param {Object} alarm - chrome alarm
 	 * @param {string} alarm.name - alarm type
 	 * @memberOf app.ScreenSaver
 	 */
