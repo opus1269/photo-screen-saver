@@ -7,6 +7,7 @@ const base = {
 	dist: 'dist/',
 	dev: 'dev/',
 	store: 'store/',
+	docs: 'docs/',
 };
 const path = {
 	scripts: base.src + 'scripts/',
@@ -65,6 +66,11 @@ const plugins = require('gulp-load-plugins')({
 	replaceString: /\bgulp[\-.]/,
 });
 
+/**
+ * regex to remove path from filename
+ * @const
+ * @type {RegExp}
+ */
 const regex = new RegExp('^(.*?)' + base.app + '\\\\', 'g');
 
 /**
@@ -99,7 +105,7 @@ gulp.task('watch', ['manifest', 'scripts', 'html', 'styles', 'elements',
 gulp.task('dev', function(callback) {
 	isProd = false;
 	runSequence('clean', ['bower', 'manifest', 'html', 'scripts', 'styles',
-		'elements', 'images', 'assets', 'lib', 'locales', 'doc'], callback);
+		'elements', 'images', 'assets', 'lib', 'locales', 'docs'], callback);
 });
 
 // Production build
@@ -107,7 +113,7 @@ gulp.task('prod', function(callback) {
 	isProd = true;
 	isProdTest = false;
 	runSequence('clean', ['manifest', 'html', 'scripts', 'styles', 'vulcanize',
-		'images', 'assets', 'lib', 'locales', 'doc'], 'zip', callback);
+		'images', 'assets', 'lib', 'locales', 'docs'], 'zip', callback);
 });
 
 // Production test build
@@ -115,7 +121,14 @@ gulp.task('prodTest', function(callback) {
 	isProd = true;
 	isProdTest = true;
 	runSequence('clean', ['manifest', 'html', 'scripts', 'styles', 'vulcanize',
-		'images', 'assets', 'lib', 'locales', 'doc'], 'zip', callback);
+		'images', 'assets', 'lib', 'locales', 'docs'], 'zip', callback);
+});
+
+// Generate JSDoc
+gulp.task('docs', function(cb) {
+	const config = require('./jsdoc.json');
+	gulp.src(['README.md', files.scripts, files.elements], {read: false})
+		.pipe(plugins.jsdoc3(config, cb));
 });
 
 // clean output directories
@@ -126,13 +139,6 @@ gulp.task('clean', function() {
 // clean output directories
 gulp.task('clean-all', function() {
 	return del([base.dist, base.dev]);
-});
-
-// Generate JSDoc
-gulp.task('doc', function(cb) {
-	const config = require('./jsdoc.json');
-	gulp.src(['README.md', files.scripts, files.elements], {read: false})
-		.pipe(plugins.jsdoc3(config, cb));
 });
 
 // manifest.json
