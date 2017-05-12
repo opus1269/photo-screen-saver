@@ -42,8 +42,8 @@
     "**/extjs/resources/**",
     "**/extjs/src/**",
     "**/extjs/welcome/**",
-    "/app/bower_components/**",
-    "/docs/**",
+    "**/app/bower_components/**",
+    "**/docs/**",
     "**/app/lib/**",
   ],
   "test": [
