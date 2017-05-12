@@ -29,11 +29,11 @@ It is implemented using Vanilla JavaScript and [Polymer 1](https://www.polymer-p
 
 <br />
 
-[View in Chrome Web Store](https://chrome.google.com/webstore/detail/kohpcmlfdjfdggcjmjhhbcbankgmppgc)
+### [View in Chrome Web Store](https://chrome.google.com/webstore/detail/kohpcmlfdjfdggcjmjhhbcbankgmppgc)
 
 <br />
 
-[JSDoc](gen/index.html)
+### [GitHub Pages](https://opus1269.github.io/photo-screen-saver/)
 
 <br /><br />
 
