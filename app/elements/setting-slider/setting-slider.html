@@ -4,7 +4,11 @@
   ~  https://opensource.org/licenses/BSD-3-Clause
   ~  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
   -->
-<link rel="import" href="../setting-base/setting-base.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 
 <link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
@@ -44,6 +48,11 @@
 				cursor: pointer;
 			}
 
+			:host > paper-item {
+				padding-top: 10px;
+				padding-bottom: 10px;
+			}
+
 			:host paper-dropdown-menu {
 				width: 175px;
 				padding-right: 16px;
@@ -52,14 +61,16 @@
 					text-align: right;
 				};
 			}
+
 		</style>
 
-		<setting-base id="base"
-					  name="[[name]]" value="{{value}}"
-					  default-value='{"base": 10, "display": 10, "unit": 0}'
-					  section-title="[[sectionTitle]]"
-					  noseparator="[[noseparator]]" disabled="[[disabled]]">
-			<paper-item id="label" class="setting-label" tabindex="-1">{{label}}</paper-item>
+		<div class="section-title setting-label" tabindex="-1" hidden$="[[!sectionTitle]]">
+			{{sectionTitle}}
+		</div>
+		<div>
+			<paper-item id="label" class="setting-label" tabindex="-1">
+				{{label}}
+			</paper-item>
 			<div class="horizontal layout">
 				<paper-slider class="flex" editable value="{{value.display}}"
 							  min="{{unit.min}}" max="{{unit.max}}" step="{{unit.step}}"
@@ -73,65 +84,96 @@
 				</paper-dropdown-menu>
 				<array-selector id="selector" items="[[units]]" selected="{{unit}}"></array-selector>
 			</div>
-		</setting-base>
+		</div>
+		<iron-localstorage name="{{name}}" value="{{value}}"
+						   on-iron-localstorage-load-empty="_initValue"></iron-localstorage>
+		<hr hidden$="[[noseparator]]"/>
+
 	</template>
 </dom-module>
 
 <script>
-'use strict';
+	'use strict';
+	Polymer({
+		is: 'setting-slider',
 
-/**
- * Handle rendering of a photo in screen saver
- * @namespace slider
- */
+		properties: {
+			name: {
+				type: String,
+				value: 'store',
+			},
 
-Polymer({
-	is: 'setting-slider',
+			label: {
+				type: String,
+				value: '',
+			},
 
-	properties: {
-		label: {
-			type: String,
-			value: '',
-		},
+			value: {
+				type: Object,
+				notify: true,
+				value: function() {
+					return {'base': 10, 'display': 10, 'unit': 0};
+				},
+			},
 
-		units: {
-			type: Array,
-			value: function() {
-				return [];
+			units: {
+				type: Array,
+				value: function() {
+					return [];
+				},
+			},
+
+			sectionTitle: {
+				type: String,
+				value: '',
+			},
+
+			disabled: {
+				type: Boolean,
+				value: false,
+			},
+
+			noseparator: {
+				type: Boolean,
+				value: false,
 			},
 		},
 
-		sectionTitle: {
-			type: String,
-			value: '',
+		/**
+		 * Initialize value if it is not in localstorage
+		 * @private
+		 */
+		_initValue: function() {
+			this.value = {
+				base: 10,
+				display: 10,
+				unit: 0,
+			};
 		},
-	},
 
-	/**
-	 * Set the base value
-	 * @private
-	 * @memberOf slider
-	 */
-	_setBase: function() {
-		const value = this.$.base.getValue();
-		value.base = this.unit.mult * value.display;
-		this.$.base.setValue(value);
-	},
+		/**
+		 * Set the base value
+		 * @private
+		 */
+		_setBase: function() {
+			this.set('value.base', this.unit.mult * this.value.display);
+		},
 
-	/**
-	 * Event: user changed slider value
-	 */
-	_sliderValueChanged: function() {
-		this._setBase();
-	},
+		/**
+		 * Event: User changed slider value
+		 * @private
+		 */
+		_sliderValueChanged: function() {
+			this._setBase();
+		},
 
-	/**
-	 * Event: display unit changed
-	 */
-	_unitChanged: function() {
-		const value = this.$.base.getValue();
-		this.$.selector.select(this.units[value.unit]);
-		this._setBase();
-	},
-});
+		/**
+		 * Event: Display unit was changed
+		 * @private
+		 */
+		_unitChanged: function() {
+			this.$.selector.select(this.units[this.value.unit]);
+			this._setBase();
+		},
+	});
 </script>

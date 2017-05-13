@@ -4,7 +4,11 @@
   ~  https://opensource.org/licenses/BSD-3-Clause
   ~  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
   -->
-<link rel="import" href="../setting-base/setting-base.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 
@@ -81,57 +85,105 @@
 			</div>
 		</paper-dialog>
 
-		<setting-base id="base"
-					  name="[[name]]" value="{{value}}" default-value="background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)"
-					  section-title="[[sectionTitle]]"
-					  noseparator="[[noseparator]]" disabled="[[disabled]]">
-			<paper-item class="center horizontal layout" on-tap="_onTap">
-				<paper-item-body class="flex" two-line>
-					<div class="setting-label" hidden$="[[!mainLabel]]">{{mainLabel}}</div>
-					<div class="setting-label" secondary hidden$="[[!secondaryLabel]]">{{secondaryLabel}}</div>
-				</paper-item-body>
-				<div class="selected-background" style$="[[value]]" disabled$="[[disabled]]"></div>
-				<paper-ripple center></paper-ripple>
-			</paper-item>
-		</setting-base>
+		<div class="section-title setting-label" tabindex="-1" hidden$="[[!sectionTitle]]">
+			{{sectionTitle}}
+		</div>
+
+		<paper-item class="center horizontal layout" tabindex="-1" on-tap="_onTap">
+			<paper-item-body class="flex" two-line>
+				<div class="setting-label" hidden$="[[!mainLabel]]">
+					{{mainLabel}}
+				</div>
+				<div class="setting-label" secondary hidden$="[[!secondaryLabel]]">
+					{{secondaryLabel}}
+				</div>
+			</paper-item-body>
+			<div class="selected-background" style$="[[value]]" tabindex="0" disabled$="[[disabled]]"></div>
+			<paper-ripple center></paper-ripple>
+		</paper-item>
+		<hr hidden$="[[noseparator]]"/>
+		<iron-localstorage name="{{name}}" value="{{value}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
+
 	</template>
 </dom-module>
 
 <script>
-'use strict';
-Polymer({
-	is: 'setting-background',
+	'use strict';
+	Polymer({
+		is: 'setting-background',
 
-	behaviors: [
-		app.LocalizeBehavior,
-	],
+		behaviors: [
+			app.LocalizeBehavior,
+		],
 
-	properties: {
-		selected: {
-			type: String,
-			value: 'b1',
-			notify: true,
+		properties: {
+			name: {
+				type: String,
+				value: 'store',
+			},
+
+			selected: {
+				type: String,
+				value: 'b1',
+				notify: true,
+			},
+
+			value: {
+				type: String,
+				value: 'background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)',
+				notify: true,
+			},
+
+			mainLabel: {
+				type: String,
+				value: '',
+			},
+
+			secondaryLabel: {
+				type: String,
+				value: '',
+			},
+
+			sectionTitle: {
+				type: String,
+				value: '',
+			},
+
+			disabled: {
+				type: Boolean,
+				value: false,
+			},
+
+			noseparator: {
+				type: Boolean,
+				value: false,
+			},
 		},
 
-		mainLabel: {
-			type: String,
-			value: '',
+		/**
+		 * Initialize value if it is not in localstorage
+		 * @private
+		 */
+		_init: function() {
+			this.set('value',
+				'background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)');
 		},
 
-		secondaryLabel: {
-			type: String,
-			value: '',
+		/**
+		 * Event: Show dialog on tap
+		 * @private
+		 */
+		_onTap: function() {
+			this.$.dialog.open();
 		},
-	},
 
-	_onTap: function() {
-		this.$.dialog.open();
-	},
-
-	// save the currently selected background
-	_onOK: function() {
-		const el = document.getElementById(this.selected);
-		this.$.base.setValue('background:' + el.style.background);
-	},
-});
+		/**
+		 * Event: Set selected background on tap of OK button
+		 * @private
+		 */
+		_onOK: function() {
+			const el = document.getElementById(this.selected);
+			this.set('value', 'background:' + el.style.background);
+		},
+	});
 </script>

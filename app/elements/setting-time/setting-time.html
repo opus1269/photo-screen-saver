@@ -4,7 +4,11 @@
   ~  https://opensource.org/licenses/BSD-3-Clause
   ~  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
   -->
-<link rel="import" href="../setting-base/setting-base.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
@@ -41,73 +45,109 @@
 			}
 		</style>
 
-		<setting-base id="base"
-					  name="[[name]]" value="{{value}}" default-value="00:00"
-					  section-title="[[sectionTitle]]"
-					  noseparator="[[noseparator]]" disabled="[[disabled]]">
-			<paper-item class="center horizontal layout" on-tap="_onTap">
-				<paper-item-body class="flex" two-line>
-					<div class="setting-label" hidden$="[[!mainLabel]]">{{mainLabel}}</div>
-					<div class="setting-label" secondary hidden$="[[!secondaryLabel]]">{{secondaryLabel}}</div>
-					<paper-ripple center></paper-ripple>
-				</paper-item-body>
-				<div class="setting-label" >[[timeLabel]]</div>
-			</paper-item>
-		</setting-base>
 
 		<paper-dialog id="dialog" modal class="paper-time-picker-dialog">
 			<paper-time-picker id="timePicker" time="[[timeLabel]]"></paper-time-picker>
 			<div class="buttons">
-				<paper-button dialog-dismiss>{{localize('cancel')}}</paper-button>
-				<paper-button dialog-confirm on-tap="_onTimeSelected">{{localize('ok')}}</paper-button>
+				<paper-button dialog-dismiss>{{localize('cancel')}}
+				</paper-button>
+				<paper-button dialog-confirm on-tap="_onTimeSelected">
+					{{localize('ok')}}
+				</paper-button>
 			</div>
 		</paper-dialog>
+
+		<div class="section-title setting-label" tabindex="-1" hidden$="[[!sectionTitle]]">
+			{{sectionTitle}}
+		</div>
+
+		<paper-item class="center horizontal layout" tabindex="-1" on-tap="_onTap">
+			<paper-item-body class="flex" two-line>
+				<div class="setting-label" hidden$="[[!mainLabel]]">
+					{{mainLabel}}
+				</div>
+				<div class="setting-label" secondary hidden$="[[!secondaryLabel]]">
+					{{secondaryLabel}}
+				</div>
+				<paper-ripple center></paper-ripple>
+			</paper-item-body>
+			<div class="setting-label" tabindex="0" disabled$="[[disabled]]">[[timeLabel]]</div>
+		</paper-item>
+		<hr hidden$="[[noseparator]]"/>
+		<iron-localstorage id="store" name="{{name}}" value="{{value}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
 	</template>
 </dom-module>
 
 <script>
-'use strict';
-Polymer({
-	is: 'setting-time',
+	'use strict';
+	Polymer({
+		is: 'setting-time',
 
-	behaviors: [
-		app.LocalizeBehavior,
-	],
+		behaviors: [
+			app.LocalizeBehavior,
+		],
 
-	properties: {
-		timeLabel: {
-			type: String,
-			value: '12:00 AM',
+		properties: {
+			name: {
+				type: String,
+				value: 'store',
+			},
+
+			value: {
+				type: String,
+				value: '00:00',
+				observer: '_valueChanged',
+			},
+
+			timeLabel: {
+				type: String,
+				value: '12:00 AM',
+			},
+
+			mainLabel: {
+				type: String,
+				value: '',
+			},
+
+			secondaryLabel: {
+				type: String,
+				value: '',
+			},
+
+			sectionTitle: {
+				type: String,
+				value: '',
+			},
+
+			disabled: {
+				type: Boolean,
+				value: false,
+			},
+
+			noseparator: {
+				type: Boolean,
+				value: false,
+			},
 		},
 
-		mainLabel: {
-			type: String,
-			value: '',
+		// initialize value if it is not in localstorage
+		_init: function() {
+			this.set('value', '00:00');
 		},
 
-		secondaryLabel: {
-			type: String,
-			value: '',
+		_valueChanged: function() {
+			this.set('timeLabel', this._formatTime(this.get('value')));
 		},
-	},
 
-	ready: function() {
-		const self = this;
-		this.$.base.addEventListener('value-changed', function(e) {
-			// <setting-base> value changed event
-			const value = e.detail.value;
-			const timeStr = self._formatTime(value);
-			self.set('timeLabel', timeStr);
-		});
-	},
-
-	/**
-	 * Event: Display time picker on tap
-	 * @private
-	 */
-	_onTap: function() {
-		this.$.dialog.open();
-	},
+		/**
+		 * Event: Show dialog on tap
+		 * @private
+		 */
+		_onTap: function() {
+			if (!this.disabled) {
+				this.$.dialog.open();
+			}
+		},
 
 	/**
 	 * Event: Set time on tap of OK button
@@ -118,7 +158,7 @@ Polymer({
 		const hour = ('0' + picker.hour).substr(-2);
 		const min = ('0' + picker.minute).substr(-2);
 		const value = `${hour}:${min}`;
-		this.$.base.setValue(value);
+		this.set('value', value);
 	},
 
 	/**

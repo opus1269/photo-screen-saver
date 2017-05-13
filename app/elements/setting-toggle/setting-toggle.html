@@ -4,7 +4,11 @@
   ~  https://opensource.org/licenses/BSD-3-Clause
   ~  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
   -->
-<link rel="import" href="../setting-base/setting-base.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 
 <link rel="import" href="../../bower_components/iron-label/iron-label.html">
 
@@ -15,8 +19,8 @@
 
 <dom-module id="setting-toggle">
 	<template>
-		<style include="shared-styles"></style>
 		<style include="iron-flex iron-flex-alignment"></style>
+		<style include="shared-styles"></style>
 		<style>
 			:host {
 				display: block;
@@ -38,61 +42,90 @@
 			}
 		</style>
 
-		<setting-base id="base"
-					  name="[[name]]" value="{{checked}}" default-value="false"
-					  section-title="[[sectionTitle]]"
-					  noseparator="[[noseparator]]" disabled="[[disabled]]">
-			<iron-label for="toggle">
-				<paper-item class="center horizontal layout" tabindex="-1">
-					<paper-item-body class="flex" two-line>
-						<div class="setting-label" hidden$="[[!mainLabel]]">
-							{{mainLabel}}
-						</div>
-						<div class="setting-label" secondary
-							 hidden$="[[!secondaryLabel]]">
-							{{secondaryLabel}}
-						</div>
-						<paper-ripple center></paper-ripple>
-					</paper-item-body>
-					<paper-toggle-button
-							id="toggle" class="setting-toggle-button"
-							checked="{{checked}}" disabled$="[[disabled]]">
-					</paper-toggle-button>
-				</paper-item>
-			</iron-label>
-		</setting-base>
+		<div class="section-title setting-label" tabindex="-1" hidden$="[[!sectionTitle]]">
+			{{sectionTitle}}
+		</div>
+
+		<iron-label for="toggle">
+			<paper-item class="center horizontal layout" tabindex="-1">
+				<paper-item-body class="flex" two-line>
+					<div class="setting-label" hidden$="[[!mainLabel]]">
+						{{mainLabel}}
+					</div>
+					<div class="setting-label" secondary hidden$="[[!secondaryLabel]]">
+						{{secondaryLabel}}
+					</div>
+					<paper-ripple center></paper-ripple>
+				</paper-item-body>
+				<paper-toggle-button
+						id="toggle" class="setting-toggle-button"
+						checked="{{checked}}" disabled$="[[disabled]]">
+				</paper-toggle-button>
+			</paper-item>
+		</iron-label>
+		<hr hidden$="[[noseparator]]"/>
+		<iron-localstorage name="{{name}}" value="{{checked}}" on-iron-localstorage-load-empty="_init"></iron-localstorage>
+
 	</template>
 </dom-module>
 
 <script>
-'use strict';
-Polymer({
-	is: 'setting-toggle',
+	'use strict';
+	Polymer({
+		is: 'setting-toggle',
 
-	properties: {
-		mainLabel: {
-			type: String,
-			value: '',
+		properties: {
+			name: {
+				type: String,
+				value: 'store',
+			},
+
+			checked: {
+				type: Boolean,
+				value: false,
+				notify: true,
+			},
+
+			mainLabel: {
+				type: String,
+				value: '',
+			},
+
+			secondaryLabel: {
+				type: String,
+				value: '',
+			},
+
+			sectionTitle: {
+				type: String,
+				value: '',
+			},
+
+			disabled: {
+				type: Boolean,
+				value: false,
+			},
+
+			noseparator: {
+				type: Boolean,
+				value: false,
+			},
 		},
 
-		secondaryLabel: {
-			type: String,
-			value: '',
+		/**
+		 * Set the checked state of the toggle
+		 * @param {boolean} checked - checked state
+		 */
+		setChecked: function(checked) {
+			this.set('checked', checked);
 		},
 
-		checked: {
-			type: Boolean,
-			value: false,
-			notify: true,
+		/**
+		 * Initialize value if it is not in localStorage
+		 * @private
+		 */
+		_init: function() {
+			this.set('checked', 'false');
 		},
-	},
-
-	/**
-	 * Set the checked state of the toggle
-	 * @param {boolean} checked - checked state
-	 */
-	setChecked: function(checked) {
-		this.set('checked', checked);
-	},
-});
+	});
 </script>
