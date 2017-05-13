@@ -5,12 +5,12 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 window.app = window.app || {};
-app.BGUtils = (function() {
+app.Data = (function() {
 	'use strict';
 
 	/**
-	 * Helper methods for Background script
-	 * @namespace app.BGUtils
+	 * Manage the data
+	 * @namespace app.Data
 	 */
 
 	/**
@@ -19,7 +19,7 @@ app.BGUtils = (function() {
 	 * @default
 	 * @const
 	 * @private
-	 * @memberOf app.BGUtils
+	 * @memberOf app.Data
 	 */
 	const DATA_VERSION = 10;
 
@@ -38,7 +38,7 @@ app.BGUtils = (function() {
 	 * useAuthors: boolean, useGoogle: boolean, albumSelections: Array}}
 	 * @const
 	 * @private
-	 * @memberOf app.BGUtils
+	 * @memberOf app.Data
 	 */
 	const DEF_VALUES = {
 		'version': DATA_VERSION,
@@ -72,12 +72,12 @@ app.BGUtils = (function() {
 	};
 
 	/**
-	 * Set state based on screen saver enabled flag
+	 * Set state based on screensaver enabled flag
 	 * Note: this does not effect the keep awake settings so you could
 	 * use the extension as a display keep awake scheduler without
 	 * using the screensaver
 	 * @private
-	 * @memberOf app.BGUtils
+	 * @memberOf app.Data
 	 */
 	function _processEnabled() {
 		// update context menu text
@@ -95,7 +95,7 @@ app.BGUtils = (function() {
 	/**
 	 * Set power scheduling features
 	 * @private
-	 * @memberOf app.BGUtils
+	 * @memberOf app.Data
 	 */
 	function _processKeepAwake() {
 		app.Storage.getBool('keepAwake') ?
@@ -108,7 +108,7 @@ app.BGUtils = (function() {
 	/**
 	 * Set wait time for screen saver display after machine is idle
 	 * @private
-	 * @memberOf app.BGUtils
+	 * @memberOf app.Data
 	 */
 	function _processIdleTime() {
 		chrome.idle.setDetectionInterval(app.Utils.getIdleSeconds());
@@ -118,7 +118,7 @@ app.BGUtils = (function() {
 	 * Get default time format based on locale
 	 * @returns {int} 12 or 24
 	 * @private
-	 * @memberOf app.BGUtils
+	 * @memberOf app.Data
 	 */
 	function _getTimeFormat() {
 		let ret = 2; // 24 hr
@@ -130,9 +130,9 @@ app.BGUtils = (function() {
 	}
 
 	/**
-	 * Save the [DEF_VALUES]{@link app.BGUtils.DEF_VALUES} array to localStorage
+	 * Save the [DEF_VALUES]{@link app.Data.DEF_VALUES} array to localStorage
 	 * @private
-	 * @memberOf app.BGUtils
+	 * @memberOf app.Data
 	 */
 	function _saveDefaults() {
 		Object.keys(DEF_VALUES).forEach(function(key) {
@@ -146,7 +146,7 @@ app.BGUtils = (function() {
 	 * Convert a setting-slider value due to addition of units
 	 * @param {!string} key - localStorage key
 	 * @private
-	 * @memberOf app.BGUtils
+	 * @memberOf app.Data
 	 */
 	function _convertSliderValue(key) {
 		const value = app.Storage.get(key);
@@ -163,9 +163,9 @@ app.BGUtils = (function() {
 	return {
 		/**
 		 * Initialize the data saved in localStorage
-		 * @memberOf app.BGUtils
+		 * @memberOf app.Data
 		 */
-		initializeData: function() {
+		initialize: function() {
 			_saveDefaults();
 
 			// set operating system
@@ -177,14 +177,14 @@ app.BGUtils = (function() {
 			app.Storage.set('showTime', _getTimeFormat());
 
 			// update state
-			app.BGUtils.processState('all');
+			app.Data.processState('all');
 		},
 
 		/**
 		 * Update the data saved in localStorage
-		 * @memberOf app.BGUtils
+		 * @memberOf app.Data
 		 */
-		updateData: function() {
+		update: function() {
 			// New items, changes, and removal of unused items can take place
 			// here when the version changes
 			const oldVersion = app.Storage.getInt('version');
@@ -211,12 +211,12 @@ app.BGUtils = (function() {
 			_saveDefaults();
 
 			// update state
-			app.BGUtils.processState('all');
+			app.Data.processState('all');
 		},
 
 		/**
 		 * Restore defaults for data saved in localStorage
-		 * @memberOf app.BGUtils
+		 * @memberOf app.Data
 		 */
 		restoreDefaults: function() {
 			Object.keys(DEF_VALUES).forEach(function(key) {
@@ -231,39 +231,13 @@ app.BGUtils = (function() {
 			app.Storage.set('showTime', _getTimeFormat());
 
 			// update state
-			app.BGUtils.processState('all');
-		},
-
-		/**
-		 * Display the options tab
-		 * @memberOf app.BGUtils
-		 */
-		showOptionsTab: function() {
-			// send message to the option tab to focus it.
-			chrome.runtime.sendMessage({
-				message: 'highlight',
-			}, null, function(response) {
-				if (!response) {
-					// no one listening, create it
-					chrome.tabs.create({url: '../html/options.html'});
-				}
-			});
-		},
-
-		/**
-		 * Toggle enabled state of the screen saver
-		 * @memberOf app.BGUtils
-		 */
-		toggleEnabled: function() {
-			app.Storage.set('enabled', !app.Storage.getBool('enabled'));
-			// storage changed event not fired on same page as the change
-			_processEnabled();
+			app.Data.processState('all');
 		},
 
 		/**
 		 * Process changes to localStorage items
 		 * @param {string} key the item that changed 'all' for everything
-		 * @memberOf app.BGUtils
+		 * @memberOf app.Data
 		 */
 		processState: function(key) {
 			// Map processing functions to localStorage values

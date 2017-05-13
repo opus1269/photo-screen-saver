@@ -13,6 +13,34 @@
 	 */
 
 	/**
+	 * Display the options tab
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _showOptionsTab() {
+		// send message to the option tab to focus it.
+		chrome.runtime.sendMessage({
+			message: 'highlight',
+		}, null, function(response) {
+			if (!response) {
+				// no one listening, create it
+				chrome.tabs.create({url: '../html/options.html'});
+			}
+		});
+	}
+
+	/**
+	 * Toggle enabled state of the screen saver
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _toggleEnabled() {
+		app.Storage.set('enabled', !app.Storage.getBool('enabled'));
+		// storage changed event not fired on same page as the change
+		app.Data.processState('enabled');
+	}
+
+	/**
 	 * Event: Fired when the extension is first installed,<br />
 	 * when the extension is updated to a new version,<br />
 	 * and when Chrome is updated to a new version.
@@ -36,11 +64,11 @@
 		});
 
 		if (details.reason === 'install') {
-			app.BGUtils.initializeData();
-			app.BGUtils.showOptionsTab();
+			app.Data.initialize();
+			_showOptionsTab();
 		} else if (details.reason === 'update') {
 			// extension updated
-			app.BGUtils.updateData();
+			app.Data.update();
 		}
 	}
 
@@ -52,7 +80,7 @@
 	 * @memberOf app.Background
 	 */
 	function _onStartup() {
-		app.BGUtils.processState('all');
+		app.Data.processState('all');
 	}
 
 	/**
@@ -62,7 +90,7 @@
 	 * @memberOf app.Background
 	 */
 	function _onIconClicked() {
-		app.BGUtils.showOptionsTab();
+		_showOptionsTab();
 	}
 
 	/**
@@ -74,7 +102,7 @@
 	 * @memberOf app.Background
 	 */
 	function _onStorageChanged(event) {
-		app.BGUtils.processState(event.key);
+		app.Data.processState(event.key);
 	}
 
 	/**
@@ -87,7 +115,7 @@
 	 */
 	function _onMenuClicked(info) {
 		if (info.menuItemId === 'ENABLE_MENU') {
-			app.BGUtils.toggleEnabled();
+			_toggleEnabled();
 		}
 	}
 
@@ -101,7 +129,7 @@
 	 */
 	function _onKeyCommand(cmd) {
 		if (cmd === 'toggle-enabled') {
-			app.BGUtils.toggleEnabled();
+			_toggleEnabled();
 		}
 	}
 
@@ -120,7 +148,7 @@
 	 */
 	function _onChromeMessage(request, sender, response) {
 		if (request.message === 'restoreDefaults') {
-			app.BGUtils.restoreDefaults();
+			app.Data.restoreDefaults();
 		}
 		return false;
 	}
