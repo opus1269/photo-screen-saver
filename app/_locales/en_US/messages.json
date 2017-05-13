@@ -15,16 +15,19 @@
     "message": "Screensaver"
   },
   "on": {
-    "message": "On"
+    "message": "is On"
   },
   "off": {
-    "message": "Off"
+    "message": "is Off"
   },
   "disable": {
     "message": "Disable"
   },
   "enable": {
     "message": "Enable"
+  },
+  "no": {
+    "message": "No"
   },
   "ok": {
     "message": "OK",
@@ -106,10 +109,10 @@
     "message": "Settings"
   },
   "menu_google": {
-    "message": "Google Photos albums"
+    "message": "Select Google Photos albums"
   },
   "menu_preview": {
-    "message": "Preview"
+    "message": "Preview screensaver"
   },
   "menu_faq": {
     "message": "Frequently asked questions (FAQ)"
@@ -121,10 +124,10 @@
     "message": "Request support"
   },
   "menu_rate": {
-    "message": "Rate extension"
+    "message": "Rate the extension"
   },
   "menu_pushy": {
-    "message": "Try Pushy Clipboard extension"
+    "message": "Try the Pushy Clipboard extension"
   },
   "menu_letterbox": {
     "message": "Letterbox"
@@ -165,6 +168,12 @@
   "menu_slide_right": {
     "message": "Slide right"
   },
+  "menu_12_hour": {
+    "message": "12 hour"
+  },
+  "menu_24_hour": {
+    "message": "24 hour"
+  },
   "tooltip_select": {
     "message": "Select all"
   },
@@ -202,7 +211,7 @@
     "message": "Show time"
   },
   "setting_shuffle": {
-    "message": "Shuffle"
+    "message": "Randomize"
   },
   "setting_shuffle_desc": {
     "message": "Present photos in random order"
@@ -223,7 +232,7 @@
     "message": "Background"
   },
   "setting_bg_desc": {
-    "message": "Set the background image for the screensaver"
+    "message": "Set the background image of the screensaver"
   },
   "setting_bg_dialog_title": {
     "message": "Select background image"
@@ -235,7 +244,7 @@
     "message": "Show screensaver on all connected displays"
   },
   "setting_full_screen": {
-    "message": "Do not display over full screen Chrome windows"
+    "message": "Do not show over fullscreen Chrome windows"
   },
   "setting_full_screen_desc": {
     "message": "Useful if you are watching videos"

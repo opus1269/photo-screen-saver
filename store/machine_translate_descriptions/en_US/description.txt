@@ -3,7 +3,7 @@ This extension displays a screensaver composed of a slide show of photos from mu
 * Your Google Photos Albums
       Note: Shared Albums are not supported
 * Some background photos used by Chromecast
-* Several streams from 500px
+* Several sources from 500px
 * Several sources from reddit
 * Interesting photos from Flickr
 
@@ -13,7 +13,7 @@ Many options are available to control the appearance of the slide show, includin
 
 * Wait time after machine becomes idle to display screensaver
 * Between photo time interval
-* Photo display mode - (e.g., letterbox, fill screen)
+* Photo display mode - (e.g., frame, fill screen)
 * Photo transition animations - (e.g., fade, scale up)
 * A scheduler to control when the screensaver, display, and computer should remain on
 * Do not display over full screen Chrome windows (e.g., YouTube, Netflix)
@@ -24,7 +24,7 @@ Works great on all platforms but may be especially useful for your Chromebook.
 
 Please rate this if you find it of value. Thank you.
 
-It is open source and advertising free.
+It is open source and without advertising.
 Source code:
 https://github.com/opus1269/photo-screen-saver
 
