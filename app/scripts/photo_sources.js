@@ -40,7 +40,7 @@
 	 * @returns {boolean} true if selected
 	 */
 	PhotoSource.prototype.use = function() {
-		return app.Utils.getBool(this.useName);
+		return app.Storage.getBool(this.useName);
 	};
 
 	/**
@@ -93,7 +93,7 @@
 		} else if (!photos || !photos.length) {
 			ret = 'No photos retrieved.';
 		} else {
-			const set = app.Utils.safeSet(this.photosName, photos, keyBool);
+			const set = app.Storage.safeSet(this.photosName, photos, keyBool);
 			if (!set) {
 				ret = 'Exceeded storage capacity.';
 			}
@@ -121,7 +121,7 @@
 		let ret = [];
 		if (this.use()) {
 			if (this.isArray) {
-				const items = app.Utils.get(this.photosName);
+				const items = app.Storage.get(this.photosName);
 				if (items) {
 					// could be that items have not been retrieved yet
 					for (let i = 0; i < items.length; i++) {
@@ -132,7 +132,7 @@
 					}
 				}
 			} else {
-				ret = app.Utils.get(this.photosName);
+				ret = app.Storage.get(this.photosName);
 				if (ret) {
 					this._addType(ret);
 				} else {

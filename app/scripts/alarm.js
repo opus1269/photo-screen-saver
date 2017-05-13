@@ -142,7 +142,7 @@ app.Alarm = (function() {
 	 * @memberOf app.Alarm
 	 */
 	function _setActiveState() {
-		if (app.Utils.getBool('keepAwake')) {
+		if (app.Storage.getBool('keepAwake')) {
 			chrome.power.requestKeepAwake('display');
 		}
 		const interval = app.Utils.getIdleSeconds();
@@ -161,7 +161,7 @@ app.Alarm = (function() {
 	 * @memberOf app.Alarm
 	 */
 	function _setInactiveState() {
-		if (app.Utils.getBool('allowSuspend')) {
+		if (app.Storage.getBool('allowSuspend')) {
 			chrome.power.releaseKeepAwake();
 		} else {
 			chrome.power.requestKeepAwake('system');
@@ -177,11 +177,11 @@ app.Alarm = (function() {
 	 */
 	function _setBadgeText() {
 		let text = '';
-		if (app.Utils.getBool('enabled')) {
+		if (app.Storage.getBool('enabled')) {
 			text = app.Alarm.isActive() ?
 				'' : app.Utils.localize('sleep_abbrev');
 		} else {
-			text = app.Utils.getBool('keepAwake') ?
+			text = app.Storage.getBool('keepAwake') ?
 				app.Utils.localize('power_abbrev') :
 				app.Utils.localize('off_abbrev');
 		}
@@ -227,9 +227,9 @@ app.Alarm = (function() {
 		 * @memberOf app.Alarm
 		 */
 		updateRepeatingAlarms: function() {
-			const keepAwake = app.Utils.getBool('keepAwake');
-			const aStart = app.Utils.getBool('activeStart');
-			const aStop = app.Utils.getBool('activeStop');
+			const keepAwake = app.Storage.getBool('keepAwake');
+			const aStart = app.Storage.getBool('activeStart');
+			const aStop = app.Storage.getBool('activeStop');
 
 			// create keep awake active period scheduling alarms
 			if (keepAwake && (aStart !== aStop)) {
@@ -281,10 +281,10 @@ app.Alarm = (function() {
 		 * @memberOf app.Alarm
 		 */
 		isActive: function() {
-			const enabled = app.Utils.getBool('enabled');
-			const keepAwake = app.Utils.getBool('keepAwake');
-			const aStart = app.Utils.get('activeStart');
-			const aStop = app.Utils.get('activeStop');
+			const enabled = app.Storage.getBool('enabled');
+			const keepAwake = app.Storage.getBool('keepAwake');
+			const aStart = app.Storage.get('activeStart');
+			const aStop = app.Storage.get('activeStop');
 
 			// do not display if screen saver is not enabled or
 			// keepAwake scheduler is enabled and is in the inactive range

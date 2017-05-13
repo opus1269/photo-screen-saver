@@ -36,7 +36,7 @@
 		let type = this.type;
 		const idx = this.type.search('User');
 
-		if (!force && !app.Utils.getBool('showPhotog') && (idx !== -1)) {
+		if (!force && !app.Storage.getBool('showPhotog') && (idx !== -1)) {
 			// don't show label for user's own photos, if requested
 			return ret;
 		}
@@ -78,7 +78,7 @@
 	 */
 	Photo.ignore = function(asp, screenAsp, photoSizing) {
 		let ret = false;
-		const skip = app.Utils.getBool('skip');
+		const skip = app.Storage.getBool('skip');
 
 		if ((!asp || isNaN(asp)) ||
 			(skip && ((photoSizing === 1) || (photoSizing === 3)) &&

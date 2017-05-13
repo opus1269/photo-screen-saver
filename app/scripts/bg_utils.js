@@ -81,7 +81,7 @@ app.BGUtils = (function() {
 	 */
 	function _processEnabled() {
 		// update context menu text
-		const label = app.Utils.getBool('enabled') ?
+		const label = app.Storage.getBool('enabled') ?
 			app.Utils.localize('disable') : app.Utils.localize('enable');
 		app.Alarm.updateBadgeText();
 		chrome.contextMenus.update('ENABLE_MENU', {title: label}, function() {
@@ -98,7 +98,7 @@ app.BGUtils = (function() {
 	 * @memberOf app.BGUtils
 	 */
 	function _processKeepAwake() {
-		app.Utils.getBool('keepAwake') ?
+		app.Storage.getBool('keepAwake') ?
 			chrome.power.requestKeepAwake('display') :
 			chrome.power.releaseKeepAwake();
 		app.Alarm.updateRepeatingAlarms();
@@ -136,8 +136,8 @@ app.BGUtils = (function() {
 	 */
 	function _saveDefaults() {
 		Object.keys(DEF_VALUES).forEach(function(key) {
-			if (app.Utils.get(key) === null) {
-				app.Utils.set(key, DEF_VALUES[key]);
+			if (app.Storage.get(key) === null) {
+				app.Storage.set(key, DEF_VALUES[key]);
 			}
 		});
 	}
@@ -149,14 +149,14 @@ app.BGUtils = (function() {
 	 * @memberOf app.BGUtils
 	 */
 	function _convertSliderValue(key) {
-		const value = app.Utils.get(key);
+		const value = app.Storage.get(key);
 		if (value) {
 			const newValue = {
 				base: value,
 				display: value,
 				unit: 0,
 			};
-			app.Utils.set(key, newValue);
+			app.Storage.set(key, newValue);
 		}
 	}
 
@@ -170,11 +170,11 @@ app.BGUtils = (function() {
 
 			// set operating system
 			chrome.runtime.getPlatformInfo(function(info) {
-				app.Utils.set('os', info.os);
+				app.Storage.set('os', info.os);
 			});
 
 			// set time format based on locale
-			app.Utils.set('showTime', _getTimeFormat());
+			app.Storage.set('showTime', _getTimeFormat());
 
 			// update state
 			app.BGUtils.processState('all');
@@ -187,18 +187,18 @@ app.BGUtils = (function() {
 		updateData: function() {
 			// New items, changes, and removal of unused items can take place
 			// here when the version changes
-			const oldVersion = app.Utils.getInt('version');
+			const oldVersion = app.Storage.getInt('version');
 
 			if (DATA_VERSION > oldVersion) {
 				// update version number
-				app.Utils.set('version', DATA_VERSION);
+				app.Storage.set('version', DATA_VERSION);
 			}
 
 			if (oldVersion < 10) {
 				// was setting this without quotes before
 				const oldOS = localStorage.getItem('os');
 				if (oldOS) {
-					app.Utils.set('os', oldOS);
+					app.Storage.set('os', oldOS);
 				}
 			}
 
@@ -223,12 +223,12 @@ app.BGUtils = (function() {
 				if ((key !== 'useGoogle') &&
 					(key !== 'albumSelections')) {
 					// skip Google photos settings
-					app.Utils.set(key, DEF_VALUES[key]);
+					app.Storage.set(key, DEF_VALUES[key]);
 				}
 			});
 
 			// restore default time format based on locale
-			app.Utils.set('showTime', _getTimeFormat());
+			app.Storage.set('showTime', _getTimeFormat());
 
 			// update state
 			app.BGUtils.processState('all');
@@ -255,7 +255,7 @@ app.BGUtils = (function() {
 		 * @memberOf app.BGUtils
 		 */
 		toggleEnabled: function() {
-			app.Utils.set('enabled', !app.Utils.getBool('enabled'));
+			app.Storage.set('enabled', !app.Storage.getBool('enabled'));
 			// storage changed event not fired on same page as the change
 			_processEnabled();
 		},
@@ -286,9 +286,9 @@ app.BGUtils = (function() {
 				// process photo SOURCES
 				app.PhotoSource.processAll();
 				// set os, if not already
-				if (!app.Utils.get('os')) {
+				if (!app.Storage.get('os')) {
 					chrome.runtime.getPlatformInfo(function(info) {
-						app.Utils.set('os', info.os);
+						app.Storage.set('os', info.os);
 					});
 				}
 			} else {

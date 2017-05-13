@@ -24,7 +24,7 @@ app.SSControl = (function() {
 	function _hasFullscreen(display, callback) {
 		callback = callback || function() {};
 
-		if (app.Utils.getBool('chromeFullscreen')) {
+		if (app.Storage.getBool('chromeFullscreen')) {
 			chrome.windows.getAll({populate: false}, function(wins) {
 				const left = display ? display.bounds.left : 0;
 				const top = display ? display.bounds.top : 0;
@@ -181,7 +181,7 @@ app.SSControl = (function() {
 		 * @memberOf app.SSControl
 		 */
 		display: function(single) {
-			if (!single && app.Utils.getBool('allDisplays')) {
+			if (!single && app.Storage.getBool('allDisplays')) {
 				_openOnAllDisplays();
 			} else {
 				_open(null);

@@ -289,7 +289,7 @@ app.GooglePhotos = (function() {
 		loadImages: function(callback) {
 			callback = callback || function() {};
 			let ct = 0;
-			const items = app.Utils.get('albumSelections');
+			const items = app.Storage.get('albumSelections');
 			const newItems = [];
 
 			for (let i = 0; i < items.length; i++) {

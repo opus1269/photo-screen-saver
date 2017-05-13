@@ -47,7 +47,7 @@
 
 	// set selected background image
 	document.body.style.background =
-		app.Utils.get('background').substring(11);
+		app.Storage.get('background').substring(11);
 
 	/**
 	 * main auto-bind template
@@ -60,7 +60,7 @@
 
 	// repeat template
 	t.rep = null;
-	
+
 	// neon-animated-pages element
 	t.p = null;
 
@@ -148,18 +148,18 @@
 	 * @memberOf app.ScreenSaver
 	 */
 	t.processPhotoTransitions = function() {
-		t.transitionType = app.Utils.getInt('photoTransition');
+		t.transitionType = app.Storage.getInt('photoTransition');
 		if (t.transitionType === 8) {
 			// pick random transition
 			t.transitionType = app.Utils.getRandomInt(0, 7);
 		}
 
-		const trans = app.Utils.get('transitionTime');
+		const trans = app.Storage.get('transitionTime');
 		t.transitionTime = trans.base * 1000;
 		t.waitTime = t.transitionTime;
 		t.waitForLoad = true;
 
-		const showTime = app.Utils.getInt('showTime');
+		const showTime = app.Storage.getInt('showTime');
 		if ((showTime !== 0) && (trans.base > 60)) {
 			// add repeating alarm to update time label
 			// if transition time is more than 1 minute
@@ -183,7 +183,7 @@
 	 * @memberOf app.ScreenSaver
 	 */
 	t.processPhotoSizing = function() {
-		t.photoSizing = app.Utils.getInt('photoSizing');
+		t.photoSizing = app.Storage.getInt('photoSizing');
 		if (t.photoSizing === 4) {
 			// pick random sizing
 			t.photoSizing = app.Utils.getRandomInt(0, 3);
@@ -213,7 +213,7 @@
 		let count = 0;
 		const arr = app.PhotoSource.getSelectedPhotos();
 
-		if (app.Utils.getBool('shuffle')) {
+		if (app.Storage.getBool('shuffle')) {
 			// randomize the order
 			app.Utils.shuffleArray(arr);
 		}

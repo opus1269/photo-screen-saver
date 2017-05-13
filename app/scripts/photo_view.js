@@ -122,7 +122,7 @@ app.PhotoView = (function() {
 		borderBot = screen.height * 0.05;
 		padding = screen.height * 0.025;
 
-		if (!app.Utils.getBool('showPhotog')) {
+		if (!app.Storage.getBool('showPhotog')) {
 			// force use of photo label for this view
 			const label = photo.buildLabel(true);
 			model.set('item.label', label);
@@ -149,7 +149,7 @@ app.PhotoView = (function() {
 		image.style.borderRadius = '1.5vh';
 		image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
 
-		if (app.Utils.getInt('showTime')) {
+		if (app.Storage.getInt('showTime')) {
 			author.style.left = (screen.width - frWidth) / 2 + 10 + 'px';
 			author.style.textAlign = 'left';
 		} else {
@@ -249,7 +249,7 @@ app.PhotoView = (function() {
 		 * @memberOf app.PhotoView
 		 */
 		setTime: function(t) {
-			const format = app.Utils.getInt('showTime');
+			const format = app.Storage.getInt('showTime');
 			const date = new Date();
 			let timeStr;
 
