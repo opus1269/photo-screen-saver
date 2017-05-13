@@ -5,7 +5,8 @@
   ~  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
 
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/iron-label/iron-label.html">
@@ -200,11 +201,6 @@ window.app = window.app || {};
 app.GooglePhotosPage = Polymer({
 	is: 'google-photos-page',
 
-	// so we can lazily create the page
-	factoryImpl: function(id) {
-		this.setAttribute('id', id);
-	},
-
 	behaviors: [
 		app.LocalizeBehavior,
 	],
@@ -225,6 +221,11 @@ app.GooglePhotosPage = Polymer({
 			type: Boolean,
 			value: false,
 		},
+	},
+
+	// so we can lazily create the page
+	factoryImpl: function(id) {
+		this.setAttribute('id', id);
 	},
 
 	ready: function() {
