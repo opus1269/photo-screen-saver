@@ -105,7 +105,7 @@ gulp.task('watch', ['manifest', 'scripts', 'html', 'styles', 'elements',
 gulp.task('dev', function(callback) {
 	isProd = false;
 	runSequence('clean', ['bower', 'manifest', 'html', 'scripts', 'styles',
-		'elements', 'images', 'assets', 'lib', 'locales', 'docs'], callback);
+		'elements', 'images', 'assets', 'lib', 'locales'], callback);
 });
 
 // Production build
@@ -121,7 +121,7 @@ gulp.task('prodTest', function(callback) {
 	isProd = true;
 	isProdTest = true;
 	runSequence('clean', ['manifest', 'html', 'scripts', 'styles', 'vulcanize',
-		'images', 'assets', 'lib', 'locales', 'docs'], 'zip', callback);
+		'images', 'assets', 'lib', 'locales'], 'zip', callback);
 });
 
 // Generate JSDoc
