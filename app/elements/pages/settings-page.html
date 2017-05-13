@@ -134,7 +134,7 @@
 						<setting-dropdown
 								name="showTime"
 								label="{{localize('setting_show_time')}}"
-								items='["No", "12 hour format", "24 hour format"]'
+								items='{{_computeTimeFormatMenu()}}'
 								disabled$="[[!enabled]]"></setting-dropdown>
 						<setting-toggle
 								name="showPhotog"
@@ -351,6 +351,14 @@ Polymer({
 			app.Utils.localize('menu_slide_from_bottom'),
 			app.Utils.localize('menu_slide_right'),
 			app.Utils.localize('menu_random'),
+		];
+	},
+
+	_computeTimeFormatMenu: function() {
+		return [
+			app.Utils.localize('no'),
+			app.Utils.localize('menu_12_hour'),
+			app.Utils.localize('menu_24_hour'),
 		];
 	},
 });
