@@ -1,0 +1,102 @@
+<!--
+  ~  Copyright (c) 2015-2017, Michael A. Updike All rights reserved.
+  ~  Licensed under the BSD-3-Clause
+  ~  https://opensource.org/licenses/BSD-3-Clause
+  ~  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
+  -->
+<link rel="import" href="../setting-base/setting-base.html">
+
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+
+<link rel="import" href="../my_icons.html">
+
+<dom-module id="setting-link">
+	<style include="iron-flex iron-flex-alignment"></style>
+	<style include="shared-styles"></style>
+	<template>
+		<style>
+
+			:host {
+				display: block;
+				position: relative;
+			}
+
+			:host([disabled]) {
+				pointer-events: none;
+			}
+
+
+			:host paper-icon-item {
+				--paper-item-focused-before: {
+					background: transparent;
+				};
+				--paper-item-selected: {
+					background: transparent;
+				};
+				padding-top: 4px;
+				padding-bottom: 4px;
+				cursor: pointer;
+			}
+
+			:host iron-icon {
+				color: var(--setting-item-color);
+			}
+
+			:host paper-ripple {
+				color: var(--setting-item-color);
+			}
+
+			:host .divider {
+				margin-left: 72px;
+				margin-right: 0;
+			}
+
+		</style>
+
+		<setting-base id="base" nosave
+		              section-title="[[sectionTitle]]"
+		              noseparator="[[noseparator]]" disabled="[[disabled]]">
+			<paper-icon-item on-tap="_onLinkTapped" class="flex">
+				<paper-ripple center></paper-ripple>
+				<iron-icon icon=[[icon]] item-icon></iron-icon>
+				<span class="setting-label">[[label]]</span>
+			</paper-icon-item>
+			<template is="dom-if" if="[[!noseparator]]">
+				<hr class="divider"/>
+			</template>
+		</setting-base>
+	</template>
+</dom-module>
+
+<script>
+'use strict';
+Polymer({
+	is: 'setting-link',
+
+	properties: {
+		label: {
+			type: String,
+			value: '',
+		},
+
+		icon: {
+			type: String,
+			value: '',
+		},
+
+		url: {
+			type: String,
+			value: '',
+		},
+	},
+
+	/**
+	 * Event: Help item tapped
+	 * @private
+	 */
+	_onLinkTapped: function() {
+		chrome.tabs.create({url: this.url});
+	},
+});
+</script>

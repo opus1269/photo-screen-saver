@@ -15,28 +15,26 @@
 	/**
 	 * Manage an html page that is inserted on demand<br />
 	 * May also be a url link to external site
-	 * @typedef page
-	 * @type {Object}
+	 * @typedef {Object} app.Options.Page
 	 * @property {string} label - label for Nav menu
 	 * @property {string} route - element name route to page
 	 * @property {string} icon - icon for Nav Menu
-	 * @property {?object} obj - something to be done when selected
+	 * @property {?Object} obj - something to be done when selected
 	 * @property {boolean} ready - true if html is inserted
 	 * @property {boolean} divider - true for divider before item
 	 * @memberOf app.Options
 	 */
 
 	/**
-	 * Path to the extension
+	 * Path to the extension in the Web Store
 	 * @type {string}
 	 * @const
-	 * @default
 	 * @private
 	 * @memberOf app.Options
 	 */
 	const EXT_URI =
 		'https://chrome.google.com/webstore/detail/photo-screen-saver/' +
-		'kohpcmlfdjfdggcjmjhhbcbankgmppgc/';
+		chrome.runtime.id + '/';
 
 	/**
 	 * Path to my Pushy Clipboard extension
@@ -129,7 +127,7 @@
 
 	/**
 	 * Show the Google Photos page
-	 * @param {int} index index into t.pages Array
+	 * @param {int} index index into [t.pages]{@link app.Options.t.pages}
 	 * @memberOf app.Options
 	 */
 	t.googlePhotos = function(index) {
@@ -148,31 +146,32 @@
 	};
 
 	/**
-	 * Show the FAQ page
-	 * @param {int} index index into t.pages Array
+	 * Show the help page
+	 * @param {int} index - index into [t.pages]{@link app.Options.t.pages}
+	 * @private
 	 * @memberOf app.Options
 	 */
-	t.faq = function(index) {
+	function _showHelpPage(index) {
 		if (!t.pages[index].ready) {
-			// create the page the first time
+			// insert the page the first time
 			t.pages[index].ready = true;
-			const el = new app.FaqPage();
-			Polymer.dom(t.$.faqInsertion).appendChild(el);
+			const el = new app.HelpPageFactory();
+			Polymer.dom(t.$.helpInsertion).appendChild(el);
 		}
 		t.route = t.pages[index].route;
 		t.scrollPageToTop();
-	};
+	}
 
 	/**
-	 * Show the Information for Nerds page
-	 * @param {int} index index into t.pages Array
+	 * Show the Help page
+	 * @param {int} index - index into [t.pages]{@link app.Options.t.pages}
 	 * @memberOf app.Options
 	 */
-	t.info = function(index) {
+	t.help = function(index) {
 		if (!t.pages[index].ready) {
 			// create the page the first time
 			t.pages[index].ready = true;
-			const el = new app.InfoPage();
+			const el = new app.HelpPage();
 			Polymer.dom(t.$.infoInsertion).appendChild(el);
 		}
 		t.route = t.pages[index].route;
@@ -195,7 +194,7 @@
 
 	/**
 	 * Array of pages
-	 * @type {app.Options.page[]}
+	 * @type {app.Options.Page[]}
 	 * @memberOf app.Options
 	 */
 	t.pages = [
@@ -214,12 +213,9 @@
 			divider: false,
 		},
 		{
-			label: app.Utils.localize('menu_faq'), route: 'page-faq',
-			icon: 'myicons:help', obj: t.faq, ready: false, divider: false,
-		},
-		{
-			label: app.Utils.localize('menu_info'), route: 'page-info',
-			icon: 'myicons:info', obj: t.info, ready: false, divider: false,
+			label: app.Utils.localize('menu_help'), route: 'page-help',
+			icon: 'myicons:help', obj: _showHelpPage, ready: false,
+			divider: false,
 		},
 		{
 			label: app.Utils.localize('menu_support'), route: 'page-support',

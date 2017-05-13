@@ -14,6 +14,24 @@ app.Utils = (function() {
 	 */
 
 	return {
+		/** Get the extension's name
+		 * @returns {string} Extension name
+		 * @memberOf app.Utils
+		 */
+		getExtensionName: function() {
+			return `chrome-extension://${chrome.runtime.id}`;
+		},
+
+		/**
+		 * Get the Extension version
+		 * @returns {string} Extension version
+		 * @memberOf app.Utils
+		 */
+		getVersion: function() {
+			const manifest = chrome.runtime.getManifest();
+			return manifest.version;
+		},
+
 		/**
 		 * Get the Chrome version
 		 * @see http://stackoverflow.com/a/4900484/4468645
@@ -23,6 +41,17 @@ app.Utils = (function() {
 		getChromeVersion: function() {
 			const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
 			return raw ? parseInt(raw[2], 10) : false;
+		},
+
+		/**
+		 * Get the full Chrome version
+		 * @see https://goo.gl/2ITMNO
+		 * @returns {string} Chrome version
+		 * @memberOf app.Utils
+		 */
+		getFullChromeVersion: function() {
+			const raw = navigator.userAgent;
+			return raw ? raw : 'Unknown';
 		},
 
 		/**

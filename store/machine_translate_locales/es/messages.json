@@ -15,16 +15,22 @@
     "message": "Salvapantallas"
   },
   "on": {
-    "message": "En"
+    "message": "Está encendido"
   },
   "off": {
-    "message": "Apagado"
+    "message": "esta apagado"
   },
   "disable": {
     "message": "Inhabilitar"
   },
   "enable": {
     "message": "Habilitar"
+  },
+  "help": {
+    "message": "Ayuda"
+  },
+  "no": {
+    "message": "No"
   },
   "ok": {
     "message": "DE ACUERDO",
@@ -106,25 +112,22 @@
     "message": "Ajustes"
   },
   "menu_google": {
-    "message": "Álbumes de Google Fotos"
+    "message": "Seleccionar álbumes de Google Fotos"
   },
   "menu_preview": {
-    "message": "Avance"
+    "message": "Protector de pantalla de previsualización"
   },
-  "menu_faq": {
-    "message": "Preguntas más frecuentes (FAQ)"
-  },
-  "menu_info": {
-    "message": "Información para nerds"
+  "menu_help": {
+    "message": "Ayuda y comentarios"
   },
   "menu_support": {
     "message": "Pedir soporte"
   },
   "menu_rate": {
-    "message": "Extensión de tarifa"
+    "message": "Calificar la extensión"
   },
   "menu_pushy": {
-    "message": "Intente la extensión Pushy del sujetapapeles"
+    "message": "Prueba la extensión Pushy Clipboard"
   },
   "menu_letterbox": {
     "message": "Buzón"
@@ -165,6 +168,12 @@
   "menu_slide_right": {
     "message": "Deslizar hacia la derecha"
   },
+  "menu_12_hour": {
+    "message": "12 horas"
+  },
+  "menu_24_hour": {
+    "message": "24 horas"
+  },
   "tooltip_select": {
     "message": "Seleccionar todo"
   },
@@ -202,7 +211,7 @@
     "message": "Tiempo de la funcion"
   },
   "setting_shuffle": {
-    "message": "Barajar"
+    "message": "Aleatorizar"
   },
   "setting_shuffle_desc": {
     "message": "Presentar fotos en orden aleatorio"
@@ -214,7 +223,7 @@
     "message": "No mostrar ciertas fotos en los modos Zoom y Completo"
   },
   "setting_photog": {
-    "message": "Mostrar el nombre de las fotos que posee"
+    "message": "Mostrar autor de las fotos que posee"
   },
   "setting_photog_desc": {
     "message": "Nota: Siempre se muestra en modo Frame"
@@ -223,7 +232,7 @@
     "message": "Fondo"
   },
   "setting_bg_desc": {
-    "message": "Establecer la imagen de fondo para el protector de pantalla"
+    "message": "Establecer la imagen de fondo del protector de pantalla"
   },
   "setting_bg_dialog_title": {
     "message": "Seleccionar imagen de fondo"
@@ -247,13 +256,13 @@
     "message": "Impedir la visualización de dormir (siempre activa si los tiempos de inicio y parada son iguales)"
   },
   "setting_start_time": {
-    "message": "Protector de pantalla / Mantener despierto el tiempo de inicio activo"
+    "message": "Screensaver / Keep Awake tiempo de inicio activo"
   },
   "setting_start_time_desc": {
     "message": "Permitir la pantalla del protector de pantalla, comenzando en este momento"
   },
   "setting_stop_time": {
-    "message": "Salvapantallas / Mantener activo el tiempo de parada activa"
+    "message": "Screensaver / Keep Awake tiempo de parada activo"
   },
   "setting_stop_time_desc": {
     "message": "Desactivar pantalla de protector de pantalla después de este tiempo"
@@ -345,109 +354,41 @@
   "google_loading": {
     "message": "Cargando álbumes"
   },
-  "faq_title": {
-    "message": "preguntas frecuentes"
+  "help_title": {
+    "message": "Ayuda y comentarios"
   },
-  "faq_1": {
-    "message": "¿Cómo desinstalo esto?"
+  "help_section_feedback": {
+    "message": "Comentarios (sólo en inglés, por favor)"
   },
-  "faq_1_body": {
-    "message": "Haz clic con el botón derecho en el icono de la barra de herramientas del navegador y selecciona \"Eliminar de Chrome ...\"",
-    "description": "Values in single quotes are set by Chrome browser please check"
+  "help_question": {
+    "message": "Pregunta"
   },
-  "faq_2": {
-    "message": "¿Por qué no se muestran todos mis álbumes de Google Fotos?"
+  "help_bug": {
+    "message": "Reportar un error"
   },
-  "faq_2_body": {
-    "message": "La API que Google proporciona para interactuar con Google Fotos no admite totalmente los nuevos álbumes compartidos. Para convertir un álbum compartido existente a un formato compatible con el protector de pantalla, seleccione el álbum, haga clic en \"Opciones de Compartir\" y desactive la opción \"Compartir\"."
+  "help_feature": {
+    "message": "Solicitar característica"
   },
-  "faq_3": {
-    "message": "Recibí un error de estado: 500 al intentar cargar los álbumes de Google Fotos. Qué significa eso?"
+  "help_feedback": {
+    "message": "Suministre realimentación"
   },
-  "faq_3_body": {
-    "message": "Se trata de un error en el servidor que proporciona las fotos. Este es probablemente un problema muy temporal. Vuelve a intentarlo más tarde."
+  "help_translations": {
+    "message": "Ofrecer ayuda con traducciones"
   },
-  "faq_4": {
-    "message": "¿Por qué la etiqueta de hora es incorrecta en mi Chromebook?"
+  "help_issue": {
+    "message": "Enviar problema de GitHub (requiere cuenta)"
   },
-  "faq_4_body": {
-    "message": "Si tiene este problema, vaya a \"Configuración\" -> \"Mostrar configuración avanzada\" y en la sección \"Fecha y hora\" desmarque la opción \"Establecer zona horaria automáticamente usando su ubicación\". Tendrá que volver a empezar para que el cambio surta efecto.",
-    "description": "Values in single quotes are set by Chrome browser please check"
+  "help_documentation": {
+    "message": "Documentación"
   },
-  "faq_5": {
-    "message": "¿Qué significan las etiquetas en el icono?"
+  "help_release_notes": {
+    "message": "Notas de la versión"
   },
-  "faq_5_body1": {
-    "message": "Sin etiqueta: El protector de pantalla está habilitado y se mostrará cuando el equipo esté inactivo."
+  "help_licenses": {
+    "message": "Licencias de código abierto"
   },
-  "faq_5_body2": {
-    "message": "OFF: El protector de pantalla está deshabilitado."
-  },
-  "faq_5_body3": {
-    "message": "SLP: El tiempo está en el rango inactivo del programador. El protector de pantalla no se mostrará."
-  },
-  "faq_5_body4": {
-    "message": "PWR: El programador procesará la configuración keep awake, pero el protector de pantalla nunca se mostrará."
-  },
-  "faq_6": {
-    "message": "Tengo el Keep despierto, pero mi pantalla no está durmiendo. ¿Porqué es eso?"
-  },
-  "faq_6_body1": {
-    "message": "Otras aplicaciones pueden estar impidiendo que la pantalla o la computadora durmieran."
-  },
-  "faq_6_body2": {
-    "message": "En muchos dispositivos Chrome OS, la pantalla no se apagará si el protector de pantalla se está ejecutando. Puede usar la función de programación Guardavidas / Mantener despierto para controlar cuándo se muestra el protector de pantalla."
-  },
-  "faq_7": {
-    "message": "Tengo el Mantener despierto, pero mi sistema se está cerrando. ¿Porqué es eso?"
-  },
-  "faq_7_body": {
-    "message": "Las funciones de Mantener despierto son peticiones a la computadora y no tienen que ser honradas. La solicitud de visualización casi siempre se cumple, pero la solicitud del sistema no lo es. En particular, muchos ordenadores pondrán la computadora a dormir si los tienes configurados para hacer esto."
-  },
-  "faq_8": {
-    "message": "¿Puede agregar soporte para el uso de archivos desde mi computadora local?"
-  },
-  "faq_8_body": {
-    "message": "De forma predeterminada, las extensiones no pueden acceder al sistema de archivos local."
-  },
-  "info_title": {
-    "message": "Información para Nerds"
-  },
-  "info_source": {
+  "help_source_code": {
     "message": "Código fuente"
-  },
-  "info_apis": {
-    "message": "API y especificaciones"
-  },
-  "info_apis_body1": {
-    "message": "Esta extensión ha sido construida enteramente con JavaScript de Polymer y vanilla. El polímero lo trata todo como un"
-  },
-  "info_apis_body2": {
-    "message": "Componente web"
-  },
-  "info_apis_body3": {
-    "message": "Nunca he utilizado cosas como AngularJS (o incluso JQuery) por lo que realmente no puedo evaluar los pros y los contras de este enfoque. Además, no hay nada en Polymer que le impida usarlo con estas otras soluciones."
-  },
-  "info_libs": {
-    "message": "Bibliotecas de fotos"
-  },
-  "info_libs_body1": {
-    "message": "Desafortunadamente, no hay ninguna API de Google Fotos, por lo que la única forma de interactuar con ella es la API Web de Picasa. Esta API solo implementa un subconjunto de las funciones de Google Fotos."
-  },
-  "info_libs_body2": {
-    "message": "Fotos de Chromecast"
-  },
-  "info_libs_body3": {
-    "message": "Son una instantánea en el tiempo de los utilizados para el telón de fondo."
-  },
-  "info_libs_body4": {
-    "message": "Esta extensión solo se lee para tus fotos de Google a pesar de lo que dice el permiso de permisos. La API de Picasa no tiene un ámbito de sólo lectura."
-  },
-  "info_web": {
-    "message": "Documentación de desarrollo web"
-  },
-  "info_web_body": {
-    "message": "Esta fue mi primera vez haciendo el desarrollo web y la curva de aprendizaje es bastante empinada. Estos sitios proporcionan buenos tutoriales y materiales de referencia en el paradigma HTML-CSS-JavaScript."
   },
   "err_request_failed": {
     "message": "Solicitud fallida. Selecciona refrescar para intentarlo de nuevo."
@@ -460,7 +401,7 @@
   },
   "time_format": {
     "message": "12",
-    "description": "For translators: Set to 12 for AM/PM format or 24"
+    "description": "Set to 12 for AM/PM format or 24"
   },
   "translationInfo": {
     "message": "Google Translate API",

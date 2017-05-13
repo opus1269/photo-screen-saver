@@ -5,7 +5,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="42">
+          <list size="45">
             <item index="0" class="java.lang.String" itemvalue="include" />
             <item index="1" class="java.lang.String" itemvalue="noink" />
             <item index="2" class="java.lang.String" itemvalue="on-tap" />
@@ -48,6 +48,9 @@
             <item index="39" class="java.lang.String" itemvalue="unresolved" />
             <item index="40" class="java.lang.String" itemvalue="name" />
             <item index="41" class="java.lang.String" itemvalue="noseparator" />
+            <item index="42" class="java.lang.String" itemvalue="section-title" />
+            <item index="43" class="java.lang.String" itemvalue="item-icon" />
+            <item index="44" class="java.lang.String" itemvalue="if" />
           </list>
         </value>
       </option>
@@ -56,7 +59,7 @@
     <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="37">
+          <list size="38">
             <item index="0" class="java.lang.String" itemvalue="nobr" />
             <item index="1" class="java.lang.String" itemvalue="noembed" />
             <item index="2" class="java.lang.String" itemvalue="comment" />
@@ -94,6 +97,7 @@
             <item index="34" class="java.lang.String" itemvalue="iron-icon" />
             <item index="35" class="java.lang.String" itemvalue="neon-animatable" />
             <item index="36" class="java.lang.String" itemvalue="settings-page" />
+            <item index="37" class="java.lang.String" itemvalue="iron-iconset-svg" />
           </list>
         </value>
       </option>

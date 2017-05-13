@@ -1,0 +1,152 @@
+<!--
+  ~  Copyright (c) 2015-2017, Michael A. Updike All rights reserved.
+  ~  Licensed under the BSD-3-Clause
+  ~  https://opensource.org/licenses/BSD-3-Clause
+  ~  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
+  -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+
+<link rel="import" href="../setting-link/setting-link.html">
+
+<link rel="import" href="../localize-behavior/localize-behavior.html">
+
+<script type="text/javascript" src="../../scripts/utils.js"></script>
+
+<dom-module id="help-page">
+	<template>
+		<style include="iron-flex iron-flex-alignment"></style>
+		<style include="shared-styles"></style>
+		<style>
+
+		:host {
+			display: block;
+			position: relative;
+		}
+
+		hr {
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		.page-content {
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+
+		.page-content p {
+			@apply(--paper-font-subhead);
+		}
+
+		</style>
+
+		<paper-material elevation="1" id="faqPage" class="page-container">
+			<paper-material elevation="1">
+				<paper-toolbar class="page-toolbar">
+					<div>{{localize('help_title')}}</div>
+				</paper-toolbar>
+			</paper-material>
+			<div id="faqContainer" class="page-content">
+				<setting-link section-title="{{localize('help_section_feedback')}}"
+				              noseparator
+				              label="{{localize('help_question')}}"
+				              icon="myicons:mail"
+				              url="mailto:[[email]]?subject=Question&body=[[_computeEmailBody()]]"></setting-link>
+				<setting-link label="{{localize('help_bug')}}"
+				              noseparator
+				              icon="myicons:mail"
+				              url="mailto:[[email]]?subject=Bug%20report&body=[[_computeEmailBody()]]"></setting-link>
+				<setting-link label="{{localize('help_feature')}}"
+				              noseparator
+				              icon="myicons:mail"
+				              url="mailto:[[email]]?subject=Feature%20request&body=[[_computeEmailBody()]]"></setting-link>
+				<setting-link label="{{localize('help_feedback')}}"
+				              noseparator
+				              icon="myicons:mail"
+				              url="mailto:[[email]]?subject=General%20feedback"></setting-link>
+				<setting-link label="{{localize('help_issue')}}"
+				              icon="myicons:github"
+				              url="[[githubPath]]issues/new"></setting-link>
+				<setting-link section-title="{{localize('help')}}"
+				              noseparator
+				              label="{{localize('help_documentation')}}"
+				              icon="myicons:info"
+				              url="[[githubPagesPath]]documentation.html"></setting-link>
+				<setting-link label="{{localize('help_release_notes')}}"
+				              noseparator
+				              icon="myicons:github"
+				              url="[[githubPath]]releases/tag/v[[_computeVersion()]]"></setting-link>
+				<setting-link label="{{localize('help_licenses')}}"
+				              noseparator
+				              icon="myicons:github"
+				              url="[[githubPath]]blob/master/LICENSES.md"></setting-link>
+				<setting-link label="{{localize('help_source_code')}}"
+				              noseparator
+				              icon="myicons:github"
+				              url="[[githubPath]]"></setting-link>
+			</div>
+		</paper-material>
+	</template>
+</dom-module>
+
+<script>
+(function(window) {
+	'use strict';
+	window.app = window.app || {};
+	app.HelpPageFactory = Polymer({
+		is: 'help-page',
+
+		behaviors: [
+			app.LocalizeBehavior,
+		],
+
+		properties: {
+			email: {
+				type: String,
+				value: 'photoscreensaver%40gmail.com',
+				readOnly: true,
+			},
+
+			githubPath: {
+				type: String,
+				value: 'https://github.com/opus1269/photo-screen-saver/',
+				readOnly: true,
+			},
+
+			githubPagesPath: {
+				type: String,
+				value: 'https://opus1269.github.io/photo-screen-saver/',
+				readOnly: true,
+			},
+		},
+		/**
+        * computed binding: Get the body for support emails
+        * @returns {string} Body of email
+        * @private
+        */
+       _computeEmailBody: function() {
+			const text =
+				`Extension version: ${app.Utils.getVersion()}
+				Chrome version: ${app.Utils.getFullChromeVersion()}
+				OS: ${app.Utils.get('os')}\n\n\n`;
+			return encodeURIComponent(text);
+       },
+
+       /**
+        * computed binding: Get the extension version
+        * @returns {string} Version of the extension
+        * @private
+        */
+       _computeVersion: function() {
+			const text = app.Utils.getVersion();
+			return encodeURIComponent(text);
+       },
+
+	});
+})(window);
+</script>
