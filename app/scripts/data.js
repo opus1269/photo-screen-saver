@@ -9,7 +9,7 @@ app.Data = (function() {
 	'use strict';
 
 	/**
-	 * Manage the data
+	 * Manage the extensions data
 	 * @namespace app.Data
 	 */
 
@@ -21,27 +21,60 @@ app.Data = (function() {
 	 * @private
 	 * @memberOf app.Data
 	 */
-	const DATA_VERSION = 10;
+	const _DATA_VERSION = 10;
+
+	/**
+	 * A number and associated units
+	 * @typedef {Object} UnitValue
+	 * @property {number} base - value in base unit
+	 * @property {number} display - value in display unit
+	 * @property {int} unit - display unit
+	 */
+
+	/**
+	 * Values for items in localStorage
+	 * @typedef {Object} AppData
+	 * @property {int} version - version of data
+	 * @property {boolean} enabled - is screensaver enabled
+	 * @property {UnitValue} idleTime - idle time to display screensaver
+	 * @property {UnitValue} transitionTime - time between photos
+	 * @property {boolean} skip - ignore extreme aspect ratio photos
+	 * @property {boolean} shuffle - randomize photo order
+	 * @property {int} photoSizing - photo display type
+	 * @property {int} photoTransition - transition animation
+	 * @property {int} showTime - time display format
+	 * @property {boolean} showPhotog - display name on own photos
+	 * @property {string} background - background image
+	 * @property {boolean} keepAwake - manage computer poser settings
+	 * @property {boolean} chromeFullscreen - don't display over fullscreen
+	 * Chrome windows
+	 * @property {boolean} allDisplays - show on all displays
+	 * @property {string} activeStart - Keep Wake start time '00:00' 24 hr
+	 * @property {string} activeStop - Keep Wake stop time '00:00' 24 hr
+	 * @property {boolean} allowSuspend - let computer sleep
+	 * @property {boolean} useSpaceReddit - use this photo source
+	 * @property {boolean} useEarthReddit - use this photo source
+	 * @property {boolean} useAnimalReddit - use this photo source
+	 * @property {boolean} useEditors500px - use this photo source
+	 * @property {boolean} usePopular500px - use this photo source
+	 * @property {boolean} useYesterday500px - use this photo source
+	 * @property {boolean} useInterestingFlickr - use this photo source
+	 * @property {boolean} useChromecast - use this photo source
+	 * @property {boolean} useAuthors - use this photo source
+	 * @property {boolean} useGoogle - use this photo source
+	 * @property {boolean} useSpaceReddit - use this photo source
+	 * @property {Array} albumSelections - Users Google Photos to use
+	 */
 
 	/**
 	 * Default values in localStorage
-	 * @type {{enabled: boolean, version: int,
-	 * idleTime: {}, transitionTime: {}, skip: boolean,
-	 * shuffle: boolean, photoSizing: number, photoTransition: number,
-	 * showTime: number, showPhotog: boolean, background: string,
-	 * keepAwake: boolean, chromeFullscreen: boolean, allDisplays: boolean,
-	 * activeStart: string, activeStop: string, allowSuspend: boolean,
-	 * useSpaceReddit: boolean, useEarthReddit: boolean,
-	 * useAnimalReddit: boolean, useEditors500px: boolean,
-	 * usePopular500px: boolean, useYesterday500px: boolean,
-	 * useInterestingFlickr: boolean, useChromecast: boolean,
-	 * useAuthors: boolean, useGoogle: boolean, albumSelections: Array}}
+	 * @type {AppData}
 	 * @const
 	 * @private
 	 * @memberOf app.Data
 	 */
-	const DEF_VALUES = {
-		'version': DATA_VERSION,
+	const _DEF_VALUES = {
+		'version': _DATA_VERSION,
 		'enabled': true,
 		'idleTime': {'base': 5, 'display': 5, 'unit': 0}, // minutes
 		'transitionTime': {'base': 30, 'display': 30, 'unit': 0}, // seconds
@@ -130,14 +163,15 @@ app.Data = (function() {
 	}
 
 	/**
-	 * Save the [DEF_VALUES]{@link app.Data.DEF_VALUES} array to localStorage
+	 * Save the [_DEF_VALUES]{@link app.Data._DEF_VALUES} items, if they
+	 * do not already exist
 	 * @private
 	 * @memberOf app.Data
 	 */
-	function _saveDefaults() {
-		Object.keys(DEF_VALUES).forEach(function(key) {
+	function _addDefaults() {
+		Object.keys(_DEF_VALUES).forEach(function(key) {
 			if (app.Storage.get(key) === null) {
-				app.Storage.set(key, DEF_VALUES[key]);
+				app.Storage.set(key, _DEF_VALUES[key]);
 			}
 		});
 	}
@@ -166,7 +200,7 @@ app.Data = (function() {
 		 * @memberOf app.Data
 		 */
 		initialize: function() {
-			_saveDefaults();
+			_addDefaults();
 
 			// set operating system
 			chrome.runtime.getPlatformInfo(function(info) {
@@ -177,7 +211,7 @@ app.Data = (function() {
 			app.Storage.set('showTime', _getTimeFormat());
 
 			// update state
-			app.Data.processState('all');
+			app.Data.processState();
 		},
 
 		/**
@@ -189,9 +223,9 @@ app.Data = (function() {
 			// here when the version changes
 			const oldVersion = app.Storage.getInt('version');
 
-			if (DATA_VERSION > oldVersion) {
+			if (_DATA_VERSION > oldVersion) {
 				// update version number
-				app.Storage.set('version', DATA_VERSION);
+				app.Storage.set('version', _DATA_VERSION);
 			}
 
 			if (oldVersion < 10) {
@@ -208,22 +242,22 @@ app.Data = (function() {
 				_convertSliderValue('idleTime');
 			}
 
-			_saveDefaults();
+			_addDefaults();
 
 			// update state
-			app.Data.processState('all');
+			app.Data.processState();
 		},
 
 		/**
-		 * Restore defaults for data saved in localStorage
+		 * Restore default values for data saved in localStorage
 		 * @memberOf app.Data
 		 */
 		restoreDefaults: function() {
-			Object.keys(DEF_VALUES).forEach(function(key) {
+			Object.keys(_DEF_VALUES).forEach(function(key) {
 				if ((key !== 'useGoogle') &&
 					(key !== 'albumSelections')) {
 					// skip Google photos settings
-					app.Storage.set(key, DEF_VALUES[key]);
+					app.Storage.set(key, _DEF_VALUES[key]);
 				}
 			});
 
@@ -231,15 +265,15 @@ app.Data = (function() {
 			app.Storage.set('showTime', _getTimeFormat());
 
 			// update state
-			app.Data.processState('all');
+			app.Data.processState();
 		},
 
 		/**
 		 * Process changes to localStorage items
-		 * @param {string} key the item that changed 'all' for everything
+		 * @param {string} [key='all'] - the item that changed
 		 * @memberOf app.Data
 		 */
-		processState: function(key) {
+		processState: function(key='all') {
 			// Map processing functions to localStorage values
 			const STATE_MAP = {
 				'enabled': _processEnabled,
@@ -253,6 +287,7 @@ app.Data = (function() {
 			let fn;
 
 			if (key === 'all') {
+				// process everything
 				Object.keys(STATE_MAP).forEach(function(ky) {
 					fn = STATE_MAP[ky];
 					return fn();

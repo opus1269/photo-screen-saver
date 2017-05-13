@@ -80,7 +80,7 @@
 	 * @memberOf app.Background
 	 */
 	function _onStartup() {
-		app.Data.processState('all');
+		app.Data.processState();
 	}
 
 	/**
