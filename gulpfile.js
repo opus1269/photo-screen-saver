@@ -22,10 +22,10 @@ const path = {
 };
 const files = {
 	manifest: base.src + 'manifest.json',
-	scripts: path.scripts + '*.*',
-	html: path.html + '*.*',
+	scripts: path.scripts + '*.js',
+	html: path.html + '*.html',
 	styles: path.styles + '**/*.*',
-	elements: path.elements + '**/*.*',
+	elements: path.elements + '**/*.html',
 	images: path.images + '*.*',
 	assets: path.assets + '*.*',
 	lib: path.lib + '**/*.*',
@@ -129,6 +129,17 @@ gulp.task('docs', function(cb) {
 	const config = require('./jsdoc.json');
 	gulp.src(['README.md', files.scripts, files.elements], {read: false})
 		.pipe(plugins.jsdoc3(config, cb));
+});
+
+// polylint elements
+gulp.task('polylint', function() {
+	return gulp.src([files.elements])
+		.pipe(plugins.polylint({noRecursion: true}))
+		.pipe(plugins.polylint.reporter(plugins.polylint.reporter.stylishlike))
+		.pipe(plugins.polylint.reporter.fail({
+			buffer: true,
+			ignoreWarnings: false,
+		}));
 });
 
 // clean output directories
