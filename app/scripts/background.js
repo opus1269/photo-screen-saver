@@ -44,7 +44,7 @@
 	 * Event: Fired when the extension is first installed,<br />
 	 * when the extension is updated to a new version,<br />
 	 * and when Chrome is updated to a new version.
-	 * @see https://developer.chromse.com/extensions/runtime#event-onInstalled
+	 * @see https://developer.chrome.com/extensions/runtime#event-onInstalled
 	 * @param {Object} details - type of event
 	 * @private
 	 * @memberOf app.Background
