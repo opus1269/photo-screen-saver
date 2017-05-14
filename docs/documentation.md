@@ -1,6 +1,8 @@
 # User Documentation
 
-### [Frequently Asked Questions](https://opus1269.github.io/photo-screen-saver/faq.html)
+### [Frequently Asked Questions](faq.html)
+
+### [Help With Translations](translate.html)
 
 <br />
 
