@@ -33,7 +33,7 @@
 
 <dom-module id="google-photos-page">
 	<template>
-		<style include="iron-flex iron-flex-alignment iron-flex-factors iron-positioning"></style>
+		<style include="iron-flex iron-flex-alignment"></style>
 		<style include="shared-styles"></style>
 		<style>
 
@@ -70,6 +70,8 @@
 			@apply(--paper-font-title);
 			border: 1px #CCCCCC;
 			border-bottom-style: solid;
+			padding: 8px 16px 8px 16px;
+			white-space: normal;
 		}
 
 		.list-item {
@@ -145,10 +147,6 @@
 				</paper-toolbar>
 			</paper-material>
 
-			<paper-item class="list-note" hidden$="[[waitForLoad]]">
-				{{localize('google_shared_albums_note')}}
-			</paper-item>
-
 			<div class="page-content">
 
 				<!-- Error dialog -->
@@ -173,6 +171,10 @@
 				</div>
 
 				<div class="list-container" hidden$="[[waitForLoad]]">
+					<paper-item class="list-note" hidden$="[[waitForLoad]]">
+						{{localize('google_shared_albums_note')}}
+					</paper-item>
+
 					<template is="dom-repeat" id="t" items="{{albums}}">
 						<div class="list-item" id="[[item.uid]]" disabled$="[[!useGoogle]]">
 							<iron-label>
