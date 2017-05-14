@@ -4,9 +4,12 @@ node_modules
 bower_components
 .tmp
 *.db
-*- Copy*
+*.lock
 
-/JSDoc
+# jekyll
+_site/
+.sass-cache/
+.jekyll-metadata
 
 # IntelliJ
 *.iml
@@ -21,4 +24,5 @@ bower_components
 
 # Windows clutter
 Thumbs.db
+*- Copy*
 
