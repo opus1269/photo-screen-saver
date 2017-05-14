@@ -187,7 +187,7 @@
     "message": "Actualizar lista"
   },
   "tooltip_keep_awake": {
-    "message": "Las funciones Keep awake están disponibles incluso si el salvapantalla está deshabilitado, por lo que puede utilizar la aplicación como un programador de energía general. El icono mostrará 'ERG' en este estado."
+    "message": "Las funciones Mantenerse despierto están disponibles incluso si el salvapantalla está deshabilitado, por lo que puede utilizar la aplicación como un programador de energía general. El icono mostrará 'ERG' en este estado."
   },
   "tooltip_settings_toggle": {
     "message": "Habilitar / Deshabilitar el salvapantalla"
@@ -256,13 +256,13 @@
     "message": "Impedir la visualización de dormir (siempre activa si los tiempos de inicio y parada son iguales)"
   },
   "setting_start_time": {
-    "message": "Salvapantalla / Mantener despierto el tiempo de inicio activo"
+    "message": "Tiempo de empezar"
   },
   "setting_start_time_desc": {
     "message": "Permitir la pantalla del salvapantalla, comenzando en este momento"
   },
   "setting_stop_time": {
-    "message": "Salvapantallas / Mantener activo el tiempo de parada activa"
+    "message": "Tiempo de parar"
   },
   "setting_stop_time_desc": {
     "message": "Desactivar pantalla de salvapantalla después de este tiempo"
