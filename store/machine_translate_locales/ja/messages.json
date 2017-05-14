@@ -256,13 +256,13 @@
     "message": "ディスプレイがスリープ状態にならないようにします（開始時間と停止時間が等しい場合は常にアクティブになります）"
   },
   "setting_start_time": {
-    "message": "スクリーンセーバー/目覚めるアクティブな開始時間"
+    "message": "始める時間"
   },
   "setting_start_time_desc": {
     "message": "この時点からスクリーンセーバーの表示を許可する"
   },
   "setting_stop_time": {
-    "message": "スクリーンセーバー/アウェイクアウェイクのアクティブな停止時間を維持する"
+    "message": "停止する時間"
   },
   "setting_stop_time_desc": {
     "message": "この時間後にスクリーンセーバーの表示を許可しない"

@@ -256,13 +256,13 @@
     "message": "Запрет отображения спящего режима (всегда активен, если время начала и окончания равно)"
   },
   "setting_start_time": {
-    "message": "Заставка / Keep Awake активное время начала"
+    "message": "Время, чтобы начать"
   },
   "setting_start_time_desc": {
     "message": "Показать экранную заставку, начиная с этого времени"
   },
   "setting_stop_time": {
-    "message": "Хранитель экрана / Keep Awake active stop time"
+    "message": "Время останавливаться"
   },
   "setting_stop_time_desc": {
     "message": "Отключить показ экрана заставки"

@@ -256,13 +256,13 @@
     "message": "모니터가 절전 모드로 전환되지 않도록합니다 (시작 및 정지 시간이 동일하면 항상 활성화 됨)."
   },
   "setting_start_time": {
-    "message": "스크린 세이버 / 깨우기 활성화 된 시작 시간"
+    "message": "시작 시간"
   },
   "setting_start_time_desc": {
     "message": "이 시점부터 화면 보호기 표시 허용"
   },
   "setting_stop_time": {
-    "message": "스크린 세이버 / 깨우기 활성화 지속 시간"
+    "message": "멈출 시간"
   },
   "setting_stop_time_desc": {
     "message": "이 시간이 지나면 화면 보호기 표시를 허용하지 않습니다."

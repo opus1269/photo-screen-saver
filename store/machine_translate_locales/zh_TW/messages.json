@@ -256,13 +256,13 @@
     "message": "防止睡眠顯示（如果啟動和停止時間相等，始終處於活動狀態）"
   },
   "setting_start_time": {
-    "message": "屏保/保持喚醒活動開始時間"
+    "message": "時間開始"
   },
   "setting_start_time_desc": {
     "message": "允許屏幕保護程序顯示，從此開始"
   },
   "setting_stop_time": {
-    "message": "屏保/保持喚醒活動停止時間"
+    "message": "時間停止"
   },
   "setting_stop_time_desc": {
     "message": "此時不允許屏幕保護程序顯示"

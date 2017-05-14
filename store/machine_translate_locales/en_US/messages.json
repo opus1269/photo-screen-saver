@@ -256,13 +256,13 @@
     "message": "Prevent display from sleeping (always active if start and stop times are equal)"
   },
   "setting_start_time": {
-    "message": "Screensaver/Keep Awake active start time"
+    "message": "Time to start"
   },
   "setting_start_time_desc": {
     "message": "Allow screensaver display, starting at this time"
   },
   "setting_stop_time": {
-    "message": "Screensaver/Keep Awake active stop time"
+    "message": "Time to stop"
   },
   "setting_stop_time_desc": {
     "message": "Disallow screensaver display after this time"

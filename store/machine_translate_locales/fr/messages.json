@@ -256,13 +256,13 @@
     "message": "Empêche l'affichage de dormir (toujours actif si les temps de démarrage et d'arrêt sont égaux)"
   },
   "setting_start_time": {
-    "message": "Économie d'écran / Keep Awake active start time"
+    "message": "Le temps de commencer"
   },
   "setting_start_time_desc": {
     "message": "Autoriser l'affichage de l'écran de veille, à partir de ce moment"
   },
   "setting_stop_time": {
-    "message": "Économiseur d'écran / Keep Awake active stop time"
+    "message": "Le temps d'arrêter"
   },
   "setting_stop_time_desc": {
     "message": "Désactiver l'affichage de l'économiseur d'écran après ce temps"

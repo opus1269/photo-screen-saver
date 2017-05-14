@@ -256,13 +256,13 @@
     "message": "Voorkom dat het scherm slapen (altijd actief als de start- en stoptijden gelijk zijn)"
   },
   "setting_start_time": {
-    "message": "Screensaver / Bewaar actieve starttijd"
+    "message": "Tijd om te beginnen"
   },
   "setting_start_time_desc": {
     "message": "Schermbeveiligingsweergave toestaan, vanaf dit moment beginnen"
   },
   "setting_stop_time": {
-    "message": "Screensaver / Hou wakker actieve stoptijd"
+    "message": "Tijd om te stoppen"
   },
   "setting_stop_time_desc": {
     "message": "Laat de screensaverweergave na deze tijd niet uit"

@@ -256,13 +256,13 @@
     "message": "Verhindern, dass die Anzeige aus dem Ruhezustand (immer aktiv ist, wenn Start- und Stoppzeiten gleich sind)"
   },
   "setting_start_time": {
-    "message": "Screensaver / Wache aktive Startzeit"
+    "message": "Zeit zum Start"
   },
   "setting_start_time_desc": {
     "message": "Erlaube Bildschirmschoner-Anzeige, beginnend zu diesem Zeitpunkt"
   },
   "setting_stop_time": {
-    "message": "Bildschirmschoner / Wache aktive Stoppzeit"
+    "message": "Zeit zu stoppen"
   },
   "setting_stop_time_desc": {
     "message": "Nach diesem Zeitpunkt die Bildschirmschoneranzeige nicht zulassen"
