@@ -15,8 +15,9 @@
 		}
 	},
 	"icons": {
-		"19": "/images/icon_19.png",
-		"38": "/images/icon_38.png",
+		"16": "/images/icon_16.png",
+		"32": "/images/icon_32.png",
+		"48": "/images/icon_48.png",
 		"128": "/images/icon_128.png"
 	},
 	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
@@ -58,7 +59,9 @@
 	},
 	"browser_action": {
 		"default_title": "__MSG_browser_action_title__",
-		"default_icon": "/images/icon_19.png"
+		"16": "/images/icon_16.png",
+		"24": "/images/icon_24.png",
+		"32": "/images/icon_32.png"
 	},
 	"options_page": "/html/options.html"
 }
