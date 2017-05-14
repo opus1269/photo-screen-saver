@@ -25,17 +25,4 @@ Works great on all platforms but may be especially useful for your Chromebook.
 
 It is free and advertising free.
 
-It is implemented using Vanilla JavaScript and [Polymer 1](https://www.polymer-project.org/1.0/start/).
 
-<br />
-
-### [View in Chrome Web Store](https://chrome.google.com/webstore/detail/kohpcmlfdjfdggcjmjhhbcbankgmppgc)
-
-<br />
-
-### [Code Documentation](gen/index.html)
-
-<br /><br />
-
-[![bitHound Overall Score](https://www.bithound.io/github/opus1269/photo-screen-saver/badges/score.svg)](https://www.bithound.io/github/opus1269/photo-screen-saver)
-[![bitHound Code](https://www.bithound.io/github/opus1269/photo-screen-saver/badges/code.svg)](https://www.bithound.io/github/opus1269/photo-screen-saver)
