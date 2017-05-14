@@ -25,7 +25,7 @@
   
   ***
 
-* **I am signed in to Google Photos, but am getting an error when trying to list of albums. Why is that??**
+* **I am signed in to Google Photos, but am getting an error when trying to load my Google Photos albums. Why is that??**
 
     You need to sign into the Chrome Browser as the user whose Google 
     Photos you want to use.
