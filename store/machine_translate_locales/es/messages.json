@@ -372,14 +372,17 @@
   "help_feedback": {
     "message": "Suministre realimentación"
   },
-  "help_translations": {
-    "message": "Ofrecer ayuda con traducciones"
-  },
   "help_issue": {
     "message": "Enviar problema de GitHub (requiere cuenta)"
   },
   "help_documentation": {
     "message": "Documentación"
+  },
+  "help_faq": {
+    "message": "Preguntas frecuentes"
+  },
+  "help_translations": {
+    "message": "Ofrecer asistencia con traducciones"
   },
   "help_release_notes": {
     "message": "Notas de la versión"

@@ -250,7 +250,7 @@
     "message": "Useful if you are watching videos"
   },
   "setting_keep_awake": {
-    "message": "Keep awake"
+    "message": "Keep Awake"
   },
   "setting_keep_awake_desc": {
     "message": "Prevent display from sleeping (always active if start and stop times are equal)"
@@ -372,14 +372,17 @@
   "help_feedback": {
     "message": "Provide feedback"
   },
-  "help_translations": {
-    "message": "Offer help with translations"
-  },
   "help_issue": {
     "message": "Submit GitHub issue (requires account)"
   },
   "help_documentation": {
     "message": "Documentation"
+  },
+  "help_faq": {
+    "message": "Frequently asked questions"
+  },
+  "help_translations": {
+    "message": "Offer assistance with translations"
   },
   "help_release_notes": {
     "message": "Release notes"
