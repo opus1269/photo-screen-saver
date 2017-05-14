@@ -3,7 +3,7 @@ Diese Erweiterung zeigt einen Bildschirmschoner aus einer Diashow von Fotos aus 
 * Ihre Google Fotos Alben
       Hinweis: Freigegebene Alben werden nicht unterstützt
 * Einige Hintergrundfotos von Chromecast verwendet
-* Mehrere Streams von 500px
+* Mehrere Quellen von 500px
 * Mehrere Quellen von reddit
 * Interessante Fotos von Flickr
 
@@ -13,7 +13,7 @@ Viele Optionen stehen zur Verfügung, um das Aussehen der Diashow zu kontrollier
 
 * Wartezeit nach der Maschine wird im Leerlauf, um Bildschirmschoner anzuzeigen
 * Zwischen Foto-Zeitintervall
-* Fotoanzeigemodus - (z. B. Briefkasten, Füllschirm)
+* Fotoanzeigemodus (z.B. Rahmen, Füllschirm)
 * Fotoübergangsanimationen - (z.B. verblassen, skalieren)
 * Ein Scheduler zu steuern, wenn der Bildschirmschoner, Display und Computer sollte auf bleiben
 * Nicht über Vollbildschirm anzeigen Chrome-Fenster (z. B. YouTube, Netflix)
@@ -24,7 +24,7 @@ Funktioniert auf allen Plattformen, kann aber besonders nützlich für Ihr Chrom
 
 Bitte bewerten Sie dies, wenn Sie es von Wert finden. Vielen Dank.
 
-Es ist Open Source und Werbung kostenlos.
+Es ist Open Source und ohne Werbung.
 Quellcode:
 Https://github.com/opus1269/photo-Screen-saver
 

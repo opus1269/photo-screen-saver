@@ -15,16 +15,22 @@
     "message": "Bildschirmschoner"
   },
   "on": {
-    "message": "Auf"
+    "message": "Ist an"
   },
   "off": {
-    "message": "Aus"
+    "message": "ist aus"
   },
   "disable": {
     "message": "Deaktivieren"
   },
   "enable": {
     "message": "Aktivieren"
+  },
+  "help": {
+    "message": "Hilfe"
+  },
+  "no": {
+    "message": "Nein"
   },
   "ok": {
     "message": "OK",
@@ -106,25 +112,22 @@
     "message": "Einstellungen"
   },
   "menu_google": {
-    "message": "Google Fotos Alben"
+    "message": "Wählen Sie Google Fotos-Alben aus"
   },
   "menu_preview": {
-    "message": "Vorschau"
+    "message": "Vorschau Bildschirmschoner"
   },
-  "menu_faq": {
-    "message": "Häufig gestellte Fragen (FAQ)"
-  },
-  "menu_info": {
-    "message": "Informationen für Nerds"
+  "menu_help": {
+    "message": "Hilfe & Feedback"
   },
   "menu_support": {
     "message": "Unterstützung anfordern"
   },
   "menu_rate": {
-    "message": "Zinserweiterung"
+    "message": "Bewerte die Verlängerung"
   },
   "menu_pushy": {
-    "message": "Versuche Pushy Clipboard Erweiterung"
+    "message": "Versuche die Pushy Clipboard Erweiterung"
   },
   "menu_letterbox": {
     "message": "Briefkasten"
@@ -165,6 +168,12 @@
   "menu_slide_right": {
     "message": "Nach rechts schieben"
   },
+  "menu_12_hour": {
+    "message": "12 stunden"
+  },
+  "menu_24_hour": {
+    "message": "24 Stunden"
+  },
   "tooltip_select": {
     "message": "Alles auswählen"
   },
@@ -202,7 +211,7 @@
     "message": "Show Time"
   },
   "setting_shuffle": {
-    "message": "Shuffle"
+    "message": "Randomisieren"
   },
   "setting_shuffle_desc": {
     "message": "Präsentiere Fotos in zufälliger Reihenfolge"
@@ -214,7 +223,7 @@
     "message": "Zeigen Sie keine bestimmten Fotos im Zoom- und Vollmodus an"
   },
   "setting_photog": {
-    "message": "Zeigen Sie Namen für Fotos, die Sie besitzen"
+    "message": "Zeigen Sie Autor für Fotos, die Sie besitzen"
   },
   "setting_photog_desc": {
     "message": "Hinweis: Im Frame-Modus immer angezeigt"
@@ -223,7 +232,7 @@
     "message": "Hintergrund"
   },
   "setting_bg_desc": {
-    "message": "Legen Sie das Hintergrundbild für den Bildschirmschoner fest"
+    "message": "Legen Sie das Hintergrundbild des Bildschirmschoners fest"
   },
   "setting_bg_dialog_title": {
     "message": "Wählen Sie Hintergrundbild"
@@ -247,7 +256,7 @@
     "message": "Verhindern, dass die Anzeige aus dem Ruhezustand (immer aktiv ist, wenn Start- und Stoppzeiten gleich sind)"
   },
   "setting_start_time": {
-    "message": "Bildschirmschoner / Wache aktive Startzeit"
+    "message": "Screensaver / Wache aktive Startzeit"
   },
   "setting_start_time_desc": {
     "message": "Erlaube Bildschirmschoner-Anzeige, beginnend zu diesem Zeitpunkt"
@@ -256,7 +265,7 @@
     "message": "Bildschirmschoner / Wache aktive Stoppzeit"
   },
   "setting_stop_time_desc": {
-    "message": "Nach dieser Zeit die Bildschirmschoneranzeige nicht zulassen"
+    "message": "Nach diesem Zeitpunkt die Bildschirmschoneranzeige nicht zulassen"
   },
   "setting_suspend": {
     "message": "System aussetzen lassen"
@@ -345,109 +354,44 @@
   "google_loading": {
     "message": "Alben laden"
   },
-  "faq_title": {
+  "help_title": {
+    "message": "Hilfe & Feedback"
+  },
+  "help_section_feedback": {
+    "message": "Rückmeldung (nur auf Englisch)"
+  },
+  "help_question": {
+    "message": "Frage stellen"
+  },
+  "help_bug": {
+    "message": "Fehler melden"
+  },
+  "help_feature": {
+    "message": "Anforderungsmerkmal"
+  },
+  "help_feedback": {
+    "message": "Rückmeldung geben"
+  },
+  "help_issue": {
+    "message": "GitHub-Problem einreichen (benötigt Account)"
+  },
+  "help_documentation": {
+    "message": "Dokumentation"
+  },
+  "help_faq": {
     "message": "Häufig gestellte Fragen"
   },
-  "faq_1": {
-    "message": "Wie kann ich das deinstallieren?"
+  "help_translations": {
+    "message": "Bieten Sie Unterstützung bei Übersetzungen an"
   },
-  "faq_1_body": {
-    "message": "Klicken Sie mit der rechten Maustaste auf das Symbol in der Browser-Symbolleiste und wählen Sie 'Aus Chrome entfernen ...'",
-    "description": "Values in single quotes are set by Chrome browser please check"
+  "help_release_notes": {
+    "message": "Versionshinweise"
   },
-  "faq_2": {
-    "message": "Warum sind nicht alle meine Google Fotos-Alben?"
+  "help_licenses": {
+    "message": "Open Source Lizenzen"
   },
-  "faq_2_body": {
-    "message": "Die API, die Google zur Verfügung stellt, um mit Google Fotos zu verbinden, unterstützt die neuen freigegebenen Alben nicht vollständig. Um ein bestehendes freigegebenes Album in ein Format umzuwandeln, das der Bildschirmschoner unterstützt, wählen Sie das Album aus, klicken Sie auf 'Freigabeoptionen' und deaktivieren Sie die Option 'Freigeben'."
-  },
-  "faq_3": {
-    "message": "Ich erhielt einen Status: 500 Fehler, der versucht, meine Google Fotos Alben zu laden. Was bedeutet das?"
-  },
-  "faq_3_body": {
-    "message": "Dies ist ein Fehler auf dem Server, der die Fotos bereitstellt. Das ist wohl ein sehr vorübergehendes Problem - bitte später nochmal versuchen."
-  },
-  "faq_4": {
-    "message": "Warum ist das Zeitetikett auf meinem Chromebook falsch?"
-  },
-  "faq_4_body": {
-    "message": "Wenn Sie dieses Problem haben, gehen Sie zu 'Einstellungen' -> 'Erweiterte Einstellungen anzeigen' und im Abschnitt \"Datum und Uhrzeit\" deaktivieren Sie die Option \"Zeitzone automatisch einstellen\". Sie müssen neu starten, damit die Änderung wirksam wird.",
-    "description": "Values in single quotes are set by Chrome browser please check"
-  },
-  "faq_5": {
-    "message": "Was bedeuten die Etiketten auf dem Symbol?"
-  },
-  "faq_5_body1": {
-    "message": "Kein Label: Screensaver ist aktiviert und wird angezeigt, wenn der Computer im Leerlauf ist."
-  },
-  "faq_5_body2": {
-    "message": "OFF: Bildschirmschoner ist deaktiviert."
-  },
-  "faq_5_body3": {
-    "message": "SLP: Die Zeit befindet sich im inaktiven Bereich des Schedulers. Bildschirmschoner wird nicht angezeigt."
-  },
-  "faq_5_body4": {
-    "message": "PWR: Der Scheduler verarbeitet die wachen Einstellungen, aber der Bildschirmschoner wird niemals angezeigt."
-  },
-  "faq_6": {
-    "message": "Ich habe den Halten wach, aber mein Display schläft nicht. Warum das?"
-  },
-  "faq_6_body1": {
-    "message": "Andere Anwendungen können verhindern, dass das Display oder der Computer schläft."
-  },
-  "faq_6_body2": {
-    "message": "Bei vielen Chrome OS Geräten schaltet das Display nicht, wenn der Bildschirmschoner läuft. Sie können die Bildschirmschoner / Keep wach Scheduling-Funktion zu steuern, wenn der Bildschirmschoner angezeigt wird."
-  },
-  "faq_7": {
-    "message": "Ich habe das Wachen auf, aber mein System ist heruntergefahren. Warum das?"
-  },
-  "faq_7_body": {
-    "message": "Die Keep wach Features sind Anfragen an den Computer und müssen nicht geehrt werden. Die Anzeigeanforderung wird fast immer geehrt, aber die Systemanfrage ist nicht. Insbesondere werden viele PCs den Computer schlafen lassen, wenn man sie dazu hat."
-  },
-  "faq_8": {
-    "message": "Können Sie Unterstützung für die Verwendung von Dateien von meinem lokalen Computer hinzufügen?"
-  },
-  "faq_8_body": {
-    "message": "Standardmäßig können Erweiterungen nicht auf das lokale Dateisystem zugreifen."
-  },
-  "info_title": {
-    "message": "Informationen für Nerds"
-  },
-  "info_source": {
+  "help_source_code": {
     "message": "Quellcode"
-  },
-  "info_apis": {
-    "message": "APIs & Spezifikationen"
-  },
-  "info_apis_body1": {
-    "message": "Diese Erweiterung wurde komplett mit Polymer und Vanille JavaScript gebaut. Polymer behandelt alles wie ein"
-  },
-  "info_apis_body2": {
-    "message": "Web-Komponente"
-  },
-  "info_apis_body3": {
-    "message": "Ich habe noch nie Sachen wie AngularJS (oder sogar JQuery) benutzt, damit ich die Vor- und Nachteile dieses Ansatzes nicht wirklich bewerten kann. Darüber hinaus gibt es nichts in Polymer, das verhindert, dass Sie es mit diesen anderen Lösungen verwenden."
-  },
-  "info_libs": {
-    "message": "Fotobibliotheken"
-  },
-  "info_libs_body1": {
-    "message": "Leider gibt es keine Google Fotos API, so dass die einzige Möglichkeit, mit ihm zu interagieren ist die Picasa Web API. Diese API implementiert nur eine Teilmenge der Google Fotos-Features."
-  },
-  "info_libs_body2": {
-    "message": "Chromecast Fotos"
-  },
-  "info_libs_body3": {
-    "message": "Sind ein Schnappschuss in der Zeit der für die Kulisse verwendeten."
-  },
-  "info_libs_body4": {
-    "message": "Diese Erweiterung wird nur für Ihre Google Fotos gelesen, obwohl das Berechtigungs-Popup sagt. Die Picasa-API hat keinen Lesebereich."
-  },
-  "info_web": {
-    "message": "Web-Entwicklungsdokumentation"
-  },
-  "info_web_body": {
-    "message": "Dies war mein erstes Mal Web-Entwicklung und die Lernkurve ist ziemlich steil. Diese Seiten bieten gute Tutorials und Referenzmaterialien auf dem HTML-CSS-JavaScript-Paradigma."
   },
   "err_request_failed": {
     "message": "Anfrage fehlgeschlagen. Wählen Sie erneuern, um es erneut zu versuchen."
@@ -460,7 +404,7 @@
   },
   "time_format": {
     "message": "12",
-    "description": "For translators: Set to 12 for AM/PM format or 24"
+    "description": "Set to 12 for AM/PM format or 24"
   },
   "translationInfo": {
     "message": "Google Translate API",

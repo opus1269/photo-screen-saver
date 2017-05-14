@@ -15,16 +15,22 @@
     "message": "화면 보호기"
   },
   "on": {
-    "message": "에"
+    "message": "켜져있다."
   },
   "off": {
-    "message": "떨어져서"
+    "message": "꺼짐"
   },
   "disable": {
     "message": "사용 안함"
   },
   "enable": {
     "message": "사용"
+  },
+  "help": {
+    "message": "도움"
+  },
+  "no": {
+    "message": "아니"
   },
   "ok": {
     "message": "승인",
@@ -106,25 +112,22 @@
     "message": "설정"
   },
   "menu_google": {
-    "message": "Google 포토 앨범"
+    "message": "Google 포토 앨범 선택"
   },
   "menu_preview": {
-    "message": "시사"
+    "message": "스크린 세이버 미리보기"
   },
-  "menu_faq": {
-    "message": "자주 묻는 질문 (FAQ)"
-  },
-  "menu_info": {
-    "message": "바보들에 대한 정보"
+  "menu_help": {
+    "message": "도움말 및 피드백"
   },
   "menu_support": {
     "message": "지원 요청"
   },
   "menu_rate": {
-    "message": "추가 요금 정보"
+    "message": "확장 프로그램 평가"
   },
   "menu_pushy": {
-    "message": "Pushy 클립 보드 익스텐션을 사용해보십시오."
+    "message": "Pushy 클립 보드 확장 기능 사용해보기"
   },
   "menu_letterbox": {
     "message": "우편함"
@@ -165,6 +168,12 @@
   "menu_slide_right": {
     "message": "슬라이드 오른쪽"
   },
+  "menu_12_hour": {
+    "message": "12 시간"
+  },
+  "menu_24_hour": {
+    "message": "24 시간"
+  },
   "tooltip_select": {
     "message": "모두 선택"
   },
@@ -202,19 +211,19 @@
     "message": "시간 표시"
   },
   "setting_shuffle": {
-    "message": "혼합"
+    "message": "무작위"
   },
   "setting_shuffle_desc": {
     "message": "사진을 임의의 순서로 제시하십시오."
   },
   "setting_skip": {
-    "message": "극한의 종횡비 사진 건너 뛰기"
+    "message": "극단적 인 종횡비 사진 건너 뛰기"
   },
   "setting_skip_desc": {
     "message": "특정 사진을 확대 / 축소 및 전체보기 모드로 표시하지 않습니다."
   },
   "setting_photog": {
-    "message": "소유 한 사진의 이름 표시"
+    "message": "내가 소유 한 사진에 대한 작성자 표시"
   },
   "setting_photog_desc": {
     "message": "참고 : 항상 프레임 모드로 표시됩니다."
@@ -247,13 +256,13 @@
     "message": "모니터가 절전 모드로 전환되지 않도록합니다 (시작 및 정지 시간이 동일하면 항상 활성화 됨)."
   },
   "setting_start_time": {
-    "message": "스크린 세이버 / 활성 상태로 깨우기 시작 시간 유지"
+    "message": "스크린 세이버 / 깨우기 활성화 된 시작 시간"
   },
   "setting_start_time_desc": {
     "message": "이 시점부터 화면 보호기 표시 허용"
   },
   "setting_stop_time": {
-    "message": "화면 보호기 / 깨어있는 활성 정지 시간 유지"
+    "message": "스크린 세이버 / 깨우기 활성화 지속 시간"
   },
   "setting_stop_time_desc": {
     "message": "이 시간이 지나면 화면 보호기 표시를 허용하지 않습니다."
@@ -310,7 +319,7 @@
     "message": "reddit - 동물"
   },
   "setting_reddit_animal_desc": {
-    "message": "reddit의 동물 사진, 매일 업데이트 됨"
+    "message": "Reddit의 동물 사진, 매일 업데이트 됨"
   },
   "setting_mine": {
     "message": "확장 기능 개발자"
@@ -345,112 +354,47 @@
   "google_loading": {
     "message": "앨범 불러 오기"
   },
-  "faq_title": {
+  "help_title": {
+    "message": "도움말 및 피드백"
+  },
+  "help_section_feedback": {
+    "message": "의견 (영어로만 제공)"
+  },
+  "help_question": {
+    "message": "물어보다"
+  },
+  "help_bug": {
+    "message": "버그보고"
+  },
+  "help_feature": {
+    "message": "요청 기능"
+  },
+  "help_feedback": {
+    "message": "피드백을 제공하다"
+  },
+  "help_issue": {
+    "message": "GitHub 문제 제출 (계정 필요)"
+  },
+  "help_documentation": {
+    "message": "선적 서류 비치"
+  },
+  "help_faq": {
     "message": "자주 묻는 질문"
   },
-  "faq_1": {
-    "message": "어떻게 제거합니까?"
+  "help_translations": {
+    "message": "번역 지원 제공"
   },
-  "faq_1_body": {
-    "message": "브라우저 툴바의 아이콘을 마우스 오른쪽 버튼으로 클릭하고 'Chrome에서 제거 ...'를 선택하십시오.",
-    "description": "Values in single quotes are set by Chrome browser please check"
+  "help_release_notes": {
+    "message": "릴리즈 노트"
   },
-  "faq_2": {
-    "message": "내 모든 Google 포토 앨범이 표시되지 않는 이유는 무엇입니까?"
+  "help_licenses": {
+    "message": "오픈 소스 라이선스"
   },
-  "faq_2_body": {
-    "message": "Google에서 Google 포토와의 인터페이스를 제공하는 API는 새로운 공유 앨범을 완전히 지원하지 않습니다. 기존 공유 앨범을 화면 보호기가 지원하는 형식으로 변환하려면 앨범을 선택하고 '공유 옵션'을 클릭 한 다음 '공유'옵션의 설정을 해제하십시오."
-  },
-  "faq_3": {
-    "message": "상태 : 500 오류가 발생하여 Google 포토 앨범을로드하는 중 오류가 발생했습니다. 그게 무슨 뜻 이죠?"
-  },
-  "faq_3_body": {
-    "message": "이것은 사진을 제공하는 서버의 오류입니다. 일시적인 문제 일 수 있습니다. 나중에 다시 시도하십시오."
-  },
-  "faq_4": {
-    "message": "Chromebook에서 시간 라벨이 올바르지 않습니다."
-  },
-  "faq_4_body": {
-    "message": "이 문제가 발생하면 '설정'-> '고급 설정 표시'로 이동하고 '날짜 및 시간'섹션에서 '내 위치를 사용하여 자동으로 시간대 설정'을 선택 취소하십시오. 변경 사항을 적용하려면 다시 시작해야합니다.",
-    "description": "Values in single quotes are set by Chrome browser please check"
-  },
-  "faq_5": {
-    "message": "아이콘의 레이블은 무엇을 의미합니까?"
-  },
-  "faq_5_body1": {
-    "message": "레이블 없음 : 화면 보호기가 활성화되어 있으며 컴퓨터가 유휴 상태 일 때 표시됩니다."
-  },
-  "faq_5_body2": {
-    "message": "꺼짐 : 스크린 세이버가 비활성화됩니다."
-  },
-  "faq_5_body3": {
-    "message": "SLP : 시간이 스케줄러의 비활성 범위에 있습니다. 스크린 세이버가 표시되지 않습니다."
-  },
-  "faq_5_body4": {
-    "message": "PWR : 스케줄러가 깨우기 설정을 처리하지만 화면 보호기가 절대로 표시되지 않습니다."
-  },
-  "faq_6": {
-    "message": "나는 깨어있어 라. 그러나 나의 전시는 자지 않고있다. 왜 그런가요?"
-  },
-  "faq_6_body1": {
-    "message": "다른 응용 프로그램이 디스플레이 또는 컴퓨터가 잠자기 상태가되는 것을 방지 할 수 있습니다."
-  },
-  "faq_6_body2": {
-    "message": "대부분의 Chrome OS 기기에서 화면 보호기가 실행중인 경우 화면이 절전 모드로 전환되지 않습니다. 화면 보호기 / 깨우기 예약 기능을 사용하여 화면 보호기가 표시되는시기를 제어 할 수 있습니다."
-  },
-  "faq_7": {
-    "message": "나는 깨어있어.하지만 내 시스템은 꺼지고있어. 왜 그런가요?"
-  },
-  "faq_7_body": {
-    "message": "Keep awake 기능은 컴퓨터에 대한 요청이므로 준수 할 필요가 없습니다. 디스플레이 요청은 거의 항상 존중되지만 시스템 요청은 그렇지 않습니다. 특히, 많은 PC는 컴퓨터를 잠자기 상태로 설정합니다."
-  },
-  "faq_8": {
-    "message": "내 로컬 컴퓨터에서 파일을 사용할 수 있도록 지원을 추가 할 수 있습니까?"
-  },
-  "faq_8_body": {
-    "message": "기본적으로 확장 프로그램은 로컬 파일 시스템에 접근 할 수 없습니다."
-  },
-  "info_title": {
-    "message": "멍청이를위한 정보"
-  },
-  "info_source": {
+  "help_source_code": {
     "message": "소스 코드"
   },
-  "info_apis": {
-    "message": "API 및 사양"
-  },
-  "info_apis_body1": {
-    "message": "이 확장 기능은 전적으로 Polymer 및 바닐라 자바 ​​스크립트로 제작되었습니다. 폴리머는 모든 것을"
-  },
-  "info_apis_body2": {
-    "message": "웹 구성 요소"
-  },
-  "info_apis_body3": {
-    "message": "AngularJS (또는 JQuery조차도)와 같은 것을 사용한 적이 없으므로이 접근법의 장단점을 실제로 평가할 수 없습니다. 또한 Polymer에는 이러한 다른 솔루션과 함께 사용할 수 없습니다."
-  },
-  "info_libs": {
-    "message": "사진 라이브러리"
-  },
-  "info_libs_body1": {
-    "message": "아쉽게도 Google 포토 API가 없으므로 Picasa 웹 API 만 사용할 수 있습니다. 이 API는 Google 포토 기능의 하위 집합 만 구현합니다."
-  },
-  "info_libs_body2": {
-    "message": "Chromecast 사진"
-  },
-  "info_libs_body3": {
-    "message": "배경에 사용 된 스냅 샷입니다."
-  },
-  "info_libs_body4": {
-    "message": "이 확장 프로그램은 권한 팝업에서 말하는 것과 달리 Google 사진에 대해서만 읽습니다. Picasa API에는 읽기 전용 범위가 없습니다."
-  },
-  "info_web": {
-    "message": "웹 개발 문서"
-  },
-  "info_web_body": {
-    "message": "이것은 웹 개발을 처음 시도한 것이었고 학습 곡선이 꽤 가파르다. 이 사이트는 HTML-CSS-JavaScript 패러다임에 대한 좋은 자습서 및 참조 자료를 제공합니다."
-  },
   "err_request_failed": {
-    "message": "요청이 실패했습니다. 새로 고침을 선택하여 다시 시도하십시오."
+    "message": "요청이 실패했습니다. 새로 고침을 선택하면 다시 시도합니다."
   },
   "err_storage_title": {
     "message": "저장 용량 한도 초과"
@@ -460,7 +404,7 @@
   },
   "time_format": {
     "message": "12",
-    "description": "For translators: Set to 12 for AM/PM format or 24"
+    "description": "Set to 12 for AM/PM format or 24"
   },
   "translationInfo": {
     "message": "Google Translate API",

@@ -3,7 +3,7 @@ Questa estensione visualizza uno screensaver composto da una presentazione di fo
 * I tuoi album di foto di Google
       Nota: gli album condivisi non sono supportati
 * Alcune foto di sfondo utilizzate da Chromecast
-* Diversi flussi da 500px
+* Diverse fonti da 500px
 * Diverse fonti da reddit
 * Foto interessanti da Flickr
 
@@ -13,7 +13,7 @@ Sono disponibili molte opzioni per controllare l'aspetto della presentazione, tr
 
 * Attendere il tempo dopo che la macchina diventa inattiva per visualizzare lo screensaver
 * Tra l'intervallo di tempo della foto
-* Modalità di visualizzazione foto - (ad esempio, letterbox, schermo di riempimento)
+* Modalità di visualizzazione foto - (ad esempio, frame, schermo di riempimento)
 * Animazioni di transizione foto (ad esempio, dissolvenza, scala)
 * Uno scheduler per controllare quando lo screensaver, il display e il computer dovrebbero rimanere accesi
 * Non visualizzare le finestre Chrome a schermo intero (ad esempio, YouTube, Netflix)
@@ -24,7 +24,7 @@ Funziona bene su tutte le piattaforme, ma può essere particolarmente utile per 
 
 Si prega di valutare questo se lo troverete di valore. Grazie.
 
-È open source e pubblicità gratuita.
+È open source e senza pubblicità.
 Codice sorgente:
 https://github.com/opus1269/photo-screen-saver
 

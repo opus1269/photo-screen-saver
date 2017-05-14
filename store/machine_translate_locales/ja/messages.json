@@ -15,16 +15,22 @@
     "message": "スクリーンセーバー"
   },
   "on": {
-    "message": "に"
+    "message": "はオンです"
   },
   "off": {
-    "message": "オフ"
+    "message": "オフです"
   },
   "disable": {
     "message": "無効にする"
   },
   "enable": {
     "message": "有効にする"
+  },
+  "help": {
+    "message": "助けて"
+  },
+  "no": {
+    "message": "いいえ"
   },
   "ok": {
     "message": "[OK]",
@@ -106,22 +112,19 @@
     "message": "設定"
   },
   "menu_google": {
-    "message": "Googleフォトアルバム"
+    "message": "Googleフォトアルバムを選択"
   },
   "menu_preview": {
-    "message": "プレビュー"
+    "message": "プレビュースクリーンセーバー"
   },
-  "menu_faq": {
-    "message": "よくある質問（FAQ）"
-  },
-  "menu_info": {
-    "message": "オタクのための情報"
+  "menu_help": {
+    "message": "ヘルプとフィードバック"
   },
   "menu_support": {
     "message": "サポートを依頼する"
   },
   "menu_rate": {
-    "message": "レート延長"
+    "message": "内線番号を評価する"
   },
   "menu_pushy": {
     "message": "Pushyクリップボード拡張を試してみてください"
@@ -165,6 +168,12 @@
   "menu_slide_right": {
     "message": "スライド右"
   },
+  "menu_12_hour": {
+    "message": "12時間"
+  },
+  "menu_24_hour": {
+    "message": "24時間"
+  },
   "tooltip_select": {
     "message": "すべて選択"
   },
@@ -202,7 +211,7 @@
     "message": "ショータイム"
   },
   "setting_shuffle": {
-    "message": "シャッフル"
+    "message": "ランダム化"
   },
   "setting_shuffle_desc": {
     "message": "写真をランダムに表示する"
@@ -214,7 +223,7 @@
     "message": "特定の写真をズームモードとフルモードで表示しない"
   },
   "setting_photog": {
-    "message": "あなたが所有する写真の名前を表示する"
+    "message": "あなたが所有する写真の著者を表示する"
   },
   "setting_photog_desc": {
     "message": "注：常にフレームモードで表示されます"
@@ -223,7 +232,7 @@
     "message": "バックグラウンド"
   },
   "setting_bg_desc": {
-    "message": "スクリーンセーバーの背景画像を設定する"
+    "message": "スクリーンセーバーの背景イメージを設定する"
   },
   "setting_bg_dialog_title": {
     "message": "背景画像を選択"
@@ -235,25 +244,25 @@
     "message": "接続されているすべてのディスプレイにスクリーンセーバーを表示する"
   },
   "setting_full_screen": {
-    "message": "フルスクリーンのChromeウィンドウには表示しない"
+    "message": "フルスクリーンのChromeウィンドウに表示しない"
   },
   "setting_full_screen_desc": {
     "message": "あなたがビデオを見ている場合に便利です"
   },
   "setting_keep_awake": {
-    "message": "目を覚ます"
+    "message": "キープアウェイク"
   },
   "setting_keep_awake_desc": {
     "message": "ディスプレイがスリープ状態にならないようにします（開始時間と停止時間が等しい場合は常にアクティブになります）"
   },
   "setting_start_time": {
-    "message": "スクリーンセーバー/目を覚ますアクティブな開始時間"
+    "message": "スクリーンセーバー/目覚めるアクティブな開始時間"
   },
   "setting_start_time_desc": {
     "message": "この時点からスクリーンセーバーの表示を許可する"
   },
   "setting_stop_time": {
-    "message": "スクリーンセーバー/目を覚ますアクティブな停止時間を維持する"
+    "message": "スクリーンセーバー/アウェイクアウェイクのアクティブな停止時間を維持する"
   },
   "setting_stop_time_desc": {
     "message": "この時間後にスクリーンセーバーの表示を許可しない"
@@ -310,7 +319,7 @@
     "message": "reddit  - 動物"
   },
   "setting_reddit_animal_desc": {
-    "message": "redditの動物写真、毎日更新されています"
+    "message": "redditの動物写真、日々更新されています"
   },
   "setting_mine": {
     "message": "拡張開発者"
@@ -345,112 +354,47 @@
   "google_loading": {
     "message": "アルバムを読み込む"
   },
-  "faq_title": {
+  "help_title": {
+    "message": "ヘルプ＆フィードバック"
+  },
+  "help_section_feedback": {
+    "message": "フィードバック（英語のみ、お願い）"
+  },
+  "help_question": {
+    "message": "質問する"
+  },
+  "help_bug": {
+    "message": "バグを報告する"
+  },
+  "help_feature": {
+    "message": "リクエスト機能"
+  },
+  "help_feedback": {
+    "message": "フィードバックを提供します"
+  },
+  "help_issue": {
+    "message": "GitHubの問題を提出する（アカウントが必要）"
+  },
+  "help_documentation": {
+    "message": "ドキュメンテーション"
+  },
+  "help_faq": {
     "message": "よくある質問"
   },
-  "faq_1": {
-    "message": "どうすればアンインストールできますか？"
+  "help_translations": {
+    "message": "翻訳の支援を提供する"
   },
-  "faq_1_body": {
-    "message": "ブラウザのツールバーのアイコンを右クリックし、[Chromeから削除]を選択します。",
-    "description": "Values in single quotes are set by Chrome browser please check"
+  "help_release_notes": {
+    "message": "リリースノート"
   },
-  "faq_2": {
-    "message": "Googleフォトアルバムがすべて表示されないのはなぜですか？"
+  "help_licenses": {
+    "message": "オープンソースライセンス"
   },
-  "faq_2_body": {
-    "message": "GoogleがGoogleフォトとのインターフェースを提供するために提供するAPIは、新しい共有アルバムを完全にサポートしていません。既存の共有アルバムをスクリーンセーバーがサポートする形式に変換するには、アルバムを選択し、[共有オプション]をクリックして[共有]オプションを解除します。"
-  },
-  "faq_3": {
-    "message": "ステータス：500のエラーが表示され、Googleフォトアルバムを読み込もうとしました。どういう意味ですか？"
-  },
-  "faq_3_body": {
-    "message": "これは、写真を提供するサーバー上のエラーです。これはおそらく一時的な問題です。後でやり直してください。"
-  },
-  "faq_4": {
-    "message": "Chromebookでタイムラベルが間違っているのはなぜですか？"
-  },
-  "faq_4_body": {
-    "message": "この問題が発生した場合は、[設定]  -  [詳細設定を表示する]に移動し、[日付と時刻]セクションで[設定した場所を使用して自動的にタイムゾーンを設定する]チェックボックスをオフにします。変更を有効にするには、再起動する必要があります。",
-    "description": "Values in single quotes are set by Chrome browser please check"
-  },
-  "faq_5": {
-    "message": "アイコン上のラベルはどういう意味ですか？"
-  },
-  "faq_5_body1": {
-    "message": "ラベルなし：スクリーンセーバーが有効で、コンピュータがアイドル状態のときに表示されます。"
-  },
-  "faq_5_body2": {
-    "message": "オフ：スクリーンセーバーが無効です。"
-  },
-  "faq_5_body3": {
-    "message": "SLP：時間はスケジューラの非アクティブな範囲にあります。スクリーンセーバーは表示されません。"
-  },
-  "faq_5_body4": {
-    "message": "PWR：スケジューラは目覚め維持設定を処理しますが、スクリーンセーバーは決して表示されません。"
-  },
-  "faq_6": {
-    "message": "私は目を覚ますが、私のディスプレイは寝ていない。何故ですか？"
-  },
-  "faq_6_body1": {
-    "message": "他のアプリケーションでは、ディスプレイやコンピュータがスリープ状態にならないことがあります。"
-  },
-  "faq_6_body2": {
-    "message": "多くのChrome OSデバイスでは、スクリーンセーバーが実行されているとディスプレイはスリープしません。 Screensaver / awakeスケジューリング機能を使用して、スクリーンセーバがいつ表示されるかを制御できます。"
-  },
-  "faq_7": {
-    "message": "私は目を覚ましておくが、私のシステムはシャットダウンしている。何故ですか？"
-  },
-  "faq_7_body": {
-    "message": "キープアウェイク機能は、コンピュータに対する要求であり、尊重する必要はありません。表示要求はほぼ常に有効ですが、システム要求は正しくありません。特に、多くのPCは、これを行うように設定している場合、コンピュータをスリープ状態にします。"
-  },
-  "faq_8": {
-    "message": "ローカルコンピュータからファイルを使用するためのサポートを追加できますか？"
-  },
-  "faq_8_body": {
-    "message": "デフォルトでは、拡張機能はローカルファイルシステムにアクセスすることはできません。"
-  },
-  "info_title": {
-    "message": "オタクのための情報"
-  },
-  "info_source": {
+  "help_source_code": {
     "message": "ソースコード"
   },
-  "info_apis": {
-    "message": "APIと仕様"
-  },
-  "info_apis_body1": {
-    "message": "この拡張機能は、Polymerとvanilla JavaScriptで完全に構築されています。ポリマーはすべてを"
-  },
-  "info_apis_body2": {
-    "message": "Webコンポーネント"
-  },
-  "info_apis_body3": {
-    "message": "私はAngularJS（またはJQuery）のようなものを使ったことがないので、このアプローチの長所と短所を実際に評価することはできません。さらに、Polymerには、これらの他のソリューションでの使用を妨げるものはありません。"
-  },
-  "info_libs": {
-    "message": "フォトライブラリ"
-  },
-  "info_libs_body1": {
-    "message": "申し訳ありませんが、GoogleフォトAPIはありません。そのため、PicasaウェブAPIだけを使用することができます。このAPIは、Googleフォトの機能のサブセットのみを実装しています。"
-  },
-  "info_libs_body2": {
-    "message": "Chromecastの写真"
-  },
-  "info_libs_body3": {
-    "message": "背景に使用されたスナップショットです。"
-  },
-  "info_libs_body4": {
-    "message": "この拡張機能は、権限のポップアップに記載されている内容にもかかわらず、Googleの写真でのみ読み込まれます。 Picasa APIには読み取り専用スコープはありません。"
-  },
-  "info_web": {
-    "message": "Web開発ドキュメント"
-  },
-  "info_web_body": {
-    "message": "これは初めてのWeb開発であり、学習曲線はかなり険しいです。これらのサイトは、HTML-CSS-JavaScriptのパラダイムに関する優れたチュートリアルと参考資料を提供しています。"
-  },
   "err_request_failed": {
-    "message": "要求に失敗しました。リフレッシュを選択してもう一度お試しください。"
+    "message": "要求に失敗しました。リフレッシュを選択して再試行してください。"
   },
   "err_storage_title": {
     "message": "保存容量の超過"
@@ -460,7 +404,7 @@
   },
   "time_format": {
     "message": "12",
-    "description": "For translators: Set to 12 for AM/PM format or 24"
+    "description": "Set to 12 for AM/PM format or 24"
   },
   "translationInfo": {
     "message": "Google Translate API",

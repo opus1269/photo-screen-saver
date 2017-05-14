@@ -15,16 +15,22 @@
     "message": "Salvaschermo"
   },
   "on": {
-    "message": "Sopra"
+    "message": "È acceso"
   },
   "off": {
-    "message": "via"
+    "message": "è spento"
   },
   "disable": {
     "message": "disattivare"
   },
   "enable": {
     "message": "Abilitare"
+  },
+  "help": {
+    "message": "Aiuto"
+  },
+  "no": {
+    "message": "No"
   },
   "ok": {
     "message": "ok",
@@ -106,22 +112,19 @@
     "message": "impostazioni"
   },
   "menu_google": {
-    "message": "Album di Google Foto"
+    "message": "Seleziona gli album di Google Foto"
   },
   "menu_preview": {
-    "message": "Anteprima"
+    "message": "Anteprima screensaver"
   },
-  "menu_faq": {
-    "message": "Domande frequenti (FAQ)"
-  },
-  "menu_info": {
-    "message": "Informazioni per i nerd"
+  "menu_help": {
+    "message": "Aiuto e feedback"
   },
   "menu_support": {
     "message": "Richiedi supporto"
   },
   "menu_rate": {
-    "message": "Estensione tariffa"
+    "message": "Valuta l'estensione"
   },
   "menu_pushy": {
     "message": "Prova l'estensione Clipboard Pushy"
@@ -165,6 +168,12 @@
   "menu_slide_right": {
     "message": "Scorrere a destra"
   },
+  "menu_12_hour": {
+    "message": "12 ore"
+  },
+  "menu_24_hour": {
+    "message": "24 ore"
+  },
   "tooltip_select": {
     "message": "Seleziona tutto"
   },
@@ -178,7 +187,7 @@
     "message": "Aggiorna la lista"
   },
   "tooltip_keep_awake": {
-    "message": "Le funzioni Keep awake sono disponibili anche se lo screensaver è disattivato, in modo da poter utilizzare l'applicazione come pianificatore di alimentazione generale. L'icona visualizza 'PWR' in questo stato."
+    "message": "Le funzioni Keep awake sono disponibili anche se lo screensaver è disabilitato, in modo da poter utilizzare l'applicazione come pianificatore di alimentazione generale. L'icona visualizza 'PWR' in questo stato."
   },
   "tooltip_settings_toggle": {
     "message": "Abilita / disabilita lo screensaver"
@@ -202,7 +211,7 @@
     "message": "Orario dello spettacolo"
   },
   "setting_shuffle": {
-    "message": "rimescolare"
+    "message": "Rendi casuale"
   },
   "setting_shuffle_desc": {
     "message": "Presentare le foto in ordine casuale"
@@ -214,7 +223,7 @@
     "message": "Non visualizzare alcune foto in modalità Zoom e Full"
   },
   "setting_photog": {
-    "message": "Mostra il nome per le foto che hai"
+    "message": "Mostra l'autore per le foto che possiedi"
   },
   "setting_photog_desc": {
     "message": "Nota: mostra sempre in modalità Frame"
@@ -223,7 +232,7 @@
     "message": "sfondo"
   },
   "setting_bg_desc": {
-    "message": "Impostare l'immagine di sfondo per lo screensaver"
+    "message": "Impostare l'immagine di sfondo dello screensaver"
   },
   "setting_bg_dialog_title": {
     "message": "Seleziona l'immagine di sfondo"
@@ -235,25 +244,25 @@
     "message": "Mostra screensaver su tutti i display connessi"
   },
   "setting_full_screen": {
-    "message": "Non visualizzare le finestre Chrome a schermo intero"
+    "message": "Non mostrare le finestre Chrome a schermo intero"
   },
   "setting_full_screen_desc": {
     "message": "Utile se si guarda i video"
   },
   "setting_keep_awake": {
-    "message": "Rimani sveglio"
+    "message": "Tieniti sveglio"
   },
   "setting_keep_awake_desc": {
     "message": "Evitare la visualizzazione dal sonno (sempre attiva se i tempi di avvio e di arresto sono uguali)"
   },
   "setting_start_time": {
-    "message": "Screensaver / Keep awake l'ora di avvio attiva"
+    "message": "Screensaver / Keep Awake l'ora di inizio attiva"
   },
   "setting_start_time_desc": {
     "message": "Consenti visualizzazione dello screen saver, a partire da questo momento"
   },
   "setting_stop_time": {
-    "message": "Screensaver / Keep awake tempo di arresto attivo"
+    "message": "Screensaver / Keep Awake tempo di arresto attivo"
   },
   "setting_stop_time_desc": {
     "message": "Disattiva la visualizzazione dello screensaver dopo questo tempo"
@@ -307,7 +316,7 @@
     "message": "Principalmente foto paesaggistiche da reddit, aggiornate quotidianamente"
   },
   "setting_reddit_animal": {
-    "message": "Reddit - animale"
+    "message": "Reddit - animali"
   },
   "setting_reddit_animal_desc": {
     "message": "Foto animate da reddit, aggiornate quotidianamente"
@@ -345,109 +354,44 @@
   "google_loading": {
     "message": "Caricamento di album"
   },
-  "faq_title": {
+  "help_title": {
+    "message": "Aiuto e risposte"
+  },
+  "help_section_feedback": {
+    "message": "Feedback (solo inglese, per favore)"
+  },
+  "help_question": {
+    "message": "Fai una domanda"
+  },
+  "help_bug": {
+    "message": "Segnala un errore"
+  },
+  "help_feature": {
+    "message": "Funzione richiesta"
+  },
+  "help_feedback": {
+    "message": "Fornire un feedback"
+  },
+  "help_issue": {
+    "message": "Invia il problema di GitHub (richiede account)"
+  },
+  "help_documentation": {
+    "message": "Documentazione"
+  },
+  "help_faq": {
     "message": "Domande frequenti"
   },
-  "faq_1": {
-    "message": "Come faccio a disinstallare questo?"
+  "help_translations": {
+    "message": "Offrire assistenza con le traduzioni"
   },
-  "faq_1_body": {
-    "message": "Fare clic destro sull'icona nella barra degli strumenti del browser e selezionare \"Rimuovi da Chrome ...\"",
-    "description": "Values in single quotes are set by Chrome browser please check"
+  "help_release_notes": {
+    "message": "Note di rilascio"
   },
-  "faq_2": {
-    "message": "Perché non vengono visualizzati tutti gli album di Google Photos?"
+  "help_licenses": {
+    "message": "Licenze open source"
   },
-  "faq_2_body": {
-    "message": "L'API che Google fornisce per l'interfaccia con Google Photos non supporta pienamente i nuovi album condivisi. Per convertire un album condiviso esistente in un formato che supporta lo screen saver, selezionare l'album, fare clic su \"Opzioni di condivisione\" e disattivare l'opzione \"Condividi\"."
-  },
-  "faq_3": {
-    "message": "Ho ricevuto un errore di Status: 500 che prova a caricare gli album di Google Photos. Cosa significa?"
-  },
-  "faq_3_body": {
-    "message": "Questo è un errore sul server che fornisce le foto. Probabilmente questo è un problema temporaneo. Riprova più tardi."
-  },
-  "faq_4": {
-    "message": "Perché l'etichetta temporale non è corretta sul mio Chromebook?"
-  },
-  "faq_4_body": {
-    "message": "Se hai questo problema, vai a 'Impostazioni' -> 'Mostra impostazioni avanzate' e nella sezione 'Data e ora' deseleziona 'Imposta ora automaticamente la tua località'. Dovrai riavviare perché la modifica abbia effetto.",
-    "description": "Values in single quotes are set by Chrome browser please check"
-  },
-  "faq_5": {
-    "message": "Quali sono le etichette dell'icona?"
-  },
-  "faq_5_body1": {
-    "message": "Nessuna etichetta: il Screensaver è abilitato e verrà visualizzato quando il computer è inattivo."
-  },
-  "faq_5_body2": {
-    "message": "OFF: il Screensaver è disabilitato."
-  },
-  "faq_5_body3": {
-    "message": "SLP: il tempo è nell'intervallo inattivo dello scheduler. Il Screensaver non verrà visualizzato."
-  },
-  "faq_5_body4": {
-    "message": "PWR: Lo scheduler elaborerà le impostazioni di mantenimento sveglio, ma lo screensaver non verrà mai visualizzato."
-  },
-  "faq_6": {
-    "message": "Ho il Keep sveglio, ma il mio display non dorme. Perché?"
-  },
-  "faq_6_body1": {
-    "message": "Altre applicazioni potrebbero impedire che il display o il computer dormi."
-  },
-  "faq_6_body2": {
-    "message": "Su molti dispositivi Chrome OS il display non dorme se lo screensaver è in esecuzione. È possibile utilizzare la funzionalità di pianificazione sveglia Screensaver / Keep per controllare quando viene visualizzato il salvaschermo."
-  },
-  "faq_7": {
-    "message": "Ho il Keep sveglio, ma il mio sistema sta arrestando. Perché?"
-  },
-  "faq_7_body": {
-    "message": "Le funzioni Keep awake sono richieste al computer e non devono essere onorate. La richiesta di visualizzazione è quasi sempre onorata, ma la richiesta del sistema non è. In particolare, molti PC metteranno il computer a dormire se li hai impostati per farlo."
-  },
-  "faq_8": {
-    "message": "È possibile aggiungere un supporto per l'utilizzo di file dal computer locale?"
-  },
-  "faq_8_body": {
-    "message": "Per impostazione predefinita, le estensioni non possono accedere al file system locale."
-  },
-  "info_title": {
-    "message": "Informazioni per Nerds"
-  },
-  "info_source": {
+  "help_source_code": {
     "message": "Codice sorgente"
-  },
-  "info_apis": {
-    "message": "API e specifiche"
-  },
-  "info_apis_body1": {
-    "message": "Questa estensione è stata interamente costruita con il polimero e la vaniglia JavaScript. Il polimero tratta tutto come un"
-  },
-  "info_apis_body2": {
-    "message": "Componente Web"
-  },
-  "info_apis_body3": {
-    "message": "Non ho mai usato cose come AngularJS (o anche JQuery) in modo da non poter realmente valutare i pro ei contro di questo approccio. Inoltre, non c'è nulla nel polimero che ti impedisce di utilizzare con queste altre soluzioni."
-  },
-  "info_libs": {
-    "message": "Biblioteche fotografiche"
-  },
-  "info_libs_body1": {
-    "message": "Purtroppo non esiste alcuna API Google Photos, quindi l'unico modo per interagire con esso è l'API Web di Picasa. Questa API implementa solo un sottoinsieme delle funzionalità di Google Photos."
-  },
-  "info_libs_body2": {
-    "message": "Foto di Chromecast"
-  },
-  "info_libs_body3": {
-    "message": "Sono un'istantanea in tempo di quelle utilizzate per il contesto."
-  },
-  "info_libs_body4": {
-    "message": "Questa estensione viene letto solo per le tue foto di Google, nonostante ciò che dice le autorizzazioni. L'API Picasa non dispone di un ambito di sola lettura."
-  },
-  "info_web": {
-    "message": "Documentazione per lo sviluppo Web"
-  },
-  "info_web_body": {
-    "message": "Questa è stata la mia prima volta a fare lo sviluppo Web e la curva di apprendimento è abbastanza ripida. Questi siti forniscono buone esercitazioni e materiali di riferimento sul paradigma HTML-CSS-JavaScript."
   },
   "err_request_failed": {
     "message": "Richiesta fallita. Seleziona Aggiorna per riprovare."
@@ -460,7 +404,7 @@
   },
   "time_format": {
     "message": "12",
-    "description": "For translators: Set to 12 for AM/PM format or 24"
+    "description": "Set to 12 for AM/PM format or 24"
   },
   "translationInfo": {
     "message": "Google Translate API",

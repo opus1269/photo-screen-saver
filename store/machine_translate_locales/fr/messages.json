@@ -15,16 +15,22 @@
     "message": "Économiseur d'écran"
   },
   "on": {
-    "message": "Sur"
+    "message": "est sur"
   },
   "off": {
-    "message": "De"
+    "message": "est éteint"
   },
   "disable": {
     "message": "Désactiver"
   },
   "enable": {
     "message": "Activer"
+  },
+  "help": {
+    "message": "Aidez-moi"
+  },
+  "no": {
+    "message": "Non"
   },
   "ok": {
     "message": "D'accord",
@@ -106,22 +112,19 @@
     "message": "Paramètres"
   },
   "menu_google": {
-    "message": "Google Photos albums"
+    "message": "Sélectionner les albums Google Photos"
   },
   "menu_preview": {
-    "message": "Aperçu"
+    "message": "Aperçu de l'économiseur d'écran"
   },
-  "menu_faq": {
-    "message": "Foire aux questions (FAQ)"
-  },
-  "menu_info": {
-    "message": "Information pour nerds"
+  "menu_help": {
+    "message": "Aide et commentaires"
   },
   "menu_support": {
     "message": "Demander un support"
   },
   "menu_rate": {
-    "message": "Extension du tarif"
+    "message": "Évaluez l'extension"
   },
   "menu_pushy": {
     "message": "Essayez l'extension du Presse-papiers Pushy"
@@ -165,6 +168,12 @@
   "menu_slide_right": {
     "message": "Glissez à droite"
   },
+  "menu_12_hour": {
+    "message": "12 heures"
+  },
+  "menu_24_hour": {
+    "message": "24 heures"
+  },
   "tooltip_select": {
     "message": "Tout sélectionner"
   },
@@ -202,7 +211,7 @@
     "message": "Afficher l'heure"
   },
   "setting_shuffle": {
-    "message": "Shuffle"
+    "message": "Randomiser"
   },
   "setting_shuffle_desc": {
     "message": "Présenter les photos dans un ordre aléatoire"
@@ -214,7 +223,7 @@
     "message": "Ne pas afficher certaines photos dans Zoom et modes complets"
   },
   "setting_photog": {
-    "message": "Afficher le nom des photos que vous possédez"
+    "message": "Afficher l'auteur des photos que vous possédez"
   },
   "setting_photog_desc": {
     "message": "Remarque: affiche toujours en mode cadre"
@@ -223,7 +232,7 @@
     "message": "Contexte"
   },
   "setting_bg_desc": {
-    "message": "Définir l'image de fond pour l'économiseur d'écran"
+    "message": "Définir l'image de fond de l'économiseur d'écran"
   },
   "setting_bg_dialog_title": {
     "message": "Sélectionnez l'image de fond"
@@ -235,7 +244,7 @@
     "message": "Afficher l'économiseur d'écran sur tous les écrans connectés"
   },
   "setting_full_screen": {
-    "message": "Ne pas afficher sur l'écran plein Chrome Windows"
+    "message": "Ne pas afficher sur les fenêtres Chrome en plein écran"
   },
   "setting_full_screen_desc": {
     "message": "Utile si vous regardez des vidéos"
@@ -247,13 +256,13 @@
     "message": "Empêche l'affichage de dormir (toujours actif si les temps de démarrage et d'arrêt sont égaux)"
   },
   "setting_start_time": {
-    "message": "Économiseur d'écran / Keep awake active start time"
+    "message": "Économie d'écran / Keep Awake active start time"
   },
   "setting_start_time_desc": {
     "message": "Autoriser l'affichage de l'écran de veille, à partir de ce moment"
   },
   "setting_stop_time": {
-    "message": "Économiseur d'écran / Gardez le temps d'arrêt actif éveillé"
+    "message": "Économiseur d'écran / Keep Awake active stop time"
   },
   "setting_stop_time_desc": {
     "message": "Désactiver l'affichage de l'économiseur d'écran après ce temps"
@@ -316,7 +325,7 @@
     "message": "Développeur d'extension"
   },
   "setting_mine_desc": {
-    "message": "Des photos du gars qui a écrit ceci"
+    "message": "Photos du gars qui a écrit ceci"
   },
   "setting_click_to_view": {
     "message": "Cliquez sur la souris pour voir le site Web pour les photos Flickr, 500px et Reddit"
@@ -345,109 +354,44 @@
   "google_loading": {
     "message": "Chargement des albums"
   },
-  "faq_title": {
+  "help_title": {
+    "message": "Aide et commentaires"
+  },
+  "help_section_feedback": {
+    "message": "Feedback (en anglais seulement, s'il vous plaît)"
+  },
+  "help_question": {
+    "message": "Poser une question"
+  },
+  "help_bug": {
+    "message": "Rapportez une erreur"
+  },
+  "help_feature": {
+    "message": "Fonction de demande"
+  },
+  "help_feedback": {
+    "message": "Fournir une réponse"
+  },
+  "help_issue": {
+    "message": "Envoyer un problème GitHub (nécessite un compte)"
+  },
+  "help_documentation": {
+    "message": "Documentation"
+  },
+  "help_faq": {
     "message": "Questions fréquemment posées"
   },
-  "faq_1": {
-    "message": "Comment puis-je désinstaller cela?"
+  "help_translations": {
+    "message": "Offre d'assistance avec les traductions"
   },
-  "faq_1_body": {
-    "message": "Faites un clic droit sur l'icône dans la barre d'outils du navigateur et sélectionnez 'Supprimer du Chrome ...'",
-    "description": "Values in single quotes are set by Chrome browser please check"
+  "help_release_notes": {
+    "message": "Notes de version"
   },
-  "faq_2": {
-    "message": "Pourquoi tous mes albums Google Photos ne sont-ils pas affichés?"
+  "help_licenses": {
+    "message": "Licences Open Source"
   },
-  "faq_2_body": {
-    "message": "L'API que Google fournit pour l'interface avec Google Photos ne supporte pas entièrement les nouveaux albums partagés. Pour convertir un album partagé existant en un format, l'économiseur d'écran prend en charge, sélectionnez l'album, cliquez sur «Options de partage» et désactivez l'option «Partager»."
-  },
-  "faq_3": {
-    "message": "J'ai reçu une erreur Status: 500 en essayant de charger mes albums Google Photos. Qu'est-ce que ça veut dire?"
-  },
-  "faq_3_body": {
-    "message": "Il s'agit d'une erreur sur le serveur qui fournit les photos. C'est probablement un problème très temporaire - réessayez plus tard."
-  },
-  "faq_4": {
-    "message": "Pourquoi l'étiquette de temps est-elle incorrecte sur mon Chromebook?"
-  },
-  "faq_4_body": {
-    "message": "Si vous avez ce problème, allez dans 'Paramètres' -> 'Afficher les paramètres avancés' et dans la section \"Date et heure\", décochez la case \"Définir le fuseau horaire automatiquement en utilisant votre emplacement\". Vous devrez recommencer pour que la modification prenne effet.",
-    "description": "Values in single quotes are set by Chrome browser please check"
-  },
-  "faq_5": {
-    "message": "Que signifient les étiquettes sur l'icône?"
-  },
-  "faq_5_body1": {
-    "message": "Pas d'étiquette: l'économiseur d'écran est activé et s'affiche lorsque l'ordinateur est inactif."
-  },
-  "faq_5_body2": {
-    "message": "OFF: l'économiseur d'écran est désactivé."
-  },
-  "faq_5_body3": {
-    "message": "SLP: le temps est dans la gamme inactif du planificateur. L'économiseur d'écran ne s'affiche pas."
-  },
-  "faq_5_body4": {
-    "message": "PWR: Le planificateur traitera les paramètres de maintien éveillé, mais l'économiseur d'écran ne s'affichera jamais."
-  },
-  "faq_6": {
-    "message": "J'ai le Keep réveillé, mais mon écran ne dort pas. Pourquoi donc?"
-  },
-  "faq_6_body1": {
-    "message": "D'autres applications peuvent empêcher l'affichage ou l'ordinateur de dormir."
-  },
-  "faq_6_body2": {
-    "message": "Sur de nombreux appareils Chrome OS, l'affichage ne couchera pas si l'économiseur d'écran est en cours d'exécution. Vous pouvez utiliser la fonction Économiseur d'écran / Garder la planification éveillée pour contrôler lorsque l'économiseur d'écran s'affiche."
-  },
-  "faq_7": {
-    "message": "J'ai le Keep réveillé, mais mon système s'arrête. Pourquoi donc?"
-  },
-  "faq_7_body": {
-    "message": "Les fonctions Keep awake sont des demandes à l'ordinateur et ne doivent pas être honorées. La demande d'affichage est presque toujours honorée, mais la demande du système n'est pas correcte. En particulier, de nombreux PC mettent l'ordinateur en veille si vous les avez configurés pour le faire."
-  },
-  "faq_8": {
-    "message": "Pouvez-vous ajouter un support pour l'utilisation de fichiers depuis mon ordinateur local?"
-  },
-  "faq_8_body": {
-    "message": "Par défaut, les extensions ne sont pas autorisées à accéder au système de fichiers local."
-  },
-  "info_title": {
-    "message": "Information pour Nerds"
-  },
-  "info_source": {
+  "help_source_code": {
     "message": "Code source"
-  },
-  "info_apis": {
-    "message": "API et spécifications"
-  },
-  "info_apis_body1": {
-    "message": "Cette extension a été entièrement construite avec Polymer et vanilla JavaScript. Polymer traite tout comme un"
-  },
-  "info_apis_body2": {
-    "message": "Composant Web"
-  },
-  "info_apis_body3": {
-    "message": "Je n'ai jamais utilisé des choses comme AngularJS (ou même JQuery), de sorte que je ne peux pas vraiment évaluer les avantages et les inconvénients de cette approche. En outre, il n'y a rien dans Polymer qui vous empêche de l'utiliser avec ces autres solutions."
-  },
-  "info_libs": {
-    "message": "Bibliothèques de photos"
-  },
-  "info_libs_body1": {
-    "message": "Malheureusement, il n'y a pas d'API Google Photos, donc la seule façon d'interagir avec elle est l'API Web Picasa. Cette API ne met en œuvre qu'un sous-ensemble des fonctionnalités Google Photos."
-  },
-  "info_libs_body2": {
-    "message": "Chromecast photos"
-  },
-  "info_libs_body3": {
-    "message": "Sont un instantané dans le temps de ceux utilisés pour la toile de fond."
-  },
-  "info_libs_body4": {
-    "message": "Cette extension est lue uniquement pour vos photos Google en dépit de ce que les autorisations affichent. L'API Picasa n'a pas de portée en lecture seule."
-  },
-  "info_web": {
-    "message": "Documentation sur le développement Web"
-  },
-  "info_web_body": {
-    "message": "C'était la première fois que je faisais du développement Web et que la courbe d'apprentissage était assez raide. Ces sites fournissent de bons tutoriels et des documents de référence sur le paradigme HTML-CSS-JavaScript."
   },
   "err_request_failed": {
     "message": "Demande échoué. Sélectionnez Rafraîchir pour réessayer."
@@ -460,7 +404,7 @@
   },
   "time_format": {
     "message": "12",
-    "description": "For translators: Set to 12 for AM/PM format or 24"
+    "description": "Set to 12 for AM/PM format or 24"
   },
   "translationInfo": {
     "message": "Google Translate API",

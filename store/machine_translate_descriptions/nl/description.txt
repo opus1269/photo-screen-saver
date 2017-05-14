@@ -3,7 +3,7 @@ Deze extensie toont een screensaver samengesteld uit een diavoorstelling van fot
 * Uw Google Fotoalbums
       Opmerking: gedeelde albums worden niet ondersteund
 * Enkele achtergrondfoto's die door Chromecast worden gebruikt
-* Verschillende stromen van 500px
+* Verschillende bronnen van 500px
 * Verschillende bronnen van reddit
 * Interessante foto's van Flickr
 
@@ -13,7 +13,7 @@ Er zijn veel opties beschikbaar om het uiterlijk van de diavoorstelling te contr
 
 * Wachttijd nadat de machine inactief is om screensaver te tonen
 * Tussen foto tijdsinterval
-* Fotodisplay modus - (bijvoorbeeld briefbox, vulscherm)
+* Fotodisplay modus - (bijv. Frame, vul scherm)
 * Foto-overgang animaties - (bijvoorbeeld vervagen, opschalen)
 * Een scheduler om te controleren wanneer de screensaver, display en computer moeten blijven
 * Weergave niet over het volledige scherm Chrome windows (bijvoorbeeld YouTube, Netflix)
@@ -24,7 +24,7 @@ Werkt goed op alle platforms, maar kan vooral nuttig zijn voor je Chromebook.
 
 Gelieve dit te beoordelen als u het van waarde vindt. Dank je.
 
-Het is open source en reclame gratis.
+Het is open source en zonder reclame.
 Broncode:
 https://github.com/opus1269/photo-screen-saver
 

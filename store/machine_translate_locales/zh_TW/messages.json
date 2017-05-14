@@ -15,16 +15,22 @@
     "message": "屏幕保護"
   },
   "on": {
-    "message": "上"
+    "message": "是在"
   },
   "off": {
-    "message": "離"
+    "message": "已關閉"
   },
   "disable": {
     "message": "禁用"
   },
   "enable": {
     "message": "啟用"
+  },
+  "help": {
+    "message": "幫幫我"
+  },
+  "no": {
+    "message": "沒有"
   },
   "ok": {
     "message": "好",
@@ -106,31 +112,28 @@
     "message": "設置"
   },
   "menu_google": {
-    "message": "Google相冊"
+    "message": "選擇Google相冊"
   },
   "menu_preview": {
-    "message": "預習"
+    "message": "預覽屏保"
   },
-  "menu_faq": {
-    "message": "常見問題（FAQ）"
-  },
-  "menu_info": {
-    "message": "書呆子信息"
+  "menu_help": {
+    "message": "幫助和反饋"
   },
   "menu_support": {
     "message": "請求支持"
   },
   "menu_rate": {
-    "message": "費率延長"
+    "message": "評價擴展名"
   },
   "menu_pushy": {
-    "message": "嘗試推送剪貼板擴展"
+    "message": "嘗試Pushy Clipboard擴展"
   },
   "menu_letterbox": {
     "message": "信箱"
   },
   "menu_zoom": {
-    "message": "縮放（可能會裁剪）"
+    "message": "縮放（可能裁剪）"
   },
   "menu_frame": {
     "message": "幀"
@@ -164,6 +167,12 @@
   },
   "menu_slide_right": {
     "message": "向右滑動"
+  },
+  "menu_12_hour": {
+    "message": "12小時"
+  },
+  "menu_24_hour": {
+    "message": "24小時"
   },
   "tooltip_select": {
     "message": "全選"
@@ -202,7 +211,7 @@
     "message": "開演時間"
   },
   "setting_shuffle": {
-    "message": "拖曳"
+    "message": "隨機化"
   },
   "setting_shuffle_desc": {
     "message": "以隨機順序呈現照片"
@@ -214,7 +223,7 @@
     "message": "不要在縮放和完全模式下顯示某些照片"
   },
   "setting_photog": {
-    "message": "顯示您擁有的照片的名稱"
+    "message": "顯示您擁有的照片的作者"
   },
   "setting_photog_desc": {
     "message": "注意：始終以幀模式顯示"
@@ -232,10 +241,10 @@
     "message": "所有顯示"
   },
   "setting_all_displays_desc": {
-    "message": "在所有連接的顯示器上顯示屏幕保護程序"
+    "message": "在所有連接的顯示器上顯示屏保"
   },
   "setting_full_screen": {
-    "message": "不要在全屏Chrome窗口上顯示"
+    "message": "不要顯示全屏Chrome窗口"
   },
   "setting_full_screen_desc": {
     "message": "有用的，如果你正在看視頻"
@@ -345,109 +354,44 @@
   "google_loading": {
     "message": "載入專輯"
   },
-  "faq_title": {
+  "help_title": {
+    "message": "幫助和反饋"
+  },
+  "help_section_feedback": {
+    "message": "反饋（僅限英文）"
+  },
+  "help_question": {
+    "message": "問問題"
+  },
+  "help_bug": {
+    "message": "報告軟件缺陷"
+  },
+  "help_feature": {
+    "message": "請求功能"
+  },
+  "help_feedback": {
+    "message": "提供反饋信息"
+  },
+  "help_issue": {
+    "message": "提交GitHub問題（需要帳號）"
+  },
+  "help_documentation": {
+    "message": "文檔"
+  },
+  "help_faq": {
     "message": "經常問的問題"
   },
-  "faq_1": {
-    "message": "如何卸載？"
+  "help_translations": {
+    "message": "提供翻譯協助"
   },
-  "faq_1_body": {
-    "message": "右鍵單擊瀏覽器工具欄中的圖標，然後選擇“從Chrome移除...”",
-    "description": "Values in single quotes are set by Chrome browser please check"
+  "help_release_notes": {
+    "message": "發行說明"
   },
-  "faq_2": {
-    "message": "為什麼我所有的Google相冊都不顯示？"
+  "help_licenses": {
+    "message": "開源許可證"
   },
-  "faq_2_body": {
-    "message": "Google提供的與Google相冊接口的API並不完全支持新的共享相冊。要將現有的共享相冊轉換為屏幕保護程序支持的格式，請選擇相冊，單擊“共享選項”，並取消設置“共享”選項。"
-  },
-  "faq_3": {
-    "message": "我收到一個狀態：500錯誤，試圖加載我的Google相冊。這意味著什麼？"
-  },
-  "faq_3_body": {
-    "message": "這是提供照片的服務器上的錯誤。這可能是一個非常臨時的問題 - 請稍後再試。"
-  },
-  "faq_4": {
-    "message": "為什麼Chromebook上的時間標籤不正確？"
-  },
-  "faq_4_body": {
-    "message": "如果您遇到此問題，請轉到“設置” - >“顯示高級設置”，然後在“日期和時間”部分中，取消選中“使用您的位置自動設置時區”。您需要重新啟動才能使更改生效。",
-    "description": "Values in single quotes are set by Chrome browser please check"
-  },
-  "faq_5": {
-    "message": "圖標上的標籤是什麼意思？"
-  },
-  "faq_5_body1": {
-    "message": "無標籤：屏幕保護程序已啟用，並在計算機空閒時顯示。"
-  },
-  "faq_5_body2": {
-    "message": "OFF：屏幕保護程序已禁用。"
-  },
-  "faq_5_body3": {
-    "message": "SLP：時間在調度程序的非活動範圍內。屏幕保護程序不會顯示。"
-  },
-  "faq_5_body4": {
-    "message": "PWR：調度程序將處理保持喚醒設置，但屏幕保護程序將永遠不會顯示。"
-  },
-  "faq_6": {
-    "message": "我的Keep保持關閉，但我的顯示器沒有睡覺。這是為什麼？"
-  },
-  "faq_6_body1": {
-    "message": "其他應用可能阻止顯示器或計算機睡眠。"
-  },
-  "faq_6_body2": {
-    "message": "在許多Chrome操作系統設備上，如果屏幕保護程序正在運行，顯示屏將不會休眠。您可以使用屏幕保護程序/保持喚醒調度功能來控制顯示屏幕保護程序的時間。"
-  },
-  "faq_7": {
-    "message": "我有Keep保持清醒，但我的系統正在關閉。這是為什麼？"
-  },
-  "faq_7_body": {
-    "message": "保持喚醒功能是對計算機的請求，不必得到尊重。顯示請求幾乎總是被兌現，但係統請求不是。特別是，如果你有這樣做，許多電腦會把電腦都睡覺。"
-  },
-  "faq_8": {
-    "message": "可以添加從本地計算機使用文件的支持嗎？"
-  },
-  "faq_8_body": {
-    "message": "默認情況下，擴展名不允許訪問本地文件系統。"
-  },
-  "info_title": {
-    "message": "信息為神經"
-  },
-  "info_source": {
+  "help_source_code": {
     "message": "源代碼"
-  },
-  "info_apis": {
-    "message": "API和規格"
-  },
-  "info_apis_body1": {
-    "message": "這個擴展完全由聚合物和香草JavaScript構建。聚合物將一切都視為一種"
-  },
-  "info_apis_body2": {
-    "message": "Web組件"
-  },
-  "info_apis_body3": {
-    "message": "我從來沒有使用像AngularJS（甚至是JQuery）這樣的東西，所以我無法真正評估這種方法的利弊。此外，Polymer中沒有什麼可以阻止您使用這些其他解決方案。"
-  },
-  "info_libs": {
-    "message": "照片庫"
-  },
-  "info_libs_body1": {
-    "message": "不幸的是，沒有Google Photos API，因此與Picasa Web API進行互動的唯一方法是。此API僅實現Google照片功能的一部分。"
-  },
-  "info_libs_body2": {
-    "message": "Chromecast照片"
-  },
-  "info_libs_body3": {
-    "message": "是用於背景的那些時間的快照。"
-  },
-  "info_libs_body4": {
-    "message": "此擴展程序僅適用於您的Google照片，儘管權限彈出窗口顯示。 Picasa API沒有隻讀範圍。"
-  },
-  "info_web": {
-    "message": "Web開發文檔"
-  },
-  "info_web_body": {
-    "message": "這是我第一次做Web開發，學習曲線很陡。這些網站為HTML-CSS-JavaScript範例提供了很好的教程和參考資料。"
   },
   "err_request_failed": {
     "message": "請求失敗選擇刷新以重試。"
@@ -460,7 +404,7 @@
   },
   "time_format": {
     "message": "12",
-    "description": "For translators: Set to 12 for AM/PM format or 24"
+    "description": "Set to 12 for AM/PM format or 24"
   },
   "translationInfo": {
     "message": "Google Translate API",

@@ -2,7 +2,7 @@
 
 ### [Frequently Asked Questions](faq.html)
 
-### [Help With Translations](translate.html)
+### [Offer Assistance With Translations](translate.html)
 
 <br />
 

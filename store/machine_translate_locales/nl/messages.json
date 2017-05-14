@@ -15,16 +15,22 @@
     "message": "Screensaver"
   },
   "on": {
-    "message": "Op"
+    "message": "staat aan"
   },
   "off": {
-    "message": "Uit"
+    "message": "is uit"
   },
   "disable": {
     "message": "onbruikbaar maken"
   },
   "enable": {
     "message": "in staat stellen"
+  },
+  "help": {
+    "message": "Helpen"
+  },
+  "no": {
+    "message": "Nee"
   },
   "ok": {
     "message": "OK",
@@ -106,25 +112,22 @@
     "message": "instellingen"
   },
   "menu_google": {
-    "message": "Albums van Google Foto's"
+    "message": "Selecteer Google Foto albums"
   },
   "menu_preview": {
-    "message": "Voorbeeld"
+    "message": "Voorbeeld screensaver"
   },
-  "menu_faq": {
-    "message": "Veel gestelde vragen (FAQ)"
-  },
-  "menu_info": {
-    "message": "Informatie voor nerds"
+  "menu_help": {
+    "message": "Hulp & feedback"
   },
   "menu_support": {
     "message": "Vraag ondersteuning aan"
   },
   "menu_rate": {
-    "message": "Beoordeel extensie"
+    "message": "Beoordeel de extensie"
   },
   "menu_pushy": {
-    "message": "Probeer Pushy Clipboard extensie"
+    "message": "Probeer de Pushy Clipboard extensie"
   },
   "menu_letterbox": {
     "message": "brievenbus"
@@ -165,6 +168,12 @@
   "menu_slide_right": {
     "message": "Schuif rechtsaf"
   },
+  "menu_12_hour": {
+    "message": "12 uur"
+  },
+  "menu_24_hour": {
+    "message": "24 uur"
+  },
   "tooltip_select": {
     "message": "Selecteer alles"
   },
@@ -202,7 +211,7 @@
     "message": "Show Time"
   },
   "setting_shuffle": {
-    "message": "schuifelen"
+    "message": "willekeurig"
   },
   "setting_shuffle_desc": {
     "message": "Presenteer foto's in willekeurige volgorde"
@@ -214,7 +223,7 @@
     "message": "Weergeven bepaalde foto's niet in Zoom en Full modes"
   },
   "setting_photog": {
-    "message": "Toon naam voor foto's die u bezit"
+    "message": "Toon auteur voor foto's die u bezit"
   },
   "setting_photog_desc": {
     "message": "Opmerking: wordt altijd weergegeven in de kadermodus"
@@ -223,7 +232,7 @@
     "message": "Achtergrond"
   },
   "setting_bg_desc": {
-    "message": "Stel de achtergrondafbeelding voor de screensaver in"
+    "message": "Stel de achtergrondafbeelding van de screensaver in"
   },
   "setting_bg_dialog_title": {
     "message": "Selecteer achtergrondafbeelding"
@@ -235,7 +244,7 @@
     "message": "Toon screensaver op alle aangesloten displays"
   },
   "setting_full_screen": {
-    "message": "Weergave niet over het volledige scherm Chrome windows"
+    "message": "Geef niet meer Chrome-vensters op vol scherm"
   },
   "setting_full_screen_desc": {
     "message": "Nuttig als je video's kijkt"
@@ -247,13 +256,13 @@
     "message": "Voorkom dat het scherm slapen (altijd actief als de start- en stoptijden gelijk zijn)"
   },
   "setting_start_time": {
-    "message": "Screensaver / Houd wakker actieve starttijd"
+    "message": "Screensaver / Bewaar actieve starttijd"
   },
   "setting_start_time_desc": {
     "message": "Schermbeveiligingsweergave toestaan, vanaf dit moment beginnen"
   },
   "setting_stop_time": {
-    "message": "Screensaver / Bewaar de actieve stoptijd"
+    "message": "Screensaver / Hou wakker actieve stoptijd"
   },
   "setting_stop_time_desc": {
     "message": "Laat de screensaverweergave na deze tijd niet uit"
@@ -340,114 +349,49 @@
     "message": "Google Fotoalbums"
   },
   "google_shared_albums_note": {
-    "message": "Opmerking: Gedeelde albums zijn mogelijk niet beschikbaar. Raadpleeg de FAQ voor meer info."
+    "message": "Opmerking: gedeelde albums zijn mogelijk niet beschikbaar. Raadpleeg de FAQ voor meer info."
   },
   "google_loading": {
     "message": "Albums laden"
   },
-  "faq_title": {
+  "help_title": {
+    "message": "Hulp & feedback"
+  },
+  "help_section_feedback": {
+    "message": "Feedback (alleen Engels, alstublieft)"
+  },
+  "help_question": {
+    "message": "Stel een vraag"
+  },
+  "help_bug": {
+    "message": "Meld bug aan"
+  },
+  "help_feature": {
+    "message": "Aanvraag functie"
+  },
+  "help_feedback": {
+    "message": "Geef feedback"
+  },
+  "help_issue": {
+    "message": "Verzend GitHub probleem (vereist account)"
+  },
+  "help_documentation": {
+    "message": "Documentatie"
+  },
+  "help_faq": {
     "message": "Veel Gestelde Vragen"
   },
-  "faq_1": {
-    "message": "Hoe verwijder ik dit?"
+  "help_translations": {
+    "message": "Bied hulp bij vertalingen aan"
   },
-  "faq_1_body": {
-    "message": "Klik met de rechtermuisknop op het pictogram in de werkbalk van de browser en selecteer 'Verwijderen uit Chrome ...'",
-    "description": "Values in single quotes are set by Chrome browser please check"
+  "help_release_notes": {
+    "message": "Release notities"
   },
-  "faq_2": {
-    "message": "Waarom worden niet al mijn Google Foto albums weergegeven?"
+  "help_licenses": {
+    "message": "Open source licenties"
   },
-  "faq_2_body": {
-    "message": "De API die Google biedt om te koppelen aan Google Foto's, ondersteunt de nieuwe gedeelde albums niet volledig. Om een ​​bestaand gedeeld album om te zetten in een formaat, ondersteunt de schermbeveiliging, selecteert u het album, klikt u op 'Delen opties' en zet u de optie 'Delen' uit."
-  },
-  "faq_3": {
-    "message": "Ik heb een Status: 500 fout ontvangen met het proberen om mijn Google Foto albums te laden. Wat betekent dat?"
-  },
-  "faq_3_body": {
-    "message": "Dit is een fout op de server die de foto's levert. Dit is waarschijnlijk een zeer tijdelijk probleem - probeer het later opnieuw."
-  },
-  "faq_4": {
-    "message": "Waarom is het tijdlabel onjuist op mijn Chromebook?"
-  },
-  "faq_4_body": {
-    "message": "Als u dit probleem hebt, gaat u naar 'Instellingen' -> 'Geavanceerde instellingen weergeven' en in de sectie 'Datum en tijd' verwijdert u de optie 'Tijdzone automatisch instellen met uw locatie'. U moet opnieuw starten voordat de wijziging in werking treedt.",
-    "description": "Values in single quotes are set by Chrome browser please check"
-  },
-  "faq_5": {
-    "message": "Wat betekenen de labels op het icoon?"
-  },
-  "faq_5_body1": {
-    "message": "Geen label: Screensaver is ingeschakeld en wordt weergegeven wanneer de computer inactief is."
-  },
-  "faq_5_body2": {
-    "message": "OFF: Screensaver is uitgeschakeld."
-  },
-  "faq_5_body3": {
-    "message": "SLP: De tijd is in het inactieve bereik van de scheduler. Screensaver wordt niet weergegeven."
-  },
-  "faq_5_body4": {
-    "message": "PWR: De scheduler zal de wake-up-instellingen bewaken, maar de screensaver zal nooit worden weergegeven."
-  },
-  "faq_6": {
-    "message": "Ik heb de Keep wakker, maar mijn scherm slaapt niet. Waarom is dat?"
-  },
-  "faq_6_body1": {
-    "message": "Andere toepassingen kunnen voorkomen dat het beeldscherm of de computer slapen."
-  },
-  "faq_6_body2": {
-    "message": "Op veel Chrome OS-apparaten gaat het scherm niet slapen als de screensaver wordt uitgevoerd. U kunt de functie Screensaver / Keep awake scheduling gebruiken om te controleren wanneer de screensaver wordt weergegeven."
-  },
-  "faq_7": {
-    "message": "Ik heb de Keep wakker, maar mijn systeem is aan het sluiten. Waarom is dat?"
-  },
-  "faq_7_body": {
-    "message": "De Keep awake functies zijn verzoeken aan de computer en hoeven niet te worden vereerd. Het schermverzoek wordt bijna altijd vereerd, maar het systeemverzoek is niet. In het bijzonder zullen veel pc's de computer slapen als je ze hebt ingesteld om dit te doen."
-  },
-  "faq_8": {
-    "message": "Kan u ondersteuning toevoegen voor het gebruik van bestanden van mijn lokale computer?"
-  },
-  "faq_8_body": {
-    "message": "Standaard zijn extensies niet toegestaan ​​om toegang te krijgen tot het lokale bestandssysteem."
-  },
-  "info_title": {
-    "message": "Informatie voor nerds"
-  },
-  "info_source": {
+  "help_source_code": {
     "message": "Broncode"
-  },
-  "info_apis": {
-    "message": "API's en specificaties"
-  },
-  "info_apis_body1": {
-    "message": "Deze uitbreiding is volledig gebouwd met Polymer en Vanilla JavaScript. Polymeer behandelt alles als een"
-  },
-  "info_apis_body2": {
-    "message": "Webcomponent"
-  },
-  "info_apis_body3": {
-    "message": "Ik heb nooit dingen zoals AngularJS (of zelfs JQuery) gebruikt, dus ik kan de voor- en nadelen van deze aanpak niet echt beoordelen. Daarnaast is er niets in Polymer dat voorkomt dat u het gebruikt met deze andere oplossingen."
-  },
-  "info_libs": {
-    "message": "Foto Bibliotheken"
-  },
-  "info_libs_body1": {
-    "message": "Helaas is er geen Google Photos API, dus de enige manier om ermee te communiceren is de Picasa Web API. Deze API implementeert alleen een subset van de functies Google Foto's."
-  },
-  "info_libs_body2": {
-    "message": "Chromecast foto's"
-  },
-  "info_libs_body3": {
-    "message": "Zijn een momentopname van degenen die voor de achtergrond worden gebruikt."
-  },
-  "info_libs_body4": {
-    "message": "Deze extensie is alleen voor uw Google-foto's gelezen, ondanks wat de permissies popup zegt. De Picasa-API heeft geen lees-alleen-bereik."
-  },
-  "info_web": {
-    "message": "Webontwikkeling Documentatie"
-  },
-  "info_web_body": {
-    "message": "Dit was mijn eerste keer dat ik webontwikkeling heb gedaan en de leercurve is vrij steil. Deze sites bieden goede tutorials en referentiematerialen op het HTML-CSS-JavaScript-paradigma."
   },
   "err_request_failed": {
     "message": "Verzoek mislukt. Selecteer vernieuw om opnieuw te proberen."
@@ -460,7 +404,7 @@
   },
   "time_format": {
     "message": "12",
-    "description": "For translators: Set to 12 for AM/PM format or 24"
+    "description": "Set to 12 for AM/PM format or 24"
   },
   "translationInfo": {
     "message": "Google Translate API",
