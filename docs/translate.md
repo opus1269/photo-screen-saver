@@ -31,8 +31,6 @@ I would also take one for the Queen's English
 
 Here is the text that needs translation:
 
-<br />
-
 This is all the text in the extension
 The text following each '"message":'  are what need to be translated.
 
