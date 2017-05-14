@@ -9,3 +9,5 @@
 *.7z binary
 *.xcf binary
 *.XCF binary
+*.ico binary
+*.ICO binary
