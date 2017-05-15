@@ -19,13 +19,12 @@
 	 */
 	function _showOptionsTab() {
 		// send message to the option tab to focus it.
-		chrome.runtime.sendMessage({
+		const chromep = new ChromePromise();
+		chromep.runtime.sendMessage({
 			message: 'highlight',
-		}, null, function(response) {
-			if (!response) {
-				// no one listening, create it
-				chrome.tabs.create({url: '../html/options.html'});
-			}
+		}).catch(() => {
+			// no one listening, create it
+			chrome.tabs.create({url: '../html/options.html'});
 		});
 	}
 
@@ -150,7 +149,7 @@
 		if (request.message === 'restoreDefaults') {
 			app.Data.restoreDefaults();
 		}
-		return false;
+		return true;
 	}
 
 	// listen for extension install or update

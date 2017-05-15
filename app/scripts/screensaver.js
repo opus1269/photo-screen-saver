@@ -412,6 +412,7 @@
 	 * @param {Object} request - details for the message
 	 * @param {Object} sender - MessageSender object
 	 * @param {function} response - function to call once after processing
+	 * @returns {boolean} true if asynchronous
 	 * @memberOf app.ScreenSaver
 	 */
 	t.onMessage = function(request, sender, response) {
@@ -421,6 +422,7 @@
 			// let people know we are here
 			response({message: 'OK'});
 		}
+		return true;
 	};
 
 	/**
@@ -444,9 +446,9 @@
 	 */
 	t.closeWindow = function() {
 		// send message to other screen savers to close themselves
-		chrome.runtime.sendMessage({
+		chromep.runtime.sendMessage({
 			message: 'close',
-		}, function() {});
+		}).catch((err) => {});
 
 		setTimeout(function() {
 			// delay a little to process events

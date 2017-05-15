@@ -56,23 +56,20 @@ app.SSControl = (function() {
 
 	/**
 	 * Determine if the screen saver is currently showing
-	 * @param {function} callback - callback(isShowing)
+	 * @returns {Promise<boolean>} true if showing
 	 * @private
 	 * @memberOf app.SSControl
 	 */
-	function _isShowing(callback) {
-		callback = callback || function() {};
-
+	function _isShowing() {
 		// send message to the screen saver to see if he is around
-		chrome.runtime.sendMessage({
+		return chromep.runtime.sendMessage({
 			message: 'isShowing',
-		}, null, function(response) {
-			if (response) {
-				// screen saver responded
-				callback(true);
-			} else {
-				callback(false);
-			}
+		}, null).then(() => {
+			// a screensaver is around
+			return Promise.resolve(true);
+		}).catch(() => {
+			// throws error if receiving end does not exist
+			return Promise.resolve(false);
 		});
 	}
 
@@ -144,8 +141,8 @@ app.SSControl = (function() {
 	 * @memberOf app.SSControl
 	 */
 	function _onIdleStateChanged(state) {
-		_isShowing(function(isShowing) {
-			if (state === 'idle' && app.Alarm.isActive() && !isShowing) {
+		_isShowing().then((isTrue) => {
+			if (state === 'idle' && app.Alarm.isActive() && !isTrue) {
 				app.SSControl.display(false);
 			} else {
 				if (!app.Utils.isWin()) {
@@ -155,7 +152,7 @@ app.SSControl = (function() {
 					app.SSControl.close();
 				}
 			}
-		});
+		}).catch((err) => {});
 	}
 
 	// noinspection JSUnusedLocalSymbols
@@ -176,7 +173,7 @@ app.SSControl = (function() {
 			// preview the screensaver
 			app.SSControl.display(true);
 		}
-		return false;
+		return true;
 	}
 
 	// listen for changes to the idle state of the computer
@@ -206,9 +203,9 @@ app.SSControl = (function() {
 		 */
 		close: function() {
 			// send message to the screen savers to close themselves
-			chrome.runtime.sendMessage({
+			chromep.runtime.sendMessage({
 				message: 'close',
-			}, function(response) {});
+			}).catch((err) => {});
 		},
 	};
 })();

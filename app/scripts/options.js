@@ -189,9 +189,9 @@
 		t.async(function() {
 			t.$.mainMenu.select(t.prevRoute);
 		}, 500);
-		chrome.runtime.sendMessage({
+		chromep.runtime.sendMessage({
 			message: 'showScreensaver',
-		}, function() {});
+		}).catch((err) => {});
 	};
 
 	/**
@@ -281,6 +281,6 @@
 			t.dialogText = app.Utils.localize('err_storage_desc');
 			t.$.errorDialog.open();
 		}
-		return false;
+		return true;
 	};
 })(document);
