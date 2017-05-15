@@ -41,6 +41,7 @@
 	],
 	"background": {
 		"scripts": [
+			"lib/chrome-promise.js",
 			"/lib/Snoocore-browser.min.js",
 			"/scripts/reddit.js",
 			"/scripts/google_photos.js",

@@ -13,6 +13,8 @@ app.Data = (function() {
 	 * @namespace app.Data
 	 */
 
+	const chromep = new ChromePromise();
+
 	/**
 	 * Version of localStorage - update when items are added, removed, changed
 	 * @type {int}
@@ -117,12 +119,9 @@ app.Data = (function() {
 		const label = app.Storage.getBool('enabled') ?
 			app.Utils.localize('disable') : app.Utils.localize('enable');
 		app.Alarm.updateBadgeText();
-		chrome.contextMenus.update('ENABLE_MENU', {title: label}, function() {
-			if (chrome.runtime.lastError) {
-				// noinspection UnnecessaryReturnStatementJS
-				return;
-			}
-		});
+		chromep.contextMenus.update('ENABLE_MENU', {
+			title: label,
+		}).catch((err) => {});
 	}
 
 	/**
@@ -160,6 +159,19 @@ app.Data = (function() {
 			ret = 1;
 		}
 		return ret;
+	}
+
+	/**
+	 * Set the 'os' value
+	 * @returns {Promise} err on failure
+	 * @private
+	 * @memberOf app.Data
+	 */
+	function _setOS() {
+		return chromep.runtime.getPlatformInfo().then((info) => {
+			app.Storage.set('os', info.os);
+			return Promise.resolve();
+		});
 	}
 
 	/**
@@ -203,9 +215,7 @@ app.Data = (function() {
 			_addDefaults();
 
 			// set operating system
-			chrome.runtime.getPlatformInfo(function(info) {
-				app.Storage.set('os', info.os);
-			});
+			_setOS().catch((err) => {});
 
 			// set time format based on locale
 			app.Storage.set('showTime', _getTimeFormat());
@@ -296,9 +306,7 @@ app.Data = (function() {
 				app.PhotoSource.processAll();
 				// set os, if not already
 				if (!app.Storage.get('os')) {
-					chrome.runtime.getPlatformInfo(function(info) {
-						app.Storage.set('os', info.os);
-					});
+					_setOS().catch((err) => {});
 				}
 			} else {
 				// individual change

@@ -26,6 +26,7 @@ module.exports = {
 		'self': true,
 		'clients': true,
 		'Snoocore': true,
+		'ChromePromise': true,
 		'ga': true,
 	},
 

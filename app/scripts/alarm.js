@@ -14,6 +14,8 @@ app.Alarm = (function() {
 	 * @namespace app.Alarm
 	 */
 
+	const chromep = new ChromePromise();
+
 	/**
 	 * Alarms triggered by chrome.alarms
 	 * @typedef {Object} Alarms
@@ -119,12 +121,12 @@ app.Alarm = (function() {
 			chrome.power.requestKeepAwake('display');
 		}
 		const interval = app.Utils.getIdleSeconds();
-		chrome.idle.queryState(interval, function(state) {
+		chromep.idle.queryState(interval).then((state) => {
 			// display screensaver if the idle time criteria is met
 			if (state === 'idle') {
 				app.SSControl.display(false);
 			}
-		});
+		}).catch((err) => {});
 		app.Alarm.updateBadgeText();
 	}
 
@@ -229,14 +231,14 @@ app.Alarm = (function() {
 			}
 
 			// Add daily alarm to update photo sources that request this
-			chrome.alarms.get(_ALARMS.UPDATE_PHOTOS, function(alarm) {
+			chromep.alarms.get(_ALARMS.UPDATE_PHOTOS).then((alarm) => {
 				if (!alarm) {
 					chrome.alarms.create(_ALARMS.UPDATE_PHOTOS, {
 						when: Date.now() + _TIME.MSEC_IN_DAY,
 						periodInMinutes: _TIME.MIN_IN_DAY,
 					});
 				}
-			});
+			}).catch((err) => {});
 		},
 
 		/**

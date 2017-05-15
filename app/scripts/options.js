@@ -12,6 +12,8 @@
 	 * @namespace app.Options
 	 */
 
+	const chromep = new ChromePromise();
+
 	/**
 	 * Manage an html page that is inserted on demand<br />
 	 * May also be a url link to external site
@@ -268,9 +270,9 @@
 	t.onMessage = function(request, sender, response) {
 		if (request.message === 'highlight') {
 			// highlight ourselves and let the sender know we are here
-			chrome.tabs.getCurrent(function(t) {
+			chromep.tabs.getCurrent().then((t) => {
 				chrome.tabs.update(t.id, {'highlighted': true});
-			});
+			}).catch((err) => {});
 			response(JSON.stringify({message: 'OK'}));
 		} else if (request.message === 'storageExceeded') {
 			// Display Error Dialog if a save action exceeded the

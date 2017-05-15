@@ -16,6 +16,8 @@
 	 * @namespace app.ScreenSaver
 	 */
 
+	const chromep = new ChromePromise();
+
 	/**
 	 * aspect ratio of screen
 	 * @type {number}
@@ -135,11 +137,11 @@
 	t.processZoom = function() {
 		if (app.Utils.getChromeVersion() >= 42) {
 			// override zoom factor to 1.0 - chrome 42 and later
-			chrome.tabs.getZoom(function(zoomFactor) {
+			chromep.tabs.getZoom().then((zoomFactor) => {
 				if ((zoomFactor <= 0.99) || (zoomFactor >= 1.01)) {
 					chrome.tabs.setZoom(1.0);
 				}
-			});
+			}).catch((err) => {});
 		}
 	};
 
@@ -167,14 +169,14 @@
 
 			chrome.alarms.onAlarm.addListener(t.onAlarm);
 
-			chrome.alarms.get(CLOCK_ALARM, function(alarm) {
+			chromep.alarms.get(CLOCK_ALARM).then((alarm) => {
 				if (!alarm) {
 					chrome.alarms.create(CLOCK_ALARM, {
 						when: Date.now(),
 						periodInMinutes: 1,
 					});
 				}
-			});
+			}).catch((err) => {});
 		}
 	};
 

@@ -13,6 +13,8 @@ app.SSControl = (function() {
 	 * @namespace app.SSControl
 	 */
 
+	const chromep = new ChromePromise();
+
 	/**
 	 * Determine if there is a full screen chrome window running on a display
 	 * @param {Object} display - a connected display
@@ -25,7 +27,7 @@ app.SSControl = (function() {
 		callback = callback || function() {};
 
 		if (app.Storage.getBool('chromeFullscreen')) {
-			chrome.windows.getAll({populate: false}, function(wins) {
+			chromep.windows.getAll({populate: false}).then((wins) => {
 				const left = display ? display.bounds.left : 0;
 				const top = display ? display.bounds.top : 0;
 				for (let i = 0; i < wins.length; i++) {
@@ -109,7 +111,7 @@ app.SSControl = (function() {
 	 * @memberOf app.SSControl
 	 */
 	function _openOnAllDisplays() {
-		chrome.system.display.getInfo(function(displayInfo) {
+		chromep.system.display.getInfo().then((displayInfo) => {
 			if (displayInfo.length === 1) {
 				_open(null);
 			} else {
@@ -117,7 +119,7 @@ app.SSControl = (function() {
 					_open(displayInfo[i]);
 				}
 			}
-		});
+		}).catch((err) => {});
 	}
 
 	/**

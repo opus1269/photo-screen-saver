@@ -56,7 +56,7 @@ app.Utils = (function() {
 
 		/**
 		 * Get the i18n string
-		 * @param {string} messageName - key in message.json
+		 * @param {string} messageName - key in messages.json
 		 * @returns {string} internationalized string
 		 * @memberOf app.Utils
 		 */
