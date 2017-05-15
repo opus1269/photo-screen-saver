@@ -16,32 +16,41 @@ app.SSControl = (function() {
 	const chromep = new ChromePromise();
 
 	/**
+	 * Screensaver URL
+	 * @type {string}
+	 * @default
+	 * @const
+	 * @private
+	 * @memberOf app.SSControl
+	 */
+	const _SS_URL = '/html/screensaver.html';
+
+	/**
 	 * Determine if there is a full screen chrome window running on a display
 	 * @param {Object} display - a connected display
-	 * @param {function} callback (boolean) - true if there is a full screen
+	 * @returns {Promise<boolean>} true if there is a full screen
 	 * window on the display
 	 * @private
 	 * @memberOf app.SSControl
 	 */
-	function _hasFullscreen(display, callback) {
-		callback = callback || function() {};
-
+	function _hasFullscreen(display) {
 		if (app.Storage.getBool('chromeFullscreen')) {
-			chromep.windows.getAll({populate: false}).then((wins) => {
+			return chromep.windows.getAll({populate: false}).then((wins) => {
+				let ret = false;
 				const left = display ? display.bounds.left : 0;
 				const top = display ? display.bounds.top : 0;
 				for (let i = 0; i < wins.length; i++) {
 					const win = wins[i];
 					if ((win.state === 'fullscreen') &&
 						(!display || (win.top === top && win.left === left))) {
-						callback(true);
-						return;
+						ret = true;
+						break;
 					}
 				}
-				callback(false);
+				return Promise.resolve(ret);
 			});
 		} else {
-			callback(false);
+			return Promise.resolve(false);
 		}
 	}
 
@@ -69,40 +78,41 @@ app.SSControl = (function() {
 
 	/**
 	 * Open a screen saver window on the given display
-	 * @param {Object} display a connected display
+	 * @param {Object} display - a connected display
 	 * @private
 	 * @memberOf app.SSControl
 	 */
 	function _open(display) {
-		_hasFullscreen(display, function(isTrue) {
-			// don't display if there is a fullscreen window
-			const left = display ? display.bounds.left : 0;
-			const top = display ? display.bounds.top : 0;
-			if (!isTrue) {
-				if (app.Utils.getChromeVersion() >= 44 && !display) {
-					// Chrome supports fullscreen option on create since
-					// version 44
-					chrome.windows.create({
-						url: '/html/screensaver.html',
-						focused: true,
-						type: 'popup',
-						state: 'fullscreen',
-					});
-				} else {
-					chrome.windows.create({
-						url: '/html/screensaver.html',
-						left: left,
-						top: top,
-						width: 1,
-						height: 1,
-						focused: true,
-						type: 'popup',
-					}, function(win) {
-						chrome.windows.update(win.id, {state: 'fullscreen'});
-					});
-				}
+		_hasFullscreen(display).then((isTrue) => {
+			if (isTrue) {
+				// don't display if there is a fullscreen window
+				return;
 			}
-		});
+			// window creation options
+			const winOpts = {
+				url: _SS_URL,
+				focused: true,
+				type: 'popup',
+			};
+
+			if (app.Utils.getChromeVersion() >= 44 && !display) {
+				// Chrome supports fullscreen option on create since version 44
+				winOpts.state = 'fullscreen';
+			} else {
+				const left = display ? display.bounds.left : 0;
+				const top = display ? display.bounds.top : 0;
+				winOpts.left = left;
+				winOpts.top = top;
+				winOpts.width = 1;
+				winOpts.height = 1;
+			}
+
+			return chromep.windows.create(winOpts).then((win) => {
+				if (winOpts.state !== 'fullscreen') {
+					chrome.windows.update(win.id, {state: 'fullscreen'});
+				}
+			});
+		}).catch((err) => {});
 	}
 
 	/**

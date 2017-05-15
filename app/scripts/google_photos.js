@@ -61,13 +61,10 @@ app.GooglePhotos = (function() {
 		let error = null;
 
 		(function getTokenAndXhr() {
-			chrome.identity.getAuthToken({'interactive': true},
-											function(accessToken) {
-				if (chrome.runtime.lastError) {
-					callback(chrome.runtime.lastError.message);
-					return;
-				}
-
+			const chromep = new ChromePromise();
+			chromep.identity.getAuthToken({
+				'interactive': true,
+			}).then((accessToken) => {
 				const xhr = new XMLHttpRequest();
 				xhr.open(method, url);
 				xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
@@ -107,6 +104,12 @@ app.GooglePhotos = (function() {
 					}
 					callback(error);
 				};
+			}).catch((err) => {
+				if (chrome.runtime.lastError) {
+					callback(chrome.runtime.lastError.message);
+				} else {
+					callback(err);
+				}
 			});
 
 		})();
