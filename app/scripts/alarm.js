@@ -9,69 +9,42 @@ app.Alarm = (function() {
 	'use strict';
 
 	/**
-	 * Manage the chrome.alarm
+	 * Manage alarms from the chrome.alarms API
+	 * @see https://developer.chrome.com/apps/alarms
 	 * @namespace app.Alarm
 	 */
 
 	/**
-	 * Triggered when screen saver is active
-	 * @type {string}
+	 * Alarms triggered by chrome.alarms
+	 * @typedef {Object} Alarms
+	 * @property {string} ACTIVATE - screen saver is active
+	 * @property {string} DEACTIVATE - screen saver is not activate
+	 * @property {string} UPDATE_PHOTOS - photo sources should be updated
+	 * @property {string} BADGE_TEXT - icon's Badge text should be set
 	 * @const
-	 * @default
 	 * @private
 	 * @memberOf app.Alarm
 	 */
-	const ALARM_ACTIVATE = 'activeStart';
+	const _ALARMS = {
+		'ACTIVATE': 'ACTIVATE',
+		'DEACTIVATE': 'DEACTIVATE',
+		'UPDATE_PHOTOS': 'UPDATE_PHOTOS',
+		'BADGE_TEXT': 'BADGE_TEXT',
+	};
 
 	/**
-	 * Triggered when screen saver is deactivated
-	 * @type {string}
+	 * Time constants
+	 * @typedef {Object} Time
+	 * @property {int} MIN_IN_DAY - minutes in a day
+	 * @property {int} MSEC_IN_DAY - milliSeconds in a day
 	 * @const
-	 * @default
 	 * @private
 	 * @memberOf app.Alarm
 	 */
-	const ALARM_DEACTIVATE = 'activeStop';
-
-	/**
-	 * Triggered when selected photos should be updated from Web
-	 * @type {string}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Alarm
-	 */
-	const ALARM_UPDATE_PHOTOS = 'updatePhotos';
-
-	/**
-	 * Triggered when the icon's Badge text should be set
-	 * @type {string}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Alarm
-	 */
-	const ALARM_BADGE = 'setBadgeText';
-
-	/**
-	 * minutes in a day
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Alarm
-	 */
-	const MIN_IN_DAY = 60 * 24;
-
-	/**
-	 * milli-seconds in a day
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Alarm
-	 */
-	const MSEC_IN_DAY = MIN_IN_DAY * 60 * 1000;
+	const _TIME = {
+		'MIN_IN_DAY': 60 * 24,
+		'MSEC_IN_DAY': 60 * 60 * 24 * 1000,
+	};
 
 	/**
 	 * Convert string to time
@@ -103,7 +76,7 @@ app.Alarm = (function() {
 		let delayMin = (time - curTime) / 1000 / 60;
 
 		if (delayMin < 0) {
-			delayMin = MIN_IN_DAY + delayMin;
+			delayMin = _TIME.MIN_IN_DAY + delayMin;
 		}
 		return delayMin;
 	}
@@ -197,19 +170,19 @@ app.Alarm = (function() {
 	 */
 	function _onAlarm(alarm) {
 		switch (alarm.name) {
-			case ALARM_ACTIVATE:
+			case _ALARMS.ACTIVATE:
 				// entering active time range of keep awake
 				_setActiveState();
 				break;
-			case ALARM_DEACTIVATE:
+			case _ALARMS.DEACTIVATE:
 				// leaving active time range of keep awake
 				_setInactiveState();
 				break;
-			case ALARM_UPDATE_PHOTOS:
+			case _ALARMS.UPDATE_PHOTOS:
 				// get the latest for the live photo streams
 				app.PhotoSource.processDaily();
 				break;
-			case ALARM_BADGE:
+			case _ALARMS.BADGE_TEXT:
 				// set the icons text
 				_setBadgeText();
 				break;
@@ -236,13 +209,13 @@ app.Alarm = (function() {
 				const startDelayMin = _getTimeDelta(aStart);
 				const stopDelayMin = _getTimeDelta(aStop);
 
-				chrome.alarms.create(ALARM_ACTIVATE, {
+				chrome.alarms.create(_ALARMS.ACTIVATE, {
 					delayInMinutes: startDelayMin,
-					periodInMinutes: MIN_IN_DAY,
+					periodInMinutes: _TIME.MIN_IN_DAY,
 				});
-				chrome.alarms.create(ALARM_DEACTIVATE, {
+				chrome.alarms.create(_ALARMS.DEACTIVATE, {
 					delayInMinutes: stopDelayMin,
-					periodInMinutes: MIN_IN_DAY,
+					periodInMinutes: _TIME.MIN_IN_DAY,
 				});
 
 				// if we are currently outside of the active range
@@ -251,16 +224,16 @@ app.Alarm = (function() {
 					_setInactiveState();
 				}
 			} else {
-				chrome.alarms.clear(ALARM_ACTIVATE);
-				chrome.alarms.clear(ALARM_DEACTIVATE);
+				chrome.alarms.clear(_ALARMS.ACTIVATE);
+				chrome.alarms.clear(_ALARMS.DEACTIVATE);
 			}
 
 			// Add daily alarm to update photo sources that request this
-			chrome.alarms.get(ALARM_UPDATE_PHOTOS, function(alarm) {
+			chrome.alarms.get(_ALARMS.UPDATE_PHOTOS, function(alarm) {
 				if (!alarm) {
-					chrome.alarms.create(ALARM_UPDATE_PHOTOS, {
-						when: Date.now() + MSEC_IN_DAY,
-						periodInMinutes: MIN_IN_DAY,
+					chrome.alarms.create(_ALARMS.UPDATE_PHOTOS, {
+						when: Date.now() + _TIME.MSEC_IN_DAY,
+						periodInMinutes: _TIME.MIN_IN_DAY,
 					});
 				}
 			});
@@ -272,7 +245,9 @@ app.Alarm = (function() {
 		 */
 		updateBadgeText: function() {
 			// delay setting a little to make sure range check is good
-			chrome.alarms.create(ALARM_BADGE, {when: Date.now() + 250});
+			chrome.alarms.create(_ALARMS.BADGE_TEXT, {
+				when: Date.now() + 250,
+			});
 		},
 
 		/**
