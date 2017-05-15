@@ -12,6 +12,8 @@
 	 * @namespace app.Background
 	 */
 
+	const chromep = new ChromePromise();
+
 	/**
 	 * Display the options tab
 	 * @private
@@ -19,7 +21,6 @@
 	 */
 	function _showOptionsTab() {
 		// send message to the option tab to focus it.
-		const chromep = new ChromePromise();
 		chromep.runtime.sendMessage({
 			message: 'highlight',
 		}).catch(() => {
@@ -50,17 +51,18 @@
 	 */
 	function _onInstalled(details) {
 		// create menus on the right click menu of the extension icon
-		chrome.contextMenus.create({
+		chromep.contextMenus.create({
 			type: 'normal',
 			id: 'ENABLE_MENU',
 			title: app.Utils.localize('disable'),
 			contexts: ['browser_action'],
-		});
-		chrome.contextMenus.create({
+		}).catch((err) => {});
+
+		chromep.contextMenus.create({
 			type: 'separator',
 			id: 'SEP_MENU',
 			contexts: ['browser_action'],
-		});
+		}).catch((err) => {});
 
 		if (details.reason === 'install') {
 			app.Data.initialize();
