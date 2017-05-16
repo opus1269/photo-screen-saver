@@ -290,6 +290,6 @@
 			// t.dialogText = request.error + 'for ' + request.type;
 			// t.$.errorDialog.open();
 		}
-		return true;
+		return false;
 	};
 })(document);

@@ -157,7 +157,7 @@
 		if (request.message === 'restoreDefaults') {
 			app.Data.restoreDefaults();
 		}
-		return true;
+		return false;
 	}
 
 	// listen for extension install or update

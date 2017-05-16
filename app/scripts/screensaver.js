@@ -428,7 +428,7 @@
 			// let people know we are here
 			response({message: 'OK'});
 		}
-		return true;
+		return false;
 	};
 
 	/**

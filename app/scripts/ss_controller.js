@@ -185,7 +185,7 @@ app.SSControl = (function() {
 			// preview the screensaver
 			app.SSControl.display(true);
 		}
-		return true;
+		return false;
 	}
 
 	// listen for changes to the idle state of the computer
