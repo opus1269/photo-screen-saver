@@ -73,7 +73,7 @@ app.Use500px = (function() {
 				const photo = response.photos[i];
 				if (!photo.nsfw) {
 					const asp = photo.width / photo.height;
-					app.Utils.addImage(photos, photo.images[0].url,
+					app.PhotoSource.addImage(photos, photo.images[0].url,
 						photo.user.fullname, asp);
 				}
 			}

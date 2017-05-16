@@ -68,7 +68,7 @@ app.Flickr = (function() {
 						const width = parseInt(photo.width_k, 10);
 						const height = parseInt(photo.height_k, 10);
 						const asp = width / height;
-						app.Utils.addImage(photos, photo.url_k,
+						app.PhotoSource.addImage(photos, photo.url_k,
 							photo.ownername, asp, photo.owner);
 					}
 				}

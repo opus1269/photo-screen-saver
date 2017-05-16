@@ -242,6 +242,26 @@
 		}
 	};
 
+	/**
+	 * Add an image object to an existing Array
+	 * @param {Array} images - Array of image objects
+	 * @param {string} url - The url to the photo
+	 * @param {string} author - The photographer
+	 * @param {number} asp - The aspect ratio of the photo
+	 * @param {Object} [ex] - Additional information about the photo
+	 */
+	PhotoSource.addImage = function(images, url, author, asp, ex) {
+		const image = {
+			url: url,
+			author: author,
+			asp: asp.toPrecision(3),
+		};
+		if (ex) {
+			image.ex = ex;
+		}
+		images.push(image);
+	};
+
 	window.app = window.app || {};
 	app.PhotoSource = PhotoSource;
 })(window);

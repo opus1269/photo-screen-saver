@@ -71,7 +71,7 @@ app.GooglePhotos = (function() {
 				const height = entry.media$group.media$content[0].height;
 				const asp = width / height;
 				const author = entry.media$group.media$credit[0].$t;
-				app.Utils.addImage(photos, url, author, asp);
+				app.PhotoSource.addImage(photos, url, author, asp);
 			}
 		}
 		return photos;

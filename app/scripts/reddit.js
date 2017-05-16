@@ -140,9 +140,10 @@ app.Reddit = (function() {
 			}
 
 			const asp = width / height;
+			const author = data.author;
 			if (asp && !isNaN(asp) && (Math.max(width, height) >= _MIN_SIZE) &&
 				(Math.max(width, height) <= _MAX_SIZE)) {
-				app.Utils.addImage(photos, url, data.author, asp, data.url);
+				app.PhotoSource.addImage(photos, url, author, asp, data.url);
 			}
 		}
 		return photos;
