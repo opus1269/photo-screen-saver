@@ -89,7 +89,6 @@ app.SSControl = (function() {
 			type: 'popup',
 		};
 		_hasFullscreen(display).then((isTrue) => {
-			console.log('in _hasFullscreen');
 			if (isTrue) {
 				// don't display if there is a fullscreen window
 				return null;
@@ -109,7 +108,6 @@ app.SSControl = (function() {
 
 			return chromep.windows.create(winOpts);
 		}).then((win) => {
-			console.log('created', win);
 			if (win && (winOpts.state !== 'fullscreen')) {
 				chrome.windows.update(win.id, {state: 'fullscreen'});
 			}
@@ -152,7 +150,6 @@ app.SSControl = (function() {
 	 */
 	function _onIdleStateChanged(state) {
 		_isShowing(function(isTrue) {
-			console.log('state', state);
 			if (state === 'idle' && app.Alarm.isActive() && !isTrue) {
 				app.SSControl.display(false);
 			} else {
