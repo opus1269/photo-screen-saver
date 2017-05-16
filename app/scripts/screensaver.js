@@ -467,7 +467,7 @@
 	 * Show link to original photo if possible and close windows
 	 */
 	window.addEventListener('click', function() {
-		if (t.p.selected) {
+		if (t.p.selected !== undefined) {
 			app.Photo.showSource(t.items[t.p.selected]);
 		}
 		t.closeWindow();
