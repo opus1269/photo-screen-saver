@@ -43,6 +43,7 @@
 		"scripts": [
 			"lib/chrome-promise.js",
 			"/lib/Snoocore-browser.min.js",
+			"/scripts/http.js",
 			"/scripts/reddit.js",
 			"/scripts/google_photos.js",
 			"/scripts/chromecast.js",

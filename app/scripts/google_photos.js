@@ -21,99 +21,19 @@ app.GooglePhotos = (function() {
 	 * @private
 	 * @memberOf app.GooglePhotos
 	 */
-	const PICASA_URI = 'https://picasaweb.google.com/data/feed/api/user/';
+	const _URL_BASE = 'https://picasaweb.google.com/data/feed/api/user/';
 
 	/**
-	 * Query for photos
+	 * Query an album
 	 * @type {string}
 	 * @const
 	 * @default
 	 * @private
 	 * @memberOf app.GooglePhotos
 	 */
-	const PHOTOS_QUERY =
-		'?imgmax=1600&thumbsize=72' +
-		'&fields=entry(media:group/media:content,media:group/media:credit)' +
-		'&v=2&alt=json';
-
-	/**
-	 * Max retries for failed Web request
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.GooglePhotos
-	 */
-	const MAX_RETRY = 3;
-
-	/**
-	 * Perform an http request using OAuth 2.0 authentication
-	 * @param {string} method - request type "POST" "GET" etc.
-	 * @param {string} url - url to call
-	 * @param {function} callback (error, httpStatus, responseText)
-	 * @private
-	 * @memberOf app.GooglePhotos
-	 */
-	function _authenticatedXhr(method, url, callback) {
-		callback = callback || function() {};
-		let retryToken = true;
-		let retryError = 0;
-		let error = null;
-
-		(function getTokenAndXhr() {
-			const chromep = new ChromePromise();
-			chromep.identity.getAuthToken({
-				'interactive': true,
-			}).then((accessToken) => {
-				const xhr = new XMLHttpRequest();
-				xhr.open(method, url);
-				xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-				xhr.send();
-
-				xhr.onload = function() {
-					if ((this.status === 401) && retryToken) {
-						// This status may indicate that the cached
-						// access token was invalid. Retry with a fresh token.
-						retryToken = false;
-						chrome.identity.removeCachedAuthToken({
-							'token': accessToken,
-						}, getTokenAndXhr);
-						return;
-					}
-
-					if ((this.status !== 200) && (retryError < MAX_RETRY)) {
-						// Some error, retry a few times
-						retryError++;
-						getTokenAndXhr();
-						return;
-					}
-
-					if (this.status !== 200) {
-						error =
-							'<strong>Server status: ' + this.status +
-							'</strong><p>' + this.responseText + '</p>';
-					}
-					callback(error, this.status, this.responseText);
-				};
-
-				xhr.onerror = function() {
-					let error =
-						'<strong>Network Request: Unknown error</strong>';
-					if (chrome.runtime.lastError) {
-						error = chrome.runtime.lastError.message;
-					}
-					callback(error);
-				};
-			}).catch((err) => {
-				if (chrome.runtime.lastError) {
-					callback(chrome.runtime.lastError.message);
-				} else {
-					callback(err);
-				}
-			});
-
-		})();
-	}
+	const _ALBUM_QUERY = '?imgmax=1600&thumbsize=72' +
+		'&fields=title,gphoto:id,entry(media:group/media:content,' +
+		'media:group/media:credit,media:group/media:thumbnail)&v=2&alt=json';
 
 	/** Determine if a Picasa entry is an image
 	 * @param {Object} entry - Picasa media object
@@ -141,22 +61,16 @@ app.GooglePhotos = (function() {
 	function _processPhotos(root) {
 		const feed = root.feed;
 		const entries = feed.entry || [];
-		let entry;
 		const photos = [];
-		let url;
-		let author;
-		let width;
-		let height;
-		let asp;
 
 		for (let i = 0; i < entries.length; i++) {
-			entry = entries[i];
+			let entry = entries[i];
 			if (_isImage(entry)) {
-				url = entry.media$group.media$content[0].url;
-				width = entry.media$group.media$content[0].width;
-				height = entry.media$group.media$content[0].height;
-				asp = width / height;
-				author = entry.media$group.media$credit[0].$t;
+				const url = entry.media$group.media$content[0].url;
+				const width = entry.media$group.media$content[0].width;
+				const height = entry.media$group.media$content[0].height;
+				const asp = width / height;
+				const author = entry.media$group.media$credit[0].$t;
 				app.Utils.addImage(photos, url, author, asp);
 			}
 		}
@@ -164,156 +78,127 @@ app.GooglePhotos = (function() {
 	}
 
 	/**
-	 * Retrieve the photos for the given album id
-	 * @param {int} id - Picasa album id
-	 * @param {function} callback (error, photos)
+	 * Retrieve a Google Photos album
+	 * @param {string} albumId - Picasa album ID
+	 * @param {string} [userId='default'] - userId for non-authenticated request
+	 * @returns {Promise<Object>} Root object from Picasa call
 	 * @private
 	 * @memberOf app.GooglePhotos
 	 */
-	function loadPicasaAlbum(id, callback) {
-		callback = callback || function() {};
-		const request = `${PICASA_URI}default/albumid/${id}/${PHOTOS_QUERY}`;
-
-		_authenticatedXhr('GET', request, function(error, status, response) {
-			if (error) {
-				callback(error);
-			} else {
-				callback(null, _processPhotos(JSON.parse(response)));
-			}
-		});
+	function _loadPicasaAlbum(albumId, userId = 'default') {
+		const url = `${_URL_BASE}${userId}/albumid/${albumId}/${_ALBUM_QUERY}`;
+		let isAuth = false;
+		let isRetry = false;
+		if (userId === 'default') {
+			isRetry = true;
+			isAuth = true;
+		}
+		return app.Http.doGet(url, isAuth, isRetry);
 	}
 
 	return {
 		/**
 		 * Get my photo album
-		 * @param {function} callback (error, photos)
+		 * @returns {Promise<Photo[]>} Array of {@link Photo} objects
 		 * @memberOf app.GooglePhotos
 		 */
-		loadAuthorImages: function(callback) {
-			callback = callback || function() {};
-			const id = '103839696200462383083';
-			const album = '6117481612859013089';
-			const request =
-				`${PICASA_URI}${id}/albumid/${album}/${PHOTOS_QUERY}`;
-			const xhr = new XMLHttpRequest();
-
-			xhr.onload = function() {
-				if (xhr.status === 200) {
-					const photos = _processPhotos(JSON.parse(xhr.responseText));
-					callback(null, photos);
-				} else {
-					callback(xhr.responseText);
+		loadAuthorImages: function() {
+			const albumId = '6117481612859013089';
+			const userId = '103839696200462383083';
+			return _loadPicasaAlbum(albumId, userId).then((root) => {
+				const photos = _processPhotos(root);
+				if (photos && photos.length) {
+					return Promise.resolve(photos);
 				}
-			};
-
-			xhr.onerror = function(error) {
-				callback(error);
-			};
-
-			xhr.open('GET', request, true);
-			xhr.send();
+				throw new Error('No photos');
+			});
 		},
 
 		/**
 		 * Retrieve the users list of albums, including the photos in each
-		 * @param {function} callback (error, albumList)
+		 * @returns {Promise<Array>} Array of Arrays
 		 * @memberOf app.GooglePhotos
 		 */
-		loadAlbumList: function(callback) {
-			callback = callback || function() {};
-			const query =
-				'?v=2&thumbsize=72' +
+		loadAlbumList: function() {
+			const query = '?v=2' +
+				'&fields=entry(gphoto:albumType,gphoto:id)' +
 				'&max-results=20000&visibility=all&kind=album&alt=json';
-			const request = `${PICASA_URI}default/${query}`;
+			const url = `${_URL_BASE}default/${query}`;
 
-			_authenticatedXhr('GET', request, function(error, stat, response) {
-				if (error) {
-					callback(error);
-					return;
-				}
-
-				const root = JSON.parse(response);
+			// get list of albums
+			return app.Http.doGet(url, true, false).then((root) => {
 				const feed = root.feed;
 				const entries = feed.entry || [];
-				const albumList = [];
-				let album;
-				let ct = 0;
 
-				for (let i = 0; i < entries.length; ++i) {
-					(function(index) {
-						loadPicasaAlbum(entries[index].gphoto$id.$t,
-							function(error, photos) {
-							if (error) {
-								callback(error);
-								return;
-							}
-
-							if (!entries[index].gphoto$albumType &&
-								photos.length) {
-								album = {};
-								album.index = index;
-								album.uid = 'album' + index;
-								album.name = entries[index].title.$t;
-								album.id = entries[index].gphoto$id.$t;
-								album.ct = photos.length;
-								album.thumb =
-									entries[index]
-										.media$group.media$thumbnail[0].url;
-								album.checked = false;
-								album.photos = photos;
-								albumList.push(album);
-							}
-							if (ct === (entries.length - 1)) {
-								if (albumList) {
-									albumList.sort(function(a, b) {
-										return a.index - b.index;
-									});
-									// renumber
-									for (let j = 0; j < albumList.length; j++) {
-										albumList[j].index = j;
-										albumList[j].uid = 'album' + j;
-									}
-								}
-								callback(null, albumList);
-							}
-							ct++;
-						});
-					})(i);
+				// series of API calls to get each album
+				const promises = [];
+				for (let i = 0; i < entries.length; i++) {
+					const entry = entries[i];
+					if (!entry.gphoto$albumType) {
+						const albumId = entry.gphoto$id.$t;
+						promises.push(
+							_loadPicasaAlbum(albumId).catch(() => {})
+						);
+					}
 				}
+
+				// Collate the albums
+				return Promise.all(promises).then((values) => {
+					let albums = [];
+					let ct = 0;
+					values.forEach((value) => {
+						const feed = value.feed;
+						const thumb =
+							feed.entry[0].media$group.media$thumbnail[0].url;
+						const photos = _processPhotos(value);
+						if (photos && photos.length) {
+							const album = {
+								index: ct,
+								uid: 'album' + ct,
+								name: feed.title.$t,
+								id: feed.gphoto$id.$t,
+								ct: photos.length,
+								thumb: thumb,
+								checked: false,
+								photos: photos,
+							};
+							albums.push(album);
+							ct++;
+						}
+					});
+					return Promise.resolve(albums);
+				});
 			});
 		},
 
 		/**
 		 * Retrieve the photos in the selected albums
-		 * @param {function} callback (error, items)
 		 * Array of Array of album photos on success
+		 * @returns {Promise<Array>} Array of Array of albums
 		 * @memberOf app.GooglePhotos
 		 */
-		loadImages: function(callback) {
-			callback = callback || function() {};
-			let ct = 0;
+		loadImages: function() {
 			const items = app.Storage.get('albumSelections');
-			const newItems = [];
 
+			// series of API calls to get each album
+			const promises = [];
 			for (let i = 0; i < items.length; i++) {
-				(function(index) {
-					loadPicasaAlbum(items[index].id, function(error, photos) {
-						if (photos && photos.length) {
-							newItems.push({
-								id: items[index].id,
-								photos: photos,
-							});
-						}
-
-						if (ct === (items.length - 1)) {
-							// done
-							callback(null, newItems);
-							return;
-						}
-						ct++;
-					});
-				})(i);
+				const albumId = items[i].id;
+				promises.push(_loadPicasaAlbum(albumId).catch(() =>{}));
 			}
+
+			// Collate the albums
+			return Promise.all(promises).then((values) => {
+				const albums = [];
+				values.forEach((value) => {
+					const feed = value.feed;
+					const photos = _processPhotos(value);
+					if (photos && photos.length) {
+						albums.push({id: feed.gphoto$id.$t, photos: photos});
+					}
+				});
+				return Promise.resolve(albums);
+			});
 		},
 	};
 })();

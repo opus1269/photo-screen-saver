@@ -44,7 +44,7 @@
 	};
 
 	/**
-	 * Process the given photo source.
+	 * Process the photo source.
 	 * This normally requires a https call
 	 * and may fail for various reasons
 	 * Save to localStorage if there is enough room.
@@ -59,40 +59,35 @@
 			let err = null;
 			// convert string to function
 			const fn = window.app[this.loadObj][this.loadFn];
+			let arg = null;
 			if (this.loadArgs.length === 1) {
-				fn(this.loadArgs[0], function(error, photos) {
-					err = self._savePhotos(error, photos);
-				});
-			} else {
-				fn(function(error, photos) {
-					err = self._savePhotos(error, photos);
-				});
+				arg = this.loadArgs[0];
 			}
-			callback(err);
-			return;
+			fn(arg).then((photos) => {
+				err = self._savePhotos(photos);
+				callback(err);
+			}).catch((error) => {
+				console.error('error', error);
+				callback(error);
+			});
 		} else {
 			if (this.useName !== 'useGoogle') {
 				localStorage.removeItem(this.photosName);
 			}
+			callback(null);
 		}
-		callback(null);
 	};
 
 	/**
 	 * Save the photos to localStorage in a safe manner
-	 * @param {string} error - non-null if retrieval failed
 	 * @param {Array} photos - an array of photo objects
-	 * @returns {string} non-null on error
+	 * @returns {?string} non-null on error
 	 * @private
 	 */
-	PhotoSource.prototype._savePhotos = function(error, photos) {
+	PhotoSource.prototype._savePhotos = function(photos) {
 		let ret = null;
 		const keyBool = (this.useName === 'useGoogle') ? null : this.useName;
-		if (error) {
-			ret = error;
-		} else if (!photos || !photos.length) {
-			ret = 'No photos retrieved.';
-		} else {
+		if (photos || photos.length) {
 			const set = app.Storage.safeSet(this.photosName, photos, keyBool);
 			if (!set) {
 				ret = 'Exceeded storage capacity.';
@@ -114,10 +109,11 @@
 	};
 
 	/**
-	 * Get all the photos
+	 * Get all the photos from local storage
 	 * @returns {Array} The Array of photos
+	 * @private
 	 */
-	PhotoSource.prototype.getPhotos = function() {
+	PhotoSource.prototype._getPhotos = function() {
 		let ret = [];
 		if (this.use()) {
 			if (this.isArray) {
@@ -184,13 +180,13 @@
 
 	/**
 	 * Get all the photos from all selected sources. These will be
-	 * used by the screen saver.
+	 * used by the screensaver.
 	 * @returns {Array} Array of photos to display in screen saver
 	 */
 	PhotoSource.getSelectedPhotos = function() {
 		let ret = [];
 		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
-			ret = ret.concat(PhotoSource.SOURCES[i].getPhotos());
+			ret = ret.concat(PhotoSource.SOURCES[i]._getPhotos());
 		}
 		return ret;
 	};
@@ -215,7 +211,6 @@
 	 * and may fail for various reasons
 	 * @param {string} useName - The photo source to retrieve
 	 * @param {function} callback (error) non-null on error
-	 *
 	 */
 	PhotoSource.process = function(useName, callback) {
 		// callback(error)

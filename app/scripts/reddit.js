@@ -14,25 +14,23 @@ app.Reddit = (function() {
 	 */
 
 	/**
-	 * Extensions redirect uri
+	 * Extension's redirect uri
 	 * @type {string}
 	 * @const
-	 * @default
 	 * @private
 	 * @memberOf app.Reddit
 	 */
-	const REDIRECT_URI =
-		'https://kohpcmlfdjfdggcjmjhhbcbankgmppgc.chromiumapp.org/reddit';
+	const _REDIRECT_URI =
+		`https://${chrome.runtime.id}.chromiumapp.org/reddit`;
 
 	/**
 	 * Reddit rest API authorization key
 	 * @type {string}
 	 * @const
-	 * @default
 	 * @private
 	 * @memberOf app.Reddit
 	 */
-	const KEY = 'bATkDOUNW_tOlg';
+	const _KEY = 'bATkDOUNW_tOlg';
 
 	/**
 	 * Max photos to return
@@ -42,7 +40,8 @@ app.Reddit = (function() {
 	 * @private
 	 * @memberOf app.Reddit
 	 */
-	const MAX_PHOTOS = 100;
+	const _MAX_PHOTOS = 100;
+
 	/**
 	 * Min size of photo to use
 	 * @type {int}
@@ -51,7 +50,7 @@ app.Reddit = (function() {
 	 * @private
 	 * @memberOf app.Reddit
 	 */
-	const MIN_SIZE = 750;
+	const _MIN_SIZE = 750;
 
 	/**
 	 * Max size of photo to use
@@ -61,22 +60,22 @@ app.Reddit = (function() {
 	 * @private
 	 * @memberOf app.Reddit
 	 */
-	const MAX_SIZE = 3500;
+	const _MAX_SIZE = 3500;
 
 	/**
 	 * Expose reddit API
-	 * @type {function}
+	 * @type {Function}
 	 * @const
 	 * @private
 	 * @memberOf app.Reddit
 	 */
-	const snoocore = new Snoocore({
+	const _snoocore = new Snoocore({
 		userAgent: 'photo-screen-saver',
 		throttle: 0,
 		oauth: {
 			type: 'implicit',
-			key: KEY,
-			redirectUri: REDIRECT_URI,
+			key: _KEY,
+			redirectUri: _REDIRECT_URI,
 			scope: ['read'],
 		},
 	});
@@ -90,11 +89,9 @@ app.Reddit = (function() {
 	 * @memberOf app.Reddit
 	 */
 	function _getSize(title) {
-		let ret = {width: -1, height: -1};
-		let res;
+		const ret = {width: -1, height: -1};
 		const regex = /\[(\d*)\D*(\d*)\]/;
-
-		res = title.match(regex);
+		const res = title.match(regex);
 		if (res) {
 			ret.width = parseInt(res[1], 10);
 			ret.height = parseInt(res[2], 10);
@@ -104,33 +101,30 @@ app.Reddit = (function() {
 
 	/**
 	 * Build the list of photos for one page of items
-	 * @param {Array} children Array of photos returned from reddit
-	 * @returns {Array} Array of images in our format,
+	 * @param {Array} children - Array of photos returned from reddit
+	 * @returns {Array} Array of {@link Photo} objects,
 	 * stripped of NSFW and big and small photos
 	 * @private
 	 * @memberOf app.Reddit
 	 */
-	const _processChildren = function(children) {
-		let data;
-		let item;
-		const images = [];
+	function _processChildren(children) {
+		const photos = [];
 		let url;
 		let width = 1;
 		let height = 1;
-		let asp;
 
-		for (let j = 0; j < children.length; j++) {
-			data = children[j].data;
+		for (let i = 0; i < children.length; i++) {
+			const data = children[i].data;
 			if (data.over_18) {
 				// skip NSFW
 				continue;
 			} else if (data.preview && data.preview.images) {
 				// new way. has full size image and array of reduced resolutions
-				item = data.preview.images[0];
+				let item = data.preview.images[0];
 				url = item.source.url;
 				width = parseInt(item.source.width, 10);
 				height = parseInt(item.source.height, 10);
-				if (Math.max(width, height) > MAX_SIZE) {
+				if (Math.max(width, height) > _MAX_SIZE) {
 					// too big. get the largest reduced resolution image
 					item = item.resolutions[item.resolutions.length - 1];
 					url = item.url.replace(/&amp;/g, '&');
@@ -145,38 +139,33 @@ app.Reddit = (function() {
 				height = size.height;
 			}
 
-			asp = width / height;
-			if (asp && !isNaN(asp) && (Math.max(width, height) >= MIN_SIZE) &&
-				(Math.max(width, height) <= MAX_SIZE)) {
-				app.Utils.addImage(images, url, data.author, asp, data.url);
+			const asp = width / height;
+			if (asp && !isNaN(asp) && (Math.max(width, height) >= _MIN_SIZE) &&
+				(Math.max(width, height) <= _MAX_SIZE)) {
+				app.Utils.addImage(photos, url, data.author, asp, data.url);
 			}
 		}
-		return images;
-	};
+		return photos;
+	}
 
 	return {
 		/**
 		 * Retrieve the array of reddit photos
 		 * @param {string} subreddit - name of photo subreddit
-		 * @param {function} callback (error, photos) Array of photos on success
+		 * @returns {Promise<Photo[]>} Array of {@link Photo} objects
 		 * @memberOf app.Reddit
 		 */
-		loadImages: function(subreddit, callback) {
-			// callback(error, photos)
-			callback = callback || function() {};
-			
+		loadImages: function(subreddit) {
 			let photos = [];
 
-			snoocore(subreddit + 'hot').listing({
-				limit: MAX_PHOTOS,
-			}).then(function(slice) {
+			return _snoocore(`${subreddit}hot`).listing({
+				limit: _MAX_PHOTOS,
+			}).then((slice) => {
 				photos = photos.concat(_processChildren(slice.children));
 				return slice.next();
-			}).then(function(slice) {
+			}).then((slice) => {
 				photos = photos.concat(_processChildren(slice.children));
-				callback(null, photos);
-			}).catch(function(reason) {
-				callback(reason);
+				return Promise.resolve(photos);
 			});
 		},
 	};

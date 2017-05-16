@@ -9,39 +9,24 @@ app.ChromeCast = (function() {
 	'use strict';
 
 	/**
-	 * Interface to the chromecast photos
+	 * Interface to the Chromecast photos
 	 * @namespace app.ChromeCast
 	 */
 
 	return {
 		/**
 		 * Get the photos from chromecast.json
-		 * @param {function} callback (error, photos)
+		 * @returns {Promise<Photo[]>} Array of {@link Photo} objects
 		 * @memberOf app.ChromeCast
 		 */
-		loadImages: function(callback) {
-			callback = callback || function() {};
-			let photos = [];
-			const xhr = new XMLHttpRequest();
-
-			xhr.onload = function() {
-				if (xhr.status === 200) {
-					photos = JSON.parse(xhr.responseText);
-					for (let i = 0; i < photos.length; i++) {
-						photos[i].asp = 16 / 9;
-					}
-					callback(null, photos);
-				} else {
-					callback(xhr.responseText);
+		loadImages: function() {
+			const url = '/assets/chromecast.json';
+			return app.Http.doGet(url).then((photos) => {
+				for (let i = 0; i < photos.length; i++) {
+					photos[i].asp = 16 / 9;
 				}
-			};
-
-			xhr.onerror = function(error) {
-				callback(error);
-			};
-
-			xhr.open('GET', '/assets/chromecast.json', true);
-			xhr.send();
+				return Promise.resolve(photos);
+			});
 		},
 	};
 })();
