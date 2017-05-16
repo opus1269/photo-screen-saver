@@ -136,38 +136,36 @@ app.GooglePhotos = (function() {
 					const entry = entries[i];
 					if (!entry.gphoto$albumType) {
 						const albumId = entry.gphoto$id.$t;
-						promises.push(
-							_loadPicasaAlbum(albumId).catch(() => {})
-						);
+						promises.push(_loadPicasaAlbum(albumId));
 					}
 				}
 
 				// Collate the albums
-				return Promise.all(promises).then((values) => {
-					let albums = [];
-					let ct = 0;
-					values.forEach((value) => {
-						const feed = value.feed;
-						const thumb =
-							feed.entry[0].media$group.media$thumbnail[0].url;
-						const photos = _processPhotos(value);
-						if (photos && photos.length) {
-							const album = {
-								index: ct,
-								uid: 'album' + ct,
-								name: feed.title.$t,
-								id: feed.gphoto$id.$t,
-								ct: photos.length,
-								thumb: thumb,
-								checked: false,
-								photos: photos,
-							};
-							albums.push(album);
-							ct++;
-						}
-					});
-					return Promise.resolve(albums);
+				return Promise.all(promises);
+			}).then((values) => {
+				let albums = [];
+				let ct = 0;
+				values.forEach((value) => {
+					const feed = value.feed;
+					const thumb =
+						feed.entry[0].media$group.media$thumbnail[0].url;
+					const photos = _processPhotos(value);
+					if (photos && photos.length) {
+						const album = {
+							index: ct,
+							uid: 'album' + ct,
+							name: feed.title.$t,
+							id: feed.gphoto$id.$t,
+							ct: photos.length,
+							thumb: thumb,
+							checked: false,
+							photos: photos,
+						};
+						albums.push(album);
+						ct++;
+					}
 				});
+				return Promise.resolve(albums);
 			});
 		},
 

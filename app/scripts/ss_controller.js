@@ -80,17 +80,17 @@ app.SSControl = (function() {
 	 * @memberOf app.SSControl
 	 */
 	function _open(display) {
+		// window creation options
+		const winOpts = {
+			url: _SS_URL,
+			focused: true,
+			type: 'popup',
+		};
 		_hasFullscreen(display).then((isTrue) => {
 			if (isTrue) {
 				// don't display if there is a fullscreen window
 				return;
 			}
-			// window creation options
-			const winOpts = {
-				url: _SS_URL,
-				focused: true,
-				type: 'popup',
-			};
 
 			if (app.Utils.getChromeVersion() >= 44 && !display) {
 				// Chrome supports fullscreen option on create since version 44
@@ -104,11 +104,12 @@ app.SSControl = (function() {
 				winOpts.height = 1;
 			}
 
-			return chromep.windows.create(winOpts).then((win) => {
-				if (winOpts.state !== 'fullscreen') {
-					chrome.windows.update(win.id, {state: 'fullscreen'});
-				}
-			});
+			return chromep.windows.create(winOpts);
+		}).then((win) => {
+			if (winOpts.state !== 'fullscreen') {
+				chrome.windows.update(win.id, {state: 'fullscreen'});
+			}
+			return null;
 		}).catch((err) => {});
 	}
 
@@ -126,6 +127,7 @@ app.SSControl = (function() {
 					_open(displayInfo[i]);
 				}
 			}
+			return null;
 		}).catch((err) => {});
 	}
 
@@ -152,6 +154,7 @@ app.SSControl = (function() {
 					app.SSControl.close();
 				}
 			}
+			return null;
 		}).catch((err) => {});
 	}
 

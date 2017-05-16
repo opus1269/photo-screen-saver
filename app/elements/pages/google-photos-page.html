@@ -251,6 +251,7 @@ app.GooglePhotosPage = Polymer({
 			// set select state on albums
 			this._selectAlbums();
 			this.set('waitForLoad', false);
+			return null;
 		}).catch((err) => {
 			this.set('waitForLoad', false);
 			this.$.dialogTitle.innerHTML =

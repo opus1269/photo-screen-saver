@@ -310,7 +310,14 @@ app.Data = (function() {
 			} else {
 				// individual change
 				if (app.PhotoSource.contains(key)) {
-					app.PhotoSource.process(key).catch(() => {});
+					app.PhotoSource.process(key).catch((err) => {
+						// send message on processing error
+						return chromep.runtime.sendMessage({
+							message: 'photosFailed',
+							type: key,
+							error: err.message,
+						});
+					}).catch((err) => {});
 				} else {
 					(STATE_MAP[key] || noop)();
 				}

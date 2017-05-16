@@ -251,7 +251,9 @@
 </dom-module>
 
 <script>
-Polymer({
+'use strict';
+window.app = window.app || {};
+app.SettingsPage = Polymer({
 	is: 'settings-page',
 
 	behaviors: [
@@ -273,6 +275,20 @@ Polymer({
 
 	ready: function() {
 		this.set('selectedTab', 0);
+	},
+
+	deselectPhotoSource: function(useName) {
+		const useNames = app.PhotoSource.getUseNames();
+		for (let i = 0; i < useNames.length; i++) {
+			if (useName === useNames[i]) {
+				const query = '[name=' + useName + ']';
+				const el = document.querySelector(query);
+				if (el) {
+					el.setChecked(false);
+					break;
+				}
+			}
+		}
 	},
 
 	// select all photo sources
@@ -310,8 +326,10 @@ Polymer({
 	},
 
 	_getUnit: function(name, min, max, step, mult) {
-		return {'name': app.Utils.localize(name),
-			'min': min, 'max': max, 'step': step, 'mult': mult};
+		return {
+			'name': app.Utils.localize(name),
+			'min': min, 'max': max, 'step': step, 'mult': mult,
+		};
 	},
 
 	_computeWaitTimeUnits: function() {

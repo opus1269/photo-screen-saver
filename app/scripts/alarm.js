@@ -126,6 +126,7 @@ app.Alarm = (function() {
 			if (state === 'idle') {
 				app.SSControl.display(false);
 			}
+			return null;
 		}).catch((err) => {});
 		app.Alarm.updateBadgeText();
 	}
@@ -238,6 +239,7 @@ app.Alarm = (function() {
 						periodInMinutes: _TIME.MIN_IN_DAY,
 					});
 				}
+				return null;
 			}).catch((err) => {});
 		},
 

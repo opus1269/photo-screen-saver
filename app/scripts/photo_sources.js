@@ -63,6 +63,7 @@
 				if (err) {
 					throw new Error(err);
 				}
+				return Promise.resolve();
 			});
 		} else {
 			if (this.useName !== 'useGoogle') {

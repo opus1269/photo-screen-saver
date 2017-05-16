@@ -137,8 +137,7 @@
 			// create the page the first time
 			t.pages[index].ready = true;
 			t.gPhotosPage =
-				new app.GooglePhotosPage('gPhotosPage', t.$.errorDialog,
-					t.$.dialogTitle, t.$.dialogText);
+				new app.GooglePhotosPage('gPhotosPage');
 			Polymer.dom(t.$.googlePhotosInsertion).appendChild(t.gPhotosPage);
 		} else {
 			t.gPhotosPage.loadAlbumList();
@@ -272,6 +271,7 @@
 			// highlight ourselves and let the sender know we are here
 			chromep.tabs.getCurrent().then((t) => {
 				chrome.tabs.update(t.id, {'highlighted': true});
+				return null;
 			}).catch((err) => {});
 			response(JSON.stringify({message: 'OK'}));
 		} else if (request.message === 'storageExceeded') {
@@ -280,6 +280,13 @@
 			t.dialogTitle = app.Utils.localize('err_storage_title');
 			t.dialogText = app.Utils.localize('err_storage_desc');
 			t.$.errorDialog.open();
+		} else if (request.message === 'photosFailed') {
+			// TODO Display Error Dialog if a photo source
+			// failed to load
+			// wrong app.SettingsPage.deselectPhotoSource(request.type);
+			// t.dialogTitle = app.Utils.localize('err_storage_title');
+			// t.dialogText = request.error + 'for ' + request.type;
+			// t.$.errorDialog.open();
 		}
 		return true;
 	};

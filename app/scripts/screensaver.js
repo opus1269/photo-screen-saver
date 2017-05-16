@@ -141,6 +141,7 @@
 				if ((zoomFactor <= 0.99) || (zoomFactor >= 1.01)) {
 					chrome.tabs.setZoom(1.0);
 				}
+				return null;
 			}).catch((err) => {});
 		}
 	};
@@ -176,6 +177,7 @@
 						periodInMinutes: 1,
 					});
 				}
+				return null;
 			}).catch((err) => {});
 		}
 	};
