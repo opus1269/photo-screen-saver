@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Namespace: Use500px</title>
+	<title>Documentation Namespace: Http</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,13 +79,13 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Namespace: Use500px</h1>
+	<h1 class="page-title">Namespace: Http</h1>
 <section>
 
 <header>
     
         <h2>
-        Use500px
+        Http
         </h2>
         
     
@@ -96,7 +96,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Interface to 500px API</p></div>
+            <div class="description"><p>Fetch with authentication and exponential backoff</p></div>
         
 
         
@@ -134,8 +134,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="use500px.js.html">use500px.js</a>,
-				 <a href="use500px.js.html#sunlight-1-line-11">line 11</a>
+				<a href="http.js.html">http.js</a>,
+				 <a href="http.js.html#sunlight-1-line-11">line 11</a>
 			</li>
 		</ul>
 	</dd>
@@ -169,29 +169,18 @@
         <dl>
             
 <hr>
-<dt class="name" id="._CATS">
-    <h4 id="._CATS"><span class="type-signature">&lt;private, static, constant> </span>_CATS<span class="type-signature"> :Array</span></h4>
+<dt class="name" id="._DELAY">
+    <h4 id="._DELAY"><span class="type-signature">&lt;private, static, constant> </span>_DELAY<span class="type-signature"></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>Categories to use Make them an array to overcome 100 photo limit per call</p>
+        <p>Delay multiplier for exponential back-off</p>
     </div>
     
 
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Array</span>
-
-
-
-            </li>
-        </ul>
     
 
     
@@ -224,7 +213,7 @@
 	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
 	<dd class="tag-default">
 		<ul class="dummy">
-			<li>["Nature,City and Architecture","Landscapes,Animals","Macro,Still Life,Underwater"]</li>
+			<li>1000</li>
 		</ul>
 	</dd>
 	
@@ -236,8 +225,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="use500px.js.html">use500px.js</a>,
-				 <a href="use500px.js.html#sunlight-1-line-53">line 53</a>
+				<a href="http.js.html">http.js</a>,
+				 <a href="http.js.html#sunlight-1-line-34">line 34</a>
 			</li>
 		</ul>
 	</dd>
@@ -257,110 +246,18 @@
         
             
 <hr>
-<dt class="name" id="._KEY">
-    <h4 id="._KEY"><span class="type-signature">&lt;private, static, constant> </span>_KEY<span class="type-signature"> :string</span></h4>
+<dt class="name" id="._MAX_RETRIES">
+    <h4 id="._MAX_RETRIES"><span class="type-signature">&lt;private, static, constant> </span>_MAX_RETRIES<span class="type-signature"></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>API authorization key</p>
+        <p>Max retries on 500 errors</p>
     </div>
     
 
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="use500px.js.html">use500px.js</a>,
-				 <a href="use500px.js.html#sunlight-1-line-33">line 33</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="._MAX_PHOTOS">
-    <h4 id="._MAX_PHOTOS"><span class="type-signature">&lt;private, static, constant> </span>_MAX_PHOTOS<span class="type-signature"> :int</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Max photos to return - 100 is API max</p>
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">int</span>
-
-
-
-            </li>
-        </ul>
     
 
     
@@ -393,7 +290,7 @@
 	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
 	<dd class="tag-default">
 		<ul class="dummy">
-			<li>100</li>
+			<li>4</li>
 		</ul>
 	</dd>
 	
@@ -405,96 +302,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="use500px.js.html">use500px.js</a>,
-				 <a href="use500px.js.html#sunlight-1-line-43">line 43</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="._URL_BASE">
-    <h4 id="._URL_BASE"><span class="type-signature">&lt;private, static, constant> </span>_URL_BASE<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>500px rest API</p>
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
-	<dd class="tag-default">
-		<ul class="dummy">
-			<li>https://api.500px.com/v1/</li>
-		</ul>
-	</dd>
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="use500px.js.html">use500px.js</a>,
-				 <a href="use500px.js.html#sunlight-1-line-24">line 24</a>
+				<a href="http.js.html">http.js</a>,
+				 <a href="http.js.html#sunlight-1-line-25">line 25</a>
 			</li>
 		</ul>
 	</dd>
@@ -521,7 +330,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="._doGet"><span class="type-signature">&lt;private, static> </span>_doGet<span class="signature">(url)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;<a href="Photo.html">Photo</a>>>}</span></h4>
+    <h4 class="name" id="._doAuth"><span class="type-signature">&lt;private, static> </span>_doAuth<span class="signature">(isAuth, interactive)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
     
     
 </dt>
@@ -529,7 +338,305 @@
 
     
     <div class="description">
-        <p>Call API to get some photos</p>
+        <p>Get auth token if requested</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isAuth</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>true if authorization required</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>interactive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>true if auth call is interactive</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="http.js.html">http.js</a>,
+				 <a href="http.js.html#sunlight-1-line-60">line 60</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>auth token if needed</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;string></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._doGet"><span class="type-signature">&lt;static> </span>_doGet<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;json>}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Fetch with exponential back-off</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="http.js.html">http.js</a>,
+				 <a href="http.js.html#sunlight-1-line-87">line 87</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>response from server</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;json></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._retryGet"><span class="type-signature">&lt;private, static> </span>_retryGet<span class="signature">(url, authToken)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Retry call to server after removing cached auth token</p>
     </div>
     
 
@@ -581,7 +688,31 @@
 
             
 
-            <td class="description last"><p>server url</p></td>
+            <td class="description last"><p>url to call</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authToken</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>chrome authorization token</p></td>
         </tr>
 
     
@@ -625,8 +756,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="use500px.js.html">use500px.js</a>,
-				 <a href="use500px.js.html#sunlight-1-line-66">line 66</a>
+				<a href="http.js.html">http.js</a>,
+				 <a href="http.js.html#sunlight-1-line-44">line 44</a>
 			</li>
 		</ul>
 	</dd>
@@ -655,7 +786,7 @@
     
             
 <div class="param-desc">
-    <p>Array of <a href="Photo.html">Photo</a> objects</p>
+    <p>response from server</p>
 </div>
 
 
@@ -666,7 +797,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Array.&lt;<a href="Photo.html">Photo</a>>></span>
+<span class="param-type">Promise.&lt;void></span>
 
 
 
@@ -683,7 +814,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".loadImages"><span class="type-signature">&lt;static> </span>loadImages<span class="signature">(type)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;<a href="Photo.html">Photo</a>>>}</span></h4>
+    <h4 class="name" id=".doGet"><span class="type-signature">&lt;static> </span>doGet<span class="signature">(url [, isAuth] [, retryAuth])</span><span class="type-signature"> &rarr; {Promise.&lt;json>}</span></h4>
     
     
 </dt>
@@ -691,7 +822,7 @@
 
     
     <div class="description">
-        <p>Retrieve the array of 500px photos</p>
+        <p>Perform GET request to server using exponential back-off</p>
     </div>
     
 
@@ -714,7 +845,11 @@
         <th>Type</th>
 
         
+        <th>Argument</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -726,7 +861,7 @@
 
         <tr>
             
-                <td class="name"><code>type</code></td>
+                <td class="name"><code>url</code></td>
             
 
             <td class="type">
@@ -740,10 +875,102 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>name of 500px gallery</p></td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>server</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isAuth</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>true if authorization required</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retryAuth</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>if true, retry with new token</p></td>
         </tr>
 
     
@@ -787,8 +1014,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="use500px.js.html">use500px.js</a>,
-				 <a href="use500px.js.html#sunlight-1-line-91">line 91</a>
+				<a href="http.js.html">http.js</a>,
+				 <a href="http.js.html#sunlight-1-line-77">line 77</a>
 			</li>
 		</ul>
 	</dd>
@@ -817,7 +1044,7 @@
     
             
 <div class="param-desc">
-    <p>Array of <a href="Photo.html">Photo</a> objects</p>
+    <p>response from server</p>
 </div>
 
 
@@ -828,7 +1055,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Array.&lt;<a href="Photo.html">Photo</a>>></span>
+<span class="param-type">Promise.&lt;json></span>
 
 
 

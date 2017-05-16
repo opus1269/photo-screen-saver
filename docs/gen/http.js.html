@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: photo.js</title>
+	<title>Documentation Source: http.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: photo.js</h1>
+		<h1 class="page-title">Source: http.js</h1>
     
 <section>
     <article>
@@ -90,137 +90,124 @@
  *  https://opensource.org/licenses/BSD-3-Clause
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
-(function() {
+window.app = window.app || {};
+app.Http = (function() {
 	'use strict';
 
 	/**
-	 * A photo for the screen saver
-	 * @param {string} name - unique name
-	 * @param {Object} source - source item
-	 * @constructor
-	 * @alias Photo
+	 * Fetch with authentication and exponential backoff
+	 * @namespace app.Http
 	 */
-	const Photo = function(name, source) {
-		this.name = name;
-		this.path = source.url;
-		this.author = source.author ? source.author : '';
-		this.type = source.type;
-		this.aspectRatio = source.asp;
-		this.ex = source.ex;
-		this.width = screen.width;
-		this.height = screen.height;
-		this.label = this.buildLabel(false);
-	};
+
+	const chromep = new ChromePromise();
 
 	/**
-	 * Create the photo label
-	 * @param {boolean} force - require display of label if true
-	 * @returns {string} label describing the photo source and photographer name
-	 */
-	Photo.prototype.buildLabel = function(force) {
-		let ret = '';
-		let type = this.type;
-		const idx = this.type.search('User');
-
-		if (!force &amp;&amp; !app.Storage.getBool('showPhotog') &amp;&amp; (idx !== -1)) {
-			// don't show label for user's own photos, if requested
-			return ret;
-		}
-
-		if (idx !== -1) {
-			// strip off 'User'
-			type = this.type.substring(0, idx - 1);
-		}
-
-		if (this.author) {
-			ret = `${this.author} / ${type}`;
-		} else {
-			// no photographer name
-			ret = `Photo from ${type}`;
-		}
-		return ret;
-	};
-
-	/**
-	 * Determine if a photo would look bad zoomed or stretched on the screen
-	 * @param {number} asp aspect ratio of photo
-	 * @param {number} screenAsp - the screen aspect ratio
-	 * @returns {boolean} true if a photo aspect ratio differs substantially
-	 * from the screens'
+	 * Max retries on 500 errors
+	 * @const
+	 * @default
 	 * @private
+	 * @memberOf app.Http
 	 */
-	Photo._isBadAspect = function(asp, screenAsp) {
-		// arbitrary
-		const CUT_OFF = 0.5;
-		return (asp &lt; screenAsp - CUT_OFF) || (asp > screenAsp + CUT_OFF);
-	};
+	const _MAX_RETRIES = 4;
 
 	/**
-	 * Determine if a photo should not be displayed
-	 * @param {number} asp - aspect ratio
-	 * @param {number} screenAsp - the screen aspect ratio
-	 * @param {int} photoSizing - the sizing type
-	 * @returns {boolean} true if the photo should not be displayed
+	 * Delay multiplier for exponential back-off
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf app.Http
 	 */
-	Photo.ignore = function(asp, screenAsp, photoSizing) {
-		let ret = false;
-		const skip = app.Storage.getBool('skip');
-
-		if ((!asp || isNaN(asp)) ||
-			(skip &amp;&amp; ((photoSizing === 1) || (photoSizing === 3)) &amp;&amp;
-			Photo._isBadAspect(asp, screenAsp))) {
-			// ignore photos that don't have aspect ratio
-			// or would look bad with cropped or stretched sizing options
-			ret = true;
-		}
-		return ret;
-	};
+	const _DELAY = 1000;
 
 	/**
-	 * Create a new tab with a link to the
-	 * original source of the current photo, if possible
-	 * @param {Object} item - a photo item
+	 * Retry call to server after removing cached auth token
+	 * @param {string} url - url to call
+	 * @param {string} authToken - chrome authorization token
+	 * @returns {Promise.&lt;void>} response from server
+	 * @private
+	 * @memberOf app.Http
 	 */
-	Photo.showSource = function(item) {
-		if (!item) {
-			return;
-		}
-		const path = item.path;
-		const extra = item.ex;
-		let regex;
-		let id;
-		let url;
+	function _retryGet(url, authToken) {
+		return chromep.identity.removeCachedAuthToken({
+			token: authToken,
+		}).then(() => {
+			return app.Http.doGet(url, true, false);
+		});
+	}
 
-		switch (item.type) {
-			case '500':
-				// parse photo id
-				regex = /(\/[^\/]*){4}/;
-				id = path.match(regex);
-				url = `http://500px.com/photo${id[1]}`;
-				chrome.tabs.create({url: url});
-				break;
-			case 'flickr':
-				if (extra) {
-					// parse photo id
-					regex = /(\/[^\/]*){4}(_.*_)/;
-					id = path.match(regex);
-					url = `https://www.flickr.com/photos/${item.ex}${id[1]}`;
-					chrome.tabs.create({url: url});
-				}
-				break;
-			case 'reddit':
-				if (extra) {
-					chrome.tabs.create({url: item.ex});
-				}
-				break;
-			default:
-				break;
+	/**
+	 * Get auth token if requested
+	 * @param {boolean} isAuth - true if authorization required
+	 * @param {boolean} interactive - true if auth call is interactive
+	 * @returns {Promise.&lt;string>} auth token if needed
+	 * @private
+	 * @memberOf app.Http
+	 */
+	function _doAuth(isAuth, interactive) {
+		if (isAuth) {
+			return chromep.identity.getAuthToken({'interactive': interactive});
+		} else {
+			return Promise.resolve('');
 		}
+	}
+
+	return {
+		/**
+		 * Perform GET request to server using exponential back-off
+		 * @param {string} url - server
+		 * @param {boolean} [isAuth=false] - true if authorization required
+		 * @param {boolean} [retryAuth=false] - if true, retry with new token
+		 * @returns {Promise.&lt;json>} response from server
+		 * @memberOf app.Http
+		 */
+		doGet: function(url, isAuth = false, retryAuth = false) {
+			let attempts = 0;
+			let token = '';
+			return _doGet();
+
+			/**
+			 * Fetch with exponential back-off
+			 * @returns {Promise.&lt;json>} response from server
+			 * @memberOf app.Http
+			 */
+			function _doGet() {
+				return _doAuth(isAuth, retryAuth).then((authToken) => {
+					const init = {method: 'GET', headers: new Headers({})};
+					if (isAuth) {
+						token = authToken;
+						init.headers.append('Authorization', `Bearer ${token}`);
+					}
+					return fetch(url, init);
+				}).then((response) => {
+					if (response.ok) {
+						return response.json();
+					} else if (isAuth &amp;&amp; retryAuth &amp;&amp;
+						(response.status === 401)) {
+						// could be bad token. Remove cached one and try again
+						return _retryGet(url, token);
+					} else if ((attempts &lt; _MAX_RETRIES) &amp;&amp;
+						((response.status >= 500) &amp;&amp; (response.status &lt; 600))) {
+						// temporary server issue, retryAuth with back-off
+						attempts++;
+						const delay = (Math.pow(2, attempts) - 1) * _DELAY;
+						return new Promise(() => {
+							setTimeout(() => {
+								return _doGet();
+							}, delay);
+						});
+					} else {
+						// TODO add to localization
+						let msg = `Status: ${response.status}`;
+						msg+= `\nReason: ${response.statusText}`;
+						throw new Error(msg);
+					}
+				}).then((json) => {
+					return Promise.resolve(json);
+				});
+			}
+		},
 	};
-
-	window.app = window.app || {};
-	app.Photo = Photo;
-})(window);
+})();
 </pre>
     </article>
 </section>

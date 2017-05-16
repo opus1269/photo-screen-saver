@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -107,17 +107,16 @@ app.Use500px = (function() {
 	 * @private
 	 * @memberOf app.Use500px
 	 */
-	const URL = 'https://api.500px.com/v1/';
+	const _URL_BASE = 'https://api.500px.com/v1/';
 
 	/**
 	 * API authorization key
 	 * @type {string}
 	 * @const
-	 * @default
 	 * @private
 	 * @memberOf app.Use500px
 	 */
-	const KEY = 'iyKV6i6wu0R8QUea9mIXvEsQxIF0tMRVXopwYcFC';
+	const _KEY = 'iyKV6i6wu0R8QUea9mIXvEsQxIF0tMRVXopwYcFC';
 
 	/**
 	 * Max photos to return - 100 is API max
@@ -127,78 +126,73 @@ app.Use500px = (function() {
 	 * @private
 	 * @memberOf app.Use500px
 	 */
-	const MAX_PHOTOS = 100;
+	const _MAX_PHOTOS = 100;
 
 	/**
-	 * Categories to use
-	 * Make them an array to overcome 100 photo limit per call
+	 * Categories to use Make them an array to overcome 100 photo limit per call
 	 * @type {Array}
 	 * @const
 	 * @default
 	 * @private
 	 * @memberOf app.Use500px
 	 */
-	const CATS = [
+	const _CATS = [
 		'Nature,City and Architecture',
 		'Landscapes,Animals',
 		'Macro,Still Life,Underwater',
 	];
 
+	/**
+	 * Call API to get some photos
+	 * @param {string} url - server url
+	 * @returns {Promise&lt;Photo[]>} Array of {@link Photo} objects
+	 * @private
+	 * @memberOf app.Use500px
+	 */
+	function _doGet(url) {
+		return app.Http.doGet(url).then((response) => {
+			if (response.error) {
+				throw new Error(response.error);
+			}
+			const photos = [];
+			for (let i = 0; i &lt; response.photos.length; i++) {
+				const photo = response.photos[i];
+				if (!photo.nsfw) {
+					const asp = photo.width / photo.height;
+					app.Utils.addImage(photos, photo.images[0].url,
+						photo.user.fullname, asp);
+				}
+			}
+			return Promise.resolve(photos);
+		});
+	}
+
 	return {
 		/**
-		 * Retrieve the array of reddit photos
+		 * Retrieve the array of 500px photos
 		 * @param {string} type - name of 500px gallery
-		 * @param {function} callback (error, photos) Array of photos on success
+		 * @returns {Promise&lt;Photo[]>} Array of {@link Photo} objects
 		 * @memberOf app.Use500px
 		 */
-		loadImages: function(type, callback) {
-			callback = callback || function() {};
-			let photos = [];
-			const xhr = [];
-			const done = [false, false, false];
-
-			for (let j = 0; j &lt; CATS.length; j++) {
-				(function(index) {
-					const request =
-						`${URL}photos/?consumer_key=${KEY}&amp;feature=${type}` +
-						`&amp;only=${CATS[index]}&amp;rpp=${MAX_PHOTOS}` +
-						'&amp;sort=rating&amp;image_size=2048';
-
-					xhr.push(new XMLHttpRequest());
-
-					xhr[index].onload = function() {
-						const response = JSON.parse(xhr[index].response);
-						if (response.error) {
-							callback(response.error);
-						} else {
-							const images = [];
-							let asp;
-							for (let i = 0; i &lt; response.photos.length; i++) {
-								const photo = response.photos[i];
-								if (!photo.nsfw) {
-									asp = photo.width / photo.height;
-									app.Utils.addImage(images,
-										photo.images[0].url,
-										photo.user.fullname, asp);
-								}
-							}
-							photos = photos.concat(images);
-							done[index] = true;
-							if (done[0] &amp;&amp; done[1] &amp;&amp; done[2]) {
-								// success
-								callback(null, photos);
-							}
-						}
-					};
-
-					xhr[index].onerror = function(error) {
-						callback(error);
-					};
-
-					xhr[index].open('GET', request, true);
-					xhr[index].send();
-				})(j);
+		loadImages: function(type) {
+			// series of API calls
+			const promises = [];
+			for (let i = 0; i &lt; _CATS.length; i++) {
+				let url =
+					`${_URL_BASE}photos/?consumer_key=${_KEY}&amp;feature=${type}` +
+					`&amp;only=${_CATS[i]}&amp;rpp=${_MAX_PHOTOS}` +
+					'&amp;sort=rating&amp;image_size=2048';
+				promises.push(_doGet(url));
 			}
+
+			// Collate the photos
+			return Promise.all(promises).then((values) => {
+				let photos = [];
+				values.forEach((value) => {
+					photos = photos.concat(value);
+				});
+				return Promise.resolve(photos);
+			});
 		},
 	};
 })();
@@ -247,7 +241,7 @@ app.Use500px = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 14th 2017, 1:00:38 pm
+		on May 16th 2017, 2:52:43 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

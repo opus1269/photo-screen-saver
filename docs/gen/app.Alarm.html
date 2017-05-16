@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -96,7 +96,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Manage the chrome.alarm</p></div>
+            <div class="description"><p>Manage alarms from the chrome.alarms API</p></div>
         
 
         
@@ -144,6 +144,13 @@
 	
 
 	
+	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="https://developer.chrome.com/apps/alarms">https://developer.chrome.com/apps/alarms</a></li>
+			</ul>
+	</dd>
+	
 
 	
 </dl>
@@ -169,15 +176,15 @@
         <dl>
             
 <hr>
-<dt class="name" id=".ALARM_ACTIVATE">
-    <h4 id=".ALARM_ACTIVATE"><span class="type-signature">&lt;private, static, constant> </span>ALARM_ACTIVATE<span class="type-signature"> :string</span></h4>
+<dt class="name" id=".Alarms">
+    <h4 id=".Alarms"><span class="type-signature">&lt;private, static, constant> </span>Alarms<span class="type-signature"> :Object</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>Triggered when screen saver is active</p>
+        <p>Alarms triggered by chrome.alarms</p>
     </div>
     
 
@@ -186,7 +193,7 @@
         <ul>
             <li>
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
 
@@ -198,6 +205,131 @@
 <dl class="details">
     
 
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ACTIVATE</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>screen saver is active</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>DEACTIVATE</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>screen saver is not activate</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>UPDATE_PHOTOS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>photo sources should be updated</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>BADGE_TEXT</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>icon's Badge text should be set</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+    
+
 	
 
 	
@@ -220,13 +352,6 @@
 
 	
 
-	
-	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
-	<dd class="tag-default">
-		<ul class="dummy">
-			<li>activeStart</li>
-		</ul>
-	</dd>
 	
 
 
@@ -237,7 +362,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-24">line 24</a>
+				 <a href="alarm.js.html#sunlight-1-line-19">line 19</a>
 			</li>
 		</ul>
 	</dd>
@@ -257,15 +382,15 @@
         
             
 <hr>
-<dt class="name" id=".ALARM_BADGE">
-    <h4 id=".ALARM_BADGE"><span class="type-signature">&lt;private, static, constant> </span>ALARM_BADGE<span class="type-signature"> :string</span></h4>
+<dt class="name" id=".Time">
+    <h4 id=".Time"><span class="type-signature">&lt;private, static, constant> </span>Time<span class="type-signature"> :Object</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>Triggered when the icon's Badge text should be set</p>
+        <p>Time constants</p>
     </div>
     
 
@@ -274,7 +399,7 @@
         <ul>
             <li>
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
 
@@ -286,349 +411,81 @@
 <dl class="details">
     
 
-	
+    <h5 class="subsection-title">Properties:</h5>
 
-	
+    <dl>
 
-	
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
-	<dd class="tag-default">
-		<ul class="dummy">
-			<li>setBadgeText</li>
-		</ul>
-	</dd>
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-54">line 54</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
+        <th>Type</th>
 
         
-            
-<hr>
-<dt class="name" id=".ALARM_DEACTIVATE">
-    <h4 id=".ALARM_DEACTIVATE"><span class="type-signature">&lt;private, static, constant> </span>ALARM_DEACTIVATE<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Triggered when screen saver is deactivated</p>
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
-	<dd class="tag-default">
-		<ul class="dummy">
-			<li>activeStop</li>
-		</ul>
-	</dd>
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-34">line 34</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
 
         
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
-<hr>
-<dt class="name" id=".ALARM_UPDATE_PHOTOS">
-    <h4 id=".ALARM_UPDATE_PHOTOS"><span class="type-signature">&lt;private, static, constant> </span>ALARM_UPDATE_PHOTOS<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Triggered when selected photos should be updated from Web</p>
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
-	<dd class="tag-default">
-		<ul class="dummy">
-			<li>updatePhotos</li>
-		</ul>
-	</dd>
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-44">line 44</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
+                <td class="name"><code>MIN_IN_DAY</code></td>
             
-<hr>
-<dt class="name" id=".MIN_IN_DAY">
-    <h4 id=".MIN_IN_DAY"><span class="type-signature">&lt;private, static, constant> </span>MIN_IN_DAY<span class="type-signature"> :int</span></h4>
 
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>minutes in a day</p>
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
+            <td class="type">
+            
                 
 <span class="param-type">int</span>
 
 
 
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-64">line 64</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
             
-<hr>
-<dt class="name" id=".MSEC_IN_DAY">
-    <h4 id=".MSEC_IN_DAY"><span class="type-signature">&lt;private, static, constant> </span>MSEC_IN_DAY<span class="type-signature"> :int</span></h4>
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>minutes in a day</p></td>
+        </tr>
 
     
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>milli-seconds in a day</p>
-    </div>
-    
 
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
+        <tr>
+            
+                <td class="name"><code>MSEC_IN_DAY</code></td>
+            
+
+            <td class="type">
+            
                 
 <span class="param-type">int</span>
 
 
 
-            </li>
-        </ul>
-    
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>milliSeconds in a day</p></td>
+        </tr>
 
     
-<dl class="details">
+    </tbody>
+</table>
+</dl>
+
     
 
 	
@@ -663,7 +520,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-74">line 74</a>
+				 <a href="alarm.js.html#sunlight-1-line-37">line 37</a>
 			</li>
 		</ul>
 	</dd>
@@ -795,7 +652,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-83">line 83</a>
+				 <a href="alarm.js.html#sunlight-1-line-58">line 58</a>
 			</li>
 		</ul>
 	</dd>
@@ -957,7 +814,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-100">line 100</a>
+				 <a href="alarm.js.html#sunlight-1-line-75">line 75</a>
 			</li>
 		</ul>
 	</dd>
@@ -1143,7 +1000,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-119">line 119</a>
+				 <a href="alarm.js.html#sunlight-1-line-94">line 94</a>
 			</li>
 		</ul>
 	</dd>
@@ -1305,7 +1162,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-198">line 198</a>
+				 <a href="alarm.js.html#sunlight-1-line-173">line 173</a>
 			</li>
 		</ul>
 	</dd>
@@ -1400,7 +1257,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-144">line 144</a>
+				 <a href="alarm.js.html#sunlight-1-line-119">line 119</a>
 			</li>
 		</ul>
 	</dd>
@@ -1488,7 +1345,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-178">line 178</a>
+				 <a href="alarm.js.html#sunlight-1-line-153">line 153</a>
 			</li>
 		</ul>
 	</dd>
@@ -1576,7 +1433,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-163">line 163</a>
+				 <a href="alarm.js.html#sunlight-1-line-138">line 138</a>
 			</li>
 		</ul>
 	</dd>
@@ -1664,7 +1521,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-283">line 283</a>
+				 <a href="alarm.js.html#sunlight-1-line-260">line 260</a>
 			</li>
 		</ul>
 	</dd>
@@ -1776,7 +1633,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-273">line 273</a>
+				 <a href="alarm.js.html#sunlight-1-line-248">line 248</a>
 			</li>
 		</ul>
 	</dd>
@@ -1864,7 +1721,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="alarm.js.html">alarm.js</a>,
-				 <a href="alarm.js.html#sunlight-1-line-229">line 229</a>
+				 <a href="alarm.js.html#sunlight-1-line-204">line 204</a>
 			</li>
 		</ul>
 	</dd>
@@ -1947,7 +1804,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 14th 2017, 1:00:38 pm
+		on May 16th 2017, 2:52:43 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

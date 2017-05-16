@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -99,94 +99,103 @@ app.SSControl = (function() {
 	 * @namespace app.SSControl
 	 */
 
+	const chromep = new ChromePromise();
+
+	/**
+	 * Screensaver URL
+	 * @type {string}
+	 * @default
+	 * @const
+	 * @private
+	 * @memberOf app.SSControl
+	 */
+	const _SS_URL = '/html/screensaver.html';
+
 	/**
 	 * Determine if there is a full screen chrome window running on a display
 	 * @param {Object} display - a connected display
-	 * @param {function} callback (boolean) - true if there is a full screen
+	 * @returns {Promise&lt;boolean>} true if there is a full screen
 	 * window on the display
 	 * @private
 	 * @memberOf app.SSControl
 	 */
-	function _hasFullscreen(display, callback) {
-		callback = callback || function() {};
-
+	function _hasFullscreen(display) {
 		if (app.Storage.getBool('chromeFullscreen')) {
-			chrome.windows.getAll({populate: false}, function(wins) {
+			return chromep.windows.getAll({populate: false}).then((wins) => {
+				let ret = false;
 				const left = display ? display.bounds.left : 0;
 				const top = display ? display.bounds.top : 0;
 				for (let i = 0; i &lt; wins.length; i++) {
 					const win = wins[i];
 					if ((win.state === 'fullscreen') &amp;&amp;
 						(!display || (win.top === top &amp;&amp; win.left === left))) {
-						callback(true);
-						return;
+						ret = true;
+						break;
 					}
 				}
-				callback(false);
+				return Promise.resolve(ret);
 			});
 		} else {
-			callback(false);
+			return Promise.resolve(false);
 		}
 	}
 
 	/**
 	 * Determine if the screen saver is currently showing
-	 * @param {function} callback - callback(isShowing)
+	 * @returns {Promise&lt;boolean>} true if showing
 	 * @private
 	 * @memberOf app.SSControl
 	 */
-	function _isShowing(callback) {
-		callback = callback || function() {};
-
+	function _isShowing() {
 		// send message to the screen saver to see if he is around
-		chrome.runtime.sendMessage({
+		return chromep.runtime.sendMessage({
 			message: 'isShowing',
-		}, null, function(response) {
-			if (response) {
-				// screen saver responded
-				callback(true);
-			} else {
-				callback(false);
-			}
+		}, null).then(() => {
+			// a screensaver is around
+			return Promise.resolve(true);
+		}).catch(() => {
+			// throws error if receiving end does not exist
+			return Promise.resolve(false);
 		});
 	}
 
 	/**
 	 * Open a screen saver window on the given display
-	 * @param {Object} display a connected display
+	 * @param {Object} display - a connected display
 	 * @private
 	 * @memberOf app.SSControl
 	 */
 	function _open(display) {
-		_hasFullscreen(display, function(isTrue) {
-			// don't display if there is a fullscreen window
-			const left = display ? display.bounds.left : 0;
-			const top = display ? display.bounds.top : 0;
-			if (!isTrue) {
-				if (app.Utils.getChromeVersion() >= 44 &amp;&amp; !display) {
-					// Chrome supports fullscreen option on create since
-					// version 44
-					chrome.windows.create({
-						url: '/html/screensaver.html',
-						focused: true,
-						type: 'popup',
-						state: 'fullscreen',
-					});
-				} else {
-					chrome.windows.create({
-						url: '/html/screensaver.html',
-						left: left,
-						top: top,
-						width: 1,
-						height: 1,
-						focused: true,
-						type: 'popup',
-					}, function(win) {
-						chrome.windows.update(win.id, {state: 'fullscreen'});
-					});
-				}
+		_hasFullscreen(display).then((isTrue) => {
+			if (isTrue) {
+				// don't display if there is a fullscreen window
+				return;
 			}
-		});
+			// window creation options
+			const winOpts = {
+				url: _SS_URL,
+				focused: true,
+				type: 'popup',
+			};
+
+			if (app.Utils.getChromeVersion() >= 44 &amp;&amp; !display) {
+				// Chrome supports fullscreen option on create since version 44
+				winOpts.state = 'fullscreen';
+			} else {
+				const left = display ? display.bounds.left : 0;
+				const top = display ? display.bounds.top : 0;
+				winOpts.left = left;
+				winOpts.top = top;
+				winOpts.width = 1;
+				winOpts.height = 1;
+			}
+
+			return chromep.windows.create(winOpts).then((win) => {
+				if (winOpts.state !== 'fullscreen') {
+					chrome.windows.update(win.id, {state: 'fullscreen'});
+				}
+			});
+		}).catch((err) => {});
 	}
 
 	/**
@@ -195,7 +204,7 @@ app.SSControl = (function() {
 	 * @memberOf app.SSControl
 	 */
 	function _openOnAllDisplays() {
-		chrome.system.display.getInfo(function(displayInfo) {
+		chromep.system.display.getInfo().then((displayInfo) => {
 			if (displayInfo.length === 1) {
 				_open(null);
 			} else {
@@ -203,7 +212,7 @@ app.SSControl = (function() {
 					_open(displayInfo[i]);
 				}
 			}
-		});
+		}).catch((err) => {});
 	}
 
 	/**
@@ -218,8 +227,8 @@ app.SSControl = (function() {
 	 * @memberOf app.SSControl
 	 */
 	function _onIdleStateChanged(state) {
-		_isShowing(function(isShowing) {
-			if (state === 'idle' &amp;&amp; app.Alarm.isActive() &amp;&amp; !isShowing) {
+		_isShowing().then((isTrue) => {
+			if (state === 'idle' &amp;&amp; app.Alarm.isActive() &amp;&amp; !isTrue) {
 				app.SSControl.display(false);
 			} else {
 				if (!app.Utils.isWin()) {
@@ -229,7 +238,7 @@ app.SSControl = (function() {
 					app.SSControl.close();
 				}
 			}
-		});
+		}).catch((err) => {});
 	}
 
 	// noinspection JSUnusedLocalSymbols
@@ -250,7 +259,7 @@ app.SSControl = (function() {
 			// preview the screensaver
 			app.SSControl.display(true);
 		}
-		return false;
+		return true;
 	}
 
 	// listen for changes to the idle state of the computer
@@ -280,9 +289,9 @@ app.SSControl = (function() {
 		 */
 		close: function() {
 			// send message to the screen savers to close themselves
-			chrome.runtime.sendMessage({
+			chromep.runtime.sendMessage({
 				message: 'close',
-			}, function(response) {});
+			}).catch((err) => {});
 		},
 	};
 })();
@@ -331,7 +340,7 @@ app.SSControl = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 14th 2017, 1:00:38 pm
+		on May 16th 2017, 2:52:43 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
