@@ -402,6 +402,15 @@
   "err_storage_desc": {
     "message": "다른 사진 소스를 선택 취소하고 다시 시도하십시오."
   },
+  "err_status": {
+    "message": "지위"
+  },
+  "err_network": {
+    "message": "네트워크 오류"
+  },
+  "err_photo_source_title": {
+    "message": "사진 소스를 가져 오지 못했습니다."
+  },
   "time_format": {
     "message": "12",
     "description": "Set to 12 for AM/PM format or 24"

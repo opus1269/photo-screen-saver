@@ -402,6 +402,15 @@
   "err_storage_desc": {
     "message": "Deselecteer andere fotobronnen en probeer het opnieuw."
   },
+  "err_status": {
+    "message": "staat"
+  },
+  "err_network": {
+    "message": "Netwerkfout"
+  },
+  "err_photo_source_title": {
+    "message": "Fout bij het ophalen van de foto bron"
+  },
   "time_format": {
     "message": "12",
     "description": "Set to 12 for AM/PM format or 24"

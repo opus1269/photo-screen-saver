@@ -36,7 +36,7 @@ app.Http = (function() {
 	/**
 	 * Retry call to server after removing cached auth token
 	 * @param {string} url - url to call
-	 * @param {string} authToken - chrome authorization token
+	 * @param {string} authToken - chrome auth token
 	 * @returns {Promise.<void>} response from server
 	 * @private
 	 * @memberOf app.Http
@@ -93,30 +93,38 @@ app.Http = (function() {
 					}
 					return fetch(url, init);
 				}).then((response) => {
+					const status = response.status;
 					if (response.ok) {
 						return response.json();
 					} else if (isAuth && retryAuth &&
-						(response.status === 401)) {
+						(status === 401)) {
 						// could be bad token. Remove cached one and try again
 						return _retryGet(url, token);
 					} else if ((attempts < _MAX_RETRIES) &&
-						((response.status >= 500) && (response.status < 600))) {
+						((status >= 500) && (status < 600))) {
 						// temporary server issue, retryAuth with back-off
 						attempts++;
 						const delay = (Math.pow(2, attempts) - 1) * _DELAY;
+						// eslint-disable-next-line promise/avoid-new
 						return new Promise(() => {
 							setTimeout(() => {
 								return _doGet();
 							}, delay);
 						});
 					} else {
-						// TODO add to localization
-						let msg = `Status: ${response.status}`;
-						msg+= `\nReason: ${response.statusText}`;
+						// request failed
+						const statusMsg = app.Utils.localize('err_status');
+						let msg = `${statusMsg}: ${status}`;
+						msg+= `\n${response.statusText}`;
 						throw new Error(msg);
 					}
 				}).then((json) => {
 					return Promise.resolve(json);
+				}).catch((err) => {
+					if (err.message === 'Failed to fetch') {
+						err.message = app.Utils.localize('err_network');
+					}
+					throw new Error(err.message);
 				});
 			}
 		},

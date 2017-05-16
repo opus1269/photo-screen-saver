@@ -402,6 +402,15 @@
   "err_storage_desc": {
     "message": "他の写真ソースの選択を解除し、もう一度やり直してください。"
   },
+  "err_status": {
+    "message": "状態"
+  },
+  "err_network": {
+    "message": "ネットワークエラー"
+  },
+  "err_photo_source_title": {
+    "message": "写真ソースの取得に失敗しました"
+  },
   "time_format": {
     "message": "12",
     "description": "Set to 12 for AM/PM format or 24"

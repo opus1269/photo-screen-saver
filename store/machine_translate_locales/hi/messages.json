@@ -402,6 +402,15 @@
   "err_storage_desc": {
     "message": "अन्य फोटो स्रोतों को अचयनित करें और फिर से प्रयास करें"
   },
+  "err_status": {
+    "message": "स्थिति"
+  },
+  "err_network": {
+    "message": "नेटवर्क त्रुटि"
+  },
+  "err_photo_source_title": {
+    "message": "फ़ोटो स्रोत पुनर्प्राप्त करने में विफल"
+  },
   "time_format": {
     "message": "12",
     "description": "Set to 12 for AM/PM format or 24"

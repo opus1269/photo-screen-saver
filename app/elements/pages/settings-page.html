@@ -252,8 +252,7 @@
 
 <script>
 'use strict';
-window.app = window.app || {};
-app.SettingsPage = Polymer({
+Polymer({
 	is: 'settings-page',
 
 	behaviors: [
@@ -277,6 +276,10 @@ app.SettingsPage = Polymer({
 		this.set('selectedTab', 0);
 	},
 
+	/**
+	 * Deselect the given photo source
+	 * @param {string} useName - Name of <setting-toggle>
+	 */
 	deselectPhotoSource: function(useName) {
 		const useNames = app.PhotoSource.getUseNames();
 		for (let i = 0; i < useNames.length; i++) {
@@ -291,28 +294,38 @@ app.SettingsPage = Polymer({
 		}
 	},
 
-	// select all photo sources
+	/**
+	 * Event: select all photo sources tapped
+	 * @private
+	 */
 	_selectAllTapped: function() {
-		this._setPhotoSourceChecked(true);
+		this._setPhotoSourcesChecked(true);
 	},
 
-	// deselect all photo sources
+	/**
+	 * Event: deselect all photo sources tapped
+	 * @private
+	 */
 	_deselectAllTapped: function() {
-		this._setPhotoSourceChecked(false);
+		this._setPhotoSourcesChecked(false);
 	},
 
-	// restore default settings
+	/**
+	 * Event: restore default settings tapped
+	 * @private
+	 */
 	_restoreDefaultsTapped: function() {
 		chrome.runtime.sendMessage({
 			message: 'restoreDefaults',
 		});
 	},
 
-	_computeMenuHidden: function(selectedTab) {
-		return (selectedTab !== 2);
-	},
-
-	_setPhotoSourceChecked: function(state) {
+	/**
+	 * Set checked state of all Photo Sources
+	 * @param {boolean} state - checked state
+	 * @private
+	 */
+	_setPhotoSourcesChecked: function(state) {
 		const useNames = app.PhotoSource.getUseNames();
 		for (let i = 0; i < useNames.length; i++) {
 			const name = useNames[i];
@@ -324,6 +337,16 @@ app.SettingsPage = Polymer({
 		}
 	},
 
+	/**
+	 * Computed property: Set menu icons visibilty
+	 * @param {int} selectedTab - the current tab
+	 * @returns {boolean} true if menu should be visible
+	 * @private
+	 */
+	_computeMenuHidden: function(selectedTab) {
+		return (selectedTab !== 2);
+	},
+
 	_getUnit: function(name, min, max, step, mult) {
 		return {
 			'name': app.Utils.localize(name),
@@ -331,6 +354,11 @@ app.SettingsPage = Polymer({
 		};
 	},
 
+	/**
+	 * Computed binding: idle time values
+	 * @returns {Array} Array of menu items
+	 * @private
+	 */
 	_computeWaitTimeUnits: function() {
 		return [
 			this._getUnit('minutes', 1, 60, 1, 1),
@@ -339,6 +367,11 @@ app.SettingsPage = Polymer({
 		];
 	},
 
+	/**
+	 * Computed binding: transition time values
+	 * @returns {Array} Array of menu items
+	 * @private
+	 */
 	_computeTransitionTimeUnits: function() {
 		return [
 			this._getUnit('seconds', 4, 60, 1, 1),
@@ -348,6 +381,11 @@ app.SettingsPage = Polymer({
 		];
 	},
 
+	/**
+	 * Computed binding: photo sizing values
+	 * @returns {Array} Array of menu items
+	 * @private
+	 */
 	_computePhotoSizingMenu: function() {
 		return [
 			app.Utils.localize('menu_letterbox'),
@@ -358,6 +396,11 @@ app.SettingsPage = Polymer({
 		];
 	},
 
+	/**
+	 * Computed binding: photo transition values
+	 * @returns {Array} Array of menu items
+	 * @private
+	 */
 	_computePhotoTransitionMenu: function() {
 		return [
 			app.Utils.localize('menu_scale_up'),
@@ -372,6 +415,11 @@ app.SettingsPage = Polymer({
 		];
 	},
 
+	/**
+	 * Computed binding: time format values
+	 * @returns {Array} Array of menu items
+	 * @private
+	 */
 	_computeTimeFormatMenu: function() {
 		return [
 			app.Utils.localize('no'),

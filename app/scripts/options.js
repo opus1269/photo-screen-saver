@@ -283,12 +283,11 @@
 			t.dialogText = app.Utils.localize('err_storage_desc');
 			t.$.errorDialog.open();
 		} else if (request.message === 'photosFailed') {
-			// TODO Display Error Dialog if a photo source
 			// failed to load
-			// wrong app.SettingsPage.deselectPhotoSource(request.type);
-			// t.dialogTitle = app.Utils.localize('err_storage_title');
-			// t.dialogText = request.error + 'for ' + request.type;
-			// t.$.errorDialog.open();
+			t.$.settingsPage.deselectPhotoSource(request.type);
+			t.dialogTitle = app.Utils.localize('err_photo_source_title');
+			t.dialogText = request.error;
+			t.$.errorDialog.open();
 		}
 		return false;
 	};

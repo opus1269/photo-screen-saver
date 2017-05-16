@@ -402,6 +402,15 @@
   "err_storage_desc": {
     "message": "Отмените выбор других источников фотографий и повторите попытку."
   },
+  "err_status": {
+    "message": "Положение дел"
+  },
+  "err_network": {
+    "message": "Ошибка сети"
+  },
+  "err_photo_source_title": {
+    "message": "Не удалось загрузить источник фото"
+  },
   "time_format": {
     "message": "12",
     "description": "Set to 12 for AM/PM format or 24"

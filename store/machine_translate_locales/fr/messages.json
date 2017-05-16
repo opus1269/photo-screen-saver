@@ -402,6 +402,15 @@
   "err_storage_desc": {
     "message": "Désélectionnez d'autres sources de photos et réessayez."
   },
+  "err_status": {
+    "message": "Statut"
+  },
+  "err_network": {
+    "message": "Erreur de réseau"
+  },
+  "err_photo_source_title": {
+    "message": "Échec de la récupération de la source de la photo"
+  },
   "time_format": {
     "message": "12",
     "description": "Set to 12 for AM/PM format or 24"

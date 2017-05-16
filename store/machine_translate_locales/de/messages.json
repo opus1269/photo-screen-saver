@@ -402,6 +402,15 @@
   "err_storage_desc": {
     "message": "Deaktivieren Sie andere Fotoquellen und versuchen Sie es erneut."
   },
+  "err_status": {
+    "message": "Status"
+  },
+  "err_network": {
+    "message": "Netzwerkfehler"
+  },
+  "err_photo_source_title": {
+    "message": "Fehler beim Abrufen der Fotoquelle"
+  },
   "time_format": {
     "message": "12",
     "description": "Set to 12 for AM/PM format or 24"

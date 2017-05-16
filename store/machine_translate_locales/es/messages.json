@@ -402,6 +402,15 @@
   "err_storage_desc": {
     "message": "Anule la selección de otras fuentes de fotografías e inténtelo de nuevo."
   },
+  "err_status": {
+    "message": "Estado"
+  },
+  "err_network": {
+    "message": "Error de red"
+  },
+  "err_photo_source_title": {
+    "message": "Error al recuperar el origen de la foto"
+  },
   "time_format": {
     "message": "12",
     "description": "Set to 12 for AM/PM format or 24"

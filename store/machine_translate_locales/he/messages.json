@@ -402,6 +402,15 @@
   "err_storage_desc": {
     "message": "בטל את הסימון של מקורות תמונה אחרים ונסה שוב."
   },
+  "err_status": {
+    "message": "סטָטוּס"
+  },
+  "err_network": {
+    "message": "בעיה ברשת"
+  },
+  "err_photo_source_title": {
+    "message": "אחזור מקור התמונה נכשל"
+  },
   "time_format": {
     "message": "12",
     "description": "Set to 12 for AM/PM format or 24"

@@ -402,6 +402,15 @@
   "err_storage_desc": {
     "message": "取消選擇其他照片來源，然後重試。"
   },
+  "err_status": {
+    "message": "狀態"
+  },
+  "err_network": {
+    "message": "網絡錯誤"
+  },
+  "err_photo_source_title": {
+    "message": "無法檢索照片來源"
+  },
   "time_format": {
     "message": "12",
     "description": "Set to 12 for AM/PM format or 24"
