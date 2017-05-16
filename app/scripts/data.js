@@ -121,7 +121,7 @@ app.Data = (function() {
 		app.Alarm.updateBadgeText();
 		chromep.contextMenus.update('ENABLE_MENU', {
 			title: label,
-		}).catch((err) => {});
+		}).catch(() => {});
 	}
 
 	/**
@@ -215,7 +215,7 @@ app.Data = (function() {
 			_addDefaults();
 
 			// set operating system
-			_setOS().catch((err) => {});
+			_setOS().catch(() => {});
 
 			// set time format based on locale
 			app.Storage.set('showTime', _getTimeFormat());
@@ -295,7 +295,6 @@ app.Data = (function() {
 			};
 			const noop = function() {};
 			let fn;
-
 			if (key === 'all') {
 				// process everything
 				Object.keys(STATE_MAP).forEach(function(ky) {
@@ -306,12 +305,12 @@ app.Data = (function() {
 				app.PhotoSource.processAll();
 				// set os, if not already
 				if (!app.Storage.get('os')) {
-					_setOS().catch((err) => {});
+					_setOS().catch(() => {});
 				}
 			} else {
 				// individual change
 				if (app.PhotoSource.contains(key)) {
-					app.PhotoSource.process(key, function() {});
+					app.PhotoSource.process(key).catch(() => {});
 				} else {
 					(STATE_MAP[key] || noop)();
 				}

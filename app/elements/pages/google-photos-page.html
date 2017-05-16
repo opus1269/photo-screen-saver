@@ -240,29 +240,23 @@ app.GooglePhotosPage = Polymer({
 	loadAlbumList: function() {
 		this.set('waitForLoad', true);
 		app.GooglePhotos.loadAlbumList().then((albums) => {
+			// get all the user's albums
 			this.splice('albums', 0, this.albums.length);
 			for (let i = 0; i < albums.length; i++) {
 				this.push('albums', JSON.parse(JSON.stringify(albums[i])));
 			}
-			app.PhotoSource.process('useGoogle', function(error) {
-				if (error) {
-					this.set('waitForLoad', false);
-					this.$.dialogTitle.innerHTML =
-						app.Utils.localize('err_request_failed');
-					this.$.dialogText.innerHTML = error;
-					this.$.errorDialog.open();
-				} else {
-					this._selectAlbums();
-					this.set('waitForLoad', false);
-				}
-			}.bind(this));
+			// reload the currently selected albums
+			return app.PhotoSource.process('useGoogle');
+		}).then(() => {
+			// set select state on albums
+			this._selectAlbums();
+			this.set('waitForLoad', false);
 		}).catch((err) => {
 			this.set('waitForLoad', false);
 			this.$.dialogTitle.innerHTML =
 				app.Utils.localize('err_request_failed');
-			this.$.dialogText.innerHTML = err;
+			this.$.dialogText.innerHTML = err.message;
 			this.$.errorDialog.open();
-			this.set('waitForLoad', false);
 		});
 	},
 

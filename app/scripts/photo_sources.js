@@ -48,33 +48,27 @@
 	 * This normally requires a https call
 	 * and may fail for various reasons
 	 * Save to localStorage if there is enough room.
-	 * @param {function} callback (error)
+	 * @returns {Promise<void>} void
 	 */
-	PhotoSource.prototype.process = function(callback) {
-		// callback(error)
-		callback = callback || function() {};
-
+	PhotoSource.prototype.process = function() {
 		if (this.use()) {
-			const self = this;
-			let err = null;
 			// convert string to function
 			const fn = window.app[this.loadObj][this.loadFn];
 			let arg = null;
 			if (this.loadArgs.length === 1) {
 				arg = this.loadArgs[0];
 			}
-			fn(arg).then((photos) => {
-				err = self._savePhotos(photos);
-				callback(err);
-			}).catch((error) => {
-				console.error('error', error);
-				callback(error);
+			return fn(arg).then((photos) => {
+				const err = this._savePhotos(photos);
+				if (err) {
+					throw new Error(err);
+				}
 			});
 		} else {
 			if (this.useName !== 'useGoogle') {
 				localStorage.removeItem(this.photosName);
 			}
-			callback(null);
+			return Promise.resolve();
 		}
 	};
 
@@ -210,19 +204,16 @@
 	 * This normally requires a https call
 	 * and may fail for various reasons
 	 * @param {string} useName - The photo source to retrieve
-	 * @param {function} callback (error) non-null on error
+	 * @returns {Promise<void>} void
 	 */
-	PhotoSource.process = function(useName, callback) {
-		// callback(error)
-		callback = callback || function() {};
-
+	PhotoSource.process = function(useName) {
 		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
 			if (PhotoSource.SOURCES[i].useName === useName) {
-				PhotoSource.SOURCES[i].process(function(error) {
-					callback(error);
-				});
+				return PhotoSource.SOURCES[i].process();
 			}
 		}
+		// not found, shouldn't be here
+		return Promise.resolve();
 	};
 
 	/**
