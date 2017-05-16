@@ -95,10 +95,9 @@ app.Storage = (function() {
 					}
 				}
 				// notify listeners
-				const chromep = new ChromePromise();
-				chromep.runtime.sendMessage({
+				chrome.runtime.sendMessage({
 					message: 'storageExceeded',
-				}).catch((err) => {});
+				});
 			}
 
 			return ret;

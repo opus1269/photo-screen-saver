@@ -127,7 +127,9 @@ app.Alarm = (function() {
 				app.SSControl.display(false);
 			}
 			return null;
-		}).catch((err) => {});
+		}).catch((err) => {
+			console.error(err);
+		});
 		app.Alarm.updateBadgeText();
 	}
 
@@ -240,7 +242,9 @@ app.Alarm = (function() {
 					});
 				}
 				return null;
-			}).catch((err) => {});
+			}).catch((err) => {
+				console.error(err);
+			});
 		},
 
 		/**

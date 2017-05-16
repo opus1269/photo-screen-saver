@@ -21,11 +21,13 @@
 	 */
 	function _showOptionsTab() {
 		// send message to the option tab to focus it.
-		chromep.runtime.sendMessage({
+		chrome.runtime.sendMessage({
 			message: 'highlight',
-		}).catch(() => {
-			// no one listening, create it
-			chrome.tabs.create({url: '../html/options.html'});
+		}, null, function(response) {
+			if (!response) {
+				// no one listening, create it
+				chrome.tabs.create({url: '../html/options.html'});
+			}
 		});
 	}
 
@@ -56,13 +58,17 @@
 			id: 'ENABLE_MENU',
 			title: app.Utils.localize('disable'),
 			contexts: ['browser_action'],
-		}).catch((err) => {});
+		}).catch((err) => {
+			console.error(err);
+		});
 
 		chromep.contextMenus.create({
 			type: 'separator',
 			id: 'SEP_MENU',
 			contexts: ['browser_action'],
-		}).catch((err) => {});
+		}).catch((err) => {
+			console.error(err);
+		});
 
 		if (details.reason === 'install') {
 			app.Data.initialize();

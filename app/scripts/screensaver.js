@@ -142,7 +142,9 @@
 					chrome.tabs.setZoom(1.0);
 				}
 				return null;
-			}).catch((err) => {});
+			}).catch((err) => {
+				console.error(err);
+			});
 		}
 	};
 
@@ -178,7 +180,9 @@
 					});
 				}
 				return null;
-			}).catch((err) => {});
+			}).catch((err) => {
+				console.error(err);
+			});
 		}
 	};
 
@@ -448,9 +452,9 @@
 	 */
 	t.closeWindow = function() {
 		// send message to other screen savers to close themselves
-		chromep.runtime.sendMessage({
+		chrome.runtime.sendMessage({
 			message: 'close',
-		}).catch((err) => {});
+		});
 
 		setTimeout(function() {
 			// delay a little to process events

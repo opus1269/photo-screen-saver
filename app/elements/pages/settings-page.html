@@ -303,10 +303,9 @@ app.SettingsPage = Polymer({
 
 	// restore default settings
 	_restoreDefaultsTapped: function() {
-		const chromep = new ChromePromise();
-		chromep.runtime.sendMessage({
+		chrome.runtime.sendMessage({
 			message: 'restoreDefaults',
-		}).catch((err) => {});
+		});
 	},
 
 	_computeMenuHidden: function(selectedTab) {

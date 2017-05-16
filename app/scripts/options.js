@@ -188,9 +188,9 @@
 		t.async(function() {
 			t.$.mainMenu.select(t.prevRoute);
 		}, 500);
-		chromep.runtime.sendMessage({
+		chrome.runtime.sendMessage({
 			message: 'showScreensaver',
-		}).catch((err) => {});
+		});
 	};
 
 	/**
@@ -272,7 +272,9 @@
 			chromep.tabs.getCurrent().then((t) => {
 				chrome.tabs.update(t.id, {'highlighted': true});
 				return null;
-			}).catch((err) => {});
+			}).catch((err) => {
+				console.error(err);
+			});
 			response(JSON.stringify({message: 'OK'}));
 		} else if (request.message === 'storageExceeded') {
 			// Display Error Dialog if a save action exceeded the

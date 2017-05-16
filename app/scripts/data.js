@@ -143,6 +143,7 @@ app.Data = (function() {
 	 * @memberOf app.Data
 	 */
 	function _processIdleTime() {
+		console.log('idle ', app.Utils.getIdleSeconds());
 		chrome.idle.setDetectionInterval(app.Utils.getIdleSeconds());
 	}
 
@@ -312,12 +313,12 @@ app.Data = (function() {
 				if (app.PhotoSource.contains(key)) {
 					app.PhotoSource.process(key).catch((err) => {
 						// send message on processing error
-						return chromep.runtime.sendMessage({
+						chrome.runtime.sendMessage({
 							message: 'photosFailed',
 							type: key,
 							error: err.message,
 						});
-					}).catch((err) => {});
+					});
 				} else {
 					(STATE_MAP[key] || noop)();
 				}

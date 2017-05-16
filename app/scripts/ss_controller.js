@@ -56,20 +56,22 @@ app.SSControl = (function() {
 
 	/**
 	 * Determine if the screen saver is currently showing
-	 * @returns {Promise<boolean>} true if showing
+	 * @param {Function} callback - true if showing
 	 * @private
 	 * @memberOf app.SSControl
 	 */
-	function _isShowing() {
+	function _isShowing(callback) {
+		callback = callback || function() {};
 		// send message to the screen saver to see if he is around
-		return chromep.runtime.sendMessage({
+		chrome.runtime.sendMessage({
 			message: 'isShowing',
-		}, null).then(() => {
-			// a screensaver is around
-			return Promise.resolve(true);
-		}).catch(() => {
-			// throws error if receiving end does not exist
-			return Promise.resolve(false);
+		}, null, function(response) {
+			let isShowing = false;
+			if (response) {
+				// A screensaver responded
+				isShowing = true;
+			}
+			callback(isShowing);
 		});
 	}
 
@@ -87,9 +89,10 @@ app.SSControl = (function() {
 			type: 'popup',
 		};
 		_hasFullscreen(display).then((isTrue) => {
+			console.log('in _hasFullscreen');
 			if (isTrue) {
 				// don't display if there is a fullscreen window
-				return;
+				return null;
 			}
 
 			if (app.Utils.getChromeVersion() >= 44 && !display) {
@@ -106,11 +109,14 @@ app.SSControl = (function() {
 
 			return chromep.windows.create(winOpts);
 		}).then((win) => {
-			if (winOpts.state !== 'fullscreen') {
+			console.log('created', win);
+			if (win && (winOpts.state !== 'fullscreen')) {
 				chrome.windows.update(win.id, {state: 'fullscreen'});
 			}
 			return null;
-		}).catch((err) => {});
+		}).catch((err) => {
+			console.error(err);
+		});
 	}
 
 	/**
@@ -128,7 +134,9 @@ app.SSControl = (function() {
 				}
 			}
 			return null;
-		}).catch((err) => {});
+		}).catch((err) => {
+			console.error(err);
+		});
 	}
 
 	/**
@@ -143,7 +151,8 @@ app.SSControl = (function() {
 	 * @memberOf app.SSControl
 	 */
 	function _onIdleStateChanged(state) {
-		_isShowing().then((isTrue) => {
+		_isShowing(function(isTrue) {
+			console.log('state', state);
 			if (state === 'idle' && app.Alarm.isActive() && !isTrue) {
 				app.SSControl.display(false);
 			} else {
@@ -155,7 +164,7 @@ app.SSControl = (function() {
 				}
 			}
 			return null;
-		}).catch((err) => {});
+		});
 	}
 
 	// noinspection JSUnusedLocalSymbols
@@ -206,9 +215,9 @@ app.SSControl = (function() {
 		 */
 		close: function() {
 			// send message to the screen savers to close themselves
-			chromep.runtime.sendMessage({
+			chrome.runtime.sendMessage({
 				message: 'close',
-			}).catch((err) => {});
+			});
 		},
 	};
 })();
