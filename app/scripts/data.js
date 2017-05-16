@@ -143,7 +143,6 @@ app.Data = (function() {
 	 * @memberOf app.Data
 	 */
 	function _processIdleTime() {
-		console.log('idle ', app.Utils.getIdleSeconds());
 		chrome.idle.setDetectionInterval(app.Utils.getIdleSeconds());
 	}
 
