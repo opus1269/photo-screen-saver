@@ -2,6 +2,7 @@ module.exports = {
 	'extends': [
 		'eslint:recommended',
 		'google',
+		'plugin:promise/recommended',
 	],
 
 	'env': {
@@ -11,6 +12,7 @@ module.exports = {
 
 	'plugins': [
 		'html',
+		'promise',
 	],
 
 	'globals': {
@@ -59,4 +61,5 @@ module.exports = {
 			},
 		}],
 	},
+
 };
