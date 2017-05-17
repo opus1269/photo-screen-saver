@@ -14,6 +14,20 @@ app.GooglePhotos = (function() {
 	 */
 
 	/**
+	 * A Google Photo Album
+	 * @typedef {Object} app.GooglePhotos.Album
+	 * @property {int} index - Array index
+	 * @property {string} uid - unique identifier
+	 * @property {string} name - album name
+	 * @property {string} id - Google album Id
+	 * @property {string} thumb - thumbnail url
+	 * @property {boolean} checked - is album selected
+	 * @property {int} ct - number of photos
+	 * @property {Object[]} photos - Array of photos
+	 * @memberOf app.GooglePhotos
+	 */
+
+	/**
 	 * Path to Picasa API
 	 * @type {string}
 	 * @const
@@ -116,7 +130,8 @@ app.GooglePhotos = (function() {
 
 		/**
 		 * Retrieve the users list of albums, including the photos in each
-		 * @returns {Promise<Array>} Array of Arrays
+		 * @returns {Promise<app.GooglePhotos.Album[]>} Array of
+		 * {@link app.GooglePhotos.Album} objects
 		 * @memberOf app.GooglePhotos
 		 */
 		loadAlbumList: function() {
@@ -143,6 +158,7 @@ app.GooglePhotos = (function() {
 				// Collate the albums
 				return Promise.all(promises);
 			}).then((values) => {
+				/** @type {app.GooglePhotos.Album[]} */
 				let albums = [];
 				let ct = 0;
 				values.forEach((value) => {
@@ -151,16 +167,16 @@ app.GooglePhotos = (function() {
 						feed.entry[0].media$group.media$thumbnail[0].url;
 					const photos = _processPhotos(value);
 					if (photos && photos.length) {
-						const album = {
-							index: ct,
-							uid: 'album' + ct,
-							name: feed.title.$t,
-							id: feed.gphoto$id.$t,
-							ct: photos.length,
-							thumb: thumb,
-							checked: false,
-							photos: photos,
-						};
+						/** @type {app.GooglePhotos.Album} */
+						const album = {};
+						album.index = ct;
+						album.uid = 'album' + ct;
+						album.name = feed.title.$t;
+						album.id = feed.gphoto$id.$t;
+						album.ct = photos.length;
+						album.thumb = thumb;
+						album.checked = false;
+						album.photos = photos;
 						albums.push(album);
 						ct++;
 					}
@@ -182,7 +198,7 @@ app.GooglePhotos = (function() {
 			const promises = [];
 			for (let i = 0; i < items.length; i++) {
 				const albumId = items[i].id;
-				promises.push(_loadPicasaAlbum(albumId).catch(() =>{}));
+				promises.push(_loadPicasaAlbum(albumId).catch(() => {}));
 			}
 
 			// Collate the albums

@@ -175,17 +175,17 @@
 						{{localize('google_shared_albums_note')}}
 					</paper-item>
 
-					<template is="dom-repeat" id="t" items="{{albums}}">
-						<div class="list-item" id="[[item.uid]]" disabled$="[[!useGoogle]]">
+					<template is="dom-repeat" id="t" items="{{albums}}" as="album">
+						<div class="list-item" id="[[album.uid]]" disabled$="[[!useGoogle]]">
 							<iron-label>
 								<paper-item class="center horizontal layout" tabindex="-1">
-									<paper-checkbox iron-label-target checked="{{item.checked}}" on-change="_albumSelectChange" disabled$="[[!useGoogle]]"></paper-checkbox>
+									<paper-checkbox iron-label-target checked="{{album.checked}}" on-change="_albumSelectChange" disabled$="[[!useGoogle]]"></paper-checkbox>
 									<paper-item-body class="flex" two-line>
-										<div class="setting-label">{{item.name}}</div>
-										<div class="setting-label" secondary>{{_computePhotoLabel(item.ct)}}</div>
+										<div class="setting-label">{{album.name}}</div>
+										<div class="setting-label" secondary>{{_computePhotoLabel(album.ct)}}</div>
 										<paper-ripple center></paper-ripple>
 									</paper-item-body>
-									<iron-image src="[[item.thumb]]" sizing="cover" preload disabled$="[[!useGoogle]]"></iron-image>
+									<iron-image src="[[album.thumb]]" sizing="cover" preload disabled$="[[!useGoogle]]"></iron-image>
 								</paper-item>
 							</iron-label>
 						</div>
@@ -209,12 +209,14 @@ app.GooglePhotosPage = Polymer({
 
 	properties: {
 		albums: {
+			/** @type {app.GooglePhotos.Album[]} */
 			type: Array,
 			notify: true,
 			value: [],
 		},
 
 		selections: {
+			/** @type {{id: id, photos: photos}} */
 			type: Array,
 			value: [],
 		},
@@ -242,10 +244,10 @@ app.GooglePhotosPage = Polymer({
 		app.GooglePhotos.loadAlbumList().then((albums) => {
 			// get all the user's albums
 			this.splice('albums', 0, this.albums.length);
-			for (let i = 0; i < albums.length; i++) {
-				this.push('albums', JSON.parse(JSON.stringify(albums[i])));
-			}
-			// reload the currently selected albums
+			albums.forEach((album) => {
+				this.push('albums', album);
+			});
+			// update the currently selected albums from the web
 			return app.PhotoSource.process('useGoogle');
 		}).then(() => {
 			// set select state on albums
@@ -274,11 +276,10 @@ app.GooglePhotosPage = Polymer({
 	 * @private
 	 */
 	_selectAllTapped: function() {
-		let item;
 		for (let i = 0; i < this.albums.length; i++) {
-			item = this.albums[i];
-			if (!item.checked) {
-				this.selections.push({id: item.id, photos: item.photos});
+			const album = this.albums[i];
+			if (!album.checked) {
+				this.selections.push({id: album.id, photos: album.photos});
 				const set = app.Storage
 					.safeSet('albumSelections', this.selections, null);
 				if (!set) {
@@ -298,27 +299,28 @@ app.GooglePhotosPage = Polymer({
 	_deselectAllTapped: function() {
 		this._uncheckAll();
 		this.selections.splice(0, this.selections.length);
-		localStorage.albumSelections = JSON.stringify(this.selections);
+		app.Storage.set('albumSelections', this.selections);
 	},
 
 	/**
 	 * Event: Handle tap on checkbox for an album
 	 * @param {Event} event - tap event
-	 * @param {Event} event.model - our model
+	 * @param {Event} event.model - the model
+	 * @param {Event} event.model.album - the album
 	 * @private
 	 */
 	_albumSelectChange: function(event) {
-		const item = event.model.item;
+		const album = event.model.album;
 		const index = this.selections.map(function(e) {
 			return e.id;
-		}).indexOf(item.id);
+		}).indexOf(album.id);
 
 		if (index !== -1) {
 			this.selections.splice(index, 1);
 		}
 
-		if (item.checked) {
-			this.selections.push({id: item.id, photos: item.photos});
+		if (album.checked) {
+			this.selections.push({id: album.id, photos: album.photos});
 		}
 
 		const set =
@@ -326,7 +328,7 @@ app.GooglePhotosPage = Polymer({
 		if (!set) {
 			// exceeded storage limits
 			this.selections.pop();
-			this.set('albums.' + item.index + '.checked', false);
+			this.set('albums.' + album.index + '.checked', false);
 		}
 	},
 
@@ -335,7 +337,7 @@ app.GooglePhotosPage = Polymer({
 	 * @private
 	 */
 	_selectAlbums: function() {
-		this.selections = app.Storage.get('albumSelections');
+		this.set('selections', app.Storage.get('albumSelections'));
 		for (let i = 0; i < this.albums.length; i++) {
 			for (let j = 0; j < this.selections.length; j++) {
 				if (this.albums[i].id === this.selections[j].id) {
@@ -351,15 +353,15 @@ app.GooglePhotosPage = Polymer({
 	 * @private
 	 */
 	_uncheckAll: function() {
-		for (let i = 0; i < this.albums.length; i++) {
-			if (this.albums[i].checked) {
-				this.set('albums.' + i + '.checked', false);
+		this.albums.forEach((album, index) => {
+			if (album.checked) {
+				this.set('albums.' + index + '.checked', false);
 			}
-		}
+		});
 	},
 
 	/**
-	 * Computed property: Set photo count label on album entry
+	 * Computed binding: Set photo count label on an album
 	 * @param {int} count - number of photos in album
 	 * @returns {string} i18n label
 	 * @private
