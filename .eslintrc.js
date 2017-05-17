@@ -37,7 +37,7 @@ module.exports = {
 		'max-len': ['warn', 80],
 		'eqeqeq': ['error', 'always'],
 		'no-var': 'warn',
-		'no-console': 'warn',
+		'no-console': ['warn', {'allow': ['error']}],
 		'no-unused-vars': 'warn',
 		'comma-dangle': ['warn', 'always-multiline'],
 		'no-trailing-spaces': 'off',
