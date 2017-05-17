@@ -167,6 +167,9 @@ app.Reddit = (function() {
 			}).then((slice) => {
 				photos = photos.concat(_processChildren(slice.children));
 				return Promise.resolve(photos);
+			}).catch((error) => {
+				console.error(error);
+				throw new Error(error.message);
 			});
 		},
 	};

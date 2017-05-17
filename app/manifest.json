@@ -49,6 +49,7 @@
 			"/scripts/chromecast.js",
 			"/scripts/use500px.js",
 			"/scripts/flickr.js",
+			"/scripts/msg.js",
 			"/scripts/utils.js",
 			"/scripts/storage.js",
 			"/scripts/data.js",

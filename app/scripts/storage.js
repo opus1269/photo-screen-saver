@@ -95,11 +95,8 @@ app.Storage = (function() {
 					}
 				}
 				// notify listeners
-				chrome.runtime.sendMessage({
-					message: 'storageExceeded',
-				});
+				app.Msg.send(app.Msg.STORAGE_EXCEEDED).catch(() => {});
 			}
-
 			return ret;
 		},
 	};

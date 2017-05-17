@@ -452,9 +452,7 @@
 	 */
 	t.closeWindow = function() {
 		// send message to other screen savers to close themselves
-		chrome.runtime.sendMessage({
-			message: 'close',
-		});
+		app.Msg.send(app.Msg.SCREENSAVER_CLOSE).catch(() => {});
 
 		setTimeout(function() {
 			// delay a little to process events

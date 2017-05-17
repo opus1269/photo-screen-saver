@@ -56,22 +56,17 @@ app.SSControl = (function() {
 
 	/**
 	 * Determine if the screen saver is currently showing
-	 * @param {Function} callback - true if showing
+	 * @returns {Promise<boolean>} true if showing
 	 * @private
 	 * @memberOf app.SSControl
 	 */
-	function _isShowing(callback) {
-		callback = callback || function() {};
-		// send message to the screen saver to see if he is around
-		chrome.runtime.sendMessage({
-			message: 'isShowing',
-		}, null, function(response) {
-			let isShowing = false;
-			if (response) {
-				// A screensaver responded
-				isShowing = true;
-			}
-			callback(isShowing);
+	function _isShowing() {
+		// send message to the screensaver to see if he is around
+		return app.Msg.send(app.Msg.SCREENSAVER_IS_SHOWING).then(() => {
+			return Promise.resolve(true);
+		}).catch(() => {
+			// no one listening
+			return Promise.resolve(false);
 		});
 	}
 
@@ -149,7 +144,7 @@ app.SSControl = (function() {
 	 * @memberOf app.SSControl
 	 */
 	function _onIdleStateChanged(state) {
-		_isShowing(function(isTrue) {
+		_isShowing().then((isTrue) => {
 			if (state === 'idle' && app.Alarm.isActive() && !isTrue) {
 				app.SSControl.display(false);
 			} else {
@@ -161,6 +156,8 @@ app.SSControl = (function() {
 				}
 			}
 			return null;
+		}).catch((err) => {
+			console.error(err);
 		});
 	}
 
@@ -212,9 +209,7 @@ app.SSControl = (function() {
 		 */
 		close: function() {
 			// send message to the screen savers to close themselves
-			chrome.runtime.sendMessage({
-				message: 'close',
-			});
+			app.Msg.send(app.Msg.SCREENSAVER_CLOSE).catch(() => {});
 		},
 	};
 })();

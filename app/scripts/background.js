@@ -21,13 +21,9 @@
 	 */
 	function _showOptionsTab() {
 		// send message to the option tab to focus it.
-		chrome.runtime.sendMessage({
-			message: 'highlight',
-		}, null, function(response) {
-			if (!response) {
-				// no one listening, create it
-				chrome.tabs.create({url: '../html/options.html'});
-			}
+		app.Msg.send(app.Msg.HIGHLIGHT).catch(() => {
+			// no one listening, create it
+			chrome.tabs.create({url: '../html/options.html'});
 		});
 	}
 

@@ -315,9 +315,7 @@ Polymer({
 	 * @private
 	 */
 	_restoreDefaultsTapped: function() {
-		chrome.runtime.sendMessage({
-			message: 'restoreDefaults',
-		});
+		app.Msg.send(app.Msg.RESTORE_DEFAULTS).catch(() => {});
 	},
 
 	/**

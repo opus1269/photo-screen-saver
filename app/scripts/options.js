@@ -188,9 +188,7 @@
 		t.async(function() {
 			t.$.mainMenu.select(t.prevRoute);
 		}, 500);
-		chrome.runtime.sendMessage({
-			message: 'showScreensaver',
-		});
+		app.Msg.send(app.Msg.SCREENSAVER_SHOW).catch(() => {});
 	};
 
 	/**

@@ -312,12 +312,11 @@ app.Data = (function() {
 				if (app.PhotoSource.contains(key)) {
 					app.PhotoSource.process(key).catch((err) => {
 						// send message on processing error
-						chrome.runtime.sendMessage({
-							message: 'photosFailed',
-							type: key,
-							error: err.message,
-						});
-					});
+						const msg = app.Msg.PHOTO_SOURCE_FAILED;
+						msg.type = key;
+						msg.error = err.message;
+						return app.Msg.send(msg);
+					}).catch(() => {});
 				} else {
 					(STATE_MAP[key] || noop)();
 				}
