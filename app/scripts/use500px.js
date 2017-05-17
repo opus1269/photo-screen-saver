@@ -59,7 +59,7 @@ app.Use500px = (function() {
 	/**
 	 * Call API to get some photos
 	 * @param {string} url - server url
-	 * @returns {Promise<Photo[]>} Array of {@link Photo} objects
+	 * @returns {Promise<app.PhotoSource.Photo[]>} Array photos
 	 * @private
 	 * @memberOf app.Use500px
 	 */
@@ -69,14 +69,13 @@ app.Use500px = (function() {
 				throw new Error(response.error);
 			}
 			const photos = [];
-			for (let i = 0; i < response.photos.length; i++) {
-				const photo = response.photos[i];
+			response.photos.forEach((photo) => {
 				if (!photo.nsfw) {
 					const asp = photo.width / photo.height;
 					app.PhotoSource.addImage(photos, photo.images[0].url,
 						photo.user.fullname, asp);
 				}
-			}
+			});
 			return Promise.resolve(photos);
 		});
 	}
@@ -85,19 +84,19 @@ app.Use500px = (function() {
 		/**
 		 * Retrieve the array of 500px photos
 		 * @param {string} type - name of 500px gallery
-		 * @returns {Promise<Photo[]>} Array of {@link Photo} objects
+		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
 		 * @memberOf app.Use500px
 		 */
 		loadImages: function(type) {
 			// series of API calls
 			const promises = [];
-			for (let i = 0; i < _CATS.length; i++) {
+			_CATS.forEach((_CAT) => {
 				let url =
 					`${_URL_BASE}photos/?consumer_key=${_KEY}&feature=${type}` +
-					`&only=${_CATS[i]}&rpp=${_MAX_PHOTOS}` +
+					`&only=${_CAT}&rpp=${_MAX_PHOTOS}` +
 					'&sort=rating&image_size=2048';
 				promises.push(_doGet(url));
-			}
+			});
 
 			// Collate the photos
 			return Promise.all(promises).then((values) => {

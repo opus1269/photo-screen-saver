@@ -16,15 +16,15 @@ app.ChromeCast = (function() {
 	return {
 		/**
 		 * Get the photos from chromecast.json
-		 * @returns {Promise<Photo[]>} Array of {@link Photo} objects
+		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
 		 * @memberOf app.ChromeCast
 		 */
 		loadImages: function() {
 			const url = '/assets/chromecast.json';
 			return app.Http.doGet(url).then((photos) => {
-				for (let i = 0; i < photos.length; i++) {
-					photos[i].asp = 16 / 9;
-				}
+				photos.forEach((photo) => {
+					photo.asp = 16 / 9;
+				});
 				return Promise.resolve(photos);
 			});
 		},

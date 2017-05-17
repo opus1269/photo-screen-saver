@@ -21,7 +21,7 @@
 	 * collection as a string
 	 * @param {Array} loadArgs - Arguments to the loadFn
 	 * @constructor
-	 * @alias PhotoSource
+	 * @alias app.PhotoSource
 	 */
 	const PhotoSource = function(useName, photosName, type, isDaily, isArray,
 								loadObj, loadFn, loadArgs) {
@@ -34,6 +34,9 @@
 		this.loadFn = loadFn;
 		this.loadArgs = loadArgs || [];
 	};
+
+	window.app = window.app || {};
+	app.PhotoSource = PhotoSource;
 
 	/**
 	 * Determine if this source has been selected for display
@@ -243,6 +246,16 @@
 	};
 
 	/**
+	 * A photo from a {@link app.PhotoSource}
+	 * @typedef {Object} app.PhotoSource.Photo
+	 * @property {string} url - The url to the photo
+	 * @property {string} author - The photographer
+	 * @property {number} asp - The aspect ratio of the photo
+	 * @property {Object} [ex] - Additional information about the photo
+	 * @property {string} type - source of the photo
+	 */
+
+	/**
 	 * Add an image object to an existing Array
 	 * @param {Array} images - Array of image objects
 	 * @param {string} url - The url to the photo
@@ -251,17 +264,14 @@
 	 * @param {Object} [ex] - Additional information about the photo
 	 */
 	PhotoSource.addImage = function(images, url, author, asp, ex) {
-		const image = {
-			url: url,
-			author: author,
-			asp: asp.toPrecision(3),
-		};
+		/** @type {app.PhotoSource.Photo} */
+		const image = {};
+		image.url = url;
+		image.author = author;
+		image.asp = asp.toPrecision(3);
 		if (ex) {
 			image.ex = ex;
 		}
 		images.push(image);
 	};
-
-	window.app = window.app || {};
-	app.PhotoSource = PhotoSource;
 })(window);

@@ -45,7 +45,7 @@ app.Flickr = (function() {
 	return {
 		/**
 		 * Retrieve flickr photos
-		 * @returns {Promise<Photo[]>} Array of {@link Photo} objects
+		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
 		 * @memberOf app.Flickr
 		 */
 		loadImages: function() {
@@ -59,8 +59,7 @@ app.Flickr = (function() {
 					throw new Error(response.message);
 				}
 				const photos = [];
-				for (let i = 0; i < response.photos.photo.length; i++) {
-					const photo = response.photos.photo[i];
+				response.photos.photo.forEach((photo) => {
 					if (photo && photo.url_k &&
 						(photo.media === 'photo') &&
 						(photo.isfriend !== '0') &&
@@ -71,7 +70,7 @@ app.Flickr = (function() {
 						app.PhotoSource.addImage(photos, photo.url_k,
 							photo.ownername, asp, photo.owner);
 					}
-				}
+				});
 				return Promise.resolve(photos);
 			});
 		},

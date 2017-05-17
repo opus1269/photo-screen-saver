@@ -8,11 +8,26 @@
 	'use strict';
 
 	/**
+	 * A photo used by the screen saver
+	 * @typedef {Object} Photo
+	 * @property {string} name - Unique name
+	 * @property {string} path - The url to the photo
+	 * @property {string} author - The photographer
+	 * @property {string} type - source of the photo
+	 * @property {int} width - width
+	 * @property {int} height - height
+	 * @property {number} aspectRatio - aspect ratio
+	 * @property {Object} [ex] - additional information about the photo
+	 * @property {string} label - display label
+	 */
+
+	/**
 	 * A photo for the screen saver
+	 * @type {Photo}
 	 * @param {string} name - unique name
-	 * @param {Object} source - source item
+	 * @param {app.PhotoSource.Photo} source - source photo
 	 * @constructor
-	 * @alias Photo
+	 * @alias app.Photo
 	 */
 	const Photo = function(name, source) {
 		this.name = name;
@@ -25,6 +40,9 @@
 		this.height = screen.height;
 		this.label = this.buildLabel(false);
 	};
+
+	window.app = window.app || {};
+	app.Photo = Photo;
 
 	/**
 	 * Create the photo label
@@ -131,7 +149,4 @@
 				break;
 		}
 	};
-
-	window.app = window.app || {};
-	app.Photo = Photo;
 })(window);

@@ -101,9 +101,8 @@ app.Reddit = (function() {
 
 	/**
 	 * Build the list of photos for one page of items
-	 * @param {Array} children - Array of photos returned from reddit
-	 * @returns {Array} Array of {@link Photo} objects,
-	 * stripped of NSFW and big and small photos
+	 * @param {Array} children - Array of objects from reddit
+	 * @returns {app.PhotoSource.Photo[]} Array of photos
 	 * @private
 	 * @memberOf app.Reddit
 	 */
@@ -113,30 +112,31 @@ app.Reddit = (function() {
 		let width = 1;
 		let height = 1;
 
-		for (let i = 0; i < children.length; i++) {
-			const data = children[i].data;
-			if (data.over_18) {
+		children.forEach((child) => {
+			const data = child.data;
+			if (!data.over_18) {
 				// skip NSFW
-				continue;
-			} else if (data.preview && data.preview.images) {
-				// new way. has full size image and array of reduced resolutions
-				let item = data.preview.images[0];
-				url = item.source.url;
-				width = parseInt(item.source.width, 10);
-				height = parseInt(item.source.height, 10);
-				if (Math.max(width, height) > _MAX_SIZE) {
-					// too big. get the largest reduced resolution image
-					item = item.resolutions[item.resolutions.length - 1];
-					url = item.url.replace(/&amp;/g, '&');
-					width = parseInt(item.width, 10);
-					height = parseInt(item.height, 10);
+				if (data.preview && data.preview.images) {
+					// new way. has full size image and array of reduced
+					// resolutions
+					let item = data.preview.images[0];
+					url = item.source.url;
+					width = parseInt(item.source.width, 10);
+					height = parseInt(item.source.height, 10);
+					if (Math.max(width, height) > _MAX_SIZE) {
+						// too big. get the largest reduced resolution image
+						item = item.resolutions[item.resolutions.length - 1];
+						url = item.url.replace(/&amp;/g, '&');
+						width = parseInt(item.width, 10);
+						height = parseInt(item.height, 10);
+					}
+				} else if (data.title) {
+					// old way of specifying images - parse size from title
+					const size = _getSize(data.title);
+					url = data.url;
+					width = size.width;
+					height = size.height;
 				}
-			} else if (data.title) {
-				// old way of specifying images
-				const size = _getSize(data.title);
-				url = data.url;
-				width = size.width;
-				height = size.height;
 			}
 
 			const asp = width / height;
@@ -145,7 +145,7 @@ app.Reddit = (function() {
 				(Math.max(width, height) <= _MAX_SIZE)) {
 				app.PhotoSource.addImage(photos, url, author, asp, data.url);
 			}
-		}
+		});
 		return photos;
 	}
 
@@ -153,7 +153,7 @@ app.Reddit = (function() {
 		/**
 		 * Retrieve the array of reddit photos
 		 * @param {string} subreddit - name of photo subreddit
-		 * @returns {Promise<Photo[]>} Array of {@link Photo} objects
+		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
 		 * @memberOf app.Reddit
 		 */
 		loadImages: function(subreddit) {

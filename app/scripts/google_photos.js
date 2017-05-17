@@ -23,7 +23,15 @@ app.GooglePhotos = (function() {
 	 * @property {string} thumb - thumbnail url
 	 * @property {boolean} checked - is album selected
 	 * @property {int} ct - number of photos
-	 * @property {Object[]} photos - Array of photos
+	 * @property {app.PhotoSource.Photo[]} photos - Array of photos
+	 * @memberOf app.GooglePhotos
+	 */
+
+	/**
+	 * A Selected Google Photo Album
+	 * @typedef {Object} app.GooglePhotos.SelectedAlbum
+	 * @property {string} id - Google album Id
+	 * @property {app.PhotoSource.Photo[]} photos - Array of photos
 	 * @memberOf app.GooglePhotos
 	 */
 
@@ -68,17 +76,17 @@ app.GooglePhotos = (function() {
 	/**
 	 * Extract the Picasa photos into an Array
 	 * @param {Object} root - root object from Picasa API call
-	 * @returns {Array} Array of photo objects
+	 * @returns {app.PhotoSource.Photo[]} Array of photos
 	 * @private
 	 * @memberOf app.GooglePhotos
 	 */
 	function _processPhotos(root) {
 		const feed = root.feed;
 		const entries = feed.entry || [];
+		/** @(type) {PhotoSource.Photo[]} */
 		const photos = [];
 
-		for (let i = 0; i < entries.length; i++) {
-			let entry = entries[i];
+		entries.forEach((entry) => {
 			if (_isImage(entry)) {
 				const url = entry.media$group.media$content[0].url;
 				const width = entry.media$group.media$content[0].width;
@@ -87,7 +95,7 @@ app.GooglePhotos = (function() {
 				const author = entry.media$group.media$credit[0].$t;
 				app.PhotoSource.addImage(photos, url, author, asp);
 			}
-		}
+		});
 		return photos;
 	}
 
@@ -113,7 +121,7 @@ app.GooglePhotos = (function() {
 	return {
 		/**
 		 * Get my photo album
-		 * @returns {Promise<Photo[]>} Array of {@link Photo} objects
+		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
 		 * @memberOf app.GooglePhotos
 		 */
 		loadAuthorImages: function() {
@@ -130,8 +138,7 @@ app.GooglePhotos = (function() {
 
 		/**
 		 * Retrieve the users list of albums, including the photos in each
-		 * @returns {Promise<app.GooglePhotos.Album[]>} Array of
-		 * {@link app.GooglePhotos.Album} objects
+		 * @returns {Promise<app.GooglePhotos.Album[]>} Array of albums
 		 * @memberOf app.GooglePhotos
 		 */
 		loadAlbumList: function() {
@@ -147,13 +154,12 @@ app.GooglePhotos = (function() {
 
 				// series of API calls to get each album
 				const promises = [];
-				for (let i = 0; i < entries.length; i++) {
-					const entry = entries[i];
+				entries.forEach((entry) => {
 					if (!entry.gphoto$albumType) {
 						const albumId = entry.gphoto$id.$t;
 						promises.push(_loadPicasaAlbum(albumId));
 					}
-				}
+				});
 
 				// Collate the albums
 				return Promise.all(promises);
@@ -187,22 +193,21 @@ app.GooglePhotos = (function() {
 
 		/**
 		 * Retrieve the photos in the selected albums
-		 * Array of Array of album photos on success
-		 * @returns {Promise<Array>} Array of Array of albums
+		 * @returns {Promise<app.GooglePhotos.SelectedAlbum[]>} Array albums
 		 * @memberOf app.GooglePhotos
 		 */
 		loadImages: function() {
-			const items = app.Storage.get('albumSelections');
+			const albums = app.Storage.get('albumSelections');
 
 			// series of API calls to get each album
 			const promises = [];
-			for (let i = 0; i < items.length; i++) {
-				const albumId = items[i].id;
-				promises.push(_loadPicasaAlbum(albumId).catch(() => {}));
-			}
+			albums.forEach((album) => {
+				promises.push(_loadPicasaAlbum(album.id));
+			});
 
 			// Collate the albums
 			return Promise.all(promises).then((values) => {
+				/** app.GooglePhotos.SelectedAlbum */
 				const albums = [];
 				values.forEach((value) => {
 					const feed = value.feed;
