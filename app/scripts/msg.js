@@ -5,6 +5,7 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 window.app = window.app || {};
+
 /**
  * Wrapper for chrome messages
  * @namespace
@@ -14,42 +15,91 @@ app.Msg = (function() {
 
 	const chromep = new ChromePromise();
 
-	const SCREENSAVER_SHOW = {
+	/**
+	 * A Chrome message
+	 * @typedef {{}} app.Msg.Message
+	 * @property {string} message - Unique name
+	 * @memberOf app.Msg
+	 */
+
+	/**
+	 * Show {@link app.ScreenSaver}
+	 * @type {app.Msg.Message}
+	 * @memberOf app.Msg
+	 */
+	const SS_SHOW = {
 		message: 'showScreensaver',
 	};
 
-	const SCREENSAVER_CLOSE = {
-		message: 'close',
+	/**
+	 * Close {@link app.ScreenSaver}
+	 * @type {app.Msg.Message}
+	 * @memberOf app.Msg
+	 */
+	const SS_CLOSE = {
+		message: 'closeScreensaver',
 	};
 
-	const SCREENSAVER_IS_SHOWING = {
-		message: 'isShowing',
+	/**
+	 * Is a {@link app.ScreenSaver} showing
+	 * @type {app.Msg.Message}
+	 * @memberOf app.Msg
+	 */
+	const SS_IS_SHOWING = {
+		message: 'isScreensaverShowing',
 	};
 
+	/**
+	 * Restore default settings
+	 * @type {app.Msg.Message}
+	 * @memberOf app.Msg
+	 */
 	const RESTORE_DEFAULTS = {
 		message: 'restoreDefaults',
 	};
 
+	/**
+	 * Highlight a tab
+	 * @type {app.Msg.Message}
+	 * @memberOf app.Msg
+	 */
 	const HIGHLIGHT = {
-		message: 'highlight',
+		message: 'highlightTab',
 	};
 
+	/**
+	 * A save attempt to localStorage exceeded its capacity
+	 * @type {app.Msg.Message}
+	 * @memberOf app.Msg
+	 */
 	const STORAGE_EXCEEDED = {
 		message: 'storageExceeded',
 	};
 
+	/**
+	 * A Chrome message that an {@link app.PhotoSource} failed to load from Web
+	 * @typedef {{}} app.Msg.PhotoSourceFailed
+	 * @property {string} message - Unique name
+	 * @property {string} type - the photo source
+	 * @property {Error} error - the failure reason
+	 */
+
+	/**
+	 * An {@link app.PhotoSource} failed to load from Web
+	 * @type {app.Msg.PhotoSourceFailed}
+	 * @memberOf app.Msg
+	 */
 	const PHOTO_SOURCE_FAILED = {
-		message: 'photosFailed',
+		message: 'photoSourceFailed',
 		type: '',
 		error: '',
 	};
 
-
 	return {
 
-		SCREENSAVER_SHOW: SCREENSAVER_SHOW,
-		SCREENSAVER_CLOSE: SCREENSAVER_CLOSE,
-		SCREENSAVER_IS_SHOWING: SCREENSAVER_IS_SHOWING,
+		SS_SHOW: SS_SHOW,
+		SS_CLOSE: SS_CLOSE,
+		SS_IS_SHOWING: SS_IS_SHOWING,
 		RESTORE_DEFAULTS: RESTORE_DEFAULTS,
 		HIGHLIGHT: HIGHLIGHT,
 		STORAGE_EXCEEDED: STORAGE_EXCEEDED,

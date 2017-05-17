@@ -188,7 +188,7 @@
 		t.async(function() {
 			t.$.mainMenu.select(t.prevRoute);
 		}, 500);
-		app.Msg.send(app.Msg.SCREENSAVER_SHOW).catch(() => {});
+		app.Msg.send(app.Msg.SS_SHOW).catch(() => {});
 	};
 
 	/**
@@ -265,7 +265,7 @@
 	 * @memberOf app.Options
 	 */
 	t.onMessage = function(request, sender, response) {
-		if (request.message === 'highlight') {
+		if (request.message === app.Msg.HIGHLIGHT.message) {
 			// highlight ourselves and let the sender know we are here
 			chromep.tabs.getCurrent().then((t) => {
 				chrome.tabs.update(t.id, {'highlighted': true});
@@ -274,13 +274,13 @@
 				console.error(err);
 			});
 			response(JSON.stringify({message: 'OK'}));
-		} else if (request.message === 'storageExceeded') {
+		} else if (request.message === app.Msg.STORAGE_EXCEEDED.message) {
 			// Display Error Dialog if a save action exceeded the
 			// localStorage limit
 			t.dialogTitle = app.Utils.localize('err_storage_title');
 			t.dialogText = app.Utils.localize('err_storage_desc');
 			t.$.errorDialog.open();
-		} else if (request.message === 'photosFailed') {
+		} else if (request.message === app.Msg.PHOTO_SOURCE_FAILED.message) {
 			// failed to load
 			t.$.settingsPage.deselectPhotoSource(request.type);
 			t.dialogTitle = app.Utils.localize('err_photo_source_title');

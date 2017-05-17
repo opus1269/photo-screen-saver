@@ -150,7 +150,7 @@
 	 * @memberOf app.Background
 	 */
 	function _onChromeMessage(request, sender, response) {
-		if (request.message === 'restoreDefaults') {
+		if (request.message === app.Msg.RESTORE_DEFAULTS.message) {
 			app.Data.restoreDefaults();
 		}
 		return false;

@@ -4,10 +4,6 @@
  *  https://opensource.org/licenses/BSD-3-Clause
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
-
-/*
-@@license
-*/
 (function() {
 	'use strict';
 
@@ -422,9 +418,9 @@
 	 * @memberOf app.ScreenSaver
 	 */
 	t.onMessage = function(request, sender, response) {
-		if (request.message === 'close') {
+		if (request.message === app.Msg.SS_CLOSE.message) {
 			t.closeWindow();
-		} else if(request.message === 'isShowing') {
+		} else if(request.message === app.Msg.SS_IS_SHOWING.message) {
 			// let people know we are here
 			response({message: 'OK'});
 		}
@@ -452,7 +448,7 @@
 	 */
 	t.closeWindow = function() {
 		// send message to other screen savers to close themselves
-		app.Msg.send(app.Msg.SCREENSAVER_CLOSE).catch(() => {});
+		app.Msg.send(app.Msg.SS_CLOSE).catch(() => {});
 
 		setTimeout(function() {
 			// delay a little to process events

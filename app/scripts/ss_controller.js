@@ -5,13 +5,13 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 window.app = window.app || {};
+
+/**
+ * Controller for the screen saver
+ * @namespace
+ */
 app.SSControl = (function() {
 	'use strict';
-
-	/**
-	 * Controller for the screen saver
-	 * @namespace app.SSControl
-	 */
 
 	const chromep = new ChromePromise();
 
@@ -62,7 +62,7 @@ app.SSControl = (function() {
 	 */
 	function _isShowing() {
 		// send message to the screensaver to see if he is around
-		return app.Msg.send(app.Msg.SCREENSAVER_IS_SHOWING).then(() => {
+		return app.Msg.send(app.Msg.SS_IS_SHOWING).then(() => {
 			return Promise.resolve(true);
 		}).catch(() => {
 			// no one listening
@@ -175,7 +175,7 @@ app.SSControl = (function() {
 	 * @memberOf app.SSControl
 	 */
 	function _onChromeMessage(request, sender, response) {
-		if (request.message === 'showScreensaver') {
+		if (request.message === app.Msg.SS_SHOW.message) {
 			// preview the screensaver
 			app.SSControl.display(true);
 		}
@@ -209,7 +209,7 @@ app.SSControl = (function() {
 		 */
 		close: function() {
 			// send message to the screen savers to close themselves
-			app.Msg.send(app.Msg.SCREENSAVER_CLOSE).catch(() => {});
+			app.Msg.send(app.Msg.SS_CLOSE).catch(() => {});
 		},
 	};
 })();
