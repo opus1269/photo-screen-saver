@@ -7,7 +7,7 @@
 window.app = window.app || {};
 
 /**
- * Fetch with authentication and exponential backoff
+ * Fetch with authentication and exponential back-off
  * @namespace
  */
 app.Http = (function() {
@@ -24,7 +24,7 @@ app.Http = (function() {
 	 * @private
 	 * @memberOf app.Http
 	 */
-	const _MAX_RETRIES = 4;
+	const _MAX_ATTEMPTS = 3;
 
 	/**
 	 * Delay multiplier for exponential back-off
@@ -34,22 +34,6 @@ app.Http = (function() {
 	 * @memberOf app.Http
 	 */
 	const _DELAY = 1000;
-
-	/**
-	 * Retry call to server after removing cached auth token
-	 * @param {string} url - url to call
-	 * @param {string} authToken - chrome auth token
-	 * @returns {Promise.<void>} response from server
-	 * @private
-	 * @memberOf app.Http
-	 */
-	function _retryGet(url, authToken) {
-		return chromep.identity.removeCachedAuthToken({
-			token: authToken,
-		}).then(() => {
-			return app.Http.doGet(url, true, false);
-		});
-	}
 
 	/**
 	 * Get auth token if requested
@@ -67,9 +51,113 @@ app.Http = (function() {
 		}
 	}
 
+	/**
+	 * Retry fetch with exponential back-off
+	 * @param {string} url - server
+	 * @param {Object} options - fetch options
+	 * @param {boolean} isAuth - true if authorization required
+	 * @param {boolean} retryAuth - if true, retry with new token
+	 * @param {int} attempt - the retry attempt we are on
+	 * @returns {Promise.<JSON>} response from server
+	 * @private
+	 * @memberOf app.Http
+	 */
+	function _retry(url, options, isAuth, retryAuth, attempt) {
+		attempt++;
+
+		// eslint-disable-next-line promise/avoid-new
+		return new Promise((resolve, reject) => {
+			setTimeout(() => {
+				return _fetch(url, options, isAuth, retryAuth, attempt)
+					.then(resolve, reject);
+			}, (Math.pow(2, attempt) - 1) * _DELAY);
+		});
+	}
+
+	/**
+	 * Retry fetch with new auth token
+	 * @param {string} url - server
+	 * @param {Object} options - fetch options
+	 * @param {boolean} isAuth - true if authorization required
+	 * @param {string} authToken - cached auth token
+	 * @param {int} attempt - the retry attempt we are on
+	 * @returns {Promise.<JSON>} response from server
+	 * @private
+	 * @memberOf app.Http
+	 */
+	function _retryAuth(url, options, isAuth, authToken, attempt) {
+		return chromep.identity.removeCachedAuthToken({
+			token: authToken,
+		}).then(() => {
+			return _fetch(url, options, isAuth, false, attempt);
+		});
+	}
+
+	/**
+	 * Perform fetch using exponential back-off and
+	 * optionally with authorization
+	 * @param {string} url - server
+	 * @param {Object} opts - fetch options
+	 * @param {boolean} isAuth - true if authorization required
+	 * @param {boolean} retryAuth - if true, retry with new token
+	 * @param {int} attempt - the retry attempt we are on
+	 * @returns {Promise.<JSON>} response from server
+	 * @private
+	 * @memberOf app.Http
+	 */
+	function _fetch(url, opts, isAuth, retryAuth, attempt) {
+		let token = '';
+		return _doAuth(isAuth, retryAuth).then((authToken) => {
+			if (isAuth) {
+				token = authToken;
+				opts = {method: 'GET', headers: new Headers({})};
+				opts.headers.append('Authorization',
+					`Bearer ${token}`);
+			}
+			return fetch(url, opts);
+		}).then((response) => {
+			const status = response.status;
+
+			if (response.ok) {
+				// request succeeded
+				return response.json();
+			}
+
+			if (attempt >= _MAX_ATTEMPTS) {
+				// request failed
+				const statusMsg = app.Utils.localize('err_status');
+				let msg = `${statusMsg}: ${status}`;
+				msg += `\n${response.statusText}`;
+				return Promise.reject(new Error(msg));
+			}
+
+			if (isAuth && retryAuth && (status === 401)) {
+				// could be bad token. Remove cached one and try again
+				return _retryAuth(url, opts, isAuth, token, attempt);
+			}
+
+			if ((status >= 500) && (status < 600)) {
+				// temporary network error, maybe. Retry
+				return _retry(url, opts, isAuth, retryAuth, attempt);
+			}
+
+			// request failed
+			const statusMsg = app.Utils.localize('err_status');
+			let msg = `${statusMsg}: ${status}`;
+			msg += `\n${response.statusText}`;
+			return Promise.reject(new Error(msg));
+		}).catch((err) => {
+			if (err.message === 'Failed to fetch') {
+				err.message = app.Utils.localize('err_network');
+			}
+			throw new Error(err.message);
+		});
+	}
+
 	return {
 		/**
-		 * Perform GET request to server using exponential back-off
+		 * Perform GET request to server using exponential back-off and
+		 * optionally with authorization
 		 * @param {string} url - server
 		 * @param {boolean} [isAuth=false] - true if authorization required
 		 * @param {boolean} [retryAuth=false] - if true, retry with new token
@@ -77,58 +165,10 @@ app.Http = (function() {
 		 * @memberOf app.Http
 		 */
 		doGet: function(url, isAuth = false, retryAuth = false) {
-			let attempts = 0;
-			let token = '';
-			return _doGet();
+			let attempt = 0;
+			let options = {method: 'GET', headers: new Headers({})};
 
-			/**
-			 * Fetch with exponential back-off
-			 * @returns {Promise.<json>} response from server
-			 * @memberOf app.Http
-			 */
-			function _doGet() {
-				return _doAuth(isAuth, retryAuth).then((authToken) => {
-					const init = {method: 'GET', headers: new Headers({})};
-					if (isAuth) {
-						token = authToken;
-						init.headers.append('Authorization', `Bearer ${token}`);
-					}
-					return fetch(url, init);
-				}).then((response) => {
-					const status = response.status;
-					if (response.ok) {
-						return response.json();
-					} else if (isAuth && retryAuth &&
-						(status === 401)) {
-						// could be bad token. Remove cached one and try again
-						return _retryGet(url, token);
-					} else if ((attempts < _MAX_RETRIES) &&
-						((status >= 500) && (status < 600))) {
-						// temporary server issue, retryAuth with back-off
-						attempts++;
-						const delay = (Math.pow(2, attempts) - 1) * _DELAY;
-						// eslint-disable-next-line promise/avoid-new
-						return new Promise(() => {
-							setTimeout(() => {
-								return _doGet();
-							}, delay);
-						});
-					} else {
-						// request failed
-						const statusMsg = app.Utils.localize('err_status');
-						let msg = `${statusMsg}: ${status}`;
-						msg+= `\n${response.statusText}`;
-						throw new Error(msg);
-					}
-				}).then((json) => {
-					return Promise.resolve(json);
-				}).catch((err) => {
-					if (err.message === 'Failed to fetch') {
-						err.message = app.Utils.localize('err_network');
-					}
-					throw new Error(err.message);
-				});
-			}
+			return _fetch(url, options, isAuth, retryAuth, attempt);
 		},
 	};
 })();
