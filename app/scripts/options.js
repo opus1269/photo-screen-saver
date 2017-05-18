@@ -166,7 +166,6 @@
 		}
 		t.route = t.pages[index].route;
 		t.scrollPageToTop();
-		throw new Error('testing latest ExceptionHandler');
 	}
 
 	/**
