@@ -64,6 +64,7 @@ app.Http = (function() {
 	 */
 	function _retry(url, options, isAuth, retryAuth, attempt) {
 		attempt++;
+		app.GA.error(`Retry fetch: ${url}`, 'app.Http._retry');
 
 		// eslint-disable-next-line promise/avoid-new
 		return new Promise((resolve, reject) => {
@@ -86,6 +87,7 @@ app.Http = (function() {
 	 * @memberOf app.Http
 	 */
 	function _retryAuth(url, options, isAuth, authToken, attempt) {
+		app.GA.error('Refresh auth token.', 'app.Http._retryAuth');
 		return chromep.identity.removeCachedAuthToken({
 			token: authToken,
 		}).then(() => {
