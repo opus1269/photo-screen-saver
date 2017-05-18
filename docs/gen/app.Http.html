@@ -96,7 +96,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Fetch with authentication and exponential backoff</p></div>
+            <div class="description"><p>Fetch with authentication and exponential back-off</p></div>
         
 
         
@@ -246,8 +246,8 @@
         
             
 <hr>
-<dt class="name" id="._MAX_RETRIES">
-    <h4 id="._MAX_RETRIES"><span class="type-signature">&lt;private, static, constant> </span>_MAX_RETRIES<span class="type-signature"></span></h4>
+<dt class="name" id="._MAX_ATTEMPTS">
+    <h4 id="._MAX_ATTEMPTS"><span class="type-signature">&lt;private, static, constant> </span>_MAX_ATTEMPTS<span class="type-signature"></span></h4>
 
     
 </dt>
@@ -290,7 +290,7 @@
 	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
 	<dd class="tag-default">
 		<ul class="dummy">
-			<li>4</li>
+			<li>3</li>
 		</ul>
 	</dd>
 	
@@ -459,7 +459,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="http.js.html">http.js</a>,
-				 <a href="http.js.html#sunlight-1-line-62">line 62</a>
+				 <a href="http.js.html#sunlight-1-line-46">line 46</a>
 			</li>
 		</ul>
 	</dd>
@@ -516,7 +516,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="._doGet"><span class="type-signature">&lt;static> </span>_doGet<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;json>}</span></h4>
+    <h4 class="name" id="._fetch"><span class="type-signature">&lt;private, static> </span>_fetch<span class="signature">(url, opts, isAuth, retryAuth, attempt)</span><span class="type-signature"> &rarr; {Promise.&lt;JSON>}</span></h4>
     
     
 </dt>
@@ -524,7 +524,8 @@
 
     
     <div class="description">
-        <p>Fetch with exponential back-off</p>
+        <p>Perform fetch using exponential back-off and
+optionally with authorization</p>
     </div>
     
 
@@ -533,6 +534,668 @@
     
 
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>server</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>opts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>fetch options</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isAuth</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>true if authorization required</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retryAuth</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>if true, retry with new token</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attempt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the retry attempt we are on</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="http.js.html">http.js</a>,
+				 <a href="http.js.html#sunlight-1-line-110">line 110</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>response from server</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;JSON></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._retry"><span class="type-signature">&lt;private, static> </span>_retry<span class="signature">(url, options, isAuth, retryAuth, attempt)</span><span class="type-signature"> &rarr; {Promise.&lt;JSON>}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Retry fetch with exponential back-off</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>server</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>fetch options</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isAuth</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>true if authorization required</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retryAuth</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>if true, retry with new token</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attempt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the retry attempt we are on</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="http.js.html">http.js</a>,
+				 <a href="http.js.html#sunlight-1-line-65">line 65</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>response from server</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;JSON></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._retryAuth"><span class="type-signature">&lt;private, static> </span>_retryAuth<span class="signature">(url, options, isAuth, authToken, attempt)</span><span class="type-signature"> &rarr; {Promise.&lt;JSON>}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Retry fetch with new auth token</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>server</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>fetch options</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isAuth</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>true if authorization required</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authToken</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>cached auth token</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attempt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the retry attempt we are on</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
@@ -611,193 +1274,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;json></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._retryGet"><span class="type-signature">&lt;private, static> </span>_retryGet<span class="signature">(url, authToken)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Retry call to server after removing cached auth token</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>url to call</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>authToken</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>chrome auth token</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="http.js.html">http.js</a>,
-				 <a href="http.js.html#sunlight-1-line-46">line 46</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>response from server</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;void></span>
+<span class="param-type">Promise.&lt;JSON></span>
 
 
 
@@ -822,7 +1299,8 @@
 
     
     <div class="description">
-        <p>Perform GET request to server using exponential back-off</p>
+        <p>Perform GET request to server using exponential back-off and
+optionally with authorization</p>
     </div>
     
 
@@ -1015,7 +1493,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="http.js.html">http.js</a>,
-				 <a href="http.js.html#sunlight-1-line-79">line 79</a>
+				 <a href="http.js.html#sunlight-1-line-169">line 169</a>
 			</li>
 		</ul>
 	</dd>
@@ -1122,7 +1600,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 18th 2017, 3:43:27 am
+		on May 18th 2017, 2:25:08 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
