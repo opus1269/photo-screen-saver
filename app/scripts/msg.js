@@ -115,8 +115,11 @@ app.Msg = (function() {
 			return chromep.runtime.sendMessage(type, null).then((response) => {
 				return Promise.resolve(response);
 			}).catch((err) => {
-				if (err.message && !err.message.includes('port closed')) {
-					console.error(err);
+				if (err.message &&
+					!err.message.includes('port closed') &&
+					!err.message.includes('Receiving end does not exist')) {
+					const msg = `type: ${type.message}, ${err.message}`;
+					app.GA.error(msg, 'app.Msg.send');
 				}
 				return Promise.reject(err);
 			});

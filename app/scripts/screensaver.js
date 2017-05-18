@@ -103,6 +103,8 @@
 	 * @memberOf app.ScreenSaver
 	 */
 	t.addEventListener('dom-change', function() {
+		app.GA.page('/screensaver.html');
+
 		t.rep = t.$.repeatTemplate;
 		t.p = t.$.pages;
 		t.time = 'time';
@@ -139,7 +141,7 @@
 				}
 				return null;
 			}).catch((err) => {
-				console.error(err);
+				app.GA.error(err.message, 'chromep.tabs.getZoom');
 			});
 		}
 	};
@@ -177,7 +179,7 @@
 				}
 				return null;
 			}).catch((err) => {
-				console.error(err);
+				app.GA.error(err.message, 'chromep.alarms.get(CLOCK_ALARM)');
 			});
 		}
 	};

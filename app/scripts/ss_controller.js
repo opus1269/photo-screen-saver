@@ -108,7 +108,7 @@ app.SSControl = (function() {
 			}
 			return null;
 		}).catch((err) => {
-			console.error(err);
+			app.GA.error(err.message, 'app.SSControl._open', true);
 		});
 	}
 
@@ -128,7 +128,7 @@ app.SSControl = (function() {
 			}
 			return null;
 		}).catch((err) => {
-			console.error(err);
+			app.GA.error(err.message, 'app.SSControl._openOnAllDisplays', true);
 		});
 	}
 
@@ -157,7 +157,7 @@ app.SSControl = (function() {
 			}
 			return null;
 		}).catch((err) => {
-			console.error(err);
+			app.GA.error(err.message, 'app.SSControl._isShowing');
 		});
 	}
 

@@ -5,13 +5,13 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 window.app = window.app || {};
+
+/**
+ * Interface to Reddit API
+ * @namespace
+ */
 app.Reddit = (function() {
 	'use strict';
-
-	/**
-	 * Interface to Reddit API
-	 * @namespace app.Reddit
-	 */
 
 	/**
 	 * Extension's redirect uri
@@ -167,9 +167,9 @@ app.Reddit = (function() {
 			}).then((slice) => {
 				photos = photos.concat(_processChildren(slice.children));
 				return Promise.resolve(photos);
-			}).catch((error) => {
-				console.error(error);
-				throw new Error(error.message);
+			}).catch((err) => {
+				app.GA.error(err.message, 'app.Reddit.loadImages');
+				throw new Error(err.message);
 			});
 		},
 	};

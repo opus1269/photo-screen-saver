@@ -4,7 +4,7 @@
  *  https://opensource.org/licenses/BSD-3-Clause
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
-(function(document) {
+(function(window) {
 	'use strict';
 
 	/**
@@ -13,6 +13,21 @@
 	 */
 
 	const chromep = new ChromePromise();
+
+	if (typeof window.onerror === 'object') {
+		// global error handler
+		window.onerror = function(message, url, line, col, errObject) {
+			if (app && app.GA) {
+				let msg = message;
+				let stack = null;
+				if (errObject && errObject.message && errObject.stack) {
+					msg = errObject.message;
+					stack = errObject.stack;
+				}
+				app.GA.exception(msg, stack);
+			}
+		};
+	}
 
 	/**
 	 * Manage an html page that is inserted on demand<br />
@@ -93,6 +108,7 @@
 	 * @memberOf app.Options
 	 */
 	t.addEventListener('dom-change', function() {
+		app.GA.page('/options.html');
 		// listen for app messages
 		chrome.runtime.onMessage.addListener(t.onMessage);
 	});
@@ -271,7 +287,7 @@
 				chrome.tabs.update(t.id, {'highlighted': true});
 				return null;
 			}).catch((err) => {
-				console.error(err);
+				app.GA.error(err.message, 'chromep.tabs.getCurrent');
 			});
 			response(JSON.stringify({message: 'OK'}));
 		} else if (request.message === app.Msg.STORAGE_EXCEEDED.message) {
@@ -289,4 +305,4 @@
 		}
 		return false;
 	};
-})(document);
+})(window);

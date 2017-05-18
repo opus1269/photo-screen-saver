@@ -67,6 +67,9 @@
 					throw new Error(err);
 				}
 				return Promise.resolve();
+			}).catch((err) => {
+				app.GA.error(err.message, 'PhotoSource.process');
+				return Promise.reject(err);
 			});
 		} else {
 			if (this.useName !== 'useGoogle') {

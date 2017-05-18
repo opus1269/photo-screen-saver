@@ -5,14 +5,14 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 window.app = window.app || {};
+
+/**
+ * Manage alarms from the chrome.alarms API
+ * @see https://developer.chrome.com/apps/alarms
+ * @namespace
+ */
 app.Alarm = (function() {
 	'use strict';
-
-	/**
-	 * Manage alarms from the chrome.alarms API
-	 * @see https://developer.chrome.com/apps/alarms
-	 * @namespace app.Alarm
-	 */
 
 	const chromep = new ChromePromise();
 
@@ -128,7 +128,7 @@ app.Alarm = (function() {
 			}
 			return null;
 		}).catch((err) => {
-			console.error(err);
+			app.GA.error(err.message, 'app.Alarm._setActiveState', true);
 		});
 		app.Alarm.updateBadgeText();
 	}
@@ -243,7 +243,8 @@ app.Alarm = (function() {
 				}
 				return null;
 			}).catch((err) => {
-				console.error(err);
+				app.GA.error(err.message,
+					'chromep.alarms.get(_ALARMS.UPDATE_PHOTOS)');
 			});
 		},
 

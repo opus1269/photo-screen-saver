@@ -14,6 +14,21 @@
 
 	const chromep = new ChromePromise();
 
+	if (typeof window.onerror === 'object') {
+		// global error handler
+		window.onerror = function(message, url, line, col, errObject) {
+			if (app && app.GA) {
+				let msg = message;
+				let stack = null;
+				if (errObject && errObject.message && errObject.stack) {
+					msg = errObject.message;
+					stack = errObject.stack;
+				}
+				app.GA.exception(msg, stack);
+			}
+		};
+	}
+
 	/**
 	 * Display the options tab
 	 * @private
@@ -55,7 +70,7 @@
 			title: app.Utils.localize('disable'),
 			contexts: ['browser_action'],
 		}).catch((err) => {
-			console.error(err);
+			app.GA.error(err.message, 'chromep.contextMenus.create');
 		});
 
 		chromep.contextMenus.create({
@@ -63,14 +78,16 @@
 			id: 'SEP_MENU',
 			contexts: ['browser_action'],
 		}).catch((err) => {
-			console.error(err);
+			app.GA.error(err.message, 'chromep.contextMenus.create');
 		});
 
 		if (details.reason === 'install') {
+			app.GA.event(app.GA.EVENT.INSTALLED);
 			app.Data.initialize();
 			_showOptionsTab();
 		} else if (details.reason === 'update') {
 			// extension updated
+			app.GA.event(app.GA.EVENT.UPDATED);
 			app.Data.update();
 		}
 	}
@@ -83,6 +100,7 @@
 	 * @memberOf app.Background
 	 */
 	function _onStartup() {
+		app.GA.page('/background.html');
 		app.Data.processState();
 	}
 
