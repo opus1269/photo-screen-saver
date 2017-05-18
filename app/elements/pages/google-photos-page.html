@@ -261,6 +261,7 @@ app.GooglePhotosPage = Polymer({
 			return null;
 		}).catch((err) => {
 			this.set('waitForLoad', false);
+			app.GA.error(err.message, 'app.GooglePhotosPage.loadAlbumList');
 			this.$.dialogTitle.innerHTML =
 				app.Utils.localize('err_request_failed');
 			this.$.dialogText.innerHTML = err.message;
