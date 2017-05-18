@@ -8,6 +8,21 @@ window.app = window.app || {};
 app.ChromeCast = (function() {
 	'use strict';
 
+	if (typeof window.onerror === 'object') {
+		// global error handler
+		window.onerror = function(message, url, line, col, errObject) {
+			if (app && app.GA) {
+				let msg = message;
+				let stack = null;
+				if (errObject && errObject.message && errObject.stack) {
+					msg = errObject.message;
+					stack = errObject.stack;
+				}
+				app.GA.exception(msg, stack);
+			}
+		};
+	}
+
 	/**
 	 * Interface to the Chromecast photos
 	 * @namespace app.ChromeCast

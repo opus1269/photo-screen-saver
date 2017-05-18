@@ -127,6 +127,8 @@
 			return e.route;
 		}).indexOf(event.currentTarget.id);
 
+		app.GA.event(app.GA.EVENT.MENU, t.pages[index].route);
+
 		t.prevRoute = t.route;
 
 		if (!t.pages[index].obj) {

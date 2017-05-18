@@ -5,13 +5,28 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 window.app = window.app || {};
+
+/**
+ * Handle rendering of a photo in screen saver
+ * @namespace
+ */
 app.PhotoView = (function() {
 	'use strict';
 
-	/**
-	 * Handle rendering of a photo in screen saver
-	 * @namespace app.PhotoView
-	 */
+	if (typeof window.onerror === 'object') {
+		// global error handler
+		window.onerror = function(message, url, line, col, errObject) {
+			if (app && app.GA) {
+				let msg = message;
+				let stack = null;
+				if (errObject && errObject.message && errObject.stack) {
+					msg = errObject.message;
+					stack = errObject.stack;
+				}
+				app.GA.exception(msg, stack);
+			}
+		};
+	}
 
 	/**
 	 * Important components of a photo view

@@ -5,13 +5,28 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 window.app = window.app || {};
+
+/**
+ * Interface to Picasa API
+ * @namespace
+ */
 app.GooglePhotos = (function() {
 	'use strict';
 
-	/**
-	 * Interface to Picasa API
-	 * @namespace app.GooglePhotos
-	 */
+	if (typeof window.onerror === 'object') {
+		// global error handler
+		window.onerror = function(message, url, line, col, errObject) {
+			if (app && app.GA) {
+				let msg = message;
+				let stack = null;
+				if (errObject && errObject.message && errObject.stack) {
+					msg = errObject.message;
+					stack = errObject.stack;
+				}
+				app.GA.exception(msg, stack);
+			}
+		};
+	}
 
 	/**
 	 * A Google Photo Album

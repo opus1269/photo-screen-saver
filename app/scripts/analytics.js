@@ -40,7 +40,8 @@ app.GA = (function() {
 	 */
 	const EVENT = {
 		INSTALLED: {cat: 'extension', act: 'installed'},
-		UPDATED: {cat: 'extension', act: 'updated'},
+		MENU: {cat: 'menu', act: 'select'},
+		TOGGLE: {cat: 'settingsToggle', act: 'select'},
 	};
 
 	/**
@@ -96,11 +97,13 @@ app.GA = (function() {
 		 * Send an event
 		 * @memberOf app.GA
 		 * @param {GAEvent} event - the event type
+		 * @param {string} [action=null] - override action
 		 * @memberOf app.GA
 		 */
-		event: function(event) {
+		event: function(event, action=null) {
 			if (event) {
-				ga('send', 'event', event.cat, event.act);
+				const act = action ? action : event.act;
+				ga('send', 'event', event.cat, act);
 			}
 		},
 

@@ -87,7 +87,6 @@
 			_showOptionsTab();
 		} else if (details.reason === 'update') {
 			// extension updated
-			app.GA.event(app.GA.EVENT.UPDATED);
 			app.Data.update();
 		}
 	}

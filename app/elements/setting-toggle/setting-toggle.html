@@ -59,7 +59,8 @@
 				</paper-item-body>
 				<paper-toggle-button
 						id="toggle" class="setting-toggle-button"
-						checked="{{checked}}" disabled$="[[disabled]]">
+						checked="{{checked}}" on-change="_onChange"
+						disabled$="[[disabled]]">
 				</paper-toggle-button>
 			</paper-item>
 		</iron-label>
@@ -118,6 +119,14 @@
 		 */
 		setChecked: function(checked) {
 			this.set('checked', checked);
+			app.GA.event(app.GA.EVENT.TOGGLE, `${this.name}: ${this.checked}`);
+		},
+
+		/**
+		 * Event: checked state changed
+		 */
+		_onChange: function() {
+			app.GA.event(app.GA.EVENT.TOGGLE, `${this.name}: ${this.checked}`);
 		},
 
 		/**

@@ -5,15 +5,30 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 window.app = window.app || {};
+
+/**
+ * Manage the extensions data
+ * @namespace
+ */
 app.Data = (function() {
 	'use strict';
 
-	/**
-	 * Manage the extensions data
-	 * @namespace app.Data
-	 */
-
 	const chromep = new ChromePromise();
+
+	if (typeof window.onerror === 'object') {
+		// global error handler
+		window.onerror = function(message, url, line, col, errObject) {
+			if (app && app.GA) {
+				let msg = message;
+				let stack = null;
+				if (errObject && errObject.message && errObject.stack) {
+					msg = errObject.message;
+					stack = errObject.stack;
+				}
+				app.GA.exception(msg, stack);
+			}
+		};
+	}
 
 	/**
 	 * Version of localStorage - update when items are added, removed, changed

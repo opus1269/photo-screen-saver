@@ -5,13 +5,28 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 window.app = window.app || {};
+
+/**
+ * Interface to 500px API
+ * @namespace
+ */
 app.Use500px = (function() {
 	'use strict';
 
-	/**
-	 * Interface to 500px API
-	 * @namespace app.Use500px
-	 */
+	if (typeof window.onerror === 'object') {
+		// global error handler
+		window.onerror = function(message, url, line, col, errObject) {
+			if (app && app.GA) {
+				let msg = message;
+				let stack = null;
+				if (errObject && errObject.message && errObject.stack) {
+					msg = errObject.message;
+					stack = errObject.stack;
+				}
+				app.GA.exception(msg, stack);
+			}
+		};
+	}
 
 	/**
 	 * 500px rest API

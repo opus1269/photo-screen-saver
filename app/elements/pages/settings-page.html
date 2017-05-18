@@ -277,25 +277,15 @@ Polymer({
 	},
 
 	/**
-	 * Deselect the given photo source
+	 * Deselect the given {@link app.PhotoSource}
 	 * @param {string} useName - Name of <setting-toggle>
 	 */
 	deselectPhotoSource: function(useName) {
-		const useNames = app.PhotoSource.getUseNames();
-		for (let i = 0; i < useNames.length; i++) {
-			if (useName === useNames[i]) {
-				const query = '[name=' + useName + ']';
-				const el = document.querySelector(query);
-				if (el) {
-					el.setChecked(false);
-					break;
-				}
-			}
-		}
+		this._setPhotoSourceChecked(useName, false);
 	},
 
 	/**
-	 * Event: select all photo sources tapped
+	 * Event: select all {@link app.PhotoSource} objects tapped
 	 * @private
 	 */
 	_selectAllTapped: function() {
@@ -303,7 +293,7 @@ Polymer({
 	},
 
 	/**
-	 * Event: deselect all photo sources tapped
+	 * Event: deselect all {@link app.PhotoSource} objects tapped
 	 * @private
 	 */
 	_deselectAllTapped: function() {
@@ -319,20 +309,29 @@ Polymer({
 	},
 
 	/**
-	 * Set checked state of all Photo Sources
+	 * Set checked state of a {@link app.PhotoSource}
+	 * @param {string} useName - source name
+	 * @param {boolean} state - checked state
+	 * @private
+	 */
+	_setPhotoSourceChecked: function(useName, state) {
+		const query = `[name=${useName}]`;
+		const el = document.querySelector(query);
+		if (el && (useName !== 'useGoogle')) {
+			el.setChecked(state);
+		}
+	},
+
+	/**
+	 * Set checked state of all {@link app.PhotoSource} objects
 	 * @param {boolean} state - checked state
 	 * @private
 	 */
 	_setPhotoSourcesChecked: function(state) {
 		const useNames = app.PhotoSource.getUseNames();
-		for (let i = 0; i < useNames.length; i++) {
-			const name = useNames[i];
-			const query = '[name=' + name + ']';
-			const el = document.querySelector(query);
-			if (name !== 'useGoogle') {
-				el.setChecked(state);
-			}
-		}
+		useNames.forEach((useName) => {
+			this._setPhotoSourceChecked(useName, state);
+		});
 	},
 
 	/**

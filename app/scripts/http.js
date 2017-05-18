@@ -5,15 +5,30 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 window.app = window.app || {};
+
+/**
+ * Fetch with authentication and exponential backoff
+ * @namespace
+ */
 app.Http = (function() {
 	'use strict';
 
-	/**
-	 * Fetch with authentication and exponential backoff
-	 * @namespace app.Http
-	 */
-
 	const chromep = new ChromePromise();
+
+	if (typeof window.onerror === 'object') {
+		// global error handler
+		window.onerror = function(message, url, line, col, errObject) {
+			if (app && app.GA) {
+				let msg = message;
+				let stack = null;
+				if (errObject && errObject.message && errObject.stack) {
+					msg = errObject.message;
+					stack = errObject.stack;
+				}
+				app.GA.exception(msg, stack);
+			}
+		};
+	}
 
 	/**
 	 * Max retries on 500 errors
