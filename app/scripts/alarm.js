@@ -14,22 +14,9 @@ window.app = window.app || {};
 app.Alarm = (function() {
 	'use strict';
 
-	const chromep = new ChromePromise();
+	new ExceptionHandler();
 
-	if (typeof window.onerror === 'object') {
-		// global error handler
-		window.onerror = function(message, url, line, col, errObject) {
-			if (app && app.GA) {
-				let msg = message;
-				let stack = null;
-				if (errObject && errObject.message && errObject.stack) {
-					msg = errObject.message;
-					stack = errObject.stack;
-				}
-				app.GA.exception(msg, stack);
-			}
-		};
-	}
+	const chromep = new ChromePromise();
 
 	/**
 	 * Alarms triggered by chrome.alarms

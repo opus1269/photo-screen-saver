@@ -12,22 +12,9 @@
 	 * @namespace app.Options
 	 */
 
-	const chromep = new ChromePromise();
+	new ExceptionHandler();
 
-	if (typeof window.onerror === 'object') {
-		// global error handler
-		window.onerror = function(message, url, line, col, errObject) {
-			if (app && app.GA) {
-				let msg = message;
-				let stack = null;
-				if (errObject && errObject.message && errObject.stack) {
-					msg = errObject.message;
-					stack = errObject.stack;
-				}
-				app.GA.exception(msg, stack);
-			}
-		};
-	}
+	const chromep = new ChromePromise();
 
 	/**
 	 * Manage an html page that is inserted on demand<br />
@@ -179,6 +166,7 @@
 		}
 		t.route = t.pages[index].route;
 		t.scrollPageToTop();
+		throw new Error('testing latest ExceptionHandler');
 	}
 
 	/**
