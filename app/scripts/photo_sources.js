@@ -232,7 +232,7 @@
 	 */
 	PhotoSource.processAll = function() {
 		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
-			PhotoSource.SOURCES[i].process();
+			PhotoSource.SOURCES[i].process().catch(() => {});
 		}
 	};
 
@@ -245,7 +245,7 @@
 	PhotoSource.processDaily = function() {
 		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
 			if (PhotoSource.SOURCES[i].isDaily) {
-				PhotoSource.SOURCES[i].process();
+				PhotoSource.SOURCES[i].process().catch(() => {});
 			}
 		}
 	};
