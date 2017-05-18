@@ -14,6 +14,8 @@
 
 <link rel="import" href="../my_icons.html">
 
+<script type="text/javascript" src="../../scripts/exception_handler.js"></script>
+
 <dom-module id="setting-link">
 	<style include="iron-flex iron-flex-alignment"></style>
 	<style include="shared-styles"></style>
@@ -71,6 +73,9 @@
 
 <script>
 	'use strict';
+
+	new ExceptionHandler();
+
 	Polymer({
 		is: 'setting-link',
 

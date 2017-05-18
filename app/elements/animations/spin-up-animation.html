@@ -8,6 +8,8 @@
 <link rel="import" href="../../bower_components/neon-animation/neon-animation-behavior.html">
 <link rel="import" href="../../bower_components/neon-animation/web-animations.html">
 
+<script type="text/javascript" src="../../scripts/exception_handler.js"></script>
+
 <!--
 `<spin-up-animation>` animates the scale transform of an element from 0 to 1 and
 the rotate from 0 to 1 turn
@@ -25,6 +27,9 @@ Configuration:
 
 <script>
 'use strict';
+
+new ExceptionHandler();
+
 Polymer({
 	is: 'spin-up-animation',
 

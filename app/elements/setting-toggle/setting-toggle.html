@@ -17,6 +17,8 @@
 <link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 
+<script type="text/javascript" src="../../scripts/exception_handler.js"></script>
+
 <dom-module id="setting-toggle">
 	<template>
 		<style include="iron-flex iron-flex-alignment"></style>
@@ -72,6 +74,9 @@
 
 <script>
 	'use strict';
+
+	new ExceptionHandler();
+
 	Polymer({
 		is: 'setting-toggle',
 

@@ -27,9 +27,11 @@
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
+<link rel="import" href="../my_icons.html">
+
 <link rel="import" href="../localize-behavior/localize-behavior.html">
 
-<link rel="import" href="../my_icons.html">
+<script type="text/javascript" src="../../scripts/exception_handler.js"></script>
 
 <dom-module id="google-photos-page">
 	<template>
@@ -199,6 +201,9 @@
 
 <script>
 'use strict';
+
+new ExceptionHandler();
+
 window.app = window.app || {};
 app.GooglePhotosPage = Polymer({
 	is: 'google-photos-page',
