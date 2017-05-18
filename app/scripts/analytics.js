@@ -19,7 +19,7 @@ app.GA = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf GA
+	 * @memberOf app.GA
 	 */
 	const TRACKING_ID = 'UA-61314754-1';
 
@@ -36,7 +36,7 @@ app.GA = (function() {
 	 * @property {GAEvent} INSTALLED - extension installed
 	 * @property {GAEvent} UPDATED - extension updated
 	 * @const
-	 * @memberOf GA
+	 * @memberOf app.GA
 	 */
 	const EVENT = {
 		INSTALLED: {cat: 'extension', act: 'installed'},
@@ -47,7 +47,7 @@ app.GA = (function() {
 	 * Event: called when document and resources are loaded<br />
 	 * Initialize Google Analytics
 	 * @private
-	 * @memberOf GA
+	 * @memberOf app.GA
 	 */
 	function _onLoad() {
 		// Standard Google Universal Analytics code
@@ -82,8 +82,9 @@ app.GA = (function() {
 
 		/**
 		 * Send a page
-		 * @memberOf GA
+		 * @memberOf app.GA
 		 * @param {string} page - page path
+		 * @memberOf app.GA
 		 */
 		page: function(page) {
 			if (page) {
@@ -93,8 +94,9 @@ app.GA = (function() {
 
 		/**
 		 * Send an event
-		 * @memberOf GA
+		 * @memberOf app.GA
 		 * @param {GAEvent} event - the event type
+		 * @memberOf app.GA
 		 */
 		event: function(event) {
 			if (event) {
@@ -104,10 +106,11 @@ app.GA = (function() {
 
 		/**
 		 * Send an error
-		 * @memberOf GA
+		 * @memberOf app.GA
 		 * @param {string} message - the error message
 		 * @param {?string} [method=null] - the method name
 		 * @param {boolean} [fatal=false] - is error fatal
+		 * @memberOf app.GA
 		 */
 		error: function(message, method=null, fatal=false) {
 			let msg = '';
@@ -125,9 +128,10 @@ app.GA = (function() {
 		},
 		/**
 		 * Send an exception
-		 * @memberOf GA
+		 * @memberOf app.GA
 		 * @param {string} message - the error message
 		 * @param {?string} [stack=null] - error stack
+		 * @memberOf app.GA
 		 */
 		exception: function(message, stack=null) {
 			if (message) {
