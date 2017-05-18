@@ -22,7 +22,7 @@ app.PhotoView = (function() {
 	 * @property {Element} author - label
 	 * @property {Element} time - label
 	 * @property {Object} model - template model
-	 * @property {Object} item - photo item
+	 * @property {Object} item - {@link Photo}
 	 * @memberOf app.PhotoView
 	 */
 

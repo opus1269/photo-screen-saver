@@ -25,16 +25,17 @@ app.GA = (function() {
 
 	/**
 	 * Google Analytics Event
-	 * @typedef {object} GAEvent
+	 * @typedef {Object} GAEvent
 	 * @property {string} cat - category
 	 * @property {string} act - action
 	 */
 
 	/**
 	 * Event types
-	 * @type {object}
+	 * @type {Object}
 	 * @property {GAEvent} INSTALLED - extension installed
-	 * @property {GAEvent} UPDATED - extension updated
+	 * @property {GAEvent} MENU - main menu
+	 * @property {GAEvent} TOGGLE - setting-toggle
 	 * @const
 	 * @memberOf app.GA
 	 */
