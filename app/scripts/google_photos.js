@@ -150,7 +150,7 @@ app.GooglePhotos = (function() {
 			const url = `${_URL_BASE}default/${query}`;
 
 			// get list of albums
-			return app.Http.doGet(url, true, false).then((root) => {
+			return app.Http.doGet(url, true, true).then((root) => {
 				const feed = root.feed;
 				const entries = feed.entry || [];
 
