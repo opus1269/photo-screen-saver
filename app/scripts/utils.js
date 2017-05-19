@@ -120,30 +120,5 @@ app.Utils = (function() {
 				array[j] = temp;
 			}
 		},
-
-		/**
-		 * Add an image object to an existing Array
-		 * @param {Array} images - Array of image objects
-		 * @param {string} url - The url to the photo
-		 * @param {string} author - The photographer
-		 * @param {number} asp - The aspect ratio of the photo
-		 * @param {Object} [ex] - Additional information about the photo
-		 * @param {string} [point] - The Lat Long
-		 * @memberOf app.Utils
-		 */
-		addImage: function(images, url, author, asp, ex, point) {
-			const image = {
-				url: url,
-				author: author,
-				asp: asp.toPrecision(3),
-			};
-			if (ex) {
-				image.ex = ex;
-			}
-            if (point) {
-                image.point = point;
-            }
-			images.push(image);
-		},
 	};
 })();

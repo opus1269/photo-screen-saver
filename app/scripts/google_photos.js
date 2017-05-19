@@ -57,7 +57,8 @@ app.GooglePhotos = (function() {
 	 */
 	const _ALBUM_QUERY = '?imgmax=1600&thumbsize=72' +
 		'&fields=title,gphoto:id,entry(media:group/media:content,' +
-		'media:group/media:credit,media:group/media:thumbnail)&v=2&alt=json';
+		'media:group/media:credit,media:group/media:thumbnail,georss:where)' +
+		'&v=2&alt=json';
 
 	/** Determine if a Picasa entry is an image
 	 * @param {Object} entry - Picasa media object
@@ -101,24 +102,18 @@ app.GooglePhotos = (function() {
 		const entries = feed.entry || [];
 		/** @(type) {PhotoSource.Photo[]} */
 		const photos = [];
-		let url;
-		let author;
-		let width;
-		let height;
-		let asp;
-		let point;
 
 		entries.forEach((entry) => {
 			if (_isImage(entry)) {
-				url = entry.media$group.media$content[0].url;
-				width = entry.media$group.media$content[0].width;
-				height = entry.media$group.media$content[0].height;
-				asp = width / height;
-				author = entry.media$group.media$credit[0].$t;
+				let point;
+				const url = entry.media$group.media$content[0].url;
+				const width = entry.media$group.media$content[0].width;
+				const height = entry.media$group.media$content[0].height;
+				const asp = width / height;
+				const author = entry.media$group.media$credit[0].$t;
 				if (_hasGeo(entry)) {
 					point = entry.georss$where.gml$Point.gml$pos.$t;
                 }
-                app.Utils.addImage(photos, url, author, asp, {}, point);
                 app.PhotoSource.addImage(photos, url, author, asp, {}, point);
 			}
 		});

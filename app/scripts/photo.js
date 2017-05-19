@@ -20,6 +20,7 @@
 	 * @property {int} height - height
 	 * @property {number} aspectRatio - aspect ratio
 	 * @property {Object} [ex] - additional information about the photo
+	 * @property {Object} [point] - geolocation lat lon
 	 * @property {string} label - display label
 	 */
 
@@ -27,7 +28,6 @@
 	 * A photo for the screen saver
 	 * Important: Only implement static methods. This Object
 	 * will be shallow copied in the screensaver and lose its instance methods
-	 * @type {Photo}
 	 * @param {string} name - unique name
 	 * @param {app.PhotoSource.Photo} source - source photo
 	 * @constructor

@@ -252,11 +252,12 @@
 
 	/**
 	 * A photo from a {@link app.PhotoSource}
-	 * @typedef {Object} app.PhotoSource.Photo
+	 * @typedef {{}} app.PhotoSource.Photo
 	 * @property {string} url - The url to the photo
 	 * @property {string} author - The photographer
 	 * @property {number} asp - The aspect ratio of the photo
 	 * @property {Object} [ex] - Additional information about the photo
+	 * @property {Object} [point] - geolocation lat lon
 	 * @property {string} type - source of the photo
 	 */
 
@@ -267,16 +268,23 @@
 	 * @param {string} author - The photographer
 	 * @param {number} asp - The aspect ratio of the photo
 	 * @param {Object} [ex] - Additional information about the photo
+	 * @param {string} [point] - The Lat Long
+	 * @memberOf app.Utils
 	 */
-	PhotoSource.addImage = function(images, url, author, asp, ex) {
+	PhotoSource.addImage = function(images, url, author, asp, ex, point) {
 		/** @type {app.PhotoSource.Photo} */
-		const image = {};
-		image.url = url;
-		image.author = author;
-		image.asp = asp.toPrecision(3);
+		const image = {
+			url: url,
+			author: author,
+			asp: asp.toPrecision(3),
+		};
 		if (ex) {
 			image.ex = ex;
 		}
+		if (point) {
+			image.point = point;
+		}
 		images.push(image);
 	};
+
 })(window);
