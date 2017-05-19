@@ -9,6 +9,8 @@
 
 	/**
 	 * A photo for the screen saver
+	 * Important: Only implement static methods. This Object
+	 * will be shallow copied in the screensaver and lose its instance methods
 	 * @param {string} name - unique name
 	 * @param {Object} source - source item
 	 * @constructor
@@ -21,20 +23,24 @@
 		this.type = source.type;
 		this.aspectRatio = source.asp;
 		this.ex = source.ex;
+        this.point = source.point;
 		this.width = screen.width;
 		this.height = screen.height;
-		this.label = this.buildLabel(false);
+		this.label = Photo.buildAuthorLabel(this.type, this.author, false);
+		this.location = null;
 	};
 
 	/**
-	 * Create the photo label
+	 * Create the author label
+	 * @param {string} type - source of photo
+	 * @param {string} author - author of photo
 	 * @param {boolean} force - require display of label if true
 	 * @returns {string} label describing the photo source and photographer name
 	 */
-	Photo.prototype.buildLabel = function(force) {
+	Photo.buildAuthorLabel = function(type, author, force) {
 		let ret = '';
-		let type = this.type;
-		const idx = this.type.search('User');
+		let newType = type;
+		const idx = type.search('User');
 
 		if (!force && !app.Storage.getBool('showPhotog') && (idx !== -1)) {
 			// don't show label for user's own photos, if requested
@@ -43,14 +49,14 @@
 
 		if (idx !== -1) {
 			// strip off 'User'
-			type = this.type.substring(0, idx - 1);
+			newType = type.substring(0, idx - 1);
 		}
 
-		if (this.author) {
-			ret = `${this.author} / ${type}`;
+		if (author) {
+			ret = `${author} / ${newType}`;
 		} else {
 			// no photographer name
-			ret = `Photo from ${type}`;
+			ret = `Photo from ${newType}`;
 		}
 		return ret;
 	};

@@ -33,7 +33,8 @@ app.GooglePhotos = (function() {
 	 */
 	const PHOTOS_QUERY =
 		'?imgmax=1600&thumbsize=72' +
-		'&fields=entry(media:group/media:content,media:group/media:credit)' +
+		'&fields=entry' +
+		'(media:group/media:content,media:group/media:credit,georss:where)' +
 		'&v=2&alt=json';
 
 	/**
@@ -128,6 +129,20 @@ app.GooglePhotos = (function() {
 		return true;
 	}
 
+	/** Determine if a Picasa entry has Geo position
+	* @param {Object} entry - Picasa media object
+	* @returns {boolean} true if entry has Geo position
+	* @private
+	* @memberOf app.GooglePhotos
+	*/
+	function _hasGeo(entry) {
+		return !!(entry.georss$where &&
+		entry.georss$where.gml$Point &&
+		entry.georss$where.gml$Point.gml$pos &&
+		entry.georss$where.gml$Point.gml$pos.$t);
+
+	}
+
 	/**
 	 * Extract the Picasa photos into an Array
 	 * @param {Object} root - root object from Picasa API call
@@ -145,6 +160,7 @@ app.GooglePhotos = (function() {
 		let width;
 		let height;
 		let asp;
+		let point;
 
 		for (let i = 0; i < entries.length; i++) {
 			entry = entries[i];
@@ -154,7 +170,10 @@ app.GooglePhotos = (function() {
 				height = entry.media$group.media$content[0].height;
 				asp = width / height;
 				author = entry.media$group.media$credit[0].$t;
-				app.Utils.addImage(photos, url, author, asp);
+				if (_hasGeo(entry)) {
+					point = entry.georss$where.gml$Point.gml$pos.$t;
+                }
+                app.Utils.addImage(photos, url, author, asp, {}, point);
 			}
 		}
 		return photos;

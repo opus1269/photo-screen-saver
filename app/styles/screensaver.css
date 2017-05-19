@@ -30,6 +30,7 @@ body {
 	font-size: 2.5vh;
 	font-weight: 300;
 	position: fixed;
+	overflow: hidden;
 	right: 1vw;
 	bottom: 1vh;
 	padding: 0;
@@ -37,7 +38,18 @@ body {
 	color: white;
 	opacity: .8;
 }
-
+.location {
+	font-size: 2.5vh;
+	font-weight: 300;
+	position: fixed;
+	overflow: hidden;
+	left: 1vw;
+	bottom: 1vh;
+	padding: 0;
+	margin: 0;
+	color: white;
+	opacity: .8;
+}
 #noPhotos {
 	font-size: 5vh;
 	font-weight: 600;
