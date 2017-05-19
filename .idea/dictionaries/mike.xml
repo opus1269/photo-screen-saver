@@ -11,6 +11,7 @@
       <w>dconnolly</w>
       <w>displayfeatures</w>
       <w>flickr</w>
+      <w>geolocation</w>
       <w>github</w>
       <w>keydown</w>
       <w>mousemove</w>
@@ -19,10 +20,12 @@
       <w>nsfw</w>
       <w>pageview</w>
       <w>photog</w>
+      <w>photoscreensaver</w>
       <w>photostreams</w>
       <w>picasa</w>
       <w>reddit</w>
       <w>screensaver</w>
+      <w>slideshow</w>
       <w>snoocore</w>
       <w>spaceporn</w>
       <w>subreddit</w>
