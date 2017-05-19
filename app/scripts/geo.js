@@ -51,6 +51,37 @@ app.Geo = (function() {
 		maxSize: 50,
 	};
 
+	/**
+	 * Try to get (@link app.Geo.Location} from cache
+	 * @param {string} point - a geolocation
+	 * @returns {app.Geo.Location|undefined} location, undefined if not cached
+	 * @private
+	 */
+	function _getFromCache(point) {
+		return _LOC_CACHE.entries.find((element) => {
+			return (element.point === point);
+		});
+
+	}
+
+	/**
+	 * Try to get (@link app.Geo.Location} from cache
+	 * @param {string} point - a geolocation
+	 * @param {string} location - description
+	 * @private
+	 */
+	function _addToCache(point, location) {
+		_LOC_CACHE.entries.push({
+			loc: location,
+			point: point,
+		});
+		if (_LOC_CACHE.entries.length >
+			_LOC_CACHE.maxSize) {
+			// FIFO
+			_LOC_CACHE.entries.shift();
+		}
+	}
+
 	return {
 		/**
 		 * Get and set the location string
@@ -61,16 +92,16 @@ app.Geo = (function() {
 			if (app.Storage.getBool('showLocation')) {
 				if (els.item && els.item.point && !els.item.location) {
 					// has location and hasn't been set yet
-					const cache = _LOC_CACHE.entries.find((element) => {
-						return (element.point === els.item.point);
-					});
+					/** @type {string}*/
+					const point = els.item.point;
+					const cache = _getFromCache(point);
 					if (cache) {
 						// retrieve from cache
 						els.model.set('item.location', cache.loc);
 					} else {
 						// get from maps api
 						const request = GOOGLE_APIS_URI + '?latlng=' +
-							els.item.point + '&sensor=true';
+							point + '&sensor=true';
 						const xhr = new XMLHttpRequest();
 
 						xhr.onload = function() {
@@ -82,15 +113,7 @@ app.Geo = (function() {
 									response.results[0].formatted_address;
 								els.model.set('item.location', location);
 								// cache it
-								_LOC_CACHE.entries.push({
-									loc: location,
-									point: els.item.point,
-								});
-								if (_LOC_CACHE.entries.length >
-									_LOC_CACHE.maxSize) {
-									// FIFO
-									_LOC_CACHE.entries.shift();
-								}
+								_addToCache(point, location);
 							}
 						};
 
