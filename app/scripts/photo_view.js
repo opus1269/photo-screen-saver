@@ -76,11 +76,11 @@ app.PhotoView = (function() {
 			e.author.style.right = (right + 1) + 'vw';
 			e.author.style.bottom = '';
 			e.author.style.width =
-				aspect / SCREEN_ASPECT * 100 - 3 + 'vw';
+				aspect / SCREEN_ASPECT * (100 - .5) + 'vw';
 			e.location.style.left = (right + 1) + 'vw';
 			e.location.style.bottom = '';
 			e.location.style.width =
-				aspect / SCREEN_ASPECT * 100 - 3 + 'vw';
+				aspect / SCREEN_ASPECT * (100 - .5) + 'vw';
 			e.time.style.right = (right + 1) + 'vw';
 			e.time.style.bottom = '';
 		} else {
@@ -93,6 +93,12 @@ app.PhotoView = (function() {
 			e.location.style.width = 100 - .5 + 'vw';
 			e.time.style.bottom = (bottom + 3.5) + 'vh';
 			e.time.style.right = '';
+		}
+
+		if (app.Storage.getBool('showTime')) {
+			// don't wrap author
+			e.author.style.textOverflow = 'ellipsis';
+			e.author.style.whiteSpace = 'nowrap';
 		}
 
 		if (!app.Utils.isWhiteSpace(e.item.location) &&
