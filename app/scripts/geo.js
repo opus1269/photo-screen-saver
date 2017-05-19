@@ -61,7 +61,6 @@ app.Geo = (function() {
 		return _LOC_CACHE.entries.find((element) => {
 			return (element.point === point);
 		});
-
 	}
 
 	/**
@@ -75,8 +74,7 @@ app.Geo = (function() {
 			loc: location,
 			point: point,
 		});
-		if (_LOC_CACHE.entries.length >
-			_LOC_CACHE.maxSize) {
+		if (_LOC_CACHE.entries.length > _LOC_CACHE.maxSize) {
 			// FIFO
 			_LOC_CACHE.entries.shift();
 		}
@@ -92,7 +90,7 @@ app.Geo = (function() {
 			if (app.Storage.getBool('showLocation')) {
 				if (els.item && els.item.point && !els.item.location) {
 					// has location and hasn't been set yet
-					/** @type {string}*/
+					/** @type {string} */
 					const point = els.item.point;
 					const cache = _getFromCache(point);
 					if (cache) {
@@ -100,12 +98,10 @@ app.Geo = (function() {
 						els.model.set('item.location', cache.loc);
 					} else {
 						// get from maps api
-						const request = GOOGLE_APIS_URI + '?latlng=' +
+						const url = GOOGLE_APIS_URI + '?latlng=' +
 							point + '&sensor=true';
-						const xhr = new XMLHttpRequest();
-
-						xhr.onload = function() {
-							const response = JSON.parse(xhr.response);
+						app.Http.doGet(url, false, false, false)
+							.then((response) => {
 							if (response.status && response.status === 'OK'
 								&& response.results
 								&& response.results.length > 0) {
@@ -115,14 +111,11 @@ app.Geo = (function() {
 								// cache it
 								_addToCache(point, location);
 							}
-						};
-
-						xhr.onerror = function() {
-							els.model.set('item.location', '');
-						};
-
-						xhr.open('GET', request, true);
-						xhr.send();
+							return null;
+						}).catch((err) => {
+							els.model.set('item.location', null);
+							app.GA.error(err.message, 'app.Geo.set');
+						});
 					}
 				}
 			}

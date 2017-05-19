@@ -103,11 +103,12 @@ app.Http = (function() {
 	 * @param {boolean} isAuth - true if authorization required
 	 * @param {boolean} retryAuth - if true, retry with new token
 	 * @param {int} attempt - the retry attempt we are on
+	 * @param {boolean} backoff - if true, do exponential back-off
 	 * @returns {Promise.<JSON>} response from server
 	 * @private
 	 * @memberOf app.Http
 	 */
-	function _fetch(url, opts, isAuth, retryAuth, attempt) {
+	function _fetch(url, opts, isAuth, retryAuth, attempt, backoff) {
 		let token = '';
 		return _doAuth(isAuth, retryAuth).then((authToken) => {
 			if (isAuth) {
@@ -138,7 +139,7 @@ app.Http = (function() {
 				return _retryAuth(url, opts, isAuth, token, attempt);
 			}
 
-			if ((status >= 500) && (status < 600)) {
+			if (backoff && (status >= 500) && (status < 600)) {
 				// temporary network error, maybe. Retry
 				return _retry(url, opts, isAuth, retryAuth, attempt);
 			}
@@ -163,14 +164,16 @@ app.Http = (function() {
 		 * @param {string} url - server
 		 * @param {boolean} [isAuth=false] - true if authorization required
 		 * @param {boolean} [retryAuth=false] - if true, retry with new token
+		 * @param {boolean} [backoff=true] - if true, do exponential back-off
 		 * @returns {Promise.<json>} response from server
 		 * @memberOf app.Http
 		 */
-		doGet: function(url, isAuth = false, retryAuth = false) {
+		doGet: function(url, isAuth = false, retryAuth = false,
+						backoff = true) {
 			let attempt = 0;
 			let options = {method: 'GET', headers: new Headers({})};
 
-			return _fetch(url, options, isAuth, retryAuth, attempt);
+			return _fetch(url, options, isAuth, retryAuth, attempt, backoff);
 		},
 	};
 })();
