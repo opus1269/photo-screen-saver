@@ -17,12 +17,13 @@ app.PhotoView = (function() {
 
 	/**
 	 * Important components of a photo view
-	 * @typedef {Object} Elements
+	 * @typedef {Object} app.PhotoView.Elements
 	 * @property {Element} image - paper-image
 	 * @property {Element} author - label
 	 * @property {Element} time - label
+	 * @property {Element} location - Geo location
 	 * @property {Object} model - template model
-	 * @property {Object} item - {@link Photo}
+	 * @property {app.Photo} item - photo item
 	 * @memberOf app.PhotoView
 	 */
 
@@ -38,7 +39,7 @@ app.PhotoView = (function() {
 	/**
 	 * Get references to the important elements of a slide
 	 * @param {int} idx - index into animated pages
-	 * @returns {Elements} Object containing the elements of a slide
+	 * @returns {app.PhotoView.Elements} important elements of a slide
 	 * @private
 	 * @memberOf app.PhotoView
 	 */
@@ -49,6 +50,7 @@ app.PhotoView = (function() {
 		const ret = {};
 		ret.image = el.querySelector('.image');
 		ret.author = el.querySelector('.author');
+		ret.location = el.querySelector('.location');
 		ret.time = el.querySelector('.time');
 		ret.model = rep.modelForElement(ret.image);
 		ret.item = ret.model.get('item');
@@ -67,19 +69,40 @@ app.PhotoView = (function() {
 		let right;
 		let bottom;
 
+		e.author.style.textAlign = 'right';
+		e.location.style.textAlign = 'left';
 		if (aspect < SCREEN_ASPECT) {
 			right = (100 - aspect / SCREEN_ASPECT * 100) / 2;
 			e.author.style.right = (right + 1) + 'vw';
 			e.author.style.bottom = '';
+			e.author.style.width =
+				aspect / SCREEN_ASPECT * 100 - 3 + 'vw';
+			e.location.style.left = (right + 1) + 'vw';
+			e.location.style.bottom = '';
+			e.location.style.width =
+				aspect / SCREEN_ASPECT * 100 - 3 + 'vw';
 			e.time.style.right = (right + 1) + 'vw';
 			e.time.style.bottom = '';
 		} else {
 			bottom = (100 - SCREEN_ASPECT / aspect * 100) / 2;
 			e.author.style.bottom = (bottom + 1) + 'vh';
 			e.author.style.right = '';
+			e.author.style.width = 100 - .5 + 'vw';
+			e.location.style.bottom = (bottom + 1) + 'vh';
+			e.location.style.left = '';
+			e.location.style.width = 100 - .5 + 'vw';
 			e.time.style.bottom = (bottom + 3.5) + 'vh';
 			e.time.style.right = '';
 		}
+
+		if (!app.Utils.isWhiteSpace(e.item.location) &&
+			app.Storage.getBool('showLocation')) {
+			e.author.style.maxWidth =
+				((aspect / SCREEN_ASPECT * 100) / 2 ) - .25 + 'vh';
+		}
+
+		e.location.style.maxWidth =
+			((aspect / SCREEN_ASPECT * 100) / 2 ) - .25 + 'vh';
 	}
 
 	/**
@@ -97,6 +120,33 @@ app.PhotoView = (function() {
 	}
 
 	/**
+	 * Set style info for labels in frame mode
+	 * @param {Element} el - element to style
+	 * @param {int} width - frame width
+	 * @param {int} height - frame height
+	 * @private
+	 * @memberOf app.PhotoView
+	 */
+	function _setFrameLabelStyle(el, width, height) {
+		el.style.textOverflow = 'ellipsis';
+		el.style.whiteSpace = 'nowrap';
+		if (app.Storage.getInt('showTime')) {
+			el.style.left = (screen.width - width) / 2 + 10 + 'px';
+			el.style.textAlign = 'left';
+			el.style.width = Math.floor(0.8 * width) + 'px';
+		} else {
+			el.style.left = (screen.width - width) / 2 + 10 + 'px';
+			el.style.width = width - 20 + 'px';
+			el.style.textAlign = 'center';
+		}
+		el.style.bottom = (screen.height - height) / 2 + 10 + 'px';
+		el.style.color = 'black';
+		el.style.opacity = 0.9;
+		el.style.fontSize = '2.5vh';
+		el.style.fontWeight = 300;
+	}
+
+	/**
 	 * Finalize DOM for a framed photo
 	 * @param {int} idx - index into animated pages
 	 * @private
@@ -106,11 +156,15 @@ app.PhotoView = (function() {
 		const e = _getElements(idx);
 		const model = e.model;
 		const author = e.author;
+		const location = e.location;
 		const time = e.time;
 		const image = e.image;
 		const img = image.$.img;
+		/** @type {Photo} */
 		const photo = e.item;
 		const aspect = photo.aspectRatio;
+		const showLocation = app.Storage.getBool('showLocation');
+		const hasLocation = !!photo.point;
 		let padding;
 		let border;
 		let borderBot;
@@ -124,11 +178,15 @@ app.PhotoView = (function() {
 		borderBot = screen.height * 0.05;
 		padding = screen.height * 0.025;
 
-		if (!app.Storage.getBool('showPhotog')) {
-			// force use of photo label for this view
-			const label = photo.buildLabel(true);
-			model.set('item.label', label);
+		let label;
+		if (showLocation && hasLocation) {
+			// location takes priority over author
+			label = '';
+		} else {
+			// force author for this view
+			label = app.Photo.buildAuthorLabel(photo.type, photo.author, true);
 		}
+		model.set('item.label', label);
 
 		height =
 			Math.min((screen.width - padding * 2 - border * 2) / aspect,
@@ -151,19 +209,8 @@ app.PhotoView = (function() {
 		image.style.borderRadius = '1.5vh';
 		image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
 
-		if (app.Storage.getInt('showTime')) {
-			author.style.left = (screen.width - frWidth) / 2 + 10 + 'px';
-			author.style.textAlign = 'left';
-		} else {
-			author.style.left = '0';
-			author.style.width = screen.width + 'px';
-			author.style.textAlign = 'center';
-		}
-		author.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
-		author.style.color = 'black';
-		author.style.opacity = 0.9;
-		author.style.fontSize = '2.5vh';
-		author.style.fontWeight = 300;
+		_setFrameLabelStyle(author, frWidth, frHeight);
+		_setFrameLabelStyle(location, frWidth, frHeight);
 
 		time.style.right = (screen.width - frWidth) / 2 + 10 + 'px';
 		time.style.textAlign = 'right';
@@ -206,6 +253,7 @@ app.PhotoView = (function() {
 		 * @memberOf app.PhotoView
 		 */
 		prep: function(idx, t) {
+			app.Geo.set(_getElements(idx));
 			app.PhotoView.setTime(t);
 			_super500px(idx);
 			switch (t.photoSizing) {
@@ -261,10 +309,10 @@ app.PhotoView = (function() {
 			} else if (format === 1) {
 				// 12 hour format
 				timeStr = date.toLocaleTimeString('en-us', {
-						hour: 'numeric',
-						minute: '2-digit',
-						hour12: true,
-					});
+					hour: 'numeric',
+					minute: '2-digit',
+					hour12: true,
+				});
 				if (timeStr.endsWith('M')) {
 					// strip off AM/PM
 					timeStr = timeStr.substring(0, timeStr.length - 3);

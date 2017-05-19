@@ -75,6 +75,20 @@ app.GooglePhotos = (function() {
 		return true;
 	}
 
+	/** Determine if a Picasa entry has Geo position
+	* @param {Object} entry - Picasa media object
+	* @returns {boolean} true if entry has Geo position
+	* @private
+	* @memberOf app.GooglePhotos
+	*/
+	function _hasGeo(entry) {
+		return !!(entry.georss$where &&
+		entry.georss$where.gml$Point &&
+		entry.georss$where.gml$Point.gml$pos &&
+		entry.georss$where.gml$Point.gml$pos.$t);
+
+	}
+
 	/**
 	 * Extract the Picasa photos into an Array
 	 * @param {Object} root - root object from Picasa API call
@@ -87,15 +101,25 @@ app.GooglePhotos = (function() {
 		const entries = feed.entry || [];
 		/** @(type) {PhotoSource.Photo[]} */
 		const photos = [];
+		let url;
+		let author;
+		let width;
+		let height;
+		let asp;
+		let point;
 
 		entries.forEach((entry) => {
 			if (_isImage(entry)) {
-				const url = entry.media$group.media$content[0].url;
-				const width = entry.media$group.media$content[0].width;
-				const height = entry.media$group.media$content[0].height;
-				const asp = width / height;
-				const author = entry.media$group.media$credit[0].$t;
-				app.PhotoSource.addImage(photos, url, author, asp);
+				url = entry.media$group.media$content[0].url;
+				width = entry.media$group.media$content[0].width;
+				height = entry.media$group.media$content[0].height;
+				asp = width / height;
+				author = entry.media$group.media$credit[0].$t;
+				if (_hasGeo(entry)) {
+					point = entry.georss$where.gml$Point.gml$pos.$t;
+                }
+                app.Utils.addImage(photos, url, author, asp, {}, point);
+                app.PhotoSource.addImage(photos, url, author, asp, {}, point);
 			}
 		});
 		return photos;

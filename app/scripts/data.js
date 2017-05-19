@@ -25,7 +25,7 @@ app.Data = (function() {
 	 * @private
 	 * @memberOf app.Data
 	 */
-	const _DATA_VERSION = 10;
+	const _DATA_VERSION = 11;
 
 	/**
 	 * A number and associated units
@@ -48,6 +48,7 @@ app.Data = (function() {
 	 * @property {int} photoTransition - transition animation
 	 * @property {int} showTime - time display format
 	 * @property {boolean} showPhotog - display name on own photos
+	 * @property {boolean} showLocation - display photo location
 	 * @property {string} background - background image
 	 * @property {boolean} keepAwake - manage computer poser settings
 	 * @property {boolean} chromeFullscreen - don't display over fullscreen
@@ -88,6 +89,7 @@ app.Data = (function() {
 		'photoTransition': 4,
 		'showTime': 2, // 24 hr format
 		'showPhotog': true,
+		'showLocation': true,
 		'background': 'background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)',
 		'keepAwake': false,
 		'chromeFullscreen': true,
