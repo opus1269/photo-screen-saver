@@ -5,7 +5,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="45">
+          <list size="49">
             <item index="0" class="java.lang.String" itemvalue="include" />
             <item index="1" class="java.lang.String" itemvalue="noink" />
             <item index="2" class="java.lang.String" itemvalue="on-tap" />
@@ -51,6 +51,10 @@
             <item index="42" class="java.lang.String" itemvalue="section-title" />
             <item index="43" class="java.lang.String" itemvalue="item-icon" />
             <item index="44" class="java.lang.String" itemvalue="if" />
+            <item index="45" class="java.lang.String" itemvalue="label" />
+            <item index="46" class="java.lang.String" itemvalue="units" />
+            <item index="47" class="java.lang.String" itemvalue="url" />
+            <item index="48" class="java.lang.String" itemvalue="icon" />
           </list>
         </value>
       </option>
