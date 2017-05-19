@@ -98,7 +98,7 @@ app.GA = (function() {
 		 * Send an event
 		 * @memberOf app.GA
 		 * @param {GAEvent} event - the event type
-		 * @param {string} [action=null] - override action
+		 * @param {?string} [action=null] - override action
 		 * @memberOf app.GA
 		 */
 		event: function(event, action=null) {
@@ -130,6 +130,7 @@ app.GA = (function() {
 				console.error(message);
 			}
 		},
+
 		/**
 		 * Send an exception
 		 * @memberOf app.GA
