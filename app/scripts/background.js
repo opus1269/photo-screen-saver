@@ -57,7 +57,9 @@
 			title: app.Utils.localize('disable'),
 			contexts: ['browser_action'],
 		}).catch((err) => {
-			app.GA.error(err.message, 'chromep.contextMenus.create');
+			if (!err.message.includes('duplicate id')) {
+				app.GA.error(err.message, 'chromep.contextMenus.create');
+			}
 		});
 
 		chromep.contextMenus.create({
@@ -65,7 +67,9 @@
 			id: 'SEP_MENU',
 			contexts: ['browser_action'],
 		}).catch((err) => {
-			app.GA.error(err.message, 'chromep.contextMenus.create');
+			if (!err.message.includes('duplicate id')) {
+				app.GA.error(err.message, 'chromep.contextMenus.create');
+			}
 		});
 
 		if (details.reason === 'install') {
