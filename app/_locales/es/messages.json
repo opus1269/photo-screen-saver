@@ -229,10 +229,10 @@
     "message": "Nota: Siempre se muestra en modo Frame"
   },
   "setting_location": {
-    "message": "Mostrar la ubicación de la foto"
+    "message": "Mostrar ubicación de la foto, si está disponible"
   },
   "setting_location_desc": {
-    "message": "Muestre la ubicación donde fue tomada la foto, si está disponible"
+    "message": "No mostrará la ubicación estimada de Google Fotos"
   },
   "setting_bg": {
     "message": "Fondo"
