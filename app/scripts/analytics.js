@@ -112,11 +112,11 @@ app.GA = (function() {
 		 * @memberOf app.GA
 		 */
 		error: function(message, method=null, fatal=false) {
-			let msg = '';
+			let msg = 'ERROR ';
 			if (method) {
 				msg = `Method: ${method} `;
 			}
-			msg+= `Error: ${message}`;
+			msg+= `Message: ${message}`;
 			if (message) {
 				ga('send', 'exception', {
 					'exDescription': msg,
@@ -132,18 +132,19 @@ app.GA = (function() {
 		 * @param {?string} [stack=null] - error stack
 		 * @memberOf app.GA
 		 */
-		exception: function(message, stack=null) {
+		exception: function(message, stack = null) {
+			let msg = 'EXCEPTION ';
 			if (message) {
-				let msg = message;
-				if (stack) {
-					msg+= `\n${stack}`;
-				}
-				ga('send', 'exception', {
-					'exDescription': msg,
-					'exFatal': true,
-				});
-				console.error(msg);
+				msg += message;
 			}
+			if (stack) {
+				msg += `\n${stack}`;
+			}
+			ga('send', 'exception', {
+				'exDescription': msg,
+				'exFatal': true,
+			});
+			console.error(msg);
 		},
 	};
 })();
