@@ -48,6 +48,17 @@ app.GooglePhotos = (function() {
 	const _URL_BASE = 'https://picasaweb.google.com/data/feed/api/user/';
 
 	/**
+	 * Query for list of albums
+	 * @type {string}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf app.GooglePhotos
+	 */
+	const _ALBUMS_QUERY = '?max-results=2000&visibility=all&kind=album' +
+		'&fields=entry(gphoto:albumType,gphoto:id)&v2&alt=json';
+
+	/**
 	 * Query an album
 	 * @type {string}
 	 * @const
@@ -87,7 +98,22 @@ app.GooglePhotos = (function() {
 		entry.georss$where.gml$Point &&
 		entry.georss$where.gml$Point.gml$pos &&
 		entry.georss$where.gml$Point.gml$pos.$t);
+	}
 
+	/** Get the thumbnail url if it exists
+	* @param {Array} entry - Picasa media object
+	* @returns {?string} url or null
+	* @private
+	* @memberOf app.GooglePhotos
+	*/
+	function _getThumbnail(entry) {
+		let ret = null;
+		if (entry.length &&
+			entry[0].media$group &&
+			entry[0].media$group.media$thumbnail[0]) {
+			ret = entry[0].media$group.media$thumbnail[0].url;
+		}
+		return ret;
 	}
 
 	/**
@@ -105,12 +131,12 @@ app.GooglePhotos = (function() {
 
 		entries.forEach((entry) => {
 			if (_isImage(entry)) {
-				let point;
 				const url = entry.media$group.media$content[0].url;
 				const width = entry.media$group.media$content[0].width;
 				const height = entry.media$group.media$content[0].height;
 				const asp = width / height;
 				const author = entry.media$group.media$credit[0].$t;
+				let point;
 				if (_hasGeo(entry)) {
 					point = entry.georss$where.gml$Point.gml$pos.$t;
                 }
@@ -163,10 +189,7 @@ app.GooglePhotos = (function() {
 		 * @memberOf app.GooglePhotos
 		 */
 		loadAlbumList: function() {
-			const query = '?v=2' +
-				'&fields=entry(gphoto:albumType,gphoto:id)' +
-				'&max-results=20000&visibility=all&kind=album&alt=json';
-			const url = `${_URL_BASE}default/${query}`;
+			const url = `${_URL_BASE}default/${_ALBUMS_QUERY}`;
 
 			// get list of albums
 			return app.Http.doGet(url, true, true).then((root) => {
@@ -177,6 +200,7 @@ app.GooglePhotos = (function() {
 				const promises = [];
 				entries.forEach((entry) => {
 					if (!entry.gphoto$albumType) {
+						// skip special albums (e.g. Google+ posts, backups)
 						const albumId = entry.gphoto$id.$t;
 						promises.push(_loadPicasaAlbum(albumId));
 					}
@@ -190,22 +214,23 @@ app.GooglePhotos = (function() {
 				let ct = 0;
 				values.forEach((value) => {
 					const feed = value.feed;
-					const thumb =
-						feed.entry[0].media$group.media$thumbnail[0].url;
-					const photos = _processPhotos(value);
-					if (photos && photos.length) {
-						/** @type {app.GooglePhotos.Album} */
-						const album = {};
-						album.index = ct;
-						album.uid = 'album' + ct;
-						album.name = feed.title.$t;
-						album.id = feed.gphoto$id.$t;
-						album.ct = photos.length;
-						album.thumb = thumb;
-						album.checked = false;
-						album.photos = photos;
-						albums.push(album);
-						ct++;
+					if (feed && feed.entry) {
+						const thumb = _getThumbnail(feed.entry);
+						const photos = _processPhotos(value);
+						if (photos && photos.length) {
+							/** @type {app.GooglePhotos.Album} */
+							const album = {};
+							album.index = ct;
+							album.uid = 'album' + ct;
+							album.name = feed.title.$t;
+							album.id = feed.gphoto$id.$t;
+							album.ct = photos.length;
+							album.thumb = thumb;
+							album.checked = false;
+							album.photos = photos;
+							albums.push(album);
+							ct++;
+						}
 					}
 				});
 				return Promise.resolve(albums);
