@@ -68,7 +68,6 @@ app.GA = (function() {
 			m.parentNode.insertBefore(a, m);
 		})(window, document, 'script',
 			'https://www.google-analytics.com/analytics.js', 'ga');
-
 		ga('create', TRACKING_ID, 'auto');
 		// see: http://stackoverflow.com/a/22152353/1958200
 		ga('set', 'checkProtocolTask', function() { });
@@ -79,12 +78,10 @@ app.GA = (function() {
 	window.addEventListener('load', _onLoad);
 
 	return {
-
 		EVENT: EVENT,
 
 		/**
 		 * Send a page
-		 * @memberOf app.GA
 		 * @param {string} page - page path
 		 * @memberOf app.GA
 		 */
@@ -96,7 +93,6 @@ app.GA = (function() {
 
 		/**
 		 * Send an event
-		 * @memberOf app.GA
 		 * @param {GAEvent} event - the event type
 		 * @param {?string} [action=null] - override action
 		 * @memberOf app.GA
@@ -110,7 +106,6 @@ app.GA = (function() {
 
 		/**
 		 * Send an error
-		 * @memberOf app.GA
 		 * @param {string} message - the error message
 		 * @param {?string} [method=null] - the method name
 		 * @param {boolean} [fatal=false] - is error fatal
@@ -133,7 +128,6 @@ app.GA = (function() {
 
 		/**
 		 * Send an exception
-		 * @memberOf app.GA
 		 * @param {string} message - the error message
 		 * @param {?string} [stack=null] - error stack
 		 * @memberOf app.GA
@@ -152,7 +146,6 @@ app.GA = (function() {
 			}
 		},
 	};
-
 })();
 
 
