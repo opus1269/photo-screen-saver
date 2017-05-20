@@ -112,9 +112,8 @@ app.Geo = (function() {
 								_addToCache(point, location);
 							}
 							return null;
-						}).catch((err) => {
+						}).catch(() => {
 							els.model.set('item.location', null);
-							app.GA.error(err.message, 'app.Geo.set');
 						});
 					}
 				}
