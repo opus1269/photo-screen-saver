@@ -170,7 +170,6 @@ app.Reddit = (function() {
 				photos = photos.concat(_processChildren(slice.children));
 				return Promise.resolve(photos);
 			}).catch((err) => {
-				app.GA.error(err.message, 'app.Reddit.loadImages');
 				throw new Error(err.message);
 			});
 		},
