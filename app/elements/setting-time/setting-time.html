@@ -173,10 +173,15 @@
 	 * @private
 	 */
 	_formatTime: function(timeString) {
-		let hour = parseInt(timeString.substr(0, 2), 10);
-		const period = (hour % 24) < 12 ? 'AM' : 'PM';
-		hour = hour % 12 || 12;
-		return hour + timeString.substr(2, 3) + ' ' + period;
+		if (timeString) {
+			let hour = parseInt(timeString.substr(0, 2), 10);
+			const period = (hour % 24) < 12 ? 'AM' : 'PM';
+			hour = hour % 12 || 12;
+			return hour + timeString.substr(2, 3) + ' ' + period;
+		} else {
+			app.GA.error('timeString is null', 'setting-time._formatTime');
+			return '12:00 AM';
+		}
 	},
 });
 </script>
