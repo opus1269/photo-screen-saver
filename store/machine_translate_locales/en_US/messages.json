@@ -228,6 +228,12 @@
   "setting_photog_desc": {
     "message": "Note: Always shows in Frame mode"
   },
+  "setting_location": {
+    "message": "Show photo location, if available"
+  },
+  "setting_location_desc": {
+    "message": "Will not show Google Photos 'estimated' location"
+  },
   "setting_bg": {
     "message": "Background"
   },
