@@ -70,7 +70,8 @@
 				}
 				return Promise.resolve();
 			}).catch((err) => {
-				app.GA.error(err.message, 'PhotoSource.process');
+				app.GA.error(err.message,
+					`PhotoSource.process(${this.useName})`);
 				return Promise.reject(err);
 			});
 		} else {
