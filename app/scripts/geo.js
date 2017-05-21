@@ -100,7 +100,7 @@ app.Geo = (function() {
 						// get from maps api
 						const url = GOOGLE_APIS_URI + '?latlng=' +
 							point + '&sensor=true';
-						app.Http.doGet(url, false, false, false)
+						app.Http.doGet(url, false)
 							.then((response) => {
 							if (response.status && response.status === 'OK'
 								&& response.results

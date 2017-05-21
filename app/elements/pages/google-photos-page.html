@@ -246,7 +246,8 @@ app.GooglePhotosPage = Polymer({
 	 */
 	loadAlbumList: function() {
 		this.set('waitForLoad', true);
-		app.GooglePhotos.loadAlbumList().then((albums) => {
+		// call interactively
+		app.GooglePhotos.loadAlbumList(true).then((albums) => {
 			// get all the user's albums
 			this.splice('albums', 0, this.albums.length);
 			albums.forEach((album) => {

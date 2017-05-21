@@ -156,13 +156,11 @@ app.GooglePhotos = (function() {
 	 */
 	function _loadPicasaAlbum(albumId, userId = 'default') {
 		const url = `${_URL_BASE}${userId}/albumid/${albumId}/${_ALBUM_QUERY}`;
-		let isAuth = false;
-		let isRetry = false;
 		if (userId === 'default') {
-			isRetry = true;
-			isAuth = true;
+			return app.Http.doGetWithAuth(url, true);
+		} else {
+			return app.Http.doGet(url);
 		}
-		return app.Http.doGet(url, isAuth, isRetry);
 	}
 
 	return {
@@ -185,14 +183,16 @@ app.GooglePhotos = (function() {
 
 		/**
 		 * Retrieve the users list of albums, including the photos in each
+		 * @param {boolean} interactive - true is user initiated call
 		 * @returns {Promise<app.GooglePhotos.Album[]>} Array of albums
 		 * @memberOf app.GooglePhotos
 		 */
-		loadAlbumList: function() {
+		loadAlbumList: function(interactive = false) {
 			const url = `${_URL_BASE}default/${_ALBUMS_QUERY}`;
 
 			// get list of albums
-			return app.Http.doGet(url, true, true).then((root) => {
+			return app.Http.doGetWithAuth(url, true, interactive)
+				.then((root) => {
 				const feed = root.feed;
 				const entries = feed.entry || [];
 
