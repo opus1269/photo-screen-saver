@@ -114,16 +114,16 @@ app.GA = (function() {
 		error: function(message, method=null, fatal=false) {
 			let msg = 'ERROR ';
 			if (method) {
-				msg = `Method: ${method} `;
+				msg+= `Method: ${method} `;
 			}
-			msg+= `Message: ${message}`;
 			if (message) {
-				ga('send', 'exception', {
-					'exDescription': msg,
-					'exFatal': fatal,
-				});
-				console.error(message);
+				msg += `Message: ${message}`;
 			}
+			ga('send', 'exception', {
+				'exDescription': msg,
+				'exFatal': fatal,
+			});
+			console.error(message);
 		},
 
 		/**
