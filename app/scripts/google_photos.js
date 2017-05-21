@@ -150,14 +150,21 @@ app.GooglePhotos = (function() {
 	 * Retrieve a Google Photos album
 	 * @param {string} albumId - Picasa album ID
 	 * @param {string} [userId='default'] - userId for non-authenticated request
-	 * @returns {Promise<Object>} Root object from Picasa call
+	 * @returns {Promise<Object>} Root object from Picasa call null if not found
 	 * @private
 	 * @memberOf app.GooglePhotos
 	 */
 	function _loadPicasaAlbum(albumId, userId = 'default') {
 		const url = `${_URL_BASE}${userId}/albumid/${albumId}/${_ALBUM_QUERY}`;
 		if (userId === 'default') {
-			return app.Http.doGetWithAuth(url, true);
+			return app.Http.doGetWithAuth(url, true).catch((err) => {
+				const statusMsg = `${app.Utils.localize('err_status')}: 404`;
+				if (err.message.includes(statusMsg)) {
+					// album was probably deleted
+					console.log('album deleted');
+					return Promise.resolve(null);
+				}
+			});
 		} else {
 			return app.Http.doGet(url);
 		}
@@ -213,23 +220,25 @@ app.GooglePhotos = (function() {
 				let albums = [];
 				let ct = 0;
 				values.forEach((value) => {
-					const feed = value.feed;
-					if (feed && feed.entry) {
-						const thumb = _getThumbnail(feed.entry);
-						const photos = _processPhotos(value);
-						if (photos && photos.length) {
-							/** @type {app.GooglePhotos.Album} */
-							const album = {};
-							album.index = ct;
-							album.uid = 'album' + ct;
-							album.name = feed.title.$t;
-							album.id = feed.gphoto$id.$t;
-							album.ct = photos.length;
-							album.thumb = thumb;
-							album.checked = false;
-							album.photos = photos;
-							albums.push(album);
-							ct++;
+					if (value !== null) {
+						const feed = value.feed;
+						if (feed && feed.entry) {
+							const thumb = _getThumbnail(feed.entry);
+							const photos = _processPhotos(value);
+							if (photos && photos.length) {
+								/** @type {app.GooglePhotos.Album} */
+								const album = {};
+								album.index = ct;
+								album.uid = 'album' + ct;
+								album.name = feed.title.$t;
+								album.id = feed.gphoto$id.$t;
+								album.ct = photos.length;
+								album.thumb = thumb;
+								album.checked = false;
+								album.photos = photos;
+								albums.push(album);
+								ct++;
+							}
 						}
 					}
 				});
@@ -253,13 +262,18 @@ app.GooglePhotos = (function() {
 
 			// Collate the albums
 			return Promise.all(promises).then((values) => {
-				/** app.GooglePhotos.SelectedAlbum */
+				/** @type {app.GooglePhotos.SelectedAlbum[]} */
 				const albums = [];
 				values.forEach((value) => {
-					const feed = value.feed;
-					const photos = _processPhotos(value);
-					if (photos && photos.length) {
-						albums.push({id: feed.gphoto$id.$t, photos: photos});
+					if (value !== null) {
+						const feed = value.feed;
+						const photos = _processPhotos(value);
+						if (photos && photos.length) {
+							albums.push({
+								id: feed.gphoto$id.$t,
+								photos: photos,
+							});
+						}
 					}
 				});
 				return Promise.resolve(albums);
