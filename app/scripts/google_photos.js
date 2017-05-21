@@ -124,25 +124,27 @@ app.GooglePhotos = (function() {
 	 * @memberOf app.GooglePhotos
 	 */
 	function _processPhotos(root) {
-		const feed = root.feed;
-		const entries = feed.entry || [];
 		/** @(type) {PhotoSource.Photo[]} */
 		const photos = [];
-
-		entries.forEach((entry) => {
-			if (_isImage(entry)) {
-				const url = entry.media$group.media$content[0].url;
-				const width = entry.media$group.media$content[0].width;
-				const height = entry.media$group.media$content[0].height;
-				const asp = width / height;
-				const author = entry.media$group.media$credit[0].$t;
-				let point;
-				if (_hasGeo(entry)) {
-					point = entry.georss$where.gml$Point.gml$pos.$t;
-                }
-                app.PhotoSource.addImage(photos, url, author, asp, {}, point);
-			}
-		});
+		if (root) {
+			const feed = root.feed;
+			const entries = feed.entry || [];
+			entries.forEach((entry) => {
+				if (_isImage(entry)) {
+					const url = entry.media$group.media$content[0].url;
+					const width = entry.media$group.media$content[0].width;
+					const height = entry.media$group.media$content[0].height;
+					const asp = width / height;
+					const author = entry.media$group.media$credit[0].$t;
+					let point;
+					if (_hasGeo(entry)) {
+						point = entry.georss$where.gml$Point.gml$pos.$t;
+					}
+					app.PhotoSource.addImage(photos, url, author, asp, {},
+						point);
+				}
+			});
+		}
 		return photos;
 	}
 
