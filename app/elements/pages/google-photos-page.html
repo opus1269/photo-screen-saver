@@ -254,7 +254,9 @@ app.GooglePhotosPage = Polymer({
 				this.push('albums', album);
 			});
 			// update the currently selected albums from the web
-			return app.PhotoSource.process('useGoogle');
+			// eslint-disable-next-line promise/no-nesting
+			app.PhotoSource.process('useGoogle').catch(() => {});
+			return null;
 		}).then(() => {
 			// set select state on albums
 			this._selectAlbums();
