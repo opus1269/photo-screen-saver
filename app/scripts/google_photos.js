@@ -161,7 +161,6 @@ app.GooglePhotos = (function() {
 				const statusMsg = `${app.Utils.localize('err_status')}: 404`;
 				if (err.message.includes(statusMsg)) {
 					// album was probably deleted
-					console.log('album deleted');
 					return Promise.resolve(null);
 				}
 			});
