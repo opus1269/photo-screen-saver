@@ -227,7 +227,7 @@ app.Http = (function() {
 
 			if (backoff && (status >= 500) && (status < 600)) {
 				// temporary network error, maybe. Retry
-				return _retryWithAuth(url, opts, interactive, attempt);
+				return _retryWithAuth(url, opts, retry, interactive, attempt);
 			}
 
 			if (token && retry && (status === 401)) {
