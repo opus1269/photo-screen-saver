@@ -265,7 +265,7 @@
 
             
 
-            <td class="description last"><p>main menu</p></td>
+            <td class="description last"><p>menu selected</p></td>
         </tr>
 
     
@@ -290,6 +290,54 @@
             
 
             <td class="description last"><p>setting-toggle</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>LINK</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#GAEvent">GAEvent</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>setting-link</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>BUTTON</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#GAEvent">GAEvent</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>button click</p></td>
         </tr>
 
     
@@ -331,7 +379,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="analytics.js.html">analytics.js</a>,
-				 <a href="analytics.js.html#sunlight-1-line-42">line 42</a>
+				 <a href="analytics.js.html#sunlight-1-line-46">line 46</a>
 			</li>
 		</ul>
 	</dd>
@@ -502,7 +550,7 @@ Initialize Google Analytics</p>
 		<ul class="dummy">
 			<li>
 				<a href="analytics.js.html">analytics.js</a>,
-				 <a href="analytics.js.html#sunlight-1-line-54">line 54</a>
+				 <a href="analytics.js.html#sunlight-1-line-85">line 85</a>
 			</li>
 		</ul>
 	</dd>
@@ -535,7 +583,7 @@ Initialize Google Analytics</p>
             
 <hr>
 <dt>
-    <h4 class="name" id=".error"><span class="type-signature">&lt;static> </span>error<span class="signature">(message [, method] [, fatal])</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".error"><span class="type-signature">&lt;static> </span>error<span class="signature">( [label] [, action])</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -582,43 +630,7 @@ Initialize Google Analytics</p>
 
         <tr>
             
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>the error message</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>method</code></td>
+                <td class="name"><code>label</code></td>
             
 
             <td class="type">
@@ -653,201 +665,7 @@ Initialize Google Analytics</p>
                 </td>
             
 
-            <td class="description last"><p>the method name</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>fatal</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last"><p>is error fatal</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="analytics.js.html">analytics.js</a>,
-				 <a href="analytics.js.html#sunlight-1-line-114">line 114</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".event"><span class="type-signature">&lt;static> </span>event<span class="signature">(event [, action])</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Send an event</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Argument</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>event</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#GAEvent">GAEvent</a></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>the event type</p></td>
+            <td class="description last"><p>override label</p></td>
         </tr>
 
     
@@ -934,7 +752,245 @@ Initialize Google Analytics</p>
 		<ul class="dummy">
 			<li>
 				<a href="analytics.js.html">analytics.js</a>,
-				 <a href="analytics.js.html#sunlight-1-line-100">line 100</a>
+				 <a href="analytics.js.html#sunlight-1-line-152">line 152</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".event"><span class="type-signature">&lt;static> </span>event<span class="signature">(event [, label] [, action])</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Send an event</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#GAEvent">GAEvent</a></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>the event type</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>label</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>override label</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>action</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>override action</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="analytics.js.html">analytics.js</a>,
+				 <a href="analytics.js.html#sunlight-1-line-135">line 135</a>
 			</li>
 		</ul>
 	</dd>
@@ -1130,7 +1186,7 @@ Initialize Google Analytics</p>
 		<ul class="dummy">
 			<li>
 				<a href="analytics.js.html">analytics.js</a>,
-				 <a href="analytics.js.html#sunlight-1-line-135">line 135</a>
+				 <a href="analytics.js.html#sunlight-1-line-171">line 171</a>
 			</li>
 		</ul>
 	</dd>
@@ -1268,7 +1324,7 @@ Initialize Google Analytics</p>
 		<ul class="dummy">
 			<li>
 				<a href="analytics.js.html">analytics.js</a>,
-				 <a href="analytics.js.html#sunlight-1-line-88">line 88</a>
+				 <a href="analytics.js.html#sunlight-1-line-122">line 122</a>
 			</li>
 		</ul>
 	</dd>
@@ -1351,7 +1407,7 @@ Initialize Google Analytics</p>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 21st 2017, 4:16:44 am
+		on May 22nd 2017, 2:57:11 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
