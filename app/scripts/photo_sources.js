@@ -70,8 +70,12 @@
 				}
 				return Promise.resolve();
 			}).catch((err) => {
-				app.GA.error(err.message,
-					`PhotoSource.process(${this.useName})`);
+				if (err.message === app.Utils.localize('err_network')) {
+					app.GA.error(err.message, 'PhotoSource.process');
+				} else {
+					app.GA.error(err.message,
+						`PhotoSource.process(${this.useName})`);
+				}
 				return Promise.reject(err);
 			});
 		} else {

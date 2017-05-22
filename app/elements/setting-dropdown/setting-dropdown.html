@@ -1,8 +1,8 @@
 <!--
-  ~  Copyright (c) 2015-2017, Michael A. Updike All rights reserved.
-  ~  Licensed under the BSD-3-Clause
-  ~  https://opensource.org/licenses/BSD-3-Clause
-  ~  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
+  ~ Copyright (c) 2016-2017, Michael A. Updike All rights reserved.
+  ~ Licensed under Apache 2.0
+  ~ https://opensource.org/licenses/Apache-2.0
+  ~ https://goo.gl/wFvBM1
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-styles/typography.html">
@@ -54,7 +54,7 @@
 		<paper-item class="center horizontal layout" tabindex="-1">
 			<div class="setting-label flex">{{label}}</div>
 			<paper-dropdown-menu disabled$="[[disabled]]" noink no-label-float>
-				<paper-menu class="dropdown-content" selected="{{value}}">
+				<paper-menu class="dropdown-content" selected="{{value}}" on-iron-select="_onItemSelected">
 					<template is="dom-repeat" items="[[items]]">
 						<paper-item>[[item]]</paper-item>
 					</template>
@@ -107,6 +107,13 @@
 				type: Boolean,
 				value: false,
 			},
+		},
+
+		/**
+		 * Event: menu item selected
+		 */
+		_onItemSelected: function() {
+			app.GA.event(app.GA.EVENT.MENU, `${this.name}: ${this.value}`);
 		},
 
 		/**

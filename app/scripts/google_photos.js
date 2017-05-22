@@ -164,6 +164,8 @@ app.GooglePhotos = (function() {
 				if (err.message.includes(statusMsg)) {
 					// album was probably deleted
 					return Promise.resolve(null);
+				} else {
+					throw err;
 				}
 			});
 		} else {
@@ -201,6 +203,10 @@ app.GooglePhotos = (function() {
 			// get list of albums
 			return app.Http.doGetWithAuth(url, true, interactive)
 				.then((root) => {
+				if (!root) {
+					throw new Error(app.Utils.localize('err_no_albums'));
+				}
+
 				const feed = root.feed;
 				const entries = feed.entry || [];
 
@@ -266,7 +272,7 @@ app.GooglePhotos = (function() {
 				/** @type {app.GooglePhotos.SelectedAlbum[]} */
 				const albums = [];
 				values.forEach((value) => {
-					if (value !== null) {
+					if (value) {
 						const feed = value.feed;
 						const photos = _processPhotos(value);
 						if (photos && photos.length) {

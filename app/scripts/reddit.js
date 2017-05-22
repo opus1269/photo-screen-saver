@@ -170,7 +170,17 @@ app.Reddit = (function() {
 				photos = photos.concat(_processChildren(slice.children));
 				return Promise.resolve(photos);
 			}).catch((err) => {
-				throw new Error(err.message);
+				let msg = err.message;
+				if (msg) {
+					// extract first sentence
+					const idx = msg.indexOf('.');
+					if (idx !== -1) {
+						msg = msg.substring(0, idx + 1);
+					}
+				} else {
+					msg = 'Unknown Error';
+				}
+				throw new Error(msg);
 			});
 		},
 	};

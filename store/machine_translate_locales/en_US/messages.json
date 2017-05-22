@@ -417,6 +417,9 @@
   "err_photo_source_title": {
     "message": "Failed to retrieve photo source"
   },
+  "err_no_albums": {
+    "message": "No albums found"
+  },
   "time_format": {
     "message": "12",
     "description": "Set to 12 for AM/PM format or 24"

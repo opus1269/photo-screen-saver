@@ -130,7 +130,7 @@ app.Alarm = (function() {
 			}
 			return null;
 		}).catch((err) => {
-			app.GA.error(err.message, 'app.Alarm._setActiveState', true);
+			app.GA.error(err.message, 'app.Alarm._setActiveState');
 		});
 		app.Alarm.updateBadgeText();
 	}

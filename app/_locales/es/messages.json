@@ -417,6 +417,9 @@
   "err_photo_source_title": {
     "message": "Error al recuperar el origen de la foto"
   },
+  "err_no_albums": {
+    "message": "No hay álbumes encontrados"
+  },
   "time_format": {
     "message": "24",
     "description": "For translators: Set to 12 for AM/PM format or 24"

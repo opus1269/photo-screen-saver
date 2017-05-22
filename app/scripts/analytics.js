@@ -26,23 +26,54 @@ app.GA = (function() {
 	/**
 	 * Google Analytics Event
 	 * @typedef {Object} GAEvent
-	 * @property {string} cat - category
-	 * @property {string} act - action
+	 * @property {string} eventCategory - category
+	 * @property {string} eventAction - action
+	 * @property {string} eventLabel - label
+	 * @property {boolean} noInteraction - direct user interaction?
 	 */
 
 	/**
 	 * Event types
-	 * @type {Object}
+	 * @type {{}}
 	 * @property {GAEvent} INSTALLED - extension installed
-	 * @property {GAEvent} MENU - main menu
+	 * @property {GAEvent} MENU - menu selected
 	 * @property {GAEvent} TOGGLE - setting-toggle
+	 * @property {GAEvent} LINK - setting-link
+	 * @property {GAEvent} BUTTON - button click
 	 * @const
 	 * @memberOf app.GA
 	 */
 	const EVENT = {
-		INSTALLED: {cat: 'extension', act: 'installed'},
-		MENU: {cat: 'menu', act: 'select'},
-		TOGGLE: {cat: 'settingsToggle', act: 'select'},
+		INSTALLED: {
+			eventCategory: 'extension',
+			eventAction: 'installed',
+			eventLabel: '',
+			noInteraction: false,
+		},
+		MENU: {
+			eventCategory: 'ui',
+			eventAction: 'menuSelect',
+			eventLabel: '',
+			noInteraction: false,
+		},
+		TOGGLE: {
+			eventCategory: 'ui',
+			eventAction: 'toggle',
+			eventLabel: '',
+			noInteraction: false,
+		},
+		LINK: {
+			eventCategory: 'ui',
+			eventAction: 'linkSelect',
+			eventLabel: '',
+			noInteraction: false,
+		},
+		BUTTON: {
+			eventCategory: 'ui',
+			eventAction: 'buttonClicked',
+			eventLabel: '',
+			noInteraction: false,
+		},
 	};
 
 	/**
@@ -71,6 +102,9 @@ app.GA = (function() {
 		ga('create', TRACKING_ID, 'auto');
 		// see: http://stackoverflow.com/a/22152353/1958200
 		ga('set', 'checkProtocolTask', function() { });
+		ga('set', 'appName', 'Photo Screensaver');
+		ga('set', 'appId', 'photo-screen-saver');
+		ga('set', 'appVersion', app.Utils.getVersion());
 		ga('require', 'displayfeatures');
 	}
 
@@ -94,36 +128,38 @@ app.GA = (function() {
 		/**
 		 * Send an event
 		 * @param {GAEvent} event - the event type
+		 * @param {?string} [label=null] - override label
 		 * @param {?string} [action=null] - override action
 		 * @memberOf app.GA
 		 */
-		event: function(event, action=null) {
+		event: function(event, label=null, action=null) {
 			if (event) {
-				const act = action ? action : event.act;
-				ga('send', 'event', event.cat, act);
+				// shallow copy
+				const ev = JSON.parse(JSON.stringify(event));
+				ev.hitType = 'event';
+				ev.eventLabel = label ? label : ev.eventLabel;
+				ev.eventAction = action ? action : ev.eventAction;
+				ga('send', ev);
 			}
 		},
 
 		/**
 		 * Send an error
-		 * @param {string} message - the error message
-		 * @param {?string} [method=null] - the method name
-		 * @param {boolean} [fatal=false] - is error fatal
+		 * @param {?string} [label=null] - override label
+		 * @param {?string} [action=null] - override action
 		 * @memberOf app.GA
 		 */
-		error: function(message, method=null, fatal=false) {
-			let msg = 'ERROR ';
-			if (method) {
-				msg+= `Method: ${method} `;
-			}
-			if (message) {
-				msg += `Message: ${message}`;
-			}
-			ga('send', 'exception', {
-				'exDescription': msg,
-				'exFatal': fatal,
-			});
-			console.error(message);
+		error: function(label=null, action=null) {
+			const ev = {
+				eventCategory: 'error',
+				eventAction: 'unknownMethod',
+				eventLabel: '',
+				noInteraction: true,
+			};
+			ev.hitType = 'event';
+			ev.eventLabel = label ? label : ev.eventLabel;
+			ev.eventAction = action ? action : ev.eventAction;
+			ga('send', ev);
 		},
 
 		/**
@@ -133,7 +169,7 @@ app.GA = (function() {
 		 * @memberOf app.GA
 		 */
 		exception: function(message, stack = null) {
-			let msg = 'EXCEPTION ';
+			let msg = '';
 			if (message) {
 				msg += message;
 			}

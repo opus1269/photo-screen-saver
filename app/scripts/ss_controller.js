@@ -110,7 +110,7 @@ app.SSControl = (function() {
 			}
 			return null;
 		}).catch((err) => {
-			app.GA.error(err.message, 'app.SSControl._open', true);
+			app.GA.error(err.message, 'app.SSControl._open');
 		});
 	}
 
@@ -130,7 +130,7 @@ app.SSControl = (function() {
 			}
 			return null;
 		}).catch((err) => {
-			app.GA.error(err.message, 'app.SSControl._openOnAllDisplays', true);
+			app.GA.error(err.message, 'app.SSControl._openOnAllDisplays');
 		});
 	}
 
