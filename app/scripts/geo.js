@@ -101,7 +101,7 @@ app.Geo = (function() {
 						// on browser language
 						const url = `${GOOGLE_APIS_URI}?sensor=true` +
 							`&latlng=${point.replace(' ', ',')}`;
-						app.Http.doGet(url, true, 1)
+						app.Http.doGet(url, false, false, false, true, 1)
 							.then((response) => {
 							if (response.status && response.status === 'OK'
 								&& response.results

@@ -159,7 +159,7 @@ app.GooglePhotos = (function() {
 	function _loadPicasaAlbum(albumId, userId = 'default') {
 		const url = `${_URL_BASE}${userId}/albumid/${albumId}/${_ALBUM_QUERY}`;
 		if (userId === 'default') {
-			return app.Http.doGetWithAuth(url, true).catch((err) => {
+			return app.Http.doGet(url, true).catch((err) => {
 				const statusMsg = `${app.Utils.localize('err_status')}: 404`;
 				if (err.message.includes(statusMsg)) {
 					// album was probably deleted
@@ -201,16 +201,15 @@ app.GooglePhotos = (function() {
 			const url = `${_URL_BASE}default/${_ALBUMS_QUERY}`;
 
 			// get list of albums
-			return app.Http.doGetWithAuth(url, true, interactive)
-				.then((root) => {
-				if (!root) {
+			return app.Http.doGet(url, true, true, interactive).then((root) => {
+				if (!root || !root.feed || !root.feed.entry) {
 					throw new Error(app.Utils.localize('err_no_albums'));
 				}
 
-				const promises = [];
 				const feed = root.feed;
 
 				// series of API calls to get each album
+				const promises = [];
 				const entries = feed.entry || [];
 				entries.forEach((entry) => {
 					if (!entry.gphoto$albumType) {
