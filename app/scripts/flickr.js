@@ -42,7 +42,7 @@ app.Flickr = (function() {
 	 * @private
 	 * @memberOf app.Flickr
 	 */
-	const _MAX_PHOTOS = 300;
+	const _MAX_PHOTOS = 250;
 
 	return {
 		/**
@@ -53,8 +53,9 @@ app.Flickr = (function() {
 		loadImages: function() {
 			const url =
 				`${_URL_BASE}?method=flickr.interestingness.getList` +
-				`&api_key=${_KEY}&extras=owner_name,url_k,media` +
-				`&per_page=${_MAX_PHOTOS}&format=json&nojsoncallback=1`;
+				`&api_key=${_KEY}&extras=owner_name,url_k,media,geo` +
+				`&per_page=${_MAX_PHOTOS}` +
+				'&format=json&nojsoncallback=1';
 
 			return app.Http.doGet(url).then((response) => {
 				if (response.stat !== 'ok') {
@@ -69,8 +70,13 @@ app.Flickr = (function() {
 						const width = parseInt(photo.width_k, 10);
 						const height = parseInt(photo.height_k, 10);
 						const asp = width / height;
+						let pt = null;
+						if (photo.latitude && photo.longitude) {
+							pt = app.PhotoSource
+								.getPt(photo.latitude, photo.longitude);
+						}
 						app.PhotoSource.addImage(photos, photo.url_k,
-							photo.ownername, asp, photo.owner);
+							photo.ownername, asp, photo.owner, pt);
 					}
 				});
 				return Promise.resolve(photos);
