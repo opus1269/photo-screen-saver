@@ -36,6 +36,63 @@ app.Http = (function() {
 	const _DELAY = 1000;
 
 	/**
+	 * Check response and act accordingly
+	 * @param {{}} response - response from server
+	 * @param {string} url - server
+	 * @param {Object} opts - fetch options
+	 * @param {boolean} isAuth - true is authorization required
+	 * @param {boolean} retryToken - if true, retry with new token
+	 * @param {string} token - cached auth token
+	 * @param {boolean} interactive - true if user initiated
+	 * @param {int} attempt - the retry attempt we are on
+	 * @param {boolean} backoff - if true, do exponential back-off
+	 * @param {int} maxRetries - max retries
+	 * @returns {Promise.<JSON>} response from server
+	 * @private
+	 * @memberOf app.Http
+	 */
+	function _checkResponse(response, url, opts, isAuth, retryToken, token,
+							interactive, attempt, backoff, maxRetries) {
+		if (response.ok) {
+			// request succeeded
+			return response.json();
+		}
+
+		if (attempt >= maxRetries) {
+			// request failed after maxRetries
+			return Promise.reject(_getError(response));
+		}
+
+		const status = response.status;
+
+		if (backoff && (status >= 500) && (status < 600)) {
+			// temporary network error, maybe. Retry
+			if (isAuth) {
+				return _retryWithAuth(url, opts, retryToken,
+					interactive, attempt);
+			} else {
+				return _retry(url, opts, attempt, maxRetries);
+			}
+		}
+
+		if (isAuth && token && retryToken && (status === 401)) {
+			// could be bad token. Remove cached one and try again
+			return _retryToken(url, opts, token, interactive, attempt,
+				backoff);
+		}
+
+		if (isAuth && interactive && token && retryToken && (status === 403)) {
+			// user may have revoked access to extension.
+			// Retry if interactive so they can sign-in again
+			return _retryToken(url, opts, token, interactive, attempt,
+				backoff);
+		}
+
+		// request failed
+		return Promise.reject(_getError(response));
+	}
+
+	/**
 	 * Get Error message
 	 * @param {{}} response - server response
 	 * @returns {Error} details on failure
@@ -67,10 +124,8 @@ app.Http = (function() {
 			return Promise.resolve(token);
 		}).catch((err) => {
 			if (interactive &&
-				(err.message.includes(
-					'Authorization page could not be loaded') ||
-				err.message.includes(
-					'revoked'))) {
+				(err.message.includes('Authorization page could not be loaded')
+				|| err.message.includes('revoked'))) {
 				// try one more time non-interactively
 				// Always returns Authorization page one
 				// when first registering. Not sure why
@@ -110,21 +165,21 @@ app.Http = (function() {
 	 * Retry authorized fetch with exponential back-off
 	 * @param {string} url - server
 	 * @param {Object} opts - fetch options
-	 * @param {boolean} retry - if true, retry with new token
+	 * @param {boolean} retryToken - if true, retry with new token
 	 * @param {boolean} interactive - true if user initiated
 	 * @param {int} attempt - the retry attempt we are on
 	 * @returns {Promise.<JSON>} response from server
 	 * @private
 	 * @memberOf app.Http
 	 */
-	function _retryWithAuth(url, opts, retry, interactive, attempt) {
+	function _retryWithAuth(url, opts, retryToken, interactive, attempt) {
 		attempt++;
 		// eslint-disable-next-line promise/avoid-new
 		return new Promise((resolve, reject) => {
 			const delay = (Math.pow(2, attempt) - 1) * _DELAY;
 			setTimeout(() => {
-				return _fetchWithAuth(url, opts, retry, interactive, attempt)
-					.then(resolve, reject);
+				return _fetchWithAuth(url, opts, retryToken, interactive,
+					attempt).then(resolve, reject);
 			}, delay);
 		});
 	}
@@ -165,25 +220,8 @@ app.Http = (function() {
 	function _fetch(url, opts, attempt, backoff = true,
 					maxRetries = _MAX_RETRIES) {
 		return fetch(url, opts).then((response) => {
-			const status = response.status;
-
-			if (response.ok) {
-				// request succeeded
-				return response.json();
-			}
-
-			if (attempt >= maxRetries) {
-				// request failed after max retries
-				return Promise.reject(_getError(response));
-			}
-
-			if (backoff && (status >= 500) && (status < 600)) {
-				// temporary network error, maybe. Retry
-				return _retry(url, opts, attempt, maxRetries);
-			}
-
-			// request failed
-			return Promise.reject(_getError(response));
+			return _checkResponse(response, url, opts, false, false, '',
+				false, attempt, backoff, maxRetries);
 		}).catch((err) => {
 			let msg = err.message;
 			if (msg === 'Failed to fetch') {
@@ -217,38 +255,8 @@ app.Http = (function() {
 			}
 			return fetch(url, opts);
 		}).then((response) => {
-			const status = response.status;
-
-			if (response.ok) {
-				// request succeeded
-				return response.json();
-			}
-
-			if (attempt >= _MAX_RETRIES) {
-				// request failed after max retries
-				return Promise.reject(_getError(response));
-			}
-
-			if (backoff && (status >= 500) && (status < 600)) {
-				// temporary network error, maybe. Retry
-				return _retryWithAuth(url, opts, retry, interactive, attempt);
-			}
-
-			if (token && retry && (status === 401)) {
-				// could be bad token. Remove cached one and try again
-				return _retryToken(url, opts, token, interactive, attempt,
-					backoff);
-			}
-
-			if (interactive && token && retry && (status === 403)) {
-				// user may have revoked access to extension.
-				// Retry if interactive so they can sign-in again
-				return _retryToken(url, opts, token, interactive, attempt,
-					backoff);
-			}
-
-			// request failed
-			return Promise.reject(_getError(response));
+			return _checkResponse(response, url, opts, true, retry, token,
+				interactive, attempt, backoff, _MAX_RETRIES);
 		}).catch((err) => {
 			let msg = err.message;
 			if (msg === 'Failed to fetch') {
@@ -267,7 +275,7 @@ app.Http = (function() {
 		 * @returns {Promise.<json>} response from server
 		 * @memberOf app.Http
 		 */
-		doGet: function(url, backoff = true, maxRetries=_MAX_RETRIES) {
+		doGet: function(url, backoff = true, maxRetries = _MAX_RETRIES) {
 			let attempt = 0;
 			let options = {method: 'GET'};
 			return _fetch(url, options, attempt, backoff, maxRetries);
@@ -277,19 +285,18 @@ app.Http = (function() {
 		 * Perform GET request to server using exponential back-off and
 		 * authorization
 		 * @param {string} url - server
-		 * @param {boolean} [retry=false] - if true, retry with new token
+		 * @param {boolean} [retryToken=false] - if true, retry with new token
 		 * @param {boolean} [interactive=false] - user initiated, if true
 		 * @param {boolean} [backoff=true] - if true, do exponential back-off
 		 * @returns {Promise.<json>} response from server
 		 * @memberOf app.Http
 		 */
-		doGetWithAuth: function(url, retry = false, interactive = false,
+		doGetWithAuth: function(url, retryToken = false, interactive = false,
 								backoff = true) {
 			let attempt = 0;
 			let options = {method: 'GET', headers: new Headers({})};
-
-			return _fetchWithAuth(url, options, retry, interactive, attempt,
-				backoff);
+			return _fetchWithAuth(url, options, retryToken, interactive,
+				attempt, backoff);
 		},
 	};
 })();
