@@ -266,6 +266,17 @@
 	 * @property {string} type - source of the photo
 	 */
 
+
+	/**
+	 * Get a geo point string from a latitude and longitude
+	 * @param {number} latitude - latitude
+	 * @param {number} longitude - longitude
+	 * @returns {string} 'lat lon'
+	 */
+	PhotoSource.getPt = function(latitude, longitude) {
+		return `${latitude} ${longitude}`;
+	};
+
 	/**
 	 * Add an image object to an existing Array
 	 * @param {Array} images - Array of image objects
@@ -273,7 +284,7 @@
 	 * @param {string} author - The photographer
 	 * @param {number} asp - The aspect ratio of the photo
 	 * @param {Object} [ex] - Additional information about the photo
-	 * @param {string} [point] - The Lat Long
+	 * @param {string} [point] - 'lat lon'
 	 * @memberOf app.Utils
 	 */
 	PhotoSource.addImage = function(images, url, author, asp, ex, point) {
