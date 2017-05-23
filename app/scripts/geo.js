@@ -97,9 +97,10 @@ app.Geo = (function() {
 						// retrieve from cache
 						els.model.set('item.location', cache.loc);
 					} else {
-						// get from maps api
-						const url = GOOGLE_APIS_URI + '?latlng=' +
-							point + '&sensor=true';
+						// get from maps api - it will translate based
+						// on browser language
+						const url = `${GOOGLE_APIS_URI}?sensor=true` +
+							`&latlng=${point.replace(' ', ',')}`;
 						app.Http.doGet(url, false)
 							.then((response) => {
 							if (response.status && response.status === 'OK'
