@@ -207,11 +207,11 @@ app.GooglePhotos = (function() {
 					throw new Error(app.Utils.localize('err_no_albums'));
 				}
 
+				const promises = [];
 				const feed = root.feed;
-				const entries = feed.entry || [];
 
 				// series of API calls to get each album
-				const promises = [];
+				const entries = feed.entry || [];
 				entries.forEach((entry) => {
 					if (!entry.gphoto$albumType) {
 						// skip special albums (e.g. Google+ posts, backups)
@@ -222,10 +222,11 @@ app.GooglePhotos = (function() {
 
 				// Collate the albums
 				return Promise.all(promises);
-			}).then((values) => {
+			}).then((vals) => {
 				/** @type {app.GooglePhotos.Album[]} */
 				let albums = [];
 				let ct = 0;
+				const values = vals || [];
 				values.forEach((value) => {
 					if (value !== null) {
 						const feed = value.feed;
@@ -259,18 +260,20 @@ app.GooglePhotos = (function() {
 		 * @memberOf app.GooglePhotos
 		 */
 		loadImages: function() {
-			const albums = app.Storage.get('albumSelections');
+			let vals = app.Storage.get('albumSelections');
 
 			// series of API calls to get each album
 			const promises = [];
+			const albums = vals || [];
 			albums.forEach((album) => {
 				promises.push(_loadPicasaAlbum(album.id));
 			});
 
 			// Collate the albums
-			return Promise.all(promises).then((values) => {
+			return Promise.all(promises).then((vals) => {
 				/** @type {app.GooglePhotos.SelectedAlbum[]} */
 				const albums = [];
+				const values = vals || [];
 				values.forEach((value) => {
 					if (value) {
 						const feed = value.feed;
