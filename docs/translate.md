@@ -13,10 +13,8 @@ If you'd like to help, please [email](mailto:photoscreensaver%40gmail.com) me.
 
 Here is the list of all [languages](https://developer.chrome.com/webstore/i18n?csw=1#localeTable) supported by Chrome
 
-I appreciate any of them, but my highest priorities are:
+I appreciate any of them (Dutch and French are complete), but my highest priorities are:
 * Spanish
-* French
-* Dutch
 * Italian
 * Japanese
 * Russian
