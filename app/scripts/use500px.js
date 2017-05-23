@@ -42,7 +42,7 @@ app.Use500px = (function() {
 	 * @private
 	 * @memberOf app.Use500px
 	 */
-	const _MAX_PHOTOS = 100;
+	const _MAX_PHOTOS = 90;
 
 	/**
 	 * Categories to use Make them an array to overcome 100 photo limit per call
@@ -74,8 +74,15 @@ app.Use500px = (function() {
 			response.photos.forEach((photo) => {
 				if (!photo.nsfw) {
 					const asp = photo.width / photo.height;
+					let ex = null;
+					let pt = null;
+					if (photo.latitude && photo.longitude) {
+						pt = app.PhotoSource
+							.getPt(photo.latitude, photo.longitude);
+						ex = {};
+					}
 					app.PhotoSource.addImage(photos, photo.images[0].url,
-						photo.user.fullname, asp);
+						photo.user.fullname, asp, ex, pt);
 				}
 			});
 			return Promise.resolve(photos);
