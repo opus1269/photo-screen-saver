@@ -160,6 +160,7 @@ app.GA = (function() {
 			ev.eventLabel = label ? `Err: ${label}` : ev.eventLabel;
 			ev.eventAction = action ? action : ev.eventAction;
 			ga('send', ev);
+			console.error('Error: ', ev);
 		},
 
 		/**
@@ -180,7 +181,7 @@ app.GA = (function() {
 				'exDescription': msg,
 				'exFatal': true,
 			});
-			console.error(msg);
+			console.error('Exception caught: ', msg);
 		},
 	};
 })();
