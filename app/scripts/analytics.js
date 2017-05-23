@@ -153,11 +153,11 @@ app.GA = (function() {
 			const ev = {
 				eventCategory: 'error',
 				eventAction: 'unknownMethod',
-				eventLabel: '',
+				eventLabel: 'Err: unknown',
 				noInteraction: true,
 			};
 			ev.hitType = 'event';
-			ev.eventLabel = label ? label : ev.eventLabel;
+			ev.eventLabel = label ? `Err: ${label}` : ev.eventLabel;
 			ev.eventAction = action ? action : ev.eventAction;
 			ga('send', ev);
 		},
