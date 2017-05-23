@@ -269,12 +269,16 @@
 
 	/**
 	 * Get a geo point string from a latitude and longitude
-	 * @param {number} latitude - latitude
-	 * @param {number} longitude - longitude
+	 * @param {number} lat - latitude
+	 * @param {number} lon - longitude
 	 * @returns {string} 'lat lon'
 	 */
-	PhotoSource.getPt = function(latitude, longitude) {
-		return `${latitude} ${longitude}`;
+	PhotoSource.getPt = function(lat, lon) {
+		if ((typeof lat === 'number') && (typeof lon === 'number')) {
+			return `${lat.toPrecision(8)} ${lon.toPrecision(8)}`;
+		} else {
+			return `${lat} ${lon}`;
+		}
 	};
 
 	/**
