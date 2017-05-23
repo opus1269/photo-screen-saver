@@ -24,7 +24,7 @@ app.Http = (function() {
 	 * @private
 	 * @memberOf app.Http
 	 */
-	const _MAX_ATTEMPTS = 3;
+	const _MAX_RETRIES = 3;
 
 	/**
 	 * Delay multiplier for exponential back-off
@@ -89,17 +89,19 @@ app.Http = (function() {
 	 * @param {string} url - server
 	 * @param {Object} opts - fetch options
 	 * @param {int} attempt - the retry attempt we are on
+	 * @param {int} maxRetries - max retries
 	 * @returns {Promise.<JSON>} response from server
 	 * @private
 	 * @memberOf app.Http
 	 */
-	function _retry(url, opts, attempt) {
+	function _retry(url, opts, attempt, maxRetries) {
 		attempt++;
 		// eslint-disable-next-line promise/avoid-new
 		return new Promise((resolve, reject) => {
 			const delay = (Math.pow(2, attempt) - 1) * _DELAY;
 			setTimeout(() => {
-				return _fetch(url, opts, attempt).then(resolve, reject);
+				return _fetch(url, opts, attempt, true, maxRetries)
+					.then(resolve, reject);
 			}, delay);
 		});
 	}
@@ -155,11 +157,13 @@ app.Http = (function() {
 	 * @param {Object} opts - fetch options
 	 * @param {int} attempt - the retry attempt we are on
 	 * @param {boolean} [backoff=true] - if true, do exponential back-off
+	 * @param {int} [maxRetries=_MAX_ATTEMPTS] - max retries
 	 * @returns {Promise.<JSON>} response from server
 	 * @private
 	 * @memberOf app.Http
 	 */
-	function _fetch(url, opts, attempt, backoff = true) {
+	function _fetch(url, opts, attempt, backoff = true,
+					maxRetries = _MAX_RETRIES) {
 		return fetch(url, opts).then((response) => {
 			const status = response.status;
 
@@ -168,14 +172,14 @@ app.Http = (function() {
 				return response.json();
 			}
 
-			if (attempt >= _MAX_ATTEMPTS) {
+			if (attempt >= maxRetries) {
 				// request failed after max retries
 				return Promise.reject(_getError(response));
 			}
 
 			if (backoff && (status >= 500) && (status < 600)) {
 				// temporary network error, maybe. Retry
-				return _retry(url, opts, attempt);
+				return _retry(url, opts, attempt, maxRetries);
 			}
 
 			// request failed
@@ -220,7 +224,7 @@ app.Http = (function() {
 				return response.json();
 			}
 
-			if (attempt >= _MAX_ATTEMPTS) {
+			if (attempt >= _MAX_RETRIES) {
 				// request failed after max retries
 				return Promise.reject(_getError(response));
 			}
@@ -237,7 +241,8 @@ app.Http = (function() {
 			}
 
 			if (interactive && token && retry && (status === 403)) {
-				// user may have disallowed extension. Retry if interactive
+				// user may have revoked access to extension.
+				// Retry if interactive so they can sign-in again
 				return _retryToken(url, opts, token, interactive, attempt,
 					backoff);
 			}
@@ -258,13 +263,14 @@ app.Http = (function() {
 		 * Perform GET request to server using exponential back-off
 		 * @param {string} url - server request
 		 * @param {boolean} [backoff=true] - if true, do exponential back-off
+		 * @param {int} [maxRetries=_MAX_ATTEMPTS] - max retries
 		 * @returns {Promise.<json>} response from server
 		 * @memberOf app.Http
 		 */
-		doGet: function(url, backoff = true) {
+		doGet: function(url, backoff = true, maxRetries=_MAX_RETRIES) {
 			let attempt = 0;
 			let options = {method: 'GET'};
-			return _fetch(url, options, attempt, backoff);
+			return _fetch(url, options, attempt, backoff, maxRetries);
 		},
 
 		/**
