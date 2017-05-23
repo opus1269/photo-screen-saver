@@ -56,6 +56,7 @@ app.Utils = (function() {
 			return raw ? raw : 'Unknown';
 		},
 
+
 		/**
 		 * Get the i18n string
 		 * @param {string} messageName - key in messages.json
@@ -64,6 +65,15 @@ app.Utils = (function() {
 		 */
 		localize: function(messageName) {
 			return chrome.i18n.getMessage(messageName);
+		},
+
+		/**
+		 * Get the current locale
+		 * @returns {string} current locale e.g. en_US
+		 * @memberOf app.Utils
+		 */
+		getLocale: function() {
+			return chrome.i18n.getMessage('@@ui_locale');
 		},
 
 		/**
