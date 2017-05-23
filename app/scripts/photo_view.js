@@ -147,7 +147,7 @@ app.PhotoView = (function() {
 		}
 		el.style.bottom = (screen.height - height) / 2 + 10 + 'px';
 		el.style.color = 'black';
-		el.style.opacity = 0.9;
+		el.style.opacity = 1.0;
 		el.style.fontSize = '2.5vh';
 		el.style.fontWeight = 300;
 	}
@@ -222,7 +222,7 @@ app.PhotoView = (function() {
 		time.style.textAlign = 'right';
 		time.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
 		time.style.color = 'black';
-		time.style.opacity = 0.9;
+		time.style.opacity = 1.0;
 		time.style.fontSize = '3vh';
 		time.style.fontWeight = 300;
 	}
