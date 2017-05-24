@@ -103,29 +103,22 @@ app.PhotoView = (function() {
 
 		e.author.style.textAlign = 'right';
 		e.location.style.textAlign = 'left';
-		if (aspect < _SCREEN_ASPECT) {
-			let right = (100 - aspect / _SCREEN_ASPECT * 100) / 2;
-			e.author.style.right = (right + 1) + 'vw';
-			e.author.style.bottom = '';
-			e.author.style.width =
-				aspect / _SCREEN_ASPECT * (100 - .5) + 'vw';
-			e.location.style.left = (right + 1) + 'vw';
-			e.location.style.bottom = '';
-			e.location.style.width =
-				aspect / _SCREEN_ASPECT * (100 - .5) + 'vw';
-			e.time.style.right = (right + 1) + 'vw';
-			e.time.style.bottom = '';
-		} else {
-			let bottom = (100 - _SCREEN_ASPECT / aspect * 100) / 2;
-			e.author.style.bottom = (bottom + 1) + 'vh';
-			e.author.style.right = '';
-			e.author.style.width = 100 - .5 + 'vw';
-			e.location.style.bottom = (bottom + 1) + 'vh';
-			e.location.style.left = '';
-			e.location.style.width = 100 - .5 + 'vw';
-			e.time.style.bottom = (bottom + 3.5) + 'vh';
-			e.time.style.right = '';
-		}
+		// percent of the screen width of image
+		let imgWidthPer = ((aspect / _SCREEN_ASPECT * 100));
+		imgWidthPer = Math.min(imgWidthPer, 100.0);
+		let right = (100 - imgWidthPer) / 2;
+		// percent of the screen height of image
+		let imgHeightPer = ((_SCREEN_ASPECT / aspect * 100));
+		imgHeightPer = Math.min(imgHeightPer, 100.0);
+		let bottom = (100 - imgHeightPer) / 2;
+		e.author.style.right = (right + 1) + 'vw';
+		e.author.style.bottom = (bottom + 1) + 'vh';
+		e.author.style.width = imgWidthPer - .5 + 'vw';
+		e.location.style.left = (right + 1) + 'vw';
+		e.location.style.bottom = (bottom + 1) + 'vh';
+		e.location.style.width = imgWidthPer - .5 + 'vw';
+		e.time.style.right = (right + 1) + 'vw';
+		e.time.style.bottom = (bottom + 3.5) + 'vh';
 
 		if (app.Storage.getBool('showTime')) {
 			// don't wrap author
@@ -133,16 +126,16 @@ app.PhotoView = (function() {
 			e.author.style.whiteSpace = 'nowrap';
 		}
 
+		// percent of half the width of image
+		let maxWidth = imgWidthPer / 2;
 		if (_showLocation() && _hasLocation(idx)) {
 			// limit author width if we also have a location
-			e.author.style.maxWidth =
-				((aspect / _SCREEN_ASPECT * 100) / 2 ) - 1.1 + 'vw';
+			e.author.style.maxWidth = maxWidth - 1.1 + 'vw';
 		}
 
 		if (_hasAuthor(idx)) {
 			// limit location width if we also have an author
-			e.location.style.maxWidth =
-				((aspect / _SCREEN_ASPECT * 100) / 2 ) - 1.1 + 'vw';
+			e.location.style.maxWidth = maxWidth - 1.1 + 'vw';
 		}
 	}
 
@@ -264,7 +257,7 @@ app.PhotoView = (function() {
 		time.style.textAlign = 'right';
 		time.style.bottom = topPer + 5.0 + 'vh';
 
-		// percent of half the screen width of image
+		// percent of half the width of image
 		let maxWidth = imgWidthPer / 2;
 		if (_showLocation() && _hasLocation(idx)) {
 			// limit author width if we also have a location
