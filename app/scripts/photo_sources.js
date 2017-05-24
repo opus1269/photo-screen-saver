@@ -170,8 +170,8 @@
 			true, false, 'Reddit', 'loadImages', ['r/animalporn/']),
 		new PhotoSource('useInterestingFlickr', 'flickrInterestingImages',
 			'flickr', true, false, 'Flickr', 'loadImages', []),
-		new PhotoSource('useAuthors', 'authorImages', 'Google',
-			false, false, 'GooglePhotos', 'loadAuthorImages', []),
+		new PhotoSource('useAuthors', 'authorImages', 'flickr',
+			false, false, 'Flickr', 'loadAuthorImages', []),
 	];
 
 	/**

@@ -44,7 +44,60 @@ app.Flickr = (function() {
 	 */
 	const _MAX_PHOTOS = 250;
 
+	/**
+	 * Extract the photos into an Array
+	 * @param {JSON} response - server response
+	 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
+	 * @private
+	 * @memberOf app.Flickr
+	 */
+	function _processPhotos(response) {
+		if (!response.photos || !response.photos.photo) {
+			throw new Error(app.Utils.localize('err_photo_source_title'));
+		}
+		/** @(type) {PhotoSource.Photo[]} */
+		const photos = [];
+		response.photos.photo.forEach((photo) => {
+			if (photo && photo.url_k &&
+				(photo.media === 'photo') &&
+				(photo.isfriend !== '0') &&
+				(photo.isfamily !== '0')) {
+				const width = parseInt(photo.width_k, 10);
+				const height = parseInt(photo.height_k, 10);
+				const asp = width / height;
+				let pt = null;
+				if (photo.latitude && photo.longitude) {
+					pt = app.PhotoSource.getPt(photo.latitude, photo.longitude);
+				}
+				app.PhotoSource.addImage(photos, photo.url_k,
+					photo.ownername, asp, photo.owner, pt);
+			}
+		});
+		return Promise.resolve(photos);
+	}
+
 	return {
+		/**
+		 * Get my photo album
+		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
+		 * @memberOf app.Flickr
+		 */
+		loadAuthorImages: function() {
+			// const albumId = '6117481612859013089';
+			const userId = '86149994@N06';
+			const url =
+				`${_URL_BASE}?method=flickr.people.getPublicPhotos` +
+				`&api_key=${_KEY}&user_id=${userId}` +
+				`&extras=owner_name,url_k,media,geo&per_page=${_MAX_PHOTOS}` +
+				'&format=json&nojsoncallback=1';
+			return app.Http.doGet(url).then((response) => {
+				if (response.stat !== 'ok') {
+					throw new Error(response.message);
+				}
+				return _processPhotos(response);
+			});
+		},
+
 		/**
 		 * Retrieve flickr photos
 		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
@@ -61,25 +114,7 @@ app.Flickr = (function() {
 				if (response.stat !== 'ok') {
 					throw new Error(response.message);
 				}
-				const photos = [];
-				response.photos.photo.forEach((photo) => {
-					if (photo && photo.url_k &&
-						(photo.media === 'photo') &&
-						(photo.isfriend !== '0') &&
-						(photo.isfamily !== '0')) {
-						const width = parseInt(photo.width_k, 10);
-						const height = parseInt(photo.height_k, 10);
-						const asp = width / height;
-						let pt = null;
-						if (photo.latitude && photo.longitude) {
-							pt = app.PhotoSource
-								.getPt(photo.latitude, photo.longitude);
-						}
-						app.PhotoSource.addImage(photos, photo.url_k,
-							photo.ownername, asp, photo.owner, pt);
-					}
-				});
-				return Promise.resolve(photos);
+				return _processPhotos(response);
 			});
 		},
 	};
