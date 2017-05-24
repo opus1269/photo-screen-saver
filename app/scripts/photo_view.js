@@ -36,6 +36,41 @@ app.PhotoView = (function() {
 	 */
 	const SCREEN_ASPECT = screen.width / screen.height;
 
+
+	/**
+	 * Does a photo have an author label to show
+	 * @param {int} idx - index into animated pages
+	 * @returns {boolean} true if we should show the author
+	 * @private
+	 * @memberOf app.PhotoView
+	 */
+	function _hasAuthor(idx) {
+		const e = _getElements(idx);
+		return !!(e && e.item && e.item.label);
+	}
+
+	/**
+	 * Does a photo have a geolocation
+	 * @param {int} idx - index into animated pages
+	 * @returns {boolean} true if geolocation point is non-null
+	 * @private
+	 * @memberOf app.PhotoView
+	 */
+	function _hasLocation(idx) {
+		const e = _getElements(idx);
+		return !!(e && e.item && e.item.point);
+	}
+
+	/**
+	 * Should we show the location, if available
+	 * @returns {boolean} true if we should show the location
+	 * @private
+	 * @memberOf app.PhotoView
+	 */
+	function _showLocation() {
+		return app.Storage.getBool('showLocation');
+	}
+
 	/**
 	 * Get references to the important elements of a slide
 	 * @param {int} idx - index into animated pages
@@ -101,14 +136,17 @@ app.PhotoView = (function() {
 			e.author.style.whiteSpace = 'nowrap';
 		}
 
-		if (!app.Utils.isWhiteSpace(e.item.location) &&
-			app.Storage.getBool('showLocation')) {
+		if (_showLocation() && _hasLocation(idx)) {
+			// limit author width if we also have a location
 			e.author.style.maxWidth =
-				((aspect / SCREEN_ASPECT * 100) / 2 ) - .25 + 'vh';
+				((aspect / SCREEN_ASPECT * 100) / 2 ) - 1.1 + 'vw';
 		}
 
-		e.location.style.maxWidth =
-			((aspect / SCREEN_ASPECT * 100) / 2 ) - .25 + 'vh';
+		if (_hasAuthor(idx)) {
+			// limit location width if we also have an author
+			e.location.style.maxWidth =
+				((aspect / SCREEN_ASPECT * 100) / 2 ) - 1.1 + 'vw';
+		}
 	}
 
 	/**
