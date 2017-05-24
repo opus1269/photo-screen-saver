@@ -213,6 +213,40 @@
 	};
 
 	/**
+	 * Build and set the time string
+	 * @memberOf app.PhotoView
+	 */
+	t.setTime = function() {
+		const format = app.Storage.getInt('showTime');
+		const date = new Date();
+		let timeStr;
+
+		if (format === 0) {
+			// don't show time
+			timeStr = '';
+		} else if (format === 1) {
+			// 12 hour format
+			timeStr = date.toLocaleTimeString('en-us', {
+				hour: 'numeric',
+				minute: '2-digit',
+				hour12: true,
+			});
+			if (timeStr.endsWith('M')) {
+				// strip off AM/PM
+				timeStr = timeStr.substring(0, timeStr.length - 3);
+			}
+		} else {
+			// 24 hour format
+			timeStr = date.toLocaleTimeString(navigator.language, {
+				hour: 'numeric',
+				minute: '2-digit',
+				hour12: false,
+			});
+		}
+		t.set('time', timeStr);
+	};
+
+	/**
 	 * Build the Array of photos that will be displayed
 	 * and populate the neon-animated-pages
 	 * @memberOf app.ScreenSaver
@@ -399,8 +433,9 @@
 
 		selected = t.getNextPhoto(selected);
 		if (selected !== -1) {
+			t.setTime();
 			// If a new photo is ready, prep it
-			app.PhotoView.prep(selected, t);
+			app.PhotoView.prep(selected, t.photoSizing);
 
 			// update t.p.selected so the animation runs
 			t.lastSelected = t.p.selected;
@@ -440,8 +475,8 @@
 	t.onAlarm = function(alarm) {
 		if (alarm.name === CLOCK_ALARM) {
 			// update time label
-			if (t.p.selected !== undefined) {
-				app.PhotoView.setTime(t);
+			if (t.p && (t.p.selected !== undefined)) {
+				t.setTime();
 			}
 		}
 	};

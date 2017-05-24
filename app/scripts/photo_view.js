@@ -235,9 +235,13 @@ app.PhotoView = (function() {
 	 */
 	function _super500px(idx) {
 		const e = _getElements(idx);
+		const type = e.item.type;
+		const authorText = e.item.label;
 		const sup = e.author.querySelector('#sup');
-		(e.item.type === '500') ?
-			sup.textContent = 'px' : sup.textContent = '';
+		sup.textContent = '';
+		if (!app.Utils.isWhiteSpace(authorText) && (type === '500')) {
+			sup.textContent = 'px';
+		}
 	}
 
 	return {
@@ -255,14 +259,12 @@ app.PhotoView = (function() {
 		/**
 		 * Finalize DOM for a photo
 		 * @param {int} idx - index into animated pages
-		 * @param {Object} t - Polymer template
+		 * @param {int} photoSizing - display type
 		 * @memberOf app.PhotoView
 		 */
-		prep: function(idx, t) {
+		prep: function(idx, photoSizing) {
 			app.Geo.set(_getElements(idx));
-			app.PhotoView.setTime(t);
-			_super500px(idx);
-			switch (t.photoSizing) {
+			switch (photoSizing) {
 				case 0:
 					_letterbox(idx);
 					break;
@@ -275,6 +277,7 @@ app.PhotoView = (function() {
 				default:
 					break;
 			}
+			_super500px(idx);
 		},
 
 		/**
@@ -297,41 +300,6 @@ app.PhotoView = (function() {
 		isLoaded: function(idx) {
 			const e = _getElements(idx);
 			return !!e.image && e.image.loaded;
-		},
-
-		/**
-		 * Build and set the time string
-		 * @param {Object} t - Polymer template
-		 * @memberOf app.PhotoView
-		 */
-		setTime: function(t) {
-			const format = app.Storage.getInt('showTime');
-			const date = new Date();
-			let timeStr;
-
-			if (format === 0) {
-				// don't show time
-				timeStr = '';
-			} else if (format === 1) {
-				// 12 hour format
-				timeStr = date.toLocaleTimeString('en-us', {
-					hour: 'numeric',
-					minute: '2-digit',
-					hour12: true,
-				});
-				if (timeStr.endsWith('M')) {
-					// strip off AM/PM
-					timeStr = timeStr.substring(0, timeStr.length - 3);
-				}
-			} else {
-				// 24 hour format
-				timeStr = date.toLocaleTimeString(navigator.language, {
-					hour: 'numeric',
-					minute: '2-digit',
-					hour12: false,
-				});
-			}
-			t.set('time', timeStr);
 		},
 	};
 })();
