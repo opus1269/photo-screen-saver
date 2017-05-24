@@ -34,8 +34,7 @@ app.PhotoView = (function() {
 	 * @private
 	 * @memberOf app.PhotoView
 	 */
-	const SCREEN_ASPECT = screen.width / screen.height;
-
+	const _SCREEN_ASPECT = screen.width / screen.height;
 
 	/**
 	 * Does a photo have an author label to show
@@ -101,25 +100,23 @@ app.PhotoView = (function() {
 	function _letterbox(idx) {
 		const e = _getElements(idx);
 		const aspect = e.item.aspectRatio;
-		let right;
-		let bottom;
 
 		e.author.style.textAlign = 'right';
 		e.location.style.textAlign = 'left';
-		if (aspect < SCREEN_ASPECT) {
-			right = (100 - aspect / SCREEN_ASPECT * 100) / 2;
+		if (aspect < _SCREEN_ASPECT) {
+			let right = (100 - aspect / _SCREEN_ASPECT * 100) / 2;
 			e.author.style.right = (right + 1) + 'vw';
 			e.author.style.bottom = '';
 			e.author.style.width =
-				aspect / SCREEN_ASPECT * (100 - .5) + 'vw';
+				aspect / _SCREEN_ASPECT * (100 - .5) + 'vw';
 			e.location.style.left = (right + 1) + 'vw';
 			e.location.style.bottom = '';
 			e.location.style.width =
-				aspect / SCREEN_ASPECT * (100 - .5) + 'vw';
+				aspect / _SCREEN_ASPECT * (100 - .5) + 'vw';
 			e.time.style.right = (right + 1) + 'vw';
 			e.time.style.bottom = '';
 		} else {
-			bottom = (100 - SCREEN_ASPECT / aspect * 100) / 2;
+			let bottom = (100 - _SCREEN_ASPECT / aspect * 100) / 2;
 			e.author.style.bottom = (bottom + 1) + 'vh';
 			e.author.style.right = '';
 			e.author.style.width = 100 - .5 + 'vw';
@@ -139,13 +136,13 @@ app.PhotoView = (function() {
 		if (_showLocation() && _hasLocation(idx)) {
 			// limit author width if we also have a location
 			e.author.style.maxWidth =
-				((aspect / SCREEN_ASPECT * 100) / 2 ) - 1.1 + 'vw';
+				((aspect / _SCREEN_ASPECT * 100) / 2 ) - 1.1 + 'vw';
 		}
 
 		if (_hasAuthor(idx)) {
 			// limit location width if we also have an author
 			e.location.style.maxWidth =
-				((aspect / SCREEN_ASPECT * 100) / 2 ) - 1.1 + 'vw';
+				((aspect / _SCREEN_ASPECT * 100) / 2 ) - 1.1 + 'vw';
 		}
 	}
 
@@ -168,26 +165,40 @@ app.PhotoView = (function() {
 	 * @param {Element} el - element to style
 	 * @param {int} width - frame width
 	 * @param {int} height - frame height
+	 * @param {boolean} isLeft - if true align left, else right
 	 * @private
 	 * @memberOf app.PhotoView
 	 */
-	function _setFrameLabelStyle(el, width, height) {
+	function _setFrameLabelStyle(el, width, height, isLeft) {
 		el.style.textOverflow = 'ellipsis';
 		el.style.whiteSpace = 'nowrap';
-		if (app.Storage.getInt('showTime')) {
-			el.style.left = (screen.width - width) / 2 + 10 + 'px';
-			el.style.textAlign = 'left';
-			el.style.width = Math.floor(0.8 * width) + 'px';
-		} else {
-			el.style.left = (screen.width - width) / 2 + 10 + 'px';
-			el.style.width = width - 20 + 'px';
-			el.style.textAlign = 'center';
-		}
-		el.style.bottom = (screen.height - height) / 2 + 10 + 'px';
 		el.style.color = 'black';
 		el.style.opacity = 1.0;
 		el.style.fontSize = '2.5vh';
-		el.style.fontWeight = 300;
+		el.style.fontWeight = 400;
+
+		// percent of screen width for label padding
+		let padPer = 0.5;
+		// percent of screen width of image
+		let imgWidthPer = (width / screen.width) * 100;
+		// percent of screen width on each side of image
+		let sidePer = (100 - imgWidthPer) / 2;
+		if (isLeft) {
+			el.style.left = sidePer + padPer + 'vw';
+			el.style.right = '';
+			el.style.textAlign = 'left';
+		} else {
+			el.style.right = sidePer + padPer + 'vw';
+			el.style.left = '';
+			el.style.textAlign = 'right';
+		}
+		el.style.width = imgWidthPer - 2 * padPer + 'vw';
+
+		// percent of screen height of image
+		let imgHtPer = (height / screen.height) * 100;
+		// percent of screen height on each side of image
+		let topPer = (100 - imgHtPer) / 2;
+		el.style.bottom = topPer + 1.1 + 'vh';
 	}
 
 	/**
@@ -207,39 +218,24 @@ app.PhotoView = (function() {
 		/** @type {Photo} */
 		const photo = e.item;
 		const aspect = photo.aspectRatio;
-		const showLocation = app.Storage.getBool('showLocation');
-		const hasLocation = !!photo.point;
-		let padding;
-		let border;
-		let borderBot;
-		let width;
-		let height;
-		let frWidth;
-		let frHeight;
 
 		// scale to screen size
-		border = screen.height * 0.005;
-		borderBot = screen.height * 0.05;
-		padding = screen.height * 0.025;
+		const border = screen.height * 0.005;
+		const borderBot = screen.height * 0.05;
+		const padding = screen.height * 0.025;
 
-		let label;
-		if (showLocation && hasLocation) {
-			// location takes priority over author
-			label = '';
-		} else {
-			// force author for this view
-			label = app.Photo.buildAuthorLabel(photo.type, photo.author, true);
-		}
+		const label =
+			app.Photo.buildAuthorLabel(photo.type, photo.author, true);
 		model.set('item.label', label);
 
-		height =
+		const height =
 			Math.min((screen.width - padding * 2 - border * 2) / aspect,
 				screen.height - padding * 2 - border - borderBot);
-		width = height * aspect;
+		const width = height * aspect;
 
 		// size with the frame
-		frWidth = width + border * 2;
-		frHeight = height + borderBot + border;
+		const frWidth = width + border * 2;
+		const frHeight = height + borderBot + border;
 
 		img.style.height = height + 'px';
 		img.style.width = width + 'px';
@@ -253,16 +249,32 @@ app.PhotoView = (function() {
 		image.style.borderRadius = '1.5vh';
 		image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
 
-		_setFrameLabelStyle(author, frWidth, frHeight);
-		_setFrameLabelStyle(location, frWidth, frHeight);
+		_setFrameLabelStyle(author, frWidth, frHeight, false);
+		_setFrameLabelStyle(location, frWidth, frHeight, true);
 
-		time.style.right = (screen.width - frWidth) / 2 + 10 + 'px';
+		// percent of screen height of image
+		let imgHtPer = (frHeight / screen.height) * 100;
+		// percent of screen height on each side of image
+		let topPer = (100 - imgHtPer) / 2;
+		// percent of screen width of image
+		let imgWidthPer = (frWidth / screen.width) * 100;
+		// percent of screen width on each side of image
+		let sidePer = (100 - imgWidthPer) / 2;
+		time.style.right = sidePer + 1.0 + 'vw';
 		time.style.textAlign = 'right';
-		time.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
-		time.style.color = 'black';
-		time.style.opacity = 1.0;
-		time.style.fontSize = '3vh';
-		time.style.fontWeight = 300;
+		time.style.bottom = topPer + 5.0 + 'vh';
+
+		// percent of half the screen width of image
+		let maxWidth = imgWidthPer / 2;
+		if (_showLocation() && _hasLocation(idx)) {
+			// limit author width if we also have a location
+			e.author.style.maxWidth = maxWidth - 1 + 'vw';
+		}
+
+		if (_hasAuthor(idx)) {
+			// limit location width if we also have an author
+			e.location.style.maxWidth = maxWidth - 1 + 'vw';
+		}
 	}
 
 	/**
