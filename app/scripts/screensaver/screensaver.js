@@ -186,7 +186,7 @@
 			const name = app.PhotoView.getName(idx);
 			const index = t.itemsAll.findIndex((element) => {
 				return element.name === name;
-			}).indexOf(name);
+			});
 			if (index !== -1) {
 				t.itemsAll[index].name = 'skip';
 			}
