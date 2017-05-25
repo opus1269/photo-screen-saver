@@ -215,11 +215,10 @@
 	function _replaceAllPhotos() {
 		if (t.itemsAll.length > t.items.length) {
 			let pos = 0;
-			let item;
 			let newIdx = t.curIdx;
 			for (let i = t.curIdx; i < t.itemsAll.length; i++) {
 				newIdx = i;
-				item = t.itemsAll[i];
+				const item = t.itemsAll[i];
 				if (item.name !== 'skip') {
 					if ((pos !== t.lastSelected) &&
 						(pos !== t.p.selected)) {

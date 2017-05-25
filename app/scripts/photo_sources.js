@@ -10,7 +10,8 @@
 	new ExceptionHandler();
 
 	/**
-	 * A potential source of photos for the screen saver
+	 * A potential source of photos for the screensaver
+	 *
 	 * @param {string} useName - The key for the boolean value that indicates
 	 * if the source is selected
 	 * @param {string} photosName - The key for the collection of photos
@@ -39,6 +40,19 @@
 
 	window.app = window.app || {};
 	app.PhotoSource = PhotoSource;
+
+	/**
+	 * A photo from a {@link app.PhotoSource}
+	 * This is the photo information that is persisted.
+	 *
+	 * @typedef {{}} app.PhotoSource.Photo
+	 * @property {string} url - The url to the photo
+	 * @property {string} author - The photographer
+	 * @property {number} asp - The aspect ratio of the photo
+	 * @property {Object} [ex] - Additional information about the photo
+	 * @property {string} [point] - geolocation 'lat lon's
+	 * @property {string} type - source of the photo (not persisted)
+	 */
 
 	/**
 	 * Determine if this source has been selected for display
@@ -88,7 +102,7 @@
 
 	/**
 	 * Save the photos to localStorage in a safe manner
-	 * @param {Array} photos - an array of photo objects
+	 * @param {Array} photos - {@link app.PhotoSource.Photo} Array
 	 * @returns {?string} non-null on error
 	 * @private
 	 */
@@ -105,43 +119,38 @@
 	};
 
 	/**
-	 * Add the type specifier (source of the photo) for each
-	 * photo object in the array
-	 * @param {Array} arr - an array of photo objects
+	 * Add the type (source of the photo) for each
+	 * {@link app.PhotoSource.Photo} object in the array
+	 * @param {Array} arr - {@link app.PhotoSource.Photo} Array
 	 * @private
 	 */
 	PhotoSource.prototype._addType = function(arr) {
-		for (let i = 0; i < arr.length; i++) {
-			arr[i].type = this.type;
-		}
+		arr.forEach((item) => {
+			item.type = this.type;
+		});
 	};
 
 	/**
 	 * Get all the photos from local storage
-	 * @returns {Array} The Array of photos
+	 * @returns {Array} {@link app.PhotoSource.Photo} Array
 	 * @private
 	 */
 	PhotoSource.prototype._getPhotos = function() {
 		let ret = [];
 		if (this.use()) {
 			if (this.isArray) {
-				const items = app.Storage.get(this.photosName);
-				if (items) {
-					// could be that items have not been retrieved yet
-					for (let i = 0; i < items.length; i++) {
-						ret = ret.concat(items[i].photos);
-						if (ret) {
-							this._addType(ret);
-						}
-					}
-				}
+				let items = app.Storage.get(this.photosName);
+				// could be that items have not been retrieved yet
+				items = items || [];
+				items.forEach((item) => {
+					ret = ret.concat(item.photos);
+				});
+				this._addType(ret);
 			} else {
 				ret = app.Storage.get(this.photosName);
-				if (ret) {
-					this._addType(ret);
-				} else {
-					ret = [];
-				}
+				// could be that items have not been retrieved yet
+				ret = ret || [];
+				this._addType(ret);
 			}
 		}
 		return ret;
@@ -149,7 +158,7 @@
 
 	/**
 	 * Array of PhotoSources
-	 * @type {Array}
+	 * @type {app.PhotoSource[]}
 	 */
 	PhotoSource.SOURCES = [
 		new PhotoSource('useGoogle', 'albumSelections', 'Google User',
@@ -176,26 +185,27 @@
 
 	/**
 	 * Get all the keys of useage boolean variables
-	 * @returns {Array} Array of keys of useage boolean variables
+	 * @returns {Array<string>} Array of keys of useage boolean variables
 	 */
 	PhotoSource.getUseNames = function() {
 		let ret = [];
-		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
-			ret = ret.concat(PhotoSource.SOURCES[i].useName);
-		}
+		PhotoSource.SOURCES.forEach((source) => {
+			ret = ret.concat(source.useName);
+		});
 		return ret;
 	};
 
 	/**
 	 * Get all the photos from all selected sources. These will be
 	 * used by the screensaver.
-	 * @returns {Array} Array of photos to display in screen saver
+	 * @returns {Array<app.PhotoSource.Photo>}
+	 * {@link app.PhotoSource.Photo} Array
 	 */
 	PhotoSource.getSelectedPhotos = function() {
 		let ret = [];
-		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
-			ret = ret.concat(PhotoSource.SOURCES[i]._getPhotos());
-		}
+		PhotoSource.SOURCES.forEach((source) => {
+			ret = ret.concat(source._getPhotos());
+		});
 		return ret;
 	};
 
@@ -215,8 +225,7 @@
 
 	/**
 	 * Process the given photo source and save to localStorage.
-	 * This normally requires a https call
-	 * and may fail for various reasons
+	 * This normally requires a https call and may fail for various reasons
 	 * @param {string} useName - The photo source to retrieve
 	 * @returns {Promise<void>} void
 	 */
@@ -231,41 +240,27 @@
 	};
 
 	/**
-	 * Process all the selected photo sources and save to localStorage.
-	 * This normally requires a https call
-	 * and may fail for various reasons
+	 * Process all the selected photo sources.
+	 * This normally requires a https call and may fail for various reasons
 	 */
 	PhotoSource.processAll = function() {
-		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
-			PhotoSource.SOURCES[i].process().catch(() => {});
-		}
+		PhotoSource.SOURCES.forEach((source) => {
+			source.process().catch(() => {});
+		});
 	};
 
 	/**
 	 * Process all the selected photo sources that are to be
-	 * updated every day and save to localStorage.
-	 * This normally requires a https call
-	 * and may fail for various reasons
+	 * updated every day.
+	 * This normally requires a https call and may fail for various reasons
 	 */
 	PhotoSource.processDaily = function() {
-		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
-			if (PhotoSource.SOURCES[i].isDaily) {
-				PhotoSource.SOURCES[i].process().catch(() => {});
+		PhotoSource.SOURCES.forEach((source) => {
+			if (source.isDaily) {
+				source.process().catch(() => {});
 			}
-		}
+		});
 	};
-
-	/**
-	 * A photo from a {@link app.PhotoSource}
-	 * @typedef {{}} app.PhotoSource.Photo
-	 * @property {string} url - The url to the photo
-	 * @property {string} author - The photographer
-	 * @property {number} asp - The aspect ratio of the photo
-	 * @property {Object} [ex] - Additional information about the photo
-	 * @property {string} [point] - geolocation 'lat lon's
-	 * @property {string} type - source of the photo
-	 */
-
 
 	/**
 	 * Get a geo point string from a latitude and longitude
@@ -282,8 +277,8 @@
 	};
 
 	/**
-	 * Add an image object to an existing Array
-	 * @param {Array} images - Array of image objects
+	 * Add a {@link app.PhotoSource.Photo} to an existing Array
+	 * @param {Array} photos - {@link app.PhotoSource.Photo} Array
 	 * @param {string} url - The url to the photo
 	 * @param {string} author - The photographer
 	 * @param {number} asp - The aspect ratio of the photo
@@ -291,20 +286,19 @@
 	 * @param {string} [point] - 'lat lon'
 	 * @memberOf app.Utils
 	 */
-	PhotoSource.addImage = function(images, url, author, asp, ex, point) {
+	PhotoSource.addImage = function(photos, url, author, asp, ex, point) {
 		/** @type {app.PhotoSource.Photo} */
-		const image = {
+		const photo = {
 			url: url,
 			author: author,
 			asp: asp.toPrecision(3),
 		};
 		if (ex) {
-			image.ex = ex;
+			photo.ex = ex;
 		}
 		if (point) {
-			image.point = point;
+			photo.point = point;
 		}
-		images.push(image);
+		photos.push(photo);
 	};
-
-})(window);
+})();

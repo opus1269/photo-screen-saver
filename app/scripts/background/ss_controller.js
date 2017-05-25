@@ -120,15 +120,15 @@ app.SSControl = (function() {
 	 * @memberOf app.SSControl
 	 */
 	function _openOnAllDisplays() {
-		chromep.system.display.getInfo().then((displayInfo) => {
-			if (displayInfo.length === 1) {
+		chromep.system.display.getInfo().then((displayArr) => {
+			if (displayArr.length === 1) {
 				_open(null);
 			} else {
-				for (let i = 0; i < displayInfo.length; i++) {
-					_open(displayInfo[i]);
-				}
+				displayArr.forEach((display) => {
+					_open(display);
+				});
 			}
-			return null;
+			return Promise.resolve();
 		}).catch((err) => {
 			app.GA.error(err.message, 'app.SSControl._openOnAllDisplays');
 		});
