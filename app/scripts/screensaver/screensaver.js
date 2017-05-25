@@ -189,8 +189,6 @@
 			});
 			if (index !== -1) {
 				t.itemsAll[index].name = 'skip';
-				app.GA.error(`Photo did not load: ${t.itemsAll[index].path}`,
-					'Screensaver._replacePhoto');
 			}
 		}
 
