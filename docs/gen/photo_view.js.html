@@ -120,7 +120,41 @@ app.PhotoView = (function() {
 	 * @private
 	 * @memberOf app.PhotoView
 	 */
-	const SCREEN_ASPECT = screen.width / screen.height;
+	const _SCREEN_ASPECT = screen.width / screen.height;
+
+	/**
+	 * Does a photo have an author label to show
+	 * @param {int} idx - index into animated pages
+	 * @returns {boolean} true if we should show the author
+	 * @private
+	 * @memberOf app.PhotoView
+	 */
+	function _hasAuthor(idx) {
+		const e = _getElements(idx);
+		return !!(e &amp;&amp; e.item &amp;&amp; e.item.label);
+	}
+
+	/**
+	 * Does a photo have a geolocation
+	 * @param {int} idx - index into animated pages
+	 * @returns {boolean} true if geolocation point is non-null
+	 * @private
+	 * @memberOf app.PhotoView
+	 */
+	function _hasLocation(idx) {
+		const e = _getElements(idx);
+		return !!(e &amp;&amp; e.item &amp;&amp; e.item.point);
+	}
+
+	/**
+	 * Should we show the location, if available
+	 * @returns {boolean} true if we should show the location
+	 * @private
+	 * @memberOf app.PhotoView
+	 */
+	function _showLocation() {
+		return app.Storage.getBool('showLocation');
+	}
 
 	/**
 	 * Get references to the important elements of a slide
@@ -152,34 +186,25 @@ app.PhotoView = (function() {
 	function _letterbox(idx) {
 		const e = _getElements(idx);
 		const aspect = e.item.aspectRatio;
-		let right;
-		let bottom;
 
 		e.author.style.textAlign = 'right';
 		e.location.style.textAlign = 'left';
-		if (aspect &lt; SCREEN_ASPECT) {
-			right = (100 - aspect / SCREEN_ASPECT * 100) / 2;
-			e.author.style.right = (right + 1) + 'vw';
-			e.author.style.bottom = '';
-			e.author.style.width =
-				aspect / SCREEN_ASPECT * (100 - .5) + 'vw';
-			e.location.style.left = (right + 1) + 'vw';
-			e.location.style.bottom = '';
-			e.location.style.width =
-				aspect / SCREEN_ASPECT * (100 - .5) + 'vw';
-			e.time.style.right = (right + 1) + 'vw';
-			e.time.style.bottom = '';
-		} else {
-			bottom = (100 - SCREEN_ASPECT / aspect * 100) / 2;
-			e.author.style.bottom = (bottom + 1) + 'vh';
-			e.author.style.right = '';
-			e.author.style.width = 100 - .5 + 'vw';
-			e.location.style.bottom = (bottom + 1) + 'vh';
-			e.location.style.left = '';
-			e.location.style.width = 100 - .5 + 'vw';
-			e.time.style.bottom = (bottom + 3.5) + 'vh';
-			e.time.style.right = '';
-		}
+		// percent of the screen width of image
+		let imgWidthPer = ((aspect / _SCREEN_ASPECT * 100));
+		imgWidthPer = Math.min(imgWidthPer, 100.0);
+		let right = (100 - imgWidthPer) / 2;
+		// percent of the screen height of image
+		let imgHeightPer = ((_SCREEN_ASPECT / aspect * 100));
+		imgHeightPer = Math.min(imgHeightPer, 100.0);
+		let bottom = (100 - imgHeightPer) / 2;
+		e.author.style.right = (right + 1) + 'vw';
+		e.author.style.bottom = (bottom + 1) + 'vh';
+		e.author.style.width = imgWidthPer - .5 + 'vw';
+		e.location.style.left = (right + 1) + 'vw';
+		e.location.style.bottom = (bottom + 1) + 'vh';
+		e.location.style.width = imgWidthPer - .5 + 'vw';
+		e.time.style.right = (right + 1) + 'vw';
+		e.time.style.bottom = (bottom + 3.5) + 'vh';
 
 		if (app.Storage.getBool('showTime')) {
 			// don't wrap author
@@ -187,14 +212,17 @@ app.PhotoView = (function() {
 			e.author.style.whiteSpace = 'nowrap';
 		}
 
-		if (!app.Utils.isWhiteSpace(e.item.location) &amp;&amp;
-			app.Storage.getBool('showLocation')) {
-			e.author.style.maxWidth =
-				((aspect / SCREEN_ASPECT * 100) / 2 ) - .25 + 'vh';
+		// percent of half the width of image
+		let maxWidth = imgWidthPer / 2;
+		if (_showLocation() &amp;&amp; _hasLocation(idx)) {
+			// limit author width if we also have a location
+			e.author.style.maxWidth = maxWidth - 1.1 + 'vw';
 		}
 
-		e.location.style.maxWidth =
-			((aspect / SCREEN_ASPECT * 100) / 2 ) - .25 + 'vh';
+		if (_hasAuthor(idx)) {
+			// limit location width if we also have an author
+			e.location.style.maxWidth = maxWidth - 1.1 + 'vw';
+		}
 	}
 
 	/**
@@ -216,26 +244,40 @@ app.PhotoView = (function() {
 	 * @param {Element} el - element to style
 	 * @param {int} width - frame width
 	 * @param {int} height - frame height
+	 * @param {boolean} isLeft - if true align left, else right
 	 * @private
 	 * @memberOf app.PhotoView
 	 */
-	function _setFrameLabelStyle(el, width, height) {
+	function _setFrameLabelStyle(el, width, height, isLeft) {
 		el.style.textOverflow = 'ellipsis';
 		el.style.whiteSpace = 'nowrap';
-		if (app.Storage.getInt('showTime')) {
-			el.style.left = (screen.width - width) / 2 + 10 + 'px';
-			el.style.textAlign = 'left';
-			el.style.width = Math.floor(0.8 * width) + 'px';
-		} else {
-			el.style.left = (screen.width - width) / 2 + 10 + 'px';
-			el.style.width = width - 20 + 'px';
-			el.style.textAlign = 'center';
-		}
-		el.style.bottom = (screen.height - height) / 2 + 10 + 'px';
 		el.style.color = 'black';
-		el.style.opacity = 0.9;
+		el.style.opacity = 1.0;
 		el.style.fontSize = '2.5vh';
-		el.style.fontWeight = 300;
+		el.style.fontWeight = 400;
+
+		// percent of screen width for label padding
+		let padPer = 0.5;
+		// percent of screen width of image
+		let imgWidthPer = (width / screen.width) * 100;
+		// percent of screen width on each side of image
+		let sidePer = (100 - imgWidthPer) / 2;
+		if (isLeft) {
+			el.style.left = sidePer + padPer + 'vw';
+			el.style.right = '';
+			el.style.textAlign = 'left';
+		} else {
+			el.style.right = sidePer + padPer + 'vw';
+			el.style.left = '';
+			el.style.textAlign = 'right';
+		}
+		el.style.width = imgWidthPer - 2 * padPer + 'vw';
+
+		// percent of screen height of image
+		let imgHtPer = (height / screen.height) * 100;
+		// percent of screen height on each side of image
+		let topPer = (100 - imgHtPer) / 2;
+		el.style.bottom = topPer + 1.1 + 'vh';
 	}
 
 	/**
@@ -255,39 +297,24 @@ app.PhotoView = (function() {
 		/** @type {Photo} */
 		const photo = e.item;
 		const aspect = photo.aspectRatio;
-		const showLocation = app.Storage.getBool('showLocation');
-		const hasLocation = !!photo.point;
-		let padding;
-		let border;
-		let borderBot;
-		let width;
-		let height;
-		let frWidth;
-		let frHeight;
 
 		// scale to screen size
-		border = screen.height * 0.005;
-		borderBot = screen.height * 0.05;
-		padding = screen.height * 0.025;
+		const border = screen.height * 0.005;
+		const borderBot = screen.height * 0.05;
+		const padding = screen.height * 0.025;
 
-		let label;
-		if (showLocation &amp;&amp; hasLocation) {
-			// location takes priority over author
-			label = '';
-		} else {
-			// force author for this view
-			label = app.Photo.buildAuthorLabel(photo.type, photo.author, true);
-		}
+		const label =
+			app.Photo.buildAuthorLabel(photo.type, photo.author, true);
 		model.set('item.label', label);
 
-		height =
+		const height =
 			Math.min((screen.width - padding * 2 - border * 2) / aspect,
 				screen.height - padding * 2 - border - borderBot);
-		width = height * aspect;
+		const width = height * aspect;
 
 		// size with the frame
-		frWidth = width + border * 2;
-		frHeight = height + borderBot + border;
+		const frWidth = width + border * 2;
+		const frHeight = height + borderBot + border;
 
 		img.style.height = height + 'px';
 		img.style.width = width + 'px';
@@ -301,16 +328,32 @@ app.PhotoView = (function() {
 		image.style.borderRadius = '1.5vh';
 		image.style.boxShadow = '1.5vh 1.5vh 1.5vh rgba(0,0,0,.7)';
 
-		_setFrameLabelStyle(author, frWidth, frHeight);
-		_setFrameLabelStyle(location, frWidth, frHeight);
+		_setFrameLabelStyle(author, frWidth, frHeight, false);
+		_setFrameLabelStyle(location, frWidth, frHeight, true);
 
-		time.style.right = (screen.width - frWidth) / 2 + 10 + 'px';
+		// percent of screen height of image
+		let imgHtPer = (frHeight / screen.height) * 100;
+		// percent of screen height on each side of image
+		let topPer = (100 - imgHtPer) / 2;
+		// percent of screen width of image
+		let imgWidthPer = (frWidth / screen.width) * 100;
+		// percent of screen width on each side of image
+		let sidePer = (100 - imgWidthPer) / 2;
+		time.style.right = sidePer + 1.0 + 'vw';
 		time.style.textAlign = 'right';
-		time.style.bottom = (screen.height - frHeight) / 2 + 10 + 'px';
-		time.style.color = 'black';
-		time.style.opacity = 0.9;
-		time.style.fontSize = '3vh';
-		time.style.fontWeight = 300;
+		time.style.bottom = topPer + 5.0 + 'vh';
+
+		// percent of half the width of image
+		let maxWidth = imgWidthPer / 2;
+		if (_showLocation() &amp;&amp; _hasLocation(idx)) {
+			// limit author width if we also have a location
+			e.author.style.maxWidth = maxWidth - 1 + 'vw';
+		}
+
+		if (_hasAuthor(idx)) {
+			// limit location width if we also have an author
+			e.location.style.maxWidth = maxWidth - 1 + 'vw';
+		}
 	}
 
 	/**
@@ -321,9 +364,13 @@ app.PhotoView = (function() {
 	 */
 	function _super500px(idx) {
 		const e = _getElements(idx);
+		const type = e.item.type;
+		const authorText = e.item.label;
 		const sup = e.author.querySelector('#sup');
-		(e.item.type === '500') ?
-			sup.textContent = 'px' : sup.textContent = '';
+		sup.textContent = '';
+		if (!app.Utils.isWhiteSpace(authorText) &amp;&amp; (type === '500')) {
+			sup.textContent = 'px';
+		}
 	}
 
 	return {
@@ -341,14 +388,12 @@ app.PhotoView = (function() {
 		/**
 		 * Finalize DOM for a photo
 		 * @param {int} idx - index into animated pages
-		 * @param {Object} t - Polymer template
+		 * @param {int} photoSizing - display type
 		 * @memberOf app.PhotoView
 		 */
-		prep: function(idx, t) {
+		prep: function(idx, photoSizing) {
 			app.Geo.set(_getElements(idx));
-			app.PhotoView.setTime(t);
-			_super500px(idx);
-			switch (t.photoSizing) {
+			switch (photoSizing) {
 				case 0:
 					_letterbox(idx);
 					break;
@@ -361,6 +406,7 @@ app.PhotoView = (function() {
 				default:
 					break;
 			}
+			_super500px(idx);
 		},
 
 		/**
@@ -383,41 +429,6 @@ app.PhotoView = (function() {
 		isLoaded: function(idx) {
 			const e = _getElements(idx);
 			return !!e.image &amp;&amp; e.image.loaded;
-		},
-
-		/**
-		 * Build and set the time string
-		 * @param {Object} t - Polymer template
-		 * @memberOf app.PhotoView
-		 */
-		setTime: function(t) {
-			const format = app.Storage.getInt('showTime');
-			const date = new Date();
-			let timeStr;
-
-			if (format === 0) {
-				// don't show time
-				timeStr = '';
-			} else if (format === 1) {
-				// 12 hour format
-				timeStr = date.toLocaleTimeString('en-us', {
-					hour: 'numeric',
-					minute: '2-digit',
-					hour12: true,
-				});
-				if (timeStr.endsWith('M')) {
-					// strip off AM/PM
-					timeStr = timeStr.substring(0, timeStr.length - 3);
-				}
-			} else {
-				// 24 hour format
-				timeStr = date.toLocaleTimeString(navigator.language, {
-					hour: 'numeric',
-					minute: '2-digit',
-					hour12: false,
-				});
-			}
-			t.set('time', timeStr);
 		},
 	};
 })();
@@ -466,7 +477,7 @@ app.PhotoView = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 22nd 2017, 2:57:11 pm
+		on May 24th 2017, 10:27:23 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
