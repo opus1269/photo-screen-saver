@@ -14,8 +14,6 @@
 
 	new ExceptionHandler();
 
-	const chromep = new ChromePromise();
-
 	/**
 	 * Manage an html page that is inserted on demand<br />
 	 * May also be a url link to external site
@@ -110,6 +108,7 @@
 	/**
 	 * Current {@link Options.Page}
 	 * @type {string}
+	 * @memberOf Options
 	 */
 	t.route = 'page-settings';
 
@@ -252,6 +251,7 @@
 	function _onMessage(request, sender, response) {
 		if (request.message === app.Msg.HIGHLIGHT.message) {
 			// highlight ourselves and let the sender know we are here
+			const chromep = new ChromePromise();
 			chromep.tabs.getCurrent().then((t) => {
 				chrome.tabs.update(t.id, {'highlighted': true});
 				return null;
