@@ -19,7 +19,7 @@
 	<link rel="import" href="../elements/elements.html">
 
 	<!-- For iron-flex-layout -->
-	<style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors iron-positioning"></style>
+	<style is="custom-style" include="iron-flex iron-flex-alignment"></style>
 
 	<!-- For shared styles, shared-styles.html import in elements.html -->
 	<style is="custom-style" include="shared-styles"></style>
@@ -28,19 +28,23 @@
 <body unresolved class="fullbleed layout vertical">
 	<template is="dom-bind" id="t">
 
-		<paper-drawer-panel id="paperDrawerPanel" responsive-width="800px" drawer-width="350px">
+		<paper-drawer-panel id="paperDrawerPanel" responsive-width="800px"
+							drawer-width="350px">
 			<paper-material elevation="2" drawer fixed>
 				<!-- Drawer Scroll Header Panel -->
 				<paper-scroll-header-panel>
 					<!-- Drawer Toolbar -->
 					<paper-toolbar id="drawerToolbar">
-						<span class="paper-font-title">{{computeMenu()}}</span>
+						<span class="paper-font-title">{{_computeMenu()}}</span>
 					</paper-toolbar>
 					<!-- Drawer Content -->
-					<paper-menu class="list" id="mainMenu" attr-for-selected="id" selected="[[route]]">
+					<paper-menu class="list" id="mainMenu" attr-for-selected="id"
+								selected="[[route]]">
 						<template is="dom-repeat" items="[[pages]]">
 							<hr hidden$="[[!item.divider]]"/>
-							<paper-item id="[[item.route]]" class="center horizontal layout" on-click="onDataRouteClick">
+							<paper-item id="[[item.route]]"
+										class="center horizontal layout"
+										on-click="_onNavMenuItemTapped">
 								<iron-icon icon="[[item.icon]]"></iron-icon>
 								<span>[[item.label]]</span>
 							</paper-item>
@@ -54,12 +58,14 @@
 				<!-- Main Toolbar -->
 				<paper-material class="paper-header" elevation="2">
 					<paper-toolbar id="mainToolbar">
-						<paper-icon-button id="paperToggle" icon="myicons:menu" paper-drawer-toggle></paper-icon-button>
+						<paper-icon-button id="paperToggle" icon="myicons:menu"
+										   paper-drawer-toggle>
+						</paper-icon-button>
 						<span class="flex"></span>
 						<!-- Application name -->
 						<div class="middle middle-container center horizontal layout">
 							<div class="paper-font-headline app-name">
-								{{computeTitle()}}
+								{{_computeTitle()}}
 							</div>
 						</div>
 					</paper-toolbar>
@@ -69,8 +75,9 @@
 				<div id="mainContainer" class="options-content">
 
 					<!-- Error dialog -->
-					<paper-dialog id="errorDialog" modal entry-animation="scale-up-animation"
-						exit-animation="fade-out-animation">
+					<paper-dialog id="errorDialog" modal
+								  entry-animation="scale-up-animation"
+								  exit-animation="fade-out-animation">
 						<h2 id="dialogTitle">[[dialogTitle]]</h2>
 						<paper-dialog-scrollable>
 							<p id="dialogText">[[dialogText]]</p>
@@ -80,8 +87,11 @@
 						</div>
 					</paper-dialog>
 
-					<neon-animated-pages id="mainPages" attr-for-selected="data-route" selected="{{route}}"
-					                     entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+					<neon-animated-pages id="mainPages"
+										 attr-for-selected="data-route"
+										 selected="{{route}}"
+					                     entry-animation="fade-in-animation"
+										 exit-animation="fade-out-animation">
 						<neon-animatable data-route="page-settings">
 							<section>
 								<settings-page id="settingsPage"></settings-page>

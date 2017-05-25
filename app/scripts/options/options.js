@@ -4,12 +4,12 @@
  *  https://opensource.org/licenses/BSD-3-Clause
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
-(function(window) {
+(function() {
 	'use strict';
 
 	/**
 	 * Extension's Options page
-	 * @namespace app.Options
+	 * @namespace Options
 	 */
 
 	new ExceptionHandler();
@@ -19,14 +19,14 @@
 	/**
 	 * Manage an html page that is inserted on demand<br />
 	 * May also be a url link to external site
-	 * @typedef {Object} app.Options.Page
+	 * @typedef {{}} Options.Page
 	 * @property {string} label - label for Nav menu
 	 * @property {string} route - element name route to page
 	 * @property {string} icon - icon for Nav Menu
-	 * @property {?Object} obj - something to be done when selected
+	 * @property {?Object|Function} obj - something to be done when selected
 	 * @property {boolean} ready - true if html is inserted
 	 * @property {boolean} divider - true for divider before item
-	 * @memberOf app.Options
+	 * @memberOf Options
 	 */
 
 	/**
@@ -34,7 +34,7 @@
 	 * @type {string}
 	 * @const
 	 * @private
-	 * @memberOf app.Options
+	 * @memberOf Options
 	 */
 	const EXT_URI =
 		'https://chrome.google.com/webstore/detail/photo-screen-saver/' +
@@ -46,7 +46,7 @@
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf app.Options
+	 * @memberOf Options
 	 */
 	const PUSHY_URI =
 		'https://chrome.google.com/webstore/detail/pushy-clipboard/' +
@@ -57,149 +57,14 @@
 	 * @type {Object}
 	 * @const
 	 * @private
-	 * @memberOf app.Options
+	 * @memberOf Options
 	 */
 	const t = document.querySelector('#t');
 
-	// Error dialog
-	t.dialogTitle = '';
-	t.dialogText = '';
-
-	// current and previous route
-	// several menu items open a new tab or window and we
-	// need to keep the selected menu item and the current page in sync
-	t.route = 'page-settings';
-	t.prevRoute = 'page-settings';
-
-	/**
-	 * Computed property: Page title
-	 * @returns {string} i18n title
-	 * @memberOf app.Options
-	 */
-	t.computeTitle = function() {
-		return app.Utils.localize('chrome_extension_name');
-	};
-
-	/**
-	 * Computed property: Menu label
-	 * @returns {string} i18n label
-	 * @memberOf app.Options
-	 */
-	t.computeMenu = function() {
-		return app.Utils.localize('menu');
-	};
-
-	/**
-	 * Event Listener for template bound event to know when bindings
-	 * have resolved and content has been stamped to the page
-	 * @memberOf app.Options
-	 */
-	t.addEventListener('dom-change', function() {
-		app.GA.page('/options.html');
-		// listen for app messages
-		chrome.runtime.onMessage.addListener(t.onMessage);
-	});
-
-	/**
-	 * Event Listener for main menu clicks
-	 * Route to proper page
-	 * @param {Event} event - ClickEvent
-	 * @memberOf app.Options
-	 */
-	t.onDataRouteClick = function(event) {
-		// Close drawer after menu item is selected if drawerPanel is narrow
-		t.closeDrawer();
-
-		const index = t.pages.map(function(e) {
-			return e.route;
-		}).indexOf(event.currentTarget.id);
-
-		app.GA.event(app.GA.EVENT.MENU, t.pages[index].route);
-
-		t.prevRoute = t.route;
-
-		if (!t.pages[index].obj) {
-			// some pages are just pages
-			t.route = t.pages[index].route;
-			t.scrollPageToTop();
-		} else if (typeof t.pages[index].obj === 'string') {
-			// some pages are url links
-			t.$.mainMenu.select(t.prevRoute);
-			chrome.tabs.create({url: t.pages[index].obj});
-		} else {
-			// some pages have functions to view them
-			t.pages[index].obj(index, event);
-		}
-	};
-
-	/**
-	 * Show the Google Photos page
-	 * @param {int} index index into [t.pages]{@link app.Options.t.pages}
-	 * @memberOf app.Options
-	 */
-	t.googlePhotos = function(index) {
-		if (!t.pages[index].ready) {
-			// create the page the first time
-			t.pages[index].ready = true;
-			t.gPhotosPage =
-				new app.GooglePhotosPage('gPhotosPage');
-			Polymer.dom(t.$.googlePhotosInsertion).appendChild(t.gPhotosPage);
-		} else {
-			t.gPhotosPage.loadAlbumList();
-		}
-		t.route = t.pages[index].route;
-		t.scrollPageToTop();
-	};
-
-	/**
-	 * Show the help page
-	 * @param {int} index - index into [t.pages]{@link app.Options.t.pages}
-	 * @private
-	 * @memberOf app.Options
-	 */
-	function _showHelpPage(index) {
-		if (!t.pages[index].ready) {
-			// insert the page the first time
-			t.pages[index].ready = true;
-			const el = new app.HelpPageFactory();
-			Polymer.dom(t.$.helpInsertion).appendChild(el);
-		}
-		t.route = t.pages[index].route;
-		t.scrollPageToTop();
-	}
-
-	/**
-	 * Show the Help page
-	 * @param {int} index - index into [t.pages]{@link app.Options.t.pages}
-	 * @memberOf app.Options
-	 */
-	t.help = function(index) {
-		if (!t.pages[index].ready) {
-			// create the page the first time
-			t.pages[index].ready = true;
-			const el = new app.HelpPage();
-			Polymer.dom(t.$.infoInsertion).appendChild(el);
-		}
-		t.route = t.pages[index].route;
-		t.scrollPageToTop();
-	};
-
-	/**
-	 * Display a preview of the screen saver
-	 * @memberOf app.Options
-	 */
-	t.preview = function() {
-		// reselect previous page
-		t.async(function() {
-			t.$.mainMenu.select(t.prevRoute);
-		}, 500);
-		app.Msg.send(app.Msg.SS_SHOW).catch(() => {});
-	};
-
 	/**
 	 * Array of pages
-	 * @type {app.Options.Page[]}
-	 * @memberOf app.Options
+	 * @type {Options.Page[]}
+	 * @memberOf Options
 	 */
 	t.pages = [
 		{
@@ -209,11 +74,11 @@
 		{
 			label: app.Utils.localize('menu_google'),
 			route: 'page-google-photos', icon: 'myicons:cloud',
-			obj: t.googlePhotos, ready: false, divider: false,
+			obj: _showGooglePhotosPage, ready: false, divider: false,
 		},
 		{
 			label: app.Utils.localize('menu_preview'), route: 'page-preview',
-			icon: 'myicons:pageview', obj: t.preview, ready: true,
+			icon: 'myicons:pageview', obj: _showScreensaverPreview, ready: true,
 			divider: false,
 		},
 		{
@@ -238,25 +103,140 @@
 		},
 	];
 
-	/**
-	 * Scroll page to top
-	 * @memberOf app.Options
-	 */
-	t.scrollPageToTop = function() {
-		t.$.scrollPanel.scrollToTop(true);
-	};
+	// Error dialog
+	t.dialogTitle = '';
+	t.dialogText = '';
 
 	/**
-	 * Close drawer if drawerPanel is narrow
-	 * @memberOf app.Options
+	 * Current {@link Options.Page}
+	 * @type {string}
 	 */
-	t.closeDrawer = function() {
+	t.route = 'page-settings';
+
+	/**
+	 * Event Listener for template bound event to know when bindings
+	 * have resolved and content has been stamped to the page
+	 * @memberOf Options
+	 */
+	t.addEventListener('dom-change', function() {
+		app.GA.page('/options.html');
+		// listen for chrome messages
+		app.Msg.listen(_onMessage);
+	});
+
+	/**
+	 * Event: navigation menu selected
+	 * Route to proper page
+	 * @param {Event} event - ClickEvent
+	 * @memberOf Options
+	 */
+	t._onNavMenuItemTapped = function(event) {
+		// Close drawer after menu item is selected if it is narrow
 		const drawerPanel = document.querySelector('#paperDrawerPanel');
-		if (drawerPanel.narrow) {
+		if (drawerPanel && drawerPanel.narrow) {
 			drawerPanel.closeDrawer();
+		}
+
+		const index = t.pages.findIndex((element) => {
+			return element.route === event.currentTarget.id;
+		});
+
+		app.GA.event(app.GA.EVENT.MENU, t.pages[index].route);
+
+		const prevRoute = t.route;
+
+		if (!t.pages[index].obj) {
+			// some pages are just pages
+			t.route = t.pages[index].route;
+			_scrollPageToTop();
+		} else if (typeof t.pages[index].obj === 'string') {
+			// some pages are url links
+			t.$.mainMenu.select(prevRoute);
+			chrome.tabs.create({url: t.pages[index].obj});
+		} else {
+			// some pages have functions to view them
+			t.pages[index].obj(index, prevRoute);
 		}
 	};
 
+	/**
+	 * Computed property: Page title
+	 * @returns {string} i18n title
+	 * @memberOf Options
+	 */
+	t._computeTitle = function() {
+		return app.Utils.localize('chrome_extension_name');
+	};
+
+	/**
+	 * Computed property: Menu label
+	 * @returns {string} i18n label
+	 * @memberOf Options
+	 */
+	t._computeMenu = function() {
+		return app.Utils.localize('menu');
+	};
+
+	/**
+	 * Show the Google Photos page
+	 * @param {int} index - index into [t.pages]{@link Options.t.pages}
+	 * @memberOf Options
+	 */
+	function _showGooglePhotosPage(index) {
+		if (!t.pages[index].ready) {
+			// create the page the first time
+			t.pages[index].ready = true;
+			t.gPhotosPage =
+				new app.GooglePhotosPage('gPhotosPage');
+			Polymer.dom(t.$.googlePhotosInsertion).appendChild(t.gPhotosPage);
+		} else {
+			t.gPhotosPage.loadAlbumList();
+		}
+		t.route = t.pages[index].route;
+		_scrollPageToTop();
+	}
+
+	/**
+	 * Show the help page
+	 * @param {int} index - index into [t.pages]{@link Options.t.pages}
+	 * @private
+	 * @memberOf Options
+	 */
+	function _showHelpPage(index) {
+		if (!t.pages[index].ready) {
+			// insert the page the first time
+			t.pages[index].ready = true;
+			const el = new app.HelpPageFactory();
+			Polymer.dom(t.$.helpInsertion).appendChild(el);
+		}
+		t.route = t.pages[index].route;
+		_scrollPageToTop();
+	}
+
+	// noinspection JSUnusedLocalSymbols
+	/**
+	 * Display a preview of the screen saver
+	 * @param {int} index - index into [t.pages]{@link Options.t.pages}
+	 * @param {string} prevRoute - last page selected
+	 * @memberOf Options
+	 */
+	function _showScreensaverPreview(index, prevRoute) {
+		// reselect previous page - need to delay so tap event is done
+		t.async(function() {
+			t.$.mainMenu.select(prevRoute);
+		}, 500);
+		app.Msg.send(app.Msg.SS_SHOW).catch(() => {});
+	}
+
+	/**
+	 * Scroll page to top
+	 * @memberOf Options
+	 */
+	function _scrollPageToTop() {
+		t.$.scrollPanel.scrollToTop(true);
+	}
+
+	// noinspection JSUnusedLocalSymbols
 	/**
 	 * Event: Fired when a message is sent from either an extension process<br>
 	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
@@ -267,9 +247,9 @@
 	 * @param {function} response - function to call once after processing
 	 * @returns {boolean} true if asynchronous
 	 * @private
-	 * @memberOf app.Options
+	 * @memberOf Options
 	 */
-	t.onMessage = function(request, sender, response) {
+	function _onMessage(request, sender, response) {
 		if (request.message === app.Msg.HIGHLIGHT.message) {
 			// highlight ourselves and let the sender know we are here
 			chromep.tabs.getCurrent().then((t) => {
@@ -293,5 +273,5 @@
 			t.$.errorDialog.open();
 		}
 		return false;
-	};
-})(window);
+	}
+})();
