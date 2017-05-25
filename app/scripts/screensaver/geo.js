@@ -8,7 +8,7 @@ window.app = window.app || {};
 
 /**
  * Handle interaction the Google maps geocode API
- * @namespace app.Geo
+ * @namespace
  */
 app.Geo = (function() {
 	'use strict';

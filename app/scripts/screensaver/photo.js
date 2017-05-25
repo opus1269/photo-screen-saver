@@ -20,7 +20,7 @@
 	 * @property {int} height - height
 	 * @property {number} aspectRatio - aspect ratio
 	 * @property {Object} ex - additional information about the photo
-	 * @property {Object} point - geolocation lat lon
+	 * @property {string} point - geolocation 'lat lon'
 	 * @property {string} label - author label
 	 * @property {string} location - geolocation label
 	 */

@@ -262,7 +262,7 @@
 	 * @property {string} author - The photographer
 	 * @property {number} asp - The aspect ratio of the photo
 	 * @property {Object} [ex] - Additional information about the photo
-	 * @property {Object} [point] - geolocation lat lon
+	 * @property {string} [point] - geolocation 'lat lon's
 	 * @property {string} type - source of the photo
 	 */
 
