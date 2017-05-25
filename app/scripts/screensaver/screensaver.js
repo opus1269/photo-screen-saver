@@ -111,21 +111,21 @@
 		t.p = t.$.pages;
 		t.time = 'time';
 
-		t.processZoom();
-		t.processPhotoTransitions();
-		t.processPhotoSizing();
+		_processZoom();
+		_processPhotoTransitions();
+		_processPhotoSizing();
 
-		// listen for request to close screensaver
-		chrome.runtime.onMessage.addListener(t.onMessage);
+		// listen for chrome messages
+		app.Msg.listen(_onMessage);
 
 		// load the photos for the slide show
-		t.loadImages();
+		_loadImages();
 
 		if (!t.noPhotos) {
 			// kick off the slide show if there are photos selected
 			// slight delay at beginning so we have a smooth start
 			t.waitTime = 2000;
-			t.timer = window.setTimeout(t.runShow, t.waitTime);
+			t.timer = window.setTimeout(_runShow, t.waitTime);
 		}
 
 	});
@@ -134,7 +134,7 @@
 	 * Process Chrome window Zoom factor
 	 * @memberOf app.ScreenSaver
 	 */
-	t.processZoom = function() {
+	function _processZoom() {
 		if (app.Utils.getChromeVersion() >= 42) {
 			// override zoom factor to 1.0 - chrome 42 and later
 			chromep.tabs.getZoom().then((zoomFactor) => {
@@ -146,13 +146,13 @@
 				app.GA.error(err.message, 'chromep.tabs.getZoom');
 			});
 		}
-	};
+	}
 
 	/**
-	 * Process settings related to between photo transition
+	 * Process settings related to between photo transitions
 	 * @memberOf app.ScreenSaver
 	 */
-	t.processPhotoTransitions = function() {
+	function _processPhotoTransitions() {
 		t.transitionType = app.Storage.getInt('photoTransition');
 		if (t.transitionType === 8) {
 			// pick random transition
@@ -170,7 +170,7 @@
 			// if transition time is more than 1 minute
 			// and time label is showing
 
-			chrome.alarms.onAlarm.addListener(t.onAlarm);
+			chrome.alarms.onAlarm.addListener(_onAlarm);
 
 			chromep.alarms.get(CLOCK_ALARM).then((alarm) => {
 				if (!alarm) {
@@ -184,13 +184,13 @@
 				app.GA.error(err.message, 'chromep.alarms.get(CLOCK_ALARM)');
 			});
 		}
-	};
+	}
 
 	/**
 	 * Process settings related to photo appearance
 	 * @memberOf app.ScreenSaver
 	 */
-	t.processPhotoSizing = function() {
+	function _processPhotoSizing() {
 		t.photoSizing = app.Storage.getInt('photoSizing');
 		if (t.photoSizing === 4) {
 			// pick random sizing
@@ -210,13 +210,13 @@
 			default:
 				break;
 		}
-	};
+	}
 
 	/**
 	 * Build and set the time string
-	 * @memberOf app.PhotoView
+	 * @memberOf app.ScreenSaver
 	 */
-	t.setTime = function() {
+	function _setTime() {
 		const format = app.Storage.getInt('showTime');
 		const date = new Date();
 		let timeStr;
@@ -244,43 +244,44 @@
 			});
 		}
 		t.set('time', timeStr);
-	};
+	}
 
 	/**
 	 * Build the Array of photos that will be displayed
 	 * and populate the neon-animated-pages
 	 * @memberOf app.ScreenSaver
 	 */
-	t.loadImages = function() {
-		let count = 0;
-		const arr = app.PhotoSource.getSelectedPhotos();
+	function _loadImages() {
+		let arr = app.PhotoSource.getSelectedPhotos();
+		arr = arr || [];
 
 		if (app.Storage.getBool('shuffle')) {
 			// randomize the order
 			app.Utils.shuffleArray(arr);
 		}
 
-		for (let i = 0; i < arr.length; i++) {
-			if (!app.Photo.ignore(arr[i].asp, SCREEN_ASPECT, t.photoSizing)) {
-				const photo = new app.Photo('photo' + count, arr[i]);
+		let count = 0;
+		arr.forEach((item) => {
+			if (!app.Photo.ignore(item.asp, SCREEN_ASPECT, t.photoSizing)) {
+				const photo = new app.Photo('photo' + count, item);
 				t.itemsAll.push(photo);
 
 				if (count < MAX_PAGES) {
 					// add a new animatable page - shallow copy
 					t.push('items',
-						JSON.parse(JSON.stringify(t.itemsAll[count])));
+						JSON.parse(JSON.stringify(photo)));
 					t.curIdx++;
 				}
 				count++;
 			}
-		}
+		});
 
 		if (!count) {
 			// No usable photos, display static image
 			t.$.noPhotos.style.visibility = 'visible';
 			t.noPhotos = true;
 		}
-	};
+	}
 
 	/**
 	 * Try to find a photo that has finished loading
@@ -289,7 +290,7 @@
 	 * -1 if none are loaded
 	 * @memberOf app.ScreenSaver
 	 */
-	t.findLoadedPhoto = function(idx) {
+	function _findLoadedPhoto(idx) {
 		if (app.PhotoView.isLoaded(idx)) {
 			return idx;
 		}
@@ -308,7 +309,7 @@
 			}
 		}
 		return -1;
-	};
+	}
 
 	/**
 	 * Add the next photo from the master array
@@ -316,14 +317,12 @@
 	 * @param {boolean} error - true if the photo at idx didn't load
 	 * @memberOf app.ScreenSaver
 	 */
-	t.replacePhoto = function(idx, error) {
-		let item;
-
+	function _replacePhoto(idx, error) {
 		if (error) {
 			// bad url, mark it
 			const name = app.PhotoView.getName(idx);
-			const index = t.itemsAll.map(function(item) {
-				return item.name;
+			const index = t.itemsAll.findIndex((element) => {
+				return element.name === name;
 			}).indexOf(name);
 			if (index !== -1) {
 				t.itemsAll[index].name = 'skip';
@@ -331,6 +330,7 @@
 		}
 
 		if (t.started && (t.itemsAll.length > t.items.length)) {
+			let item;
 			for (let i = t.curIdx; i < t.itemsAll.length; i++) {
 				// find a url that is ok, AFAWK
 				item = t.itemsAll[i];
@@ -343,13 +343,13 @@
 			t.rep.set('items.' + idx, JSON.parse(JSON.stringify(item)));
 			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
 		}
-	};
+	}
 
 	/**
 	 * Replace the active photos with new photos from the master array
 	 * @memberOf app.ScreenSaver
 	 */
-	t.replaceAllPhotos = function() {
+	function _replaceAllPhotos() {
 		if (t.itemsAll.length > t.items.length) {
 			let pos = 0;
 			let item;
@@ -372,7 +372,7 @@
 			}
 			t.curIdx = (newIdx === t.itemsAll.length - 1) ? 0 : newIdx + 1;
 		}
-	};
+	}
 
 	/**
 	 * Get the next photo to display
@@ -381,8 +381,8 @@
 	 * to display, -1 if none are ready
 	 * @memberOf app.ScreenSaver
 	 */
-	t.getNextPhoto = function(idx) {
-		let ret = t.findLoadedPhoto(idx);
+	function _getNextPhoto(idx) {
+		let ret = _findLoadedPhoto(idx);
 		if (ret === -1) {
 			if (t.waitForLoad) {
 				// no photos ready.. wait a little and try again the first time
@@ -391,9 +391,9 @@
 			} else {
 				// tried waiting for load, now replace the current photos
 				t.waitTime = 200;
-				t.replaceAllPhotos();
+				_replaceAllPhotos();
 				idx = (idx === t.items.length - 1) ? 0 : idx + 1;
-				ret = t.findLoadedPhoto(idx);
+				ret = _findLoadedPhoto(idx);
 			}
 		} else if (t.waitTime !== t.transitionTime) {
 			// photo found, set the waitTime back to transition time in case
@@ -401,24 +401,24 @@
 			t.waitTime = t.transitionTime;
 		}
 		return ret;
-	};
+	}
 
 	/**
 	 * Called at fixed time intervals to cycle through the photos
 	 * Runs forever
 	 * @memberOf app.ScreenSaver
 	 */
-	t.runShow = function() {
+	function _runShow() {
 		const curPage = (t.p.selected === undefined) ? 0 : t.p.selected;
 		const prevPage = (curPage > 0) ? curPage - 1 : t.items.length - 1;
 		let selected = (curPage === t.items.length - 1) ? 0 : curPage + 1;
 
 		// replace the previous selected with the next one from master array
-		t.replacePhoto(t.lastSelected, false);
+		_replacePhoto(t.lastSelected, false);
 
 		if (app.PhotoView.isError(prevPage)) {
 			// broken link, mark it and replace it
-			t.replacePhoto(prevPage, true);
+			_replacePhoto(prevPage, true);
 		}
 
 		if (t.p.selected === undefined) {
@@ -431,9 +431,9 @@
 			t.started = true;
 		}
 
-		selected = t.getNextPhoto(selected);
+		selected = _getNextPhoto(selected);
 		if (selected !== -1) {
-			t.setTime();
+			_setTime();
 			// If a new photo is ready, prep it
 			app.PhotoView.prep(selected, t.photoSizing);
 
@@ -443,9 +443,10 @@
 		}
 
 		// setup the next timer --- runs forever
-		t.timer = window.setTimeout(t.runShow, t.waitTime);
-	};
+		t.timer = window.setTimeout(_runShow, t.waitTime);
+	}
 
+	// noinspection JSUnusedLocalSymbols
 	/**
 	 * Event: Fired when a message is sent from either an extension process<br>
 	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
@@ -456,36 +457,36 @@
 	 * @returns {boolean} true if asynchronous
 	 * @memberOf app.ScreenSaver
 	 */
-	t.onMessage = function(request, sender, response) {
+	function _onMessage(request, sender, response) {
 		if (request.message === app.Msg.SS_CLOSE.message) {
-			t.closeWindow();
+			_closeWindow();
 		} else if(request.message === app.Msg.SS_IS_SHOWING.message) {
 			// let people know we are here
 			response({message: 'OK'});
 		}
 		return false;
-	};
+	}
 
 	/**
-	 * Listen for alarms
+	 * Event: Listen for alarms
 	 * @param {Object} alarm - chrome alarm
 	 * @param {string} alarm.name - alarm type
 	 * @memberOf app.ScreenSaver
 	 */
-	t.onAlarm = function(alarm) {
+	function _onAlarm(alarm) {
 		if (alarm.name === CLOCK_ALARM) {
 			// update time label
 			if (t.p && (t.p.selected !== undefined)) {
-				t.setTime();
+				_setTime();
 			}
 		}
-	};
+	}
 
 	/**
 	 * Close ourselves
 	 * @memberOf app.ScreenSaver
 	 */
-	t.closeWindow = function() {
+	function _closeWindow() {
 		// send message to other screen savers to close themselves
 		app.Msg.send(app.Msg.SS_CLOSE).catch(() => {});
 
@@ -493,7 +494,7 @@
 			// delay a little to process events
 			window.close();
 		}, 750);
-	};
+	}
 
 	/**
 	 * Event listener for mouse clicks
@@ -503,7 +504,7 @@
 		if (t.p && (t.p.selected !== undefined)) {
 			app.Photo.showSource(t.items[t.p.selected]);
 		}
-		t.closeWindow();
+		_closeWindow();
 	}, false);
 
 	/**
@@ -511,7 +512,7 @@
 	 * Close window (prob won't work on Chrome OS)
 	 */
 	window.addEventListener('keydown', function() {
-		t.closeWindow();
+		_closeWindow();
 	}, false);
 
 	/**
@@ -524,7 +525,7 @@
 			const deltaY = Math.abs(event.clientY - t.startMouse.y);
 			if (Math.max(deltaX, deltaY) > 10) {
 				// close after a minimum amount of mouse movement
-				t.closeWindow();
+				_closeWindow();
 			}
 		} else {
 			// first move, set values
