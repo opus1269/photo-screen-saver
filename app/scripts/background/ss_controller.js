@@ -188,13 +188,13 @@ app.SSControl = (function() {
 	chrome.idle.onStateChanged.addListener(_onIdleStateChanged);
 
 	// listen for chrome messages
-	chrome.runtime.onMessage.addListener(_onChromeMessage);
+	app.Msg.listen(_onChromeMessage);
 
 	return {
 		/**
 		 * Display the screen saver(s)
 		 * !Important: Always request screensaver through this call
-		 * @param {boolean} single - if true only show on one display
+		 * @param {boolean} single - if true, only show on one display
 		 * @memberOf app.SSControl
 		 */
 		display: function(single) {
