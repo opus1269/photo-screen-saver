@@ -13,6 +13,8 @@ window.app = window.app || {};
 app.Geo = (function() {
 	'use strict';
 
+	new ExceptionHandler();
+
 	/**
 	 * Path to Google's geocode api
 	 * @type {string}
