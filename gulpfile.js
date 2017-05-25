@@ -22,7 +22,7 @@ const path = {
 };
 const files = {
 	manifest: base.src + 'manifest.json',
-	scripts: path.scripts + '*.js',
+	scripts: path.scripts + '**/*.js',
 	html: path.html + '*.html',
 	styles: path.styles + '**/*.*',
 	elements: path.elements + '**/*.html',
