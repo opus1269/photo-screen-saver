@@ -54,41 +54,52 @@
 			</paper-material>
 			<div id="faqContainer" class="page-content">
 				<setting-link section-title="{{localize('help_section_feedback')}}"
-				              label="{{localize('help_question')}}"
+							  name="questionMail"
+							  label="{{localize('help_question')}}"
 				              icon="myicons:mail"
 				              url="mailto:[[email]]?subject=Question&body=[[_computeEmailBody()]]"></setting-link>
 				<setting-link label="{{localize('help_bug')}}"
-				              icon="myicons:mail"
+							  name="bugMail"
+							  icon="myicons:mail"
 				              url="mailto:[[email]]?subject=Bug%20report&body=[[_computeEmailBody()]]"></setting-link>
 				<setting-link label="{{localize('help_feature')}}"
-				              icon="myicons:mail"
+							  name="featureMail"
+							  icon="myicons:mail"
 				              url="mailto:[[email]]?subject=Feature%20request&body=[[_computeEmailBody()]]"></setting-link>
 				<setting-link label="{{localize('help_feedback')}}"
-				              icon="myicons:mail"
+							  name="feedbackMail"
+							  icon="myicons:mail"
 				              url="mailto:[[email]]?subject=General%20feedback"></setting-link>
 				<setting-link label="{{localize('help_issue')}}"
+							  name="submitGitHubIssue"
 							  noseparator
 				              icon="myicons:github"
 				              url="[[githubPath]]issues/new"></setting-link>
 				<hr />
 				<setting-link section-title="{{localize('help')}}"
-				              label="{{localize('help_documentation')}}"
+							  name="documentation"
+							  label="{{localize('help_documentation')}}"
 				              icon="myicons:info"
 				              url="[[githubPagesPath]]documentation.html"></setting-link>
 				<setting-link label="{{localize('help_faq')}}"
-				              icon="myicons:github"
+							  name="faq"
+							  icon="myicons:github"
 				              url="[[githubPagesPath]]faq.html"></setting-link>
 				<setting-link label="{{localize('help_translations')}}"
-				              icon="myicons:github"
+							  name="translations"
+							  icon="myicons:github"
 				              url="[[githubPagesPath]]translate.html"></setting-link>
 				<setting-link label="{{localize('help_release_notes')}}"
-				              icon="myicons:github"
+							  name="releaseNotes"
+							  icon="myicons:github"
 				              url="[[githubPath]]releases/tag/v[[_computeVersion()]]"></setting-link>
 				<setting-link label="{{localize('help_licenses')}}"
-				              icon="myicons:github"
+							  name="licenses"
+							  icon="myicons:github"
 				              url="[[githubPath]]blob/master/LICENSES.md"></setting-link>
 				<setting-link label="{{localize('help_source_code')}}"
-				              noseparator
+							  name="sourceCode"
+							  noseparator
 				              icon="myicons:github"
 				              url="[[githubPath]]"></setting-link>
 			</div>
