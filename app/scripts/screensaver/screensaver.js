@@ -14,27 +14,6 @@
 
 	new ExceptionHandler();
 
-	const chromep = new ChromePromise();
-
-	/**
-	 * aspect ratio of screen
-	 * @type {number}
-	 * @const
-	 * @private
-	 * @memberOf app.ScreenSaver
-	 */
-	const SCREEN_ASPECT = screen.width / screen.height;
-
-	/**
-	 * max number of animated pages
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.ScreenSaver
-	 */
-	const MAX_PAGES = 20;
-
 	/**
 	 * repeating alarm for updating time label
 	 * @type {string}
@@ -79,8 +58,7 @@
 	t.curIdx = 0;
 
 	/**
-	 * Array of photos [MAX_PAGES]{@link app.ScreenSaver.MAX_PAGES}
-	 * long, currently loaded into the neon-animated-pages.
+	 * Array of photos currently loaded into the neon-animated-pages.
 	 * Always changing subset of [t.itemsAll]{@link app.ScreenSaver.t.itemsAll}
 	 * @type {Array}
 	 * @memberOf app.ScreenSaver
@@ -105,21 +83,22 @@
 	 * @memberOf app.ScreenSaver
 	 */
 	t.addEventListener('dom-change', function() {
+		// listen for chrome messages
+		app.Msg.listen(_onMessage);
+
 		app.GA.page('/screensaver.html');
 
 		t.rep = t.$.repeatTemplate;
 		t.p = t.$.pages;
 		t.time = 'time';
 
-		_processZoom();
-		_processPhotoTransitions();
-		_processPhotoSizing();
+		app.SSUtils.setZoom();
+		app.SSUtils.setupPhotoSizing(t);
 
-		// listen for chrome messages
-		app.Msg.listen(_onMessage);
+		_processPhotoTransitions();
 
 		// load the photos for the slide show
-		_loadImages();
+		app.SSUtils.loadPhotos(t);
 
 		if (!t.noPhotos) {
 			// kick off the slide show if there are photos selected
@@ -127,26 +106,7 @@
 			t.waitTime = 2000;
 			t.timer = window.setTimeout(_runShow, t.waitTime);
 		}
-
 	});
-
-	/**
-	 * Process Chrome window Zoom factor
-	 * @memberOf app.ScreenSaver
-	 */
-	function _processZoom() {
-		if (app.Utils.getChromeVersion() >= 42) {
-			// override zoom factor to 1.0 - chrome 42 and later
-			chromep.tabs.getZoom().then((zoomFactor) => {
-				if ((zoomFactor <= 0.99) || (zoomFactor >= 1.01)) {
-					chrome.tabs.setZoom(1.0);
-				}
-				return null;
-			}).catch((err) => {
-				app.GA.error(err.message, 'chromep.tabs.getZoom');
-			});
-		}
-	}
 
 	/**
 	 * Process settings related to between photo transitions
@@ -169,9 +129,9 @@
 			// add repeating alarm to update time label
 			// if transition time is more than 1 minute
 			// and time label is showing
-
 			chrome.alarms.onAlarm.addListener(_onAlarm);
 
+			const chromep = new ChromePromise();
 			chromep.alarms.get(CLOCK_ALARM).then((alarm) => {
 				if (!alarm) {
 					chrome.alarms.create(CLOCK_ALARM, {
@@ -183,103 +143,6 @@
 			}).catch((err) => {
 				app.GA.error(err.message, 'chromep.alarms.get(CLOCK_ALARM)');
 			});
-		}
-	}
-
-	/**
-	 * Process settings related to photo appearance
-	 * @memberOf app.ScreenSaver
-	 */
-	function _processPhotoSizing() {
-		t.photoSizing = app.Storage.getInt('photoSizing');
-		if (t.photoSizing === 4) {
-			// pick random sizing
-			t.photoSizing = app.Utils.getRandomInt(0, 3);
-		}
-		switch (t.photoSizing) {
-			case 0:
-				t.sizingType = 'contain';
-				break;
-			case 1:
-				t.sizingType = 'cover';
-				break;
-			case 2:
-			case 3:
-				t.sizingType = null;
-				break;
-			default:
-				break;
-		}
-	}
-
-	/**
-	 * Build and set the time string
-	 * @memberOf app.ScreenSaver
-	 */
-	function _setTime() {
-		const format = app.Storage.getInt('showTime');
-		const date = new Date();
-		let timeStr;
-
-		if (format === 0) {
-			// don't show time
-			timeStr = '';
-		} else if (format === 1) {
-			// 12 hour format
-			timeStr = date.toLocaleTimeString('en-us', {
-				hour: 'numeric',
-				minute: '2-digit',
-				hour12: true,
-			});
-			if (timeStr.endsWith('M')) {
-				// strip off AM/PM
-				timeStr = timeStr.substring(0, timeStr.length - 3);
-			}
-		} else {
-			// 24 hour format
-			timeStr = date.toLocaleTimeString(navigator.language, {
-				hour: 'numeric',
-				minute: '2-digit',
-				hour12: false,
-			});
-		}
-		t.set('time', timeStr);
-	}
-
-	/**
-	 * Build the Array of photos that will be displayed
-	 * and populate the neon-animated-pages
-	 * @memberOf app.ScreenSaver
-	 */
-	function _loadImages() {
-		let arr = app.PhotoSource.getSelectedPhotos();
-		arr = arr || [];
-
-		if (app.Storage.getBool('shuffle')) {
-			// randomize the order
-			app.Utils.shuffleArray(arr);
-		}
-
-		let count = 0;
-		arr.forEach((item) => {
-			if (!app.Photo.ignore(item.asp, SCREEN_ASPECT, t.photoSizing)) {
-				const photo = new app.Photo('photo' + count, item);
-				t.itemsAll.push(photo);
-
-				if (count < MAX_PAGES) {
-					// add a new animatable page - shallow copy
-					t.push('items',
-						JSON.parse(JSON.stringify(photo)));
-					t.curIdx++;
-				}
-				count++;
-			}
-		});
-
-		if (!count) {
-			// No usable photos, display static image
-			t.$.noPhotos.style.visibility = 'visible';
-			t.noPhotos = true;
 		}
 	}
 
@@ -433,7 +296,7 @@
 
 		selected = _getNextPhoto(selected);
 		if (selected !== -1) {
-			_setTime();
+			t.set('time', app.SSUtils.getTime());
 			// If a new photo is ready, prep it
 			app.PhotoView.prep(selected, t.photoSizing);
 
@@ -459,7 +322,7 @@
 	 */
 	function _onMessage(request, sender, response) {
 		if (request.message === app.Msg.SS_CLOSE.message) {
-			_closeWindow();
+			app.SSUtils.close();
 		} else if(request.message === app.Msg.SS_IS_SHOWING.message) {
 			// let people know we are here
 			response({message: 'OK'});
@@ -477,23 +340,9 @@
 		if (alarm.name === CLOCK_ALARM) {
 			// update time label
 			if (t.p && (t.p.selected !== undefined)) {
-				_setTime();
+				t.set('time', app.SSUtils.getTime());
 			}
 		}
-	}
-
-	/**
-	 * Close ourselves
-	 * @memberOf app.ScreenSaver
-	 */
-	function _closeWindow() {
-		// send message to other screen savers to close themselves
-		app.Msg.send(app.Msg.SS_CLOSE).catch(() => {});
-
-		setTimeout(function() {
-			// delay a little to process events
-			window.close();
-		}, 750);
 	}
 
 	/**
@@ -504,7 +353,7 @@
 		if (t.p && (t.p.selected !== undefined)) {
 			app.Photo.showSource(t.items[t.p.selected]);
 		}
-		_closeWindow();
+		app.SSUtils.close();
 	}, false);
 
 	/**
@@ -512,7 +361,7 @@
 	 * Close window (prob won't work on Chrome OS)
 	 */
 	window.addEventListener('keydown', function() {
-		_closeWindow();
+		app.SSUtils.close();
 	}, false);
 
 	/**
@@ -525,7 +374,7 @@
 			const deltaY = Math.abs(event.clientY - t.startMouse.y);
 			if (Math.max(deltaX, deltaY) > 10) {
 				// close after a minimum amount of mouse movement
-				_closeWindow();
+				app.SSUtils.close();
 			}
 		} else {
 			// first move, set values
