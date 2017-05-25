@@ -22,7 +22,7 @@
 	 * @private
 	 * @memberOf app.ScreenSaver
 	 */
-	const CLOCK_ALARM = 'updateTimeLabel';
+	const _CLOCK_ALARM = 'updateTimeLabel';
 
 	// set selected background image
 	document.body.style.background =
@@ -44,7 +44,7 @@
 	t.p = null;
 
 	/**
-	 * array of all the photos to use for slide show
+	 * array of all the {@link app.Photo} to use for slide show
 	 * @type {Array}
 	 * @memberOf app.ScreenSaver
 	 */
@@ -58,7 +58,7 @@
 	t.curIdx = 0;
 
 	/**
-	 * Array of photos currently loaded into the neon-animated-pages.
+	 * Array of {@link app.Photo} currently loaded into the neon-animated-pages.
 	 * Always changing subset of [t.itemsAll]{@link app.ScreenSaver.t.itemsAll}
 	 * @type {Array}
 	 * @memberOf app.ScreenSaver
@@ -132,9 +132,9 @@
 			chrome.alarms.onAlarm.addListener(_onAlarm);
 
 			const chromep = new ChromePromise();
-			chromep.alarms.get(CLOCK_ALARM).then((alarm) => {
+			chromep.alarms.get(_CLOCK_ALARM).then((alarm) => {
 				if (!alarm) {
-					chrome.alarms.create(CLOCK_ALARM, {
+					chrome.alarms.create(_CLOCK_ALARM, {
 						when: Date.now(),
 						periodInMinutes: 1,
 					});
@@ -189,6 +189,8 @@
 			});
 			if (index !== -1) {
 				t.itemsAll[index].name = 'skip';
+				app.GA.error(`Photo did not load: ${t.itemsAll[index].path}`,
+					'Screensaver._replacePhoto');
 			}
 		}
 
@@ -337,7 +339,7 @@
 	 * @memberOf app.ScreenSaver
 	 */
 	function _onAlarm(alarm) {
-		if (alarm.name === CLOCK_ALARM) {
+		if (alarm.name === _CLOCK_ALARM) {
 			// update time label
 			if (t.p && (t.p.selected !== undefined)) {
 				t.set('time', app.SSUtils.getTime());
