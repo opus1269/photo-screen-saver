@@ -15,8 +15,6 @@ app.Msg = (function() {
 
 	new ExceptionHandler();
 
-	const chromep = new ChromePromise();
-
 	/**
 	 * A Chrome message
 	 * @typedef {{}} app.Msg.Message
@@ -79,15 +77,16 @@ app.Msg = (function() {
 	};
 
 	/**
-	 * A Chrome message that an {@link app.PhotoSource} failed to load from Web
-	 * @typedef {{}} app.Msg.PhotoSourceFailed
+	 * A Chrome message that an {@link app.PhotoSource} server request failed
+	 * @typedef {app.Msg.Message} app.Msg.PhotoSourceFailed
 	 * @property {string} message - Unique name
 	 * @property {string} type - the photo source
 	 * @property {Error} error - the failure reason
+	 * @memberOf app.Msg
 	 */
 
 	/**
-	 * An {@link app.PhotoSource} failed to load from Web
+	 * An {@link app.PhotoSource} server request failed
 	 * @type {app.Msg.PhotoSourceFailed}
 	 * @memberOf app.Msg
 	 */
@@ -109,11 +108,12 @@ app.Msg = (function() {
 
 		/**
 		 * Send a chrome message
-		 * @param {Object} type - type of message
+		 * @param {app.Msg.Message} type - type of message
 		 * @returns {Promise<JSON>} response JSON
 		 * @memberOf app.Msg
 		 */
 		send: function(type) {
+			const chromep = new ChromePromise();
 			return chromep.runtime.sendMessage(type, null).then((response) => {
 				return Promise.resolve(response);
 			}).catch((err) => {
@@ -125,6 +125,15 @@ app.Msg = (function() {
 				}
 				return Promise.reject(err);
 			});
+		},
+
+		/**
+		 * Add a listener for chrome messages
+		 * @param {Function} listener - function to receive messages
+		 * @memberOf app.Msg
+		 */
+		listen: function(listener) {
+			chrome.runtime.onMessage.addListener(listener);
 		},
 	};
 })();
