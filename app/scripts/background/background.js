@@ -14,8 +14,6 @@
 
 	new ExceptionHandler();
 
-	const chromep = new ChromePromise();
-
 	/**
 	 * Display the options tab
 	 * @private
@@ -50,6 +48,8 @@
 	 * @memberOf app.Background
 	 */
 	function _onInstalled(details) {
+		const chromep = new ChromePromise();
+
 		// create menus on the right click menu of the extension icon
 		chromep.contextMenus.create({
 			type: 'normal',
@@ -177,7 +177,7 @@
 	addEventListener('storage', _onStorageChanged, false);
 
 	// listen for chrome messages
-	chrome.runtime.onMessage.addListener(_onChromeMessage);
+	app.Msg.listen(_onChromeMessage);
 
 	// listen for clicks on context menus
 	chrome.contextMenus.onClicked.addListener(_onMenuClicked);
