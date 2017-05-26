@@ -233,7 +233,7 @@ app.Http = (function() {
 			}
 			return fetch(url, opts);
 		}).then((response) => {
-			return _processResponse(response, url, opts, true, retryToken,
+			return _processResponse(response, url, opts, isAuth, retryToken,
 				token, interactive, attempt, backoff, maxRetries);
 		}).catch((err) => {
 			let msg = err.message;
