@@ -189,6 +189,8 @@
 		_onOK: function() {
 			const el = document.getElementById(this.selected);
 			this.set('value', 'background:' + el.style.background);
+			app.GA.event(app.GA.EVENT.BUTTON,
+				`SettingBackground.okButton: ${this.selected}`);
 		},
 	});
 </script>
