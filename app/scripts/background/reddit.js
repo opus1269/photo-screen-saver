@@ -104,7 +104,7 @@ app.Reddit = (function() {
 	/**
 	 * Build the list of photos for one page of items
 	 * @param {Array} children - Array of objects from reddit
-	 * @returns {app.PhotoSource.Photo[]} Array of photos
+	 * @returns {app.PhotoSource.SourcePhoto[]} Array of photos
 	 * @private
 	 * @memberOf app.Reddit
 	 */
@@ -145,7 +145,7 @@ app.Reddit = (function() {
 			const author = data.author;
 			if (asp && !isNaN(asp) && (Math.max(width, height) >= _MIN_SIZE) &&
 				(Math.max(width, height) <= _MAX_SIZE)) {
-				app.PhotoSource.addImage(photos, url, author, asp, data.url);
+				app.PhotoSource.addPhoto(photos, url, author, asp, data.url);
 			}
 		});
 		return photos;
@@ -155,10 +155,10 @@ app.Reddit = (function() {
 		/**
 		 * Retrieve the array of reddit photos
 		 * @param {string} subreddit - name of photo subreddit
-		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
+		 * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
 		 * @memberOf app.Reddit
 		 */
-		loadImages: function(subreddit) {
+		loadPhotos: function(subreddit) {
 			let photos = [];
 
 			return _snoocore(`${subreddit}hot`).listing({

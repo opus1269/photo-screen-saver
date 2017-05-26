@@ -61,7 +61,7 @@ app.Use500px = (function() {
 	/**
 	 * Call API to get some photos
 	 * @param {string} url - server url
-	 * @returns {Promise<app.PhotoSource.Photo[]>} Array photos
+	 * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
 	 * @private
 	 * @memberOf app.Use500px
 	 */
@@ -81,7 +81,7 @@ app.Use500px = (function() {
 							.getPt(photo.latitude, photo.longitude);
 						ex = {};
 					}
-					app.PhotoSource.addImage(photos, photo.images[0].url,
+					app.PhotoSource.addPhoto(photos, photo.images[0].url,
 						photo.user.fullname, asp, ex, pt);
 				}
 			});
@@ -93,10 +93,10 @@ app.Use500px = (function() {
 		/**
 		 * Retrieve the array of 500px photos
 		 * @param {string} type - name of 500px gallery
-		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
+		 * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
 		 * @memberOf app.Use500px
 		 */
-		loadImages: function(type) {
+		loadPhotos: function(type) {
 			// series of API calls
 			const promises = [];
 			_CATS.forEach((_CAT) => {

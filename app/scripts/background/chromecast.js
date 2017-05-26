@@ -5,25 +5,26 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 window.app = window.app || {};
+
+/**
+ * Interface to the Chromecast photos
+ * @namespace
+ */
 app.ChromeCast = (function() {
 	'use strict';
 
 	new ExceptionHandler();
 
-	/**
-	 * Interface to the Chromecast photos
-	 * @namespace app.ChromeCast
-	 */
-
 	return {
 		/**
 		 * Get the photos from chromecast.json
-		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
+		 * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
 		 * @memberOf app.ChromeCast
 		 */
-		loadImages: function() {
+		loadPhotos: function() {
 			const url = '/assets/chromecast.json';
 			return app.Http.doGet(url).then((photos) => {
+				photos = photos || [];
 				photos.forEach((photo) => {
 					photo.asp = 16 / 9;
 				});

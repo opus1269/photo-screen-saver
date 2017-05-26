@@ -88,32 +88,39 @@ app.SSUtils = (function() {
 		 * @memberOf app.SSUtils
 		 */
 		loadPhotos: function(t) {
-			let arr = app.PhotoSource.getSelectedPhotos();
-			arr = arr || [];
+
+			// populate t.itemsAll with selected photos
+			let sources = app.PhotoSource.getSelectedPhotos();
+			sources = sources || [];
+			sources.forEach((source) => {
+				const type = source.type;
+				let ct = 0;
+				source.photos.forEach((sourcePhoto) => {
+					const ignore = app.Photo.ignore(sourcePhoto.asp,
+						_SCREEN_ASPECT, t.photoSizing);
+					if (!ignore) {
+						const photo =
+							new app.Photo('photo' + ct, sourcePhoto, type);
+						t.itemsAll.push(photo);
+					}
+				});
+			});
 
 			if (app.Storage.getBool('shuffle')) {
 				// randomize the order
-				app.Utils.shuffleArray(arr);
+				app.Utils.shuffleArray(t.itemsAll);
 			}
 
-			let count = 0;
-			arr.forEach((item) => {
-				if (!app.Photo.ignore(item.asp, _SCREEN_ASPECT,
-						t.photoSizing)) {
-					const photo = new app.Photo('photo' + count, item);
-					t.itemsAll.push(photo);
+			// create the animatable pages
+			const ct = Math.min(t.itemsAll.length, _MAX_PAGES);
+			for (let i = 0; i < ct; i++) {
+				const photo = t.itemsAll[i];
+				// shallow copy
+				t.push('items', JSON.parse(JSON.stringify(photo)));
+				t.curIdx++;
+			}
 
-					if (count < _MAX_PAGES) {
-						// add a new animatable page - shallow copy
-						t.push('items',
-							JSON.parse(JSON.stringify(photo)));
-						t.curIdx++;
-					}
-					count++;
-				}
-			});
-
-			if (!count) {
+			if (!t.itemsAll || (t.itemsAll.length === 0)) {
 				// No usable photos, display static image
 				t.$.noPhotos.style.visibility = 'visible';
 				t.noPhotos = true;

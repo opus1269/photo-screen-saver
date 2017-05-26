@@ -25,7 +25,7 @@ app.GooglePhotos = (function() {
 	 * @property {string} thumb - thumbnail url
 	 * @property {boolean} checked - is album selected
 	 * @property {int} ct - number of photos
-	 * @property {app.PhotoSource.Photo[]} photos - Array of photos
+	 * @property {app.PhotoSource.SourcePhoto[]} photos - Array of photos
 	 * @memberOf app.GooglePhotos
 	 */
 
@@ -33,7 +33,7 @@ app.GooglePhotos = (function() {
 	 * A Selected Google Photo Album
 	 * @typedef {Object} app.GooglePhotos.SelectedAlbum
 	 * @property {string} id - Google album Id
-	 * @property {app.PhotoSource.Photo[]} photos - Array of photos
+	 * @property {app.PhotoSource.SourcePhoto[]} photos - Array of photos
 	 * @memberOf app.GooglePhotos
 	 */
 
@@ -119,12 +119,11 @@ app.GooglePhotos = (function() {
 	/**
 	 * Extract the Picasa photos into an Array
 	 * @param {Object} root - root object from Picasa API call
-	 * @returns {app.PhotoSource.Photo[]} Array of photos
+	 * @returns {app.PhotoSource.SourcePhoto[]} Array of photos
 	 * @private
 	 * @memberOf app.GooglePhotos
 	 */
 	function _processPhotos(root) {
-		/** @(type) {PhotoSource.Photo[]} */
 		const photos = [];
 		if (root) {
 			const feed = root.feed;
@@ -140,7 +139,7 @@ app.GooglePhotos = (function() {
 					if (_hasGeo(entry)) {
 						point = entry.georss$where.gml$Point.gml$pos.$t;
 					}
-					app.PhotoSource.addImage(photos, url, author, asp, {},
+					app.PhotoSource.addPhoto(photos, url, author, asp, {},
 						point);
 				}
 			});
@@ -174,23 +173,6 @@ app.GooglePhotos = (function() {
 	}
 
 	return {
-		/**
-		 * Get my photo album
-		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
-		 * @memberOf app.GooglePhotos
-		 */
-		loadAuthorImages: function() {
-			const albumId = '6117481612859013089';
-			const userId = '103839696200462383083';
-			return _loadPicasaAlbum(albumId, userId).then((root) => {
-				const photos = _processPhotos(root);
-				if (photos && photos.length) {
-					return Promise.resolve(photos);
-				}
-				throw new Error('No photos');
-			});
-		},
-
 		/**
 		 * Retrieve the users list of albums, including the photos in each
 		 * @param {boolean} interactive - true is user initiated call
@@ -258,7 +240,7 @@ app.GooglePhotos = (function() {
 		 * @returns {Promise<app.GooglePhotos.SelectedAlbum[]>} Array albums
 		 * @memberOf app.GooglePhotos
 		 */
-		loadImages: function() {
+		loadPhotos: function() {
 			let vals = app.Storage.get('albumSelections');
 
 			// series of API calls to get each album

@@ -47,7 +47,7 @@ app.Flickr = (function() {
 	/**
 	 * Extract the photos into an Array
 	 * @param {JSON} response - server response
-	 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
+	 * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
 	 * @private
 	 * @memberOf app.Flickr
 	 */
@@ -55,7 +55,8 @@ app.Flickr = (function() {
 		if (!response.photos || !response.photos.photo) {
 			throw new Error(app.Utils.localize('err_photo_source_title'));
 		}
-		/** @(type) {PhotoSource.Photo[]} */
+
+		/** @(type) {PhotoSource.SourcePhoto[]} */
 		const photos = [];
 		response.photos.photo.forEach((photo) => {
 			if (photo && photo.url_k &&
@@ -69,7 +70,7 @@ app.Flickr = (function() {
 				if (photo.latitude && photo.longitude) {
 					pt = app.PhotoSource.getPt(photo.latitude, photo.longitude);
 				}
-				app.PhotoSource.addImage(photos, photo.url_k,
+				app.PhotoSource.addPhoto(photos, photo.url_k,
 					photo.ownername, asp, photo.owner, pt);
 			}
 		});
@@ -79,11 +80,10 @@ app.Flickr = (function() {
 	return {
 		/**
 		 * Get my photo album
-		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
+		 * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
 		 * @memberOf app.Flickr
 		 */
-		loadAuthorImages: function() {
-			// const albumId = '6117481612859013089';
+		loadAuthorPhotos: function() {
 			const userId = '86149994@N06';
 			const url =
 				`${_URL_BASE}?method=flickr.people.getPublicPhotos` +
@@ -100,10 +100,10 @@ app.Flickr = (function() {
 
 		/**
 		 * Retrieve flickr photos
-		 * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
+		 * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
 		 * @memberOf app.Flickr
 		 */
-		loadImages: function() {
+		loadPhotos: function() {
 			const url =
 				`${_URL_BASE}?method=flickr.interestingness.getList` +
 				`&api_key=${_KEY}&extras=owner_name,url_k,media,geo` +

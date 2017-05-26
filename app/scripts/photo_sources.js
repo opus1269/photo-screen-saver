@@ -12,16 +12,13 @@
 	/**
 	 * A potential source of photos for the screensaver
 	 *
-	 * @param {string} useName - The key for the boolean value that indicates
-	 * if the source is selected
+	 * @param {string} useName - The key for if the source is selected
 	 * @param {string} photosName - The key for the collection of photos
 	 * @param {string} type - A descriptor of the photo source
 	 * @param {boolean} isDaily - Should the source be updated daily
 	 * @param {boolean} isArray - Is the source an Array of photo Arrays
-	 * @param {string} loadObj - the function wrapper for a photo source
-	 * as a string
-	 * @param {string} loadFn - function to call to retrieve the photo
-	 * collection as a string
+	 * @param {string} loadObj - function wrapper, as a string
+	 * @param {string} loadFn - function to load photos, as a string
 	 * @param {Array} loadArgs - Arguments to the loadFn
 	 * @constructor
 	 * @alias app.PhotoSource
@@ -45,14 +42,49 @@
 	 * A photo from a {@link app.PhotoSource}
 	 * This is the photo information that is persisted.
 	 *
-	 * @typedef {{}} app.PhotoSource.Photo
+	 * @typedef {{}} app.PhotoSource.SourcePhoto
 	 * @property {string} url - The url to the photo
 	 * @property {string} author - The photographer
 	 * @property {number} asp - The aspect ratio of the photo
 	 * @property {Object} [ex] - Additional information about the photo
-	 * @property {string} [point] - geolocation 'lat lon's
-	 * @property {string} type - source of the photo (not persisted)
+	 * @property {string} [point] - geolocation 'lat lon'
 	 */
+
+	/**
+	 * The photos for a {@link app.PhotoSource}
+	 *
+	 * @typedef {{}} app.PhotoSource.SourcePhotos
+	 * @property {string} type - type of {@link app.PhotoSource}
+	 * @property {app.PhotoSource.SourcePhoto[]} photos - The photos
+	 */
+
+	/**
+	 * Array of PhotoSources
+	 * @private
+	 * @type {app.PhotoSource[]}
+	 */
+	PhotoSource._SRCS = [
+		new PhotoSource('useGoogle', 'albumSelections', 'Google User',
+			true, true, 'GooglePhotos', 'loadPhotos', []),
+		new PhotoSource('useChromecast', 'ccImages', 'Google',
+			false, false, 'ChromeCast', 'loadPhotos', []),
+		new PhotoSource('useEditors500px', 'editors500pxImages', '500',
+			true, false, 'Use500px', 'loadPhotos', ['editors']),
+		new PhotoSource('usePopular500px', 'popular500pxImages', '500',
+			true, false, 'Use500px', 'loadPhotos', ['popular']),
+		new PhotoSource('useYesterday500px', 'yesterday500pxImages', '500',
+			true, false, 'Use500px', 'loadPhotos', ['fresh_yesterday']),
+		new PhotoSource('useSpaceReddit', 'spaceRedditImages', 'reddit',
+			true, false, 'Reddit', 'loadPhotos', ['r/spaceporn/']),
+		new PhotoSource('useEarthReddit', 'earthRedditImages', 'reddit',
+			true, false, 'Reddit', 'loadPhotos', ['r/EarthPorn/']),
+		new PhotoSource('useAnimalReddit', 'animalRedditImages', 'reddit',
+			true, false, 'Reddit', 'loadPhotos', ['r/animalporn/']),
+		new PhotoSource('useInterestingFlickr', 'flickrInterestingImages',
+			'flickr', true, false, 'Flickr', 'loadPhotos', []),
+		new PhotoSource('useAuthors', 'authorImages', 'flickr',
+			false, false, 'Flickr', 'loadAuthorPhotos', []),
+	];
 
 	/**
 	 * Determine if this source has been selected for display
@@ -64,9 +96,7 @@
 
 	/**
 	 * Process the photo source.
-	 * This normally requires a https call
-	 * and may fail for various reasons
-	 * Save to localStorage if there is enough room.
+	 * This normally requires a https call and may fail for various reasons
 	 * @returns {Promise<void>} void
 	 */
 	PhotoSource.prototype.process = function() {
@@ -102,7 +132,8 @@
 
 	/**
 	 * Save the photos to localStorage in a safe manner
-	 * @param {Array} photos - {@link app.PhotoSource.Photo} Array
+	 * @param {app.PhotoSource.SourcePhoto[]} photos
+	 * - {@link app.PhotoSource.SourcePhoto} Array
 	 * @returns {?string} non-null on error
 	 * @private
 	 */
@@ -119,77 +150,41 @@
 	};
 
 	/**
-	 * Add the type (source of the photo) for each
-	 * {@link app.PhotoSource.Photo} object in the array
-	 * @param {Array} arr - {@link app.PhotoSource.Photo} Array
-	 * @private
-	 */
-	PhotoSource.prototype._addType = function(arr) {
-		arr.forEach((item) => {
-			item.type = this.type;
-		});
-	};
-
-	/**
-	 * Get all the photos from local storage
-	 * @returns {Array} {@link app.PhotoSource.Photo} Array
+	 * Get the photos from local storage
+	 * @returns {app.PhotoSource.SourcePhotos} the photos
 	 * @private
 	 */
 	PhotoSource.prototype._getPhotos = function() {
-		let ret = [];
+		let ret = {
+			type: this.type,
+			photos: [],
+		};
 		if (this.use()) {
+			let photos = [];
 			if (this.isArray) {
 				let items = app.Storage.get(this.photosName);
 				// could be that items have not been retrieved yet
 				items = items || [];
 				items.forEach((item) => {
-					ret = ret.concat(item.photos);
+					photos = photos.concat(item.photos);
 				});
-				this._addType(ret);
 			} else {
-				ret = app.Storage.get(this.photosName);
+				photos = app.Storage.get(this.photosName);
 				// could be that items have not been retrieved yet
-				ret = ret || [];
-				this._addType(ret);
+				photos = photos || [];
 			}
+			ret.photos = photos;
 		}
 		return ret;
 	};
 
 	/**
-	 * Array of PhotoSources
-	 * @type {app.PhotoSource[]}
-	 */
-	PhotoSource.SOURCES = [
-		new PhotoSource('useGoogle', 'albumSelections', 'Google User',
-			true, true, 'GooglePhotos', 'loadImages', []),
-		new PhotoSource('useChromecast', 'ccImages', 'Google',
-			false, false, 'ChromeCast', 'loadImages', []),
-		new PhotoSource('useEditors500px', 'editors500pxImages', '500',
-			true, false, 'Use500px', 'loadImages', ['editors']),
-		new PhotoSource('usePopular500px', 'popular500pxImages', '500',
-			true, false, 'Use500px', 'loadImages', ['popular']),
-		new PhotoSource('useYesterday500px', 'yesterday500pxImages', '500',
-			true, false, 'Use500px', 'loadImages', ['fresh_yesterday']),
-		new PhotoSource('useSpaceReddit', 'spaceRedditImages', 'reddit',
-			true, false, 'Reddit', 'loadImages', ['r/spaceporn/']),
-		new PhotoSource('useEarthReddit', 'earthRedditImages', 'reddit',
-			true, false, 'Reddit', 'loadImages', ['r/EarthPorn/']),
-		new PhotoSource('useAnimalReddit', 'animalRedditImages', 'reddit',
-			true, false, 'Reddit', 'loadImages', ['r/animalporn/']),
-		new PhotoSource('useInterestingFlickr', 'flickrInterestingImages',
-			'flickr', true, false, 'Flickr', 'loadImages', []),
-		new PhotoSource('useAuthors', 'authorImages', 'flickr',
-			false, false, 'Flickr', 'loadAuthorImages', []),
-	];
-
-	/**
 	 * Get all the keys of useage boolean variables
-	 * @returns {Array<string>} Array of keys of useage boolean variables
+	 * @returns {string[]} Array of keys of useage boolean variables
 	 */
 	PhotoSource.getUseNames = function() {
 		let ret = [];
-		PhotoSource.SOURCES.forEach((source) => {
+		PhotoSource._SRCS.forEach((source) => {
 			ret = ret.concat(source.useName);
 		});
 		return ret;
@@ -198,13 +193,12 @@
 	/**
 	 * Get all the photos from all selected sources. These will be
 	 * used by the screensaver.
-	 * @returns {Array<app.PhotoSource.Photo>}
-	 * {@link app.PhotoSource.Photo} Array
+	 * @returns {app.PhotoSource.SourcePhotos[]} Array of sources photos
 	 */
 	PhotoSource.getSelectedPhotos = function() {
 		let ret = [];
-		PhotoSource.SOURCES.forEach((source) => {
-			ret = ret.concat(source._getPhotos());
+		PhotoSource._SRCS.forEach((source) => {
+			ret.push(source._getPhotos());
 		});
 		return ret;
 	};
@@ -215,8 +209,8 @@
 	 * @returns {boolean} true if photo source
 	 */
 	PhotoSource.contains = function(useName) {
-		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
-			if (PhotoSource.SOURCES[i].useName === useName) {
+		for (let i = 0; i < PhotoSource._SRCS.length; i++) {
+			if (PhotoSource._SRCS[i].useName === useName) {
 				return true;
 			}
 		}
@@ -230,9 +224,9 @@
 	 * @returns {Promise<void>} void
 	 */
 	PhotoSource.process = function(useName) {
-		for (let i = 0; i < PhotoSource.SOURCES.length; i++) {
-			if (PhotoSource.SOURCES[i].useName === useName) {
-				return PhotoSource.SOURCES[i].process();
+		for (let i = 0; i < PhotoSource._SRCS.length; i++) {
+			if (PhotoSource._SRCS[i].useName === useName) {
+				return PhotoSource._SRCS[i].process();
 			}
 		}
 		// not found, shouldn't be here
@@ -244,7 +238,7 @@
 	 * This normally requires a https call and may fail for various reasons
 	 */
 	PhotoSource.processAll = function() {
-		PhotoSource.SOURCES.forEach((source) => {
+		PhotoSource._SRCS.forEach((source) => {
 			source.process().catch(() => {});
 		});
 	};
@@ -255,7 +249,7 @@
 	 * This normally requires a https call and may fail for various reasons
 	 */
 	PhotoSource.processDaily = function() {
-		PhotoSource.SOURCES.forEach((source) => {
+		PhotoSource._SRCS.forEach((source) => {
 			if (source.isDaily) {
 				source.process().catch(() => {});
 			}
@@ -277,17 +271,16 @@
 	};
 
 	/**
-	 * Add a {@link app.PhotoSource.Photo} to an existing Array
-	 * @param {Array} photos - {@link app.PhotoSource.Photo} Array
+	 * Add a {@link app.PhotoSource.SourcePhoto} to an existing Array
+	 * @param {Array} photos - {@link app.PhotoSource.SourcePhoto} Array
 	 * @param {string} url - The url to the photo
 	 * @param {string} author - The photographer
 	 * @param {number} asp - The aspect ratio of the photo
 	 * @param {Object} [ex] - Additional information about the photo
 	 * @param {string} [point] - 'lat lon'
-	 * @memberOf app.Utils
 	 */
-	PhotoSource.addImage = function(photos, url, author, asp, ex, point) {
-		/** @type {app.PhotoSource.Photo} */
+	PhotoSource.addPhoto = function(photos, url, author, asp, ex, point) {
+		/** @type {app.PhotoSource.SourcePhoto} */
 		const photo = {
 			url: url,
 			author: author,

@@ -10,35 +10,32 @@
 	new ExceptionHandler();
 
 	/**
-	 * A photo used by the screen saver
-	 * @typedef {Object} Photo
+	 * A photo for the screen saver
+	 * Important: Only implement static methods. This Object
+	 * will be shallow copied in the screensaver and lose its instance methods
+	 *
 	 * @property {string} name - Unique name
 	 * @property {string} path - The url to the photo
 	 * @property {string} author - The photographer
-	 * @property {string} type - source of the photo
+	 * @property {string} type - type of {@link app.PhotoSource}
 	 * @property {int} width - width
 	 * @property {int} height - height
 	 * @property {number} aspectRatio - aspect ratio
 	 * @property {Object} ex - additional information about the photo
 	 * @property {string} point - geolocation 'lat lon'
 	 * @property {string} label - author label
-	 * @property {string} location - geolocation label
-	 */
-
-	/**
-	 * A photo for the screen saver
-	 * Important: Only implement static methods. This Object
-	 * will be shallow copied in the screensaver and lose its instance methods
+	 * @property {?string} location - geolocation label
 	 * @param {string} name - unique name
-	 * @param {app.PhotoSource.Photo} source - source photo
+	 * @param {app.PhotoSource.SourcePhoto} source - source photo
+	 * @param {string} sourceType - type of {@link app.PhotoSource}
 	 * @constructor
 	 * @alias app.Photo
 	 */
-	const Photo = function(name, source) {
+	const Photo = function(name, source, sourceType) {
 		this.name = name;
 		this.path = source.url;
 		this.author = source.author ? source.author : '';
-		this.type = source.type;
+		this.type = sourceType;
 		this.aspectRatio = source.asp;
 		this.ex = source.ex;
         this.point = source.point;
@@ -158,4 +155,4 @@
 				break;
 		}
 	};
-})(window);
+})();
