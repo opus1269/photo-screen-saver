@@ -11,6 +11,10 @@
   "toggle_enabled": {
     "message": "Alternar estado activado"
   },
+  "photo_from": {
+    "message": "Foto de",
+    "description": "use example: Photo from Google"
+  },
   "screensaver": {
     "message": "Salvapantalla"
   },

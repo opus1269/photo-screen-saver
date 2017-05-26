@@ -16,16 +16,7 @@ app.SSUtils = (function() {
 	new ExceptionHandler();
 
 	/**
-	 * aspect ratio of screen
-	 * @type {number}
-	 * @const
-	 * @private
-	 * @memberOf app.SSUtils
-	 */
-	const _SCREEN_ASPECT = screen.width / screen.height;
-
-	/**
-	 * max number of animated pages
+	 * Max number of animated pages
 	 * @type {int}
 	 * @const
 	 * @default
@@ -55,7 +46,7 @@ app.SSUtils = (function() {
 		},
 
 		/**
-		 * Process settings related to the photos appearance
+		 * Process settings related to a photo's appearance
 		 * @param {Object} t - screensaver template
 		 * @memberOf app.SSUtils
 		 */
@@ -96,9 +87,7 @@ app.SSUtils = (function() {
 				const type = source.type;
 				let ct = 0;
 				source.photos.forEach((sourcePhoto) => {
-					const ignore = app.Photo.ignore(sourcePhoto.asp,
-						_SCREEN_ASPECT, t.photoSizing);
-					if (!ignore) {
+					if (!app.Photo.ignore(sourcePhoto.asp, t.photoSizing)) {
 						const photo =
 							new app.Photo('photo' + ct, sourcePhoto, type);
 						t.itemsAll.push(photo);

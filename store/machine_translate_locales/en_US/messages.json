@@ -11,6 +11,10 @@
   "toggle_enabled": {
     "message": "Toggle enabled state"
   },
+  "photo_from": {
+    "message": "Photo from",
+    "description": "use example: Photo from Google"
+  },
   "screensaver": {
     "message": "Screensaver"
   },

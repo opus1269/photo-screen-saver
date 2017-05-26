@@ -10,6 +10,15 @@
 	new ExceptionHandler();
 
 	/**
+	 * aspect ratio of screen
+	 * @type {number}
+	 * @const
+	 * @private
+	 * @memberOf app.Photo
+	 */
+	const _SCREEN_ASP = screen.width / screen.height;
+
+	/**
 	 * A photo for the screen saver
 	 * Important: Only implement static methods. This Object
 	 * will be shallow copied in the screensaver and lose its instance methods
@@ -74,7 +83,7 @@
 			ret = `${author} / ${newType}`;
 		} else {
 			// no photographer name
-			ret = `Photo from ${newType}`;
+			ret = `${app.Utils.localize('photo_from')} ${newType}`;
 		}
 		return ret;
 	};
@@ -82,31 +91,29 @@
 	/**
 	 * Determine if a photo would look bad zoomed or stretched on the screen
 	 * @param {number} asp aspect ratio of photo
-	 * @param {number} screenAsp - the screen aspect ratio
 	 * @returns {boolean} true if a photo aspect ratio differs substantially
 	 * from the screens'
 	 * @private
 	 */
-	Photo._isBadAspect = function(asp, screenAsp) {
+	Photo._isBadAspect = function(asp) {
 		// arbitrary
 		const CUT_OFF = 0.5;
-		return (asp < screenAsp - CUT_OFF) || (asp > screenAsp + CUT_OFF);
+		return (asp < _SCREEN_ASP - CUT_OFF) || (asp > _SCREEN_ASP + CUT_OFF);
 	};
 
 	/**
 	 * Determine if a photo should not be displayed
 	 * @param {number} asp - aspect ratio
-	 * @param {number} screenAsp - the screen aspect ratio
 	 * @param {int} photoSizing - the sizing type
 	 * @returns {boolean} true if the photo should not be displayed
 	 */
-	Photo.ignore = function(asp, screenAsp, photoSizing) {
+	Photo.ignore = function(asp, photoSizing) {
 		let ret = false;
 		const skip = app.Storage.getBool('skip');
 
 		if ((!asp || isNaN(asp)) ||
 			(skip && ((photoSizing === 1) || (photoSizing === 3)) &&
-			Photo._isBadAspect(asp, screenAsp))) {
+			Photo._isBadAspect(asp))) {
 			// ignore photos that don't have aspect ratio
 			// or would look bad with cropped or stretched sizing options
 			ret = true;
