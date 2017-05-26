@@ -23,7 +23,7 @@ app.Geo = (function() {
 	 * @private
 	 * @memberOf app.Geo
 	 */
-	const GOOGLE_APIS_URI =
+	const _GEOCODE_API =
 		'http://maps.googleapis.com/maps/api/geocode/json';
 
 	/**
@@ -101,11 +101,11 @@ app.Geo = (function() {
 					} else {
 						// get from maps api - it will translate based
 						// on browser language
-						const url = `${GOOGLE_APIS_URI}?sensor=true` +
+						const url = `${_GEOCODE_API}?sensor=true` +
 							`&latlng=${point.replace(' ', ',')}`;
 						app.Http.doGet(url, false, false, false, true, 1)
 							.then((response) => {
-							if (response.status && response.status === 'OK'
+							if (response.status === 'OK'
 								&& response.results
 								&& response.results.length > 0) {
 								const location =
@@ -114,9 +114,13 @@ app.Geo = (function() {
 								// cache it
 								_addToCache(point, location);
 							}
-							return null;
+							return Promise.resolve();
 						}).catch((err) => {
-							app.GA.error(err.message, 'Geo.set');
+							const networkErr =
+								app.Utils.localize('err_network');
+							if (!err.message.includes(networkErr)) {
+								app.GA.error(err.message, 'Geo.set');
+							}
 							els.model.set('item.location', null);
 						});
 					}
