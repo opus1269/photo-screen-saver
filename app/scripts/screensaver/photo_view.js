@@ -300,13 +300,23 @@ app.PhotoView = (function() {
 		},
 
 		/**
+		 * Set the geo location in this view
+		 * @param {int} idx - index into animated pages
+		 * @memberOf app.PhotoView
+		 */
+		setLocation: function(idx) {
+			if (_showLocation() && _hasLocation(idx))
+			app.Geo.set(_getElements(idx));
+		},
+
+		/**
 		 * Finalize DOM for a photo
 		 * @param {int} idx - index into animated pages
 		 * @param {int} photoSizing - display type
 		 * @memberOf app.PhotoView
 		 */
 		prep: function(idx, photoSizing) {
-			app.Geo.set(_getElements(idx));
+			app.PhotoView.setLocation(idx);
 			switch (photoSizing) {
 				case 0:
 					_letterbox(idx);
