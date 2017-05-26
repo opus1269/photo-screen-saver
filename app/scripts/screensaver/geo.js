@@ -57,6 +57,7 @@ app.Geo = (function() {
 	 * Try to get (@link app.Geo.Location} from cache
 	 * @param {string} point - a geolocation
 	 * @returns {app.Geo.Location|undefined} location, undefined if not cached
+	 * @memberOf app.Geo
 	 * @private
 	 */
 	function _getFromCache(point) {
@@ -69,6 +70,7 @@ app.Geo = (function() {
 	 * Try to get (@link app.Geo.Location} from cache
 	 * @param {string} point - a geolocation
 	 * @param {string} location - description
+	 * @memberOf app.Geo
 	 * @private
 	 */
 	function _addToCache(point, location) {
@@ -89,43 +91,41 @@ app.Geo = (function() {
 		 * @memberOf app.Geo
 		 */
 		set: function(els) {
-			if (app.Storage.getBool('showLocation')) {
-				if (els.item && els.item.point && !els.item.location) {
-					// has location and hasn't been set yet
-					/** @type {string} */
-					const point = els.item.point;
-					const cache = _getFromCache(point);
-					if (cache) {
-						// retrieve from cache
-						els.model.set('item.location', cache.loc);
-					} else {
-						// get from maps api - it will translate based
-						// on browser language
-						const url = `${_GEOCODE_API}?sensor=true` +
-							`&latlng=${point.replace(' ', ',')}`;
-						app.Http.doGet(url, false, false, false, true, 1)
-							.then((response) => {
-							if (response.status === 'OK'
-								&& response.results
-								&& response.results.length > 0) {
-								const location =
-									response.results[0].formatted_address;
-								els.model.set('item.location', location);
-								// cache it
-								_addToCache(point, location);
-							}
-							return Promise.resolve();
-						}).catch((err) => {
-							const networkErr =
-								app.Utils.localize('err_network');
-							if (!err.message.includes(networkErr)) {
-								app.GA.error(err.message, 'Geo.set');
-							}
-							els.model.set('item.location', null);
-						});
-					}
-				}
+			if (!app.Storage.getBool('showLocation')) {
+				return;
+			} else if (!(els.item && els.item.point && !els.item.location)) {
+				return;
 			}
+
+			// has location and hasn't been set yet
+			/** @type {string} */
+			const point = els.item.point;
+			const cache = _getFromCache(point);
+			if (cache) {
+				// retrieve from cache
+				els.model.set('item.location', cache.loc);
+				return;
+			}
+
+			// get from api - it will translate based on the browser language
+			const url = `${_GEOCODE_API}?sensor=true` +
+				`&latlng=${point.replace(' ', ',')}`;
+			app.Http.doGet(url, false, false, false, true, 2).then((resp) => {
+				if ((resp.status === 'OK') && resp.results
+					&& (resp.results.length > 0)) {
+					const location = resp.results[0].formatted_address;
+					els.model.set('item.location', location);
+					// cache it
+					_addToCache(point, location);
+				}
+				return Promise.resolve();
+			}).catch((err) => {
+				const networkErr = app.Utils.localize('err_network');
+				if (!err.message.includes(networkErr)) {
+					app.GA.error(err.message, 'Geo.set');
+				}
+				els.model.set('item.location', null);
+			});
 		},
 	};
 })();
