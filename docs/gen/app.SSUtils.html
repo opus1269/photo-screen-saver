@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Namespace: Data</title>
+	<title>Documentation Namespace: SSUtils</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,13 +79,13 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Namespace: Data</h1>
+	<h1 class="page-title">Namespace: SSUtils</h1>
 <section>
 
 <header>
     
         <h2>
-        Data
+        SSUtils
         </h2>
         
     
@@ -96,7 +96,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Manage the extensions data</p></div>
+            <div class="description"><p>Utility methods for a screensaver</p></div>
         
 
         
@@ -134,8 +134,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-13">line 13</a>
+				<a href="screensaver_ss_utils.js.html">screensaver/ss_utils.js</a>,
+				 <a href="screensaver_ss_utils.js.html#sunlight-1-line-13">line 13</a>
 			</li>
 		</ul>
 	</dd>
@@ -169,15 +169,15 @@
         <dl>
             
 <hr>
-<dt class="name" id="._DATA_VERSION">
-    <h4 id="._DATA_VERSION"><span class="type-signature">&lt;private, static, constant> </span>_DATA_VERSION<span class="type-signature"> :int</span></h4>
+<dt class="name" id="._MAX_PAGES">
+    <h4 id="._MAX_PAGES"><span class="type-signature">&lt;private, static, constant> </span>_MAX_PAGES<span class="type-signature"> :int</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>Version of localStorage - update when items are added, removed, changed</p>
+        <p>max number of animated pages</p>
     </div>
     
 
@@ -224,7 +224,7 @@
 	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
 	<dd class="tag-default">
 		<ul class="dummy">
-			<li>11</li>
+			<li>20</li>
 		</ul>
 	</dd>
 	
@@ -236,8 +236,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-28">line 28</a>
+				<a href="screensaver_ss_utils.js.html">screensaver/ss_utils.js</a>,
+				 <a href="screensaver_ss_utils.js.html#sunlight-1-line-35">line 35</a>
 			</li>
 		</ul>
 	</dd>
@@ -257,15 +257,15 @@
         
             
 <hr>
-<dt class="name" id="._DEF_VALUES">
-    <h4 id="._DEF_VALUES"><span class="type-signature">&lt;private, static, constant> </span>_DEF_VALUES<span class="type-signature"> :<a href="global.html#AppData">AppData</a></span></h4>
+<dt class="name" id="._SCREEN_ASPECT">
+    <h4 id="._SCREEN_ASPECT"><span class="type-signature">&lt;private, static, constant> </span>_SCREEN_ASPECT<span class="type-signature"> :number</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>Default values in localStorage</p>
+        <p>aspect ratio of screen</p>
     </div>
     
 
@@ -274,7 +274,7 @@
         <ul>
             <li>
                 
-<span class="param-type"><a href="global.html#AppData">AppData</a></span>
+<span class="param-type">number</span>
 
 
 
@@ -317,8 +317,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-81">line 81</a>
+				<a href="screensaver_ss_utils.js.html">screensaver/ss_utils.js</a>,
+				 <a href="screensaver_ss_utils.js.html#sunlight-1-line-25">line 25</a>
 			</li>
 		</ul>
 	</dd>
@@ -345,7 +345,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="._addDefaults"><span class="type-signature">&lt;private, static> </span>_addDefaults<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".close"><span class="type-signature">&lt;static> </span>close<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -353,8 +353,7 @@
 
     
     <div class="description">
-        <p>Save the <a href="app.Data.html#._DEF_VALUES">_DEF_VALUES</a> items, if they
-do not already exist</p>
+        <p>Close ourselves</p>
     </div>
     
 
@@ -400,8 +399,8 @@ do not already exist</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-187">line 187</a>
+				<a href="screensaver_ss_utils.js.html">screensaver/ss_utils.js</a>,
+				 <a href="screensaver_ss_utils.js.html#sunlight-1-line-166">line 166</a>
 			</li>
 		</ul>
 	</dd>
@@ -434,7 +433,7 @@ do not already exist</p>
             
 <hr>
 <dt>
-    <h4 class="name" id="._convertSliderValue"><span class="type-signature">&lt;private, static> </span>_convertSliderValue<span class="signature">(key)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".getTime"><span class="type-signature">&lt;static> </span>getTime<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
     
     
 </dt>
@@ -442,7 +441,120 @@ do not already exist</p>
 
     
     <div class="description">
-        <p>Convert a setting-slider value due to addition of units</p>
+        <p>Get the current time as a string</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_ss_utils.js.html">screensaver/ss_utils.js</a>,
+				 <a href="screensaver_ss_utils.js.html#sunlight-1-line-135">line 135</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>time string suitable for display</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".loadPhotos"><span class="type-signature">&lt;static> </span>loadPhotos<span class="signature">(t)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Build the Array of <a href="app.Photo.html">app.Photo</a> objects that will be displayed
+and populate the neon-animated-pages</p>
     </div>
     
 
@@ -477,13 +589,13 @@ do not already exist</p>
 
         <tr>
             
-                <td class="name"><code>key</code></td>
+                <td class="name"><code>t</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
 
@@ -494,7 +606,7 @@ do not already exist</p>
 
             
 
-            <td class="description last"><p>localStorage key</p></td>
+            <td class="description last"><p>screensaver template</p></td>
         </tr>
 
     
@@ -538,8 +650,8 @@ do not already exist</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-201">line 201</a>
+				<a href="screensaver_ss_utils.js.html">screensaver/ss_utils.js</a>,
+				 <a href="screensaver_ss_utils.js.html#sunlight-1-line-90">line 90</a>
 			</li>
 		</ul>
 	</dd>
@@ -572,7 +684,7 @@ do not already exist</p>
             
 <hr>
 <dt>
-    <h4 class="name" id="._getTimeFormat"><span class="type-signature">&lt;private, static> </span>_getTimeFormat<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
+    <h4 class="name" id=".setupPhotoSizing"><span class="type-signature">&lt;static> </span>setupPhotoSizing<span class="signature">(t)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -580,586 +692,7 @@ do not already exist</p>
 
     
     <div class="description">
-        <p>Get default time format based on locale</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-159">line 159</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>12 or 24</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">int</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._processEnabled"><span class="type-signature">&lt;private, static> </span>_processEnabled<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Set state based on screensaver enabled flag
-Note: this does not effect the keep awake settings so you could
-use the extension as a display keep awake scheduler without
-using the screensaver</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-121">line 121</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._processIdleTime"><span class="type-signature">&lt;private, static> </span>_processIdleTime<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Set wait time for screen saver display after machine is idle</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-149">line 149</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._processKeepAwake"><span class="type-signature">&lt;private, static> </span>_processKeepAwake<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Set power scheduling features</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-136">line 136</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._setOS"><span class="type-signature">&lt;private, static> </span>_setOS<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Set the 'os' value</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-174">line 174</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>err on failure</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".initialize"><span class="type-signature">&lt;static> </span>initialize<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Initialize the data saved in localStorage</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-218">line 218</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".processState"><span class="type-signature">&lt;static> </span>processState<span class="signature">( [key])</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Process changes to localStorage items</p>
+        <p>Process settings related to the photos appearance</p>
     </div>
     
 
@@ -1182,11 +715,7 @@ using the screensaver</p>
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1198,13 +727,13 @@ using the screensaver</p>
 
         <tr>
             
-                <td class="name"><code>key</code></td>
+                <td class="name"><code>t</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
 
@@ -1212,26 +741,10 @@ using the screensaver</p>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    'all'
-                
-                </td>
-            
 
-            <td class="description last"><p>the item that changed</p></td>
+            <td class="description last"><p>screensaver template</p></td>
         </tr>
 
     
@@ -1275,8 +788,8 @@ using the screensaver</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-290">line 290</a>
+				<a href="screensaver_ss_utils.js.html">screensaver/ss_utils.js</a>,
+				 <a href="screensaver_ss_utils.js.html#sunlight-1-line-62">line 62</a>
 			</li>
 		</ul>
 	</dd>
@@ -1309,7 +822,7 @@ using the screensaver</p>
             
 <hr>
 <dt>
-    <h4 class="name" id=".restoreDefaults"><span class="type-signature">&lt;static> </span>restoreDefaults<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".setZoom"><span class="type-signature">&lt;static> </span>setZoom<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1317,7 +830,7 @@ using the screensaver</p>
 
     
     <div class="description">
-        <p>Restore default values for data saved in localStorage</p>
+        <p>Set the window zoom factor to 1.0</p>
     </div>
     
 
@@ -1363,96 +876,8 @@ using the screensaver</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-269">line 269</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".update"><span class="type-signature">&lt;static> </span>update<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Update the data saved in localStorage</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-235">line 235</a>
+				<a href="screensaver_ss_utils.js.html">screensaver/ss_utils.js</a>,
+				 <a href="screensaver_ss_utils.js.html#sunlight-1-line-42">line 42</a>
 			</li>
 		</ul>
 	</dd>

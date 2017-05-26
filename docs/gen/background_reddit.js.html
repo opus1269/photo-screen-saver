@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: use500px.js</title>
+	<title>Documentation Source: background/reddit.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSUtils.html">app.SSUtils</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: use500px.js</h1>
+		<h1 class="page-title">Source: background/reddit.js</h1>
     
 <section>
     <article>
@@ -93,113 +93,180 @@
 window.app = window.app || {};
 
 /**
- * Interface to 500px API
+ * Interface to Reddit API
  * @namespace
  */
-app.Use500px = (function() {
+app.Reddit = (function() {
 	'use strict';
 
 	new ExceptionHandler();
 
 	/**
-	 * 500px rest API
-	 * @type {string}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _URL_BASE = 'https://api.500px.com/v1/';
-
-	/**
-	 * API authorization key
+	 * Extension's redirect uri
 	 * @type {string}
 	 * @const
 	 * @private
-	 * @memberOf app.Use500px
+	 * @memberOf app.Reddit
 	 */
-	const _KEY = 'iyKV6i6wu0R8QUea9mIXvEsQxIF0tMRVXopwYcFC';
+	const _REDIRECT_URI =
+		`https://${chrome.runtime.id}.chromiumapp.org/reddit`;
 
 	/**
-	 * Max photos to return - 100 is API max
+	 * Reddit rest API authorization key
+	 * @type {string}
+	 * @const
+	 * @private
+	 * @memberOf app.Reddit
+	 */
+	const _KEY = 'bATkDOUNW_tOlg';
+
+	/**
+	 * Max photos to return
 	 * @type {int}
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf app.Use500px
+	 * @memberOf app.Reddit
 	 */
-	const _MAX_PHOTOS = 90;
+	const _MAX_PHOTOS = 100;
 
 	/**
-	 * Categories to use Make them an array to overcome 100 photo limit per call
-	 * @type {Array}
+	 * Min size of photo to use
+	 * @type {int}
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf app.Use500px
+	 * @memberOf app.Reddit
 	 */
-	const _CATS = [
-		'Nature,City and Architecture',
-		'Landscapes,Animals',
-		'Macro,Still Life,Underwater',
-	];
+	const _MIN_SIZE = 750;
 
 	/**
-	 * Call API to get some photos
-	 * @param {string} url - server url
-	 * @returns {Promise&lt;app.PhotoSource.Photo[]>} Array photos
+	 * Max size of photo to use
+	 * @type {int}
+	 * @const
+	 * @default
 	 * @private
-	 * @memberOf app.Use500px
+	 * @memberOf app.Reddit
 	 */
-	function _doGet(url) {
-		return app.Http.doGet(url).then((response) => {
-			if (response.error) {
-				throw new Error(response.error);
-			}
-			const photos = [];
-			response.photos.forEach((photo) => {
-				if (!photo.nsfw) {
-					const asp = photo.width / photo.height;
-					let ex = null;
-					let pt = null;
-					if (photo.latitude &amp;&amp; photo.longitude) {
-						pt = app.PhotoSource
-							.getPt(photo.latitude, photo.longitude);
-						ex = {};
+	const _MAX_SIZE = 3500;
+
+	/**
+	 * Expose reddit API
+	 * @type {Function}
+	 * @const
+	 * @private
+	 * @memberOf app.Reddit
+	 */
+	const _snoocore = new Snoocore({
+		userAgent: 'photo-screen-saver',
+		throttle: 0,
+		oauth: {
+			type: 'implicit',
+			key: _KEY,
+			redirectUri: _REDIRECT_URI,
+			scope: ['read'],
+		},
+	});
+
+	/**
+	 * Parse the size from the submission title.
+	 * this is the old way reddit did it
+	 * @param {string} title - submission title
+	 * @returns {{width: int, height: int}} Photo size
+	 * @private
+	 * @memberOf app.Reddit
+	 */
+	function _getSize(title) {
+		const ret = {width: -1, height: -1};
+		const regex = /\[(\d*)\D*(\d*)\]/;
+		const res = title.match(regex);
+		if (res) {
+			ret.width = parseInt(res[1], 10);
+			ret.height = parseInt(res[2], 10);
+		}
+		return ret;
+	}
+
+	/**
+	 * Build the list of photos for one page of items
+	 * @param {Array} children - Array of objects from reddit
+	 * @returns {app.PhotoSource.SourcePhoto[]} Array of photos
+	 * @private
+	 * @memberOf app.Reddit
+	 */
+	function _processChildren(children) {
+		const photos = [];
+		let url;
+		let width = 1;
+		let height = 1;
+
+		children.forEach((child) => {
+			const data = child.data;
+			if (!data.over_18) {
+				// skip NSFW
+				if (data.preview &amp;&amp; data.preview.images) {
+					// new way. has full size image and array of reduced
+					// resolutions
+					let item = data.preview.images[0];
+					url = item.source.url;
+					width = parseInt(item.source.width, 10);
+					height = parseInt(item.source.height, 10);
+					if (Math.max(width, height) > _MAX_SIZE) {
+						// too big. get the largest reduced resolution image
+						item = item.resolutions[item.resolutions.length - 1];
+						url = item.url.replace(/&amp;amp;/g, '&amp;');
+						width = parseInt(item.width, 10);
+						height = parseInt(item.height, 10);
 					}
-					app.PhotoSource.addImage(photos, photo.images[0].url,
-						photo.user.fullname, asp, ex, pt);
+				} else if (data.title) {
+					// old way of specifying images - parse size from title
+					const size = _getSize(data.title);
+					url = data.url;
+					width = size.width;
+					height = size.height;
 				}
-			});
-			return Promise.resolve(photos);
+			}
+
+			const asp = width / height;
+			const author = data.author;
+			if (asp &amp;&amp; !isNaN(asp) &amp;&amp; (Math.max(width, height) >= _MIN_SIZE) &amp;&amp;
+				(Math.max(width, height) &lt;= _MAX_SIZE)) {
+				app.PhotoSource.addPhoto(photos, url, author, asp, data.url);
+			}
 		});
+		return photos;
 	}
 
 	return {
 		/**
-		 * Retrieve the array of 500px photos
-		 * @param {string} type - name of 500px gallery
-		 * @returns {Promise&lt;app.PhotoSource.Photo[]>} Array of photos
-		 * @memberOf app.Use500px
+		 * Retrieve the array of reddit photos
+		 * @param {string} subreddit - name of photo subreddit
+		 * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
+		 * @memberOf app.Reddit
 		 */
-		loadImages: function(type) {
-			// series of API calls
-			const promises = [];
-			_CATS.forEach((_CAT) => {
-				let url =
-					`${_URL_BASE}photos/?consumer_key=${_KEY}&amp;feature=${type}` +
-					`&amp;only=${_CAT}&amp;rpp=${_MAX_PHOTOS}` +
-					'&amp;sort=rating&amp;image_size=2048';
-				promises.push(_doGet(url));
-			});
+		loadPhotos: function(subreddit) {
+			let photos = [];
 
-			// Collate the photos
-			return Promise.all(promises).then((values) => {
-				let photos = [];
-				values.forEach((value) => {
-					photos = photos.concat(value);
-				});
+			return _snoocore(`${subreddit}hot`).listing({
+				limit: _MAX_PHOTOS,
+			}).then((slice) => {
+				photos = photos.concat(_processChildren(slice.children));
+				return slice.next();
+			}).then((slice) => {
+				photos = photos.concat(_processChildren(slice.children));
 				return Promise.resolve(photos);
+			}).catch((err) => {
+				let msg = err.message;
+				if (msg) {
+					// extract first sentence
+					const idx = msg.indexOf('.');
+					if (idx !== -1) {
+						msg = msg.substring(0, idx + 1);
+					}
+				} else {
+					msg = 'Unknown Error';
+				}
+				throw new Error(msg);
 			});
 		},
 	};
@@ -249,7 +316,7 @@ app.Use500px = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 24th 2017, 10:27:23 pm
+		on May 25th 2017, 10:40:56 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

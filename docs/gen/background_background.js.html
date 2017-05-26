@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: reddit.js</title>
+	<title>Documentation Source: background/background.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSUtils.html">app.SSUtils</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: reddit.js</h1>
+		<h1 class="page-title">Source: background/background.js</h1>
     
 <section>
     <article>
@@ -90,186 +90,186 @@
  *  https://opensource.org/licenses/BSD-3-Clause
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
-window.app = window.app || {};
-
-/**
- * Interface to Reddit API
- * @namespace
- */
-app.Reddit = (function() {
+(function() {
 	'use strict';
+
+	/**
+	 * The background script for the extension.&lt;br>
+	 * @namespace app.Background
+	 */
 
 	new ExceptionHandler();
 
 	/**
-	 * Extension's redirect uri
-	 * @type {string}
-	 * @const
+	 * Display the options tab
 	 * @private
-	 * @memberOf app.Reddit
+	 * @memberOf app.Background
 	 */
-	const _REDIRECT_URI =
-		`https://${chrome.runtime.id}.chromiumapp.org/reddit`;
-
-	/**
-	 * Reddit rest API authorization key
-	 * @type {string}
-	 * @const
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	const _KEY = 'bATkDOUNW_tOlg';
-
-	/**
-	 * Max photos to return
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	const _MAX_PHOTOS = 100;
-
-	/**
-	 * Min size of photo to use
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	const _MIN_SIZE = 750;
-
-	/**
-	 * Max size of photo to use
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	const _MAX_SIZE = 3500;
-
-	/**
-	 * Expose reddit API
-	 * @type {Function}
-	 * @const
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	const _snoocore = new Snoocore({
-		userAgent: 'photo-screen-saver',
-		throttle: 0,
-		oauth: {
-			type: 'implicit',
-			key: _KEY,
-			redirectUri: _REDIRECT_URI,
-			scope: ['read'],
-		},
-	});
-
-	/**
-	 * Parse the size from the submission title.
-	 * this is the old way reddit did it
-	 * @param {string} title - submission title
-	 * @returns {{width: int, height: int}} Photo size
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	function _getSize(title) {
-		const ret = {width: -1, height: -1};
-		const regex = /\[(\d*)\D*(\d*)\]/;
-		const res = title.match(regex);
-		if (res) {
-			ret.width = parseInt(res[1], 10);
-			ret.height = parseInt(res[2], 10);
-		}
-		return ret;
+	function _showOptionsTab() {
+		// send message to the option tab to focus it.
+		app.Msg.send(app.Msg.HIGHLIGHT).catch(() => {
+			// no one listening, create it
+			chrome.tabs.create({url: '../html/options.html'});
+		});
 	}
 
 	/**
-	 * Build the list of photos for one page of items
-	 * @param {Array} children - Array of objects from reddit
-	 * @returns {app.PhotoSource.Photo[]} Array of photos
+	 * Toggle enabled state of the screen saver
 	 * @private
-	 * @memberOf app.Reddit
+	 * @memberOf app.Background
 	 */
-	function _processChildren(children) {
-		const photos = [];
-		let url;
-		let width = 1;
-		let height = 1;
+	function _toggleEnabled() {
+		app.Storage.set('enabled', !app.Storage.getBool('enabled'));
+		// storage changed event not fired on same page as the change
+		app.Data.processState('enabled');
+	}
 
-		children.forEach((child) => {
-			const data = child.data;
-			if (!data.over_18) {
-				// skip NSFW
-				if (data.preview &amp;&amp; data.preview.images) {
-					// new way. has full size image and array of reduced
-					// resolutions
-					let item = data.preview.images[0];
-					url = item.source.url;
-					width = parseInt(item.source.width, 10);
-					height = parseInt(item.source.height, 10);
-					if (Math.max(width, height) > _MAX_SIZE) {
-						// too big. get the largest reduced resolution image
-						item = item.resolutions[item.resolutions.length - 1];
-						url = item.url.replace(/&amp;amp;/g, '&amp;');
-						width = parseInt(item.width, 10);
-						height = parseInt(item.height, 10);
-					}
-				} else if (data.title) {
-					// old way of specifying images - parse size from title
-					const size = _getSize(data.title);
-					url = data.url;
-					width = size.width;
-					height = size.height;
-				}
-			}
+	/**
+	 * Event: Fired when the extension is first installed,&lt;br />
+	 * when the extension is updated to a new version,&lt;br />
+	 * and when Chrome is updated to a new version.
+	 * @see https://developer.chrome.com/extensions/runtime#event-onInstalled
+	 * @param {Object} details - type of event
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onInstalled(details) {
+		const chromep = new ChromePromise();
 
-			const asp = width / height;
-			const author = data.author;
-			if (asp &amp;&amp; !isNaN(asp) &amp;&amp; (Math.max(width, height) >= _MIN_SIZE) &amp;&amp;
-				(Math.max(width, height) &lt;= _MAX_SIZE)) {
-				app.PhotoSource.addImage(photos, url, author, asp, data.url);
+		// create menus on the right click menu of the extension icon
+		chromep.contextMenus.create({
+			type: 'normal',
+			id: 'ENABLE_MENU',
+			title: app.Utils.localize('disable'),
+			contexts: ['browser_action'],
+		}).catch((err) => {
+			if (!err.message.includes('duplicate id')) {
+				app.GA.error(err.message, 'chromep.contextMenus.create');
 			}
 		});
-		return photos;
+
+		chromep.contextMenus.create({
+			type: 'separator',
+			id: 'SEP_MENU',
+			contexts: ['browser_action'],
+		}).catch((err) => {
+			if (!err.message.includes('duplicate id')) {
+				app.GA.error(err.message, 'chromep.contextMenus.create');
+			}
+		});
+
+		if (details.reason === 'install') {
+			app.GA.event(app.GA.EVENT.INSTALLED);
+			app.Data.initialize();
+			_showOptionsTab();
+		} else if (details.reason === 'update') {
+			// extension updated
+			app.Data.update();
+		}
 	}
 
-	return {
-		/**
-		 * Retrieve the array of reddit photos
-		 * @param {string} subreddit - name of photo subreddit
-		 * @returns {Promise&lt;app.PhotoSource.Photo[]>} Array of photos
-		 * @memberOf app.Reddit
-		 */
-		loadImages: function(subreddit) {
-			let photos = [];
+	/**
+	 * Event: Fired when a profile that has this extension installed first
+	 * starts up
+	 * @see https://developer.chrome.com/extensions/runtime#event-onStartup
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onStartup() {
+		app.GA.page('/background.html');
+		app.Data.processState();
+	}
 
-			return _snoocore(`${subreddit}hot`).listing({
-				limit: _MAX_PHOTOS,
-			}).then((slice) => {
-				photos = photos.concat(_processChildren(slice.children));
-				return slice.next();
-			}).then((slice) => {
-				photos = photos.concat(_processChildren(slice.children));
-				return Promise.resolve(photos);
-			}).catch((err) => {
-				let msg = err.message;
-				if (msg) {
-					// extract first sentence
-					const idx = msg.indexOf('.');
-					if (idx !== -1) {
-						msg = msg.substring(0, idx + 1);
-					}
-				} else {
-					msg = 'Unknown Error';
-				}
-				throw new Error(msg);
-			});
-		},
-	};
+	/**
+	 * Event: Fired when a browser action icon is clicked.
+	 * @see https://goo.gl/abVwKu
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onIconClicked() {
+		_showOptionsTab();
+	}
+
+	/**
+	 * Event: Fired when item in localStorage changes
+	 * @see https://developer.mozilla.org/en-US/docs/Web/Events/storage
+	 * @param {Event} event - StorageEvent
+	 * @param {string} event.key - storage item that changed
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onStorageChanged(event) {
+		app.Data.processState(event.key);
+	}
+
+	/**
+	 * Event: Fired when a context menu item is clicked.
+	 * @see https://developer.chrome.com/extensions/contextMenus#event-onClicked
+	 * @param {Object} info - info. on the clicked menu
+	 * @param {Object} info.menuItemId - menu name
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onMenuClicked(info) {
+		if (info.menuItemId === 'ENABLE_MENU') {
+			_toggleEnabled();
+		}
+	}
+
+	/**
+	 * Event: Fired when a registered command is activated using
+	 * a keyboard shortcut.
+	 * @see https://developer.chrome.com/extensions/commands#event-onCommand
+	 * @param {string} cmd - keyboard command
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onKeyCommand(cmd) {
+		if (cmd === 'toggle-enabled') {
+			_toggleEnabled();
+		}
+	}
+
+	// noinspection JSUnusedLocalSymbols
+	/**
+	 * Event: Fired when a message is sent from either an extension process&lt;br>
+	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
+	 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
+	 * @param {Object} request - details for the message
+	 * @param {string} request.message - name of the message
+	 * @param {Object} sender - MessageSender object
+	 * @param {function} response - function _to call once after processing
+	 * @returns {boolean} true if asynchronous
+	 * @private
+	 * @memberOf app.Background
+	 */
+	function _onChromeMessage(request, sender, response) {
+		if (request.message === app.Msg.RESTORE_DEFAULTS.message) {
+			app.Data.restoreDefaults();
+		}
+		return false;
+	}
+
+	// listen for extension install or update
+	chrome.runtime.onInstalled.addListener(_onInstalled);
+
+	// listen for Chrome starting
+	chrome.runtime.onStartup.addListener(_onStartup);
+
+	// listen for click on the icon
+	chrome.browserAction.onClicked.addListener(_onIconClicked);
+
+	// listen for changes to the stored data
+	addEventListener('storage', _onStorageChanged, false);
+
+	// listen for chrome messages
+	app.Msg.listen(_onChromeMessage);
+
+	// listen for clicks on context menus
+	chrome.contextMenus.onClicked.addListener(_onMenuClicked);
+
+	// listen for special keyboard commands
+	chrome.commands.onCommand.addListener(_onKeyCommand);
 })();
 </pre>
     </article>
@@ -316,7 +316,7 @@ app.Reddit = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 24th 2017, 10:27:23 pm
+		on May 25th 2017, 10:40:56 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

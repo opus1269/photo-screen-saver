@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: msg.js</title>
+	<title>Documentation Source: background/use500px.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: msg.js</h1>
+		<h1 class="page-title">Source: background/use500px.js</h1>
     
 <section>
     <article>
@@ -93,133 +93,114 @@
 window.app = window.app || {};
 
 /**
- * Wrapper for chrome messages
+ * Interface to 500px API
  * @namespace
  */
-app.Msg = (function() {
+app.Use500px = (function() {
 	'use strict';
 
 	new ExceptionHandler();
 
 	/**
-	 * A Chrome message
-	 * @typedef {{}} app.Msg.Message
-	 * @property {string} message - Unique name
-	 * @memberOf app.Msg
+	 * 500px rest API
+	 * @type {string}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf app.Use500px
 	 */
+	const _URL_BASE = 'https://api.500px.com/v1/';
 
 	/**
-	 * Show {@link app.ScreenSaver}
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
+	 * API authorization key
+	 * @type {string}
+	 * @const
+	 * @private
+	 * @memberOf app.Use500px
 	 */
-	const SS_SHOW = {
-		message: 'showScreensaver',
-	};
+	const _KEY = 'iyKV6i6wu0R8QUea9mIXvEsQxIF0tMRVXopwYcFC';
 
 	/**
-	 * Close {@link app.ScreenSaver}
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
+	 * Max photos to return - 100 is API max
+	 * @type {int}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf app.Use500px
 	 */
-	const SS_CLOSE = {
-		message: 'closeScreensaver',
-	};
+	const _MAX_PHOTOS = 90;
 
 	/**
-	 * Is a {@link app.ScreenSaver} showing
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
+	 * Categories to use Make them an array to overcome 100 photo limit per call
+	 * @type {Array}
+	 * @const
+	 * @default
+	 * @private
+	 * @memberOf app.Use500px
 	 */
-	const SS_IS_SHOWING = {
-		message: 'isScreensaverShowing',
-	};
+	const _CATS = [
+		'Nature,City and Architecture',
+		'Landscapes,Animals',
+		'Macro,Still Life,Underwater',
+	];
 
 	/**
-	 * Restore default settings
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
+	 * Call API to get some photos
+	 * @param {string} url - server url
+	 * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
+	 * @private
+	 * @memberOf app.Use500px
 	 */
-	const RESTORE_DEFAULTS = {
-		message: 'restoreDefaults',
-	};
-
-	/**
-	 * Highlight a tab
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
-	 */
-	const HIGHLIGHT = {
-		message: 'highlightTab',
-	};
-
-	/**
-	 * A save attempt to localStorage exceeded its capacity
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
-	 */
-	const STORAGE_EXCEEDED = {
-		message: 'storageExceeded',
-	};
-
-	/**
-	 * A Chrome message that an {@link app.PhotoSource} server request failed
-	 * @typedef {app.Msg.Message} app.Msg.PhotoSourceFailed
-	 * @property {string} message - Unique name
-	 * @property {string} type - the photo source
-	 * @property {Error} error - the failure reason
-	 * @memberOf app.Msg
-	 */
-
-	/**
-	 * An {@link app.PhotoSource} server request failed
-	 * @type {app.Msg.PhotoSourceFailed}
-	 * @memberOf app.Msg
-	 */
-	const PHOTO_SOURCE_FAILED = {
-		message: 'photoSourceFailed',
-		type: '',
-		error: '',
-	};
+	function _doGet(url) {
+		return app.Http.doGet(url).then((response) => {
+			if (response.error) {
+				throw new Error(response.error);
+			}
+			const photos = [];
+			response.photos.forEach((photo) => {
+				if (!photo.nsfw) {
+					const asp = photo.width / photo.height;
+					let ex = null;
+					let pt = null;
+					if (photo.latitude &amp;&amp; photo.longitude) {
+						pt = app.PhotoSource
+							.getPt(photo.latitude, photo.longitude);
+						ex = {};
+					}
+					app.PhotoSource.addPhoto(photos, photo.images[0].url,
+						photo.user.fullname, asp, ex, pt);
+				}
+			});
+			return Promise.resolve(photos);
+		});
+	}
 
 	return {
-
-		SS_SHOW: SS_SHOW,
-		SS_CLOSE: SS_CLOSE,
-		SS_IS_SHOWING: SS_IS_SHOWING,
-		RESTORE_DEFAULTS: RESTORE_DEFAULTS,
-		HIGHLIGHT: HIGHLIGHT,
-		STORAGE_EXCEEDED: STORAGE_EXCEEDED,
-		PHOTO_SOURCE_FAILED: PHOTO_SOURCE_FAILED,
-
 		/**
-		 * Send a chrome message
-		 * @param {app.Msg.Message} type - type of message
-		 * @returns {Promise&lt;JSON>} response JSON
-		 * @memberOf app.Msg
+		 * Retrieve the array of 500px photos
+		 * @param {string} type - name of 500px gallery
+		 * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
+		 * @memberOf app.Use500px
 		 */
-		send: function(type) {
-			const chromep = new ChromePromise();
-			return chromep.runtime.sendMessage(type, null).then((response) => {
-				return Promise.resolve(response);
-			}).catch((err) => {
-				if (err.message &amp;&amp;
-					!err.message.includes('port closed') &amp;&amp;
-					!err.message.includes('Receiving end does not exist')) {
-					const msg = `type: ${type.message}, ${err.message}`;
-					app.GA.error(msg, 'app.Msg.send');
-				}
-				return Promise.reject(err);
+		loadPhotos: function(type) {
+			// series of API calls
+			const promises = [];
+			_CATS.forEach((_CAT) => {
+				let url =
+					`${_URL_BASE}photos/?consumer_key=${_KEY}&amp;feature=${type}` +
+					`&amp;only=${_CAT}&amp;rpp=${_MAX_PHOTOS}` +
+					'&amp;sort=rating&amp;image_size=2048';
+				promises.push(_doGet(url));
 			});
-		},
 
-		/**
-		 * Add a listener for chrome messages
-		 * @param {Function} listener - function to receive messages
-		 * @memberOf app.Msg
-		 */
-		listen: function(listener) {
-			chrome.runtime.onMessage.addListener(listener);
+			// Collate the photos
+			return Promise.all(promises).then((values) => {
+				let photos = [];
+				values.forEach((value) => {
+					photos = photos.concat(value);
+				});
+				return Promise.resolve(photos);
+			});
 		},
 	};
 })();
@@ -268,7 +249,7 @@ app.Msg = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 25th 2017, 10:40:56 pm
+		on May 25th 2017, 10:40:57 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

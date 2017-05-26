@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: screensaver.js</title>
+	<title>Documentation Source: screensaver/screensaver.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSUtils.html">app.SSUtils</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: screensaver.js</h1>
+		<h1 class="page-title">Source: screensaver/screensaver.js</h1>
     
 <section>
     <article>
@@ -100,27 +100,6 @@
 
 	new ExceptionHandler();
 
-	const chromep = new ChromePromise();
-
-	/**
-	 * aspect ratio of screen
-	 * @type {number}
-	 * @const
-	 * @private
-	 * @memberOf app.ScreenSaver
-	 */
-	const SCREEN_ASPECT = screen.width / screen.height;
-
-	/**
-	 * max number of animated pages
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.ScreenSaver
-	 */
-	const MAX_PAGES = 20;
-
 	/**
 	 * repeating alarm for updating time label
 	 * @type {string}
@@ -129,7 +108,7 @@
 	 * @private
 	 * @memberOf app.ScreenSaver
 	 */
-	const CLOCK_ALARM = 'updateTimeLabel';
+	const _CLOCK_ALARM = 'updateTimeLabel';
 
 	// set selected background image
 	document.body.style.background =
@@ -151,7 +130,7 @@
 	t.p = null;
 
 	/**
-	 * array of all the photos to use for slide show
+	 * array of all the {@link app.Photo} to use for slide show
 	 * @type {Array}
 	 * @memberOf app.ScreenSaver
 	 */
@@ -165,8 +144,7 @@
 	t.curIdx = 0;
 
 	/**
-	 * Array of photos [MAX_PAGES]{@link app.ScreenSaver.MAX_PAGES}
-	 * long, currently loaded into the neon-animated-pages.
+	 * Array of {@link app.Photo} currently loaded into the neon-animated-pages.
 	 * Always changing subset of [t.itemsAll]{@link app.ScreenSaver.t.itemsAll}
 	 * @type {Array}
 	 * @memberOf app.ScreenSaver
@@ -191,54 +169,36 @@
 	 * @memberOf app.ScreenSaver
 	 */
 	t.addEventListener('dom-change', function() {
+		// listen for chrome messages
+		app.Msg.listen(_onMessage);
+
 		app.GA.page('/screensaver.html');
 
 		t.rep = t.$.repeatTemplate;
 		t.p = t.$.pages;
 		t.time = 'time';
 
-		t.processZoom();
-		t.processPhotoTransitions();
-		t.processPhotoSizing();
+		app.SSUtils.setZoom();
+		app.SSUtils.setupPhotoSizing(t);
 
-		// listen for request to close screensaver
-		chrome.runtime.onMessage.addListener(t.onMessage);
+		_processPhotoTransitions();
 
 		// load the photos for the slide show
-		t.loadImages();
+		app.SSUtils.loadPhotos(t);
 
 		if (!t.noPhotos) {
 			// kick off the slide show if there are photos selected
 			// slight delay at beginning so we have a smooth start
 			t.waitTime = 2000;
-			t.timer = window.setTimeout(t.runShow, t.waitTime);
+			t.timer = window.setTimeout(_runShow, t.waitTime);
 		}
-
 	});
 
 	/**
-	 * Process Chrome window Zoom factor
+	 * Process settings related to between photo transitions
 	 * @memberOf app.ScreenSaver
 	 */
-	t.processZoom = function() {
-		if (app.Utils.getChromeVersion() >= 42) {
-			// override zoom factor to 1.0 - chrome 42 and later
-			chromep.tabs.getZoom().then((zoomFactor) => {
-				if ((zoomFactor &lt;= 0.99) || (zoomFactor >= 1.01)) {
-					chrome.tabs.setZoom(1.0);
-				}
-				return null;
-			}).catch((err) => {
-				app.GA.error(err.message, 'chromep.tabs.getZoom');
-			});
-		}
-	};
-
-	/**
-	 * Process settings related to between photo transition
-	 * @memberOf app.ScreenSaver
-	 */
-	t.processPhotoTransitions = function() {
+	function _processPhotoTransitions() {
 		t.transitionType = app.Storage.getInt('photoTransition');
 		if (t.transitionType === 8) {
 			// pick random transition
@@ -255,12 +215,12 @@
 			// add repeating alarm to update time label
 			// if transition time is more than 1 minute
 			// and time label is showing
+			chrome.alarms.onAlarm.addListener(_onAlarm);
 
-			chrome.alarms.onAlarm.addListener(t.onAlarm);
-
-			chromep.alarms.get(CLOCK_ALARM).then((alarm) => {
+			const chromep = new ChromePromise();
+			chromep.alarms.get(_CLOCK_ALARM).then((alarm) => {
 				if (!alarm) {
-					chrome.alarms.create(CLOCK_ALARM, {
+					chrome.alarms.create(_CLOCK_ALARM, {
 						when: Date.now(),
 						periodInMinutes: 1,
 					});
@@ -270,103 +230,7 @@
 				app.GA.error(err.message, 'chromep.alarms.get(CLOCK_ALARM)');
 			});
 		}
-	};
-
-	/**
-	 * Process settings related to photo appearance
-	 * @memberOf app.ScreenSaver
-	 */
-	t.processPhotoSizing = function() {
-		t.photoSizing = app.Storage.getInt('photoSizing');
-		if (t.photoSizing === 4) {
-			// pick random sizing
-			t.photoSizing = app.Utils.getRandomInt(0, 3);
-		}
-		switch (t.photoSizing) {
-			case 0:
-				t.sizingType = 'contain';
-				break;
-			case 1:
-				t.sizingType = 'cover';
-				break;
-			case 2:
-			case 3:
-				t.sizingType = null;
-				break;
-			default:
-				break;
-		}
-	};
-
-	/**
-	 * Build and set the time string
-	 * @memberOf app.PhotoView
-	 */
-	t.setTime = function() {
-		const format = app.Storage.getInt('showTime');
-		const date = new Date();
-		let timeStr;
-
-		if (format === 0) {
-			// don't show time
-			timeStr = '';
-		} else if (format === 1) {
-			// 12 hour format
-			timeStr = date.toLocaleTimeString('en-us', {
-				hour: 'numeric',
-				minute: '2-digit',
-				hour12: true,
-			});
-			if (timeStr.endsWith('M')) {
-				// strip off AM/PM
-				timeStr = timeStr.substring(0, timeStr.length - 3);
-			}
-		} else {
-			// 24 hour format
-			timeStr = date.toLocaleTimeString(navigator.language, {
-				hour: 'numeric',
-				minute: '2-digit',
-				hour12: false,
-			});
-		}
-		t.set('time', timeStr);
-	};
-
-	/**
-	 * Build the Array of photos that will be displayed
-	 * and populate the neon-animated-pages
-	 * @memberOf app.ScreenSaver
-	 */
-	t.loadImages = function() {
-		let count = 0;
-		const arr = app.PhotoSource.getSelectedPhotos();
-
-		if (app.Storage.getBool('shuffle')) {
-			// randomize the order
-			app.Utils.shuffleArray(arr);
-		}
-
-		for (let i = 0; i &lt; arr.length; i++) {
-			if (!app.Photo.ignore(arr[i].asp, SCREEN_ASPECT, t.photoSizing)) {
-				const photo = new app.Photo('photo' + count, arr[i]);
-				t.itemsAll.push(photo);
-
-				if (count &lt; MAX_PAGES) {
-					// add a new animatable page - shallow copy
-					t.push('items',
-						JSON.parse(JSON.stringify(t.itemsAll[count])));
-					t.curIdx++;
-				}
-				count++;
-			}
-		}
-
-		if (!count) {
-			// No usable photos, display static image
-			t.$.noPhotos.style.visibility = 'visible';
-			t.noPhotos = true;
-		}
-	};
+	}
 
 	/**
 	 * Try to find a photo that has finished loading
@@ -375,7 +239,7 @@
 	 * -1 if none are loaded
 	 * @memberOf app.ScreenSaver
 	 */
-	t.findLoadedPhoto = function(idx) {
+	function _findLoadedPhoto(idx) {
 		if (app.PhotoView.isLoaded(idx)) {
 			return idx;
 		}
@@ -394,7 +258,7 @@
 			}
 		}
 		return -1;
-	};
+	}
 
 	/**
 	 * Add the next photo from the master array
@@ -402,21 +266,20 @@
 	 * @param {boolean} error - true if the photo at idx didn't load
 	 * @memberOf app.ScreenSaver
 	 */
-	t.replacePhoto = function(idx, error) {
-		let item;
-
+	function _replacePhoto(idx, error) {
 		if (error) {
 			// bad url, mark it
 			const name = app.PhotoView.getName(idx);
-			const index = t.itemsAll.map(function(item) {
-				return item.name;
-			}).indexOf(name);
+			const index = t.itemsAll.findIndex((element) => {
+				return element.name === name;
+			});
 			if (index !== -1) {
 				t.itemsAll[index].name = 'skip';
 			}
 		}
 
 		if (t.started &amp;&amp; (t.itemsAll.length > t.items.length)) {
+			let item;
 			for (let i = t.curIdx; i &lt; t.itemsAll.length; i++) {
 				// find a url that is ok, AFAWK
 				item = t.itemsAll[i];
@@ -429,20 +292,19 @@
 			t.rep.set('items.' + idx, JSON.parse(JSON.stringify(item)));
 			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
 		}
-	};
+	}
 
 	/**
 	 * Replace the active photos with new photos from the master array
 	 * @memberOf app.ScreenSaver
 	 */
-	t.replaceAllPhotos = function() {
+	function _replaceAllPhotos() {
 		if (t.itemsAll.length > t.items.length) {
 			let pos = 0;
-			let item;
 			let newIdx = t.curIdx;
 			for (let i = t.curIdx; i &lt; t.itemsAll.length; i++) {
 				newIdx = i;
-				item = t.itemsAll[i];
+				const item = t.itemsAll[i];
 				if (item.name !== 'skip') {
 					if ((pos !== t.lastSelected) &amp;&amp;
 						(pos !== t.p.selected)) {
@@ -458,7 +320,7 @@
 			}
 			t.curIdx = (newIdx === t.itemsAll.length - 1) ? 0 : newIdx + 1;
 		}
-	};
+	}
 
 	/**
 	 * Get the next photo to display
@@ -467,8 +329,8 @@
 	 * to display, -1 if none are ready
 	 * @memberOf app.ScreenSaver
 	 */
-	t.getNextPhoto = function(idx) {
-		let ret = t.findLoadedPhoto(idx);
+	function _getNextPhoto(idx) {
+		let ret = _findLoadedPhoto(idx);
 		if (ret === -1) {
 			if (t.waitForLoad) {
 				// no photos ready.. wait a little and try again the first time
@@ -477,9 +339,9 @@
 			} else {
 				// tried waiting for load, now replace the current photos
 				t.waitTime = 200;
-				t.replaceAllPhotos();
+				_replaceAllPhotos();
 				idx = (idx === t.items.length - 1) ? 0 : idx + 1;
-				ret = t.findLoadedPhoto(idx);
+				ret = _findLoadedPhoto(idx);
 			}
 		} else if (t.waitTime !== t.transitionTime) {
 			// photo found, set the waitTime back to transition time in case
@@ -487,24 +349,24 @@
 			t.waitTime = t.transitionTime;
 		}
 		return ret;
-	};
+	}
 
 	/**
 	 * Called at fixed time intervals to cycle through the photos
 	 * Runs forever
 	 * @memberOf app.ScreenSaver
 	 */
-	t.runShow = function() {
+	function _runShow() {
 		const curPage = (t.p.selected === undefined) ? 0 : t.p.selected;
 		const prevPage = (curPage > 0) ? curPage - 1 : t.items.length - 1;
 		let selected = (curPage === t.items.length - 1) ? 0 : curPage + 1;
 
 		// replace the previous selected with the next one from master array
-		t.replacePhoto(t.lastSelected, false);
+		_replacePhoto(t.lastSelected, false);
 
 		if (app.PhotoView.isError(prevPage)) {
 			// broken link, mark it and replace it
-			t.replacePhoto(prevPage, true);
+			_replacePhoto(prevPage, true);
 		}
 
 		if (t.p.selected === undefined) {
@@ -517,9 +379,9 @@
 			t.started = true;
 		}
 
-		selected = t.getNextPhoto(selected);
+		selected = _getNextPhoto(selected);
 		if (selected !== -1) {
-			t.setTime();
+			t.set('time', app.SSUtils.getTime());
 			// If a new photo is ready, prep it
 			app.PhotoView.prep(selected, t.photoSizing);
 
@@ -529,9 +391,10 @@
 		}
 
 		// setup the next timer --- runs forever
-		t.timer = window.setTimeout(t.runShow, t.waitTime);
-	};
+		t.timer = window.setTimeout(_runShow, t.waitTime);
+	}
 
+	// noinspection JSUnusedLocalSymbols
 	/**
 	 * Event: Fired when a message is sent from either an extension process&lt;br>
 	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
@@ -542,44 +405,30 @@
 	 * @returns {boolean} true if asynchronous
 	 * @memberOf app.ScreenSaver
 	 */
-	t.onMessage = function(request, sender, response) {
+	function _onMessage(request, sender, response) {
 		if (request.message === app.Msg.SS_CLOSE.message) {
-			t.closeWindow();
+			app.SSUtils.close();
 		} else if(request.message === app.Msg.SS_IS_SHOWING.message) {
 			// let people know we are here
 			response({message: 'OK'});
 		}
 		return false;
-	};
+	}
 
 	/**
-	 * Listen for alarms
+	 * Event: Listen for alarms
 	 * @param {Object} alarm - chrome alarm
 	 * @param {string} alarm.name - alarm type
 	 * @memberOf app.ScreenSaver
 	 */
-	t.onAlarm = function(alarm) {
-		if (alarm.name === CLOCK_ALARM) {
+	function _onAlarm(alarm) {
+		if (alarm.name === _CLOCK_ALARM) {
 			// update time label
 			if (t.p &amp;&amp; (t.p.selected !== undefined)) {
-				t.setTime();
+				t.set('time', app.SSUtils.getTime());
 			}
 		}
-	};
-
-	/**
-	 * Close ourselves
-	 * @memberOf app.ScreenSaver
-	 */
-	t.closeWindow = function() {
-		// send message to other screen savers to close themselves
-		app.Msg.send(app.Msg.SS_CLOSE).catch(() => {});
-
-		setTimeout(function() {
-			// delay a little to process events
-			window.close();
-		}, 750);
-	};
+	}
 
 	/**
 	 * Event listener for mouse clicks
@@ -589,7 +438,7 @@
 		if (t.p &amp;&amp; (t.p.selected !== undefined)) {
 			app.Photo.showSource(t.items[t.p.selected]);
 		}
-		t.closeWindow();
+		app.SSUtils.close();
 	}, false);
 
 	/**
@@ -597,7 +446,7 @@
 	 * Close window (prob won't work on Chrome OS)
 	 */
 	window.addEventListener('keydown', function() {
-		t.closeWindow();
+		app.SSUtils.close();
 	}, false);
 
 	/**
@@ -610,7 +459,7 @@
 			const deltaY = Math.abs(event.clientY - t.startMouse.y);
 			if (Math.max(deltaX, deltaY) > 10) {
 				// close after a minimum amount of mouse movement
-				t.closeWindow();
+				app.SSUtils.close();
 			}
 		} else {
 			// first move, set values
@@ -664,7 +513,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 24th 2017, 10:27:23 pm
+		on May 25th 2017, 10:40:56 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

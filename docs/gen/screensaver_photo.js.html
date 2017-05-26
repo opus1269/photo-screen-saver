@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: msg.js</title>
+	<title>Documentation Source: screensaver/photo.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: msg.js</h1>
+		<h1 class="page-title">Source: screensaver/photo.js</h1>
     
 <section>
     <article>
@@ -90,137 +90,156 @@
  *  https://opensource.org/licenses/BSD-3-Clause
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
-window.app = window.app || {};
-
-/**
- * Wrapper for chrome messages
- * @namespace
- */
-app.Msg = (function() {
+(function() {
 	'use strict';
 
 	new ExceptionHandler();
 
 	/**
-	 * A Chrome message
-	 * @typedef {{}} app.Msg.Message
-	 * @property {string} message - Unique name
-	 * @memberOf app.Msg
+	 * A photo for the screen saver
+	 * Important: Only implement static methods. This Object
+	 * will be shallow copied in the screensaver and lose its instance methods
+	 *
+	 * @property {string} name - Unique name
+	 * @property {string} path - The url to the photo
+	 * @property {string} author - The photographer
+	 * @property {string} type - type of {@link app.PhotoSource}
+	 * @property {int} width - width
+	 * @property {int} height - height
+	 * @property {number} aspectRatio - aspect ratio
+	 * @property {Object} ex - additional information about the photo
+	 * @property {string} point - geolocation 'lat lon'
+	 * @property {string} label - author label
+	 * @property {?string} location - geolocation label
+	 * @param {string} name - unique name
+	 * @param {app.PhotoSource.SourcePhoto} source - source photo
+	 * @param {string} sourceType - type of {@link app.PhotoSource}
+	 * @constructor
+	 * @alias app.Photo
 	 */
+	const Photo = function(name, source, sourceType) {
+		this.name = name;
+		this.path = source.url;
+		this.author = source.author ? source.author : '';
+		this.type = sourceType;
+		this.aspectRatio = source.asp;
+		this.ex = source.ex;
+        this.point = source.point;
+		this.width = screen.width;
+		this.height = screen.height;
+		this.label = Photo.buildAuthorLabel(this.type, this.author, false);
+		this.location = null;
+	};
+
+	window.app = window.app || {};
+	app.Photo = Photo;
 
 	/**
-	 * Show {@link app.ScreenSaver}
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
+	 * Create the author label
+	 * @param {string} type - source of photo
+	 * @param {string} author - author of photo
+	 * @param {boolean} force - require display of label if true
+	 * @returns {string} label describing the photo source and photographer name
 	 */
-	const SS_SHOW = {
-		message: 'showScreensaver',
+	Photo.buildAuthorLabel = function(type, author, force) {
+		let ret = '';
+		let newType = type;
+		const idx = type.search('User');
+
+		if (!force &amp;&amp; !app.Storage.getBool('showPhotog') &amp;&amp; (idx !== -1)) {
+			// don't show label for user's own photos, if requested
+			return ret;
+		}
+
+		if (idx !== -1) {
+			// strip off 'User'
+			newType = type.substring(0, idx - 1);
+		}
+
+		if (author) {
+			ret = `${author} / ${newType}`;
+		} else {
+			// no photographer name
+			ret = `Photo from ${newType}`;
+		}
+		return ret;
 	};
 
 	/**
-	 * Close {@link app.ScreenSaver}
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
+	 * Determine if a photo would look bad zoomed or stretched on the screen
+	 * @param {number} asp aspect ratio of photo
+	 * @param {number} screenAsp - the screen aspect ratio
+	 * @returns {boolean} true if a photo aspect ratio differs substantially
+	 * from the screens'
+	 * @private
 	 */
-	const SS_CLOSE = {
-		message: 'closeScreensaver',
+	Photo._isBadAspect = function(asp, screenAsp) {
+		// arbitrary
+		const CUT_OFF = 0.5;
+		return (asp &lt; screenAsp - CUT_OFF) || (asp > screenAsp + CUT_OFF);
 	};
 
 	/**
-	 * Is a {@link app.ScreenSaver} showing
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
+	 * Determine if a photo should not be displayed
+	 * @param {number} asp - aspect ratio
+	 * @param {number} screenAsp - the screen aspect ratio
+	 * @param {int} photoSizing - the sizing type
+	 * @returns {boolean} true if the photo should not be displayed
 	 */
-	const SS_IS_SHOWING = {
-		message: 'isScreensaverShowing',
+	Photo.ignore = function(asp, screenAsp, photoSizing) {
+		let ret = false;
+		const skip = app.Storage.getBool('skip');
+
+		if ((!asp || isNaN(asp)) ||
+			(skip &amp;&amp; ((photoSizing === 1) || (photoSizing === 3)) &amp;&amp;
+			Photo._isBadAspect(asp, screenAsp))) {
+			// ignore photos that don't have aspect ratio
+			// or would look bad with cropped or stretched sizing options
+			ret = true;
+		}
+		return ret;
 	};
 
 	/**
-	 * Restore default settings
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
+	 * Create a new tab with a link to the
+	 * original source of the current photo, if possible
+	 * @param {Object} item - a photo item
 	 */
-	const RESTORE_DEFAULTS = {
-		message: 'restoreDefaults',
-	};
+	Photo.showSource = function(item) {
+		if (!item) {
+			return;
+		}
+		const path = item.path;
+		const extra = item.ex;
+		let regex;
+		let id;
+		let url;
 
-	/**
-	 * Highlight a tab
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
-	 */
-	const HIGHLIGHT = {
-		message: 'highlightTab',
-	};
-
-	/**
-	 * A save attempt to localStorage exceeded its capacity
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
-	 */
-	const STORAGE_EXCEEDED = {
-		message: 'storageExceeded',
-	};
-
-	/**
-	 * A Chrome message that an {@link app.PhotoSource} server request failed
-	 * @typedef {app.Msg.Message} app.Msg.PhotoSourceFailed
-	 * @property {string} message - Unique name
-	 * @property {string} type - the photo source
-	 * @property {Error} error - the failure reason
-	 * @memberOf app.Msg
-	 */
-
-	/**
-	 * An {@link app.PhotoSource} server request failed
-	 * @type {app.Msg.PhotoSourceFailed}
-	 * @memberOf app.Msg
-	 */
-	const PHOTO_SOURCE_FAILED = {
-		message: 'photoSourceFailed',
-		type: '',
-		error: '',
-	};
-
-	return {
-
-		SS_SHOW: SS_SHOW,
-		SS_CLOSE: SS_CLOSE,
-		SS_IS_SHOWING: SS_IS_SHOWING,
-		RESTORE_DEFAULTS: RESTORE_DEFAULTS,
-		HIGHLIGHT: HIGHLIGHT,
-		STORAGE_EXCEEDED: STORAGE_EXCEEDED,
-		PHOTO_SOURCE_FAILED: PHOTO_SOURCE_FAILED,
-
-		/**
-		 * Send a chrome message
-		 * @param {app.Msg.Message} type - type of message
-		 * @returns {Promise&lt;JSON>} response JSON
-		 * @memberOf app.Msg
-		 */
-		send: function(type) {
-			const chromep = new ChromePromise();
-			return chromep.runtime.sendMessage(type, null).then((response) => {
-				return Promise.resolve(response);
-			}).catch((err) => {
-				if (err.message &amp;&amp;
-					!err.message.includes('port closed') &amp;&amp;
-					!err.message.includes('Receiving end does not exist')) {
-					const msg = `type: ${type.message}, ${err.message}`;
-					app.GA.error(msg, 'app.Msg.send');
+		switch (item.type) {
+			case '500':
+				// parse photo id
+				regex = /(\/[^\/]*){4}/;
+				id = path.match(regex);
+				url = `http://500px.com/photo${id[1]}`;
+				chrome.tabs.create({url: url});
+				break;
+			case 'flickr':
+				if (extra) {
+					// parse photo id
+					regex = /(\/[^\/]*){4}(_.*_)/;
+					id = path.match(regex);
+					url = `https://www.flickr.com/photos/${item.ex}${id[1]}`;
+					chrome.tabs.create({url: url});
 				}
-				return Promise.reject(err);
-			});
-		},
-
-		/**
-		 * Add a listener for chrome messages
-		 * @param {Function} listener - function to receive messages
-		 * @memberOf app.Msg
-		 */
-		listen: function(listener) {
-			chrome.runtime.onMessage.addListener(listener);
-		},
+				break;
+			case 'reddit':
+				if (extra) {
+					chrome.tabs.create({url: item.ex});
+				}
+				break;
+			default:
+				break;
+		}
 	};
 })();
 </pre>

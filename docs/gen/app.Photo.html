@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSUtils.html">app.SSUtils</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -98,7 +98,7 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="Photo"><span class="type-signature"></span>new Photo<span class="signature">(name, source)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Photo"><span class="type-signature"></span>new Photo<span class="signature">(name, source, sourceType)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -173,7 +173,7 @@ will be shallow copied in the screensaver and lose its instance methods</p>
             <td class="type">
             
                 
-<span class="param-type"><a href="app.PhotoSource.html#.Photo">app.PhotoSource.Photo</a></span>
+<span class="param-type"><a href="app.PhotoSource.html#.SourcePhoto">app.PhotoSource.SourcePhoto</a></span>
 
 
 
@@ -188,6 +188,30 @@ will be shallow copied in the screensaver and lose its instance methods</p>
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>sourceType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>type of <a href="app.PhotoSource.html">app.PhotoSource</a></p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -195,6 +219,369 @@ will be shallow copied in the screensaver and lose its instance methods</p>
 
     
 <dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Unique name</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The url to the photo</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>author</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The photographer</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>type of <a href="app.PhotoSource.html">app.PhotoSource</a></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>width</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>width</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>height</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>height</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>aspectRatio</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>aspect ratio</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ex</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>additional information about the photo</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>point</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>geolocation 'lat lon'</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>label</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>author label</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>geolocation label</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
     
 
 	
@@ -228,8 +615,8 @@ will be shallow copied in the screensaver and lose its instance methods</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="photo.js.html">photo.js</a>,
-				 <a href="photo.js.html#sunlight-1-line-37">line 37</a>
+				<a href="screensaver_photo.js.html">screensaver/photo.js</a>,
+				 <a href="screensaver_photo.js.html#sunlight-1-line-34">line 34</a>
 			</li>
 		</ul>
 	</dd>
@@ -408,8 +795,8 @@ will be shallow copied in the screensaver and lose its instance methods</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="photo.js.html">photo.js</a>,
-				 <a href="photo.js.html#sunlight-1-line-93">line 93</a>
+				<a href="screensaver_photo.js.html">screensaver/photo.js</a>,
+				 <a href="screensaver_photo.js.html#sunlight-1-line-90">line 90</a>
 			</li>
 		</ul>
 	</dd>
@@ -619,8 +1006,8 @@ from the screens'</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="photo.js.html">photo.js</a>,
-				 <a href="photo.js.html#sunlight-1-line-61">line 61</a>
+				<a href="screensaver_photo.js.html">screensaver/photo.js</a>,
+				 <a href="screensaver_photo.js.html#sunlight-1-line-58">line 58</a>
 			</li>
 		</ul>
 	</dd>
@@ -829,8 +1216,8 @@ from the screens'</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="photo.js.html">photo.js</a>,
-				 <a href="photo.js.html#sunlight-1-line-106">line 106</a>
+				<a href="screensaver_photo.js.html">screensaver/photo.js</a>,
+				 <a href="screensaver_photo.js.html#sunlight-1-line-103">line 103</a>
 			</li>
 		</ul>
 	</dd>
@@ -992,8 +1379,8 @@ original source of the current photo, if possible</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="photo.js.html">photo.js</a>,
-				 <a href="photo.js.html#sunlight-1-line-125">line 125</a>
+				<a href="screensaver_photo.js.html">screensaver/photo.js</a>,
+				 <a href="screensaver_photo.js.html#sunlight-1-line-122">line 122</a>
 			</li>
 		</ul>
 	</dd>
@@ -1076,7 +1463,7 @@ original source of the current photo, if possible</p>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 24th 2017, 10:27:23 pm
+		on May 25th 2017, 10:40:57 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

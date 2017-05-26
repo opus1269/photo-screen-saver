@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: background.js</title>
+	<title>Documentation Source: background/ss_controller.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSUtils.html">app.SSUtils</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: background.js</h1>
+		<h1 class="page-title">Source: background/ss_controller.js</h1>
     
 <section>
     <article>
@@ -90,144 +90,163 @@
  *  https://opensource.org/licenses/BSD-3-Clause
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
-(function() {
-	'use strict';
+window.app = window.app || {};
 
-	/**
-	 * The background script for the extension.&lt;br>
-	 * @namespace app.Background
-	 */
+/**
+ * Controller for the screen saver
+ * @namespace
+ */
+app.SSControl = (function() {
+	'use strict';
 
 	new ExceptionHandler();
 
 	const chromep = new ChromePromise();
 
 	/**
-	 * Display the options tab
+	 * Screensaver URL
+	 * @type {string}
+	 * @default
+	 * @const
 	 * @private
-	 * @memberOf app.Background
+	 * @memberOf app.SSControl
 	 */
-	function _showOptionsTab() {
-		// send message to the option tab to focus it.
-		app.Msg.send(app.Msg.HIGHLIGHT).catch(() => {
-			// no one listening, create it
-			chrome.tabs.create({url: '../html/options.html'});
+	const _SS_URL = '/html/screensaver.html';
+
+	/**
+	 * Determine if there is a full screen chrome window running on a display
+	 * @param {Object} display - a connected display
+	 * @returns {Promise&lt;boolean>} true if there is a full screen
+	 * window on the display
+	 * @private
+	 * @memberOf app.SSControl
+	 */
+	function _hasFullscreen(display) {
+		if (app.Storage.getBool('chromeFullscreen')) {
+			return chromep.windows.getAll({populate: false}).then((wins) => {
+				let ret = false;
+				const left = display ? display.bounds.left : 0;
+				const top = display ? display.bounds.top : 0;
+				for (let i = 0; i &lt; wins.length; i++) {
+					const win = wins[i];
+					if ((win.state === 'fullscreen') &amp;&amp;
+						(!display || (win.top === top &amp;&amp; win.left === left))) {
+						ret = true;
+						break;
+					}
+				}
+				return Promise.resolve(ret);
+			});
+		} else {
+			return Promise.resolve(false);
+		}
+	}
+
+	/**
+	 * Determine if the screen saver is currently showing
+	 * @returns {Promise&lt;boolean>} true if showing
+	 * @private
+	 * @memberOf app.SSControl
+	 */
+	function _isShowing() {
+		// send message to the screensaver to see if he is around
+		return app.Msg.send(app.Msg.SS_IS_SHOWING).then(() => {
+			return Promise.resolve(true);
+		}).catch(() => {
+			// no one listening
+			return Promise.resolve(false);
 		});
 	}
 
 	/**
-	 * Toggle enabled state of the screen saver
+	 * Open a screen saver window on the given display
+	 * @param {Object} display - a connected display
 	 * @private
-	 * @memberOf app.Background
+	 * @memberOf app.SSControl
 	 */
-	function _toggleEnabled() {
-		app.Storage.set('enabled', !app.Storage.getBool('enabled'));
-		// storage changed event not fired on same page as the change
-		app.Data.processState('enabled');
-	}
-
-	/**
-	 * Event: Fired when the extension is first installed,&lt;br />
-	 * when the extension is updated to a new version,&lt;br />
-	 * and when Chrome is updated to a new version.
-	 * @see https://developer.chrome.com/extensions/runtime#event-onInstalled
-	 * @param {Object} details - type of event
-	 * @private
-	 * @memberOf app.Background
-	 */
-	function _onInstalled(details) {
-		// create menus on the right click menu of the extension icon
-		chromep.contextMenus.create({
-			type: 'normal',
-			id: 'ENABLE_MENU',
-			title: app.Utils.localize('disable'),
-			contexts: ['browser_action'],
-		}).catch((err) => {
-			if (!err.message.includes('duplicate id')) {
-				app.GA.error(err.message, 'chromep.contextMenus.create');
+	function _open(display) {
+		// window creation options
+		const winOpts = {
+			url: _SS_URL,
+			focused: true,
+			type: 'popup',
+		};
+		_hasFullscreen(display).then((isTrue) => {
+			if (isTrue) {
+				// don't display if there is a fullscreen window
+				return null;
 			}
-		});
 
-		chromep.contextMenus.create({
-			type: 'separator',
-			id: 'SEP_MENU',
-			contexts: ['browser_action'],
-		}).catch((err) => {
-			if (!err.message.includes('duplicate id')) {
-				app.GA.error(err.message, 'chromep.contextMenus.create');
+			if (app.Utils.getChromeVersion() >= 44 &amp;&amp; !display) {
+				// Chrome supports fullscreen option on create since version 44
+				winOpts.state = 'fullscreen';
+			} else {
+				const left = display ? display.bounds.left : 0;
+				const top = display ? display.bounds.top : 0;
+				winOpts.left = left;
+				winOpts.top = top;
+				winOpts.width = 1;
+				winOpts.height = 1;
 			}
+
+			return chromep.windows.create(winOpts);
+		}).then((win) => {
+			if (win &amp;&amp; (winOpts.state !== 'fullscreen')) {
+				chrome.windows.update(win.id, {state: 'fullscreen'});
+			}
+			return null;
+		}).catch((err) => {
+			app.GA.error(err.message, 'app.SSControl._open');
 		});
-
-		if (details.reason === 'install') {
-			app.GA.event(app.GA.EVENT.INSTALLED);
-			app.Data.initialize();
-			_showOptionsTab();
-		} else if (details.reason === 'update') {
-			// extension updated
-			app.Data.update();
-		}
 	}
 
 	/**
-	 * Event: Fired when a profile that has this extension installed first
-	 * starts up
-	 * @see https://developer.chrome.com/extensions/runtime#event-onStartup
+	 * Open a screensaver on every display
 	 * @private
-	 * @memberOf app.Background
+	 * @memberOf app.SSControl
 	 */
-	function _onStartup() {
-		app.GA.page('/background.html');
-		app.Data.processState();
+	function _openOnAllDisplays() {
+		chromep.system.display.getInfo().then((displayArr) => {
+			if (displayArr.length === 1) {
+				_open(null);
+			} else {
+				displayArr.forEach((display) => {
+					_open(display);
+				});
+			}
+			return Promise.resolve();
+		}).catch((err) => {
+			app.GA.error(err.message, 'app.SSControl._openOnAllDisplays');
+		});
 	}
 
 	/**
-	 * Event: Fired when a browser action icon is clicked.
-	 * @see https://goo.gl/abVwKu
+	 * Event: Fired when the system changes to an active, idle or locked state.
+	 * The event fires with "locked" if the screen is locked or the screensaver
+	 * activates, "idle" if the system is unlocked and the user has not
+	 * generated any input for a specified number of seconds, and "active"
+	 * when the user generates input on an idle system.
+	 * @see https://developer.chrome.com/extensions/idle#event-onStateChanged
+	 * @param {string} state - current state of computer
 	 * @private
-	 * @memberOf app.Background
+	 * @memberOf app.SSControl
 	 */
-	function _onIconClicked() {
-		_showOptionsTab();
-	}
-
-	/**
-	 * Event: Fired when item in localStorage changes
-	 * @see https://developer.mozilla.org/en-US/docs/Web/Events/storage
-	 * @param {Event} event - StorageEvent
-	 * @param {string} event.key - storage item that changed
-	 * @private
-	 * @memberOf app.Background
-	 */
-	function _onStorageChanged(event) {
-		app.Data.processState(event.key);
-	}
-
-	/**
-	 * Event: Fired when a context menu item is clicked.
-	 * @see https://developer.chrome.com/extensions/contextMenus#event-onClicked
-	 * @param {Object} info - info. on the clicked menu
-	 * @param {Object} info.menuItemId - menu name
-	 * @private
-	 * @memberOf app.Background
-	 */
-	function _onMenuClicked(info) {
-		if (info.menuItemId === 'ENABLE_MENU') {
-			_toggleEnabled();
-		}
-	}
-
-	/**
-	 * Event: Fired when a registered command is activated using
-	 * a keyboard shortcut.
-	 * @see https://developer.chrome.com/extensions/commands#event-onCommand
-	 * @param {string} cmd - keyboard command
-	 * @private
-	 * @memberOf app.Background
-	 */
-	function _onKeyCommand(cmd) {
-		if (cmd === 'toggle-enabled') {
-			_toggleEnabled();
-		}
+	function _onIdleStateChanged(state) {
+		_isShowing().then((isTrue) => {
+			if (state === 'idle' &amp;&amp; app.Alarm.isActive() &amp;&amp; !isTrue) {
+				app.SSControl.display(false);
+			} else {
+				if (!app.Utils.isWin()) {
+					// Windows 10 Creator triggers an 'active' state
+					// when the window is created so we have to skip
+					// closing here
+					app.SSControl.close();
+				}
+			}
+			return null;
+		}).catch((err) => {
+			app.GA.error(err.message, 'app.SSControl._isShowing');
+		});
 	}
 
 	// noinspection JSUnusedLocalSymbols
@@ -238,38 +257,49 @@
 	 * @param {Object} request - details for the message
 	 * @param {string} request.message - name of the message
 	 * @param {Object} sender - MessageSender object
-	 * @param {function} response - function _to call once after processing
+	 * @param {function} response - function to call once after processing
 	 * @returns {boolean} true if asynchronous
 	 * @private
-	 * @memberOf app.Background
+	 * @memberOf app.SSControl
 	 */
 	function _onChromeMessage(request, sender, response) {
-		if (request.message === app.Msg.RESTORE_DEFAULTS.message) {
-			app.Data.restoreDefaults();
+		if (request.message === app.Msg.SS_SHOW.message) {
+			// preview the screensaver
+			app.SSControl.display(true);
 		}
 		return false;
 	}
 
-	// listen for extension install or update
-	chrome.runtime.onInstalled.addListener(_onInstalled);
-
-	// listen for Chrome starting
-	chrome.runtime.onStartup.addListener(_onStartup);
-
-	// listen for click on the icon
-	chrome.browserAction.onClicked.addListener(_onIconClicked);
-
-	// listen for changes to the stored data
-	addEventListener('storage', _onStorageChanged, false);
+	// listen for changes to the idle state of the computer
+	chrome.idle.onStateChanged.addListener(_onIdleStateChanged);
 
 	// listen for chrome messages
-	chrome.runtime.onMessage.addListener(_onChromeMessage);
+	app.Msg.listen(_onChromeMessage);
 
-	// listen for clicks on context menus
-	chrome.contextMenus.onClicked.addListener(_onMenuClicked);
+	return {
+		/**
+		 * Display the screen saver(s)
+		 * !Important: Always request screensaver through this call
+		 * @param {boolean} single - if true, only show on one display
+		 * @memberOf app.SSControl
+		 */
+		display: function(single) {
+			if (!single &amp;&amp; app.Storage.getBool('allDisplays')) {
+				_openOnAllDisplays();
+			} else {
+				_open(null);
+			}
+		},
 
-	// listen for special keyboard commands
-	chrome.commands.onCommand.addListener(_onKeyCommand);
+		/**
+		 * Close all the screen saver windows
+		 * @memberOf app.SSControl
+		 */
+		close: function() {
+			// send message to the screen savers to close themselves
+			app.Msg.send(app.Msg.SS_CLOSE).catch(() => {});
+		},
+	};
 })();
 </pre>
     </article>
@@ -316,7 +346,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 24th 2017, 10:27:23 pm
+		on May 25th 2017, 10:40:57 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
