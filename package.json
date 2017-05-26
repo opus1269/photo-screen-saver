@@ -27,7 +27,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "gulp": "^3.9.1",
     "gulp-changed": "^3.0.0",
-    "gulp-clean-css": "^3.0.3",
+    "gulp-clean-css": "^3.4.0",
     "gulp-crisper": "^1.1.0",
     "gulp-eslint": "^3.0.1",
     "gulp-html-extract": "^0.3.0",
@@ -41,12 +41,12 @@
     "gulp-replace": "^0.5.4",
     "gulp-size": "^2.1.0",
     "gulp-strip-line": "0.0.1",
-    "gulp-uglify": "^2.0.1",
+    "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
     "gulp-vulcanize": "^6.1.0",
     "gulp-zip": "^4.0.0",
     "run-sequence": "^1.2.2",
-    "uglify-js-harmony": "^2.7.7",
+    "uglify-es": "^3.0.11",
     "vulcanize": "^1.15.3"
   }
 }
