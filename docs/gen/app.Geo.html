@@ -169,89 +169,8 @@
         <dl>
             
 <hr>
-<dt class="name" id="._LOC_CACHE">
-    <h4 id="._LOC_CACHE"><span class="type-signature">&lt;private, static, constant> </span>_LOC_CACHE<span class="type-signature"> :<a href="app.Geo.html#.Cache">app.Geo.Cache</a></span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Location cache</p>
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type"><a href="app.Geo.html#.Cache">app.Geo.Cache</a></span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="screensaver_geo.js.html">screensaver/geo.js</a>,
-				 <a href="screensaver_geo.js.html#sunlight-1-line-51">line 51</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id=".GOOGLE_APIS_URI">
-    <h4 id=".GOOGLE_APIS_URI"><span class="type-signature">&lt;private, static, constant> </span>GOOGLE_APIS_URI<span class="type-signature"> :string</span></h4>
+<dt class="name" id="._GEOCODE_API">
+    <h4 id="._GEOCODE_API"><span class="type-signature">&lt;private, static, constant> </span>_GEOCODE_API<span class="type-signature"> :string</span></h4>
 
     
 </dt>
@@ -335,6 +254,87 @@
     
 </dd>
 
+        
+            
+<hr>
+<dt class="name" id="._LOC_CACHE">
+    <h4 id="._LOC_CACHE"><span class="type-signature">&lt;private, static, constant> </span>_LOC_CACHE<span class="type-signature"> :<a href="app.Geo.html#.Cache">app.Geo.Cache</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Location cache</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="app.Geo.html#.Cache">app.Geo.Cache</a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_geo.js.html">screensaver/geo.js</a>,
+				 <a href="screensaver_geo.js.html#sunlight-1-line-51">line 51</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
         </dl>
     
 
@@ -342,6 +342,333 @@
         <h3 class="subsection-title">Methods</h3>
 
         <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="._addToCache"><span class="type-signature">&lt;private, static> </span>_addToCache<span class="signature">(point, location)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Try to get (@link app.Geo.Location} from cache</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>point</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a geolocation</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>description</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_geo.js.html">screensaver/geo.js</a>,
+				 <a href="screensaver_geo.js.html#sunlight-1-line-76">line 76</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._getFromCache"><span class="type-signature">&lt;private, static> </span>_getFromCache<span class="signature">(point)</span><span class="type-signature"> &rarr; {<a href="app.Geo.html#.Location">app.Geo.Location</a>|undefined}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Try to get (@link app.Geo.Location} from cache</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>point</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a geolocation</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_geo.js.html">screensaver/geo.js</a>,
+				 <a href="screensaver_geo.js.html#sunlight-1-line-63">line 63</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>location, undefined if not cached</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="app.Geo.html#.Location">app.Geo.Location</a></span>
+|
+
+<span class="param-type">undefined</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
             
 <hr>
 <dt>
@@ -450,7 +777,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="screensaver_geo.js.html">screensaver/geo.js</a>,
-				 <a href="screensaver_geo.js.html#sunlight-1-line-91">line 91</a>
+				 <a href="screensaver_geo.js.html#sunlight-1-line-93">line 93</a>
 			</li>
 		</ul>
 	</dd>
@@ -853,7 +1180,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 25th 2017, 10:40:57 pm
+		on May 27th 2017, 3:41:21 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
