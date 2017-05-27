@@ -27,6 +27,19 @@ app.SSUtils = (function() {
 
 	return {
 		/**
+		 * Set the state when no photos are available
+		 * @param {Object} t - screensaver template
+		 * @memberOf app.SSUtils
+		 */
+		setNoPhotos: function(t) {
+			if (t && t.$) {
+				t.$.noPhotos.style.visibility = 'visible';
+				t.$.pages.style.visibility = 'hidden';
+				t.noPhotos = true;
+			}
+		},
+
+		/**
 		 * Set the window zoom factor to 1.0
 		 * @memberOf app.SSUtils
 		 */
@@ -91,6 +104,7 @@ app.SSUtils = (function() {
 						const photo =
 							new app.Photo('photo' + ct, sourcePhoto, type);
 						t.itemsAll.push(photo);
+						ct++;
 					}
 				});
 			});
@@ -108,11 +122,16 @@ app.SSUtils = (function() {
 				t.push('items', JSON.parse(JSON.stringify(photo)));
 				t.curIdx++;
 			}
+			// force update of repeat template
+			t.rep.render();
+			// set the geo locations
+			t.items.forEach((item, index) => {
+				app.PhotoView.setLocation(index);
+			});
 
 			if (!t.itemsAll || (t.itemsAll.length === 0)) {
 				// No usable photos, display static image
-				t.$.noPhotos.style.visibility = 'visible';
-				t.noPhotos = true;
+				app.SSUtils.setNoPhotos(t);
 			}
 		},
 

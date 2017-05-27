@@ -94,7 +94,6 @@
 
 		app.SSUtils.setZoom();
 		app.SSUtils.setupPhotoSizing(t);
-
 		_processPhotoTransitions();
 
 		// load the photos for the slide show
@@ -107,6 +106,25 @@
 			t.timer = window.setTimeout(_runShow, t.waitTime);
 		}
 	});
+
+	/**
+	 * Event: Slide animation finished
+	 * @memberOf app.ScreenSaver
+	 */
+	t._OnAniFinished = function() {
+		// replace the previous selected with the next one from master array
+		// do it here so the web request doesn't run during transition
+		if (t.replaceLast >= 0) {
+			_replacePhoto(t.replaceLast, false);
+		}
+
+		if (app.PhotoView.isError(t.prevPage)) {
+			// broken link, mark it and replace it
+			if (t.prevPage >= 0) {
+				_replacePhoto(t.prevPage, true);
+			}
+		}
+	};
 
 	/**
 	 * Process settings related to between photo transitions
@@ -147,28 +165,59 @@
 	}
 
 	/**
+	 * Set the photo item
+	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
+	 * @param {app.Photo} item - An {@link app.Photo}
+	 * @private
+	 */
+	function _setItem(idx, item) {
+		t.rep.set('items.' + idx, JSON.parse(JSON.stringify(item)));
+		app.PhotoView.setLocation(idx);
+	}
+
+	/**
+	 * Mark a photo in t.itemsAll as unusable
+	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
+	 * @private
+	 */
+	function _markPhotoBad(idx) {
+		const name = app.PhotoView.getName(idx);
+		const index = t.itemsAll.findIndex((item) => {
+			return item.name === name;
+		});
+		if (index !== -1) {
+			t.itemsAll[index].name = 'skip';
+			const skipAll = t.itemsAll.every((item) => {
+				return item.name === 'skip';
+			});
+			if (skipAll) {
+				// if all items are bad set no photos state
+				app.SSUtils.setNoPhotos(t);
+			}
+		}
+	}
+
+	/**
 	 * Try to find a photo that has finished loading
 	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
-	 * @returns {int} index into t.items of a loaded photo,
-	 * -1 if none are loaded
+	 * @returns {int} index into t.items, -1 if none are loaded
 	 * @memberOf app.ScreenSaver
 	 */
 	function _findLoadedPhoto(idx) {
 		if (app.PhotoView.isLoaded(idx)) {
 			return idx;
 		}
-		for (let i = idx + 1; i < t.items.length; i++) {
-			if ((i !== t.lastSelected) &&
-				(i !== t.p.selected) &&
-				app.PhotoView.isLoaded(i)) {
-				return i;
+		// wrap-around loop: https://stackoverflow.com/a/28430482/4468645
+		for (let i = 0; i < t.items.length; i++) {
+			const index = (i + idx) % t.items.length;
+			if ((index === t.lastSelected) || (index === t.p.selected)) {
+				// don't use current animation pair
+				continue;
 			}
-		}
-		for (let i = 0; i < idx; i++) {
-			if ((i !== t.lastSelected) &&
-				(i !== t.p.selected) &&
-				app.PhotoView.isLoaded(i)) {
-				return i;
+			if (app.PhotoView.isLoaded(index)) {
+				return index;
+			} else if (app.PhotoView.isError(index)) {
+				_markPhotoBad(index);
 			}
 		}
 		return -1;
@@ -183,13 +232,7 @@
 	function _replacePhoto(idx, error) {
 		if (error) {
 			// bad url, mark it
-			const name = app.PhotoView.getName(idx);
-			const index = t.itemsAll.findIndex((element) => {
-				return element.name === name;
-			});
-			if (index !== -1) {
-				t.itemsAll[index].name = 'skip';
-			}
+			_markPhotoBad(idx);
 		}
 
 		if (t.started && (t.itemsAll.length > t.items.length)) {
@@ -203,7 +246,7 @@
 				}
 			}
 			// add the next image from the master list to this page
-			t.rep.set('items.' + idx, JSON.parse(JSON.stringify(item)));
+			_setItem(idx, item);
 			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
 		}
 	}
@@ -220,18 +263,18 @@
 				newIdx = i;
 				const item = t.itemsAll[i];
 				if (item.name !== 'skip') {
-					if ((pos !== t.lastSelected) &&
-						(pos !== t.p.selected)) {
-						// don't replace the last two
-						t.rep.set('items.' + pos,
-							JSON.parse(JSON.stringify(item)));
+					if ((pos === t.lastSelected) || (pos === t.p.selected)) {
+						// don't replace current animation pair
+						continue;
 					}
+					_setItem(pos, item);
 					pos++;
 					if (pos === t.items.length) {
 						break;
 					}
 				}
 			}
+
 			t.curIdx = (newIdx === t.itemsAll.length - 1) ? 0 : newIdx + 1;
 		}
 	}
@@ -256,10 +299,12 @@
 				_replaceAllPhotos();
 				idx = (idx === t.items.length - 1) ? 0 : idx + 1;
 				ret = _findLoadedPhoto(idx);
+				if (ret !== -1) {
+					t.waitForLoad = true;
+				}
 			}
 		} else if (t.waitTime !== t.transitionTime) {
 			// photo found, set the waitTime back to transition time in case
-			// it was changed
 			t.waitTime = t.transitionTime;
 		}
 		return ret;
@@ -267,21 +312,22 @@
 
 	/**
 	 * Called at fixed time intervals to cycle through the photos
-	 * Runs forever
+	 * Potentially runs forever
 	 * @memberOf app.ScreenSaver
 	 */
 	function _runShow() {
+		if (t.noPhotos) {
+			// no usable photos to show
+			return;
+		}
+
 		const curPage = (t.p.selected === undefined) ? 0 : t.p.selected;
 		const prevPage = (curPage > 0) ? curPage - 1 : t.items.length - 1;
 		let selected = (curPage === t.items.length - 1) ? 0 : curPage + 1;
 
-		// replace the previous selected with the next one from master array
-		_replacePhoto(t.lastSelected, false);
-
-		if (app.PhotoView.isError(prevPage)) {
-			// broken link, mark it and replace it
-			_replacePhoto(prevPage, true);
-		}
+		// for replacing the page in _onAniFinished
+		t.replaceLast = t.lastSelected;
+		t.prevPage = prevPage;
 
 		if (t.p.selected === undefined) {
 			// special case for first page. neon-animated-pages is configured
@@ -295,17 +341,19 @@
 
 		selected = _getNextPhoto(selected);
 		if (selected !== -1) {
-			t.set('time', app.SSUtils.getTime());
 			// If a new photo is ready, prep it
+			t.set('time', app.SSUtils.getTime());
 			app.PhotoView.prep(selected, t.photoSizing);
 
-			// update t.p.selected so the animation runs
 			t.lastSelected = t.p.selected;
+			// update t.p.selected so the animation runs
 			t.p.selected = selected;
 		}
 
-		// setup the next timer --- runs forever
-		t.timer = window.setTimeout(_runShow, t.waitTime);
+		// setup the next timeout and call ourselves --- runs until interrupted
+		window.setTimeout(() => {
+			_runShow();
+		}, t.waitTime);
 	}
 
 	// noinspection JSUnusedLocalSymbols
