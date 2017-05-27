@@ -168,6 +168,7 @@
 	 * Set the photo item
 	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
 	 * @param {app.Photo} item - An {@link app.Photo}
+	 * @memberOf app.ScreenSaver
 	 * @private
 	 */
 	function _setItem(idx, item) {
@@ -178,6 +179,7 @@
 	/**
 	 * Mark a photo in t.itemsAll as unusable
 	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
+	 * @memberOf app.ScreenSaver
 	 * @private
 	 */
 	function _markPhotoBad(idx) {
