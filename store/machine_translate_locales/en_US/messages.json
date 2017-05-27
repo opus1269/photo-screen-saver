@@ -44,38 +44,6 @@
     "message": "CANCEL",
     "description": "All Caps"
   },
-  "polymer": {
-    "message": "POLYMER",
-    "description": "All Caps"
-  },
-  "github": {
-    "message": "VIEW ON GITHUB",
-    "description": "All Caps"
-  },
-  "w3": {
-    "message": "W3SCHOOLS",
-    "description": "All Caps"
-  },
-  "mdn": {
-    "message": "MDN",
-    "description": "All Caps"
-  },
-  "chromecast": {
-    "message": "CHROMECAST",
-    "description": "All Caps"
-  },
-  "picasa": {
-    "message": "PICASA",
-    "description": "All Caps"
-  },
-  "material": {
-    "message": "MATERIAL DESIGN",
-    "description": "All Caps"
-  },
-  "chrome_ext": {
-    "message": "CHROME EXTENSION",
-    "description": "All Caps"
-  },
   "note": {
     "message": "Note:"
   },
