@@ -389,6 +389,9 @@
   "err_photo_source_title": {
     "message": "Failed to retrieve photo source"
   },
+  "err_auth_picasa": {
+    "message": "User did not authorize Picasa."
+  },
   "err_no_albums": {
     "message": "No albums found"
   },

@@ -389,6 +389,9 @@
   "err_photo_source_title": {
     "message": "Error al recuperar el origen de la foto"
   },
+  "err_auth_picasa": {
+    "message": "Usuario no autoriza a Picasa."
+  },
   "err_no_albums": {
     "message": "No hay álbumes encontrados"
   },
