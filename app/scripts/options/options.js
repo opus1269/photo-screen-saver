@@ -240,10 +240,9 @@
 	 * Event: Fired when a message is sent from either an extension process<br>
 	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
 	 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-	 * @param {Object} request - details for the message
-	 * @param {string} request.message - name of the message
-	 * @param {Object} sender - MessageSender object
-	 * @param {function} response - function to call once after processing
+	 * @param {app.Msg.Message} request - details for the message
+	 * @param {Object} [sender] - MessageSender object
+	 * @param {Function} [response] - function to call once after processing
 	 * @returns {boolean} true if asynchronous
 	 * @private
 	 * @memberOf app.Options
@@ -267,7 +266,7 @@
 			t.$.errorDialog.open();
 		} else if (request.message === app.Msg.PHOTO_SOURCE_FAILED.message) {
 			// failed to load
-			t.$.settingsPage.deselectPhotoSource(request.type);
+			t.$.settingsPage.deselectPhotoSource(request.key);
 			t.dialogTitle = app.Utils.localize('err_photo_source_title');
 			t.dialogText = request.error;
 			t.$.errorDialog.open();
