@@ -90,7 +90,7 @@
 
 		t.rep = t.$.repeatTemplate;
 		t.p = t.$.pages;
-		t.time = 'time';
+		t.time = '';
 
 		app.SSUtils.setZoom();
 		app.SSUtils.setupPhotoSizing(t);
@@ -168,8 +168,8 @@
 	 * Set the photo item
 	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
 	 * @param {app.Photo} item - An {@link app.Photo}
-	 * @memberOf app.ScreenSaver
 	 * @private
+	 * @memberOf app.ScreenSaver
 	 */
 	function _setItem(idx, item) {
 		t.rep.set('items.' + idx, JSON.parse(JSON.stringify(item)));
@@ -177,10 +177,24 @@
 	}
 
 	/**
+	 * Set the time label
+	 * @private
+	 * @memberOf app.ScreenSaver
+	 */
+	function _setTime() {
+		const showTime = app.Storage.getInt('showTime');
+		if (showTime !== 0) {
+			t.set('time', app.SSUtils.getTime());
+		} else {
+			t.set('time', '');
+		}
+	}
+
+	/**
 	 * Mark a photo in t.itemsAll as unusable
 	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
-	 * @memberOf app.ScreenSaver
 	 * @private
+	 * @memberOf app.ScreenSaver
 	 */
 	function _markPhotoBad(idx) {
 		const name = app.PhotoView.getName(idx);
@@ -344,7 +358,7 @@
 		selected = _getNextPhoto(selected);
 		if (selected !== -1) {
 			// If a new photo is ready, prep it
-			t.set('time', app.SSUtils.getTime());
+			_setTime();
 			app.PhotoView.prep(selected, t.photoSizing);
 
 			t.lastSelected = t.p.selected;
@@ -389,7 +403,7 @@
 		if (alarm.name === _CLOCK_ALARM) {
 			// update time label
 			if (t.p && (t.p.selected !== undefined)) {
-				t.set('time', app.SSUtils.getTime());
+				_setTime();
 			}
 		}
 	}
