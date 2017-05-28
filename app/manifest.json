@@ -35,8 +35,9 @@
 		"power",
 		"system.display",
 		"alarms",
-		"contextMenus",
-		"https://chrome.google.com/",
+		"contextMenus"
+	],
+	"optional_permissions": [
 		"https://picasaweb.google.com/"
 	],
 	"background": {

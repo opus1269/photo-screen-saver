@@ -25,7 +25,7 @@ app.Data = (function() {
 	 * @private
 	 * @memberOf app.Data
 	 */
-	const _DATA_VERSION = 11;
+	const _DATA_VERSION = 12;
 
 	/**
 	 * A number and associated units
@@ -40,6 +40,7 @@ app.Data = (function() {
 	 * @typedef {Object} AppData
 	 * @property {int} version - version of data
 	 * @property {boolean} enabled - is screensaver enabled
+	 * @property {string} permPicasa - optional permission for Picasa
 	 * @property {UnitValue} idleTime - idle time to display screensaver
 	 * @property {UnitValue} transitionTime - time between photos
 	 * @property {boolean} skip - ignore extreme aspect ratio photos
@@ -52,7 +53,6 @@ app.Data = (function() {
 	 * @property {string} background - background image
 	 * @property {boolean} keepAwake - manage computer poser settings
 	 * @property {boolean} chromeFullscreen - don't display over fullscreen
-	 * Chrome windows
 	 * @property {boolean} allDisplays - show on all displays
 	 * @property {string} activeStart - Keep Wake start time '00:00' 24 hr
 	 * @property {string} activeStop - Keep Wake stop time '00:00' 24 hr
@@ -81,6 +81,7 @@ app.Data = (function() {
 	const _DEF_VALUES = {
 		'version': _DATA_VERSION,
 		'enabled': true,
+		'permPicasa': 'notSet', // enum: notSet allowed denied
 		'idleTime': {'base': 5, 'display': 5, 'unit': 0}, // minutes
 		'transitionTime': {'base': 30, 'display': 30, 'unit': 0}, // seconds
 		'skip': true,
@@ -240,6 +241,14 @@ app.Data = (function() {
 			if (_DATA_VERSION > oldVersion) {
 				// update version number
 				app.Storage.set('version', _DATA_VERSION);
+			}
+
+			if (oldVersion < 12) {
+				// picasa used to be a required permission
+				// installed extensions before the change will keep
+				// this permission on update.
+				// https://stackoverflow.com/a/38278824/4468645
+				app.Storage.set('permPicasa', 'allowed');
 			}
 
 			if (oldVersion < 10) {

@@ -165,7 +165,8 @@
 
 				<div class="waiter" hidden$="[[!waitForLoad]]">
 					<div class="horizontal center-justified layout">
-						<paper-spinner alt="{{localize('google_loading')}}" active="[[waitForLoad]]"></paper-spinner>
+						<paper-spinner alt="{{localize('google_loading')}}"
+									   active="[[waitForLoad]]"></paper-spinner>
 					</div>
 					<paper-item class="horizontal center-justified layout">
 						{{localize('google_loading')}}
@@ -245,9 +246,14 @@ app.GooglePhotosPage = Polymer({
 	 * Query Picasa for the list of the users albums
 	 */
 	loadAlbumList: function() {
-		this.set('waitForLoad', true);
-		// call interactively
-		app.GooglePhotos.loadAlbumList(true).then((albums) => {
+		this._checkPermissions().then((allowed) => {
+			if (!allowed) {
+				throw new Error('Used did not authorize Picasa');
+			}
+			this.set('waitForLoad', true);
+			// call interactively
+			return app.GooglePhotos.loadAlbumList(true);
+		}).then((albums) => {
 			// get all the user's albums
 			this.splice('albums', 0, this.albums.length);
 			albums.forEach((album) => {
@@ -256,12 +262,12 @@ app.GooglePhotosPage = Polymer({
 			// update the currently selected albums from the web
 			// eslint-disable-next-line promise/no-nesting
 			app.PhotoSource.process('useGoogle').catch(() => {});
-			return null;
+			return Promise.resolve();
 		}).then(() => {
-			// set select state on albums
+			// set selected state on albums
 			this._selectAlbums();
 			this.set('waitForLoad', false);
-			return null;
+			return Promise.resolve();
 		}).catch((err) => {
 			this.set('waitForLoad', false);
 			app.GA.error(err.message, 'app.GooglePhotosPage.loadAlbumList');
@@ -272,6 +278,41 @@ app.GooglePhotosPage = Polymer({
 		});
 	},
 
+	/**
+	 * Try to get permissions, if not already authorized
+	 * @returns {Promise<boolean>} true if we have permissions
+	 */
+	_checkPermissions: function() {
+		if (app.Permissions.isAllowed(app.Permissions.PICASA)) {
+			return Promise.resolve(true);
+		} else {
+			return app.Permissions.request(app.Permissions.PICASA)
+				.then((granted) => {
+					return Promise.resolve(granted);
+				});
+		}
+	},
+
+//	/**
+//	 * Get permissions if needed, then load the albums
+//	 * if it has not been set yet
+//	 */
+//	_checkPermissions: function() {
+//		if (app.Permissions.isAllowed(app.Permissions.PICASA)) {
+//			this._loadAlbumList();
+//		} else {
+//			app.Permissions.request(app.Permissions.PICASA).then((granted) => {
+//				if (granted) {
+//					return this._loadAlbumList();
+//				} else {
+//					throw new Error('Request for Picasa permissions failed.');
+//				}
+//			}).catch((err) => {
+//				app.GA.error(err.message, 'GooglePhotos._checkPermissions');
+//			});
+//		}
+//	},
+//
 	/**
 	 * Event: Handle tap on refresh album list icon
 	 * @private
