@@ -74,6 +74,12 @@ app.GA = (function() {
 			eventLabel: '',
 			noInteraction: false,
 		},
+		ICON: {
+			eventCategory: 'ui',
+			eventAction: 'toolbarIconClicked',
+			eventLabel: '',
+			noInteraction: false,
+		},
 	};
 
 	/**
