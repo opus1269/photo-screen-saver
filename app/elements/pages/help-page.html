@@ -5,10 +5,11 @@
   ~  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
   -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-styles/typography.html">
-<link rel="import" href="../../bower_components/paper-styles/color.html">
 
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
 
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
@@ -46,13 +47,13 @@
 
 		</style>
 
-		<paper-material elevation="1" id="faqPage" class="page-container">
+		<paper-material elevation="1" class="page-container">
 			<paper-material elevation="1">
 				<paper-toolbar class="page-toolbar">
 					<div>{{localize('help_title')}}</div>
 				</paper-toolbar>
 			</paper-material>
-			<div id="faqContainer" class="page-content">
+			<div class="page-content">
 				<setting-link section-title="{{localize('help_section_feedback')}}"
 							  name="questionMail"
 							  label="{{localize('help_question')}}"
