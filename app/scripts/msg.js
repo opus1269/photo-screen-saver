@@ -19,6 +19,9 @@ app.Msg = (function() {
 	 * A Chrome message
 	 * @typedef {{}} app.Msg.Message
 	 * @property {string} message - Unique name
+	 * @property {Error} error - an error
+	 * @property {string} key - key name
+	 * @property {?Object} value - value of key
 	 * @memberOf app.Msg
 	 */
 
@@ -77,23 +80,25 @@ app.Msg = (function() {
 	};
 
 	/**
-	 * A Chrome message that an {@link app.PhotoSource} server request failed
-	 * @typedef {app.Msg.Message} app.Msg.PhotoSourceFailed
-	 * @property {string} message - Unique name
-	 * @property {string} type - the photo source
-	 * @property {Error} error - the failure reason
-	 * @memberOf app.Msg
-	 */
-
-	/**
 	 * An {@link app.PhotoSource} server request failed
-	 * @type {app.Msg.PhotoSourceFailed}
+	 * @type {app.Msg.Message}
 	 * @memberOf app.Msg
 	 */
 	const PHOTO_SOURCE_FAILED = {
 		message: 'photoSourceFailed',
-		type: '',
+		key: '',
 		error: '',
+	};
+
+	/**
+	 * Save value to storage message
+	 * @type {app.Msg.Message}
+	 * @memberOf app.Msg
+	 */
+	const STORE = {
+		message: 'store',
+		key: '',
+		value: '',
 	};
 
 	return {
@@ -105,6 +110,7 @@ app.Msg = (function() {
 		HIGHLIGHT: HIGHLIGHT,
 		STORAGE_EXCEEDED: STORAGE_EXCEEDED,
 		PHOTO_SOURCE_FAILED: PHOTO_SOURCE_FAILED,
+		STORE: STORE,
 
 		/**
 		 * Send a chrome message
