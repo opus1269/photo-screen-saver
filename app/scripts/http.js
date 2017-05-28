@@ -200,7 +200,7 @@ app.Http = (function() {
 	 */
 	function _retryToken(url, opts, token, interactive, attempt, backoff,
 						maxRetries) {
-		app.GA.error('Refresh auth token.', 'app.Http._retryToken');
+		app.GA.error('Refresh auth token.', 'Http._retryToken');
 		return chromep.identity.removeCachedAuthToken({
 			token: token,
 		}).then(() => {

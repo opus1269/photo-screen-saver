@@ -110,7 +110,7 @@ app.SSControl = (function() {
 			}
 			return null;
 		}).catch((err) => {
-			app.GA.error(err.message, 'app.SSControl._open');
+			app.GA.error(err.message, 'SSControl._open');
 		});
 	}
 
@@ -130,7 +130,7 @@ app.SSControl = (function() {
 			}
 			return Promise.resolve();
 		}).catch((err) => {
-			app.GA.error(err.message, 'app.SSControl._openOnAllDisplays');
+			app.GA.error(err.message, 'SSControl._openOnAllDisplays');
 		});
 	}
 
@@ -159,7 +159,7 @@ app.SSControl = (function() {
 			}
 			return null;
 		}).catch((err) => {
-			app.GA.error(err.message, 'app.SSControl._isShowing');
+			app.GA.error(err.message, 'SSControl._isShowing');
 		});
 	}
 

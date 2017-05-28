@@ -121,7 +121,7 @@ app.Msg = (function() {
 					!err.message.includes('port closed') &&
 					!err.message.includes('Receiving end does not exist')) {
 					const msg = `type: ${type.message}, ${err.message}`;
-					app.GA.error(msg, 'app.Msg.send');
+					app.GA.error(msg, 'Msg.send');
 				}
 				return Promise.reject(err);
 			});
