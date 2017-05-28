@@ -141,11 +141,13 @@
 					</paper-tooltip>
 					<paper-toggle-button
 							id="googlePhotosToggle"
+							on-change="_onUseGoogleChange"
 							checked="{{useGoogle}}"></paper-toggle-button>
 					<paper-tooltip for="googlePhotosToggle" position="left" offset="0">
 						{{localize('tooltip_google_toggle')}}
 					</paper-tooltip>
-					<iron-localstorage name="useGoogle" value="{{useGoogle}}"></iron-localstorage>
+					<iron-localstorage name="useGoogle" value="{{useGoogle}}">
+					</iron-localstorage>
 				</paper-toolbar>
 			</paper-material>
 
@@ -173,8 +175,8 @@
 					</paper-item>
 				</div>
 
-				<div class="list-container" hidden$="[[waitForLoad]]">
-					<paper-item class="list-note" hidden$="[[waitForLoad]]">
+				<div class="list-container" hidden$="[[isHidden]]">
+					<paper-item class="list-note">
 						{{localize('google_shared_albums_note')}}
 					</paper-item>
 
@@ -195,6 +197,9 @@
 					</template>
 				</div>
 			</div>
+			<iron-localstorage name="permPicasa" value="{{permPicasa}}"
+							   on-iron-localstorage-load-empty="_initPermPicasa">
+			</iron-localstorage>
 			<content></content>
 		</paper-material>
 	</template>
@@ -230,6 +235,18 @@ app.GooglePhotosPage = Polymer({
 		waitForLoad: {
 			type: Boolean,
 			value: false,
+			notify: true,
+		},
+
+		permPicasa: {
+			type: String,
+			value: 'notSet',
+			notify: true,
+		},
+
+		isHidden: {
+			type: Boolean,
+			computed: '_computeHidden(waitForLoad, permPicasa)',
 		},
 	},
 
@@ -248,7 +265,7 @@ app.GooglePhotosPage = Polymer({
 	loadAlbumList: function() {
 		this._checkPermissions().then((allowed) => {
 			if (!allowed) {
-				throw new Error('Used did not authorize Picasa');
+				throw new Error(app.Utils.localize('err_auth_picasa'));
 			}
 			this.set('waitForLoad', true);
 			// call interactively
@@ -256,21 +273,23 @@ app.GooglePhotosPage = Polymer({
 		}).then((albums) => {
 			// get all the user's albums
 			this.splice('albums', 0, this.albums.length);
+			albums = albums || [];
 			albums.forEach((album) => {
 				this.push('albums', album);
 			});
 			// update the currently selected albums from the web
 			// eslint-disable-next-line promise/no-nesting
-			app.PhotoSource.process('useGoogle').catch(() => {});
-			return Promise.resolve();
-		}).then(() => {
+			app.PhotoSource.process('useGoogle').catch((err) => {
+				app.GA.error(err.message,
+					'PhotoSource.process via GooglePhotosPage.loadAlbumList');
+			});
 			// set selected state on albums
 			this._selectAlbums();
 			this.set('waitForLoad', false);
 			return Promise.resolve();
 		}).catch((err) => {
 			this.set('waitForLoad', false);
-			app.GA.error(err.message, 'app.GooglePhotosPage.loadAlbumList');
+			app.GA.error(err.message, 'GooglePhotosPage.loadAlbumList');
 			this.$.dialogTitle.innerHTML =
 				app.Utils.localize('err_request_failed');
 			this.$.dialogText.innerHTML = err.message;
@@ -279,7 +298,7 @@ app.GooglePhotosPage = Polymer({
 	},
 
 	/**
-	 * Try to get permissions, if not already authorized
+	 * Try to get permissions, if not already authorized - may block
 	 * @returns {Promise<boolean>} true if we have permissions
 	 */
 	_checkPermissions: function() {
@@ -293,31 +312,12 @@ app.GooglePhotosPage = Polymer({
 		}
 	},
 
-//	/**
-//	 * Get permissions if needed, then load the albums
-//	 * if it has not been set yet
-//	 */
-//	_checkPermissions: function() {
-//		if (app.Permissions.isAllowed(app.Permissions.PICASA)) {
-//			this._loadAlbumList();
-//		} else {
-//			app.Permissions.request(app.Permissions.PICASA).then((granted) => {
-//				if (granted) {
-//					return this._loadAlbumList();
-//				} else {
-//					throw new Error('Request for Picasa permissions failed.');
-//				}
-//			}).catch((err) => {
-//				app.GA.error(err.message, 'GooglePhotos._checkPermissions');
-//			});
-//		}
-//	},
-//
 	/**
 	 * Event: Handle tap on refresh album list icon
 	 * @private
 	 */
 	_refreshTapped: function() {
+		app.GA.event(app.GA.EVENT.ICON, 'refreshGoogleAlbums');
 		this.loadAlbumList();
 	},
 
@@ -326,6 +326,7 @@ app.GooglePhotosPage = Polymer({
 	 * @private
 	 */
 	_selectAllTapped: function() {
+		app.GA.event(app.GA.EVENT.ICON, 'selectAllGoogleAlbums');
 		for (let i = 0; i < this.albums.length; i++) {
 			const album = this.albums[i];
 			if (!album.checked) {
@@ -335,6 +336,8 @@ app.GooglePhotosPage = Polymer({
 				if (!set) {
 					// exceeded storage limits
 					this.selections.pop();
+					this._showStorageErrorDialog(
+						'GooglePhotosPage._selectAllTapped');
 					break;
 				}
 				this.set('albums.' + i + '.checked', true);
@@ -347,6 +350,7 @@ app.GooglePhotosPage = Polymer({
 	 * @private
 	 */
 	_deselectAllTapped: function() {
+		app.GA.event(app.GA.EVENT.ICON, 'deselectAllGoogleAlbums');
 		this._uncheckAll();
 		this.selections.splice(0, this.selections.length);
 		app.Storage.set('albumSelections', this.selections);
@@ -355,31 +359,57 @@ app.GooglePhotosPage = Polymer({
 	/**
 	 * Event: Handle tap on checkbox for an album
 	 * @param {Event} event - tap event
-	 * @param {Event} event.model - the model
-	 * @param {Event} event.model.album - the album
+	 * @param {Object} event.model - the model
+	 * @param {app.GooglePhotos.Album} event.model.album - the album
+	 * @param {int} event.model.index - the album index
 	 * @private
 	 */
 	_albumSelectChange: function(event) {
 		const album = event.model.album;
-		const index = this.selections.map(function(e) {
-			return e.id;
-		}).indexOf(album.id);
+		const index = event.model.index;
 
 		if (index !== -1) {
+			app.GA.event(app.GA.EVENT.ICON,
+				`selectGoogleAlbum: ${album.checked}`);
 			this.selections.splice(index, 1);
-		}
 
-		if (album.checked) {
-			this.selections.push({id: album.id, photos: album.photos});
-		}
+			if (album.checked) {
+				this.selections.push({id: album.id, photos: album.photos});
+			}
 
-		const set =
-			app.Storage.safeSet('albumSelections', this.selections, null);
-		if (!set) {
-			// exceeded storage limits
-			this.selections.pop();
-			this.set('albums.' + album.index + '.checked', false);
+			const set =
+				app.Storage.safeSet('albumSelections', this.selections, null);
+			if (!set) {
+				// exceeded storage limits
+				this.selections.pop();
+				this.set('albums.' + album.index + '.checked', false);
+				this._showStorageErrorDialog(
+					'GooglePhotosPage._albumSelectChange');
+			}
+		} else {
+			app.GA.error('Album select  - index not found',
+				'GooglePhotosPage._albumSelectChange');
 		}
+	},
+
+	/**
+	 * Event: checked state changed on main toggle
+	 */
+	_onUseGoogleChange: function() {
+		app.GA.event(app.GA.EVENT.TOGGLE,
+			`useGoogle: ${this.$.googlePhotosToggle.checked}`);
+	},
+
+	/**
+	 * Exceeded storage limits error
+	 * @param {string} method - function that caused error
+	 * @private
+	 */
+	_showStorageErrorDialog: function(method) {
+		app.GA.error('safeSet failed', method);
+		this.$.dialogTitle.innerHTML = app.Utils.localize('err_storage_title');
+		this.$.dialogText.innerHTML = app.Utils.localize('err_storage_desc');
+		this.$.errorDialog.open();
 	},
 
 	/**
@@ -411,6 +441,21 @@ app.GooglePhotosPage = Polymer({
 	},
 
 	/**
+	 * Computed property: Hidden state of main interface
+	 * @param {boolean} waitForLoad - true if loading
+	 * @param {string} permPicasa - permission state
+	 * @returns {boolean} true if hidden
+	 * @private
+	 */
+	_computeHidden: function(waitForLoad, permPicasa) {
+		let ret = true;
+		if (!waitForLoad && (permPicasa === 'allowed')) {
+			ret = false;
+		}
+		return ret;
+	},
+
+	/**
 	 * Computed binding: Set photo count label on an album
 	 * @param {int} count - number of photos in album
 	 * @returns {string} i18n label
@@ -422,6 +467,14 @@ app.GooglePhotosPage = Polymer({
 			ret = `${count} ${app.Utils.localize('photo')}`;
 		}
 		return ret;
+	},
+
+	/**
+	 * Initialize value if it is not in localStorage
+	 * @private
+	 */
+	_initPermPicasa: function() {
+		this.set('permPicasa', 'notSet');
 	},
 });
 </script>

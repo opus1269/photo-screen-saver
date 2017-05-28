@@ -60,12 +60,62 @@ app.Permissions = (function() {
 		origins: ['https://picasaweb.google.com/'],
 	};
 
+	/**
+	 * Persist the state of an {@link app.Permissions.Type}
+	 * @param {app.Permissions.Type} type - permission type
+	 * @param {string} value - permission state
+	 * @private
+	 * @memberOf app.Permissions
+	 */
+	function _setState(type, value) {
+		// send message to store value so items that are bound
+		// to it will get storage event
+		const msg = app.Msg.STORE;
+		msg.key = type.name;
+		msg.value = value;
+		app.Msg.send(msg).catch(() => {});
+	}
+
+	/**
+	 * Determine if we have the optional permissions
+	 * @param {app.Permissions.Type} type - permission type
+	 * @returns {Promise<boolean>} true if we have permissions
+	 * @memberOf app.Permissions
+	 */
+	function _contains(type) {
+		return chromep.permissions.contains({
+			permissions: type.permissions,
+			origins: type.origins,
+		});
+	}
+
+	/**
+	 * Remove the optional permissions
+	 * @param {app.Permissions.Type} type - permission type
+	 * @returns {Promise<boolean>} true if removed
+	 * @private
+	 * @memberOf app.Permissions
+	 */
+	function _remove(type) {
+		return _contains(type).then((contains) => {
+			if (contains) {
+				// try to remove permission
+				return chromep.permissions.remove({
+					permissions: type.permissions,
+					origins: type.origins,
+				});
+			} else {
+				return Promise.resolve(false);
+			}
+		});
+	}
+
 	return {
-		/** @memberOf app.Permissions */
+		/** @type {app.Permissions.Type} */
 		PICASA: PICASA,
 
 		/**
-		 * Has use made choice on permissions
+		 * Has user made choice on permissions
 		 * @param {app.Permissions.Type} type - permission type
 		 * @returns {boolean} true if allowed or denied
 		 * @memberOf app.Permissions
@@ -85,87 +135,28 @@ app.Permissions = (function() {
 		},
 
 		/**
-		 * Prompt for the optional permissions
+		 * Request optional permission - may block
 		 * @param {app.Permissions.Type} type - permission type
 		 * @returns {Promise<boolean>} true if permission granted
 		 * @memberOf app.Permissions
 		 */
 		request: function(type) {
-			/**
-			 * Grant permission if it has been allowed
-			 * @param {app.Permissions.Type} type - permission type
-			 * @param {boolean} isTrue true is permission was allowed
-			 * @returns {Promise.<boolean>} true if removed
-			 * @private
-			 * @memberOf app.Permissions
-			 */
-			function ifGranted(type, isTrue) {
-				if (isTrue) {
-					app.Storage.set(type.name, _STATE.allowed);
-					return Promise.resolve(isTrue);
-				} else {
-					// remove if it has been previously granted
-					return app.Permissions.remove(type).then(() => {
-						return Promise.resolve(isTrue);
-					});
-				}
-			}
-
+			let isGranted;
 			return chromep.permissions.request({
 				permissions: type.permissions,
 				origins: type.origins,
 			}).then((granted) => {
-				return ifGranted(type, granted);
-			});
-		},
-
-		/**
-		 * Determine if we have the optional permissions
-		 * @param {app.Permissions.Type} type - permission type
-		 * @returns {Promise<boolean>} true if we have permissions
-		 * @memberOf app.Permissions
-		 */
-		contains: function(type) {
-			return chromep.permissions.contains({
-				permissions: type.permissions,
-				origins: type.origins,
-			});
-		},
-
-		/**
-		 * Remove the optional permissions
-		 * @param {app.Permissions.Type} type - permission type
-		 * @returns {Promise<boolean>} true if removed
-		 * @memberOf app.Permissions
-		 */
-		remove: function(type) {
-			/**
-			 * Remove permission if it has been allowed at some point
-			 * @param {app.Permissions.Type} type - permission type
-			 * @param {boolean} isTrue true is permission was allowed
-			 * @returns {Promise.<boolean>} true if removed
-			 * @private
-			 * @memberOf app.Permissions
-			 */
-			function _ifContains(type, isTrue) {
-				if (isTrue) {
-					// remove permission
-					return chromep.permissions.remove({
-						permissions: type.permissions,
-						origins: type.origins,
-					}).then((removed) => {
-						if (removed) {
-							app.Storage.set(type.name, _STATE.denied);
-						}
-						return Promise.resolve(removed);
-					});
+				isGranted = granted;
+				if (granted) {
+					_setState(type, _STATE.allowed);
+					return Promise.resolve();
 				} else {
-					return Promise.resolve(false);
+					_setState(type, _STATE.denied);
+					// try to remove if it has been previously granted
+					return _remove(type);
 				}
-			}
-
-			return app.Permissions.contains(type).then((contains) => {
-				return _ifContains(type, contains);
+			}).then(() => {
+				return Promise.resolve(isGranted);
 			});
 		},
 	};
