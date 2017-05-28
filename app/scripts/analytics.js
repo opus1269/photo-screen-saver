@@ -48,37 +48,31 @@ app.GA = (function() {
 			eventCategory: 'extension',
 			eventAction: 'installed',
 			eventLabel: '',
-			noInteraction: false,
 		},
 		MENU: {
 			eventCategory: 'ui',
 			eventAction: 'menuSelect',
 			eventLabel: '',
-			noInteraction: false,
 		},
 		TOGGLE: {
 			eventCategory: 'ui',
 			eventAction: 'toggle',
 			eventLabel: '',
-			noInteraction: false,
 		},
 		LINK: {
 			eventCategory: 'ui',
 			eventAction: 'linkSelect',
 			eventLabel: '',
-			noInteraction: false,
 		},
 		BUTTON: {
 			eventCategory: 'ui',
 			eventAction: 'buttonClicked',
 			eventLabel: '',
-			noInteraction: false,
 		},
 		ICON: {
 			eventCategory: 'ui',
 			eventAction: 'toolbarIconClicked',
 			eventLabel: '',
-			noInteraction: false,
 		},
 	};
 
@@ -157,12 +151,11 @@ app.GA = (function() {
 		 */
 		error: function(label=null, action=null) {
 			const ev = {
+				hitType: 'event',
 				eventCategory: 'error',
 				eventAction: 'unknownMethod',
 				eventLabel: 'Err: unknown',
-				noInteraction: true,
 			};
-			ev.hitType = 'event';
 			ev.eventLabel = label ? `Err: ${label}` : ev.eventLabel;
 			ev.eventAction = action ? action : ev.eventAction;
 			ga('send', ev);
