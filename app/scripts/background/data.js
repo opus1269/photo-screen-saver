@@ -326,7 +326,7 @@ app.Data = (function() {
 					app.PhotoSource.process(key).catch((err) => {
 						// send message on processing error
 						const msg = app.Msg.PHOTO_SOURCE_FAILED;
-						msg.type = key;
+						msg.key = key;
 						msg.error = err.message;
 						return app.Msg.send(msg);
 					}).catch(() => {});
