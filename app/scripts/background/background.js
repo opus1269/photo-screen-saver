@@ -127,6 +127,7 @@
 	function _onMenuClicked(info) {
 		if (info.menuItemId === 'ENABLE_MENU') {
 			_toggleEnabled();
+			app.GA.event(app.GA.EVENT.MENU, `${info.menuItemId}`);
 		}
 	}
 
@@ -149,10 +150,9 @@
 	 * Event: Fired when a message is sent from either an extension process<br>
 	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
 	 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-	 * @param {Object} request - details for the message
-	 * @param {string} request.message - name of the message
-	 * @param {Object} sender - MessageSender object
-	 * @param {function} response - function _to call once after processing
+	 * @param {app.Msg.Message} request - details for the message
+	 * @param {Object} [sender] - MessageSender object
+	 * @param {Function} [response] - function to call once after processing
 	 * @returns {boolean} true if asynchronous
 	 * @private
 	 * @memberOf app.Background
@@ -160,6 +160,8 @@
 	function _onChromeMessage(request, sender, response) {
 		if (request.message === app.Msg.RESTORE_DEFAULTS.message) {
 			app.Data.restoreDefaults();
+		} else if (request.message === app.Msg.STORE.message) {
+			app.Storage.set(request.key, request.value);
 		}
 		return false;
 	}
