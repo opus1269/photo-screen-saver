@@ -48,10 +48,10 @@
 	 * @type {Array}
 	 * @memberOf app.ScreenSaver
 	 */
-	t.itemsAll = [];
+	t.photos = [];
 
 	/**
-	 * Index into [t.itemsAll]{@link app.ScreenSaver.t.itemsAll}
+	 * Index into [t.photos]{@link app.ScreenSaver.t.photos}
 	 * @type {int}
 	 * @memberOf app.ScreenSaver
 	 */
@@ -60,7 +60,7 @@
 	/**
 	 * Array of {@link app.SSView} objects bound to the neon-animated-pages.
 	 * The {@link app.Photo} property is an always changing subset of
-	 * [t.itemsAll]{@link app.ScreenSaver.t.itemsAll}
+	 * [t.photos]{@link app.ScreenSaver.t.photos}
 	 * @type {Array}
 	 * @memberOf app.ScreenSaver
 	 */
@@ -180,19 +180,19 @@
 	}
 
 	/**
-	 * Mark a photo in t.itemsAll as unusable
+	 * Mark a photo in t.photos as unusable
 	 * @param {int} idx - index into [t.views]{@link app.ScreenSaver.t.views}
 	 * @private
 	 * @memberOf app.ScreenSaver
 	 */
 	function _markPhotoBad(idx) {
 		const name = t.views[idx].getName();
-		const index = t.itemsAll.findIndex((item) => {
+		const index = t.photos.findIndex((item) => {
 			return item.name === name;
 		});
 		if (index !== -1) {
-			t.itemsAll[index].name = 'skip';
-			const skipAll = t.itemsAll.every((item) => {
+			t.photos[index].name = 'skip';
+			const skipAll = t.photos.every((item) => {
 				return item.name === 'skip';
 			});
 			if (skipAll) {
@@ -241,11 +241,11 @@
 			_markPhotoBad(idx);
 		}
 
-		if (t.started && (t.itemsAll.length > t.views.length)) {
+		if (t.started && (t.photos.length > t.views.length)) {
 			let item;
-			for (let i = t.curIdx; i < t.itemsAll.length; i++) {
+			for (let i = t.curIdx; i < t.photos.length; i++) {
 				// find a url that is ok, AFAWK
-				item = t.itemsAll[i];
+				item = t.photos[i];
 				if (item.name !== 'skip') {
 					t.curIdx = i;
 					break;
@@ -253,7 +253,7 @@
 			}
 			// add the next image from the master list to this page
 			t.views[idx].setPhoto(item);
-			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
+			t.curIdx = (t.curIdx === t.photos.length - 1) ? 0 : t.curIdx + 1;
 		}
 	}
 
@@ -262,12 +262,12 @@
 	 * @memberOf app.ScreenSaver
 	 */
 	function _replaceAllPhotos() {
-		if (t.itemsAll.length > t.views.length) {
+		if (t.photos.length > t.views.length) {
 			let pos = 0;
 			let newIdx = t.curIdx;
-			for (let i = t.curIdx; i < t.itemsAll.length; i++) {
+			for (let i = t.curIdx; i < t.photos.length; i++) {
 				newIdx = i;
-				const item = t.itemsAll[i];
+				const item = t.photos[i];
 				if (item.name !== 'skip') {
 					if ((pos === t.lastSelected) || (pos === t.p.selected)) {
 						// don't replace current animation pair
@@ -282,7 +282,7 @@
 				}
 			}
 
-			t.curIdx = (newIdx === t.itemsAll.length - 1) ? 0 : newIdx + 1;
+			t.curIdx = (newIdx === t.photos.length - 1) ? 0 : newIdx + 1;
 		}
 	}
 

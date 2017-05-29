@@ -93,7 +93,7 @@ app.SSUtils = (function() {
 		 */
 		loadPhotos: function(t) {
 
-			// populate t.itemsAll with selected photos
+			// populate t.photos with selected photos
 			let sources = app.PhotoSource.getSelectedPhotos();
 			sources = sources || [];
 			sources.forEach((source) => {
@@ -103,7 +103,7 @@ app.SSUtils = (function() {
 					if (!app.Photo.ignore(sourcePhoto.asp, t.photoSizing)) {
 						const photo =
 							new app.Photo('photo' + ct, sourcePhoto, type);
-						t.itemsAll.push(photo);
+						t.photos.push(photo);
 						ct++;
 					}
 				});
@@ -111,13 +111,13 @@ app.SSUtils = (function() {
 
 			if (app.Storage.getBool('shuffle')) {
 				// randomize the order
-				app.Utils.shuffleArray(t.itemsAll);
+				app.Utils.shuffleArray(t.photos);
 			}
 
 			// create the animated pages
-			const len = Math.min(t.itemsAll.length, _MAX_PAGES);
+			const len = Math.min(t.photos.length, _MAX_PAGES);
 			for (let i = 0; i < len; i++) {
-				const photo = t.itemsAll[i];
+				const photo = t.photos[i];
 				const view = app.SSViewFull.createView(photo, t.photoSizing);
 				t.push('views', view);
 				t.curIdx++;
@@ -137,7 +137,7 @@ app.SSUtils = (function() {
 				view.setElements(image, author, time, location, model);
 			});
 
-			if (!t.itemsAll || (t.itemsAll.length === 0)) {
+			if (!t.photos || (t.photos.length === 0)) {
 				// No usable photos, display static image
 				app.SSUtils.setNoPhotos(t);
 			}
