@@ -27,6 +27,40 @@
 
 <body unresolved class="fullbleed layout vertical">
 	<template is="dom-bind" id="t">
+		<style is="custom-style">
+			#mainToolbar .middle-container {
+				height: 100%;
+				margin-left: 48px;
+			}
+
+			#mainToolbar .middle {
+				@apply(--paper-font-headline);
+				padding-bottom: 0;
+			}
+
+			#drawerToolbar {
+				color: var(--secondary-text-color);
+				background-color: var(--drawer-menu-color);
+				border-bottom: var(--drawer-toolbar-border-color);
+			}
+
+			#drawerToolbar .menu-name {
+				@apply(--paper-font-title);
+			}
+
+			#drawer.paper-drawer-panel > [drawer] {
+				border-right: 1px solid rgba(0, 0, 0, 0.14);
+			}
+
+			#mainPages neon-animatable {
+				padding: 0 0;
+			}
+
+			/* Height of the main scroll area */
+			#mainContainer {
+				height: 1000px;
+			}
+		</style>
 
 		<paper-drawer-panel id="paperDrawerPanel" responsive-width="800px"
 							drawer-width="350px">
@@ -35,7 +69,7 @@
 				<paper-scroll-header-panel>
 					<!-- Drawer Toolbar -->
 					<paper-toolbar id="drawerToolbar">
-						<span class="paper-font-title">{{_computeMenu()}}</span>
+						<span>{{_computeMenu()}}</span>
 					</paper-toolbar>
 					<!-- Drawer Content -->
 					<paper-menu class="list" id="mainMenu" attr-for-selected="id"
@@ -64,15 +98,15 @@
 						<span class="flex"></span>
 						<!-- Application name -->
 						<div class="middle middle-container center horizontal layout">
-							<div class="paper-font-headline app-name">
+							<div>
 								{{_computeTitle()}}
 							</div>
 						</div>
 					</paper-toolbar>
 				</paper-material>
 
-				<!-- Main Content id !important -->
-				<div id="mainContainer" class="options-content">
+				<!-- Main Content -->
+				<div id="mainContainer">
 
 					<!-- Error dialog -->
 					<paper-dialog id="errorDialog" modal
