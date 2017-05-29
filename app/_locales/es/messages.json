@@ -182,6 +182,9 @@
   "setting_show_time": {
     "message": "Tiempo de la funcion"
   },
+  "setting_large_time": {
+    "message": "Etiqueta de tiempo grande"
+  },
   "setting_shuffle": {
     "message": "Aleatorizar"
   },

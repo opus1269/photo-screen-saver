@@ -182,6 +182,9 @@
   "setting_show_time": {
     "message": "Show time"
   },
+  "setting_large_time": {
+    "message": "Large time label"
+  },
   "setting_shuffle": {
     "message": "Randomize"
   },

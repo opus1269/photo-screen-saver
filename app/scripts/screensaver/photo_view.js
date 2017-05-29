@@ -310,6 +310,17 @@ app.PhotoView = (function() {
 		},
 
 		/**
+		 * Set the style for a larger time label
+		 * @param {int} idx - index into animated pages
+		 * @memberOf app.PhotoView
+		 */
+		setLargeTimeStyle: function(idx) {
+			const e = _getElements(idx);
+			e.time.style.fontSize = '8.5vh';
+			e.time.style.fontWeight = 300;
+		},
+
+		/**
 		 * Finalize DOM for a photo
 		 * @param {int} idx - index into animated pages
 		 * @param {int} photoSizing - display type

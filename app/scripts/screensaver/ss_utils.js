@@ -87,7 +87,7 @@ app.SSUtils = (function() {
 
 		/**
 		 * Build the Array of {@link app.Photo} objects that will be displayed
-		 * and populate the neon-animated-pages
+		 * and the neon-animated-pages
 		 * @param {Object} t - screensaver template
 		 * @memberOf app.SSUtils
 		 */
@@ -124,9 +124,13 @@ app.SSUtils = (function() {
 			}
 			// force update of repeat template
 			t.rep.render();
-			// set the geo locations
+			// set the geo locations and optionally the time style
+			const largeTime = app.Storage.getBool('largeTime');
 			t.items.forEach((item, index) => {
 				app.PhotoView.setLocation(index);
+				if (largeTime) {
+					app.PhotoView.setLargeTimeStyle(index);
+				}
 			});
 
 			if (!t.itemsAll || (t.itemsAll.length === 0)) {
