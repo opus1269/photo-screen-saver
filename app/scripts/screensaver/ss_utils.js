@@ -114,23 +114,27 @@ app.SSUtils = (function() {
 				app.Utils.shuffleArray(t.itemsAll);
 			}
 
-			// create the animatable pages
-			const ct = Math.min(t.itemsAll.length, _MAX_PAGES);
-			for (let i = 0; i < ct; i++) {
+			// create the animated pages
+			const len = Math.min(t.itemsAll.length, _MAX_PAGES);
+			for (let i = 0; i < len; i++) {
 				const photo = t.itemsAll[i];
-				// shallow copy
-				t.push('items', JSON.parse(JSON.stringify(photo)));
+				const view = app.SSViewFull.createView(photo, t.photoSizing);
+				t.push('views', view);
 				t.curIdx++;
 			}
-			// force update of repeat template
+
+			// force update of animated pages
 			t.rep.render();
-			// set the geo locations and optionally the time style
-			const largeTime = app.Storage.getBool('largeTime');
-			t.items.forEach((item, index) => {
-				app.PhotoView.setLocation(index);
-				if (largeTime) {
-					app.PhotoView.setLargeTimeStyle(index);
-				}
+
+			// set the Elements of the view
+			t.views.forEach((view, index) => {
+				const el = t.p.querySelector('#item' + index);
+				const image = el.querySelector('.image');
+				const author = el.querySelector('.author');
+				const time = el.querySelector('.time');
+				const location = el.querySelector('.location');
+				const model = t.rep.modelForElement(el);
+				view.setElements(image, author, time, location, model);
 			});
 
 			if (!t.itemsAll || (t.itemsAll.length === 0)) {

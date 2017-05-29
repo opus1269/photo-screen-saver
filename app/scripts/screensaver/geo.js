@@ -50,7 +50,7 @@ app.Geo = (function() {
 	 */
 	const _LOC_CACHE = {
 		entries: [],
-		maxSize: 50,
+		maxSize: 100,
 	};
 
 	/**
@@ -86,45 +86,40 @@ app.Geo = (function() {
 
 	return {
 		/**
-		 * Get and set the location string
-		 * @param {app.PhotoView.Elements} els - animated pages elements
+		 * Get the location string
+		 * @param {string} point - 'lat,long'
+		 * @returns {Promise<string>} geolocation as string
 		 * @memberOf app.Geo
 		 */
-		set: function(els) {
+		get: function(point) {
 			if (!app.Storage.getBool('showLocation')) {
-				return;
-			} else if (!(els.item && els.item.point && !els.item.location)) {
-				return;
+				throw new Error('showLocation is off');
+			} else if (!point) {
+				throw new Error('point is null');
 			}
 
-			// has location and hasn't been set yet
-			/** @type {string} */
-			const point = els.item.point;
+			// check cache
 			const cache = _getFromCache(point);
 			if (cache) {
 				// retrieve from cache
-				els.model.set('item.location', cache.loc);
-				return;
+				return Promise.resolve(cache.loc);
 			}
 
 			// get from api - it will translate based on the browser language
 			const url = `${_GEOCODE_API}?sensor=true` +
 				`&latlng=${point.replace(' ', ',')}`;
-			app.Http.doGet(url, false, false, false, true, 2).then((resp) => {
+			return app.Http.doGet(url, false, false, false, true, 2)
+				.then((resp) => {
 				if ((resp.status === 'OK') && resp.results
 					&& (resp.results.length > 0)) {
 					const location = resp.results[0].formatted_address;
-					els.model.set('item.location', location);
 					// cache it
 					_addToCache(point, location);
+					return Promise.resolve(location);
+				} else {
+					const err = `geolocation failed. Status: ${resp.status}`;
+					throw new Error(err);
 				}
-				return Promise.resolve();
-			}).catch((err) => {
-				const networkErr = app.Utils.localize('err_network');
-				if (!err.message.includes(networkErr)) {
-					app.GA.error(err.message, 'Geo.set');
-				}
-				els.model.set('item.location', null);
 			});
 		},
 	};

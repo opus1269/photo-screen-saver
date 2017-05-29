@@ -58,12 +58,13 @@
 	t.curIdx = 0;
 
 	/**
-	 * Array of {@link app.Photo} currently loaded into the neon-animated-pages.
-	 * Always changing subset of [t.itemsAll]{@link app.ScreenSaver.t.itemsAll}
+	 * Array of {@link app.SSView} objects bound to the neon-animated-pages.
+	 * The {@link app.Photo} property is an always changing subset of
+	 * [t.itemsAll]{@link app.ScreenSaver.t.itemsAll}
 	 * @type {Array}
 	 * @memberOf app.ScreenSaver
 	 */
-	t.items = [];
+	t.views = [];
 
 	// the last selected page
 	t.lastSelected = -1;
@@ -118,7 +119,7 @@
 			_replacePhoto(t.replaceLast, false);
 		}
 
-		if (app.PhotoView.isError(t.prevPage)) {
+		if (t.views[t.prevPage].isError(t.prevPage)) {
 			// broken link, mark it and replace it
 			if (t.prevPage >= 0) {
 				_replacePhoto(t.prevPage, true);
@@ -165,18 +166,6 @@
 	}
 
 	/**
-	 * Set the photo item
-	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
-	 * @param {app.Photo} item - An {@link app.Photo}
-	 * @private
-	 * @memberOf app.ScreenSaver
-	 */
-	function _setItem(idx, item) {
-		t.rep.set('items.' + idx, JSON.parse(JSON.stringify(item)));
-		app.PhotoView.setLocation(idx);
-	}
-
-	/**
 	 * Set the time label
 	 * @private
 	 * @memberOf app.ScreenSaver
@@ -192,12 +181,12 @@
 
 	/**
 	 * Mark a photo in t.itemsAll as unusable
-	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
+	 * @param {int} idx - index into [t.views]{@link app.ScreenSaver.t.views}
 	 * @private
 	 * @memberOf app.ScreenSaver
 	 */
 	function _markPhotoBad(idx) {
-		const name = app.PhotoView.getName(idx);
+		const name = t.views[idx].getName();
 		const index = t.itemsAll.findIndex((item) => {
 			return item.name === name;
 		});
@@ -215,24 +204,25 @@
 
 	/**
 	 * Try to find a photo that has finished loading
-	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
-	 * @returns {int} index into t.items, -1 if none are loaded
+	 * @param {int} idx - index into [t.views]{@link app.ScreenSaver.t.views}
+	 * @returns {int} index into t.views, -1 if none are loaded
 	 * @memberOf app.ScreenSaver
 	 */
 	function _findLoadedPhoto(idx) {
-		if (app.PhotoView.isLoaded(idx)) {
+		if (t.views[idx].isLoaded()) {
 			return idx;
 		}
 		// wrap-around loop: https://stackoverflow.com/a/28430482/4468645
-		for (let i = 0; i < t.items.length; i++) {
-			const index = (i + idx) % t.items.length;
+		for (let i = 0; i < t.views.length; i++) {
+			const index = (i + idx) % t.views.length;
+			const view = t.views[index];
 			if ((index === t.lastSelected) || (index === t.p.selected)) {
 				// don't use current animation pair
 				continue;
 			}
-			if (app.PhotoView.isLoaded(index)) {
+			if (view.isLoaded()) {
 				return index;
-			} else if (app.PhotoView.isError(index)) {
+			} else if (view.isError()) {
 				_markPhotoBad(index);
 			}
 		}
@@ -241,7 +231,7 @@
 
 	/**
 	 * Add the next photo from the master array
-	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
+	 * @param {int} idx - index into [t.views]{@link app.ScreenSaver.t.views}
 	 * @param {boolean} error - true if the photo at idx didn't load
 	 * @memberOf app.ScreenSaver
 	 */
@@ -251,7 +241,7 @@
 			_markPhotoBad(idx);
 		}
 
-		if (t.started && (t.itemsAll.length > t.items.length)) {
+		if (t.started && (t.itemsAll.length > t.views.length)) {
 			let item;
 			for (let i = t.curIdx; i < t.itemsAll.length; i++) {
 				// find a url that is ok, AFAWK
@@ -262,7 +252,7 @@
 				}
 			}
 			// add the next image from the master list to this page
-			_setItem(idx, item);
+			t.views[idx].setPhoto(item);
 			t.curIdx = (t.curIdx === t.itemsAll.length - 1) ? 0 : t.curIdx + 1;
 		}
 	}
@@ -272,7 +262,7 @@
 	 * @memberOf app.ScreenSaver
 	 */
 	function _replaceAllPhotos() {
-		if (t.itemsAll.length > t.items.length) {
+		if (t.itemsAll.length > t.views.length) {
 			let pos = 0;
 			let newIdx = t.curIdx;
 			for (let i = t.curIdx; i < t.itemsAll.length; i++) {
@@ -283,9 +273,10 @@
 						// don't replace current animation pair
 						continue;
 					}
-					_setItem(pos, item);
+					// replace photo
+					t.views[pos].setPhoto(item);
 					pos++;
-					if (pos === t.items.length) {
+					if (pos === t.views.length) {
 						break;
 					}
 				}
@@ -297,8 +288,8 @@
 
 	/**
 	 * Get the next photo to display
-	 * @param {int} idx - index into [t.items]{@link app.ScreenSaver.t.items}
-	 * @returns {int} next - index into [t.items]{@link app.ScreenSaver.t.items}
+	 * @param {int} idx - index into [t.views]{@link app.ScreenSaver.t.views}
+	 * @returns {int} next - index into [t.views]{@link app.ScreenSaver.t.views}
 	 * to display, -1 if none are ready
 	 * @memberOf app.ScreenSaver
 	 */
@@ -313,14 +304,14 @@
 				// tried waiting for load, now replace the current photos
 				t.waitTime = 200;
 				_replaceAllPhotos();
-				idx = (idx === t.items.length - 1) ? 0 : idx + 1;
+				idx = (idx === t.views.length - 1) ? 0 : idx + 1;
 				ret = _findLoadedPhoto(idx);
 				if (ret !== -1) {
 					t.waitForLoad = true;
 				}
 			}
 		} else if (t.waitTime !== t.transitionTime) {
-			// photo found, set the waitTime back to transition time in case
+			// photo found, set the waitTime back to transition time
 			t.waitTime = t.transitionTime;
 		}
 		return ret;
@@ -338,8 +329,8 @@
 		}
 
 		const curPage = (t.p.selected === undefined) ? 0 : t.p.selected;
-		const prevPage = (curPage > 0) ? curPage - 1 : t.items.length - 1;
-		let selected = (curPage === t.items.length - 1) ? 0 : curPage + 1;
+		const prevPage = (curPage > 0) ? curPage - 1 : t.views.length - 1;
+		let selected = (curPage === t.views.length - 1) ? 0 : curPage + 1;
 
 		// for replacing the page in _onAniFinished
 		t.replaceLast = t.lastSelected;
@@ -357,9 +348,9 @@
 
 		selected = _getNextPhoto(selected);
 		if (selected !== -1) {
-			// If a new photo is ready, prep it
+			// If a new photo is ready, render it
 			_setTime();
-			app.PhotoView.prep(selected, t.photoSizing);
+			t.views[selected].render();
 
 			t.lastSelected = t.p.selected;
 			// update t.p.selected so the animation runs
@@ -415,7 +406,7 @@
 	 */
 	window.addEventListener('click', function() {
 		if (t.p && (t.p.selected !== undefined)) {
-			app.Photo.showSource(t.items[t.p.selected]);
+			app.Photo.showSource(t.views[t.p.selected].photo);
 		}
 		app.SSUtils.close();
 	}, false);

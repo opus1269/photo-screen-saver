@@ -38,6 +38,7 @@ body {
 	color: white;
 	opacity: 1.0;
 }
+
 .location {
 	font-size: 2.5vh;
 	font-weight: 300;
@@ -50,6 +51,7 @@ body {
 	color: white;
 	opacity: 1.0;
 }
+
 #noPhotos {
 	font-size: 5vh;
 	font-weight: 600;

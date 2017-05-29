@@ -15,7 +15,7 @@
 	<link rel="import" href="../elements/elements.html">
 
 	<!-- For iron-flex-layout -->
-	<style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors iron-positioning"></style>
+	<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning"></style>
 
 	<!-- For shared styles, shared-styles.html import in elements.html -->
 	<style is="custom-style" include="shared-styles"></style>
@@ -29,25 +29,26 @@
 		<div id="mainContainer" class="flex">
 			<neon-animated-pages id="pages" class="fit" animate-initial-selection
 								 on-neon-animation-finish="_OnAniFinished">
-				<template is="dom-repeat" id="repeatTemplate" items="{{items}}">
+				<template is="dom-repeat" id="repeatTemplate" items="{{views}}">
 					<slide-animatable ani-type="{{transitionType}}" class="fit">
 						<section id="item[[index]]">
 							<iron-image
 								class="image"
-								src="{{item.path}}"
-								width="{{item.width}}"
-								height="{{item.height}}"
+								src="{{item.photo.path}}"
+								width="{{item.photo.width}}"
+								height="{{item.photo.height}}"
 								sizing="{{sizingType}}"
 								preload>
 							</iron-image>
 							<div class="time">{{time}}</div>
-							<div class="author">{{item.label}}<sup id="sup"></sup></div>
-							<div class="location">{{item.location}}</div>
+							<div class="author">{{item.photo.label}}<sup id="sup"></sup></div>
+							<div class="location">{{item.photo.location}}</div>
 						</section>
 					</slide-animatable>
 				</template>
 			</neon-animated-pages>
 		</div>
+		<!-- todo Localize or replace -->
 		<div id="noPhotos">No Photos Are Selected</div>
 	</template>
 
@@ -61,7 +62,10 @@
 	<script src="../scripts/storage.js"></script>
 	<script src="../scripts/screensaver/geo.js"></script>
 	<script src="../scripts/screensaver/photo.js"></script>
-	<script src="../scripts/screensaver/photo_view.js"></script>
+	<script src="../scripts/screensaver/views/ss_view.js"></script>
+	<script src="../scripts/screensaver/views/ss_view_letterbox.js"></script>
+	<script src="../scripts/screensaver/views/ss_view_frame.js"></script>
+	<script src="../scripts/screensaver/views/ss_view_full.js"></script>
 	<script src="../scripts/screensaver/ss_utils.js"></script>
 	<script src="../scripts/screensaver/screensaver.js"></script>
 
