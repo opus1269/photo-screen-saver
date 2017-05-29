@@ -87,16 +87,6 @@ app.Utils = (function() {
 		},
 
 		/**
-		 * Get the idle time in seconds
-		 * @returns {int} idle time in seconds
-		 * @memberOf app.Utils
-		 */
-		getIdleSeconds: function() {
-			const idle = app.Storage.get('idleTime');
-			return idle.base * 60;
-		},
-
-		/**
 		 * true if we are MS windows
 		 * @returns {boolean} true if MS windows
 		 * @memberOf app.Utils

@@ -122,7 +122,7 @@ app.Alarm = (function() {
 		if (app.Storage.getBool('keepAwake')) {
 			chrome.power.requestKeepAwake('display');
 		}
-		const interval = app.Utils.getIdleSeconds();
+		const interval = app.Data.getIdleSeconds();
 		chromep.idle.queryState(interval).then((state) => {
 			// display screensaver if the idle time criteria is met
 			if (state === 'idle') {

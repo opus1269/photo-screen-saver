@@ -150,7 +150,7 @@ app.Data = (function() {
 	 * @memberOf app.Data
 	 */
 	function _processIdleTime() {
-		chrome.idle.setDetectionInterval(app.Utils.getIdleSeconds());
+		chrome.idle.setDetectionInterval(app.Data.getIdleSeconds());
 	}
 
 	/**
@@ -337,5 +337,16 @@ app.Data = (function() {
 				}
 			}
 		},
+
+		/**
+		 * Get the idle time in seconds
+		 * @returns {int} idle time in seconds
+		 * @memberOf app.Utils
+		 */
+		getIdleSeconds: function() {
+			const idle = app.Storage.get('idleTime');
+			return idle.base * 60;
+		},
+
 	};
 })();
