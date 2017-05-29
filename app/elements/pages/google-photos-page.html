@@ -360,35 +360,35 @@ app.GooglePhotosPage = Polymer({
 	/**
 	 * Event: Handle tap on checkbox for an album
 	 * @param {Event} event - tap event
-	 * @param {Object} event.model - the model
 	 * @param {app.GooglePhotos.Album} event.model.album - the album
-	 * @param {int} event.model.index - the album index
 	 * @private
 	 */
 	_albumSelectChange: function(event) {
 		const album = event.model.album;
-		const index = event.model.index;
 
-		if (index !== -1) {
-			app.GA.event(app.GA.EVENT.ICON,
-				`selectGoogleAlbum: ${album.checked}`);
-			this.selections.splice(index, 1);
+		app.GA.event(app.GA.EVENT.ICON,
+			`selectGoogleAlbum: ${album.checked}`);
 
-			if (album.checked) {
-				this.selections.push({id: album.id, photos: album.photos});
-			}
-
-			const set =
-				app.Storage.safeSet('albumSelections', this.selections, null);
-			if (!set) {
-				// exceeded storage limits
-				this.selections.pop();
-				this.set('albums.' + album.index + '.checked', false);
-				this._showStorageErrorDialog(
-					'GooglePhotosPage._albumSelectChange');
-			}
+		if (album.checked) {
+			// add new
+			this.selections.push({id: album.id, photos: album.photos});
 		} else {
-			app.GA.error('Album select  - index not found',
+			// delete old
+			const index = this.selections.findIndex((e) => {
+				return e.id === album.id;
+			});
+			if (index !== -1) {
+				this.selections.splice(index, 1);
+			}
+		}
+
+		const set =
+			app.Storage.safeSet('albumSelections', this.selections, null);
+		if (!set) {
+			// exceeded storage limits
+			this.selections.pop();
+			this.set('albums.' + album.index + '.checked', false);
+			this._showStorageErrorDialog(
 				'GooglePhotosPage._albumSelectChange');
 		}
 	},
