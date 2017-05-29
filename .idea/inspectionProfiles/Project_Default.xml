@@ -64,7 +64,7 @@
     <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="38">
+          <list size="47">
             <item index="0" class="java.lang.String" itemvalue="nobr" />
             <item index="1" class="java.lang.String" itemvalue="noembed" />
             <item index="2" class="java.lang.String" itemvalue="comment" />
@@ -103,6 +103,15 @@
             <item index="35" class="java.lang.String" itemvalue="neon-animatable" />
             <item index="36" class="java.lang.String" itemvalue="settings-page" />
             <item index="37" class="java.lang.String" itemvalue="iron-iconset-svg" />
+            <item index="38" class="java.lang.String" itemvalue="paper-tabs" />
+            <item index="39" class="java.lang.String" itemvalue="paper-tab" />
+            <item index="40" class="java.lang.String" itemvalue="setting-dropdown" />
+            <item index="41" class="java.lang.String" itemvalue="setting-toggle" />
+            <item index="42" class="java.lang.String" itemvalue="setting-time" />
+            <item index="43" class="java.lang.String" itemvalue="setting-background" />
+            <item index="44" class="java.lang.String" itemvalue="setting-slider" />
+            <item index="45" class="java.lang.String" itemvalue="iron-pages" />
+            <item index="46" class="java.lang.String" itemvalue="setting-link" />
           </list>
         </value>
       </option>
