@@ -59,7 +59,7 @@ body {
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%,-50%);
-	color: red;
+	color: rgba(48, 63, 159, 1);
 	visibility: hidden;
 	opacity: .8;
 }

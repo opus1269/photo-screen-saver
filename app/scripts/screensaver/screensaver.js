@@ -128,6 +128,15 @@
 	};
 
 	/**
+	 * Computed property: No photos label
+	 * @returns {string} i18n label
+	 * @memberOf app.ScreenSaver
+	 */
+	t._computeNoPhotos = function() {
+		return `${app.Utils.localize('no')} ${app.Utils.localize('photos')}`;
+	};
+
+	/**
 	 * Process settings related to between photo transitions
 	 * @memberOf app.ScreenSaver
 	 */

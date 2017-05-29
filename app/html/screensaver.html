@@ -48,8 +48,7 @@
 				</template>
 			</neon-animated-pages>
 		</div>
-		<!-- todo Localize or replace -->
-		<div id="noPhotos">No Photos Are Selected</div>
+		<div id="noPhotos">{{_computeNoPhotos()}}</div>
 	</template>
 
 	<script src="../lib/chrome-promise.js"></script>
