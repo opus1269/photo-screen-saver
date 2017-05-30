@@ -55,7 +55,9 @@
 				case 3:
 					return new app.SSViewFull(photo);
 				default:
-					throw new TypeError(`Unknown SSView type: ${sizing}`);
+					app.GA.error(`Unknown SSView type: ${sizing}`,
+						'SSView.createView');
+					return new app.SSViewLetterbox(photo);
 			}
 		}
 
