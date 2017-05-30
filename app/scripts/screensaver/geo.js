@@ -94,8 +94,8 @@ app.Geo = (function() {
 		get: function(point) {
 			if (!app.Storage.getBool('showLocation')) {
 				throw new Error('showLocation is off');
-			} else if (!point) {
-				throw new Error('point is null');
+			} else if (app.Utils.isWhiteSpace(point)) {
+				throw new Error('point is empty or null');
 			}
 
 			// check cache
@@ -107,19 +107,17 @@ app.Geo = (function() {
 
 			// get from api - it will translate based on the browser language
 			const url = `${_GEOCODE_API}?sensor=true` +
-				`&latlng=${point.replace(' ', ',')}`;
+				`&latlng=${point}`;
 			return app.Http.doGet(url, false, false, false, true, 2)
 				.then((resp) => {
+				let location = '';
 				if ((resp.status === 'OK') && resp.results
-					&& (resp.results.length > 0)) {
-					const location = resp.results[0].formatted_address;
+				&& (resp.results.length > 0)) {
+					location = resp.results[0].formatted_address;
 					// cache it
 					_addToCache(point, location);
-					return Promise.resolve(location);
-				} else {
-					const err = `geolocation failed. Status: ${resp.status}`;
-					throw new Error(err);
 				}
+				return Promise.resolve(location);
 			});
 		},
 	};
