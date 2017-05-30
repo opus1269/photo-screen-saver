@@ -69,6 +69,15 @@
 		}
 
 		/**
+		 * Should we show the time
+		 * @returns {boolean} true if we should show the time
+		 * @static
+		 */
+		static showTime() {
+			return app.Storage.getBool('showTime');
+		}
+
+		/**
 		 * Does a photo have an author label to show
 		 * @returns {boolean} true if we should show the author
 		 */

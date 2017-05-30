@@ -73,7 +73,7 @@
 			timeStyle.right = (right + 1) + 'vw';
 			timeStyle.bottom = (bottom + 3.5) + 'vh';
 
-			if (app.SSView._showLocation()) {
+			if (app.SSView.showTime()) {
 				// don't wrap author
 				authorStyle.textOverflow = 'ellipsis';
 				authorStyle.whiteSpace = 'nowrap';
