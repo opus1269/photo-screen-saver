@@ -114,7 +114,8 @@
 		_setLocation() {
 			if (app.SSView._showLocation() && this._hasLocation()) {
 				app.Geo.get(this.photo.point).then((location) => {
-					if (this.model) {
+					if (location && this.model) {
+						location = location.replace('Unnamed Road, ', '');
 						this.model.set('item.photo.location', location);
 					}
 					return Promise.resolve();
