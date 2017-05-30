@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.PhotoView.html">app.PhotoView</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSUtils.html">app.SSUtils</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.ScreenSaver.html">app.ScreenSaver</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSUtils.html">app.SSUtils</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
+					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
 				</ul>
 			</li>
 			
@@ -179,7 +179,7 @@ app.SSUtils = (function() {
 		 */
 		loadPhotos: function(t) {
 
-			// populate t.itemsAll with selected photos
+			// populate t.photos with selected photos
 			let sources = app.PhotoSource.getSelectedPhotos();
 			sources = sources || [];
 			sources.forEach((source) => {
@@ -189,7 +189,7 @@ app.SSUtils = (function() {
 					if (!app.Photo.ignore(sourcePhoto.asp, t.photoSizing)) {
 						const photo =
 							new app.Photo('photo' + ct, sourcePhoto, type);
-						t.itemsAll.push(photo);
+						t.photos.push(photo);
 						ct++;
 					}
 				});
@@ -197,29 +197,33 @@ app.SSUtils = (function() {
 
 			if (app.Storage.getBool('shuffle')) {
 				// randomize the order
-				app.Utils.shuffleArray(t.itemsAll);
+				app.Utils.shuffleArray(t.photos);
 			}
 
-			// create the animatable pages
-			const ct = Math.min(t.itemsAll.length, _MAX_PAGES);
-			for (let i = 0; i &lt; ct; i++) {
-				const photo = t.itemsAll[i];
-				// shallow copy
-				t.push('items', JSON.parse(JSON.stringify(photo)));
+			// create the animated pages
+			const len = Math.min(t.photos.length, _MAX_PAGES);
+			for (let i = 0; i &lt; len; i++) {
+				const photo = t.photos[i];
+				const view = app.SSViewFull.createView(photo, t.photoSizing);
+				t.push('views', view);
 				t.curIdx++;
 			}
-			// force update of repeat template
+
+			// force update of animated pages
 			t.rep.render();
-			// set the geo locations and optionally the time style
-			const largeTime = app.Storage.getBool('largeTime');
-			t.items.forEach((item, index) => {
-				app.PhotoView.setLocation(index);
-				if (largeTime) {
-					app.PhotoView.setLargeTimeStyle(index);
-				}
+
+			// set the Elements of the view
+			t.views.forEach((view, index) => {
+				const el = t.p.querySelector('#item' + index);
+				const image = el.querySelector('.image');
+				const author = el.querySelector('.author');
+				const time = el.querySelector('.time');
+				const location = el.querySelector('.location');
+				const model = t.rep.modelForElement(el);
+				view.setElements(image, author, time, location, model);
 			});
 
-			if (!t.itemsAll || (t.itemsAll.length === 0)) {
+			if (!t.photos || (t.photos.length === 0)) {
 				// No usable photos, display static image
 				app.SSUtils.setNoPhotos(t);
 			}
@@ -317,7 +321,7 @@ app.SSUtils = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on May 29th 2017, 3:00:47 am
+		on May 29th 2017, 8:08:57 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
