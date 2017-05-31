@@ -15,6 +15,20 @@ app.Storage = (function() {
 
 	new ExceptionHandler();
 
+	/**
+	 * Notify listeners of a value change
+	 * @param {!string} key - key that changed
+	 * @param {?Object} value - new value, null if item removed
+	 * @private
+	 */
+	function _notify(key, value) {
+		// notify listeners
+		const msg = app.JSONUtils.shallowCopy(app.Msg.VALUE_CHANGED);
+		msg.key = key;
+		msg.value = value;
+		app.Msg.send(msg);
+	}
+
 	return {
 		/**
 		 * Get a JSON parsed value from localStorage
@@ -60,13 +74,19 @@ app.Storage = (function() {
 		 * JSON stringify and save a value to localStorage
 		 * @param {!string} key - key to set value for
 		 * @param {?Object} [value=null] - new value, if null remove item
+		 * @param {?boolean} [notify=true] - if true, notify listeners
 		 * @memberOf app.Storage
 		 */
-		set: function(key, value = null) {
+		set: function(key, value = null, notify = true) {
+			let val = value;
 			if (value === null) {
 				localStorage.removeItem(key);
 			} else {
-				localStorage.setItem(key, JSON.stringify(value));
+				val = JSON.stringify(value);
+				localStorage.setItem(key, val);
+			}
+			if (notify) {
+				_notify(key, val);
 			}
 		},
 
