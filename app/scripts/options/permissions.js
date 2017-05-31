@@ -70,7 +70,7 @@ app.Permissions = (function() {
 	function _setState(type, value) {
 		// send message to store value so items that are bound
 		// to it will get storage event
-		const msg = app.Msg.STORE;
+		const msg = app.JSONUtils.shallowCopy(app.Msg.STORE);
 		msg.key = type.name;
 		msg.value = value;
 		app.Msg.send(msg).catch(() => {});
