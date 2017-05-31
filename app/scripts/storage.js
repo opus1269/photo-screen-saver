@@ -57,8 +57,9 @@ app.Storage = (function() {
 			let value = parseInt(item, 10);
 			if (Number.isNaN(value)) {
 				value = (def === null) ? value : def;
-				app.GA.error(`NaN value for: ${key}, set to: ${value}`,
-					'Storage.getInt');
+				if (def === null) {
+					app.GA.error(`NaN value for: ${key}`, 'Storage.getInt');
+				}
 			}
 			return value;
 		},
