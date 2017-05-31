@@ -48,14 +48,17 @@ app.Storage = (function() {
 		/**
 		 * Get integer value from localStorage
 		 * @param {!string} key - key to get value for
+		 * @param {?int} [def=null] - optional value to return, if NaN
 		 * @returns {int} value as integer, NaN on error
 		 * @memberOf app.Storage
 		 */
-		getInt: function(key) {
+		getInt: function(key, def = null) {
 			let item = localStorage.getItem(key);
 			let value = parseInt(item, 10);
 			if (Number.isNaN(value)) {
-				app.GA.error(`NaN value for: ${key}`, 'Storage.getInt');
+				value = (def === null) ? value : def;
+				app.GA.error(`NaN value for: ${key}, set to: ${value}`,
+					'Storage.getInt');
 			}
 			return value;
 		},

@@ -109,6 +109,13 @@
 				value: '12:00 AM',
 			},
 
+			format: {
+				type: Number,
+				value: 1,
+				notify: true,
+				observer: '_formatChanged',
+			},
+
 			mainLabel: {
 				type: String,
 				value: '',
@@ -135,13 +142,25 @@
 			},
 		},
 
-		// initialize value if it is not in localstorage
-		_init: function() {
-			this.set('value', '00:00');
+		_setTimeLabel: function(value) {
+			this.set('timeLabel', this._formatTime(value));
 		},
 
-		_valueChanged: function() {
-			this.set('timeLabel', this._formatTime(this.get('value')));
+		/**
+		 * Observer: Value changed
+		 * @param {string} newValue - value we changed to
+		 * @private
+		 */
+		_valueChanged: function(newValue) {
+			this._setTimeLabel(newValue);
+		},
+
+		/**
+		 * Observer: Global Time format changed
+		 * @private
+		 */
+		_formatChanged: function() {
+			this._setTimeLabel(this.get('value'));
 		},
 
 		/**
@@ -154,33 +173,42 @@
 			}
 		},
 
-	/**
-	 * Event: Set time on tap of OK button
-	 * @private
-	 */
-	_onTimeSelected: function() {
-		const picker = this.$.timePicker;
-		const hour = ('0' + picker.hour).substr(-2);
-		const min = ('0' + picker.minute).substr(-2);
-		const value = `${hour}:${min}`;
-		this.set('value', value);
-		app.GA.event(app.GA.EVENT.BUTTON, `SettingTime.OK: ${this.name}`);
-	},
+		/**
+		 * Event: Set time on tap of OK button
+		 * @private
+		 */
+		_onTimeSelected: function() {
+			const picker = this.$.timePicker;
+			const hour = ('0' + picker.hour).substr(-2);
+			const min = ('0' + picker.minute).substr(-2);
+			const value = `${hour}:${min}`;
+			this.set('value', value);
+			app.GA.event(app.GA.EVENT.BUTTON, `SettingTime.OK: ${this.name}`);
+		},
 
-	/**
-	 * Get the time suitable for display
-	 * @param {string} timeString - format '00:00'
-	 * @returns {string} formatted time
-	 * @private
-	 */
-	_formatTime: function(timeString) {
-		let ret = '12:00 AM';
-		if (timeString) {
-			ret = app.Time.getStringFull(timeString);
-		} else {
-			app.GA.error('timeString is null', 'setting-time._formatTime');
-		}
-		return ret;
-	},
-});
+		/**
+		 * Get the time suitable for display
+		 * @param {string} timeString - format '00:00'
+		 * @returns {string} formatted time
+		 * @private
+		 */
+		_formatTime: function(timeString) {
+			let ret = '12:00 AM';
+			if (timeString) {
+				ret = app.Time.getStringFull(timeString, this.format);
+			} else {
+				app.GA.error('timeString is null', 'setting-time._formatTime');
+			}
+			return ret;
+		},
+
+		/**
+		 * Initialize value if it is not in localstorage
+		 * @private
+		 */
+		_init: function() {
+			this.set('value', '00:00');
+		},
+
+	});
 </script>

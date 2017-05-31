@@ -141,7 +141,7 @@
 	 * @memberOf app.ScreenSaver
 	 */
 	function _processPhotoTransitions() {
-		t.transitionType = app.Storage.getInt('photoTransition');
+		t.transitionType = app.Storage.getInt('photoTransition', 0);
 		if (t.transitionType === 8) {
 			// pick random transition
 			t.transitionType = app.Utils.getRandomInt(0, 7);
@@ -152,7 +152,7 @@
 		t.waitTime = t.transitionTime;
 		t.waitForLoad = true;
 
-		const showTime = app.Storage.getInt('showTime');
+		const showTime = app.Storage.getInt('showTime', 0);
 		if ((showTime !== 0) && (trans.base > 60)) {
 			// add repeating alarm to update time label
 			// if transition time is more than 1 minute
@@ -180,7 +180,7 @@
 	 * @memberOf app.ScreenSaver
 	 */
 	function _setTime() {
-		const showTime = app.Storage.getInt('showTime');
+		const showTime = app.Storage.getInt('showTime', 0);
 		if (showTime !== 0) {
 			t.set('time', app.SSUtils.getTime());
 		} else {
@@ -189,7 +189,7 @@
 	}
 
 	/**
-	 * Mark a photo in t.photos as unusable
+	 * Mark a photo in [t.photos]{@link app.ScreenSaver.t.views} as unusable
 	 * @param {int} idx - index into [t.views]{@link app.ScreenSaver.t.views}
 	 * @private
 	 * @memberOf app.ScreenSaver

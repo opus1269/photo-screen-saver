@@ -18,8 +18,6 @@ window.app = window.app || {};
 	 * @alias app.Time
 	 */
 	app.Time = class Time {
-
-
 		/**
 		 * Create a new Time
 		 * @param {?string} [timeString=null] - in '00:00' format, if null
@@ -33,12 +31,13 @@ window.app = window.app || {};
 		/**
 		 * Get time as string suitable for display, including AM/PM if 12hr
 		 * @param {!string} timeString - in '00:00' format
+		 * @param {?int} [frmt=null] - optional format, overrides storage value
 		 * @returns {!string} display string
 		 * @static
 		 */
-		static getStringFull(timeString) {
+		static getStringFull(timeString, frmt = null) {
 			const time = new Time(timeString);
-			return time.toString();
+			return time.toString(frmt);
 		}
 
 		/**
@@ -59,13 +58,16 @@ window.app = window.app || {};
 
 		/**
 		 * Determine if user wants 24 hr time
+		 * @param {?int} [frmt=null] - optional format, overrides storage value
 		 * @returns {boolean} true for 24 hour time
-		 * @private
 		 * @static
 		 */
-		static _is24hr() {
+		static is24Hr(frmt = null) {
 			let ret = false;
-			const format = app.Storage.getInt('showTime');
+			let format = app.Storage.getInt('showTime', 0);
+			if (frmt !== null) {
+				format = frmt;
+			}
 			const localeTime = app.Utils.localize('time_format');
 			if (format === 2) {
 				// time display 24hr
@@ -94,14 +96,15 @@ window.app = window.app || {};
 		}
 
 		/**
-		 * Get string
+		 * Get string representation of Time
+		 * @param {?int} [frmt=null] - optional format, overrides storage value
 		 * @returns {string} As string
 		 */
-		toString() {
+		toString(frmt = null) {
 			let ret;
 			const date = new Date();
 			date.setHours(this._hr, this._min);
-			if (Time._is24hr()) {
+			if (Time.is24Hr(frmt)) {
 				ret = date.toLocaleTimeString(navigator.language, {
 					hour: 'numeric',
 					minute: '2-digit',

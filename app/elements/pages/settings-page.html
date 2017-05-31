@@ -186,12 +186,14 @@
 								name="activeStart"
 								main-label="{{localize('setting_start_time')}}"
 								secondary-label="{{localize('setting_start_time_desc')}}"
+								format="{{showTimeValue}}"
 								indent
 								disabled$="[[!keepEnabled]]"></setting-time>
 						<setting-time
 								name="activeStop"
 								main-label="{{localize('setting_stop_time')}}"
 								secondary-label="{{localize('setting_stop_time_desc')}}"
+								format="{{showTimeValue}}"
 								indent
 								disabled$="[[!keepEnabled]]"></setting-time>
 						<setting-toggle

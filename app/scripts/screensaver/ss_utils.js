@@ -64,7 +64,7 @@ app.SSUtils = (function() {
 		 * @memberOf app.SSUtils
 		 */
 		setupPhotoSizing(t) {
-			t.photoSizing = app.Storage.getInt('photoSizing');
+			t.photoSizing = app.Storage.getInt('photoSizing', 0);
 			if (t.photoSizing === 4) {
 				// pick random sizing
 				t.photoSizing = app.Utils.getRandomInt(0, 3);
@@ -149,7 +149,7 @@ app.SSUtils = (function() {
 		 * @memberOf app.SSUtils
 		 */
 		getTime: function() {
-			const format = app.Storage.getInt('showTime');
+			const format = app.Storage.getInt('showTime', 0);
 			let timeString = '';
 
 			if (!Number.isNaN(format) && (format > 0)) {
