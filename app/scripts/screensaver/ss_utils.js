@@ -150,29 +150,12 @@ app.SSUtils = (function() {
 		 */
 		getTime: function() {
 			const format = app.Storage.getInt('showTime');
-			const date = new Date();
-			let timeStr = '';
+			let timeString = '';
 
-			if (format === 1) {
-				// 12 hour format
-				timeStr = date.toLocaleTimeString('en-us', {
-					hour: 'numeric',
-					minute: '2-digit',
-					hour12: true,
-				});
-				if (timeStr.endsWith('M')) {
-					// strip off AM/PM
-					timeStr = timeStr.substring(0, timeStr.length - 3);
-				}
-			} else {
-				// 24 hour format
-				timeStr = date.toLocaleTimeString(navigator.language, {
-					hour: 'numeric',
-					minute: '2-digit',
-					hour12: false,
-				});
+			if (!Number.isNaN(format) && (format > 0)) {
+				timeString = app.Time.getStringShort();
 			}
-			return timeStr;
+			return timeString;
 		},
 
 		/**
