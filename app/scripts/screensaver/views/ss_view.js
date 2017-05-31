@@ -28,8 +28,7 @@
 		 * @constructor
 		 */
 		constructor(photo) {
-			// shallow copy
-			this.photo = JSON.parse(JSON.stringify(photo));
+			this.photo = app.JSONUtils.shallowCopy(photo);
 			this.image = null;
 			this.author = null;
 			this.time = null;
@@ -164,8 +163,7 @@
 		 * @param {app.Photo} photo - a photo to render
 		 */
 		setPhoto(photo) {
-			// shallow copy
-			const photoCopy = JSON.parse(JSON.stringify(photo));
+			const photoCopy = app.JSONUtils.shallowCopy(photo);
 			if (this.model) {
 				this.model.set('item.photo', photoCopy);
 			}

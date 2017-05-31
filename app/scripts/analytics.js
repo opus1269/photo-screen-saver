@@ -134,8 +134,7 @@ app.GA = (function() {
 		 */
 		event: function(event, label=null, action=null) {
 			if (event) {
-				// shallow copy
-				const ev = JSON.parse(JSON.stringify(event));
+				const ev = app.JSONUtils.shallowCopy(event);
 				ev.hitType = 'event';
 				ev.eventLabel = label ? label : ev.eventLabel;
 				ev.eventAction = action ? action : ev.eventAction;
@@ -166,21 +165,29 @@ app.GA = (function() {
 		 * Send an exception
 		 * @param {string} message - the error message
 		 * @param {?string} [stack=null] - error stack
+		 * @param {boolean} [fatal=null] - true if fatal
 		 * @memberOf app.GA
 		 */
-		exception: function(message, stack = null) {
-			let msg = '';
-			if (message) {
-				msg += message;
+		exception: function(message, stack = null, fatal = true) {
+			try {
+				let msg = '';
+				if (message) {
+					msg += message;
+				}
+				if (stack) {
+					msg += `\n${stack}`;
+				}
+				const ex = {
+					hitType: 'exception',
+					exDescription: msg,
+					exFatal: fatal,
+				};
+				ga('send', ex);
+				console.error('Exception caught: ', ex);
+			} catch(err) {
+				// noinspection BadExpressionStatementJS
+				Function.prototype;
 			}
-			if (stack) {
-				msg += `\n${stack}`;
-			}
-			ga('send', 'exception', {
-				'exDescription': msg,
-				'exFatal': true,
-			});
-			console.error('Exception caught: ', msg);
 		},
 	};
 })();

@@ -24,30 +24,32 @@ app.Storage = (function() {
 		 */
 		get: function(key) {
 			let item = localStorage.getItem(key);
+			let value = null;
 			if (item !== null) {
-				item = JSON.parse(item);
+				value = app.JSONUtils.parse(item);
 			}
-			return item;
+			return value;
 		},
 
 		/**
 		 * Get integer value from localStorage
 		 * @param {!string} key - key to get value for
-		 * @returns {?int} value as integer
+		 * @returns {int} value as integer, NaN on error
 		 * @memberOf app.Storage
 		 */
 		getInt: function(key) {
 			let item = localStorage.getItem(key);
-			if (item !== null) {
-				item = parseInt(item, 10);
+			let value = parseInt(item, 10);
+			if (Number.isNaN(value)) {
+				app.GA.error(`NaN value for: ${key}`, 'Storage.getInt');
 			}
-			return item;
+			return value;
 		},
 
 		/**
 		 * Get boolean value from localStorage
 		 * @param {!string} key - key to get value for
-		 * @returns {?boolean} value as boolean
+		 * @returns {?boolean} value as boolean, null if key does not exist
 		 * @memberOf app.Storage
 		 */
 		getBool: function(key) {
@@ -57,14 +59,14 @@ app.Storage = (function() {
 		/**
 		 * JSON stringify and save a value to localStorage
 		 * @param {!string} key - key to set value for
-		 * @param {?Object} value - new value, if null remove item
+		 * @param {?Object} [value=null] - new value, if null remove item
 		 * @memberOf app.Storage
 		 */
-		set: function(key, value) {
-			if (value !== null) {
-				localStorage.setItem(key, JSON.stringify(value));
-			} else {
+		set: function(key, value = null) {
+			if (value === null) {
 				localStorage.removeItem(key);
+			} else {
+				localStorage.setItem(key, JSON.stringify(value));
 			}
 		},
 
