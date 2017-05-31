@@ -101,17 +101,6 @@ app.Msg = (function() {
 		value: '',
 	};
 
-	/**
-	 * Storage value changed
-	 * @type {app.Msg.Message}
-	 * @memberOf app.Msg
-	 */
-	const VALUE_CHANGED = {
-		message: 'store',
-		key: '',
-		value: '',
-	};
-
 	return {
 		SS_SHOW: SS_SHOW,
 		SS_CLOSE: SS_CLOSE,
@@ -121,7 +110,6 @@ app.Msg = (function() {
 		STORAGE_EXCEEDED: STORAGE_EXCEEDED,
 		PHOTO_SOURCE_FAILED: PHOTO_SOURCE_FAILED,
 		STORE: STORE,
-		VALUE_CHANGED: VALUE_CHANGED,
 
 		/**
 		 * Send a chrome message
