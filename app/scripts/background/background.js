@@ -126,8 +126,9 @@
 	 */
 	function _onMenuClicked(info) {
 		if (info.menuItemId === 'ENABLE_MENU') {
+			const isEnabled = app.Storage.get('enabled');
+			app.GA.event(app.GA.EVENT.MENU, `${info.menuItemId}: ${isEnabled}`);
 			_toggleEnabled();
-			app.GA.event(app.GA.EVENT.MENU, `${info.menuItemId}`);
 		}
 	}
 
