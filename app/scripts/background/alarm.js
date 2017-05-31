@@ -124,8 +124,8 @@ app.Alarm = (function() {
 		}
 		const interval = app.Data.getIdleSeconds();
 		chromep.idle.queryState(interval).then((state) => {
-			// display screensaver if the idle time criteria is met
-			if (state === 'idle') {
+			// display screensaver if enabled and the idle time criteria is met
+			if (app.Storage.getBool('enabled') && (state === 'idle')) {
 				app.SSControl.display(false);
 			}
 			return null;
