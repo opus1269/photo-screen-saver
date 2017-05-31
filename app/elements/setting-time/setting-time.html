@@ -164,6 +164,7 @@
 		const min = ('0' + picker.minute).substr(-2);
 		const value = `${hour}:${min}`;
 		this.set('value', value);
+		app.GA.event(app.GA.EVENT.BUTTON, `SettingTime.OK: ${this.name}`);
 	},
 
 	/**
