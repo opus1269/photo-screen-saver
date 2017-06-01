@@ -98,9 +98,10 @@
 		_processPhotoTransitions();
 
 		// load the photos for the slide show
-		app.SSUtils.loadPhotos(t);
+		if (app.SSUtils.loadPhotos(t)) {
+			// create the animated pages
+			app.SSUtils.createPages(t);
 
-		if (!t.noPhotos) {
 			// kick off the slide show if there are photos selected
 			// slight delay at beginning so we have a smooth start
 			t.waitTime = 2000;

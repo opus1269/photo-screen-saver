@@ -59,8 +59,8 @@ app.SSUtils = (function() {
 		},
 
 		/**
-		 * Process settings related to a photo's appearance
-		 * @param {Object} t - screensaver template
+		 * Process settings related to the photo's appearance
+		 * @param {!Object} t - screensaver template
 		 * @memberOf app.SSUtils
 		 */
 		setupPhotoSizing(t) {
@@ -81,19 +81,18 @@ app.SSUtils = (function() {
 					t.sizingType = null;
 					break;
 				default:
+					t.sizingType = 'contain';
 					break;
 			}
 		},
 
 		/**
 		 * Build the Array of {@link app.Photo} objects that will be displayed
-		 * and the neon-animated-pages
-		 * @param {Object} t - screensaver template
+		 * @param {!Object} t - screensaver template
+		 * @returns {boolean} true if there is at least one photo
 		 * @memberOf app.SSUtils
 		 */
 		loadPhotos: function(t) {
-
-			// populate t.photos with selected photos
 			let sources = app.PhotoSource.getSelectedPhotos();
 			sources = sources || [];
 			sources.forEach((source) => {
@@ -109,16 +108,29 @@ app.SSUtils = (function() {
 				});
 			});
 
+			if (!t.photos || (t.photos.length === 0)) {
+				// No usable photos, display static image
+				app.SSUtils.setNoPhotos(t);
+				return false;
+			}
+
 			if (app.Storage.getBool('shuffle')) {
 				// randomize the order
 				app.Utils.shuffleArray(t.photos);
 			}
+			return true;
+		},
 
-			// create the animated pages
+		/**
+		 * Create the animated pages
+		 * @param {!Object} t - screensaver template
+		 * @memberOf app.SSUtils
+		 */
+		createPages: function(t) {
 			const len = Math.min(t.photos.length, _MAX_PAGES);
 			for (let i = 0; i < len; i++) {
 				const photo = t.photos[i];
-				const view = app.SSViewFull.createView(photo, t.photoSizing);
+				const view = app.SSView.createView(photo, t.photoSizing);
 				t.push('views', view);
 				t.curIdx++;
 			}
@@ -136,11 +148,6 @@ app.SSUtils = (function() {
 				const model = t.rep.modelForElement(el);
 				view.setElements(image, author, time, location, model);
 			});
-
-			if (!t.photos || (t.photos.length === 0)) {
-				// No usable photos, display static image
-				app.SSUtils.setNoPhotos(t);
-			}
 		},
 
 		/**
