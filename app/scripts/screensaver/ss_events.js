@@ -16,6 +16,15 @@ app.SSEvents = (function() {
 	new ExceptionHandler();
 
 	/**
+	 * Starting mouse position
+	 * @type {{x: ?int, y: ?int}}
+	 * @const
+	 * @private
+	 * @memberOf app.SSEvents
+	 */
+	const _MOUSE_START = {x: null, y: null};
+
+	/**
 	 * Close ourselves
 	 * @private
 	 * @memberOf app.SSEvents
@@ -65,18 +74,17 @@ app.SSEvents = (function() {
 		 * @memberOf app.SSEvents
 		 */
 		onMouseMove: function(ev) {
-			const t = app.Screensaver.getTemplate();
-			if (t.startMouse.x && t.startMouse.y) {
-				const deltaX = Math.abs(ev.clientX - t.startMouse.x);
-				const deltaY = Math.abs(ev.clientY - t.startMouse.y);
+			if (_MOUSE_START.x && _MOUSE_START.y) {
+				const deltaX = Math.abs(ev.clientX - _MOUSE_START.x);
+				const deltaY = Math.abs(ev.clientY - _MOUSE_START.y);
 				if (Math.max(deltaX, deltaY) > 10) {
 					// close after a minimum amount of mouse movement
 					_close();
 				}
 			} else {
 				// first move, set values
-				t.startMouse.x = ev.clientX;
-				t.startMouse.y = ev.clientY;
+				_MOUSE_START.x = ev.clientX;
+				_MOUSE_START.y = ev.clientY;
 			}
 		},
 
