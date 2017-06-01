@@ -150,19 +150,27 @@ app.SSUtils = (function() {
 			});
 		},
 
+		// noinspection JSUnusedLocalSymbols
 		/**
-		 * Get the current time as a string
-		 * @returns {string} time string suitable for display
-		 * @memberOf app.SSUtils
+		 * Event: Fired when a message is sent from either an extension
+		 * process<br>
+		 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
+		 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
+		 * @param {app.Msg.Message} request - details for the message
+		 * @param {Object} [sender] - MessageSender object
+		 * @param {Function} [response] - function to call once after processing
+		 * @returns {boolean} true if asynchronous
+		 * @private
+		 * @memberOf app.ScreenSaver
 		 */
-		getTime: function() {
-			const format = app.Storage.getInt('showTime', 0);
-			let timeString = '';
-
-			if (!Number.isNaN(format) && (format > 0)) {
-				timeString = app.Time.getStringShort();
+		onMessage: function(request, sender, response) {
+			if (request.message === app.Msg.SS_CLOSE.message) {
+				app.SSUtils.close();
+			} else if (request.message === app.Msg.SS_IS_SHOWING.message) {
+				// let people know we are here
+				response({message: 'OK'});
 			}
-			return timeString;
+			return false;
 		},
 
 		/**

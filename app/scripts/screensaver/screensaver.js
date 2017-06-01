@@ -14,16 +14,6 @@
 
 	new ExceptionHandler();
 
-	/**
-	 * repeating alarm for updating time label
-	 * @type {string}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.ScreenSaver
-	 */
-	const _CLOCK_ALARM = 'updateTimeLabel';
-
 	// set selected background image
 	document.body.style.background =
 		app.Storage.get('background').substring(11);
@@ -85,7 +75,7 @@
 	 */
 	t.addEventListener('dom-change', function() {
 		// listen for chrome messages
-		app.Msg.listen(_onMessage);
+		app.Msg.listen(app.SSUtils.onMessage);
 
 		app.GA.page('/screensaver.html');
 
@@ -148,45 +138,7 @@
 			t.transitionType = app.Utils.getRandomInt(0, 7);
 		}
 
-		const trans = app.Storage.get('transitionTime');
-		t.transitionTime = trans.base * 1000;
-		t.waitTime = t.transitionTime;
-		t.waitForLoad = true;
-
-		const showTime = app.Storage.getInt('showTime', 0);
-		if ((showTime !== 0) && (trans.base > 60)) {
-			// add repeating alarm to update time label
-			// if transition time is more than 1 minute
-			// and time label is showing
-			chrome.alarms.onAlarm.addListener(_onAlarm);
-
-			const chromep = new ChromePromise();
-			chromep.alarms.get(_CLOCK_ALARM).then((alarm) => {
-				if (!alarm) {
-					chrome.alarms.create(_CLOCK_ALARM, {
-						when: Date.now(),
-						periodInMinutes: 1,
-					});
-				}
-				return null;
-			}).catch((err) => {
-				app.GA.error(err.message, 'chromep.alarms.get(CLOCK_ALARM)');
-			});
-		}
-	}
-
-	/**
-	 * Set the time label
-	 * @private
-	 * @memberOf app.ScreenSaver
-	 */
-	function _setTime() {
-		const showTime = app.Storage.getInt('showTime', 0);
-		if (showTime !== 0) {
-			t.set('time', app.SSUtils.getTime());
-		} else {
-			t.set('time', '');
-		}
+		app.SSTime.setUpTransitionTime(t);
 	}
 
 	/**
@@ -358,56 +310,19 @@
 
 		selected = _getNextPhoto(selected);
 		if (selected !== -1) {
-			// If a new photo is ready, render it
-			_setTime();
-			t.views[selected].render();
-
-			t.lastSelected = t.p.selected;
 			// update t.p.selected so the animation runs
+			t.lastSelected = t.p.selected;
 			t.p.selected = selected;
+
+			// setup photo
+			app.SSTime.setTime();
+			t.views[selected].render();
 		}
 
 		// setup the next timeout and call ourselves --- runs until interrupted
 		window.setTimeout(() => {
 			_runShow();
 		}, t.waitTime);
-	}
-
-	// noinspection JSUnusedLocalSymbols
-	/**
-	 * Event: Fired when a message is sent from either an extension process<br>
-	 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
-	 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-	 * @param {app.Msg.Message} request - details for the message
-	 * @param {Object} [sender] - MessageSender object
-	 * @param {Function} [response] - function to call once after processing
-	 * @returns {boolean} true if asynchronous
-	 * @private
-	 * @memberOf app.ScreenSaver
-	 */
-	function _onMessage(request, sender, response) {
-		if (request.message === app.Msg.SS_CLOSE.message) {
-			app.SSUtils.close();
-		} else if(request.message === app.Msg.SS_IS_SHOWING.message) {
-			// let people know we are here
-			response({message: 'OK'});
-		}
-		return false;
-	}
-
-	/**
-	 * Event: Listen for alarms
-	 * @param {Object} alarm - chrome alarm
-	 * @param {string} alarm.name - alarm type
-	 * @memberOf app.ScreenSaver
-	 */
-	function _onAlarm(alarm) {
-		if (alarm.name === _CLOCK_ALARM) {
-			// update time label
-			if (t.p && (t.p.selected !== undefined)) {
-				_setTime();
-			}
-		}
 	}
 
 	/**
