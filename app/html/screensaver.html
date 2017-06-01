@@ -29,20 +29,20 @@
 		<div id="mainContainer" class="flex">
 			<neon-animated-pages id="pages" class="fit" animate-initial-selection
 								 on-neon-animation-finish="_OnAniFinished">
-				<template is="dom-repeat" id="repeatTemplate" items="{{views}}">
-					<slide-animatable ani-type="{{transitionType}}" class="fit">
-						<section id="item[[index]]">
+				<template is="dom-repeat" id="repeatTemplate" as="view" items="{{views}}">
+					<slide-animatable ani-type="{{aniType}}" class="fit">
+						<section id="view[[index]]">
 							<iron-image
 								class="image"
-								src="{{item.photo.path}}"
-								width="{{item.photo.width}}"
-								height="{{item.photo.height}}"
+								src="{{view.photo.path}}"
+								width="{{view.photo.width}}"
+								height="{{view.photo.height}}"
 								sizing="{{sizingType}}"
 								preload>
 							</iron-image>
 							<div class="time">{{time}}</div>
-							<div class="author">{{item.photo.label}}<sup id="sup"></sup></div>
-							<div class="location">{{item.photo.location}}</div>
+							<div class="author">{{view.photo.label}}<sup id="sup"></sup></div>
+							<div class="location">{{view.photo.location}}</div>
 						</section>
 					</slide-animatable>
 				</template>

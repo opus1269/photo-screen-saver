@@ -35,18 +35,11 @@ app.Screensaver = (function() {
 	t.p = null;
 
 	/**
-	 * array of all the {@link app.Photo} to use for slide show
+	 * Array of all the {@link app.Photo} objects to use for the slide show
 	 * @type {Array}
 	 * @memberOf app.Screensaver
 	 */
 	t.photos = [];
-
-	/**
-	 * Index into [t.photos]{@link app.Screensaver.t.photos}
-	 * @type {int}
-	 * @memberOf app.Screensaver
-	 */
-	t.curIdx = 0;
 
 	/**
 	 * Array of {@link app.SSView} objects bound to the neon-animated-pages.
@@ -57,11 +50,17 @@ app.Screensaver = (function() {
 	 */
 	t.views = [];
 
-	// the last selected page
-	t.lastSelected = -1;
+	/**
+	 * The way the photos are rendered
+	 * @type {int}
+	 */
+	t.sizingType = 0;
 
-	// true after first full page animation
-	t.started = false;
+	/**
+	 * The animation type for between photo transitions
+	 * @type {int}
+	 */
+	t.aniType = 0;
 
 	// Flag to indicate the screen saver has no photos
 	t.noPhotos = false;
@@ -88,7 +87,6 @@ app.Screensaver = (function() {
 
 		t.rep = t.$.repeatTemplate;
 		t.p = t.$.pages;
-		t.time = '';
 
 		app.SSUtils.setZoom();
 		app.SSUtils.setupPhotoSizing();
@@ -130,14 +128,16 @@ app.Screensaver = (function() {
 	 * @memberOf app.Screensaver
 	 */
 	function _processPhotoTransitions() {
-		t.transitionType = app.Storage.getInt('photoTransition', 0);
-		if (t.transitionType === 8) {
+		let type = app.Storage.getInt('photoTransition', 0);
+		if (type === 8) {
 			// pick random transition
-			t.transitionType = app.Utils.getRandomInt(0, 7);
+			type = app.Utils.getRandomInt(0, 7);
 		}
+		t.set('aniType', type);
 
 		app.SSTime.setUpTransitionTime();
 	}
+
 	return {
 		/**
 		 * Get reference to the auto-binding template

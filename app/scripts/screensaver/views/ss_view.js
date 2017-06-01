@@ -126,7 +126,7 @@
 				app.Geo.get(this.photo.point).then((location) => {
 					if (location && this.model) {
 						location = location.replace('Unnamed Road, ', '');
-						this.model.set('item.photo.location', location);
+						this.model.set('view.photo.location', location);
 					}
 					return Promise.resolve();
 				}).catch((err) => {
@@ -165,7 +165,7 @@
 		setPhoto(photo) {
 			const photoCopy = app.JSONUtils.shallowCopy(photo);
 			if (this.model) {
-				this.model.set('item.photo', photoCopy);
+				this.model.set('view.photo', photoCopy);
 			}
 			this._setLocation();
 			this._super500px();

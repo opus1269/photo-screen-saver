@@ -99,7 +99,7 @@
 
 			const label =
 				app.Photo.buildAuthorLabel(photo.type, photo.author, true);
-			model.set('item.label', label);
+			model.set('view.label', label);
 
 			const height =
 				Math.min((screen.width - padding * 2 - border * 2) / ar,

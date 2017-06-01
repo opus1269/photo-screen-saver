@@ -132,15 +132,15 @@ app.SSUtils = (function() {
 				const photo = t.photos[i];
 				const view = app.SSView.createView(photo, t.photoSizing);
 				t.push('views', view);
-				t.curIdx++;
 			}
+			app.SSRunner.setPhotosIndex(len + 1);
 
 			// force update of animated pages
 			t.rep.render();
 
 			// set the Elements of the view
 			t.views.forEach((view, index) => {
-				const el = t.p.querySelector('#item' + index);
+				const el = t.p.querySelector('#view' + index);
 				const image = el.querySelector('.image');
 				const author = el.querySelector('.author');
 				const time = el.querySelector('.time');

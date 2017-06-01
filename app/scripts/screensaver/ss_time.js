@@ -44,12 +44,7 @@ app.SSTime = (function() {
 		 * @memberOf app.SSTime
 		 */
 		setUpTransitionTime: function() {
-			const t = app.Screensaver.getTemplate();
 			const trans = app.Storage.get('transitionTime');
-			t.transitionTime = trans.base * 1000;
-			t.waitTime = t.transitionTime;
-			t.waitForLoad = true;
-
 			const showTime = app.Storage.getInt('showTime', 0);
 			if ((showTime !== 0) && (trans.base > 60)) {
 				// add repeating alarm to update time label
