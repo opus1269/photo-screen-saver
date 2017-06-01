@@ -29,6 +29,79 @@ window.app = window.app || {};
 		}
 
 		/**
+		 * Minutes in day
+		 * @returns {int} value
+		 */
+		static get MIN_IN_DAY() {
+			return 60 * 24;
+		}
+
+		/**
+		 * Milliseconds in day
+		 * @returns {int} value
+		 */
+		static get MSEC_IN_DAY() {
+			return app.Time.MIN_IN_DAY * 60 * 1000;
+		}
+
+		/**
+		 * Convert string to current time
+		 * @param {!string} timeString - in '00:00' format
+		 * @returns {int} time in milliSeconds from epoch
+		 */
+		static getTime(timeString) {
+			const date = new Date();
+			const time = new Time(timeString);
+			date.setHours(time._hr);
+			date.setMinutes(time._min);
+			date.setSeconds(0);
+			date.setMilliseconds(0);
+			return date.getTime();
+		}
+
+		/**
+		 * Calculate time delta from now on a 24hr basis
+		 * @param {string} timeString - in '00:00' format
+		 * @returns {int} time delta in minutes
+		 */
+		static getTimeDelta(timeString) {
+			const curTime = Date.now();
+			const time = app.Time.getTime(timeString);
+			let delayMin = (time - curTime) / 1000 / 60;
+
+			if (delayMin < 0) {
+				delayMin = app.Time.MIN_IN_DAY + delayMin;
+			}
+			return delayMin;
+		}
+
+		/**
+		 * Determine if current time is between start and stop, inclusive
+		 * @param {string} start - in '00:00' format
+		 * @param {string} stop - in '00:00' format
+		 * @returns {boolean} true if in the given range
+		 */
+		static isInRange(start, stop) {
+			const curTime = Date.now();
+			const startTime = app.Time.getTime(start);
+			const stopTime = app.Time.getTime(stop);
+			let ret = false;
+
+			if (start === stop) {
+				ret = true;
+			} else if (stopTime > startTime) {
+				if ((curTime >= startTime) && (curTime <= stopTime)) {
+					ret = true;
+				}
+			} else {
+				if ((curTime >= startTime) || (curTime <= stopTime)) {
+					ret = true;
+				}
+			}
+			return ret;
+		}
+
+		/**
 		 * Get time as string suitable for display, including AM/PM if 12hr
 		 * @param {!string} timeString - in '00:00' format
 		 * @param {?int} [frmt=null] - optional format, overrides storage value
@@ -110,7 +183,6 @@ window.app = window.app || {};
 					minute: '2-digit',
 					hour12: false,
 				});
-
 			} else {
 				ret = date.toLocaleTimeString('en-us', {
 					hour: 'numeric',

@@ -37,83 +37,6 @@ app.Alarm = (function() {
 	};
 
 	/**
-	 * Time constants
-	 * @typedef {Object} Time
-	 * @property {int} MIN_IN_DAY - minutes in a day
-	 * @property {int} MSEC_IN_DAY - milliSeconds in a day
-	 * @const
-	 * @private
-	 * @memberOf app.Alarm
-	 */
-	const _TIME = {
-		'MIN_IN_DAY': 60 * 24,
-		'MSEC_IN_DAY': 60 * 60 * 24 * 1000,
-	};
-
-	/**
-	 * Convert string to time
-	 * @param {string} value - format: 'hh:mm' 24 hour time
-	 * @returns {int} time in mSec from epoch
-	 * @private
-	 * @memberOf app.Alarm
-	 */
-	function _getTime(value) {
-		const date = new Date();
-
-		date.setHours(parseInt(value.substr(0, 2)));
-		date.setMinutes(parseInt(value.substr(3, 2)));
-		date.setSeconds(0);
-		date.setMilliseconds(0);
-		return date.getTime();
-	}
-
-	/**
-	 * Calculate time delta from now on a 24 hr basis
-	 * @param {string} value - format: 'hh:mm' 24 hour time
-	 * @returns {int} time delta in minutes
-	 * @private
-	 * @memberOf app.Alarm
-	 */
-	function _getTimeDelta(value) {
-		const curTime = Date.now();
-		const time = _getTime(value);
-		let delayMin = (time - curTime) / 1000 / 60;
-
-		if (delayMin < 0) {
-			delayMin = _TIME.MIN_IN_DAY + delayMin;
-		}
-		return delayMin;
-	}
-
-	/**
-	 * Determine if current time is between start and stop, inclusive
-	 * @param {string} start - format: 'hh:mm' 24 hour time
-	 * @param {string} stop - format: 'hh:mm' 24 hour time
-	 * @returns {boolean} true if in the given range
-	 * @private
-	 * @memberOf app.Alarm
-	 */
-	function _isInRange(start, stop) {
-		const curTime = Date.now();
-		const startTime = _getTime(start);
-		const stopTime = _getTime(stop);
-		let ret = false;
-
-		if (start === stop) {
-			ret = true;
-		} else if (stopTime > startTime) {
-			if ((curTime >= startTime) && (curTime <= stopTime)) {
-				ret = true;
-			}
-		} else {
-			if ((curTime >= startTime) || (curTime <= stopTime)) {
-				ret = true;
-			}
-		}
-		return ret;
-	}
-
-	/**
 	 * Set state when the screensaver is in the active time range
 	 * @private
 	 * @memberOf app.Alarm
@@ -128,7 +51,7 @@ app.Alarm = (function() {
 			if (app.Storage.getBool('enabled') && (state === 'idle')) {
 				app.SSControl.display(false);
 			}
-			return null;
+			return Promise.resolve();
 		}).catch((err) => {
 			app.GA.error(err.message, 'Alarm._setActiveState');
 		});
@@ -213,21 +136,21 @@ app.Alarm = (function() {
 
 			// create keep awake active period scheduling alarms
 			if (keepAwake && (aStart !== aStop)) {
-				const startDelayMin = _getTimeDelta(aStart);
-				const stopDelayMin = _getTimeDelta(aStop);
+				const startDelayMin = app.Time.getTimeDelta(aStart);
+				const stopDelayMin = app.Time.getTimeDelta(aStop);
 
 				chrome.alarms.create(_ALARMS.ACTIVATE, {
 					delayInMinutes: startDelayMin,
-					periodInMinutes: _TIME.MIN_IN_DAY,
+					periodInMinutes: app.Time.MIN_IN_DAY,
 				});
 				chrome.alarms.create(_ALARMS.DEACTIVATE, {
 					delayInMinutes: stopDelayMin,
-					periodInMinutes: _TIME.MIN_IN_DAY,
+					periodInMinutes: app.Time.MIN_IN_DAY,
 				});
 
 				// if we are currently outside of the active range
 				// then set inactive state
-				if (!_isInRange(aStart, aStop)) {
+				if (!app.Time.isInRange(aStart, aStop)) {
 					_setInactiveState();
 				}
 			} else {
@@ -239,11 +162,11 @@ app.Alarm = (function() {
 			chromep.alarms.get(_ALARMS.UPDATE_PHOTOS).then((alarm) => {
 				if (!alarm) {
 					chrome.alarms.create(_ALARMS.UPDATE_PHOTOS, {
-						when: Date.now() + _TIME.MSEC_IN_DAY,
-						periodInMinutes: _TIME.MIN_IN_DAY,
+						when: Date.now() + app.Time.MSEC_IN_DAY,
+						periodInMinutes: app.Time.MIN_IN_DAY,
 					});
 				}
-				return null;
+				return Promise.resolve();
 			}).catch((err) => {
 				app.GA.error(err.message,
 					'chromep.alarms.get(_ALARMS.UPDATE_PHOTOS)');
@@ -263,7 +186,7 @@ app.Alarm = (function() {
 
 		/**
 		 * Determine if the screen saver can be displayed
-		 * @returns {boolean} true if can display
+		 * @returns {boolean} true, if can display
 		 * @memberOf app.Alarm
 		 */
 		isActive: function() {
@@ -271,10 +194,11 @@ app.Alarm = (function() {
 			const keepAwake = app.Storage.getBool('keepAwake');
 			const aStart = app.Storage.get('activeStart');
 			const aStop = app.Storage.get('activeStop');
+			const inRange = app.Time.isInRange(aStart, aStop);
 
 			// do not display if screen saver is not enabled or
 			// keepAwake scheduler is enabled and is in the inactive range
-			return !(!enabled || (keepAwake && !_isInRange(aStart, aStop)));
+			return !(!enabled || (keepAwake && !inRange));
 		},
 	};
 })();
