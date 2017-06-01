@@ -25,8 +25,6 @@ app.SSTime = (function() {
 	 */
 	const _CLOCK_ALARM = 'updateTimeLabel';
 
-	let template;
-
 	/**
 	 * Event: Listen for alarms
 	 * @param {Object} alarm - chrome alarm
@@ -43,15 +41,14 @@ app.SSTime = (function() {
 	return {
 		/**
 		 * Setup photo transition time
-		 * @param {Object} t - screensaver template
 		 * @memberOf app.SSTime
 		 */
-		setUpTransitionTime: function(t) {
-			template = t;
+		setUpTransitionTime: function() {
+			const t = app.Screensaver.getTemplate();
 			const trans = app.Storage.get('transitionTime');
-			template.transitionTime = trans.base * 1000;
-			template.waitTime = template.transitionTime;
-			template.waitForLoad = true;
+			t.transitionTime = trans.base * 1000;
+			t.waitTime = t.transitionTime;
+			t.waitForLoad = true;
 
 			const showTime = app.Storage.getInt('showTime', 0);
 			if ((showTime !== 0) && (trans.base > 60)) {
@@ -81,12 +78,13 @@ app.SSTime = (function() {
 		 * @memberOf app.SSTime
 		 */
 		setTime: function() {
+			const t = app.Screensaver.getTemplate();
 			const showTime = app.Storage.getInt('showTime', 0);
-			if ((showTime !== 0) && template.p &&
-				(template.p.selected !== undefined)) {
-				template.set('time', app.Time.getStringShort());
+			if ((showTime !== 0) && t.p &&
+				(t.p.selected !== undefined)) {
+				t.set('time', app.Time.getStringShort());
 			} else {
-				template.set('time', '');
+				t.set('time', '');
 			}
 		},
 	};

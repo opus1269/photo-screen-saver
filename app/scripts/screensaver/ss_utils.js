@@ -24,14 +24,42 @@ app.SSUtils = (function() {
 	 * @memberOf app.SSUtils
 	 */
 	const _MAX_PAGES = 20;
-
+	
 	return {
 		/**
-		 * Set the state when no photos are available
-		 * @param {Object} t - screensaver template
+		 * Process settings related to the photo's appearance
 		 * @memberOf app.SSUtils
 		 */
-		setNoPhotos: function(t) {
+		setupPhotoSizing() {
+			const t = app.Screensaver.getTemplate();
+			t.photoSizing = app.Storage.getInt('photoSizing', 0);
+			if (t.photoSizing === 4) {
+				// pick random sizing
+				t.photoSizing = app.Utils.getRandomInt(0, 3);
+			}
+			switch (t.photoSizing) {
+				case 0:
+					t.sizingType = 'contain';
+					break;
+				case 1:
+					t.sizingType = 'cover';
+					break;
+				case 2:
+				case 3:
+					t.sizingType = null;
+					break;
+				default:
+					t.sizingType = 'contain';
+					break;
+			}
+		},
+
+		/**
+		 * Set the state when no photos are available
+		 * @memberOf app.SSUtils
+		 */
+		setNoPhotos: function() {
+			const t = app.Screensaver.getTemplate();
 			if (t && t.$) {
 				t.$.noPhotos.style.visibility = 'visible';
 				t.$.pages.style.visibility = 'hidden';
@@ -59,40 +87,12 @@ app.SSUtils = (function() {
 		},
 
 		/**
-		 * Process settings related to the photo's appearance
-		 * @param {!Object} t - screensaver template
-		 * @memberOf app.SSUtils
-		 */
-		setupPhotoSizing(t) {
-			t.photoSizing = app.Storage.getInt('photoSizing', 0);
-			if (t.photoSizing === 4) {
-				// pick random sizing
-				t.photoSizing = app.Utils.getRandomInt(0, 3);
-			}
-			switch (t.photoSizing) {
-				case 0:
-					t.sizingType = 'contain';
-					break;
-				case 1:
-					t.sizingType = 'cover';
-					break;
-				case 2:
-				case 3:
-					t.sizingType = null;
-					break;
-				default:
-					t.sizingType = 'contain';
-					break;
-			}
-		},
-
-		/**
 		 * Build the Array of {@link app.Photo} objects that will be displayed
-		 * @param {!Object} t - screensaver template
 		 * @returns {boolean} true if there is at least one photo
 		 * @memberOf app.SSUtils
 		 */
-		loadPhotos: function(t) {
+		loadPhotos: function() {
+			const t = app.Screensaver.getTemplate();
 			let sources = app.PhotoSource.getSelectedPhotos();
 			sources = sources || [];
 			sources.forEach((source) => {
@@ -110,7 +110,7 @@ app.SSUtils = (function() {
 
 			if (!t.photos || (t.photos.length === 0)) {
 				// No usable photos, display static image
-				app.SSUtils.setNoPhotos(t);
+				app.SSUtils.setNoPhotos();
 				return false;
 			}
 
@@ -123,10 +123,10 @@ app.SSUtils = (function() {
 
 		/**
 		 * Create the animated pages
-		 * @param {!Object} t - screensaver template
 		 * @memberOf app.SSUtils
 		 */
-		createPages: function(t) {
+		createPages: function() {
+			const t = app.Screensaver.getTemplate();
 			const len = Math.min(t.photos.length, _MAX_PAGES);
 			for (let i = 0; i < len; i++) {
 				const photo = t.photos[i];
@@ -148,43 +148,6 @@ app.SSUtils = (function() {
 				const model = t.rep.modelForElement(el);
 				view.setElements(image, author, time, location, model);
 			});
-		},
-
-		// noinspection JSUnusedLocalSymbols
-		/**
-		 * Event: Fired when a message is sent from either an extension
-		 * process<br>
-		 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
-		 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-		 * @param {app.Msg.Message} request - details for the message
-		 * @param {Object} [sender] - MessageSender object
-		 * @param {Function} [response] - function to call once after processing
-		 * @returns {boolean} true if asynchronous
-		 * @private
-		 * @memberOf app.ScreenSaver
-		 */
-		onMessage: function(request, sender, response) {
-			if (request.message === app.Msg.SS_CLOSE.message) {
-				app.SSUtils.close();
-			} else if (request.message === app.Msg.SS_IS_SHOWING.message) {
-				// let people know we are here
-				response({message: 'OK'});
-			}
-			return false;
-		},
-
-		/**
-		 * Close ourselves
-		 * @memberOf app.SSUtils
-		 */
-		close: function() {
-			// send message to other screen savers to close themselves
-			app.Msg.send(app.Msg.SS_CLOSE).catch(() => {});
-
-			setTimeout(function() {
-				// delay a little to process events
-				window.close();
-			}, 750);
 		},
 	};
 })();

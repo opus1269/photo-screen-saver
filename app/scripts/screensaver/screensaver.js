@@ -4,13 +4,14 @@
  *  https://opensource.org/licenses/BSD-3-Clause
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
-(function() {
-	'use strict';
+window.app = window.app || {};
 
-	/**
-	 * Display a screen saver
-	 * @namespace app.ScreenSaver
-	 */
+/**
+ * A screensaver
+ * @namespace
+ */
+app.Screensaver = (function() {
+	'use strict';
 
 	new ExceptionHandler();
 
@@ -23,7 +24,7 @@
 	 * @type {Object}
 	 * @const
 	 * @private
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
 	const t = document.querySelector('#t');
 
@@ -36,23 +37,23 @@
 	/**
 	 * array of all the {@link app.Photo} to use for slide show
 	 * @type {Array}
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
 	t.photos = [];
 
 	/**
-	 * Index into [t.photos]{@link app.ScreenSaver.t.photos}
+	 * Index into [t.photos]{@link app.Screensaver.t.photos}
 	 * @type {int}
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
 	t.curIdx = 0;
 
 	/**
 	 * Array of {@link app.SSView} objects bound to the neon-animated-pages.
 	 * The {@link app.Photo} property is an always changing subset of
-	 * [t.photos]{@link app.ScreenSaver.t.photos}
+	 * [t.photos]{@link app.Screensaver.t.photos}
 	 * @type {Array}
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
 	t.views = [];
 
@@ -71,11 +72,20 @@
 	/**
 	 * Event Listener for template bound event to know when bindings
 	 * have resolved and content has been stamped to the page
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
 	t.addEventListener('dom-change', function() {
 		// listen for chrome messages
-		app.Msg.listen(app.SSUtils.onMessage);
+		app.Msg.listen(app.SSEvents.onMessage);
+
+		// listen for keydown events
+		window.addEventListener('keydown', app.SSEvents.onKeyDown, false);
+
+		// listen for mousemove events
+		window.addEventListener('mousemove', app.SSEvents.onMouseMove, false);
+
+		// listen for mouse click events
+		window.addEventListener('click', app.SSEvents.onMouseClick, false);
 
 		app.GA.page('/screensaver.html');
 
@@ -84,13 +94,13 @@
 		t.time = '';
 
 		app.SSUtils.setZoom();
-		app.SSUtils.setupPhotoSizing(t);
+		app.SSUtils.setupPhotoSizing();
 		_processPhotoTransitions();
 
 		// load the photos for the slide show
-		if (app.SSUtils.loadPhotos(t)) {
+		if (app.SSUtils.loadPhotos()) {
 			// create the animated pages
-			app.SSUtils.createPages(t);
+			app.SSUtils.createPages();
 
 			// kick off the slide show if there are photos selected
 			// slight delay at beginning so we have a smooth start
@@ -101,11 +111,11 @@
 
 	/**
 	 * Event: Slide animation finished
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
 	t._OnAniFinished = function() {
 		// replace the previous selected with the next one from master array
-		// do it here so the web request doesn't run during transition
+		// do it here so the web request doesn't run during the animation
 		if (t.replaceLast >= 0) {
 			_replacePhoto(t.replaceLast, false);
 		}
@@ -119,17 +129,18 @@
 	};
 
 	/**
-	 * Computed property: No photos label
+	 * Computed binding: No photos label
 	 * @returns {string} i18n label
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
-	t._computeNoPhotos = function() {
+	t._computeNoPhotosLabel = function() {
 		return `${app.Utils.localize('no')} ${app.Utils.localize('photos')}`;
 	};
 
 	/**
 	 * Process settings related to between photo transitions
-	 * @memberOf app.ScreenSaver
+	 * @private
+	 * @memberOf app.Screensaver
 	 */
 	function _processPhotoTransitions() {
 		t.transitionType = app.Storage.getInt('photoTransition', 0);
@@ -138,14 +149,14 @@
 			t.transitionType = app.Utils.getRandomInt(0, 7);
 		}
 
-		app.SSTime.setUpTransitionTime(t);
+		app.SSTime.setUpTransitionTime();
 	}
 
 	/**
-	 * Mark a photo in [t.photos]{@link app.ScreenSaver.t.views} as unusable
-	 * @param {int} idx - index into [t.views]{@link app.ScreenSaver.t.views}
+	 * Mark a photo in [t.photos]{@link app.Screensaver.t.views} as unusable
+	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t.views}
 	 * @private
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
 	function _markPhotoBad(idx) {
 		const name = t.views[idx].getName();
@@ -159,16 +170,16 @@
 			});
 			if (skipAll) {
 				// if all items are bad set no photos state
-				app.SSUtils.setNoPhotos(t);
+				app.SSUtils.setNoPhotos();
 			}
 		}
 	}
 
 	/**
 	 * Try to find a photo that has finished loading
-	 * @param {int} idx - index into [t.views]{@link app.ScreenSaver.t.views}
+	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t.views}
 	 * @returns {int} index into t.views, -1 if none are loaded
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
 	function _findLoadedPhoto(idx) {
 		if (t.views[idx].isLoaded()) {
@@ -193,9 +204,9 @@
 
 	/**
 	 * Add the next photo from the master array
-	 * @param {int} idx - index into [t.views]{@link app.ScreenSaver.t.views}
+	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t.views}
 	 * @param {boolean} error - true if the photo at idx didn't load
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
 	function _replacePhoto(idx, error) {
 		if (error) {
@@ -221,7 +232,7 @@
 
 	/**
 	 * Replace the active photos with new photos from the master array
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
 	function _replaceAllPhotos() {
 		if (t.photos.length > t.views.length) {
@@ -250,10 +261,10 @@
 
 	/**
 	 * Get the next photo to display
-	 * @param {int} idx - index into [t.views]{@link app.ScreenSaver.t.views}
-	 * @returns {int} next - index into [t.views]{@link app.ScreenSaver.t.views}
+	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t.views}
+	 * @returns {int} next - index into [t.views]{@link app.Screensaver.t.views}
 	 * to display, -1 if none are ready
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
 	function _getNextPhoto(idx) {
 		let ret = _findLoadedPhoto(idx);
@@ -282,7 +293,7 @@
 	/**
 	 * Called at fixed time intervals to cycle through the photos
 	 * Potentially runs forever
-	 * @memberOf app.ScreenSaver
+	 * @memberOf app.Screensaver
 	 */
 	function _runShow() {
 		if (t.noPhotos) {
@@ -325,41 +336,14 @@
 		}, t.waitTime);
 	}
 
-	/**
-	 * Event listener for mouse clicks
-	 * Show link to original photo if possible and close windows
-	 */
-	window.addEventListener('click', function() {
-		if (t.p && (t.p.selected !== undefined)) {
-			app.Photo.showSource(t.views[t.p.selected].photo);
-		}
-		app.SSUtils.close();
-	}, false);
-
-	/**
-	 * Event listener for key press
-	 * Close window (prob won't work on Chrome OS)
-	 */
-	window.addEventListener('keydown', function() {
-		app.SSUtils.close();
-	}, false);
-
-	/**
-	 * Event listener for mouse move
-	 * Close window
-	 */
-	window.addEventListener('mousemove', function(event) {
-		if (t.startMouse.x && t.startMouse.y) {
-			const deltaX = Math.abs(event.clientX - t.startMouse.x);
-			const deltaY = Math.abs(event.clientY - t.startMouse.y);
-			if (Math.max(deltaX, deltaY) > 10) {
-				// close after a minimum amount of mouse movement
-				app.SSUtils.close();
-			}
-		} else {
-			// first move, set values
-			t.startMouse.x = event.clientX;
-			t.startMouse.y = event.clientY;
-		}
-	}, false);
+	return {
+		/**
+		 * Get reference to the auto-binding template
+		 * @returns {Object} The auto-binding template
+		 * @memberOf app.Screensaver
+		 */
+		getTemplate: function() {
+			return t;
+		},
+	};
 })();

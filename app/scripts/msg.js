@@ -26,7 +26,7 @@ app.Msg = (function() {
 	 */
 
 	/**
-	 * Show {@link app.ScreenSaver}
+	 * Show a {@link app.Screensaver}
 	 * @type {app.Msg.Message}
 	 * @memberOf app.Msg
 	 */
@@ -35,7 +35,7 @@ app.Msg = (function() {
 	};
 
 	/**
-	 * Close {@link app.ScreenSaver}
+	 * Close a {@link app.Screensaver}
 	 * @type {app.Msg.Message}
 	 * @memberOf app.Msg
 	 */
@@ -44,7 +44,7 @@ app.Msg = (function() {
 	};
 
 	/**
-	 * Is a {@link app.ScreenSaver} showing
+	 * Is a {@link app.Screensaver} showing
 	 * @type {app.Msg.Message}
 	 * @memberOf app.Msg
 	 */
