@@ -43,15 +43,14 @@ app.Screensaver = (function() {
 	 * @memberOf app.Screensaver
 	 */
 	const t = document.querySelector('#t');
-
 	t.rep = null;
 	t.p = null;
 	t.photos = [];
 	t.views = [];
 	t.sizingType = 0;
 	t.aniType = 0;
-	t.started = false;
 	t.noPhotos = false;
+	t.started = false;
 
 	/**
 	 * Event Listener for template bound event to know when bindings
@@ -135,5 +134,15 @@ app.Screensaver = (function() {
 		getTemplate: function() {
 			return t;
 		},
+
+		/**
+		 * Set the state when no photos are available
+		 * @memberOf app.Screensaver
+		 */
+		setNoPhotos: function() {
+			const t = app.Screensaver.getTemplate();
+			t.set('noPhotos', true);
+		},
+
 	};
 })();

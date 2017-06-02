@@ -59,7 +59,7 @@ app.SSRunner = (function() {
 			});
 			if (skipAll) {
 				// if all items are bad set no photos state
-				app.SSUtils.setNoPhotos();
+				app.Screensaver.setNoPhotos();
 			}
 		}
 	}

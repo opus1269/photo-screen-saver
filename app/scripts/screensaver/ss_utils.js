@@ -55,19 +55,6 @@ app.SSUtils = (function() {
 		},
 
 		/**
-		 * Set the state when no photos are available
-		 * @memberOf app.SSUtils
-		 */
-		setNoPhotos: function() {
-			const t = app.Screensaver.getTemplate();
-			if (t && t.$) {
-				t.$.noPhotos.style.visibility = 'visible';
-				t.$.pages.style.visibility = 'hidden';
-				t.noPhotos = true;
-			}
-		},
-
-		/**
 		 * Set the window zoom factor to 1.0
 		 * @memberOf app.SSUtils
 		 */
@@ -110,7 +97,7 @@ app.SSUtils = (function() {
 
 			if (!t.photos || (t.photos.length === 0)) {
 				// No usable photos, display static image
-				app.SSUtils.setNoPhotos();
+				app.Screensaver.setNoPhotos();
 				return false;
 			}
 
