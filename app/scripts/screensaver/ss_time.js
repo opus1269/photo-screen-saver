@@ -7,7 +7,7 @@
 window.app = window.app || {};
 
 /**
- * Screensaver time methods
+ * Time handling for an {@link app.Screensaver}
  * @namespace
  */
 app.SSTime = (function() {
@@ -75,8 +75,7 @@ app.SSTime = (function() {
 		setTime: function() {
 			const t = app.Screensaver.getTemplate();
 			const showTime = app.Storage.getInt('showTime', 0);
-			if ((showTime !== 0) && t.p &&
-				(t.p.selected !== undefined)) {
+			if ((showTime !== 0) && t.started) {
 				t.set('time', app.Time.getStringShort());
 			} else {
 				t.set('time', '');

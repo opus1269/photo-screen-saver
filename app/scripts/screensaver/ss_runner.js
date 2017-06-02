@@ -7,28 +7,42 @@
 window.app = window.app || {};
 
 /**
- * Control the running of a {@link app.SSRunner}
+ * Control the running of a {@link app.Screensaver}
  * @namespace
  */
 app.SSRunner = (function() {
 	'use strict';
 
 	new ExceptionHandler();
-	
+
+	/**
+	 * Instance variables
+	 * @type {Object}
+	 * @property {boolean} firstAni - true after first animation cycle
+	 * @property {int} lastSelected - last selected page
+	 * @property {int} replaceIdx - page whose photo is to be replaced
+	 * @property {int} previousIdx - previous page (may have failed to load)
+	 * @property {int} photosIdx - pointer into photos array
+	 * @property {int} transTime - slide transition time in milliSecs
+	 * @property {int} waitTime - wait time when looking for photo in milliSecs
+	 * @property {boolean} waitForLoad - if false, replace all current photos
+	 * @private
+	 * @memberOf app.SSRunner
+	 */
 	const _VARS = {
-		started: false,
 		firstAni: false,
 		lastSelected: -1,
-		replace: -1,
+		replaceIdx: -1,
+		previousIdx: -1,
 		photosIdx: 0,
-		transTime: 30,
-		waitTime: 30,
+		transTime: 30000,
+		waitTime: 30000,
 		waitForLoad: true,
 	};
 
 	/**
 	 * Mark a photo in [t.photos]{@link app.SSRunner.t.photos} as unusable
-	 * @param {int} idx - index into [t.views]{@link app.SSRunner.t.views}
+	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t.views}
 	 * @private
 	 * @memberOf app.SSRunner
 	 */
@@ -52,7 +66,7 @@ app.SSRunner = (function() {
 
 	/**
 	 * Try to find a photo that has finished loading
-	 * @param {int} idx - index into [t.views]{@link app.SSRunner.t.views}
+	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t.views}
 	 * @returns {int} index into t.views, -1 if none are loaded
 	 * @private
 	 * @memberOf app.SSRunner
@@ -108,7 +122,7 @@ app.SSRunner = (function() {
 			if (_VARS.photosIdx === t.photos.length - 1) {
 				_VARS.photosIdx = 0;
 			} else {
-				_VARS.photosIdx+= 1;
+				_VARS.photosIdx += 1;
 			}
 		}
 	}
@@ -146,8 +160,8 @@ app.SSRunner = (function() {
 
 	/**
 	 * Get the next photo to display
-	 * @param {int} idx - index into [t.views]{@link app.SSRunner.t.views}
-	 * @returns {int} next - index into [t.views]{@link app.SSRunner.t.views}
+	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t.views}
+	 * @returns {int} next - index into [t.views]{@link app.Screensaver.t.views}
 	 * to display, -1 if none are ready
 	 * @private
 	 * @memberOf app.SSRunner
@@ -190,16 +204,15 @@ app.SSRunner = (function() {
 			return;
 		}
 
-		const curPage =
-			(typeof(t.p.selected) === 'undefined') ? 0 : t.p.selected;
+		const curPage = !t.started ? 0 : t.p.selected;
 		const prevPage = (curPage > 0) ? curPage - 1 : t.views.length - 1;
 		let nextPage = (curPage === t.views.length - 1) ? 0 : curPage + 1;
 
 		// for replacing the page in _onAniFinished
 		_VARS.replaceIdx = _VARS.lastSelected;
-		t.prevPage = prevPage;
+		_VARS.previousIdx = prevPage;
 
-		if (t.p.selected === undefined) {
+		if (!t.started) {
 			// special case for first page. neon-animated-pages is configured
 			// to run the entry animation for the first selection
 			nextPage = curPage;
@@ -214,7 +227,7 @@ app.SSRunner = (function() {
 			// update t.p.selected so the animation runs
 			_VARS.lastSelected = t.p.selected;
 			t.p.selected = nextPage;
-			_VARS.started = true;
+			t.started = true;
 
 			// setup photo
 			app.SSTime.setTime();
@@ -261,11 +274,10 @@ app.SSRunner = (function() {
 				_replacePhoto(_VARS.replaceIdx, false);
 			}
 
-			if (t.views[t.prevPage].isError(t.prevPage)) {
+			const prevPage = _VARS.previousIdx;
+			if ((prevPage >= 0) && t.views[prevPage].isError()) {
 				// broken link, mark it and replace it
-				if (t.prevPage >= 0) {
-					_replacePhoto(t.prevPage, true);
-				}
+				_replacePhoto(t.prevPage, true);
 			}
 		},
 	};

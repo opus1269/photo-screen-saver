@@ -7,7 +7,7 @@
 window.app = window.app || {};
 
 /**
- * Utility methods for a screensaver
+ * Utility methods for an {@link app.Screensaver}
  * @namespace
  */
 app.SSUtils = (function() {

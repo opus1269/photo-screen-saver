@@ -94,7 +94,7 @@ app.SSEvents = (function() {
 		 */
 		onMouseClick: function() {
 			const t = app.Screensaver.getTemplate();
-			if (t.p && (t.p.selected !== undefined)) {
+			if (t.started) {
 				app.Photo.showSource(t.views[t.p.selected].photo);
 			}
 			_close();

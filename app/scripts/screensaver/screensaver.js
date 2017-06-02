@@ -20,49 +20,37 @@ app.Screensaver = (function() {
 		app.Storage.get('background').substring(11);
 
 	/**
-	 * main auto-bind template
-	 * @type {Object}
+	 * Main auto-binding template
+	 * @typedef {Element} app.Screensaver.Template
+	 * @property {?Element} rep - repeat template
+	 * @property {?Element} p - animated-pages
+	 * @property {Array<app.Photo>} photos - array of photos
+	 * @property {Array<app.SSView>} views - array of views
+	 * @property {int} sizingType - the way the photos are rendered
+	 * @property {int} aniType - the animation type for photo transitions
+	 * @property {boolean} noPhotos - true if there are no usable photos
+	 * @property {boolean} started - true if the first page has been selected
+	 * @property {Function} _computeNoPhotosLabel
+	 * @property {Function} _OnAniFinished
+	 * @memberOf app.Screensaver
+	 */
+
+	/**
+	 * Main auto-binding template
+	 * @type {app.Screensaver.Template}
 	 * @const
 	 * @private
 	 * @memberOf app.Screensaver
 	 */
 	const t = document.querySelector('#t');
 
-	// repeat template
 	t.rep = null;
-
-	// neon-animated-pages element
 	t.p = null;
-
-	/**
-	 * Array of all the {@link app.Photo} objects to use for the slide show
-	 * @type {Array}
-	 * @memberOf app.Screensaver
-	 */
 	t.photos = [];
-
-	/**
-	 * Array of {@link app.SSView} objects bound to the neon-animated-pages.
-	 * The {@link app.Photo} property is an always changing subset of
-	 * [t.photos]{@link app.Screensaver.t.photos}
-	 * @type {Array}
-	 * @memberOf app.Screensaver
-	 */
 	t.views = [];
-
-	/**
-	 * The way the photos are rendered
-	 * @type {int}
-	 */
 	t.sizingType = 0;
-
-	/**
-	 * The animation type for between photo transitions
-	 * @type {int}
-	 */
 	t.aniType = 0;
-
-	// Flag to indicate the screen saver has no photos
+	t.started = false;
 	t.noPhotos = false;
 
 	/**
@@ -71,6 +59,8 @@ app.Screensaver = (function() {
 	 * @memberOf app.Screensaver
 	 */
 	t.addEventListener('dom-change', function() {
+		app.GA.page('/screensaver.html');
+
 		// listen for chrome messages
 		app.Msg.listen(app.SSEvents.onMessage);
 
@@ -82,8 +72,6 @@ app.Screensaver = (function() {
 
 		// listen for mouse click events
 		window.addEventListener('click', app.SSEvents.onMouseClick, false);
-
-		app.GA.page('/screensaver.html');
 
 		t.rep = t.$.repeatTemplate;
 		t.p = t.$.pages;
@@ -141,7 +129,7 @@ app.Screensaver = (function() {
 	return {
 		/**
 		 * Get reference to the auto-binding template
-		 * @returns {Object} The auto-binding template
+		 * @returns {app.Screensaver.Template} The auto-binding template
 		 * @memberOf app.Screensaver
 		 */
 		getTemplate: function() {
