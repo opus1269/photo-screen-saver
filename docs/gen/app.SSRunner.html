@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Namespace: Data</title>
+	<title>Documentation Namespace: SSRunner</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,13 +79,13 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Namespace: Data</h1>
+	<h1 class="page-title">Namespace: SSRunner</h1>
 <section>
 
 <header>
     
         <h2>
-        Data
+        SSRunner
         </h2>
         
     
@@ -96,7 +96,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Manage the extensions data</p></div>
+            <div class="description"><p>Control the running of a <a href="app.Screensaver.html">app.Screensaver</a></p></div>
         
 
         
@@ -134,8 +134,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-13">line 13</a>
+				<a href="screensaver_ss_runner.js.html">screensaver/ss_runner.js</a>,
+				 <a href="screensaver_ss_runner.js.html#sunlight-1-line-13">line 13</a>
 			</li>
 		</ul>
 	</dd>
@@ -169,15 +169,15 @@
         <dl>
             
 <hr>
-<dt class="name" id="._DATA_VERSION">
-    <h4 id="._DATA_VERSION"><span class="type-signature">&lt;private, static, constant> </span>_DATA_VERSION<span class="type-signature"> :int</span></h4>
+<dt class="name" id="._VARS">
+    <h4 id="._VARS"><span class="type-signature">&lt;private, static, constant> </span>_VARS<span class="type-signature"> :Object</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>Version of localStorage - update when items are added, removed, changed</p>
+        <p>Instance variables</p>
     </div>
     
 
@@ -185,105 +185,238 @@
         <h5>Type:</h5>
         <ul>
             <li>
+                
+<span class="param-type">Object</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>firstAni</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>true after first animation cycle</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lastSelected</code></td>
+            
+
+            <td class="type">
+            
                 
 <span class="param-type">int</span>
 
 
 
-            </li>
-        </ul>
-    
+            
+            </td>
 
-    
-<dl class="details">
-    
+            
 
-	
+            
 
-	
-
-	
+            <td class="description last"><p>last selected page</p></td>
+        </tr>
 
     
 
-    
+        <tr>
+            
+                <td class="name"><code>replaceIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>page whose photo is to be replaced</p></td>
+        </tr>
 
     
 
+        <tr>
+            
+                <td class="name"><code>previousIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>previous page (may have failed to load)</p></td>
+        </tr>
+
     
 
-	
+        <tr>
+            
+                <td class="name"><code>photosIdx</code></td>
+            
 
-	
-
-	
-
-	
-
-	
-	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
-	<dd class="tag-default">
-		<ul class="dummy">
-			<li>12</li>
-		</ul>
-	</dd>
-	
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
 
 
 
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-28">line 28</a>
-			</li>
-		</ul>
-	</dd>
-	
+            
+            </td>
 
-	
+            
 
-	
+            
 
-	
+            <td class="description last"><p>pointer into photos array</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>transTime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>slide transition time in milliSecs</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>waitTime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>wait time when looking for photo in milliSecs</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>waitForLoad</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>if false, replace all current photos</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 </dl>
 
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="._DEF_VALUES">
-    <h4 id="._DEF_VALUES"><span class="type-signature">&lt;private, static, constant> </span>_DEF_VALUES<span class="type-signature"> :<a href="global.html#AppData">AppData</a></span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Default values in localStorage</p>
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type"><a href="global.html#AppData">AppData</a></span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
     
 
 	
@@ -317,8 +450,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-82">line 82</a>
+				<a href="screensaver_ss_runner.js.html">screensaver/ss_runner.js</a>,
+				 <a href="screensaver_ss_runner.js.html#sunlight-1-line-32">line 32</a>
 			</li>
 		</ul>
 	</dd>
@@ -345,7 +478,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="._addDefaults"><span class="type-signature">&lt;private, static> </span>_addDefaults<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="._findLoadedPhoto"><span class="type-signature">&lt;private, static> </span>_findLoadedPhoto<span class="signature">(idx)</span><span class="type-signature"> &rarr; {int}</span></h4>
     
     
 </dt>
@@ -353,96 +486,7 @@
 
     
     <div class="description">
-        <p>Save the <a href="app.Data.html#._DEF_VALUES">_DEF_VALUES</a> items, if they
-do not already exist</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-190">line 190</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._convertSliderValue"><span class="type-signature">&lt;private, static> </span>_convertSliderValue<span class="signature">(key)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Convert a setting-slider value due to addition of units</p>
+        <p>Try to find a photo that has finished loading</p>
     </div>
     
 
@@ -477,13 +521,13 @@ do not already exist</p>
 
         <tr>
             
-                <td class="name"><code>key</code></td>
+                <td class="name"><code>idx</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">int</span>
 
 
 
@@ -494,7 +538,7 @@ do not already exist</p>
 
             
 
-            <td class="description last"><p>localStorage key</p></td>
+            <td class="description last"><p>index into <a href="app.Screensaver.html#.t">t.views</a></p></td>
         </tr>
 
     
@@ -538,96 +582,8 @@ do not already exist</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-204">line 204</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._getTimeFormat"><span class="type-signature">&lt;private, static> </span>_getTimeFormat<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Get default time format based on locale</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-162">line 162</a>
+				<a href="screensaver_ss_runner.js.html">screensaver/ss_runner.js</a>,
+				 <a href="screensaver_ss_runner.js.html#sunlight-1-line-74">line 74</a>
 			</li>
 		</ul>
 	</dd>
@@ -656,7 +612,7 @@ do not already exist</p>
     
             
 <div class="param-desc">
-    <p>12 or 24</p>
+    <p>index into t.views, -1 if none are loaded</p>
 </div>
 
 
@@ -684,7 +640,7 @@ do not already exist</p>
             
 <hr>
 <dt>
-    <h4 class="name" id="._processEnabled"><span class="type-signature">&lt;private, static> </span>_processEnabled<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="._getNextPhoto"><span class="type-signature">&lt;private, static> </span>_getNextPhoto<span class="signature">(idx)</span><span class="type-signature"> &rarr; {int}</span></h4>
     
     
 </dt>
@@ -692,474 +648,7 @@ do not already exist</p>
 
     
     <div class="description">
-        <p>Set state based on screensaver enabled flag
-Note: this does not effect the keep awake settings so you could
-use the extension as a display keep awake scheduler without
-using the screensaver</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-124">line 124</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._processIdleTime"><span class="type-signature">&lt;private, static> </span>_processIdleTime<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Set wait time for screen saver display after machine is idle</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-152">line 152</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._processKeepAwake"><span class="type-signature">&lt;private, static> </span>_processKeepAwake<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Set power scheduling features</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-139">line 139</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._setOS"><span class="type-signature">&lt;private, static> </span>_setOS<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Set the 'os' value</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-177">line 177</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>err on failure</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".initialize"><span class="type-signature">&lt;static> </span>initialize<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Initialize the data saved in localStorage</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-221">line 221</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".processState"><span class="type-signature">&lt;static> </span>processState<span class="signature">( [key])</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Process changes to localStorage items</p>
+        <p>Get the next photo to display</p>
     </div>
     
 
@@ -1182,11 +671,7 @@ using the screensaver</p>
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1198,13 +683,13 @@ using the screensaver</p>
 
         <tr>
             
-                <td class="name"><code>key</code></td>
+                <td class="name"><code>idx</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">int</span>
 
 
 
@@ -1212,26 +697,10 @@ using the screensaver</p>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    'all'
-                
-                </td>
-            
 
-            <td class="description last"><p>the item that changed</p></td>
+            <td class="description last"><p>index into <a href="app.Screensaver.html#.t">t.views</a></p></td>
         </tr>
 
     
@@ -1275,8 +744,171 @@ using the screensaver</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-301">line 301</a>
+				<a href="screensaver_ss_runner.js.html">screensaver/ss_runner.js</a>,
+				 <a href="screensaver_ss_runner.js.html#sunlight-1-line-169">line 169</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>next - index into <a href="app.Screensaver.html#.t">t.views</a>
+to display, -1 if none are ready</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._markPhotoBad"><span class="type-signature">&lt;private, static> </span>_markPhotoBad<span class="signature">(idx)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Mark a photo in <a href="app.Screensaver.html#.t">t.photos</a> as unusable</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>idx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>index into <a href="app.Screensaver.html#.t">t.views</a></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_ss_runner.js.html">screensaver/ss_runner.js</a>,
+				 <a href="screensaver_ss_runner.js.html#sunlight-1-line-49">line 49</a>
 			</li>
 		</ul>
 	</dd>
@@ -1309,7 +941,7 @@ using the screensaver</p>
             
 <hr>
 <dt>
-    <h4 class="name" id=".restoreDefaults"><span class="type-signature">&lt;static> </span>restoreDefaults<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="._replaceAllPhotos"><span class="type-signature">&lt;private, static> </span>_replaceAllPhotos<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1317,7 +949,7 @@ using the screensaver</p>
 
     
     <div class="description">
-        <p>Restore default values for data saved in localStorage</p>
+        <p>Replace the active photos with new photos from the master array</p>
     </div>
     
 
@@ -1363,8 +995,8 @@ using the screensaver</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-280">line 280</a>
+				<a href="screensaver_ss_runner.js.html">screensaver/ss_runner.js</a>,
+				 <a href="screensaver_ss_runner.js.html#sunlight-1-line-135">line 135</a>
 			</li>
 		</ul>
 	</dd>
@@ -1397,7 +1029,7 @@ using the screensaver</p>
             
 <hr>
 <dt>
-    <h4 class="name" id=".update"><span class="type-signature">&lt;static> </span>update<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="._replacePhoto"><span class="type-signature">&lt;private, static> </span>_replacePhoto<span class="signature">(idx, error)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1405,7 +1037,170 @@ using the screensaver</p>
 
     
     <div class="description">
-        <p>Update the data saved in localStorage</p>
+        <p>Add the next photo from the master array</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>idx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>index into <a href="app.Screensaver.html#.t">t.views</a></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>true if the photo at idx didn't load</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_ss_runner.js.html">screensaver/ss_runner.js</a>,
+				 <a href="screensaver_ss_runner.js.html#sunlight-1-line-103">line 103</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._runShow"><span class="type-signature">&lt;private, static> </span>_runShow<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Called at fixed time intervals to cycle through the photos
+Potentially runs forever</p>
     </div>
     
 
@@ -1451,8 +1246,322 @@ using the screensaver</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-238">line 238</a>
+				<a href="screensaver_ss_runner.js.html">screensaver/ss_runner.js</a>,
+				 <a href="screensaver_ss_runner.js.html#sunlight-1-line-200">line 200</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".replacePhoto"><span class="type-signature">&lt;static> </span>replacePhoto<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Add the next photo from the master array</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_ss_runner.js.html">screensaver/ss_runner.js</a>,
+				 <a href="screensaver_ss_runner.js.html#sunlight-1-line-271">line 271</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".setPhotosIndex"><span class="type-signature">&lt;static> </span>setPhotosIndex<span class="signature">(idx)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Set the index into <a href="app.Screensaver.html#.t">t.photos</a></p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>idx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>array index</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_ss_runner.js.html">screensaver/ss_runner.js</a>,
+				 <a href="screensaver_ss_runner.js.html#sunlight-1-line-263">line 263</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".start"><span class="type-signature">&lt;static> </span>start<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Start the slideshow</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_ss_runner.js.html">screensaver/ss_runner.js</a>,
+				 <a href="screensaver_ss_runner.js.html#sunlight-1-line-248">line 248</a>
 			</li>
 		</ul>
 	</dd>

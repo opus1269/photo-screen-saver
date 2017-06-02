@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: background/use500px.js</title>
+	<title>Documentation Source: screensaver/ss_events.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: background/use500px.js</h1>
+		<h1 class="page-title">Source: screensaver/ss_events.js</h1>
     
 <section>
     <article>
@@ -93,114 +93,97 @@
 window.app = window.app || {};
 
 /**
- * Interface to 500px API
+ * Event handling for a {@link app.Screensaver}
  * @namespace
  */
-app.Use500px = (function() {
+app.SSEvents = (function() {
 	'use strict';
 
 	new ExceptionHandler();
 
 	/**
-	 * 500px rest API
-	 * @type {string}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _URL_BASE = 'https://api.500px.com/v1/';
-
-	/**
-	 * API authorization key
-	 * @type {string}
+	 * Starting mouse position
+	 * @type {{x: ?int, y: ?int}}
 	 * @const
 	 * @private
-	 * @memberOf app.Use500px
+	 * @memberOf app.SSEvents
 	 */
-	const _KEY = 'iyKV6i6wu0R8QUea9mIXvEsQxIF0tMRVXopwYcFC';
+	const _MOUSE_START = {x: null, y: null};
 
 	/**
-	 * Max photos to return - 100 is API max
-	 * @type {int}
-	 * @const
-	 * @default
+	 * Close ourselves
 	 * @private
-	 * @memberOf app.Use500px
+	 * @memberOf app.SSEvents
 	 */
-	const _MAX_PHOTOS = 90;
-
-	/**
-	 * Categories to use Make them an array to overcome 100 photo limit per call
-	 * @type {Array}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _CATS = [
-		'Nature,City and Architecture',
-		'Landscapes,Animals',
-		'Macro,Still Life,Underwater',
-	];
-
-	/**
-	 * Call API to get some photos
-	 * @param {string} url - server url
-	 * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	function _doGet(url) {
-		return app.Http.doGet(url).then((response) => {
-			if (response.error) {
-				throw new Error(response.error);
-			}
-			const photos = [];
-			response.photos.forEach((photo) => {
-				if (!photo.nsfw) {
-					const asp = photo.width / photo.height;
-					let ex = null;
-					let pt = null;
-					if (photo.latitude &amp;&amp; photo.longitude) {
-						pt = app.PhotoSource
-							.getPt(photo.latitude, photo.longitude);
-						ex = {};
-					}
-					app.PhotoSource.addPhoto(photos, photo.images[0].url,
-						photo.user.fullname, asp, ex, pt);
-				}
-			});
-			return Promise.resolve(photos);
-		});
+	function _close() {
+		// send message to other screen savers to close themselves
+		app.Msg.send(app.Msg.SS_CLOSE).catch(() => {});
+		setTimeout(function() {
+			// delay a little to process events
+			window.close();
+		}, 750);
 	}
 
 	return {
+		// noinspection JSUnusedLocalSymbols
 		/**
-		 * Retrieve the array of 500px photos
-		 * @param {string} type - name of 500px gallery
-		 * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
-		 * @memberOf app.Use500px
+		 * Event: Fired when a message is sent from either an extension&lt;br>
+		 * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
+		 * @see https://developer.chrome.com/extensions/runtime#event-onMessage
+		 * @param {app.Msg.Message} request - details for the message
+		 * @param {Object} [sender] - MessageSender object
+		 * @param {Function} [response] - function to call once after processing
+		 * @returns {boolean} true if asynchronous
+		 * @memberOf app.SSEvents
 		 */
-		loadPhotos: function(type) {
-			// series of API calls
-			const promises = [];
-			_CATS.forEach((_CAT) => {
-				let url =
-					`${_URL_BASE}photos/?consumer_key=${_KEY}&amp;feature=${type}` +
-					`&amp;only=${_CAT}&amp;rpp=${_MAX_PHOTOS}` +
-					'&amp;sort=rating&amp;image_size=2048';
-				promises.push(_doGet(url));
-			});
+		onMessage: function(request, sender, response) {
+			if (request.message === app.Msg.SS_CLOSE.message) {
+				_close();
+			} else if (request.message === app.Msg.SS_IS_SHOWING.message) {
+				// let people know we are here
+				response({message: 'OK'});
+			}
+			return false;
+		},
 
-			// Collate the photos
-			return Promise.all(promises).then((values) => {
-				let photos = [];
-				values.forEach((value) => {
-					photos = photos.concat(value);
-				});
-				return Promise.resolve(photos);
-			});
+		/**
+		 * Event: keydown
+		 * @memberOf app.SSEvents
+		 */
+		onKeyDown: function() {
+			_close();
+		},
+
+		/**
+		 * Event: mousemove
+		 * @param {Event} ev - mousemove event
+		 * @memberOf app.SSEvents
+		 */
+		onMouseMove: function(ev) {
+			if (_MOUSE_START.x &amp;&amp; _MOUSE_START.y) {
+				const deltaX = Math.abs(ev.clientX - _MOUSE_START.x);
+				const deltaY = Math.abs(ev.clientY - _MOUSE_START.y);
+				if (Math.max(deltaX, deltaY) > 10) {
+					// close after a minimum amount of mouse movement
+					_close();
+				}
+			} else {
+				// first move, set values
+				_MOUSE_START.x = ev.clientX;
+				_MOUSE_START.y = ev.clientY;
+			}
+		},
+
+		/**
+		 * Event: mouse click
+		 * @memberOf app.SSEvents
+		 */
+		onMouseClick: function() {
+			const t = app.Screensaver.getTemplate();
+			if (t.started) {
+				app.Photo.showSource(t.views[t.p.selected].photo);
+			}
+			_close();
 		},
 	};
 })();
@@ -249,7 +232,7 @@ app.Use500px = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 2nd 2017, 12:27:56 am
+		on June 2nd 2017, 12:27:55 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

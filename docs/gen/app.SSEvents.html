@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Namespace: Data</title>
+	<title>Documentation Namespace: SSEvents</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,13 +79,13 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Namespace: Data</h1>
+	<h1 class="page-title">Namespace: SSEvents</h1>
 <section>
 
 <header>
     
         <h2>
-        Data
+        SSEvents
         </h2>
         
     
@@ -96,7 +96,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Manage the extensions data</p></div>
+            <div class="description"><p>Event handling for a <a href="app.Screensaver.html">app.Screensaver</a></p></div>
         
 
         
@@ -134,8 +134,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-13">line 13</a>
+				<a href="screensaver_ss_events.js.html">screensaver/ss_events.js</a>,
+				 <a href="screensaver_ss_events.js.html#sunlight-1-line-13">line 13</a>
 			</li>
 		</ul>
 	</dd>
@@ -169,15 +169,15 @@
         <dl>
             
 <hr>
-<dt class="name" id="._DATA_VERSION">
-    <h4 id="._DATA_VERSION"><span class="type-signature">&lt;private, static, constant> </span>_DATA_VERSION<span class="type-signature"> :int</span></h4>
+<dt class="name" id="._MOUSE_START">
+    <h4 id="._MOUSE_START"><span class="type-signature">&lt;private, static, constant> </span>_MOUSE_START<span class="type-signature"> :Object</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>Version of localStorage - update when items are added, removed, changed</p>
+        <p>Starting mouse position</p>
     </div>
     
 
@@ -186,95 +186,7 @@
         <ul>
             <li>
                 
-<span class="param-type">int</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
-	<dd class="tag-default">
-		<ul class="dummy">
-			<li>12</li>
-		</ul>
-	</dd>
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-28">line 28</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="._DEF_VALUES">
-    <h4 id="._DEF_VALUES"><span class="type-signature">&lt;private, static, constant> </span>_DEF_VALUES<span class="type-signature"> :<a href="global.html#AppData">AppData</a></span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Default values in localStorage</p>
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type"><a href="global.html#AppData">AppData</a></span>
+<span class="param-type">Object</span>
 
 
 
@@ -317,8 +229,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-82">line 82</a>
+				<a href="screensaver_ss_events.js.html">screensaver/ss_events.js</a>,
+				 <a href="screensaver_ss_events.js.html#sunlight-1-line-25">line 25</a>
 			</li>
 		</ul>
 	</dd>
@@ -345,7 +257,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="._addDefaults"><span class="type-signature">&lt;private, static> </span>_addDefaults<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="._close"><span class="type-signature">&lt;private, static> </span>_close<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -353,8 +265,7 @@
 
     
     <div class="description">
-        <p>Save the <a href="app.Data.html#._DEF_VALUES">_DEF_VALUES</a> items, if they
-do not already exist</p>
+        <p>Close ourselves</p>
     </div>
     
 
@@ -400,8 +311,8 @@ do not already exist</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-190">line 190</a>
+				<a href="screensaver_ss_events.js.html">screensaver/ss_events.js</a>,
+				 <a href="screensaver_ss_events.js.html#sunlight-1-line-32">line 32</a>
 			</li>
 		</ul>
 	</dd>
@@ -434,7 +345,7 @@ do not already exist</p>
             
 <hr>
 <dt>
-    <h4 class="name" id="._convertSliderValue"><span class="type-signature">&lt;private, static> </span>_convertSliderValue<span class="signature">(key)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".onKeyDown"><span class="type-signature">&lt;static> </span>onKeyDown<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -442,145 +353,7 @@ do not already exist</p>
 
     
     <div class="description">
-        <p>Convert a setting-slider value due to addition of units</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>localStorage key</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-204">line 204</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._getTimeFormat"><span class="type-signature">&lt;private, static> </span>_getTimeFormat<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Get default time format based on locale</p>
+        <p>Event: keydown</p>
     </div>
     
 
@@ -626,123 +399,8 @@ do not already exist</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-162">line 162</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>12 or 24</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">int</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._processEnabled"><span class="type-signature">&lt;private, static> </span>_processEnabled<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Set state based on screensaver enabled flag
-Note: this does not effect the keep awake settings so you could
-use the extension as a display keep awake scheduler without
-using the screensaver</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-124">line 124</a>
+				<a href="screensaver_ss_events.js.html">screensaver/ss_events.js</a>,
+				 <a href="screensaver_ss_events.js.html#sunlight-1-line-67">line 67</a>
 			</li>
 		</ul>
 	</dd>
@@ -775,7 +433,7 @@ using the screensaver</p>
             
 <hr>
 <dt>
-    <h4 class="name" id="._processIdleTime"><span class="type-signature">&lt;private, static> </span>_processIdleTime<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".onMessage"><span class="type-signature">&lt;static> </span>onMessage<span class="signature">(request [, sender] [, response])</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
     
 </dt>
@@ -783,383 +441,8 @@ using the screensaver</p>
 
     
     <div class="description">
-        <p>Set wait time for screen saver display after machine is idle</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-152">line 152</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._processKeepAwake"><span class="type-signature">&lt;private, static> </span>_processKeepAwake<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Set power scheduling features</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-139">line 139</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._setOS"><span class="type-signature">&lt;private, static> </span>_setOS<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Set the 'os' value</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-177">line 177</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>err on failure</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".initialize"><span class="type-signature">&lt;static> </span>initialize<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Initialize the data saved in localStorage</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-221">line 221</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".processState"><span class="type-signature">&lt;static> </span>processState<span class="signature">( [key])</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Process changes to localStorage items</p>
+        <p>Event: Fired when a message is sent from either an extension<br>
+(by runtime.sendMessage) or a content script (by tabs.sendMessage).</p>
     </div>
     
 
@@ -1186,8 +469,6 @@ using the screensaver</p>
         
 
         
-        <th>Default</th>
-        
 
         <th class="last">Description</th>
     </tr>
@@ -1198,13 +479,45 @@ using the screensaver</p>
 
         <tr>
             
-                <td class="name"><code>key</code></td>
+                <td class="name"><code>request</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="app.Msg.html#.Message">app.Msg.Message</a></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>details for the message</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sender</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
 
 
 
@@ -1224,14 +537,42 @@ using the screensaver</p>
             
 
             
-                <td class="default">
+
+            <td class="description last"><p>MessageSender object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>response</code></td>
+            
+
+            <td class="type">
+            
                 
-                    'all'
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
                 
                 </td>
             
 
-            <td class="description last"><p>the item that changed</p></td>
+            
+
+            <td class="description last"><p>function to call once after processing</p></td>
         </tr>
 
     
@@ -1275,8 +616,8 @@ using the screensaver</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-301">line 301</a>
+				<a href="screensaver_ss_events.js.html">screensaver/ss_events.js</a>,
+				 <a href="screensaver_ss_events.js.html#sunlight-1-line-53">line 53</a>
 			</li>
 		</ul>
 	</dd>
@@ -1284,6 +625,13 @@ using the screensaver</p>
 
 	
 
+	
+	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="https://developer.chrome.com/extensions/runtime#event-onMessage">https://developer.chrome.com/extensions/runtime#event-onMessage</a></li>
+			</ul>
+	</dd>
 	
 
 	
@@ -1301,6 +649,30 @@ using the screensaver</p>
     
 
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>true if asynchronous</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
 
     
 </dd>
@@ -1309,7 +681,7 @@ using the screensaver</p>
             
 <hr>
 <dt>
-    <h4 class="name" id=".restoreDefaults"><span class="type-signature">&lt;static> </span>restoreDefaults<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".onMouseClick"><span class="type-signature">&lt;static> </span>onMouseClick<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1317,7 +689,7 @@ using the screensaver</p>
 
     
     <div class="description">
-        <p>Restore default values for data saved in localStorage</p>
+        <p>Event: mouse click</p>
     </div>
     
 
@@ -1363,8 +735,8 @@ using the screensaver</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-280">line 280</a>
+				<a href="screensaver_ss_events.js.html">screensaver/ss_events.js</a>,
+				 <a href="screensaver_ss_events.js.html#sunlight-1-line-95">line 95</a>
 			</li>
 		</ul>
 	</dd>
@@ -1397,7 +769,7 @@ using the screensaver</p>
             
 <hr>
 <dt>
-    <h4 class="name" id=".update"><span class="type-signature">&lt;static> </span>update<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".onMouseMove"><span class="type-signature">&lt;static> </span>onMouseMove<span class="signature">(ev)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1405,7 +777,7 @@ using the screensaver</p>
 
     
     <div class="description">
-        <p>Update the data saved in localStorage</p>
+        <p>Event: mousemove</p>
     </div>
     
 
@@ -1414,6 +786,56 @@ using the screensaver</p>
     
 
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ev</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Event</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>mousemove event</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
@@ -1451,8 +873,8 @@ using the screensaver</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="background_data.js.html">background/data.js</a>,
-				 <a href="background_data.js.html#sunlight-1-line-238">line 238</a>
+				<a href="screensaver_ss_events.js.html">screensaver/ss_events.js</a>,
+				 <a href="screensaver_ss_events.js.html#sunlight-1-line-76">line 76</a>
 			</li>
 		</ul>
 	</dd>

@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: background/use500px.js</title>
+	<title>Documentation Source: screensaver/ss_time.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: background/use500px.js</h1>
+		<h1 class="page-title">Source: screensaver/ss_time.js</h1>
     
 <section>
     <article>
@@ -93,114 +93,79 @@
 window.app = window.app || {};
 
 /**
- * Interface to 500px API
+ * Time handling for an {@link app.Screensaver}
  * @namespace
  */
-app.Use500px = (function() {
+app.SSTime = (function() {
 	'use strict';
 
 	new ExceptionHandler();
 
 	/**
-	 * 500px rest API
+	 * Repeating alarm for updating time label
 	 * @type {string}
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf app.Use500px
+	 * @memberOf app.SSTime
 	 */
-	const _URL_BASE = 'https://api.500px.com/v1/';
+	const _CLOCK_ALARM = 'updateTimeLabel';
 
 	/**
-	 * API authorization key
-	 * @type {string}
-	 * @const
-	 * @private
-	 * @memberOf app.Use500px
+	 * Event: Listen for alarms
+	 * @param {Object} alarm - chrome alarm
+	 * @param {string} alarm.name - alarm type
+	 * @memberOf app.SSTime
 	 */
-	const _KEY = 'iyKV6i6wu0R8QUea9mIXvEsQxIF0tMRVXopwYcFC';
-
-	/**
-	 * Max photos to return - 100 is API max
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _MAX_PHOTOS = 90;
-
-	/**
-	 * Categories to use Make them an array to overcome 100 photo limit per call
-	 * @type {Array}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _CATS = [
-		'Nature,City and Architecture',
-		'Landscapes,Animals',
-		'Macro,Still Life,Underwater',
-	];
-
-	/**
-	 * Call API to get some photos
-	 * @param {string} url - server url
-	 * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	function _doGet(url) {
-		return app.Http.doGet(url).then((response) => {
-			if (response.error) {
-				throw new Error(response.error);
-			}
-			const photos = [];
-			response.photos.forEach((photo) => {
-				if (!photo.nsfw) {
-					const asp = photo.width / photo.height;
-					let ex = null;
-					let pt = null;
-					if (photo.latitude &amp;&amp; photo.longitude) {
-						pt = app.PhotoSource
-							.getPt(photo.latitude, photo.longitude);
-						ex = {};
-					}
-					app.PhotoSource.addPhoto(photos, photo.images[0].url,
-						photo.user.fullname, asp, ex, pt);
-				}
-			});
-			return Promise.resolve(photos);
-		});
+	function _onAlarm(alarm) {
+		if (alarm.name === _CLOCK_ALARM) {
+			// update time label
+			app.SSTime.setTime();
+		}
 	}
 
 	return {
 		/**
-		 * Retrieve the array of 500px photos
-		 * @param {string} type - name of 500px gallery
-		 * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
-		 * @memberOf app.Use500px
+		 * Setup photo transition time
+		 * @memberOf app.SSTime
 		 */
-		loadPhotos: function(type) {
-			// series of API calls
-			const promises = [];
-			_CATS.forEach((_CAT) => {
-				let url =
-					`${_URL_BASE}photos/?consumer_key=${_KEY}&amp;feature=${type}` +
-					`&amp;only=${_CAT}&amp;rpp=${_MAX_PHOTOS}` +
-					'&amp;sort=rating&amp;image_size=2048';
-				promises.push(_doGet(url));
-			});
+		setUpTransitionTime: function() {
+			const trans = app.Storage.get('transitionTime');
+			const showTime = app.Storage.getInt('showTime', 0);
+			if ((showTime !== 0) &amp;&amp; (trans.base > 60)) {
+				// add repeating alarm to update time label
+				// if transition time is more than 1 minute
+				// and time label is showing
+				chrome.alarms.onAlarm.addListener(_onAlarm);
 
-			// Collate the photos
-			return Promise.all(promises).then((values) => {
-				let photos = [];
-				values.forEach((value) => {
-					photos = photos.concat(value);
+				const chromep = new ChromePromise();
+				chromep.alarms.get(_CLOCK_ALARM).then((alarm) => {
+					if (!alarm) {
+						chrome.alarms.create(_CLOCK_ALARM, {
+							when: Date.now(),
+							periodInMinutes: 1,
+						});
+					}
+					return null;
+				}).catch((err) => {
+					app.GA.error(err.message,
+						'chromep.alarms.get(CLOCK_ALARM)');
 				});
-				return Promise.resolve(photos);
-			});
+			}
+		},
+
+		/**
+		 * Set the time label
+		 * @memberOf app.SSTime
+		 */
+		setTime: function() {
+			const t = app.Screensaver.getTemplate();
+			const showTime = app.Storage.getInt('showTime', 0);
+			if ((showTime !== 0) &amp;&amp; t.started) {
+				t.set('time', app.Time.getStringShort());
+			} else {
+				t.set('time', '');
+			}
 		},
 	};
 })();

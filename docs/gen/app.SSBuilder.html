@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: background/use500px.js</title>
+	<title>Documentation Namespace: SSBuilder</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -74,140 +74,577 @@
 <div class="row">
 
 	
-	<div class="col-md-12">
+	<div class="col-md-8">
 	
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: background/use500px.js</h1>
-    
+	<h1 class="page-title">Namespace: SSBuilder</h1>
 <section>
-    <article>
-        <pre
-            class="sunlight-highlight-javascript linenums">/*
- *  Copyright (c) 2015-2017, Michael A. Updike All rights reserved.
- *  Licensed under the BSD-3-Clause
- *  https://opensource.org/licenses/BSD-3-Clause
- *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
- */
-window.app = window.app || {};
 
-/**
- * Interface to 500px API
- * @namespace
- */
-app.Use500px = (function() {
-	'use strict';
+<header>
+    
+        <h2>
+        SSBuilder
+        </h2>
+        
+    
+</header>
 
-	new ExceptionHandler();
 
-	/**
-	 * 500px rest API
-	 * @type {string}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _URL_BASE = 'https://api.500px.com/v1/';
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Builder for an <a href="app.Screensaver.html">app.Screensaver</a></p></div>
+        
 
-	/**
-	 * API authorization key
-	 * @type {string}
-	 * @const
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _KEY = 'iyKV6i6wu0R8QUea9mIXvEsQxIF0tMRVXopwYcFC';
+        
+<dl class="details">
+    
 
-	/**
-	 * Max photos to return - 100 is API max
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _MAX_PHOTOS = 90;
+	
 
-	/**
-	 * Categories to use Make them an array to overcome 100 photo limit per call
-	 * @type {Array}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _CATS = [
-		'Nature,City and Architecture',
-		'Landscapes,Animals',
-		'Macro,Still Life,Underwater',
-	];
+	
 
-	/**
-	 * Call API to get some photos
-	 * @param {string} url - server url
-	 * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	function _doGet(url) {
-		return app.Http.doGet(url).then((response) => {
-			if (response.error) {
-				throw new Error(response.error);
-			}
-			const photos = [];
-			response.photos.forEach((photo) => {
-				if (!photo.nsfw) {
-					const asp = photo.width / photo.height;
-					let ex = null;
-					let pt = null;
-					if (photo.latitude &amp;&amp; photo.longitude) {
-						pt = app.PhotoSource
-							.getPt(photo.latitude, photo.longitude);
-						ex = {};
-					}
-					app.PhotoSource.addPhoto(photos, photo.images[0].url,
-						photo.user.fullname, asp, ex, pt);
-				}
-			});
-			return Promise.resolve(photos);
-		});
-	}
+	
 
-	return {
-		/**
-		 * Retrieve the array of 500px photos
-		 * @param {string} type - name of 500px gallery
-		 * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
-		 * @memberOf app.Use500px
-		 */
-		loadPhotos: function(type) {
-			// series of API calls
-			const promises = [];
-			_CATS.forEach((_CAT) => {
-				let url =
-					`${_URL_BASE}photos/?consumer_key=${_KEY}&amp;feature=${type}` +
-					`&amp;only=${_CAT}&amp;rpp=${_MAX_PHOTOS}` +
-					'&amp;sort=rating&amp;image_size=2048';
-				promises.push(_doGet(url));
-			});
+    
 
-			// Collate the photos
-			return Promise.all(promises).then((values) => {
-				let photos = [];
-				values.forEach((value) => {
-					photos = photos.concat(value);
-				});
-				return Promise.resolve(photos);
-			});
-		},
-	};
-})();
-</pre>
-    </article>
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_ss_builder.js.html">screensaver/ss_builder.js</a>,
+				 <a href="screensaver_ss_builder.js.html#sunlight-1-line-13">line 13</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<hr>
+<dt class="name" id="._MAX_PAGES">
+    <h4 id="._MAX_PAGES"><span class="type-signature">&lt;private, static, constant> </span>_MAX_PAGES<span class="type-signature"> :int</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Max number of animated pages</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">int</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
+	<dd class="tag-default">
+		<ul class="dummy">
+			<li>20</li>
+		</ul>
+	</dd>
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_ss_builder.js.html">screensaver/ss_builder.js</a>,
+				 <a href="screensaver_ss_builder.js.html#sunlight-1-line-26">line 26</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id=".createPages"><span class="type-signature">&lt;static> </span>createPages<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Create the <a href="app.Screensaver.html#.t">t.views</a> that will be animated</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_ss_builder.js.html">screensaver/ss_builder.js</a>,
+				 <a href="screensaver_ss_builder.js.html#sunlight-1-line-115">line 115</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".loadPhotos"><span class="type-signature">&lt;static> </span>loadPhotos<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Build the <a href="app.Screensaver.html#.t">t.photos</a> that will be displayed</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_ss_builder.js.html">screensaver/ss_builder.js</a>,
+				 <a href="screensaver_ss_builder.js.html#sunlight-1-line-81">line 81</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>true if there is at least one photo</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".setupPhotoSizing"><span class="type-signature">&lt;static> </span>setupPhotoSizing<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Process settings related to the photo's appearance</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_ss_builder.js.html">screensaver/ss_builder.js</a>,
+				 <a href="screensaver_ss_builder.js.html#sunlight-1-line-33">line 33</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".setZoom"><span class="type-signature">&lt;static> </span>setZoom<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Set the window zoom factor to 1.0</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="screensaver_ss_builder.js.html">screensaver/ss_builder.js</a>,
+				 <a href="screensaver_ss_builder.js.html#sunlight-1-line-61">line 61</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
 </section>
-
 
 
 
@@ -217,6 +654,10 @@ app.Use500px = (function() {
 
 	<div class="clearfix"></div>
 
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
 	
 
 </div>
