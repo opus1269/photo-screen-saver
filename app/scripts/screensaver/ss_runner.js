@@ -277,7 +277,7 @@ app.SSRunner = (function() {
 			const prevPage = _VARS.previousIdx;
 			if ((prevPage >= 0) && t.views[prevPage].isError()) {
 				// broken link, mark it and replace it
-				_replacePhoto(t.prevPage, true);
+				_replacePhoto(prevPage, true);
 			}
 		},
 	};
