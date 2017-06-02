@@ -75,15 +75,15 @@ app.Screensaver = (function() {
 		t.rep = t.$.repeatTemplate;
 		t.p = t.$.pages;
 
-		app.SSUtils.setZoom();
-		app.SSUtils.setupPhotoSizing();
+		app.SSBuilder.setZoom();
+		app.SSBuilder.setupPhotoSizing();
 		_processPhotoTransitions();
 
 		// load the photos for the slide show
-		const hasPhotos = app.SSUtils.loadPhotos();
+		const hasPhotos = app.SSBuilder.loadPhotos();
 		if (hasPhotos) {
 			// create the animated pages
-			app.SSUtils.createPages();
+			app.SSBuilder.createPages();
 
 			// kick off the slide show if there are photos selected
 			app.SSRunner.start();

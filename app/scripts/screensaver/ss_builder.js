@@ -7,10 +7,10 @@
 window.app = window.app || {};
 
 /**
- * Utility methods for an {@link app.Screensaver}
+ * Builder for an {@link app.Screensaver}
  * @namespace
  */
-app.SSUtils = (function() {
+app.SSBuilder = (function() {
 	'use strict';
 
 	new ExceptionHandler();
@@ -21,14 +21,14 @@ app.SSUtils = (function() {
 	 * @const
 	 * @default
 	 * @private
-	 * @memberOf app.SSUtils
+	 * @memberOf app.SSBuilder
 	 */
 	const _MAX_PAGES = 20;
 	
 	return {
 		/**
 		 * Process settings related to the photo's appearance
-		 * @memberOf app.SSUtils
+		 * @memberOf app.SSBuilder
 		 */
 		setupPhotoSizing() {
 			const t = app.Screensaver.getTemplate();
@@ -56,7 +56,7 @@ app.SSUtils = (function() {
 
 		/**
 		 * Set the window zoom factor to 1.0
-		 * @memberOf app.SSUtils
+		 * @memberOf app.SSBuilder
 		 */
 		setZoom: function() {
 			if (app.Utils.getChromeVersion() >= 42) {
@@ -76,7 +76,7 @@ app.SSUtils = (function() {
 		/**
 		 * Build the Array of {@link app.Photo} objects that will be displayed
 		 * @returns {boolean} true if there is at least one photo
-		 * @memberOf app.SSUtils
+		 * @memberOf app.SSBuilder
 		 */
 		loadPhotos: function() {
 			const t = app.Screensaver.getTemplate();
@@ -110,7 +110,7 @@ app.SSUtils = (function() {
 
 		/**
 		 * Create the animated pages
-		 * @memberOf app.SSUtils
+		 * @memberOf app.SSBuilder
 		 */
 		createPages: function() {
 			const t = app.Screensaver.getTemplate();
