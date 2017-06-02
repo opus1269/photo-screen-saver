@@ -45,6 +45,7 @@ app.Screensaver = (function() {
 	const t = document.querySelector('#t');
 	t.rep = null;
 	t.p = null;
+	/** @member app.Screensaver.t.photos */
 	t.photos = [];
 	t.views = [];
 	t.sizingType = 0;

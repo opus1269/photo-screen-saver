@@ -41,8 +41,8 @@ app.SSRunner = (function() {
 	};
 
 	/**
-	 * Mark a photo in [t.photos]{@link app.SSRunner.t.photos} as unusable
-	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t.views}
+	 * Mark a photo in [t.photos]{@link app.Screensaver.t} as unusable
+	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
 	 * @private
 	 * @memberOf app.SSRunner
 	 */
@@ -66,7 +66,7 @@ app.SSRunner = (function() {
 
 	/**
 	 * Try to find a photo that has finished loading
-	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t.views}
+	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
 	 * @returns {int} index into t.views, -1 if none are loaded
 	 * @private
 	 * @memberOf app.SSRunner
@@ -95,7 +95,7 @@ app.SSRunner = (function() {
 
 	/**
 	 * Add the next photo from the master array
-	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t.views}
+	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
 	 * @param {boolean} error - true if the photo at idx didn't load
 	 * @private
 	 * @memberOf app.SSRunner
@@ -160,8 +160,8 @@ app.SSRunner = (function() {
 
 	/**
 	 * Get the next photo to display
-	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t.views}
-	 * @returns {int} next - index into [t.views]{@link app.Screensaver.t.views}
+	 * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
+	 * @returns {int} next - index into [t.views]{@link app.Screensaver.t}
 	 * to display, -1 if none are ready
 	 * @private
 	 * @memberOf app.SSRunner
@@ -256,7 +256,7 @@ app.SSRunner = (function() {
 		},
 
 		/**
-		 * Set the index of the [t.photos]{@link app.Screensaver.t.photos} array
+		 * Set the index into [t.photos]{@link app.Screensaver.t}
 		 * @param {int} idx - array index
 		 * @memberOf app.SSRunner
 		 */

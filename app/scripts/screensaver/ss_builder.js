@@ -74,7 +74,7 @@ app.SSBuilder = (function() {
 		},
 
 		/**
-		 * Build the Array of {@link app.Photo} objects that will be displayed
+		 * Build the [t.photos]{@link app.Screensaver.t} that will be displayed
 		 * @returns {boolean} true if there is at least one photo
 		 * @memberOf app.SSBuilder
 		 */
@@ -109,7 +109,7 @@ app.SSBuilder = (function() {
 		},
 
 		/**
-		 * Create the animated pages
+		 * Create the [t.views]{@link app.Screensaver.t} that will be animated
 		 * @memberOf app.SSBuilder
 		 */
 		createPages: function() {
