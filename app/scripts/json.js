@@ -27,7 +27,7 @@ app.JSONUtils = (function() {
 			try {
 				ret = JSON.parse(jsonString);
 			} catch (err) {
-				app.GA.exception(`JSONUtils.parse: ${err.message}`,
+				app.GA.exception(`Caught: JSONUtils.parse: ${err.message}`,
 					err.stack, false);
 			}
 			return ret;
