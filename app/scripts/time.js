@@ -4,12 +4,12 @@
  *  https://opensource.org/licenses/BSD-3-Clause
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
-window.app = window.app || {};
-
-(function() {
+{
 	'use strict';
 
 	new ExceptionHandler();
+
+	window.app = window.app || {};
 
 	/**
 	 * Time Class
@@ -18,6 +18,7 @@ window.app = window.app || {};
 	 * @alias app.Time
 	 */
 	app.Time = class Time {
+
 		/**
 		 * Create a new Time
 		 * @param {?string} [timeString=null] - in '00:00' format, if null
@@ -31,6 +32,7 @@ window.app = window.app || {};
 		/**
 		 * Minutes in day
 		 * @returns {int} value
+		 * @static
 		 */
 		static get MIN_IN_DAY() {
 			return 60 * 24;
@@ -39,15 +41,41 @@ window.app = window.app || {};
 		/**
 		 * Milliseconds in day
 		 * @returns {int} value
+		 * @static
 		 */
 		static get MSEC_IN_DAY() {
 			return app.Time.MIN_IN_DAY * 60 * 1000;
 		}
 
 		/**
+		 * Determine if user wants 24 hr time
+		 * @param {?int} [frmt=null] - optional format, overrides storage value
+		 * @returns {boolean} true for 24 hour time
+		 * @private
+		 * @static
+		 */
+		static _is24Hr(frmt = null) {
+			let ret = false;
+			let format = app.Storage.getInt('showTime', 0);
+			if (frmt !== null) {
+				format = frmt;
+			}
+			const localeTime = app.Utils.localize('time_format');
+			if (format === 2) {
+				// time display 24hr
+				ret = true;
+			} else if ((format === 0) && (localeTime === '24')) {
+				// time display off, locale time 24
+				ret = true;
+			}
+			return ret;
+		}
+
+		/**
 		 * Convert string to current time
 		 * @param {!string} timeString - in '00:00' format
 		 * @returns {int} time in milliSeconds from epoch
+		 * @static
 		 */
 		static getTime(timeString) {
 			const date = new Date();
@@ -63,6 +91,7 @@ window.app = window.app || {};
 		 * Calculate time delta from now on a 24hr basis
 		 * @param {string} timeString - in '00:00' format
 		 * @returns {int} time delta in minutes
+		 * @static
 		 */
 		static getTimeDelta(timeString) {
 			const curTime = Date.now();
@@ -80,6 +109,7 @@ window.app = window.app || {};
 		 * @param {string} start - in '00:00' format
 		 * @param {string} stop - in '00:00' format
 		 * @returns {boolean} true if in the given range
+		 * @static
 		 */
 		static isInRange(start, stop) {
 			const curTime = Date.now();
@@ -121,35 +151,9 @@ window.app = window.app || {};
 		static getStringShort() {
 			const time = new Time();
 			let timeString = time.toString();
-			// strip off AM/PM
-			if (timeString.endsWith('M')) {
-				// strip off AM/PM
-				timeString = timeString.substring(0, timeString.length - 3);
-			}
+			// strip off all non-digits but :
+			timeString = timeString.replace(/[^\d:]/g, '');
 			return timeString;
-		}
-
-		/**
-		 * Determine if user wants 24 hr time
-		 * @param {?int} [frmt=null] - optional format, overrides storage value
-		 * @returns {boolean} true for 24 hour time
-		 * @static
-		 */
-		static is24Hr(frmt = null) {
-			let ret = false;
-			let format = app.Storage.getInt('showTime', 0);
-			if (frmt !== null) {
-				format = frmt;
-			}
-			const localeTime = app.Utils.localize('time_format');
-			if (format === 2) {
-				// time display 24hr
-				ret = true;
-			} else if ((format === 0) && (localeTime === '24')) {
-				// time display off, locale time 24
-				ret = true;
-			}
-			return ret;
 		}
 
 		/**
@@ -174,23 +178,22 @@ window.app = window.app || {};
 		 * @returns {string} As string
 		 */
 		toString(frmt = null) {
-			let ret;
+			let ret = '';
 			const date = new Date();
 			date.setHours(this._hr, this._min);
-			if (Time.is24Hr(frmt)) {
-				ret = date.toLocaleTimeString(navigator.language, {
-					hour: 'numeric',
-					minute: '2-digit',
-					hour12: false,
-				});
-			} else {
-				ret = date.toLocaleTimeString('en-us', {
-					hour: 'numeric',
-					minute: '2-digit',
-					hour12: true,
-				});
+			const languages = [navigator.language, 'en-us'];
+			const opts = {
+				hour: 'numeric',
+				minute: '2-digit',
+				hour12: !Time._is24Hr(frmt),
+			};
+			try {
+				ret = date.toLocaleTimeString(languages, opts);
+			} catch (err) {
+				app.GA.exception(`Caught: Time.toString: ${err.message}`,
+					err.stack, false);
 			}
 			return ret;
 		}
 	};
-})();
+}
