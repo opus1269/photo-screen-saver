@@ -16,28 +16,31 @@ const base = {
 	docs: 'docs/',
 };
 const path = {
-	scripts: base.src + 'scripts/',
-	html: base.src + 'html/',
-	elements: base.src + 'elements/',
-	styles: base.src + 'styles/',
-	images: base.src + 'images/',
-	assets: base.src + 'assets/',
-	lib: base.src + 'lib/',
-	locales: base.src + '_locales/',
-	bower: base.src + 'bower_components/',
+	scripts: `${base.src}scripts/`,
+	html: `${base.src}html/`,
+	elements: `${base.src}elements/`,
+	styles: `${base.src}styles/`,
+	images: `${base.src}images/`,
+	assets: `${base.src}assets/`,
+	lib: `${base.src}lib/`,
+	locales: `${base.src}_locales/`,
+	bower: `${base.src}bower_components/`,
 };
 const files = {
-	manifest: base.src + 'manifest.json',
-	scripts: path.scripts + '**/*.js',
-	html: path.html + '*.html',
-	styles: path.styles + '**/*.*',
-	elements: path.elements + '**/*.html',
-	images: path.images + '*.*',
-	assets: path.assets + '*.*',
-	lib: path.lib + '**/*.*',
-	locales: path.locales + '**/*.*',
-	bower: [path.bower + '**/*', '!' + path.bower + '**/test/*',
-		'!' + path.bower + '**/demo/*'],
+	manifest: `${base.src}manifest.json`,
+	scripts: `${path.scripts}**/*.js`,
+	html: `${path.html}*.*`,
+	styles: `${path.styles}**/*.*`,
+	elements: `${path.elements}**/*.html`,
+	images: `${path.images}*.*`,
+	assets: `${path.assets}*.*`,
+	lib: `${path.lib}**/*.*`,
+	locales: `${path.locales}**/*.*`,
+	bower: [
+		`${path.bower}**/*`,
+		`!${path.bower}**/test/*`,
+		`!${path.bower}**/demo/*`,
+	],
 };
 
 // command options
@@ -81,7 +84,7 @@ const plugins = require('gulp-load-plugins')({
  * @const
  * @type {RegExp}
  */
-const regex = new RegExp('^(.*?)' + base.app + '\\\\', 'g');
+const regex = new RegExp(`^(.*?)${base.app}\\\\`, 'g');
 
 /**
  * Output filenames that changed
@@ -96,12 +99,13 @@ function onChange(event) {
 gulp.task('default', ['watch']);
 
 // track changes in development
-gulp.task('watch', ['manifest', 'scripts', 'html', 'styles', 'elements',
-		'images', 'assets', 'lib', 'locales'],
+gulp.task('watch', ['bower', 'manifest', 'scripts', 'html', 'styles',
+		'elements', 'images', 'assets', 'lib', 'locales'],
 	function() {
+		gulp.watch(files.bower, ['bower']).on('change', onChange);
 		gulp.watch(files.manifest, ['manifest']).on('change', onChange);
 		gulp.watch([files.scripts, 'gulpfile.js', '.eslintrc.js',
-			base.src + '*.js'], ['scripts']).on('change', onChange);
+				`${base.src}*.js`], ['scripts']).on('change', onChange);
 		gulp.watch(files.html, ['html']).on('change', onChange);
 		gulp.watch(files.styles, ['styles']).on('change', onChange);
 		gulp.watch(files.elements, ['elements']).on('change', onChange);
@@ -137,7 +141,8 @@ gulp.task('prodTest', function(callback) {
 // Generate JSDoc
 gulp.task('docs', function(cb) {
 	const config = require('./jsdoc.json');
-	gulp.src(['README.md', files.scripts, files.elements], {read: false})
+	const README = 'README.md';
+	gulp.src([README, files.scripts, files.elements], {read: false})
 		.pipe(plugins.jsdoc3(config, cb));
 });
 
@@ -164,7 +169,7 @@ gulp.task('clean-all', function() {
 
 // manifest.json
 gulp.task('manifest', function() {
-	return gulp.src(base.src + 'manifest.json', {base: '.'})
+	return gulp.src(files.manifest, {base: '.'})
 		.pipe(plugins.changed(isProd ? base.dist : base.dev))
 		.pipe((isProd && !isProdTest) ? plugins.stripLine('"key":') :
 			gutil.noop())
@@ -181,7 +186,7 @@ gulp.task('bower', function() {
 // lint Javascript
 gulp.task('lintjs', function() {
 	return gulp.src([files.scripts, files.elements, './gulpfile.js',
-		'./.eslintrc.js', base.src + '*.js'], {base: '.'})
+		'./.eslintrc.js', `${base.src}*.js`], {base: '.'})
 		.pipe(plugins.changed(base.dev))
 		.pipe(plugins.eslint())
 		.pipe(plugins.eslint.format())
@@ -190,7 +195,7 @@ gulp.task('lintjs', function() {
 
 // scripts - lint first
 gulp.task('scripts', ['lintjs'], function() {
-	return gulp.src([files.scripts, base.src + '*.js'], {base: '.'})
+	return gulp.src([files.scripts, `${base.src}*.js`], {base: '.'})
 		.pipe(plugins.changed(isProd ? base.dist : base.dev))
 		.pipe(isProd ? minify(minifyOpts)
 			.on('error', gutil.log) : gutil.noop())
@@ -254,7 +259,7 @@ gulp.task('locales', function() {
 
 // vulcanize for production
 gulp.task('vulcanize', function() {
-	return gulp.src(base.src + 'elements/' + 'elements.html', {base: '.'})
+	return gulp.src(`${path.elements}elements.html`, {base: '.'})
 		.pipe(plugins.vulcanize(vulcanizeOpts))
 		.pipe(plugins.crisper(crisperOpts))
 		.pipe(plugins.if('*.html', plugins.minifyInline()))
@@ -264,7 +269,7 @@ gulp.task('vulcanize', function() {
 
 // compress for the Chrome Web Store
 gulp.task('zip', function() {
-	return gulp.src(base.dist + base.src + '**')
+	return gulp.src(`${base.dist}${base.src}**`)
 		.pipe(!isProdTest ? plugins.zip('store.zip') :
 			plugins.zip('store-test.zip'))
 		.pipe(!isProdTest ? gulp.dest(base.store) : gulp.dest(base.dist));
