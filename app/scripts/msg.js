@@ -8,6 +8,7 @@ window.app = window.app || {};
 
 /**
  * Wrapper for chrome messages
+ * @see https://developer.chrome.com/extensions/messaging
  * @namespace
  */
 app.Msg = (function() {
@@ -16,79 +17,53 @@ app.Msg = (function() {
   new ExceptionHandler();
 
   /**
-   * Show a {@link app.Screensaver}
-   * @type {Chrome.Msg.Message}
+   * Chrome Messages
+   * @type {{}}
+   * @property {Chrome.Msg.Message} SS_SHOW - show screensaver
+   * @property {Chrome.Msg.Message} SS_CLOSE - close screensaver
+   * @property {Chrome.Msg.Message} SS_IS_SHOWING - is a screensaver showing
+   * @property {Chrome.Msg.Message} RESTORE_DEFAULTS - restore default settings
+   * @property {Chrome.Msg.Message} HIGHLIGHT - highlight a tab
+   * @property {Chrome.Msg.Message} PHOTO_SOURCE_FAILED - failed to web load
+   * @property {Chrome.Msg.Message} STORE - save a value to storage
+   * @const
    * @memberOf app.Msg
    */
-  const SS_SHOW = {
-    message: 'showScreensaver',
-  };
-
-  /**
-   * Close a {@link app.Screensaver}
-   * @type {Chrome.Msg.Message}
-   * @memberOf app.Msg
-   */
-  const SS_CLOSE = {
-    message: 'closeScreensaver',
-  };
-
-  /**
-   * Is a {@link app.Screensaver} showing
-   * @type {Chrome.Msg.Message}
-   * @memberOf app.Msg
-   */
-  const SS_IS_SHOWING = {
-    message: 'isScreensaverShowing',
-  };
-
-  /**
-   * Restore default settings
-   * @type {Chrome.Msg.Message}
-   * @memberOf app.Msg
-   */
-  const RESTORE_DEFAULTS = {
-    message: 'restoreDefaults',
-  };
-
-  /**
-   * Highlight a tab
-   * @type {Chrome.Msg.Message}
-   * @memberOf app.Msg
-   */
-  const HIGHLIGHT = {
-    message: 'highlightTab',
-  };
-
-  /**
-   * An {@link app.PhotoSource} server request failed
-   * @type {Chrome.Msg.Message}
-   * @memberOf app.Msg
-   */
-  const PHOTO_SOURCE_FAILED = {
-    message: 'photoSourceFailed',
-    key: '',
-    error: '',
-  };
-
-  /**
-   * Save value to storage message
-   * @type {Chrome.Msg.Message}
-   * @memberOf app.Msg
-   */
-  const STORE = {
-    message: 'store',
-    key: '',
-    value: '',
+  const _MSG = {
+    SS_SHOW: {
+      message: 'showScreensaver',
+    },
+    SS_CLOSE: {
+      message: 'closeScreensaver',
+    },
+    SS_IS_SHOWING: {
+      message: 'isScreensaverShowing',
+    },
+    RESTORE_DEFAULTS: {
+      message: 'restoreDefaults',
+    },
+    HIGHLIGHT: {
+      message: 'highlightTab',
+    },
+    PHOTO_SOURCE_FAILED: {
+      message: 'photoSourceFailed',
+      key: '',
+      error: '',
+    },
+    STORE: {
+      message: 'store',
+      key: '',
+      value: '',
+    },
   };
 
   return {
-    SS_SHOW: SS_SHOW,
-    SS_CLOSE: SS_CLOSE,
-    SS_IS_SHOWING: SS_IS_SHOWING,
-    RESTORE_DEFAULTS: RESTORE_DEFAULTS,
-    HIGHLIGHT: HIGHLIGHT,
-    PHOTO_SOURCE_FAILED: PHOTO_SOURCE_FAILED,
-    STORE: STORE,
+    SS_SHOW: _MSG.SS_SHOW,
+    SS_CLOSE: _MSG.SS_CLOSE,
+    SS_IS_SHOWING: _MSG.SS_IS_SHOWING,
+    RESTORE_DEFAULTS: _MSG.RESTORE_DEFAULTS,
+    HIGHLIGHT: _MSG.HIGHLIGHT,
+    PHOTO_SOURCE_FAILED: _MSG.PHOTO_SOURCE_FAILED,
+    STORE: _MSG.STORE,
   };
 })();
