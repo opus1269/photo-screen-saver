@@ -73,7 +73,7 @@ app.Permissions = (function() {
     const msg = Chrome.JSONUtils.shallowCopy(app.Msg.STORE);
     msg.key = type.name;
     msg.value = value;
-    app.Msg.send(msg).catch(() => {});
+    Chrome.Msg.send(msg).catch(() => {});
   }
 
   /**

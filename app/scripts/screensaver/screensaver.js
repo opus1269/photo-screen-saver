@@ -62,7 +62,7 @@ app.Screensaver = (function() {
     Chrome.GA.page('/screensaver.html');
 
     // listen for chrome messages
-    app.Msg.listen(app.SSEvents.onMessage);
+    Chrome.Msg.listen(app.SSEvents.onMessage);
 
     // listen for keydown events
     window.addEventListener('keydown', app.SSEvents.onKeyDown, false);

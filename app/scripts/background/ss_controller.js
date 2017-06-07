@@ -64,7 +64,7 @@ app.SSControl = (function() {
    */
   function _isShowing() {
     // send message to the screensaver to see if he is around
-    return app.Msg.send(app.Msg.SS_IS_SHOWING).then(() => {
+    return Chrome.Msg.send(app.Msg.SS_IS_SHOWING).then(() => {
       return Promise.resolve(true);
     }).catch(() => {
       // no one listening
@@ -168,7 +168,7 @@ app.SSControl = (function() {
    * Event: Fired when a message is sent from either an extension process<br>
    * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
    * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-   * @param {app.Msg.Message} request - details for the message
+   * @param {Chrome.Msg.Message} request - details for the message
    * @param {Object} [sender] - MessageSender object
    * @param {Function} [response] - function to call once after processing
    * @returns {boolean} true if asynchronous
@@ -187,7 +187,7 @@ app.SSControl = (function() {
   chrome.idle.onStateChanged.addListener(_onIdleStateChanged);
 
   // listen for chrome messages
-  app.Msg.listen(_onChromeMessage);
+  Chrome.Msg.listen(_onChromeMessage);
 
   return {
     /**
@@ -210,7 +210,7 @@ app.SSControl = (function() {
      */
     close: function() {
       // send message to the screen savers to close themselves
-      app.Msg.send(app.Msg.SS_CLOSE).catch(() => {});
+      Chrome.Msg.send(app.Msg.SS_CLOSE).catch(() => {});
     },
   };
 })();

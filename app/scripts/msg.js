@@ -16,18 +16,8 @@ app.Msg = (function() {
   new ExceptionHandler();
 
   /**
-   * A Chrome message
-   * @typedef {{}} app.Msg.Message
-   * @property {string} message - Unique name
-   * @property {Error} error - an error
-   * @property {string} key - key name
-   * @property {?Object} value - value of key
-   * @memberOf app.Msg
-   */
-
-  /**
    * Show a {@link app.Screensaver}
-   * @type {app.Msg.Message}
+   * @type {Chrome.Msg.Message}
    * @memberOf app.Msg
    */
   const SS_SHOW = {
@@ -36,7 +26,7 @@ app.Msg = (function() {
 
   /**
    * Close a {@link app.Screensaver}
-   * @type {app.Msg.Message}
+   * @type {Chrome.Msg.Message}
    * @memberOf app.Msg
    */
   const SS_CLOSE = {
@@ -45,7 +35,7 @@ app.Msg = (function() {
 
   /**
    * Is a {@link app.Screensaver} showing
-   * @type {app.Msg.Message}
+   * @type {Chrome.Msg.Message}
    * @memberOf app.Msg
    */
   const SS_IS_SHOWING = {
@@ -54,7 +44,7 @@ app.Msg = (function() {
 
   /**
    * Restore default settings
-   * @type {app.Msg.Message}
+   * @type {Chrome.Msg.Message}
    * @memberOf app.Msg
    */
   const RESTORE_DEFAULTS = {
@@ -63,7 +53,7 @@ app.Msg = (function() {
 
   /**
    * Highlight a tab
-   * @type {app.Msg.Message}
+   * @type {Chrome.Msg.Message}
    * @memberOf app.Msg
    */
   const HIGHLIGHT = {
@@ -71,17 +61,8 @@ app.Msg = (function() {
   };
 
   /**
-   * A save attempt to localStorage exceeded its capacity
-   * @type {app.Msg.Message}
-   * @memberOf app.Msg
-   */
-  const STORAGE_EXCEEDED = {
-    message: 'storageExceeded',
-  };
-
-  /**
    * An {@link app.PhotoSource} server request failed
-   * @type {app.Msg.Message}
+   * @type {Chrome.Msg.Message}
    * @memberOf app.Msg
    */
   const PHOTO_SOURCE_FAILED = {
@@ -92,7 +73,7 @@ app.Msg = (function() {
 
   /**
    * Save value to storage message
-   * @type {app.Msg.Message}
+   * @type {Chrome.Msg.Message}
    * @memberOf app.Msg
    */
   const STORE = {
@@ -107,38 +88,7 @@ app.Msg = (function() {
     SS_IS_SHOWING: SS_IS_SHOWING,
     RESTORE_DEFAULTS: RESTORE_DEFAULTS,
     HIGHLIGHT: HIGHLIGHT,
-    STORAGE_EXCEEDED: STORAGE_EXCEEDED,
     PHOTO_SOURCE_FAILED: PHOTO_SOURCE_FAILED,
     STORE: STORE,
-
-    /**
-     * Send a chrome message
-     * @param {app.Msg.Message} type - type of message
-     * @returns {Promise<JSON>} response JSON
-     * @memberOf app.Msg
-     */
-    send: function(type) {
-      const chromep = new ChromePromise();
-      return chromep.runtime.sendMessage(type, null).then((response) => {
-        return Promise.resolve(response);
-      }).catch((err) => {
-        if (err.message &&
-            !err.message.includes('port closed') &&
-            !err.message.includes('Receiving end does not exist')) {
-          const msg = `type: ${type.message}, ${err.message}`;
-          Chrome.GA.error(msg, 'Msg.send');
-        }
-        return Promise.reject(err);
-      });
-    },
-
-    /**
-     * Add a listener for chrome messages
-     * @param {Function} listener - function to receive messages
-     * @memberOf app.Msg
-     */
-    listen: function(listener) {
-      chrome.runtime.onMessage.addListener(listener);
-    },
   };
 })();

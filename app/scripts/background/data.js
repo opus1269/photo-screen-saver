@@ -329,7 +329,7 @@ app.Data = (function() {
             const msg = app.Msg.PHOTO_SOURCE_FAILED;
             msg.key = key;
             msg.error = err.message;
-            return app.Msg.send(msg);
+            return Chrome.Msg.send(msg);
           }).catch(() => {});
         } else {
           (STATE_MAP[key] || noop)();

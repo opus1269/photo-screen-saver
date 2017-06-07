@@ -21,7 +21,7 @@
    */
   function _showOptionsTab() {
     // send message to the option tab to focus it.
-    app.Msg.send(app.Msg.HIGHLIGHT).catch(() => {
+    Chrome.Msg.send(app.Msg.HIGHLIGHT).catch(() => {
       // no one listening, create it
       chrome.tabs.create({url: '../html/options.html'});
     });
@@ -151,7 +151,7 @@
    * Event: Fired when a message is sent from either an extension process<br>
    * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
    * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-   * @param {app.Msg.Message} request - details for the message
+   * @param {Chrome.Msg.Message} request - details for the message
    * @param {Object} [sender] - MessageSender object
    * @param {Function} [response] - function to call once after processing
    * @returns {boolean} true if asynchronous
@@ -180,7 +180,7 @@
   addEventListener('storage', _onStorageChanged, false);
 
   // listen for chrome messages
-  app.Msg.listen(_onChromeMessage);
+  Chrome.Msg.listen(_onChromeMessage);
 
   // listen for clicks on context menus
   chrome.contextMenus.onClicked.addListener(_onMenuClicked);

@@ -120,7 +120,7 @@
   t.addEventListener('dom-change', function() {
     Chrome.GA.page('/options.html');
     // listen for chrome messages
-    app.Msg.listen(_onMessage);
+    Chrome.Msg.listen(_onMessage);
   });
 
   /**
@@ -224,7 +224,7 @@
     t.async(function() {
       t.$.mainMenu.select(prevRoute);
     }, 500);
-    app.Msg.send(app.Msg.SS_SHOW).catch(() => {});
+    Chrome.Msg.send(app.Msg.SS_SHOW).catch(() => {});
   }
 
   /**
@@ -240,7 +240,7 @@
    * Event: Fired when a message is sent from either an extension process<br>
    * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
    * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-   * @param {app.Msg.Message} request - details for the message
+   * @param {Chrome.Msg.Message} request - details for the message
    * @param {Object} [sender] - MessageSender object
    * @param {Function} [response] - function to call once after processing
    * @returns {boolean} true if asynchronous
@@ -258,7 +258,7 @@
         Chrome.GA.error(err.message, 'chromep.tabs.getCurrent');
       });
       response(JSON.stringify({message: 'OK'}));
-    } else if (request.message === app.Msg.STORAGE_EXCEEDED.message) {
+    } else if (request.message === Chrome.Msg.STORAGE_EXCEEDED.message) {
       // Display Error Dialog if a save action exceeded the
       // localStorage limit
       t.dialogTitle = Chrome.Locale.localize('err_storage_title');
