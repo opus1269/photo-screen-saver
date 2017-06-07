@@ -7,155 +7,162 @@
 <!doctype html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="description" content="">
-	<meta name="generator" content="Photo Screen Saver" />
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="generator" content="Photo Screen Saver"/>
 
-	<!-- !important -->
-	<title>Photo Screen Saver Options Page</title>
+  <!-- !important -->
+  <title>Photo Screen Saver Options Page</title>
 
-	<link rel="stylesheet" href="../styles/options.css">
+  <link rel="stylesheet" href="../styles/options.css">
 
-	<link rel="import" href="../elements/elements.html">
+  <link rel="import" href="../elements/elements.html">
 
-	<!-- For iron-flex-layout -->
-	<style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+  <!-- For iron-flex-layout -->
+  <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
 
-	<!-- For shared styles, shared-styles.html import in elements.html -->
-	<style is="custom-style" include="shared-styles"></style>
+  <!-- For shared styles, shared-styles.html import in elements.html -->
+  <style is="custom-style" include="shared-styles"></style>
 </head>
 
 <body unresolved class="fullbleed layout vertical">
-	<template is="dom-bind" id="t">
-		<style is="custom-style">
-			#mainToolbar .middle-container {
-				height: 100%;
-				margin-left: 48px;
-			}
+<template is="dom-bind" id="t">
+  <style is="custom-style">
+    #mainToolbar .middle-container {
+      height: 100%;
+      margin-left: 48px;
+    }
 
-			#mainToolbar .middle {
-				@apply(--paper-font-headline);
-				padding-bottom: 0;
-			}
+    #mainToolbar .middle {
+      @apply(--paper-font-headline);
+      padding-bottom: 0;
+    }
 
-			#drawerToolbar {
-				color: var(--secondary-text-color);
-				background-color: var(--drawer-menu-color);
-				border-bottom: var(--drawer-toolbar-border-color);
-			}
+    #drawerToolbar {
+      color: var(--secondary-text-color);
+      background-color: var(--drawer-menu-color);
+      border-bottom: var(--drawer-toolbar-border-color);
+    }
 
-			#drawerToolbar .menu-name {
-				@apply(--paper-font-title);
-			}
+    #drawerToolbar .menu-name {
+      @apply(--paper-font-title);
+    }
 
-			#drawer.paper-drawer-panel > [drawer] {
-				border-right: 1px solid rgba(0, 0, 0, 0.14);
-			}
+    #drawer.paper-drawer-panel > [drawer] {
+      border-right: 1px solid rgba(0, 0, 0, 0.14);
+    }
 
-			#mainPages neon-animatable {
-				padding: 0 0;
-			}
+    #mainPages neon-animatable {
+      padding: 0 0;
+    }
 
-			/* Height of the main scroll area */
-			#mainContainer {
-				height: 1000px;
-			}
-		</style>
+    /* Height of the main scroll area */
+    #mainContainer {
+      height: 1000px;
+    }
+  </style>
 
-		<paper-drawer-panel id="paperDrawerPanel" responsive-width="800px"
-							drawer-width="350px">
-			<paper-material elevation="2" drawer fixed>
-				<!-- Drawer Scroll Header Panel -->
-				<paper-scroll-header-panel>
-					<!-- Drawer Toolbar -->
-					<paper-toolbar id="drawerToolbar">
-						<span class="menu-name">{{_computeMenu()}}</span>
-					</paper-toolbar>
-					<!-- Drawer Content -->
-					<paper-menu class="list" id="mainMenu" attr-for-selected="id"
-								selected="[[route]]">
-						<template is="dom-repeat" items="[[pages]]">
-							<hr hidden$="[[!item.divider]]"/>
-							<paper-item id="[[item.route]]"
-										class="center horizontal layout"
-										on-click="_onNavMenuItemTapped">
-								<iron-icon icon="[[item.icon]]"></iron-icon>
-								<span>[[item.label]]</span>
-							</paper-item>
-						</template>
-					</paper-menu>
-				</paper-scroll-header-panel>
-			</paper-material>
+  <paper-drawer-panel id="paperDrawerPanel" responsive-width="800px"
+                      drawer-width="350px">
+    <paper-material elevation="2" drawer fixed>
+      <!-- Drawer Scroll Header Panel -->
+      <paper-scroll-header-panel>
+        <!-- Drawer Toolbar -->
+        <paper-toolbar id="drawerToolbar">
+          <span class="menu-name">{{_computeMenu()}}</span>
+        </paper-toolbar>
+        <!-- Drawer Content -->
+        <paper-menu class="list" id="mainMenu" attr-for-selected="id"
+                    selected="[[route]]">
+          <template is="dom-repeat" items="[[pages]]">
+            <hr hidden$="[[!item.divider]]"/>
+            <paper-item id="[[item.route]]"
+                        class="center horizontal layout"
+                        on-click="_onNavMenuItemTapped">
+              <iron-icon icon="[[item.icon]]"></iron-icon>
+              <span>[[item.label]]</span>
+            </paper-item>
+          </template>
+        </paper-menu>
+      </paper-scroll-header-panel>
+    </paper-material>
 
-			<!-- Main Scroll Header Panel -->
-			<paper-scroll-header-panel id="scrollPanel" main fixed>
-				<!-- Main Toolbar -->
-				<paper-material class="paper-header" elevation="2">
-					<paper-toolbar id="mainToolbar">
-						<paper-icon-button id="paperToggle" icon="myicons:menu"
-										   paper-drawer-toggle>
-						</paper-icon-button>
-						<span class="flex"></span>
-						<!-- Application name -->
-						<div class="middle middle-container center horizontal layout">
-							<div>
-								{{_computeTitle()}}
-							</div>
-						</div>
-					</paper-toolbar>
-				</paper-material>
+    <!-- Main Scroll Header Panel -->
+    <paper-scroll-header-panel id="scrollPanel" main fixed>
+      <!-- Main Toolbar -->
+      <paper-material class="paper-header" elevation="2">
+        <paper-toolbar id="mainToolbar">
+          <paper-icon-button id="paperToggle" icon="myicons:menu"
+                             paper-drawer-toggle>
+          </paper-icon-button>
+          <span class="flex"></span>
+          <!-- Application name -->
+          <div class="middle middle-container center horizontal layout">
+            <div>
+              {{_computeTitle()}}
+            </div>
+          </div>
+        </paper-toolbar>
+      </paper-material>
 
-				<!-- Main Content -->
-				<div id="mainContainer">
+      <!-- Main Content -->
+      <div id="mainContainer">
 
-					<!-- Error dialog -->
-					<paper-dialog id="errorDialog" modal
-								  entry-animation="scale-up-animation"
-								  exit-animation="fade-out-animation">
-						<h2 id="dialogTitle">[[dialogTitle]]</h2>
-						<paper-dialog-scrollable>
-							<p id="dialogText">[[dialogText]]</p>
-						</paper-dialog-scrollable>
-						<div class="buttons">
-							<paper-button dialog-dismiss>OK</paper-button>
-						</div>
-					</paper-dialog>
+        <!-- Error dialog -->
+        <paper-dialog id="errorDialog" modal
+                      entry-animation="scale-up-animation"
+                      exit-animation="fade-out-animation">
+          <h2 id="dialogTitle">[[dialogTitle]]</h2>
+          <paper-dialog-scrollable>
+            <p id="dialogText">[[dialogText]]</p>
+          </paper-dialog-scrollable>
+          <div class="buttons">
+            <paper-button dialog-dismiss>OK</paper-button>
+          </div>
+        </paper-dialog>
 
-					<neon-animated-pages id="mainPages"
-										 attr-for-selected="data-route"
-										 selected="{{route}}"
-					                     entry-animation="fade-in-animation"
-										 exit-animation="fade-out-animation">
-						<neon-animatable data-route="page-settings">
-							<section>
-								<settings-page id="settingsPage"></settings-page>
-							</section>
-						</neon-animatable>
-						<neon-animatable data-route="page-google-photos">
-							<section id="googlePhotosInsertion"></section>
-						</neon-animatable>
-						<neon-animatable data-route="page-help">
-							<section id="helpInsertion"></section>
-						</neon-animatable>
-					</neon-animated-pages>
-				</div>
-			</paper-scroll-header-panel>
-		</paper-drawer-panel>
-	</template>
+        <neon-animated-pages id="mainPages"
+                             attr-for-selected="data-route"
+                             selected="{{route}}"
+                             entry-animation="fade-in-animation"
+                             exit-animation="fade-out-animation">
+          <neon-animatable data-route="page-settings">
+            <section>
+              <settings-page id="settingsPage"></settings-page>
+            </section>
+          </neon-animatable>
+          <neon-animatable data-route="page-google-photos">
+            <section id="googlePhotosInsertion"></section>
+          </neon-animatable>
+          <neon-animatable data-route="page-help">
+            <section id="helpInsertion"></section>
+          </neon-animatable>
+        </neon-animated-pages>
+      </div>
+    </paper-scroll-header-panel>
+  </paper-drawer-panel>
+</template>
 
-	<script src="../lib/chrome-promise.js"></script>
-	<script src="../scripts/analytics.js"></script>
-	<script src="../scripts/exception_handler.js"></script>
-	<script src="../scripts/time.js"></script>
-	<script src="../scripts/msg.js"></script>
-	<script src="../scripts/utils.js"></script>
-	<script src="../scripts/json.js"></script>
-	<script src="../scripts/storage.js"></script>
-	<script src="../scripts/http.js"></script>
-	<script src="../scripts/google_photos.js"></script>
-	<script src="../scripts/photo_sources.js"></script>
-	<script src="../scripts/options/permissions.js"></script>
-	<script src="../scripts/options/options.js"></script>
+<script src="../bower_components/chrome-extension-utils/chrome-promise.js"></script>
+<script src="../bower_components/chrome-extension-utils/chrome_analytics.js"></script>
+<script src="../bower_components/chrome-extension-utils/exception_handler.js"></script>
+<script src="../bower_components/chrome-extension-utils/json.js"></script>
+<script src="../bower_components/chrome-extension-utils/storage.js"></script>
+<script src="../bower_components/chrome-extension-utils/chrome_utils.js"></script>
+<script src="../bower_components/chrome-extension-utils/chrome_msg.js"></script>
+<script src="../bower_components/chrome-extension-utils/http.js"></script>
+<script src="../scripts/analytics.js"></script>
+<script src="../scripts/exception_handler.js"></script>
+<script src="../scripts/time.js"></script>
+<script src="../scripts/msg.js"></script>
+<script src="../scripts/utils.js"></script>
+<script src="../scripts/json.js"></script>
+<script src="../scripts/storage.js"></script>
+<script src="../scripts/http.js"></script>
+<script src="../scripts/google_photos.js"></script>
+<script src="../scripts/photo_sources.js"></script>
+<script src="../scripts/options/permissions.js"></script>
+<script src="../scripts/options/options.js"></script>
 
 </body>
 </html>

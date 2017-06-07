@@ -8,7 +8,7 @@
 <link rel="import" href="../../bower_components/neon-animation/neon-animation-behavior.html">
 <link rel="import" href="../../bower_components/neon-animation/web-animations.html">
 
-<script type="text/javascript" src="../../scripts/exception_handler.js"></script>
+<script type="text/javascript" src="../../bower_components/chrome-extension-utils/exception_handler.js"></script>
 
 <!--
 `<spin-down-animation>` animates the scale transform of an element from 1 to 0 and
@@ -26,31 +26,31 @@ Configuration:
 -->
 
 <script>
-'use strict';
+  'use strict';
 
-new ExceptionHandler();
+  new ExceptionHandler();
 
-Polymer({
-	is: 'spin-down-animation',
+  Polymer({
+    is: 'spin-down-animation',
 
-	behaviors: [
-		Polymer.NeonAnimationBehavior,
-	],
+    behaviors: [
+      Polymer.NeonAnimationBehavior,
+    ],
 
-	configure: function(config) {
-		const node = config.node;
+    configure: function(config) {
+      const node = config.node;
 
-		if (config.transformOrigin) {
-			this.setPrefixedProperty(node, 'transformOrigin',
-				config.transformOrigin);
-		}
+      if (config.transformOrigin) {
+        this.setPrefixedProperty(node, 'transformOrigin',
+            config.transformOrigin);
+      }
 
-		this._effect = new KeyframeEffect(node, [
-			{'transform': 'scale(1) rotate(1.0turn)'},
-			{'transform': 'scale(0) rotate(0)'},
-		], this.timingFromConfig(config));
+      this._effect = new KeyframeEffect(node, [
+        {'transform': 'scale(1) rotate(1.0turn)'},
+        {'transform': 'scale(0) rotate(0)'},
+      ], this.timingFromConfig(config));
 
-		return this._effect;
-	},
-});
+      return this._effect;
+    },
+  });
 </script>

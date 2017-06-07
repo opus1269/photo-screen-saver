@@ -23,453 +23,453 @@
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 
-<link rel="import" href="../setting-toggle/setting-toggle.html">
-<link rel="import" href="../setting-slider/setting-slider.html">
-<link rel="import" href="../setting-dropdown/setting-dropdown.html">
-<link rel="import" href="../setting-time/setting-time.html">
+<link rel="import" href="../../bower_components/setting-elements/setting-toggle/setting-toggle.html">
+<link rel="import" href="../../bower_components/setting-elements/setting-slider/setting-slider.html">
+<link rel="import" href="../../bower_components/setting-elements/setting-dropdown/setting-dropdown.html">
+<link rel="import" href="../../bower_components/setting-elements/setting-time/setting-time.html">
 <link rel="import" href="../setting-background/setting-background.html">
 
-<link rel="import" href="../localize-behavior/localize-behavior.html">
+<link rel="import" href="../../bower_components/setting-elements/localize-behavior/localize-behavior.html">
 
 <link rel="import" href="../my_icons.html">
 
-<script type="text/javascript" src="../../scripts/exception_handler.js"></script>
+<script type="text/javascript" src="../../bower_components/chrome-extension-utils/exception_handler.js"></script>
 
 <dom-module id="settings-page">
-	<template>
-		<style include="iron-flex iron-flex-alignment"></style>
-		<style include="shared-styles"></style>
-		<style>
+  <template>
+    <style include="iron-flex iron-flex-alignment"></style>
+    <style include="shared-styles"></style>
+    <style>
 
-			:host {
-				display: block;
-				position: relative;
-			}
+      :host {
+        display: block;
+        position: relative;
+      }
 
-			:host paper-toolbar {
-				--paper-toolbar-height: 50px;
-			}
+      :host paper-toolbar {
+        --paper-toolbar-height: 50px;
+      }
 
-		</style>
+    </style>
 
-		<paper-material elevation="1" class="page-container">
-			<paper-material elevation="1">
-				<paper-toolbar class="page-toolbar medium-tall">
-					<iron-label for="settingsToggle" class="center horizontal layout flex">
-						<div class="flex">{{localize('screensaver')}}
-							<span hidden$="[[!enabled]]">{{localize('on')}}</span>
-							<span hidden$="[[enabled]]">{{localize('off')}}</span>
-						</div>
-					</iron-label>
-					<paper-icon-button
-							id="select"
-							icon="myicons:check-box"
-							on-tap="_selectAllTapped"
-							hidden$="[[menuHidden]]"
-							disabled$="[[!enabled]]"></paper-icon-button>
-					<paper-tooltip for="select" position="left" offset="0">
-						{{localize('tooltip_select')}}
-					</paper-tooltip>
-					<paper-icon-button
-							id="deselect"
-							icon="myicons:check-box-outline-blank"
-							on-tap="_deselectAllTapped"
-							hidden$="[[menuHidden]]"
-							disabled$="[[!enabled]]"></paper-icon-button>
-					<paper-tooltip for="deselect" position="left" offset="0">
-						{{localize('tooltip_deselect')}}
-					</paper-tooltip>
-					<paper-icon-button
-							id="restore"
-							icon="myicons:settings-backup-restore"
-							on-tap="_restoreDefaultsTapped"
-							disabled$="[[!enabled]]"></paper-icon-button>
-					<paper-tooltip for="restore" position="left" offset="0">
-						{{localize('tooltip_restore')}}
-					</paper-tooltip>
-					<paper-toggle-button
-							id="settingsToggle"
-							checked="{{enabled}}"></paper-toggle-button>
-					<paper-tooltip for="settingsToggle" position="left" offset="0">
-						{{localize('tooltip_settings_toggle')}}
-					</paper-tooltip>
-					<iron-localstorage name="enabled" value="{{enabled}}"></iron-localstorage>
-					<paper-tabs selected="{{selectedTab}}" class="middle fit">
-						<paper-tab>{{localize('tab_slideshow')}}</paper-tab>
-						<paper-tab>{{localize('tab_display')}}</paper-tab>
-						<paper-tab>{{localize('tab_sources')}}</paper-tab>
-					</paper-tabs>
-				</paper-toolbar>
-			</paper-material>
+    <paper-material elevation="1" class="page-container">
+      <paper-material elevation="1">
+        <paper-toolbar class="page-toolbar medium-tall">
+          <iron-label for="settingsToggle" class="center horizontal layout flex">
+            <div class="flex">{{localize('screensaver')}}
+              <span hidden$="[[!enabled]]">{{localize('on')}}</span>
+              <span hidden$="[[enabled]]">{{localize('off')}}</span>
+            </div>
+          </iron-label>
+          <paper-icon-button
+              id="select"
+              icon="myicons:check-box"
+              on-tap="_selectAllTapped"
+              hidden$="[[menuHidden]]"
+              disabled$="[[!enabled]]"></paper-icon-button>
+          <paper-tooltip for="select" position="left" offset="0">
+            {{localize('tooltip_select')}}
+          </paper-tooltip>
+          <paper-icon-button
+              id="deselect"
+              icon="myicons:check-box-outline-blank"
+              on-tap="_deselectAllTapped"
+              hidden$="[[menuHidden]]"
+              disabled$="[[!enabled]]"></paper-icon-button>
+          <paper-tooltip for="deselect" position="left" offset="0">
+            {{localize('tooltip_deselect')}}
+          </paper-tooltip>
+          <paper-icon-button
+              id="restore"
+              icon="myicons:settings-backup-restore"
+              on-tap="_restoreDefaultsTapped"
+              disabled$="[[!enabled]]"></paper-icon-button>
+          <paper-tooltip for="restore" position="left" offset="0">
+            {{localize('tooltip_restore')}}
+          </paper-tooltip>
+          <paper-toggle-button
+              id="settingsToggle"
+              checked="{{enabled}}"></paper-toggle-button>
+          <paper-tooltip for="settingsToggle" position="left" offset="0">
+            {{localize('tooltip_settings_toggle')}}
+          </paper-tooltip>
+          <iron-localstorage name="enabled" value="{{enabled}}"></iron-localstorage>
+          <paper-tabs selected="{{selectedTab}}" class="middle fit">
+            <paper-tab>{{localize('tab_slideshow')}}</paper-tab>
+            <paper-tab>{{localize('tab_display')}}</paper-tab>
+            <paper-tab>{{localize('tab_sources')}}</paper-tab>
+          </paper-tabs>
+        </paper-toolbar>
+      </paper-material>
 
-			<div class="page-content">
-				<iron-pages selected="{{selectedTab}}">
-					<div>
-						<setting-slider
-								name="idleTime"
-								label="{{localize('setting_idle_time')}}"
-								units="{{_computeWaitTimeUnits()}}"
-								disabled$="[[!enabled]]"></setting-slider>
-						<setting-slider
-								name="transitionTime"
-								label="{{localize('setting_transition_time')}}"
-								units="{{_computeTransitionTimeUnits()}}"
-								disabled$="[[!enabled]]"></setting-slider>
-						<setting-dropdown
-								name="photoSizing"
-								label="{{localize('setting_photo_sizing')}}"
-								items="{{_computePhotoSizingMenu()}}"
-								disabled$="[[!enabled]]"></setting-dropdown>
-						<setting-dropdown
-								name="photoTransition"
-								label="{{localize('setting_photo_transition')}}"
-								items="{{_computePhotoTransitionMenu()}}"
-								disabled$="[[!enabled]]"></setting-dropdown>
-						<setting-toggle
-								name="shuffle"
-								main-label="{{localize('setting_shuffle')}}"
-								secondary-label="{{localize('setting_shuffle_desc')}}"
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-toggle
-								name="skip"
-								main-label="{{localize('setting_skip')}}"
-								secondary-label="{{localize('setting_skip_desc')}}"
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-dropdown
-								name="showTime"
-								label="{{localize('setting_show_time')}}"
-								items='{{_computeTimeFormatMenu()}}'
-								value="{{showTimeValue}}"
-								disabled$="[[!enabled]]"></setting-dropdown>
-						<setting-toggle
-								name="largeTime"
-								main-label="{{localize('setting_large_time')}}"
-								indent
-								disabled$="[[_computeLargeTimeDisabled(enabled, showTimeValue)]]">
-						</setting-toggle>
-						<setting-toggle
-								name="showPhotog"
-								main-label="{{localize('setting_photog')}}"
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-toggle
-								name="showLocation"
-								main-label="{{localize('setting_location')}}"
-								secondary-label="{{localize('setting_location_desc')}}"
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-background
-								name="background"
-								main-label="{{localize('setting_bg')}}"
-								secondary-label="{{localize('setting_bg_desc')}}"
-								noseparator
-								disabled$="[[!enabled]]"></setting-background>
-					</div>
-					<div>
-						<setting-toggle
-								name="allDisplays"
-								main-label="{{localize('setting_all_displays')}}"
-								secondary-label="{{localize('setting_all_displays_desc')}}"
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-toggle
-								name="chromeFullscreen"
-								main-label="{{localize('setting_full_screen')}}"
-								secondary-label="{{localize('setting_full_screen_desc')}}"
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-toggle
-								id="keepAwake" name="keepAwake"
-								main-label="{{localize('setting_keep_awake')}}"
-								secondary-label="{{localize('setting_keep_awake_desc')}}"
-								checked="{{keepEnabled}}"></setting-toggle>
-						<paper-tooltip for="keepAwake" position="top" offset="0">
-							{{localize('tooltip_keep_awake')}}
-						</paper-tooltip>
-						<setting-time
-								name="activeStart"
-								main-label="{{localize('setting_start_time')}}"
-								secondary-label="{{localize('setting_start_time_desc')}}"
-								format="{{showTimeValue}}"
-								indent
-								disabled$="[[!keepEnabled]]"></setting-time>
-						<setting-time
-								name="activeStop"
-								main-label="{{localize('setting_stop_time')}}"
-								secondary-label="{{localize('setting_stop_time_desc')}}"
-								format="{{showTimeValue}}"
-								indent
-								disabled$="[[!keepEnabled]]"></setting-time>
-						<setting-toggle
-								id="allowSuspend" name="allowSuspend"
-								main-label="{{localize('setting_suspend')}}"
-								secondary-label="{{localize('setting_suspend_desc')}}"
-								indent
-								noseparator
-								disabled$="[[!keepEnabled]]"></setting-toggle>
-					</div>
-					<div>
-						<setting-toggle
-								name="useChromecast"
-								main-label="{{localize('setting_chromecast')}}"
-								secondary-label="{{localize('setting_chromecast_desc')}}"
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-toggle
-								name="useEditors500px"
-								main-label="{{localize('setting_500editors')}}"
-								secondary-label="{{localize('setting_500editors_desc')}}"
-								noseparator
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-toggle
-								name="usePopular500px"
-								main-label="{{localize('setting_500popular')}}"
-								secondary-label="{{localize('setting_500popular_desc')}}"
-								noseparator
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-toggle
-								name="useYesterday500px"
-								main-label="{{localize('setting_500yest')}}"
-								secondary-label="{{localize('setting_500yest_desc')}}"
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-toggle
-								name="useInterestingFlickr"
-								main-label="{{localize('setting_flickr_int')}}"
-								secondary-label="{{localize('setting_flickr_int_desc')}}"
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-toggle
-								name="useSpaceReddit"
-								main-label="{{localize('setting_reddit_space')}}"
-								secondary-label="{{localize('setting_reddit_space_desc')}}"
-								noseparator
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-toggle
-								name="useEarthReddit"
-								main-label="{{localize('setting_reddit_earth')}}"
-								secondary-label="{{localize('setting_reddit_earth_desc')}}"
-								noseparator
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-toggle
-								name="useAnimalReddit"
-								main-label="{{localize('setting_reddit_animal')}}"
-								secondary-label="{{localize('setting_reddit_animal_desc')}}"
-								disabled$="[[!enabled]]"></setting-toggle>
-						<setting-toggle
-								name="useAuthors"
-								main-label="{{localize('setting_mine')}}"
-								secondary-label="{{localize('setting_mine_desc')}}"
-								disabled$="[[!enabled]]"></setting-toggle>
-						<paper-item tabindex="-1">
-							{{localize('setting_click_to_view')}}
-						</paper-item>
-						<paper-item tabindex="-1">
-							{{localize('setting_flickr_api')}}
-						</paper-item>
-					</div>
-				</iron-pages>
-			</div>
-		</paper-material>
-	</template>
+      <div class="page-content">
+        <iron-pages selected="{{selectedTab}}">
+          <div>
+            <setting-slider
+                name="idleTime"
+                label="{{localize('setting_idle_time')}}"
+                units="{{_computeWaitTimeUnits()}}"
+                disabled$="[[!enabled]]"></setting-slider>
+            <setting-slider
+                name="transitionTime"
+                label="{{localize('setting_transition_time')}}"
+                units="{{_computeTransitionTimeUnits()}}"
+                disabled$="[[!enabled]]"></setting-slider>
+            <setting-dropdown
+                name="photoSizing"
+                label="{{localize('setting_photo_sizing')}}"
+                items="{{_computePhotoSizingMenu()}}"
+                disabled$="[[!enabled]]"></setting-dropdown>
+            <setting-dropdown
+                name="photoTransition"
+                label="{{localize('setting_photo_transition')}}"
+                items="{{_computePhotoTransitionMenu()}}"
+                disabled$="[[!enabled]]"></setting-dropdown>
+            <setting-toggle
+                name="shuffle"
+                main-label="{{localize('setting_shuffle')}}"
+                secondary-label="{{localize('setting_shuffle_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="skip"
+                main-label="{{localize('setting_skip')}}"
+                secondary-label="{{localize('setting_skip_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-dropdown
+                name="showTime"
+                label="{{localize('setting_show_time')}}"
+                items='{{_computeTimeFormatMenu()}}'
+                value="{{showTimeValue}}"
+                disabled$="[[!enabled]]"></setting-dropdown>
+            <setting-toggle
+                name="largeTime"
+                main-label="{{localize('setting_large_time')}}"
+                indent
+                disabled$="[[_computeLargeTimeDisabled(enabled, showTimeValue)]]">
+            </setting-toggle>
+            <setting-toggle
+                name="showPhotog"
+                main-label="{{localize('setting_photog')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="showLocation"
+                main-label="{{localize('setting_location')}}"
+                secondary-label="{{localize('setting_location_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-background
+                name="background"
+                main-label="{{localize('setting_bg')}}"
+                secondary-label="{{localize('setting_bg_desc')}}"
+                noseparator
+                disabled$="[[!enabled]]"></setting-background>
+          </div>
+          <div>
+            <setting-toggle
+                name="allDisplays"
+                main-label="{{localize('setting_all_displays')}}"
+                secondary-label="{{localize('setting_all_displays_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="chromeFullscreen"
+                main-label="{{localize('setting_full_screen')}}"
+                secondary-label="{{localize('setting_full_screen_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                id="keepAwake" name="keepAwake"
+                main-label="{{localize('setting_keep_awake')}}"
+                secondary-label="{{localize('setting_keep_awake_desc')}}"
+                checked="{{keepEnabled}}"></setting-toggle>
+            <paper-tooltip for="keepAwake" position="top" offset="0">
+              {{localize('tooltip_keep_awake')}}
+            </paper-tooltip>
+            <setting-time
+                name="activeStart"
+                main-label="{{localize('setting_start_time')}}"
+                secondary-label="{{localize('setting_start_time_desc')}}"
+                format="{{showTimeValue}}"
+                indent
+                disabled$="[[!keepEnabled]]"></setting-time>
+            <setting-time
+                name="activeStop"
+                main-label="{{localize('setting_stop_time')}}"
+                secondary-label="{{localize('setting_stop_time_desc')}}"
+                format="{{showTimeValue}}"
+                indent
+                disabled$="[[!keepEnabled]]"></setting-time>
+            <setting-toggle
+                id="allowSuspend" name="allowSuspend"
+                main-label="{{localize('setting_suspend')}}"
+                secondary-label="{{localize('setting_suspend_desc')}}"
+                indent
+                noseparator
+                disabled$="[[!keepEnabled]]"></setting-toggle>
+          </div>
+          <div>
+            <setting-toggle
+                name="useChromecast"
+                main-label="{{localize('setting_chromecast')}}"
+                secondary-label="{{localize('setting_chromecast_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="useEditors500px"
+                main-label="{{localize('setting_500editors')}}"
+                secondary-label="{{localize('setting_500editors_desc')}}"
+                noseparator
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="usePopular500px"
+                main-label="{{localize('setting_500popular')}}"
+                secondary-label="{{localize('setting_500popular_desc')}}"
+                noseparator
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="useYesterday500px"
+                main-label="{{localize('setting_500yest')}}"
+                secondary-label="{{localize('setting_500yest_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="useInterestingFlickr"
+                main-label="{{localize('setting_flickr_int')}}"
+                secondary-label="{{localize('setting_flickr_int_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="useSpaceReddit"
+                main-label="{{localize('setting_reddit_space')}}"
+                secondary-label="{{localize('setting_reddit_space_desc')}}"
+                noseparator
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="useEarthReddit"
+                main-label="{{localize('setting_reddit_earth')}}"
+                secondary-label="{{localize('setting_reddit_earth_desc')}}"
+                noseparator
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="useAnimalReddit"
+                main-label="{{localize('setting_reddit_animal')}}"
+                secondary-label="{{localize('setting_reddit_animal_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="useAuthors"
+                main-label="{{localize('setting_mine')}}"
+                secondary-label="{{localize('setting_mine_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <paper-item tabindex="-1">
+              {{localize('setting_click_to_view')}}
+            </paper-item>
+            <paper-item tabindex="-1">
+              {{localize('setting_flickr_api')}}
+            </paper-item>
+          </div>
+        </iron-pages>
+      </div>
+    </paper-material>
+  </template>
 </dom-module>
 
 <script>
-'use strict';
+  'use strict';
 
-new ExceptionHandler();
+  new ExceptionHandler();
 
-Polymer({
-	is: 'settings-page',
+  Polymer({
+    is: 'settings-page',
 
-	behaviors: [
-		app.LocalizeBehavior,
-	],
+    behaviors: [
+      app.LocalizeBehavior,
+    ],
 
-	properties: {
-		selectedTab: {
-			type: Number,
-			value: 0,
-			notify: true,
-		},
+    properties: {
+      selectedTab: {
+        type: Number,
+        value: 0,
+        notify: true,
+      },
 
-		enabled: {
-			type: Boolean,
-			value: true,
-			notify: true,
-		},
+      enabled: {
+        type: Boolean,
+        value: true,
+        notify: true,
+      },
 
-		showTimeValue: {
-			type: Number,
-			value: 1,
-			notify: true,
-		},
+      showTimeValue: {
+        type: Number,
+        value: 1,
+        notify: true,
+      },
 
-		menuHidden: {
-			type: Boolean,
-			computed: '_computeMenuHidden(selectedTab)',
-		},
-	},
+      menuHidden: {
+        type: Boolean,
+        computed: '_computeMenuHidden(selectedTab)',
+      },
+    },
 
-	ready: function() {
-		this.set('selectedTab', 0);
-	},
+    ready: function() {
+      this.set('selectedTab', 0);
+    },
 
-	/**
-	 * Deselect the given {@link app.PhotoSource}
-	 * @param {string} useName - Name of <setting-toggle>
-	 */
-	deselectPhotoSource: function(useName) {
-		this._setPhotoSourceChecked(useName, false);
-	},
+    /**
+     * Deselect the given {@link app.PhotoSource}
+     * @param {string} useName - Name of <setting-toggle>
+     */
+    deselectPhotoSource: function(useName) {
+      this._setPhotoSourceChecked(useName, false);
+    },
 
-	/**
-	 * Event: select all {@link app.PhotoSource} objects tapped
-	 * @private
-	 */
-	_selectAllTapped: function() {
-		this._setPhotoSourcesChecked(true);
-	},
+    /**
+     * Event: select all {@link app.PhotoSource} objects tapped
+     * @private
+     */
+    _selectAllTapped: function() {
+      this._setPhotoSourcesChecked(true);
+    },
 
-	/**
-	 * Event: deselect all {@link app.PhotoSource} objects tapped
-	 * @private
-	 */
-	_deselectAllTapped: function() {
-		this._setPhotoSourcesChecked(false);
-	},
+    /**
+     * Event: deselect all {@link app.PhotoSource} objects tapped
+     * @private
+     */
+    _deselectAllTapped: function() {
+      this._setPhotoSourcesChecked(false);
+    },
 
-	/**
-	 * Event: restore default settings tapped
-	 * @private
-	 */
-	_restoreDefaultsTapped: function() {
-		app.Msg.send(app.Msg.RESTORE_DEFAULTS).catch(() => {});
-	},
+    /**
+     * Event: restore default settings tapped
+     * @private
+     */
+    _restoreDefaultsTapped: function() {
+      app.Msg.send(app.Msg.RESTORE_DEFAULTS).catch(() => {});
+    },
 
-	/**
-	 * Set checked state of a {@link app.PhotoSource}
-	 * @param {string} useName - source name
-	 * @param {boolean} state - checked state
-	 * @private
-	 */
-	_setPhotoSourceChecked: function(useName, state) {
-		const query = `[name=${useName}]`;
-		const el = document.querySelector(query);
-		if (el && (useName !== 'useGoogle')) {
-			el.setChecked(state);
-		}
-	},
+    /**
+     * Set checked state of a {@link app.PhotoSource}
+     * @param {string} useName - source name
+     * @param {boolean} state - checked state
+     * @private
+     */
+    _setPhotoSourceChecked: function(useName, state) {
+      const query = `[name=${useName}]`;
+      const el = document.querySelector(query);
+      if (el && (useName !== 'useGoogle')) {
+        el.setChecked(state);
+      }
+    },
 
-	/**
-	 * Set checked state of all {@link app.PhotoSource} objects
-	 * @param {boolean} state - checked state
-	 * @private
-	 */
-	_setPhotoSourcesChecked: function(state) {
-		const useNames = app.PhotoSource.getUseNames();
-		useNames.forEach((useName) => {
-			this._setPhotoSourceChecked(useName, state);
-		});
-	},
+    /**
+     * Set checked state of all {@link app.PhotoSource} objects
+     * @param {boolean} state - checked state
+     * @private
+     */
+    _setPhotoSourcesChecked: function(state) {
+      const useNames = app.PhotoSource.getUseNames();
+      useNames.forEach((useName) => {
+        this._setPhotoSourceChecked(useName, state);
+      });
+    },
 
-	/**
-	 * Computed property: Set menu icons visibility
-	 * @param {int} selectedTab - the current tab
-	 * @returns {boolean} true if menu should be visible
-	 * @private
-	 */
-	_computeMenuHidden: function(selectedTab) {
-		return (selectedTab !== 2);
-	},
+    /**
+     * Computed property: Set menu icons visibility
+     * @param {int} selectedTab - the current tab
+     * @returns {boolean} true if menu should be visible
+     * @private
+     */
+    _computeMenuHidden: function(selectedTab) {
+      return (selectedTab !== 2);
+    },
 
-	_getUnit: function(name, min, max, step, mult) {
-		return {
-			'name': app.Utils.localize(name),
-			'min': min, 'max': max, 'step': step, 'mult': mult,
-		};
-	},
+    _getUnit: function(name, min, max, step, mult) {
+      return {
+        'name': app.Utils.localize(name),
+        'min': min, 'max': max, 'step': step, 'mult': mult,
+      };
+    },
 
-	/**
-	 * Computed binding: Set disabled state of largeTime toggle
-	 * @param {boolean} enabled - enabled state of screensaver
-	 * @param {number} showTimeValue - showTime value
-	 * @returns {boolean} true if disabled
-	 * @private
-	 */
-	_computeLargeTimeDisabled: function(enabled, showTimeValue) {
-		let ret = false;
-		if (!enabled || (showTimeValue === 0)) {
-			ret = true;
-		}
-		return ret;
-	},
+    /**
+     * Computed binding: Set disabled state of largeTime toggle
+     * @param {boolean} enabled - enabled state of screensaver
+     * @param {number} showTimeValue - showTime value
+     * @returns {boolean} true if disabled
+     * @private
+     */
+    _computeLargeTimeDisabled: function(enabled, showTimeValue) {
+      let ret = false;
+      if (!enabled || (showTimeValue === 0)) {
+        ret = true;
+      }
+      return ret;
+    },
 
-	/**
-	 * Computed binding: idle time values
-	 * @returns {Array} Array of menu items
-	 * @private
-	 */
-	_computeWaitTimeUnits: function() {
-		return [
-			this._getUnit('minutes', 1, 60, 1, 1),
-			this._getUnit('hours', 1, 24, 1, 60),
-			this._getUnit('days', 1, 365, 1, 1440),
-		];
-	},
+    /**
+     * Computed binding: idle time values
+     * @returns {Array} Array of menu items
+     * @private
+     */
+    _computeWaitTimeUnits: function() {
+      return [
+        this._getUnit('minutes', 1, 60, 1, 1),
+        this._getUnit('hours', 1, 24, 1, 60),
+        this._getUnit('days', 1, 365, 1, 1440),
+      ];
+    },
 
-	/**
-	 * Computed binding: transition time values
-	 * @returns {Array} Array of menu items
-	 * @private
-	 */
-	_computeTransitionTimeUnits: function() {
-		return [
-			this._getUnit('seconds', 4, 60, 1, 1),
-			this._getUnit('minutes', 1, 60, 1, 60),
-			this._getUnit('hours', 1, 24, 1, 3600),
-			this._getUnit('days', 1, 365, 1, 86400),
-		];
-	},
+    /**
+     * Computed binding: transition time values
+     * @returns {Array} Array of menu items
+     * @private
+     */
+    _computeTransitionTimeUnits: function() {
+      return [
+        this._getUnit('seconds', 4, 60, 1, 1),
+        this._getUnit('minutes', 1, 60, 1, 60),
+        this._getUnit('hours', 1, 24, 1, 3600),
+        this._getUnit('days', 1, 365, 1, 86400),
+      ];
+    },
 
-	/**
-	 * Computed binding: photo sizing values
-	 * @returns {Array} Array of menu items
-	 * @private
-	 */
-	_computePhotoSizingMenu: function() {
-		return [
-			app.Utils.localize('menu_letterbox'),
-			app.Utils.localize('menu_zoom'),
-			app.Utils.localize('menu_frame'),
-			app.Utils.localize('menu_full'),
-			app.Utils.localize('menu_random'),
-		];
-	},
+    /**
+     * Computed binding: photo sizing values
+     * @returns {Array} Array of menu items
+     * @private
+     */
+    _computePhotoSizingMenu: function() {
+      return [
+        app.Utils.localize('menu_letterbox'),
+        app.Utils.localize('menu_zoom'),
+        app.Utils.localize('menu_frame'),
+        app.Utils.localize('menu_full'),
+        app.Utils.localize('menu_random'),
+      ];
+    },
 
-	/**
-	 * Computed binding: photo transition values
-	 * @returns {Array} Array of menu items
-	 * @private
-	 */
-	_computePhotoTransitionMenu: function() {
-		return [
-			app.Utils.localize('menu_scale_up'),
-			app.Utils.localize('menu_fade'),
-			app.Utils.localize('menu_slide_from_right'),
-			app.Utils.localize('menu_slide_down'),
-			app.Utils.localize('menu_spin_up'),
-			app.Utils.localize('menu_slide_up'),
-			app.Utils.localize('menu_slide_from_bottom'),
-			app.Utils.localize('menu_slide_right'),
-			app.Utils.localize('menu_random'),
-		];
-	},
+    /**
+     * Computed binding: photo transition values
+     * @returns {Array} Array of menu items
+     * @private
+     */
+    _computePhotoTransitionMenu: function() {
+      return [
+        app.Utils.localize('menu_scale_up'),
+        app.Utils.localize('menu_fade'),
+        app.Utils.localize('menu_slide_from_right'),
+        app.Utils.localize('menu_slide_down'),
+        app.Utils.localize('menu_spin_up'),
+        app.Utils.localize('menu_slide_up'),
+        app.Utils.localize('menu_slide_from_bottom'),
+        app.Utils.localize('menu_slide_right'),
+        app.Utils.localize('menu_random'),
+      ];
+    },
 
-	/**
-	 * Computed binding: time format values
-	 * @returns {Array} Array of menu items
-	 * @private
-	 */
-	_computeTimeFormatMenu: function() {
-		return [
-			app.Utils.localize('no'),
-			app.Utils.localize('menu_12_hour'),
-			app.Utils.localize('menu_24_hour'),
-		];
-	},
-});
+    /**
+     * Computed binding: time format values
+     * @returns {Array} Array of menu items
+     * @private
+     */
+    _computeTimeFormatMenu: function() {
+      return [
+        app.Utils.localize('no'),
+        app.Utils.localize('menu_12_hour'),
+        app.Utils.localize('menu_24_hour'),
+      ];
+    },
+  });
 </script>

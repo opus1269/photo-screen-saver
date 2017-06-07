@@ -8,70 +8,77 @@
 <html>
 <head>
 
-	<meta charset="utf-8">
+  <meta charset="utf-8">
 
-	<title>Photo Screen Saver Screensaver Page</title>
+  <title>Photo Screen Saver Screensaver Page</title>
 
-	<link rel="import" href="../elements/elements.html">
+  <link rel="import" href="../elements/elements.html">
 
-	<!-- For iron-flex-layout -->
-	<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning"></style>
+  <!-- For iron-flex-layout -->
+  <style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning"></style>
 
-	<!-- For shared styles, shared-styles.html import in elements.html -->
-	<style is="custom-style" include="shared-styles"></style>
+  <!-- For shared styles, shared-styles.html import in elements.html -->
+  <style is="custom-style" include="shared-styles"></style>
 
-	<link rel="stylesheet" href="../styles/screensaver.css">
+  <link rel="stylesheet" href="../styles/screensaver.css">
 
 </head>
 
 <body unresolved class="fullbleed vertical layout">
-	<template is="dom-bind" id="t">
-		<div id="mainContainer" class="flex" hidden$="{{noPhotos}}">
-			<neon-animated-pages id="pages" class="fit" animate-initial-selection
-								 on-neon-animation-finish="_OnAniFinished">
-				<template is="dom-repeat" id="repeatTemplate" as="view" items="{{views}}">
-					<slide-animatable ani-type="{{aniType}}" class="fit">
-						<section id="view[[index]]">
-							<iron-image
-								class="image"
-								src="{{view.photo.path}}"
-								width="{{view.photo.width}}"
-								height="{{view.photo.height}}"
-								sizing="{{sizingType}}"
-								preload>
-							</iron-image>
-							<div class="time">{{time}}</div>
-							<div class="author">{{view.photo.label}}<sup id="sup"></sup></div>
-							<div class="location">{{view.photo.location}}</div>
-						</section>
-					</slide-animatable>
-				</template>
-			</neon-animated-pages>
-		</div>
-		<div id="noPhotos" hidden$="{{!noPhotos}}">{{_computeNoPhotosLabel()}}</div>
-	</template>
+<template is="dom-bind" id="t">
+  <div id="mainContainer" class="flex" hidden$="{{noPhotos}}">
+    <neon-animated-pages id="pages" class="fit" animate-initial-selection
+                         on-neon-animation-finish="_OnAniFinished">
+      <template is="dom-repeat" id="repeatTemplate" as="view" items="{{views}}">
+        <slide-animatable ani-type="{{aniType}}" class="fit">
+          <section id="view[[index]]">
+            <iron-image
+                class="image"
+                src="{{view.photo.path}}"
+                width="{{view.photo.width}}"
+                height="{{view.photo.height}}"
+                sizing="{{sizingType}}"
+                preload>
+            </iron-image>
+            <div class="time">{{time}}</div>
+            <div class="author">{{view.photo.label}}<sup id="sup"></sup></div>
+            <div class="location">{{view.photo.location}}</div>
+          </section>
+        </slide-animatable>
+      </template>
+    </neon-animated-pages>
+  </div>
+  <div id="noPhotos" hidden$="{{!noPhotos}}">{{_computeNoPhotosLabel()}}</div>
+</template>
 
-	<script src="../lib/chrome-promise.js"></script>
-	<script src="../scripts/analytics.js"></script>
-	<script src="../scripts/exception_handler.js"></script>
-	<script src="../scripts/time.js"></script>
-	<script src="../scripts/msg.js"></script>
-	<script src="../scripts/http.js"></script>
-	<script src="../scripts/photo_sources.js"></script>
-	<script src="../scripts/utils.js"></script>
-	<script src="../scripts/json.js"></script>
-	<script src="../scripts/storage.js"></script>
-	<script src="../scripts/screensaver/geo.js"></script>
-	<script src="../scripts/screensaver/photo.js"></script>
-	<script src="../scripts/screensaver/ss_builder.js"></script>
-	<script src="../scripts/screensaver/ss_time.js"></script>
-	<script src="../scripts/screensaver/ss_events.js"></script>
-	<script src="../scripts/screensaver/ss_runner.js"></script>
-	<script src="../scripts/screensaver/views/ss_view.js"></script>
-	<script src="../scripts/screensaver/views/ss_view_letterbox.js"></script>
-	<script src="../scripts/screensaver/views/ss_view_frame.js"></script>
-	<script src="../scripts/screensaver/views/ss_view_full.js"></script>
-	<script src="../scripts/screensaver/screensaver.js"></script>
+<script src="../bower_components/chrome-extension-utils/chrome-promise.js"></script>
+<script src="../bower_components/chrome-extension-utils/chrome_analytics.js"></script>
+<script src="../bower_components/chrome-extension-utils/exception_handler.js"></script>
+<script src="../bower_components/chrome-extension-utils/json.js"></script>
+<script src="../bower_components/chrome-extension-utils/storage.js"></script>
+<script src="../bower_components/chrome-extension-utils/chrome_utils.js"></script>
+<script src="../bower_components/chrome-extension-utils/chrome_msg.js"></script>
+<script src="../bower_components/chrome-extension-utils/http.js"></script>
+<script src="../scripts/analytics.js"></script>
+<script src="../scripts/exception_handler.js"></script>
+<script src="../scripts/time.js"></script>
+<script src="../scripts/msg.js"></script>
+<script src="../scripts/http.js"></script>
+<script src="../scripts/photo_sources.js"></script>
+<script src="../scripts/utils.js"></script>
+<script src="../scripts/json.js"></script>
+<script src="../scripts/storage.js"></script>
+<script src="../scripts/screensaver/geo.js"></script>
+<script src="../scripts/screensaver/photo.js"></script>
+<script src="../scripts/screensaver/ss_builder.js"></script>
+<script src="../scripts/screensaver/ss_time.js"></script>
+<script src="../scripts/screensaver/ss_events.js"></script>
+<script src="../scripts/screensaver/ss_runner.js"></script>
+<script src="../scripts/screensaver/views/ss_view.js"></script>
+<script src="../scripts/screensaver/views/ss_view_letterbox.js"></script>
+<script src="../scripts/screensaver/views/ss_view_frame.js"></script>
+<script src="../scripts/screensaver/views/ss_view_full.js"></script>
+<script src="../scripts/screensaver/screensaver.js"></script>
 
 </body>
 </html>
