@@ -91,7 +91,7 @@
    * @returns {boolean} true if selected
    */
   PhotoSource.prototype.use = function() {
-    return app.Storage.getBool(this.useName);
+    return Chrome.Storage.getBool(this.useName);
   };
 
   /**
@@ -141,7 +141,7 @@
     let ret = null;
     const keyBool = (this.useName === 'useGoogle') ? null : this.useName;
     if (photos || photos.length) {
-      const set = app.Storage.safeSet(this.photosName, photos, keyBool);
+      const set = Chrome.Storage.safeSet(this.photosName, photos, keyBool);
       if (!set) {
         ret = 'Exceeded storage capacity.';
       }
@@ -162,14 +162,14 @@
     if (this.use()) {
       let photos = [];
       if (this.isArray) {
-        let items = app.Storage.get(this.photosName);
+        let items = Chrome.Storage.get(this.photosName);
         // could be that items have not been retrieved yet
         items = items || [];
         items.forEach((item) => {
           photos = photos.concat(item.photos);
         });
       } else {
-        photos = app.Storage.get(this.photosName);
+        photos = Chrome.Storage.get(this.photosName);
         // could be that items have not been retrieved yet
         photos = photos || [];
       }

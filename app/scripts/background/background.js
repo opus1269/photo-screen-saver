@@ -33,7 +33,7 @@
    * @memberOf app.Background
    */
   function _toggleEnabled() {
-    app.Storage.set('enabled', !app.Storage.getBool('enabled'));
+    Chrome.Storage.set('enabled', !Chrome.Storage.getBool('enabled'));
     // storage changed event not fired on same page as the change
     app.Data.processState('enabled');
   }
@@ -126,7 +126,7 @@
    */
   function _onMenuClicked(info) {
     if (info.menuItemId === 'ENABLE_MENU') {
-      const isEnabled = app.Storage.get('enabled');
+      const isEnabled = Chrome.Storage.get('enabled');
       Chrome.GA.event(Chrome.GA.EVENT.MENU, `${info.menuItemId}: ${isEnabled}`);
       _toggleEnabled();
     }
@@ -162,7 +162,7 @@
     if (request.message === app.Msg.RESTORE_DEFAULTS.message) {
       app.Data.restoreDefaults();
     } else if (request.message === app.Msg.STORE.message) {
-      app.Storage.set(request.key, request.value);
+      Chrome.Storage.set(request.key, request.value);
     }
     return false;
   }

@@ -56,7 +56,7 @@
      */
     static _is24Hr(frmt = null) {
       let ret = false;
-      let format = app.Storage.getInt('showTime', 0);
+      let format = Chrome.Storage.getInt('showTime', 0);
       if (frmt !== null) {
         format = frmt;
       }

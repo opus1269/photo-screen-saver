@@ -333,7 +333,7 @@
         if (!album.checked) {
           this.selections.push({id: album.id, photos: album.photos});
           const set =
-              app.Storage.safeSet('albumSelections', this.selections, null);
+              Chrome.Storage.safeSet('albumSelections', this.selections, null);
           if (!set) {
             // exceeded storage limits
             this.selections.pop();
@@ -354,7 +354,7 @@
       Chrome.GA.event(Chrome.GA.EVENT.ICON, 'deselectAllGoogleAlbums');
       this._uncheckAll();
       this.selections.splice(0, this.selections.length);
-      app.Storage.set('albumSelections', this.selections);
+      Chrome.Storage.set('albumSelections', this.selections);
     },
 
     /**
@@ -383,7 +383,7 @@
       }
 
       const set =
-          app.Storage.safeSet('albumSelections', this.selections, null);
+          Chrome.Storage.safeSet('albumSelections', this.selections, null);
       if (!set) {
         // exceeded storage limits
         this.selections.pop();
@@ -418,7 +418,7 @@
      * @private
      */
     _selectAlbums: function() {
-      this.set('selections', app.Storage.get('albumSelections'));
+      this.set('selections', Chrome.Storage.get('albumSelections'));
       for (let i = 0; i < this.albums.length; i++) {
         for (let j = 0; j < this.selections.length; j++) {
           if (this.albums[i].id === this.selections[j].id) {

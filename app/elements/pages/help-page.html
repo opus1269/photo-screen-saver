@@ -151,7 +151,7 @@
         const text =
             `Extension version: ${app.Utils.getVersion()}
 				Chrome version: ${app.Utils.getFullChromeVersion()}
-				OS: ${app.Storage.get('os')}\n\n\n`;
+				OS: ${Chrome.Storage.get('os')}\n\n\n`;
         return encodeURIComponent(text);
       },
 

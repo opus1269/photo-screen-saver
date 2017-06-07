@@ -16,7 +16,8 @@ app.Screensaver = (function() {
   new ExceptionHandler();
 
   // set selected background image
-  document.body.style.background = app.Storage.get('background').substring(11);
+  document.body.style.background = Chrome.Storage.get('background').
+      substring(11);
 
   /**
    * Main auto-binding template
@@ -115,7 +116,7 @@ app.Screensaver = (function() {
    * @memberOf app.Screensaver
    */
   function _processPhotoTransitions() {
-    let type = app.Storage.getInt('photoTransition', 0);
+    let type = Chrome.Storage.getInt('photoTransition', 0);
     if (type === 8) {
       // pick random transition
       type = app.Utils.getRandomInt(0, 7);

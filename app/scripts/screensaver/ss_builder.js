@@ -32,7 +32,7 @@ app.SSBuilder = (function() {
      */
     setupPhotoSizing() {
       const t = app.Screensaver.getTemplate();
-      t.photoSizing = app.Storage.getInt('photoSizing', 0);
+      t.photoSizing = Chrome.Storage.getInt('photoSizing', 0);
       if (t.photoSizing === 4) {
         // pick random sizing
         t.photoSizing = app.Utils.getRandomInt(0, 3);
@@ -101,7 +101,7 @@ app.SSBuilder = (function() {
         return false;
       }
 
-      if (app.Storage.getBool('shuffle')) {
+      if (Chrome.Storage.getBool('shuffle')) {
         // randomize the order
         app.Utils.shuffleArray(t.photos);
       }

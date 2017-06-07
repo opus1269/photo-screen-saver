@@ -44,8 +44,8 @@ app.SSTime = (function() {
      * @memberOf app.SSTime
      */
     setUpTransitionTime: function() {
-      const trans = app.Storage.get('transitionTime');
-      const showTime = app.Storage.getInt('showTime', 0);
+      const trans = Chrome.Storage.get('transitionTime');
+      const showTime = Chrome.Storage.getInt('showTime', 0);
       if ((showTime !== 0) && (trans.base > 60)) {
         // add repeating alarm to update time label
         // if transition time is more than 1 minute
@@ -74,7 +74,7 @@ app.SSTime = (function() {
      */
     setTime: function() {
       const t = app.Screensaver.getTemplate();
-      const showTime = app.Storage.getInt('showTime', 0);
+      const showTime = Chrome.Storage.getInt('showTime', 0);
       if ((showTime !== 0) && t.started) {
         t.set('time', app.Time.getStringShort());
       } else {

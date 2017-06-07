@@ -42,13 +42,13 @@ app.Alarm = (function() {
    * @memberOf app.Alarm
    */
   function _setActiveState() {
-    if (app.Storage.getBool('keepAwake')) {
+    if (Chrome.Storage.getBool('keepAwake')) {
       chrome.power.requestKeepAwake('display');
     }
     const interval = app.Data.getIdleSeconds();
     chromep.idle.queryState(interval).then((state) => {
       // display screensaver if enabled and the idle time criteria is met
-      if (app.Storage.getBool('enabled') && (state === 'idle')) {
+      if (Chrome.Storage.getBool('enabled') && (state === 'idle')) {
         app.SSControl.display(false);
       }
       return Promise.resolve();
@@ -64,7 +64,7 @@ app.Alarm = (function() {
    * @memberOf app.Alarm
    */
   function _setInactiveState() {
-    if (app.Storage.getBool('allowSuspend')) {
+    if (Chrome.Storage.getBool('allowSuspend')) {
       chrome.power.releaseKeepAwake();
     } else {
       chrome.power.requestKeepAwake('system');
@@ -80,10 +80,10 @@ app.Alarm = (function() {
    */
   function _setBadgeText() {
     let text = '';
-    if (app.Storage.getBool('enabled')) {
+    if (Chrome.Storage.getBool('enabled')) {
       text = app.Alarm.isActive() ? '' : app.Utils.localize('sleep_abbrev');
     } else {
-      text = app.Storage.getBool('keepAwake') ? app.Utils.localize(
+      text = Chrome.Storage.getBool('keepAwake') ? app.Utils.localize(
           'power_abbrev') : app.Utils.localize('off_abbrev');
     }
     chrome.browserAction.setBadgeText({text: text});
@@ -128,9 +128,9 @@ app.Alarm = (function() {
      * @memberOf app.Alarm
      */
     updateRepeatingAlarms: function() {
-      const keepAwake = app.Storage.getBool('keepAwake');
-      const aStart = app.Storage.getBool('activeStart');
-      const aStop = app.Storage.getBool('activeStop');
+      const keepAwake = Chrome.Storage.getBool('keepAwake');
+      const aStart = Chrome.Storage.getBool('activeStart');
+      const aStop = Chrome.Storage.getBool('activeStop');
 
       // create keep awake active period scheduling alarms
       if (keepAwake && (aStart !== aStop)) {
@@ -188,10 +188,10 @@ app.Alarm = (function() {
      * @memberOf app.Alarm
      */
     isActive: function() {
-      const enabled = app.Storage.getBool('enabled');
-      const keepAwake = app.Storage.getBool('keepAwake');
-      const aStart = app.Storage.get('activeStart');
-      const aStop = app.Storage.get('activeStop');
+      const enabled = Chrome.Storage.getBool('enabled');
+      const keepAwake = Chrome.Storage.getBool('keepAwake');
+      const aStart = Chrome.Storage.get('activeStart');
+      const aStop = Chrome.Storage.get('activeStop');
       const inRange = app.Time.isInRange(aStart, aStop);
 
       // do not display if screen saver is not enabled or

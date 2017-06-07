@@ -28,7 +28,7 @@
      * @constructor
      */
     constructor(photo) {
-      this.photo = app.JSONUtils.shallowCopy(photo);
+      this.photo = Chrome.JSONUtils.shallowCopy(photo);
       this.image = null;
       this.author = null;
       this.time = null;
@@ -66,7 +66,7 @@
      * @static
      */
     static _showLocation() {
-      return app.Storage.getBool('showLocation');
+      return Chrome.Storage.getBool('showLocation');
     }
 
     /**
@@ -75,7 +75,7 @@
      * @static
      */
     static showTime() {
-      return app.Storage.getBool('showTime');
+      return Chrome.Storage.getBool('showTime');
     }
 
     /**
@@ -112,7 +112,7 @@
      * Set the style for the time label
      */
     _setTimeStyle() {
-      if (app.Storage.getBool('largeTime')) {
+      if (Chrome.Storage.getBool('largeTime')) {
         this.time.style.fontSize = '8.5vh';
         this.time.style.fontWeight = 300;
       }
@@ -163,7 +163,7 @@
      * @param {app.Photo} photo - a photo to render
      */
     setPhoto(photo) {
-      const photoCopy = app.JSONUtils.shallowCopy(photo);
+      const photoCopy = Chrome.JSONUtils.shallowCopy(photo);
       if (this.model) {
         this.model.set('view.photo', photoCopy);
       }
@@ -181,7 +181,7 @@
 
     /**
      * Render the page for display - the default CSS is for our view
-     * subclasses override to determine the look of photo
+     * subclasses override this to determine the look of photo
      */
     render() {}
 
