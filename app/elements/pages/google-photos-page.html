@@ -366,7 +366,7 @@
     _albumSelectChange: function(event) {
       const album = event.model.album;
 
-      Chrome.GA.event(Chrome.GA.EVENT.ICON,
+      Chrome.GA.event(Chrome.GA.EVENT.CHECK,
           `selectGoogleAlbum: ${album.checked}`);
 
       if (album.checked) {
@@ -418,7 +418,7 @@
      * @private
      */
     _selectAlbums: function() {
-      this.set('selections', Chrome.Storage.get('albumSelections'));
+      this.set('selections', Chrome.Storage.get('albumSelections', []));
       for (let i = 0; i < this.albums.length; i++) {
         for (let j = 0; j < this.selections.length; j++) {
           if (this.albums[i].id === this.selections[j].id) {
