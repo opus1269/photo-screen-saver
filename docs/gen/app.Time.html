@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Http.html">app.Http</a></li><li><a href="app.JSONUtils.html">app.JSONUtils</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.Storage.html">app.Storage</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -304,8 +304,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="time.js.html">time.js</a>,
-				 <a href="time.js.html#sunlight-1-line-20">line 20</a>
+				<a href="scripts_time.js.html">scripts/time.js</a>,
+				 <a href="scripts_time.js.html#sunlight-1-line-20">line 20</a>
 			</li>
 		</ul>
 	</dd>
@@ -402,8 +402,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="time.js.html">time.js</a>,
-				 <a href="time.js.html#sunlight-1-line-35">line 35</a>
+				<a href="scripts_time.js.html">scripts/time.js</a>,
+				 <a href="scripts_time.js.html#sunlight-1-line-37">line 37</a>
 			</li>
 		</ul>
 	</dd>
@@ -472,8 +472,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="time.js.html">time.js</a>,
-				 <a href="time.js.html#sunlight-1-line-43">line 43</a>
+				<a href="scripts_time.js.html">scripts/time.js</a>,
+				 <a href="scripts_time.js.html#sunlight-1-line-46">line 46</a>
 			</li>
 		</ul>
 	</dd>
@@ -497,6 +497,190 @@ use current Date</p></td>
         <h3 class="subsection-title">Methods</h3>
 
         <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="._is24Hr"><span class="type-signature">&lt;private, static> </span>_is24Hr<span class="signature">( [frmt])</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Determine if user wants 24 hr time</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>frmt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>optional format, overrides storage value</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_time.js.html">scripts/time.js</a>,
+				 <a href="scripts_time.js.html#sunlight-1-line-57">line 57</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>true for 24 hour time</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
             
 <hr>
 <dt>
@@ -662,8 +846,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="time.js.html">time.js</a>,
-				 <a href="time.js.html#sunlight-1-line-111">line 111</a>
+				<a href="scripts_time.js.html">scripts/time.js</a>,
+				 <a href="scripts_time.js.html#sunlight-1-line-141">line 141</a>
 			</li>
 		</ul>
 	</dd>
@@ -774,8 +958,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="time.js.html">time.js</a>,
-				 <a href="time.js.html#sunlight-1-line-121">line 121</a>
+				<a href="scripts_time.js.html">scripts/time.js</a>,
+				 <a href="scripts_time.js.html#sunlight-1-line-151">line 151</a>
 			</li>
 		</ul>
 	</dd>
@@ -936,8 +1120,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="time.js.html">time.js</a>,
-				 <a href="time.js.html#sunlight-1-line-52">line 52</a>
+				<a href="scripts_time.js.html">scripts/time.js</a>,
+				 <a href="scripts_time.js.html#sunlight-1-line-80">line 80</a>
 			</li>
 		</ul>
 	</dd>
@@ -1098,8 +1282,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="time.js.html">time.js</a>,
-				 <a href="time.js.html#sunlight-1-line-67">line 67</a>
+				<a href="scripts_time.js.html">scripts/time.js</a>,
+				 <a href="scripts_time.js.html#sunlight-1-line-96">line 96</a>
 			</li>
 		</ul>
 	</dd>
@@ -1140,190 +1324,6 @@ use current Date</p></td>
     <dd>
         
 <span class="param-type">int</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".is24Hr"><span class="type-signature">&lt;static> </span>is24Hr<span class="signature">( [frmt])</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Determine if user wants 24 hr time</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Argument</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>frmt</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">int</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>optional format, overrides storage value</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="time.js.html">time.js</a>,
-				 <a href="time.js.html#sunlight-1-line-138">line 138</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>true for 24 hour time</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
 
 
 
@@ -1468,8 +1468,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="time.js.html">time.js</a>,
-				 <a href="time.js.html#sunlight-1-line-84">line 84</a>
+				<a href="scripts_time.js.html">scripts/time.js</a>,
+				 <a href="scripts_time.js.html#sunlight-1-line-114">line 114</a>
 			</li>
 		</ul>
 	</dd>
@@ -1630,8 +1630,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="time.js.html">time.js</a>,
-				 <a href="time.js.html#sunlight-1-line-160">line 160</a>
+				<a href="scripts_time.js.html">scripts/time.js</a>,
+				 <a href="scripts_time.js.html#sunlight-1-line-164">line 164</a>
 			</li>
 		</ul>
 	</dd>
@@ -1790,8 +1790,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="time.js.html">time.js</a>,
-				 <a href="time.js.html#sunlight-1-line-176">line 176</a>
+				<a href="scripts_time.js.html">scripts/time.js</a>,
+				 <a href="scripts_time.js.html#sunlight-1-line-180">line 180</a>
 			</li>
 		</ul>
 	</dd>
@@ -1898,7 +1898,7 @@ use current Date</p></td>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 2nd 2017, 3:08:31 pm
+		on June 7th 2017, 3:02:53 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
