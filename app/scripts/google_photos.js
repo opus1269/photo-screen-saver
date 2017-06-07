@@ -158,7 +158,9 @@ app.GooglePhotos = (function() {
   function _loadPicasaAlbum(albumId, userId = 'default') {
     const url = `${_URL_BASE}${userId}/albumid/${albumId}/${_ALBUM_QUERY}`;
     if (userId === 'default') {
-      return app.Http.doGet(url, true).catch((err) => {
+      const conf = Chrome.JSONUtils.shallowCopy(Chrome.Http.conf);
+      conf.isAuth = true;
+      return Chrome.Http.doGet(url, conf).catch((err) => {
         const statusMsg = `${Chrome.Locale.localize('err_status')}: 404`;
         if (err.message.includes(statusMsg)) {
           // album was probably deleted
@@ -168,7 +170,7 @@ app.GooglePhotos = (function() {
         }
       });
     } else {
-      return app.Http.doGet(url);
+      return Chrome.Http.doGet(url);
     }
   }
 
@@ -183,7 +185,11 @@ app.GooglePhotos = (function() {
       const url = `${_URL_BASE}default/${_ALBUMS_QUERY}`;
 
       // get list of albums
-      return app.Http.doGet(url, true, true, interactive).then((root) => {
+      const conf = Chrome.JSONUtils.shallowCopy(Chrome.Http.conf);
+      conf.isAuth = true;
+      conf.retryToken = true;
+      conf.interactive = interactive;
+      return Chrome.Http.doGet(url, conf).then((root) => {
         if (!root || !root.feed || !root.feed.entry) {
           throw new Error(Chrome.Locale.localize('err_no_albums'));
         }

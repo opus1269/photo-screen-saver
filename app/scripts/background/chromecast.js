@@ -11,25 +11,25 @@ window.app = window.app || {};
  * @namespace
  */
 app.ChromeCast = (function() {
-	'use strict';
+  'use strict';
 
-	new ExceptionHandler();
+  new ExceptionHandler();
 
-	return {
-		/**
-		 * Get the photos from chromecast.json
-		 * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
-		 * @memberOf app.ChromeCast
-		 */
-		loadPhotos: function() {
-			const url = '/assets/chromecast.json';
-			return app.Http.doGet(url).then((photos) => {
-				photos = photos || [];
-				photos.forEach((photo) => {
-					photo.asp = 16 / 9;
-				});
-				return Promise.resolve(photos);
-			});
-		},
-	};
+  return {
+    /**
+     * Get the photos from chromecast.json
+     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     * @memberOf app.ChromeCast
+     */
+    loadPhotos: function() {
+      const url = '/assets/chromecast.json';
+      return Chrome.Http.doGet(url).then((photos) => {
+        photos = photos || [];
+        photos.forEach((photo) => {
+          photo.asp = 16 / 9;
+        });
+        return Promise.resolve(photos);
+      });
+    },
+  };
 })();

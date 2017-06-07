@@ -90,7 +90,7 @@ app.Flickr = (function() {
           `&api_key=${_KEY}&user_id=${userId}` +
           `&extras=owner_name,url_k,media,geo&per_page=${_MAX_PHOTOS}` +
           '&format=json&nojsoncallback=1';
-      return app.Http.doGet(url).then((response) => {
+      return Chrome.Http.doGet(url).then((response) => {
         if (response.stat !== 'ok') {
           throw new Error(response.message);
         }
@@ -110,7 +110,7 @@ app.Flickr = (function() {
           `&per_page=${_MAX_PHOTOS}` +
           '&format=json&nojsoncallback=1';
 
-      return app.Http.doGet(url).then((response) => {
+      return Chrome.Http.doGet(url).then((response) => {
         if (response.stat !== 'ok') {
           throw new Error(response.message);
         }

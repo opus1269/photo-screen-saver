@@ -11,110 +11,109 @@ window.app = window.app || {};
  * @namespace
  */
 app.Use500px = (function() {
-	'use strict';
+  'use strict';
 
-	new ExceptionHandler();
+  new ExceptionHandler();
 
-	/**
-	 * 500px rest API
-	 * @type {string}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _URL_BASE = 'https://api.500px.com/v1/';
+  /**
+   * 500px rest API
+   * @type {string}
+   * @const
+   * @default
+   * @private
+   * @memberOf app.Use500px
+   */
+  const _URL_BASE = 'https://api.500px.com/v1/';
 
-	/**
-	 * API authorization key
-	 * @type {string}
-	 * @const
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _KEY = 'iyKV6i6wu0R8QUea9mIXvEsQxIF0tMRVXopwYcFC';
+  /**
+   * API authorization key
+   * @type {string}
+   * @const
+   * @private
+   * @memberOf app.Use500px
+   */
+  const _KEY = 'iyKV6i6wu0R8QUea9mIXvEsQxIF0tMRVXopwYcFC';
 
-	/**
-	 * Max photos to return - 100 is API max
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _MAX_PHOTOS = 90;
+  /**
+   * Max photos to return - 100 is API max
+   * @type {int}
+   * @const
+   * @default
+   * @private
+   * @memberOf app.Use500px
+   */
+  const _MAX_PHOTOS = 90;
 
-	/**
-	 * Categories to use Make them an array to overcome 100 photo limit per call
-	 * @type {Array}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	const _CATS = [
-		'Nature,City and Architecture',
-		'Landscapes,Animals',
-		'Macro,Still Life,Underwater',
-	];
+  /**
+   * Categories to use Make them an array to overcome 100 photo limit per call
+   * @type {Array}
+   * @const
+   * @default
+   * @private
+   * @memberOf app.Use500px
+   */
+  const _CATS = [
+    'Nature,City and Architecture',
+    'Landscapes,Animals',
+    'Macro,Still Life,Underwater',
+  ];
 
-	/**
-	 * Call API to get some photos
-	 * @param {string} url - server url
-	 * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
-	 * @private
-	 * @memberOf app.Use500px
-	 */
-	function _doGet(url) {
-		return app.Http.doGet(url).then((response) => {
-			if (response.error) {
-				throw new Error(response.error);
-			}
-			const photos = [];
-			response.photos.forEach((photo) => {
-				if (!photo.nsfw) {
-					const asp = photo.width / photo.height;
-					let ex = null;
-					let pt = null;
-					if (photo.latitude && photo.longitude) {
-						pt = app.PhotoSource
-							.getPt(photo.latitude, photo.longitude);
-						ex = {};
-					}
-					app.PhotoSource.addPhoto(photos, photo.images[0].url,
-						photo.user.fullname, asp, ex, pt);
-				}
-			});
-			return Promise.resolve(photos);
-		});
-	}
+  /**
+   * Call API to get some photos
+   * @param {string} url - server url
+   * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+   * @private
+   * @memberOf app.Use500px
+   */
+  function _doGet(url) {
+    return Chrome.Http.doGet(url).then((response) => {
+      if (response.error) {
+        throw new Error(response.error);
+      }
+      const photos = [];
+      response.photos.forEach((photo) => {
+        if (!photo.nsfw) {
+          const asp = photo.width / photo.height;
+          let ex = null;
+          let pt = null;
+          if (photo.latitude && photo.longitude) {
+            pt = app.PhotoSource.getPt(photo.latitude, photo.longitude);
+            ex = {};
+          }
+          app.PhotoSource.addPhoto(photos, photo.images[0].url,
+              photo.user.fullname, asp, ex, pt);
+        }
+      });
+      return Promise.resolve(photos);
+    });
+  }
 
-	return {
-		/**
-		 * Retrieve the array of 500px photos
-		 * @param {string} type - name of 500px gallery
-		 * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
-		 * @memberOf app.Use500px
-		 */
-		loadPhotos: function(type) {
-			// series of API calls
-			const promises = [];
-			_CATS.forEach((_CAT) => {
-				let url =
-					`${_URL_BASE}photos/?consumer_key=${_KEY}&feature=${type}` +
-					`&only=${_CAT}&rpp=${_MAX_PHOTOS}` +
-					'&sort=rating&image_size=2048';
-				promises.push(_doGet(url));
-			});
+  return {
+    /**
+     * Retrieve the array of 500px photos
+     * @param {string} type - name of 500px gallery
+     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     * @memberOf app.Use500px
+     */
+    loadPhotos: function(type) {
+      // series of API calls
+      const promises = [];
+      _CATS.forEach((_CAT) => {
+        let url =
+            `${_URL_BASE}photos/?consumer_key=${_KEY}&feature=${type}` +
+            `&only=${_CAT}&rpp=${_MAX_PHOTOS}` +
+            '&sort=rating&image_size=2048';
+        promises.push(_doGet(url));
+      });
 
-			// Collate the photos
-			return Promise.all(promises).then((values) => {
-				let photos = [];
-				values.forEach((value) => {
-					photos = photos.concat(value);
-				});
-				return Promise.resolve(photos);
-			});
-		},
-	};
+      // Collate the photos
+      return Promise.all(promises).then((values) => {
+        let photos = [];
+        values.forEach((value) => {
+          photos = photos.concat(value);
+        });
+        return Promise.resolve(photos);
+      });
+    },
+  };
 })();

@@ -108,11 +108,13 @@ app.Geo = (function() {
       // get from api - it will translate based on the browser language
       const url = `${_GEOCODE_API}?sensor=true` +
           `&latlng=${point}`;
-      return app.Http.doGet(url, false, false, false, true, 2).then((resp) => {
+      const conf = Chrome.JSONUtils.shallowCopy(Chrome.Http.conf);
+      conf.maxRetries = 2;
+      return Chrome.Http.doGet(url, conf).then((response) => {
         let location = '';
-        if ((resp.status === 'OK') && resp.results
-            && (resp.results.length > 0)) {
-          location = resp.results[0].formatted_address;
+        if ((response.status === 'OK') && response.results
+            && (response.results.length > 0)) {
+          location = response.results[0].formatted_address;
           // cache it
           _addToCache(point, location);
         }
