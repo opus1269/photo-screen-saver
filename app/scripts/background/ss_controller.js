@@ -146,18 +146,20 @@ app.SSControl = (function() {
    * @memberOf app.SSControl
    */
   function _onIdleStateChanged(state) {
-    _isShowing().then((isTrue) => {
-      if (state === 'idle' && app.Alarm.isActive() && !isTrue) {
-        app.SSControl.display(false);
+    _isShowing().then((isShowing) => {
+      if (state === 'idle') {
+        if (app.Alarm.isActive() && !isShowing) {
+          app.SSControl.display(false);
+        }
       } else {
         if (!app.Utils.isWin()) {
-          // Windows 10 Creator triggers an 'active' state
+          // Windows 10 Creators triggers an 'active' state
           // when the window is created so we have to skip
-          // closing here
+          // closing here. Wouldn't need it ChromeOS handled keyboard right
           app.SSControl.close();
         }
       }
-      return null;
+      return Promise.resolve();
     }).catch((err) => {
       Chrome.GA.error(err.message, 'SSControl._isShowing');
     });
@@ -211,6 +213,16 @@ app.SSControl = (function() {
     close: function() {
       // send message to the screen savers to close themselves
       Chrome.Msg.send(app.Msg.SS_CLOSE).catch(() => {});
+    },
+
+    /**
+     * Toggle enabled state of the screen saver
+     * @memberOf app.SSControl
+     */
+    toggleEnabled: function() {
+      Chrome.Storage.set('enabled', !Chrome.Storage.getBool('enabled'));
+      // storage changed event not fired on same page as the change
+      app.Data.processState('enabled');
     },
   };
 })();

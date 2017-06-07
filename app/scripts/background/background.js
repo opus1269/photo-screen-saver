@@ -28,17 +28,6 @@
   }
 
   /**
-   * Toggle enabled state of the screen saver
-   * @private
-   * @memberOf app.Background
-   */
-  function _toggleEnabled() {
-    Chrome.Storage.set('enabled', !Chrome.Storage.getBool('enabled'));
-    // storage changed event not fired on same page as the change
-    app.Data.processState('enabled');
-  }
-
-  /**
    * Event: Fired when the extension is first installed,<br />
    * when the extension is updated to a new version,<br />
    * and when Chrome is updated to a new version.
@@ -48,30 +37,6 @@
    * @memberOf app.Background
    */
   function _onInstalled(details) {
-    const chromep = new ChromePromise();
-
-    // create menus on the right click menu of the extension icon
-    chromep.contextMenus.create({
-      type: 'normal',
-      id: 'ENABLE_MENU',
-      title: Chrome.Locale.localize('disable'),
-      contexts: ['browser_action'],
-    }).catch((err) => {
-      if (!err.message.includes('duplicate id')) {
-        Chrome.GA.error(err.message, 'chromep.contextMenus.create');
-      }
-    });
-
-    chromep.contextMenus.create({
-      type: 'separator',
-      id: 'SEP_MENU',
-      contexts: ['browser_action'],
-    }).catch((err) => {
-      if (!err.message.includes('duplicate id')) {
-        Chrome.GA.error(err.message, 'chromep.contextMenus.create');
-      }
-    });
-
     if (details.reason === 'install') {
       Chrome.GA.event(Chrome.GA.EVENT.INSTALLED);
       app.Data.initialize();
@@ -116,36 +81,6 @@
     app.Data.processState(event.key);
   }
 
-  /**
-   * Event: Fired when a context menu item is clicked.
-   * @see https://developer.chrome.com/extensions/contextMenus#event-onClicked
-   * @param {Object} info - info. on the clicked menu
-   * @param {Object} info.menuItemId - menu name
-   * @private
-   * @memberOf app.Background
-   */
-  function _onMenuClicked(info) {
-    if (info.menuItemId === 'ENABLE_MENU') {
-      const isEnabled = Chrome.Storage.get('enabled');
-      Chrome.GA.event(Chrome.GA.EVENT.MENU, `${info.menuItemId}: ${isEnabled}`);
-      _toggleEnabled();
-    }
-  }
-
-  /**
-   * Event: Fired when a registered command is activated using
-   * a keyboard shortcut.
-   * @see https://developer.chrome.com/extensions/commands#event-onCommand
-   * @param {string} cmd - keyboard command
-   * @private
-   * @memberOf app.Background
-   */
-  function _onKeyCommand(cmd) {
-    if (cmd === 'toggle-enabled') {
-      _toggleEnabled();
-    }
-  }
-
   // noinspection JSUnusedLocalSymbols
   /**
    * Event: Fired when a message is sent from either an extension process<br>
@@ -181,10 +116,4 @@
 
   // listen for chrome messages
   Chrome.Msg.listen(_onChromeMessage);
-
-  // listen for clicks on context menus
-  chrome.contextMenus.onClicked.addListener(_onMenuClicked);
-
-  // listen for special keyboard commands
-  chrome.commands.onCommand.addListener(_onKeyCommand);
 })();

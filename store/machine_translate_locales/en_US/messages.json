@@ -25,10 +25,13 @@
     "message": "is Off"
   },
   "disable": {
-    "message": "Disable"
+    "message": "Disable (Alt+Shift+Q)"
   },
   "enable": {
-    "message": "Enable"
+    "message": "Enable (Alt+Shift+Q)"
+  },
+  "display_now": {
+    "message": "Display now (Alt+Shift+D)"
   },
   "help": {
     "message": "Help"

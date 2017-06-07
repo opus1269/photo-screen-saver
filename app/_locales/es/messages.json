@@ -25,10 +25,13 @@
     "message": "esté Apagado"
   },
   "disable": {
-    "message": "Deshabilitar"
+    "message": "Deshabilitar (Alt+Shift+Q)"
   },
   "enable": {
-    "message": "Habilitar"
+    "message": "Habilitar (Alt+Shift+Q)"
+  },
+  "display_now": {
+    "message": "Mostrar ahora (Alt+Shift+D)"
   },
   "help": {
     "message": "Ayuda"

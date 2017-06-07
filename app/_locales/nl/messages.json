@@ -25,10 +25,13 @@
     "message": "is Uit"
   },
   "disable": {
-    "message": "Schakel uit"
+    "message": "Schakel uit (Alt+Shift+Q)"
   },
   "enable": {
-    "message": "Schakel in"
+    "message": "Schakel in (Alt+Shift+Q)"
+  },
+  "display_now": {
+    "message": "Toon de screensaver (Alt+Shift+D)"
   },
   "help": {
     "message": "Hulp"

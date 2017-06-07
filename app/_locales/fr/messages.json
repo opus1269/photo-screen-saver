@@ -25,10 +25,13 @@
     "message": "désactivé"
   },
   "disable": {
-    "message": "Désactiver"
+    "message": "Désactiver (Alt+Shift+Q)"
   },
   "enable": {
-    "message": "Activer"
+    "message": "Activer (Alt+Shift+Q)"
+  },
+  "display_now": {
+    "message": "Afficher maintenant (Alt+Shift+D)"
   },
   "help": {
     "message": "Aide"

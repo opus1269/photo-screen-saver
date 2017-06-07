@@ -3,7 +3,7 @@
 	"name": "__MSG_chrome_extension_name__",
 	"short_name": "__MSG_chrome_extension_name__",
 	"description": "__MSG_chrome_extension_description__",
-	"version": "2.3.3",
+	"version": "2.4.0",
 	"minimum_chrome_version": "38",
 	"default_locale": "en_US",
 	"commands": {
@@ -12,6 +12,12 @@
 				"default": "Alt+Shift+Q"
 			},
 			"description": "__MSG_toggle_enabled__"
+		},
+		"show-screensaver": {
+			"suggested_key": {
+				"default": "Alt+Shift+D"
+			},
+			"description": "__MSG_display_now__"
 		}
 	},
 	"icons": {
