@@ -44,7 +44,7 @@ app.Storage = (function() {
 			if (Number.isNaN(value)) {
 				value = (def === null) ? value : def;
 				if (def === null) {
-					app.GA.error(`NaN value for: ${key}`, 'Storage.getInt');
+					Chrome.GA.error(`NaN value for: ${key}`, 'Storage.getInt');
 				}
 			}
 			return value;

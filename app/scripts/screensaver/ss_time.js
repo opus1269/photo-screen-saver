@@ -11,75 +11,75 @@ window.app = window.app || {};
  * @namespace
  */
 app.SSTime = (function() {
-	'use strict';
+  'use strict';
 
-	new ExceptionHandler();
+  new ExceptionHandler();
 
-	/**
-	 * Repeating alarm for updating time label
-	 * @type {string}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.SSTime
-	 */
-	const _CLOCK_ALARM = 'updateTimeLabel';
+  /**
+   * Repeating alarm for updating time label
+   * @type {string}
+   * @const
+   * @default
+   * @private
+   * @memberOf app.SSTime
+   */
+  const _CLOCK_ALARM = 'updateTimeLabel';
 
-	/**
-	 * Event: Listen for alarms
-	 * @param {Object} alarm - chrome alarm
-	 * @param {string} alarm.name - alarm type
-	 * @memberOf app.SSTime
-	 */
-	function _onAlarm(alarm) {
-		if (alarm.name === _CLOCK_ALARM) {
-			// update time label
-			app.SSTime.setTime();
-		}
-	}
+  /**
+   * Event: Listen for alarms
+   * @param {Object} alarm - chrome alarm
+   * @param {string} alarm.name - alarm type
+   * @memberOf app.SSTime
+   */
+  function _onAlarm(alarm) {
+    if (alarm.name === _CLOCK_ALARM) {
+      // update time label
+      app.SSTime.setTime();
+    }
+  }
 
-	return {
-		/**
-		 * Setup photo transition time
-		 * @memberOf app.SSTime
-		 */
-		setUpTransitionTime: function() {
-			const trans = app.Storage.get('transitionTime');
-			const showTime = app.Storage.getInt('showTime', 0);
-			if ((showTime !== 0) && (trans.base > 60)) {
-				// add repeating alarm to update time label
-				// if transition time is more than 1 minute
-				// and time label is showing
-				chrome.alarms.onAlarm.addListener(_onAlarm);
+  return {
+    /**
+     * Setup photo transition time
+     * @memberOf app.SSTime
+     */
+    setUpTransitionTime: function() {
+      const trans = app.Storage.get('transitionTime');
+      const showTime = app.Storage.getInt('showTime', 0);
+      if ((showTime !== 0) && (trans.base > 60)) {
+        // add repeating alarm to update time label
+        // if transition time is more than 1 minute
+        // and time label is showing
+        chrome.alarms.onAlarm.addListener(_onAlarm);
 
-				const chromep = new ChromePromise();
-				chromep.alarms.get(_CLOCK_ALARM).then((alarm) => {
-					if (!alarm) {
-						chrome.alarms.create(_CLOCK_ALARM, {
-							when: Date.now(),
-							periodInMinutes: 1,
-						});
-					}
-					return null;
-				}).catch((err) => {
-					app.GA.error(err.message,
-						'chromep.alarms.get(CLOCK_ALARM)');
-				});
-			}
-		},
+        const chromep = new ChromePromise();
+        chromep.alarms.get(_CLOCK_ALARM).then((alarm) => {
+          if (!alarm) {
+            chrome.alarms.create(_CLOCK_ALARM, {
+              when: Date.now(),
+              periodInMinutes: 1,
+            });
+          }
+          return null;
+        }).catch((err) => {
+          Chrome.GA.error(err.message,
+              'chromep.alarms.get(CLOCK_ALARM)');
+        });
+      }
+    },
 
-		/**
-		 * Set the time label
-		 * @memberOf app.SSTime
-		 */
-		setTime: function() {
-			const t = app.Screensaver.getTemplate();
-			const showTime = app.Storage.getInt('showTime', 0);
-			if ((showTime !== 0) && t.started) {
-				t.set('time', app.Time.getStringShort());
-			} else {
-				t.set('time', '');
-			}
-		},
-	};
+    /**
+     * Set the time label
+     * @memberOf app.SSTime
+     */
+    setTime: function() {
+      const t = app.Screensaver.getTemplate();
+      const showTime = app.Storage.getInt('showTime', 0);
+      if ((showTime !== 0) && t.started) {
+        t.set('time', app.Time.getStringShort());
+      } else {
+        t.set('time', '');
+      }
+    },
+  };
 })();

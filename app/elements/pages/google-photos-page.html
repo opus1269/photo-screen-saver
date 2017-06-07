@@ -282,7 +282,7 @@
         // update the currently selected albums from the web
         // eslint-disable-next-line promise/no-nesting
         app.PhotoSource.process('useGoogle').catch((err) => {
-          app.GA.error(err.message,
+          Chrome.GA.error(err.message,
               'PhotoSource.process via GooglePhotosPage.loadAlbumList');
         });
         // set selected state on albums
@@ -291,7 +291,7 @@
         return Promise.resolve();
       }).catch((err) => {
         this.set('waitForLoad', false);
-        app.GA.error(err.message, 'GooglePhotosPage.loadAlbumList');
+        Chrome.GA.error(err.message, 'GooglePhotosPage.loadAlbumList');
         this.$.dialogTitle.innerHTML =
             app.Utils.localize('err_request_failed');
         this.$.dialogText.innerHTML = err.message;
@@ -318,7 +318,7 @@
      * @private
      */
     _refreshTapped: function() {
-      app.GA.event(app.GA.EVENT.ICON, 'refreshGoogleAlbums');
+      Chrome.GA.event(Chrome.GA.EVENT.ICON, 'refreshGoogleAlbums');
       this.loadAlbumList();
     },
 
@@ -327,7 +327,7 @@
      * @private
      */
     _selectAllTapped: function() {
-      app.GA.event(app.GA.EVENT.ICON, 'selectAllGoogleAlbums');
+      Chrome.GA.event(Chrome.GA.EVENT.ICON, 'selectAllGoogleAlbums');
       for (let i = 0; i < this.albums.length; i++) {
         const album = this.albums[i];
         if (!album.checked) {
@@ -351,7 +351,7 @@
      * @private
      */
     _deselectAllTapped: function() {
-      app.GA.event(app.GA.EVENT.ICON, 'deselectAllGoogleAlbums');
+      Chrome.GA.event(Chrome.GA.EVENT.ICON, 'deselectAllGoogleAlbums');
       this._uncheckAll();
       this.selections.splice(0, this.selections.length);
       app.Storage.set('albumSelections', this.selections);
@@ -366,7 +366,7 @@
     _albumSelectChange: function(event) {
       const album = event.model.album;
 
-      app.GA.event(app.GA.EVENT.ICON,
+      Chrome.GA.event(Chrome.GA.EVENT.ICON,
           `selectGoogleAlbum: ${album.checked}`);
 
       if (album.checked) {
@@ -397,7 +397,7 @@
      * Event: checked state changed on main toggle
      */
     _onUseGoogleChange: function() {
-      app.GA.event(app.GA.EVENT.TOGGLE,
+      Chrome.GA.event(Chrome.GA.EVENT.TOGGLE,
           `useGoogle: ${this.$.googlePhotosToggle.checked}`);
     },
 
@@ -407,7 +407,7 @@
      * @private
      */
     _showStorageErrorDialog: function(method) {
-      app.GA.error('safeSet failed', method);
+      Chrome.GA.error('safeSet failed', method);
       this.$.dialogTitle.innerHTML = app.Utils.localize('err_storage_title');
       this.$.dialogText.innerHTML = app.Utils.localize('err_storage_desc');
       this.$.errorDialog.open();
