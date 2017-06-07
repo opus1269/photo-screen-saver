@@ -83,7 +83,7 @@
       ret = `${author} / ${newType}`;
     } else {
       // no photographer name
-      ret = `${app.Utils.localize('photo_from')} ${newType}`;
+      ret = `${Chrome.Locale.localize('photo_from')} ${newType}`;
     }
     return ret;
   };

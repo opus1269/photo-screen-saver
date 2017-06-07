@@ -107,7 +107,9 @@ app.Screensaver = (function() {
    * @memberOf app.Screensaver
    */
   t._computeNoPhotosLabel = function() {
-    return `${app.Utils.localize('no')} ${app.Utils.localize('photos')}`;
+    const no = Chrome.Locale.localize('no');
+    const photos = Chrome.Locale.localize('photos');
+    return `${no} ${photos}`;
   };
 
   /**

@@ -59,7 +59,7 @@ app.SSBuilder = (function() {
      * @memberOf app.SSBuilder
      */
     setZoom: function() {
-      if (app.Utils.getChromeVersion() >= 42) {
+      if (Chrome.Utils.getChromeVersion() >= 42) {
         // override zoom factor to 1.0 - chrome 42 and later
         const chromep = new ChromePromise();
         chromep.tabs.getZoom().then((zoomFactor) => {

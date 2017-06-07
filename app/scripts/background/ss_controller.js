@@ -91,7 +91,7 @@ app.SSControl = (function() {
         return null;
       }
 
-      if (app.Utils.getChromeVersion() >= 44 && !display) {
+      if (Chrome.Utils.getChromeVersion() >= 44 && !display) {
         // Chrome supports fullscreen option on create since version 44
         winOpts.state = 'fullscreen';
       } else {

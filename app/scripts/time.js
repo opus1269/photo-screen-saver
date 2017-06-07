@@ -60,7 +60,7 @@
       if (frmt !== null) {
         format = frmt;
       }
-      const localeTime = app.Utils.localize('time_format');
+      const localeTime = Chrome.Locale.localize('time_format');
       if (format === 2) {
         // time display 24hr
         ret = true;

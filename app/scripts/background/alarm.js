@@ -81,10 +81,10 @@ app.Alarm = (function() {
   function _setBadgeText() {
     let text = '';
     if (Chrome.Storage.getBool('enabled')) {
-      text = app.Alarm.isActive() ? '' : app.Utils.localize('sleep_abbrev');
+      text = app.Alarm.isActive() ? '' : Chrome.Locale.localize('sleep_abbrev');
     } else {
-      text = Chrome.Storage.getBool('keepAwake') ? app.Utils.localize(
-          'power_abbrev') : app.Utils.localize('off_abbrev');
+      text = Chrome.Storage.getBool('keepAwake') ? Chrome.Locale.localize(
+          'power_abbrev') : Chrome.Locale.localize('off_abbrev');
     }
     chrome.browserAction.setBadgeText({text: text});
   }

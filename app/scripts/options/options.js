@@ -66,36 +66,36 @@
    */
   t.pages = [
     {
-      label: app.Utils.localize('menu_settings'), route: 'page-settings',
+      label: Chrome.Locale.localize('menu_settings'), route: 'page-settings',
       icon: 'myicons:settings', obj: null, ready: true, divider: false,
     },
     {
-      label: app.Utils.localize('menu_google'),
+      label: Chrome.Locale.localize('menu_google'),
       route: 'page-google-photos', icon: 'myicons:cloud',
       obj: _showGooglePhotosPage, ready: false, divider: false,
     },
     {
-      label: app.Utils.localize('menu_preview'), route: 'page-preview',
+      label: Chrome.Locale.localize('menu_preview'), route: 'page-preview',
       icon: 'myicons:pageview', obj: _showScreensaverPreview, ready: true,
       divider: false,
     },
     {
-      label: app.Utils.localize('menu_help'), route: 'page-help',
+      label: Chrome.Locale.localize('menu_help'), route: 'page-help',
       icon: 'myicons:help', obj: _showHelpPage, ready: false,
       divider: false,
     },
     {
-      label: app.Utils.localize('menu_support'), route: 'page-support',
+      label: Chrome.Locale.localize('menu_support'), route: 'page-support',
       icon: 'myicons:help', obj: `${EXT_URI}support`, ready: true,
       divider: true,
     },
     {
-      label: app.Utils.localize('menu_rate'), route: 'page-rate',
+      label: Chrome.Locale.localize('menu_rate'), route: 'page-rate',
       icon: 'myicons:grade', obj: `${EXT_URI}reviews`, ready: true,
       divider: false,
     },
     {
-      label: app.Utils.localize('menu_pushy'), route: 'page-pushy',
+      label: Chrome.Locale.localize('menu_pushy'), route: 'page-pushy',
       icon: 'myicons:extension', obj: PUSHY_URI, ready: true,
       divider: true,
     },
@@ -164,7 +164,7 @@
    * @memberOf app.Options
    */
   t._computeTitle = function() {
-    return app.Utils.localize('chrome_extension_name');
+    return Chrome.Locale.localize('chrome_extension_name');
   };
 
   /**
@@ -173,7 +173,7 @@
    * @memberOf app.Options
    */
   t._computeMenu = function() {
-    return app.Utils.localize('menu');
+    return Chrome.Locale.localize('menu');
   };
 
   /**
@@ -261,13 +261,13 @@
     } else if (request.message === app.Msg.STORAGE_EXCEEDED.message) {
       // Display Error Dialog if a save action exceeded the
       // localStorage limit
-      t.dialogTitle = app.Utils.localize('err_storage_title');
-      t.dialogText = app.Utils.localize('err_storage_desc');
+      t.dialogTitle = Chrome.Locale.localize('err_storage_title');
+      t.dialogText = Chrome.Locale.localize('err_storage_desc');
       t.$.errorDialog.open();
     } else if (request.message === app.Msg.PHOTO_SOURCE_FAILED.message) {
       // failed to load
       t.$.settingsPage.deselectPhotoSource(request.key);
-      t.dialogTitle = app.Utils.localize('err_photo_source_title');
+      t.dialogTitle = Chrome.Locale.localize('err_photo_source_title');
       t.dialogText = request.error;
       t.$.errorDialog.open();
     }

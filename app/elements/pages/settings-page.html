@@ -378,7 +378,7 @@
 
     _getUnit: function(name, min, max, step, mult) {
       return {
-        'name': app.Utils.localize(name),
+        'name': Chrome.Locale.localize(name),
         'min': min, 'max': max, 'step': step, 'mult': mult,
       };
     },
@@ -432,11 +432,11 @@
      */
     _computePhotoSizingMenu: function() {
       return [
-        app.Utils.localize('menu_letterbox'),
-        app.Utils.localize('menu_zoom'),
-        app.Utils.localize('menu_frame'),
-        app.Utils.localize('menu_full'),
-        app.Utils.localize('menu_random'),
+        Chrome.Locale.localize('menu_letterbox'),
+        Chrome.Locale.localize('menu_zoom'),
+        Chrome.Locale.localize('menu_frame'),
+        Chrome.Locale.localize('menu_full'),
+        Chrome.Locale.localize('menu_random'),
       ];
     },
 
@@ -447,15 +447,15 @@
      */
     _computePhotoTransitionMenu: function() {
       return [
-        app.Utils.localize('menu_scale_up'),
-        app.Utils.localize('menu_fade'),
-        app.Utils.localize('menu_slide_from_right'),
-        app.Utils.localize('menu_slide_down'),
-        app.Utils.localize('menu_spin_up'),
-        app.Utils.localize('menu_slide_up'),
-        app.Utils.localize('menu_slide_from_bottom'),
-        app.Utils.localize('menu_slide_right'),
-        app.Utils.localize('menu_random'),
+        Chrome.Locale.localize('menu_scale_up'),
+        Chrome.Locale.localize('menu_fade'),
+        Chrome.Locale.localize('menu_slide_from_right'),
+        Chrome.Locale.localize('menu_slide_down'),
+        Chrome.Locale.localize('menu_spin_up'),
+        Chrome.Locale.localize('menu_slide_up'),
+        Chrome.Locale.localize('menu_slide_from_bottom'),
+        Chrome.Locale.localize('menu_slide_right'),
+        Chrome.Locale.localize('menu_random'),
       ];
     },
 
@@ -466,9 +466,9 @@
      */
     _computeTimeFormatMenu: function() {
       return [
-        app.Utils.localize('no'),
-        app.Utils.localize('menu_12_hour'),
-        app.Utils.localize('menu_24_hour'),
+        Chrome.Locale.localize('no'),
+        Chrome.Locale.localize('menu_12_hour'),
+        Chrome.Locale.localize('menu_24_hour'),
       ];
     },
   });

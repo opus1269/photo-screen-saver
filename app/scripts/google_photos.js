@@ -159,7 +159,7 @@ app.GooglePhotos = (function() {
     const url = `${_URL_BASE}${userId}/albumid/${albumId}/${_ALBUM_QUERY}`;
     if (userId === 'default') {
       return app.Http.doGet(url, true).catch((err) => {
-        const statusMsg = `${app.Utils.localize('err_status')}: 404`;
+        const statusMsg = `${Chrome.Locale.localize('err_status')}: 404`;
         if (err.message.includes(statusMsg)) {
           // album was probably deleted
           return Promise.resolve(null);
@@ -185,7 +185,7 @@ app.GooglePhotos = (function() {
       // get list of albums
       return app.Http.doGet(url, true, true, interactive).then((root) => {
         if (!root || !root.feed || !root.feed.entry) {
-          throw new Error(app.Utils.localize('err_no_albums'));
+          throw new Error(Chrome.Locale.localize('err_no_albums'));
         }
 
         const feed = root.feed;

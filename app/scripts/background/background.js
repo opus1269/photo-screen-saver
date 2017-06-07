@@ -54,7 +54,7 @@
     chromep.contextMenus.create({
       type: 'normal',
       id: 'ENABLE_MENU',
-      title: app.Utils.localize('disable'),
+      title: Chrome.Locale.localize('disable'),
       contexts: ['browser_action'],
     }).catch((err) => {
       if (!err.message.includes('duplicate id')) {

@@ -123,8 +123,8 @@ app.Data = (function() {
    */
   function _processEnabled() {
     // update context menu text
-    const label = Chrome.Storage.getBool('enabled') ? app.Utils.localize(
-        'disable') : app.Utils.localize('enable');
+    const label = Chrome.Storage.getBool('enabled') ? Chrome.Locale.localize(
+        'disable') : Chrome.Locale.localize('enable');
     app.Alarm.updateBadgeText();
     chromep.contextMenus.update('ENABLE_MENU', {
       title: label,
@@ -160,7 +160,7 @@ app.Data = (function() {
    */
   function _getTimeFormat() {
     let ret = 2; // 24 hr
-    const format = app.Utils.localize('time_format');
+    const format = Chrome.Locale.localize('time_format');
     if (format && (format === '12')) {
       ret = 1;
     }

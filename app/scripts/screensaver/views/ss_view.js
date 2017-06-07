@@ -130,7 +130,7 @@
           }
           return Promise.resolve();
         }).catch((err) => {
-          const networkErr = app.Utils.localize('err_network');
+          const networkErr = Chrome.Locale.localize('err_network');
           if (!err.message.includes(networkErr)) {
             Chrome.GA.error(err.message, 'SSView._setLocation');
           }

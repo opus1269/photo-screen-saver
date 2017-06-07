@@ -16,65 +16,6 @@ app.Utils = (function() {
   new ExceptionHandler();
 
   return {
-    /** Get the extension's name
-     * @returns {string} Extension name
-     * @memberOf app.Utils
-     */
-    getExtensionName: function() {
-      return `chrome-extension://${chrome.runtime.id}`;
-    },
-
-    /**
-     * Get the Extension version
-     * @returns {string} Extension version
-     * @memberOf app.Utils
-     */
-    getVersion: function() {
-      const manifest = chrome.runtime.getManifest();
-      return manifest.version;
-    },
-
-    /**
-     * Get the Chrome version
-     * @see http://stackoverflow.com/a/4900484/4468645
-     * @returns {int} Chrome major version
-     * @memberOf app.Utils
-     */
-    getChromeVersion: function() {
-      const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-      return raw ? parseInt(raw[2], 10) : false;
-    },
-
-    /**
-     * Get the full Chrome version
-     * @see https://goo.gl/2ITMNO
-     * @returns {string} Chrome version
-     * @memberOf app.Utils
-     */
-    getFullChromeVersion: function() {
-      const raw = navigator.userAgent;
-      return raw ? raw : 'Unknown';
-    },
-
-    /**
-     * Get the i18n string
-     * @param {string} messageName - key in messages.json
-     * @returns {string} internationalized string
-     * @memberOf app.Utils
-     */
-    localize: function(messageName) {
-      return chrome.i18n.getMessage(messageName);
-    },
-
-    /**
-     * Get the current locale
-     * @returns {string} current locale e.g. en_US
-     * @memberOf app.Utils
-     */
-    getLocale: function() {
-      return chrome.i18n.getMessage('@@ui_locale');
-    },
-
     /**
      * Determine if a String is null or whitespace only
      * @param {?string} str - string to check

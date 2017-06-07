@@ -267,7 +267,7 @@
     loadAlbumList: function() {
       this._checkPermissions().then((allowed) => {
         if (!allowed) {
-          throw new Error(app.Utils.localize('err_auth_picasa'));
+          throw new Error(Chrome.Locale.localize('err_auth_picasa'));
         }
         this.set('waitForLoad', true);
         // call interactively
@@ -293,7 +293,7 @@
         this.set('waitForLoad', false);
         Chrome.GA.error(err.message, 'GooglePhotosPage.loadAlbumList');
         this.$.dialogTitle.innerHTML =
-            app.Utils.localize('err_request_failed');
+            Chrome.Locale.localize('err_request_failed');
         this.$.dialogText.innerHTML = err.message;
         this.$.errorDialog.open();
       });
@@ -408,8 +408,8 @@
      */
     _showStorageErrorDialog: function(method) {
       Chrome.GA.error('safeSet failed', method);
-      this.$.dialogTitle.innerHTML = app.Utils.localize('err_storage_title');
-      this.$.dialogText.innerHTML = app.Utils.localize('err_storage_desc');
+      this.$.dialogTitle.innerHTML = Chrome.Locale.localize('err_storage_title');
+      this.$.dialogText.innerHTML = Chrome.Locale.localize('err_storage_desc');
       this.$.errorDialog.open();
     },
 
@@ -463,9 +463,9 @@
      * @private
      */
     _computePhotoLabel: function(count) {
-      let ret = `${count} ${app.Utils.localize('photos')}`;
+      let ret = `${count} ${Chrome.Locale.localize('photos')}`;
       if (count === 1) {
-        ret = `${count} ${app.Utils.localize('photo')}`;
+        ret = `${count} ${Chrome.Locale.localize('photo')}`;
       }
       return ret;
     },

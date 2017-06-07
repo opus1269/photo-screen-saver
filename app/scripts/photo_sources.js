@@ -114,7 +114,7 @@
         }
         return Promise.resolve();
       }).catch((err) => {
-        if (err.message === app.Utils.localize('err_network')) {
+        if (err.message === Chrome.Locale.localize('err_network')) {
           Chrome.GA.error(err.message, 'PhotoSource.process');
         } else {
           Chrome.GA.error(err.message,
