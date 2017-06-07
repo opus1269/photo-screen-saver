@@ -114,13 +114,8 @@
         }
         return Promise.resolve();
       }).catch((err) => {
-        if (err.message === Chrome.Locale.localize('err_network')) {
-          Chrome.GA.error(err.message, 'PhotoSource.process');
-        } else {
-          Chrome.GA.error(err.message,
-              `PhotoSource.process(${this.useName})`);
-        }
-        return Promise.reject(err);
+        Chrome.GA.error(err.message, 'PhotoSource.process');
+        throw err;
       });
     } else {
       if (this.useName !== 'useGoogle') {
