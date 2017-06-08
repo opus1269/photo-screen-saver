@@ -18,12 +18,10 @@ app.SSTime = (function() {
   /**
    * Repeating alarm for updating time label
    * @type {string}
-   * @const
-   * @default
    * @private
    * @memberOf app.SSTime
    */
-  const _CLOCK_ALARM = 'updateTimeLabel';
+  let _CLOCK_ALARM;
 
   /**
    * Event: Listen for alarms
@@ -40,32 +38,23 @@ app.SSTime = (function() {
 
   return {
     /**
-     * Setup photo transition time
+     * Initialize the time display
      * @memberOf app.SSTime
      */
-    setUpTransitionTime: function() {
-      const trans = Chrome.Storage.get('transitionTime');
+    initialize: function() {
       const showTime = Chrome.Storage.getInt('showTime', 0);
-      if ((showTime !== 0) && (trans.base > 60)) {
-        // add repeating alarm to update time label
-        // if transition time is more than 1 minute
-        // and time label is showing
-        chrome.alarms.onAlarm.addListener(_onAlarm);
-
-        const chromep = new ChromePromise();
-        chromep.alarms.get(_CLOCK_ALARM).then((alarm) => {
-          if (!alarm) {
-            chrome.alarms.create(_CLOCK_ALARM, {
-              when: Date.now(),
-              periodInMinutes: 1,
-            });
-          }
-          return null;
-        }).catch((err) => {
-          Chrome.GA.error(err.message,
-              'chromep.alarms.get(CLOCK_ALARM)');
-        });
+      if (showTime === 0) {
+        return;
       }
+
+      // add repeating alarm to update time label
+      // append random string so each screensaver gets its own
+      _CLOCK_ALARM = `clock${app.Utils.randomString()}`;
+      chrome.alarms.onAlarm.addListener(_onAlarm);
+      chrome.alarms.create(_CLOCK_ALARM, {
+        when: Date.now(),
+        periodInMinutes: 1.1,
+      });
     },
 
     /**

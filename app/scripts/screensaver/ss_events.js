@@ -61,10 +61,10 @@ app.SSEvents = (function() {
     },
 
     /**
-     * Event: keydown
+     * Event: keyup
      * @memberOf app.SSEvents
      */
-    onKeyDown: function() {
+    onKeyUp: function() {
       _close();
     },
 

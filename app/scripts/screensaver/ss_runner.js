@@ -224,13 +224,17 @@ app.SSRunner = (function() {
 
     nextPage = _getNextPhoto(nextPage);
     if (nextPage !== -1) {
+      // the next photo is ready
+      if (!t.started) {
+        t.started = true;
+        app.SSTime.setTime();
+      }
+
       // update t.p.selected so the animation runs
       _VARS.lastSelected = t.p.selected;
       t.p.selected = nextPage;
-      t.started = true;
 
       // setup photo
-      app.SSTime.setTime();
       t.views[nextPage].render();
     }
 

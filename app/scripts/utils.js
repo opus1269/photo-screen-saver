@@ -19,7 +19,7 @@ app.Utils = (function() {
     /**
      * Determine if a String is null or whitespace only
      * @param {?string} str - string to check
-     * @returns {boolean} true is str is whitespace (or null)
+     * @returns {boolean} true is str is whitespace or null
      * @memberOf app.Utils
      */
     isWhiteSpace: function(str) {
@@ -33,6 +33,24 @@ app.Utils = (function() {
      */
     isWin: function() {
       return Chrome.Storage.get('os') === 'win';
+    },
+
+    /**
+     * Get a random string of the given length
+     * @param {int} [len=8] - length of generated string
+     * @returns {string} a random string
+     * @memberOf app.Utils
+     *
+     */
+    randomString: function(len = 8) {
+      const POSS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+          'abcdefghijklmnopqrstuvwxyz0123456789';
+      let text = '';
+      for (let i = 0; i < len; i++) {
+        text +=
+            POSS.charAt(Math.floor(Math.random() * POSS.length));
+      }
+      return text;
     },
 
     /**

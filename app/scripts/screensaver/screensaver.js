@@ -15,10 +15,6 @@ app.Screensaver = (function() {
 
   new ExceptionHandler();
 
-  // set selected background image
-  document.body.style.background = Chrome.Storage.get('background').
-      substring(11);
-
   /**
    * Main auto-binding template
    * @typedef {Element} app.Screensaver.Template
@@ -30,6 +26,7 @@ app.Screensaver = (function() {
    * @property {int} aniType - the animation type for photo transitions
    * @property {boolean} noPhotos - true if there are no usable photos
    * @property {boolean} started - true if the first page has been selected
+   * @property {string} time - current time label
    * @property {Function} _computeNoPhotosLabel
    * @property {Function} _OnAniFinished
    * @memberOf app.Screensaver
@@ -45,27 +42,32 @@ app.Screensaver = (function() {
   const t = document.querySelector('#t');
   t.rep = null;
   t.p = null;
-  /** @member app.Screensaver.t.photos */
   t.photos = [];
   t.views = [];
   t.sizingType = 0;
   t.aniType = 0;
   t.noPhotos = false;
   t.started = false;
+  t.time = 'time';
 
   /**
-   * Event Listener for template bound event to know when bindings
-   * have resolved and content has been stamped to the page
+   * Event: Template Bound, bindings have resolved and content has been
+   * stamped to the page
+   * @private
    * @memberOf app.Screensaver
    */
-  t.addEventListener('dom-change', function() {
+  function _onDomChange() {
+    // set selected background image
+    document.body.style.background = Chrome.Storage.get('background').
+        substring(11);
+
     Chrome.GA.page('/screensaver.html');
 
     // listen for chrome messages
     Chrome.Msg.listen(app.SSEvents.onMessage);
 
     // listen for keydown events
-    window.addEventListener('keydown', app.SSEvents.onKeyDown, false);
+    window.addEventListener('keyup', app.SSEvents.onKeyUp, false);
 
     // listen for mousemove events
     window.addEventListener('mousemove', app.SSEvents.onMouseMove, false);
@@ -76,20 +78,12 @@ app.Screensaver = (function() {
     t.rep = t.$.repeatTemplate;
     t.p = t.$.pages;
 
-    app.SSBuilder.setZoom();
-    app.SSBuilder.setupPhotoSizing();
-    _processPhotoTransitions();
-
-    // load the photos for the slide show
-    const hasPhotos = app.SSBuilder.loadPhotos();
+    const hasPhotos = app.SSBuilder.build();
     if (hasPhotos) {
-      // create the animated pages
-      app.SSBuilder.createPages();
-
       // kick off the slide show if there are photos selected
       app.SSRunner.start();
     }
-  });
+  }
 
   /**
    * Event: Slide animation finished
@@ -112,21 +106,8 @@ app.Screensaver = (function() {
     return `${no} ${photos}`;
   };
 
-  /**
-   * Process settings related to between photo transitions
-   * @private
-   * @memberOf app.Screensaver
-   */
-  function _processPhotoTransitions() {
-    let type = Chrome.Storage.getInt('photoTransition', 0);
-    if (type === 8) {
-      // pick random transition
-      type = app.Utils.getRandomInt(0, 7);
-    }
-    t.set('aniType', type);
-
-    app.SSTime.setUpTransitionTime();
-  }
+  // listen for dom-change
+  t.addEventListener('dom-change', _onDomChange);
 
   return {
     /**
@@ -146,6 +127,5 @@ app.Screensaver = (function() {
       const t = app.Screensaver.getTemplate();
       t.set('noPhotos', true);
     },
-
   };
 })();
