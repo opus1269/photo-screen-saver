@@ -35,7 +35,7 @@ app.SSBuilder = (function() {
     t.photoSizing = Chrome.Storage.getInt('photoSizing', 0);
     if (t.photoSizing === 4) {
       // pick random sizing
-      t.photoSizing = app.Utils.getRandomInt(0, 3);
+      t.photoSizing = Chrome.Utils.getRandomString(0, 3);
     }
     switch (t.photoSizing) {
       case 0:
@@ -64,7 +64,7 @@ app.SSBuilder = (function() {
     let type = Chrome.Storage.getInt('photoTransition', 0);
     if (type === 8) {
       // pick random transition
-      type = app.Utils.getRandomInt(0, 7);
+      type = Chrome.Utils.getRandomString(0, 7);
     }
     t.set('aniType', type);
 
@@ -122,7 +122,7 @@ app.SSBuilder = (function() {
 
     if (Chrome.Storage.getBool('shuffle')) {
       // randomize the order
-      app.Utils.shuffleArray(t.photos);
+      Chrome.Utils.shuffleArray(t.photos);
     }
     return true;
   }

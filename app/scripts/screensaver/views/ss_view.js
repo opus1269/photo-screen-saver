@@ -103,7 +103,7 @@
       const authorText = this.photo.label;
       const sup = this.author.querySelector('#sup');
       sup.textContent = '';
-      if (!app.Utils.isWhiteSpace(authorText) && (type === '500')) {
+      if (!Chrome.Utils.isWhiteSpace(authorText) && (type === '500')) {
         sup.textContent = 'px';
       }
     }

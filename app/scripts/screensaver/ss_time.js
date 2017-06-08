@@ -49,7 +49,7 @@ app.SSTime = (function() {
 
       // add repeating alarm to update time label
       // append random string so each screensaver gets its own
-      _CLOCK_ALARM = `clock${app.Utils.randomString()}`;
+      _CLOCK_ALARM = `clock${Chrome.Utils.getRandomString()}`;
       chrome.alarms.onAlarm.addListener(_onAlarm);
       chrome.alarms.create(_CLOCK_ALARM, {
         when: Date.now(),

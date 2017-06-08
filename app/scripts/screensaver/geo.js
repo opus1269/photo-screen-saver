@@ -94,7 +94,7 @@ app.Geo = (function() {
     get: function(point) {
       if (!Chrome.Storage.getBool('showLocation')) {
         throw new Error('showLocation is off');
-      } else if (app.Utils.isWhiteSpace(point)) {
+      } else if (Chrome.Utils.isWhiteSpace(point)) {
         throw new Error('point is empty or null');
       }
 

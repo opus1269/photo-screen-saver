@@ -151,15 +151,19 @@ app.SSControl = (function() {
         if (app.Alarm.isActive() && !isShowing) {
           app.SSControl.display(false);
         }
+        return Promise.resolve();
       } else {
-        if (!app.Utils.isWin()) {
-          // Windows 10 Creators triggers an 'active' state
-          // when the window is created so we have to skip
-          // closing here. Wouldn't need it ChromeOS handled keyboard right
-          app.SSControl.close();
-        }
+        // eslint-disable-next-line promise/no-nesting
+        return Chrome.Utils.isWindows().then((isTrue) => {
+          if (!isTrue) {
+            // Windows 10 Creators triggers an 'active' state
+            // when the window is created, so we have to skip closing here.
+            // Wouldn't need this at all if ChromeOS handled keyboard right
+            app.SSControl.close();
+          }
+          return Promise.resolve();
+        });
       }
-      return Promise.resolve();
     }).catch((err) => {
       Chrome.GA.error(err.message, 'SSControl._isShowing');
     });
