@@ -27,8 +27,8 @@ app.Screensaver = (function() {
    * @property {boolean} noPhotos - true if there are no usable photos
    * @property {boolean} started - true if the first page has been selected
    * @property {string} time - current time label
-   * @property {Function} _computeNoPhotosLabel
-   * @property {Function} _OnAniFinished
+   * @property {Function} _computeNoPhotosLabel - computed binding
+   * @property {Function} _OnAniFinished - event, slide animation finished
    * @memberOf app.Screensaver
    */
 
