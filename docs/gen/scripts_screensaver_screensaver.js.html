@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="app.Utils.html">app.Utils</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -47,7 +47,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#PICASA">PICASA</a></li>
+					<li><a href="global.html#build">build</a></li><li><a href="global.html#PICASA">PICASA</a></li>
 				</ul>
 			</li>
 			
@@ -101,10 +101,6 @@ app.Screensaver = (function() {
 
   new ExceptionHandler();
 
-  // set selected background image
-  document.body.style.background = Chrome.Storage.get('background').
-      substring(11);
-
   /**
    * Main auto-binding template
    * @typedef {Element} app.Screensaver.Template
@@ -116,8 +112,9 @@ app.Screensaver = (function() {
    * @property {int} aniType - the animation type for photo transitions
    * @property {boolean} noPhotos - true if there are no usable photos
    * @property {boolean} started - true if the first page has been selected
-   * @property {Function} _computeNoPhotosLabel
-   * @property {Function} _OnAniFinished
+   * @property {string} time - current time label
+   * @property {Function} _computeNoPhotosLabel - computed binding
+   * @property {Function} _OnAniFinished - event, slide animation finished
    * @memberOf app.Screensaver
    */
 
@@ -131,27 +128,32 @@ app.Screensaver = (function() {
   const t = document.querySelector('#t');
   t.rep = null;
   t.p = null;
-  /** @member app.Screensaver.t.photos */
   t.photos = [];
   t.views = [];
   t.sizingType = 0;
   t.aniType = 0;
   t.noPhotos = false;
   t.started = false;
+  t.time = 'time';
 
   /**
-   * Event Listener for template bound event to know when bindings
-   * have resolved and content has been stamped to the page
+   * Event: Template Bound, bindings have resolved and content has been
+   * stamped to the page
+   * @private
    * @memberOf app.Screensaver
    */
-  t.addEventListener('dom-change', function() {
+  function _onDomChange() {
+    // set selected background image
+    document.body.style.background = Chrome.Storage.get('background').
+        substring(11);
+
     Chrome.GA.page('/screensaver.html');
 
     // listen for chrome messages
     Chrome.Msg.listen(app.SSEvents.onMessage);
 
     // listen for keydown events
-    window.addEventListener('keydown', app.SSEvents.onKeyDown, false);
+    window.addEventListener('keyup', app.SSEvents.onKeyUp, false);
 
     // listen for mousemove events
     window.addEventListener('mousemove', app.SSEvents.onMouseMove, false);
@@ -162,20 +164,12 @@ app.Screensaver = (function() {
     t.rep = t.$.repeatTemplate;
     t.p = t.$.pages;
 
-    app.SSBuilder.setZoom();
-    app.SSBuilder.setupPhotoSizing();
-    _processPhotoTransitions();
-
-    // load the photos for the slide show
-    const hasPhotos = app.SSBuilder.loadPhotos();
+    const hasPhotos = app.SSBuilder.build();
     if (hasPhotos) {
-      // create the animated pages
-      app.SSBuilder.createPages();
-
       // kick off the slide show if there are photos selected
       app.SSRunner.start();
     }
-  });
+  }
 
   /**
    * Event: Slide animation finished
@@ -184,7 +178,7 @@ app.Screensaver = (function() {
   t._OnAniFinished = function() {
     // replace the previous selected with the next one from master array
     // do it here so the web request doesn't run during the animation
-    app.SSRunner.replacePhoto();
+    app.SSFinder.replacePhoto();
   };
 
   /**
@@ -198,21 +192,8 @@ app.Screensaver = (function() {
     return `${no} ${photos}`;
   };
 
-  /**
-   * Process settings related to between photo transitions
-   * @private
-   * @memberOf app.Screensaver
-   */
-  function _processPhotoTransitions() {
-    let type = Chrome.Storage.getInt('photoTransition', 0);
-    if (type === 8) {
-      // pick random transition
-      type = app.Utils.getRandomInt(0, 7);
-    }
-    t.set('aniType', type);
-
-    app.SSTime.setUpTransitionTime();
-  }
+  // listen for dom-change
+  t.addEventListener('dom-change', _onDomChange);
 
   return {
     /**
@@ -232,7 +213,6 @@ app.Screensaver = (function() {
       const t = app.Screensaver.getTemplate();
       t.set('noPhotos', true);
     },
-
   };
 })();
 </pre>
@@ -280,7 +260,7 @@ app.Screensaver = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 7th 2017, 3:02:52 pm
+		on June 8th 2017, 12:03:12 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
