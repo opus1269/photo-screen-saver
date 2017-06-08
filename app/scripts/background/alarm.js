@@ -178,7 +178,7 @@ app.Alarm = (function() {
     updateBadgeText: function() {
       // delay setting a little to make sure range check is good
       chrome.alarms.create(_ALARMS.BADGE_TEXT, {
-        when: Date.now() + 250,
+        when: Date.now() + 1000,
       });
     },
 
