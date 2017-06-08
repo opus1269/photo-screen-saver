@@ -92,7 +92,7 @@ app.Screensaver = (function() {
   t._OnAniFinished = function() {
     // replace the previous selected with the next one from master array
     // do it here so the web request doesn't run during the animation
-    app.SSRunner.replacePhoto();
+    app.SSFinder.replacePhoto();
   };
 
   /**

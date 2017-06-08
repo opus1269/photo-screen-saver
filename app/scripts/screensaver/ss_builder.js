@@ -140,7 +140,7 @@ app.SSBuilder = (function() {
       const view = app.SSView.createView(photo, t.photoSizing);
       t.push('views', view);
     }
-    app.SSRunner.setPhotosIndex(len + 1);
+    app.SSFinder.setPhotosIndex(len + 1);
 
     // force update of animated pages
     t.rep.render();
@@ -172,6 +172,8 @@ app.SSBuilder = (function() {
       if (hasPhotos) {
         // create the animated pages
         _createPages();
+        // initialize the photo finder
+        app.SSFinder.initialize();
       }
       return hasPhotos;
     },

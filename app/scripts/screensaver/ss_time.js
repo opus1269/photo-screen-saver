@@ -15,27 +15,6 @@ app.SSTime = (function() {
 
   new ExceptionHandler();
 
-  /**
-   * Repeating alarm for updating time label
-   * @type {string}
-   * @private
-   * @memberOf app.SSTime
-   */
-  let _CLOCK_ALARM;
-
-  /**
-   * Event: Listen for alarms
-   * @param {Object} alarm - chrome alarm
-   * @param {string} alarm.name - alarm type
-   * @memberOf app.SSTime
-   */
-  function _onAlarm(alarm) {
-    if (alarm.name === _CLOCK_ALARM) {
-      // update time label
-      app.SSTime.setTime();
-    }
-  }
-
   return {
     /**
      * Initialize the time display
@@ -43,18 +22,9 @@ app.SSTime = (function() {
      */
     initialize: function() {
       const showTime = Chrome.Storage.getInt('showTime', 0);
-      if (showTime === 0) {
-        return;
+      if (showTime > 0) {
+        setInterval(app.SSTime.setTime, 61 * 1000);
       }
-
-      // add repeating alarm to update time label
-      // append random string so each screensaver gets its own
-      _CLOCK_ALARM = `clock${Chrome.Utils.getRandomString()}`;
-      chrome.alarms.onAlarm.addListener(_onAlarm);
-      chrome.alarms.create(_CLOCK_ALARM, {
-        when: Date.now(),
-        periodInMinutes: 1.1,
-      });
     },
 
     /**
