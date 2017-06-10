@@ -36,7 +36,7 @@ app.SSTime = (function() {
       let label = '';
       const showTime = Chrome.Storage.getInt('showTime', 0);
       if ((showTime !== 0) && app.SSRunner.isStarted()) {
-        label = app.Time.getStringShort();
+        label = Chrome.Time.getStringShort();
       }
       app.Screensaver.setTimeLabel(label);
     },

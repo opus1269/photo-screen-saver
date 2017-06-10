@@ -134,21 +134,21 @@ app.Alarm = (function() {
 
       // create keep awake active period scheduling alarms
       if (keepAwake && (aStart !== aStop)) {
-        const startDelayMin = app.Time.getTimeDelta(aStart);
-        const stopDelayMin = app.Time.getTimeDelta(aStop);
+        const startDelayMin = Chrome.Time.getTimeDelta(aStart);
+        const stopDelayMin = Chrome.Time.getTimeDelta(aStop);
 
         chrome.alarms.create(_ALARMS.ACTIVATE, {
           delayInMinutes: startDelayMin,
-          periodInMinutes: app.Time.MIN_IN_DAY,
+          periodInMinutes: Chrome.Time.MIN_IN_DAY,
         });
         chrome.alarms.create(_ALARMS.DEACTIVATE, {
           delayInMinutes: stopDelayMin,
-          periodInMinutes: app.Time.MIN_IN_DAY,
+          periodInMinutes: Chrome.Time.MIN_IN_DAY,
         });
 
         // if we are currently outside of the active range
         // then set inactive state
-        if (!app.Time.isInRange(aStart, aStop)) {
+        if (!Chrome.Time.isInRange(aStart, aStop)) {
           _setInactiveState();
         }
       } else {
@@ -160,8 +160,8 @@ app.Alarm = (function() {
       chromep.alarms.get(_ALARMS.UPDATE_PHOTOS).then((alarm) => {
         if (!alarm) {
           chrome.alarms.create(_ALARMS.UPDATE_PHOTOS, {
-            when: Date.now() + app.Time.MSEC_IN_DAY,
-            periodInMinutes: app.Time.MIN_IN_DAY,
+            when: Date.now() + Chrome.Time.MSEC_IN_DAY,
+            periodInMinutes: Chrome.Time.MIN_IN_DAY,
           });
         }
         return Promise.resolve();
@@ -192,7 +192,7 @@ app.Alarm = (function() {
       const keepAwake = Chrome.Storage.getBool('keepAwake');
       const aStart = Chrome.Storage.get('activeStart');
       const aStop = Chrome.Storage.get('activeStop');
-      const inRange = app.Time.isInRange(aStart, aStop);
+      const inRange = Chrome.Time.isInRange(aStart, aStop);
 
       // do not display if screen saver is not enabled or
       // keepAwake scheduler is enabled and is in the inactive range
