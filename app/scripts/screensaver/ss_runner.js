@@ -19,7 +19,6 @@ app.SSRunner = (function() {
    * Instance variables
    * @type {Object}
    * @property {boolean} started - true if slideshow started
-   * @property {boolean} firstAni - true after first animation cycle
    * @property {int} lastSelected - last selected page
    * @property {int} waitTime - wait time when looking for photo in milliSecs
    * @private
@@ -27,7 +26,6 @@ app.SSRunner = (function() {
    */
   const _VARS = {
     started: false,
-    firstAni: false,
     lastSelected: -1,
     waitTime: 30000,
   };
@@ -53,10 +51,6 @@ app.SSRunner = (function() {
       // special case for first page. neon-animated-pages is configured
       // to run the entry animation for the first selection
       nextIdx = curIdx;
-    } else if (!_VARS.firstAni) {
-      // special case for first full animation. next time ready to start
-      // splicing in the new images
-      _VARS.firstAni = true;
     }
 
     nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected, prevIdx);
@@ -120,15 +114,6 @@ app.SSRunner = (function() {
      */
     isStarted: function() {
       return _VARS.started;
-    },
-
-    /**
-     * Has the first animation cycle run
-     * @returns {boolean} if first animation cycle has run
-     * @memberOf app.SSRunner
-     */
-    isAnimating: function() {
-      return _VARS.firstAni;
     },
 
     /**

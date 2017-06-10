@@ -29,8 +29,8 @@ app.SSFinder = (function() {
    */
   const _VARS = {
     photosIdx: 0,
-    replaceIdx: -1,
-    previousIdx: -1,
+    replaceIdx: 0,
+    previousIdx: 0,
     transTime: 30000,
     waitForLoad: true,
   };
@@ -102,7 +102,7 @@ app.SSFinder = (function() {
       _markPhotoBad(idx);
     }
 
-    if (app.SSRunner.isAnimating() && (t.photos.length > t.views.length)) {
+    if (t.photos.length > t.views.length) {
       let item = null;
       // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
       for (let i = 0; i < t.photos.length; i++) {
@@ -115,7 +115,7 @@ app.SSFinder = (function() {
         }
       }
 
-      if (item) {
+      if (item && !app.SSRunner.isCurrentPair(idx)) {
         // add the next image from the master list to this page
         t.views[idx].setPhoto(item);
         if (_VARS.photosIdx === t.photos.length - 1) {
@@ -123,7 +123,8 @@ app.SSFinder = (function() {
         } else {
           _VARS.photosIdx += 1;
         }
-      } else {
+      }
+      if (!item) {
         // all photos bad
         app.Screensaver.setNoPhotos();
       }
