@@ -56,6 +56,12 @@
   "photos": {
     "message": "photos"
   },
+  "paused": {
+    "message": "Paused"
+  },
+  "no_photos": {
+    "message": "No Photos"
+  },
   "seconds": {
     "message": "seconds"
   },
