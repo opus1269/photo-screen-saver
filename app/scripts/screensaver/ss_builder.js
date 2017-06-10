@@ -123,6 +123,10 @@ app.SSBuilder = (function() {
     if (Chrome.Storage.getBool('shuffle')) {
       // randomize the order
       Chrome.Utils.shuffleArray(t.photos);
+      // rename
+      t.photos.forEach((photo, index) => {
+        photo.name = 'photo' + index;
+      });
     }
     return true;
   }
@@ -140,7 +144,7 @@ app.SSBuilder = (function() {
       const view = app.SSView.createView(photo, t.photoSizing);
       t.push('views', view);
     }
-    app.SSFinder.setPhotosIndex(len + 1);
+    app.SSFinder.setPhotosIndex(len);
 
     // force update of animated pages
     t.rep.render();
