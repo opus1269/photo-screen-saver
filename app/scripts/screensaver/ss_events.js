@@ -38,66 +38,111 @@ app.SSEvents = (function() {
     }, 750);
   }
 
-  return {
-    // noinspection JSUnusedLocalSymbols
-    /**
-     * Event: Fired when a message is sent from either an extension<br>
-     * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
-     * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-     * @param {Chrome.Msg.Message} request - details for the message
-     * @param {Object} [sender] - MessageSender object
-     * @param {Function} [response] - function to call once after processing
-     * @returns {boolean} true if asynchronous
-     * @memberOf app.SSEvents
-     */
-    onMessage: function(request, sender, response) {
-      if (request.message === app.Msg.SS_CLOSE.message) {
+  // noinspection JSUnusedLocalSymbols
+  /**
+   * Event: Fired when a message is sent from either an extension<br>
+   * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
+   * @see https://developer.chrome.com/extensions/runtime#event-onMessage
+   * @param {Chrome.Msg.Message} request - details for the message
+   * @param {Object} [sender] - MessageSender object
+   * @param {Function} [response] - function to call once after processing
+   * @returns {boolean} true if asynchronous
+   * @private
+   * @memberOf app.SSEvents
+   */
+  function _onMessage(request, sender, response) {
+    if (request.message === app.Msg.SS_CLOSE.message) {
+      _close();
+    } else if (request.message === app.Msg.SS_IS_SHOWING.message) {
+      // let people know we are here
+      response({message: 'OK'});
+    }
+    return false;
+  }
+
+  /**
+   * Event: keyup
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
+   * @param {KeyboardEvent} ev - KeyboardEvent
+   * @private
+   * @memberOf app.SSEvents
+   */
+  function _onKey(ev) {
+    const keyName = ev.key;
+    if (!app.SSRunner.isStarted()) {
+      _close();
+      return;
+    }
+    switch (keyName) {
+      case ' ':
+        Chrome.GA.event(Chrome.GA.EVENT.KEY_COMMAND, 'SS-Toggle-Paused');
+        app.SSRunner.togglePaused();
+        break;
+      case 'ArrowLeft':
+        Chrome.GA.event(Chrome.GA.EVENT.KEY_COMMAND, 'SS-Back');
+        app.SSRunner.back();
+        break;
+      case 'ArrowRight':
+        Chrome.GA.event(Chrome.GA.EVENT.KEY_COMMAND, 'SS-Forward');
+        app.SSRunner.forward();
+        break;
+      default:
         _close();
-      } else if (request.message === app.Msg.SS_IS_SHOWING.message) {
-        // let people know we are here
-        response({message: 'OK'});
-      }
-      return false;
-    },
+        break;
+    }
+  }
 
+  /**
+   * Event: mousemove
+   * @param {MouseEvent} ev - mousemove event
+   * @private
+   * @memberOf app.SSEvents
+   */
+  function _onMouseMove(ev) {
+    if (_MOUSE_START.x && _MOUSE_START.y) {
+      const deltaX = Math.abs(ev.clientX - _MOUSE_START.x);
+      const deltaY = Math.abs(ev.clientY - _MOUSE_START.y);
+      if (Math.max(deltaX, deltaY) > 10) {
+        // close after a minimum amount of mouse movement
+        _close();
+      }
+    } else {
+      // first move, set values
+      _MOUSE_START.x = ev.clientX;
+      _MOUSE_START.y = ev.clientY;
+    }
+  }
+
+  /**
+   * Event: mouse click
+   * @private
+   * @memberOf app.SSEvents
+   */
+  function _onMouseClick() {
+    const t = app.Screensaver.getTemplate();
+    if (app.SSRunner.isStarted()) {
+      app.Photo.showSource(t.views[t.p.selected].photo);
+    }
+    _close();
+  }
+
+  return {
     /**
-     * Event: keyup
+     * Add the event listeners
      * @memberOf app.SSEvents
      */
-    onKeyUp: function() {
-      _close();
-    },
+    initialize: function() {
+      // listen for chrome messages
+      Chrome.Msg.listen(_onMessage);
 
-    /**
-     * Event: mousemove
-     * @param {Event} ev - mousemove event
-     * @memberOf app.SSEvents
-     */
-    onMouseMove: function(ev) {
-      if (_MOUSE_START.x && _MOUSE_START.y) {
-        const deltaX = Math.abs(ev.clientX - _MOUSE_START.x);
-        const deltaY = Math.abs(ev.clientY - _MOUSE_START.y);
-        if (Math.max(deltaX, deltaY) > 10) {
-          // close after a minimum amount of mouse movement
-          _close();
-        }
-      } else {
-        // first move, set values
-        _MOUSE_START.x = ev.clientX;
-        _MOUSE_START.y = ev.clientY;
-      }
-    },
+      // listen for key events
+      window.addEventListener('keydown', _onKey, false);
 
-    /**
-     * Event: mouse click
-     * @memberOf app.SSEvents
-     */
-    onMouseClick: function() {
-      const t = app.Screensaver.getTemplate();
-      if (t.started) {
-        app.Photo.showSource(t.views[t.p.selected].photo);
-      }
-      _close();
+      // listen for mousemove events
+      window.addEventListener('mousemove', _onMouseMove, false);
+
+      // listen for mouse click events
+      window.addEventListener('click', _onMouseClick, false);
     },
   };
 })();

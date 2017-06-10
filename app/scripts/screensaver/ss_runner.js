@@ -113,8 +113,30 @@ app.SSRunner = (function() {
     },
 
     /**
-     * Has the first animation cycle run
+     * Set state when there are no usable photos
+     * @memberOf app.SSRunner
+     */
+    setNoPhotos: function() {
+      window.clearTimeout(_VARS.timeOutId);
+      _VARS.noPhotos = true;
+      const label = Chrome.Locale.localize('no_photos');
+      app.Screensaver.setNoPhotosLabel(label);
+    },
+
+    /**
+     * Has the first page run
      * @returns {boolean} if animation has started
+     * @memberOf app.SSRunner
+     */
+    isStarted: function() {
+      // todo use this - return _VARS.started;
+      const t = app.Screensaver.getTemplate();
+      return t.started;
+    },
+
+    /**
+     * Has the first animation cycle run
+     * @returns {boolean} if first animation cycle has run
      * @memberOf app.SSRunner
      */
     isAnimating: function() {

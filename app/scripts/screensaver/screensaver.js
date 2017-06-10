@@ -63,17 +63,8 @@ app.Screensaver = (function() {
 
     Chrome.GA.page('/screensaver.html');
 
-    // listen for chrome messages
-    Chrome.Msg.listen(app.SSEvents.onMessage);
-
-    // listen for keydown events
-    window.addEventListener('keyup', app.SSEvents.onKeyUp, false);
-
-    // listen for mousemove events
-    window.addEventListener('mousemove', app.SSEvents.onMouseMove, false);
-
-    // listen for mouse click events
-    window.addEventListener('click', app.SSEvents.onMouseClick, false);
+    // register event listeners
+    app.SSEvents.initialize();
 
     t.rep = t.$.repeatTemplate;
     t.p = t.$.pages;
