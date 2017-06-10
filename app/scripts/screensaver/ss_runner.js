@@ -18,6 +18,7 @@ app.SSRunner = (function() {
   /**
    * Instance variables
    * @type {Object}
+   * @property {boolean} started - true if slideshow started
    * @property {boolean} firstAni - true after first animation cycle
    * @property {int} lastSelected - last selected page
    * @property {int} waitTime - wait time when looking for photo in milliSecs
@@ -25,6 +26,7 @@ app.SSRunner = (function() {
    * @memberOf app.SSRunner
    */
   const _VARS = {
+    started: false,
     firstAni: false,
     lastSelected: -1,
     waitTime: 30000,
@@ -43,11 +45,11 @@ app.SSRunner = (function() {
       return;
     }
 
-    const curIdx = !t.started ? 0 : t.p.selected;
+    const curIdx = !app.SSRunner.isStarted() ? 0 : t.p.selected;
     const prevIdx = (curIdx > 0) ? curIdx - 1 : t.views.length - 1;
     let nextIdx = (curIdx === t.views.length - 1) ? 0 : curIdx + 1;
 
-    if (!t.started) {
+    if (!app.SSRunner.isStarted()) {
       // special case for first page. neon-animated-pages is configured
       // to run the entry animation for the first selection
       nextIdx = curIdx;
@@ -60,8 +62,8 @@ app.SSRunner = (function() {
     nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected, prevIdx);
     if (nextIdx !== -1) {
       // the next photo is ready
-      if (!t.started) {
-        t.started = true;
+      if (!app.SSRunner.isStarted()) {
+        _VARS.started = true;
         app.SSTime.setTime();
       }
 
@@ -89,7 +91,6 @@ app.SSRunner = (function() {
       if (transTime) {
         app.SSRunner.setWaitTime(transTime.base * 1000);
       }
-
       // slight delay at beginning so we have a smooth start
       window.setTimeout(_runShow, 2000);
     },
@@ -118,9 +119,7 @@ app.SSRunner = (function() {
      * @memberOf app.SSRunner
      */
     isStarted: function() {
-      // todo use this - return _VARS.started;
-      const t = app.Screensaver.getTemplate();
-      return t.started;
+      return _VARS.started;
     },
 
     /**

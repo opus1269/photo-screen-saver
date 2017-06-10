@@ -28,8 +28,6 @@ app.Screensaver = (function() {
    * @property {string} noPhotosLabel - label when no photos are useable
    * @property {string} timeLabel - current time label
    * @property {string} pausedLabel - slideshow paused label
-   * @property {boolean} started - true if the first page has been selected
-   * @property {Function} _computeNoPhotosLabel - computed binding
    * @property {Function} _OnAniFinished - event, slide animation finished
    * @memberOf app.Screensaver
    */
@@ -49,7 +47,6 @@ app.Screensaver = (function() {
   t.sizingType = 0;
   t.aniType = 0;
   t.noPhotos = false;
-  t.started = false;
   t.noPhotosLabel = '';
   t.timeLabel = '';
   t.pausedLabel = '';

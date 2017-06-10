@@ -33,10 +33,9 @@ app.SSTime = (function() {
      * @memberOf app.SSTime
      */
     setTime: function() {
-      const t = app.Screensaver.getTemplate();
       let label = '';
       const showTime = Chrome.Storage.getInt('showTime', 0);
-      if ((showTime !== 0) && t.started) {
+      if ((showTime !== 0) && app.SSRunner.isStarted()) {
         label = app.Time.getStringShort();
       }
       app.Screensaver.setTimeLabel(label);
