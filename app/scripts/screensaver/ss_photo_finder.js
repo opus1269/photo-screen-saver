@@ -103,21 +103,29 @@ app.SSFinder = (function() {
     }
 
     if (app.SSRunner.isAnimating() && (t.photos.length > t.views.length)) {
-      let item;
-      for (let i = _VARS.photosIdx; i < t.photos.length; i++) {
+      let item = null;
+      // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
+      for (let i = 0; i < t.photos.length; i++) {
+        const index = (i + _VARS.photosIdx) % t.photos.length;
         // find a url that is ok, AFAWK
-        item = t.photos[i];
+        item = t.photos[index];
         if (item.name !== 'skip') {
-          _VARS.photosIdx = i;
+          _VARS.photosIdx = index;
           break;
         }
       }
-      // add the next image from the master list to this page
-      t.views[idx].setPhoto(item);
-      if (_VARS.photosIdx === t.photos.length - 1) {
-        _VARS.photosIdx = 0;
+
+      if (item) {
+        // add the next image from the master list to this page
+        t.views[idx].setPhoto(item);
+        if (_VARS.photosIdx === t.photos.length - 1) {
+          _VARS.photosIdx = 0;
+        } else {
+          _VARS.photosIdx += 1;
+        }
       } else {
-        _VARS.photosIdx += 1;
+        // all photos bad
+        app.Screensaver.setNoPhotos();
       }
     }
   }
