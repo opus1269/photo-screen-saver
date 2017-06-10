@@ -25,8 +25,10 @@ app.Screensaver = (function() {
    * @property {int} sizingType - the way the photos are rendered
    * @property {int} aniType - the animation type for photo transitions
    * @property {boolean} noPhotos - true if there are no usable photos
+   * @property {string} noPhotosLabel - label when no photos are useable
+   * @property {string} timeLabel - current time label
+   * @property {string} pausedLabel - slideshow paused label
    * @property {boolean} started - true if the first page has been selected
-   * @property {string} time - current time label
    * @property {Function} _computeNoPhotosLabel - computed binding
    * @property {Function} _OnAniFinished - event, slide animation finished
    * @memberOf app.Screensaver
@@ -48,7 +50,9 @@ app.Screensaver = (function() {
   t.aniType = 0;
   t.noPhotos = false;
   t.started = false;
-  t.time = 'time';
+  t.noPhotosLabel = '';
+  t.timeLabel = '';
+  t.pausedLabel = '';
 
   /**
    * Event: Template Bound, bindings have resolved and content has been
@@ -86,17 +90,6 @@ app.Screensaver = (function() {
     app.SSFinder.replacePhoto();
   };
 
-  /**
-   * Computed binding: No photos label
-   * @returns {string} i18n label
-   * @memberOf app.Screensaver
-   */
-  t._computeNoPhotosLabel = function() {
-    const no = Chrome.Locale.localize('no');
-    const photos = Chrome.Locale.localize('photos');
-    return `${no} ${photos}`;
-  };
-
   // listen for dom-change
   t.addEventListener('dom-change', _onDomChange);
 
@@ -117,6 +110,16 @@ app.Screensaver = (function() {
     setNoPhotos: function() {
       const t = app.Screensaver.getTemplate();
       t.set('noPhotos', true);
+      t.noPhotosLabel = Chrome.Locale.localize('no_photos');
+    },
+
+    /**
+     * Set the time label
+     * @param {string} label - current time
+     * @memberOf app.Screensaver
+     */
+    setTimeLabel: function(label) {
+      t.timeLabel = label;
     },
   };
 })();

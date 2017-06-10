@@ -23,6 +23,7 @@ app.SSTime = (function() {
     initialize: function() {
       const showTime = Chrome.Storage.getInt('showTime', 0);
       if (showTime > 0) {
+        // update current time once a minute
         setInterval(app.SSTime.setTime, 61 * 1000);
       }
     },
@@ -33,12 +34,12 @@ app.SSTime = (function() {
      */
     setTime: function() {
       const t = app.Screensaver.getTemplate();
+      let label = '';
       const showTime = Chrome.Storage.getInt('showTime', 0);
       if ((showTime !== 0) && t.started) {
-        t.set('time', app.Time.getStringShort());
-      } else {
-        t.set('time', '');
+        label = app.Time.getStringShort();
       }
+      app.Screensaver.setTimeLabel(label);
     },
   };
 })();

@@ -40,7 +40,7 @@
                 sizing="{{sizingType}}"
                 preload>
             </iron-image>
-            <div class="time">{{time}}</div>
+            <div class="time">{{timeLabel}}</div>
             <div class="author">{{view.photo.label}}<sup id="sup"></sup></div>
             <div class="location">{{view.photo.location}}</div>
           </section>
@@ -48,7 +48,7 @@
       </template>
     </neon-animated-pages>
   </div>
-  <div id="noPhotos" hidden$="{{!noPhotos}}">{{_computeNoPhotosLabel()}}</div>
+  <div id="noPhotos" hidden$="{{!noPhotos}}">{{noPhotosLabel}}</div>
 </template>
 
 <script src="../bower_components/chrome-extension-utils/chrome-promise.js"></script>

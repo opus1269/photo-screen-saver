@@ -113,17 +113,6 @@ app.SSRunner = (function() {
     },
 
     /**
-     * Set state when there are no usable photos
-     * @memberOf app.SSRunner
-     */
-    setNoPhotos: function() {
-      window.clearTimeout(_VARS.timeOutId);
-      _VARS.noPhotos = true;
-      const label = Chrome.Locale.localize('no_photos');
-      app.Screensaver.setNoPhotosLabel(label);
-    },
-
-    /**
      * Has the first page run
      * @returns {boolean} if animation has started
      * @memberOf app.SSRunner
