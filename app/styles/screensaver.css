@@ -11,15 +11,15 @@ body {
 	height: 100vh;
 	margin: 0;
 	overflow: hidden;
-	/*cursor: none;*/  // todo
+	cursor: none;
 }
 
 .fadeOut {
-	animation: SHW 2s 1s;
+	animation: fadeOut 1s 2s;
 	animation-fill-mode: both
 }
 
-@keyframes SHW {
+@keyframes fadeOut {
 	from {
 		opacity: 1
 	}
@@ -28,10 +28,14 @@ body {
 	}
 }
 
-.fade {
-	opacity: 0;
-	-webkit-transition: opacity 2s linear 1s;
-	transition: opacity 2s linear 1s;
+.vcr {
+  position: fixed;
+  width: 15vh;
+  height: 15vh;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.0;
 }
 
 .time {
@@ -70,16 +74,6 @@ body {
 	margin: 0;
 	color: white;
 	opacity: 1.0;
-}
-
-.vcr {
-	position: fixed;
-	width: 15vh;
-	height: 15vh;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	opacity: 0.0;
 }
 
 .noPhotos {
