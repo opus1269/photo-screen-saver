@@ -175,7 +175,7 @@
      * Get the name of the photo in this view
      * @returns {string} name of photo
      */
-    getName() {
+    getPhotoName() {
       return this.photo.name;
     }
 
