@@ -126,6 +126,13 @@ app.Screensaver = (function() {
      */
     setPaused: function(paused) {
       t.paused = paused;
+      if (paused) {
+        t.$.pauseImage.classList.add('fadeOut');
+        t.$.playImage.classList.remove('fadeOut');
+      } else {
+        t.$.playImage.classList.add('fadeOut');
+        t.$.pauseImage.classList.remove('fadeOut');
+      }
     },
   };
 })();

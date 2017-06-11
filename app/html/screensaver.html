@@ -49,7 +49,8 @@
     </neon-animated-pages>
   </div>
   <div class="noPhotos" hidden$="{{!noPhotos}}">{{noPhotosLabel}}</div>
-  <iron-image class="pause" src="../images/pause.png" sizing="contain" preload hidden$="{{!paused}}"></iron-image>
+  <iron-image id="pauseImage" class="vcr" src="../images/pause.png" sizing="contain" preload hidden$="{{!paused}}"></iron-image>
+  <iron-image id="playImage" class="vcr" src="../images/play.png" sizing="contain" preload hidden$="{{paused}}"></iron-image>
 </template>
 
 <script src="../bower_components/chrome-extension-utils/chrome-promise.js"></script>

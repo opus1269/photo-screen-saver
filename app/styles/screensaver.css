@@ -11,7 +11,27 @@ body {
 	height: 100vh;
 	margin: 0;
 	overflow: hidden;
-	cursor: none;
+	/*cursor: none;*/  // todo
+}
+
+.fadeOut {
+	animation: SHW 2s 1s;
+	animation-fill-mode: both
+}
+
+@keyframes SHW {
+	from {
+		opacity: 1
+	}
+	to {
+		opacity: 0
+	}
+}
+
+.fade {
+	opacity: 0;
+	-webkit-transition: opacity 2s linear 1s;
+	transition: opacity 2s linear 1s;
 }
 
 .time {
@@ -52,24 +72,14 @@ body {
 	opacity: 1.0;
 }
 
-.pause {
+.vcr {
 	position: fixed;
 	width: 15vh;
 	height: 15vh;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-}
-
-.paused {
-	font-size: 5vh;
-	font-weight: 600;
-	position: fixed;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	color: rgba(48, 63, 159, 1);
-	opacity: .8;
+	opacity: 0.0;
 }
 
 .noPhotos {
