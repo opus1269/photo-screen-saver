@@ -141,18 +141,23 @@ app.SSFinder = (function() {
     if (t.photos.length > t.views.length) {
       let pos = 0;
       let newIdx = _VARS.photosIdx;
-      for (let i = _VARS.photosIdx; i < t.photos.length; i++) {
-        newIdx = i;
-        const item = t.photos[i];
+      // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
+      for (let i = 0; i < t.photos.length; i++) {
+        const index = (i + _VARS.photosIdx) % t.photos.length;
+        newIdx = index;
+        const item = t.photos[index];
         if (item.name !== 'skip') {
           if (app.SSRunner.isCurrentPair(pos)) {
             // don't replace current animation pair
+            pos++;
             continue;
           }
           // replace photo
-          t.views[pos].setPhoto(item);
+          if (pos < t.views.length) {
+            t.views[pos].setPhoto(item);
+          }
           pos++;
-          if (pos === t.views.length) {
+          if (pos >= t.views.length) {
             break;
           }
         }
