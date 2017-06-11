@@ -52,7 +52,18 @@ body {
 	opacity: 1.0;
 }
 
-#noPhotos {
+.paused {
+	font-size: 5vh;
+	font-weight: 600;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	color: rgba(48, 63, 159, 1);
+	opacity: .8;
+}
+
+.noPhotos {
 	font-size: 5vh;
 	font-weight: 600;
 	position: fixed;

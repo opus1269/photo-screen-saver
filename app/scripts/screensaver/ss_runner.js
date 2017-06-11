@@ -21,6 +21,8 @@ app.SSRunner = (function() {
    * @property {boolean} started - true if slideshow started
    * @property {int} lastSelected - last selected page
    * @property {int} waitTime - wait time when looking for photo in milliSecs
+   * @property {boolean} paused - is screensaver paused
+   * @property {number} timeOutId - id of setTimeout
    * @private
    * @memberOf app.SSRunner
    */
@@ -28,6 +30,8 @@ app.SSRunner = (function() {
     started: false,
     lastSelected: -1,
     waitTime: 30000,
+    paused: false,
+    timeOutId: 0,
   };
 
   /**
@@ -56,6 +60,7 @@ app.SSRunner = (function() {
     nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected, prevIdx);
     if (nextIdx !== -1) {
       // the next photo is ready
+
       if (!app.SSRunner.isStarted()) {
         _VARS.started = true;
         app.SSTime.setTime();
@@ -70,9 +75,22 @@ app.SSRunner = (function() {
     }
 
     // set the next timeout, then call ourselves - runs unless interrupted
-    window.setTimeout(() => {
+    _VARS.timeOutId = window.setTimeout(() => {
       _runShow();
     }, _VARS.waitTime);
+  }
+
+  /**
+   * Restart the slideshow
+   * @param {?int} [newIdx=null] optional idx to use for current idx
+   * @memberOf app.SSRunner
+   */
+  function _restart(newIdx = null) {
+    const transTime = Chrome.Storage.get('transitionTime');
+    if (transTime) {
+      app.SSRunner.setWaitTime(transTime.base * 1000);
+    }
+    _runShow(newIdx);
   }
 
   return {
@@ -115,6 +133,14 @@ app.SSRunner = (function() {
     isStarted: function() {
       return _VARS.started;
     },
+    /**
+     * Are we paused
+     * @returns {boolean} true if paused
+     * @memberOf app.SSRunner
+     */
+    isPaused: function() {
+      return _VARS.paused;
+    },
 
     /**
      * Is the given idx a part of the current animation pair
@@ -125,6 +151,65 @@ app.SSRunner = (function() {
     isCurrentPair: function(idx) {
       const t = app.Screensaver.getTemplate();
       return ((idx === t.p.selected) || (idx === _VARS.lastSelected));
+    },
+
+    /**
+     * Toggle paused state of the slideshow
+     * @param {?int} [newIdx=null] optional idx to use for current idx
+     * @memberOf app.SSRunner
+     */
+    togglePaused: function(newIdx = null) {
+      if (_VARS.started) {
+        let label = '';
+        _VARS.paused = !_VARS.paused;
+        if (_VARS.paused) {
+          window.clearTimeout(_VARS.timeOutId);
+          label = Chrome.Locale.localize('paused');
+          app.Screensaver.setPausedLabel(label);
+        } else {
+          app.Screensaver.setPausedLabel(label);
+          _restart(newIdx);
+        }
+      }
+    },
+
+    /**
+     * Forward one slide
+     * @memberOf app.SSRunner
+     */
+    forward: function() {
+      if (_VARS.started) {
+        if (app.SSRunner.isPaused()) {
+          app.SSRunner.togglePaused();
+          app.SSRunner.togglePaused();
+        } else {
+          window.clearTimeout(_VARS.timeOutId);
+          _restart();
+        }
+      }
+    },
+
+    /**
+     * Backup one slide
+     * @memberOf app.SSRunner
+     */
+    back: function() {
+      if (_VARS.started) {
+        const t = app.Screensaver.getTemplate();
+        _VARS.historyIdx = Math.max(_VARS.historyIdx - 2, 0);
+        const viewIdx = _VARS.history[_VARS.historyIdx].viewIdx;
+        const photoName = _VARS.history[_VARS.historyIdx + 1].name;
+        const photoIdx = photoName.match(/\d+/)[0];
+        app.SSFinder.setPhotosIndex(photoIdx);
+        // _VARS.lastSelected = _VARS.lastLastSelected;
+        if (app.SSRunner.isPaused()) {
+          app.SSRunner.togglePaused(viewIdx);
+          app.SSRunner.togglePaused();
+        } else {
+          window.clearTimeout(_VARS.timeOutId);
+          _restart(viewIdx);
+        }
+      }
     },
   };
 })();

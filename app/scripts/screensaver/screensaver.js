@@ -118,5 +118,14 @@ app.Screensaver = (function() {
     setTimeLabel: function(label) {
       t.timeLabel = label;
     },
+
+    /**
+     * Set the state when slideshow is paused
+     * @param {string} label - paused label
+     * @memberOf app.Screensaver
+     */
+    setPausedLabel: function(label) {
+      t.pausedLabel = label;
+    },
   };
 })();
