@@ -160,14 +160,11 @@ app.SSRunner = (function() {
      */
     togglePaused: function(newIdx = null) {
       if (_VARS.started) {
-        let label = '';
         _VARS.paused = !_VARS.paused;
+        app.Screensaver.setPaused(_VARS.paused);
         if (_VARS.paused) {
           window.clearTimeout(_VARS.timeOutId);
-          label = Chrome.Locale.localize('paused');
-          app.Screensaver.setPausedLabel(label);
         } else {
-          app.Screensaver.setPausedLabel(label);
           _restart(newIdx);
         }
       }

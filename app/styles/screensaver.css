@@ -52,6 +52,15 @@ body {
 	opacity: 1.0;
 }
 
+.pause {
+	position: fixed;
+	width: 15vh;
+	height: 15vh;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
 .paused {
 	font-size: 5vh;
 	font-weight: 600;

@@ -24,10 +24,10 @@ app.Screensaver = (function() {
    * @property {Array<app.SSView>} views - array of views
    * @property {int} sizingType - the way the photos are rendered
    * @property {int} aniType - the animation type for photo transitions
+   * @property {boolean} paused - true if slideshow paused
    * @property {boolean} noPhotos - true if there are no usable photos
    * @property {string} noPhotosLabel - label when no photos are useable
    * @property {string} timeLabel - current time label
-   * @property {string} pausedLabel - slideshow paused label
    * @property {Function} _OnAniFinished - event, slide animation finished
    * @memberOf app.Screensaver
    */
@@ -46,10 +46,10 @@ app.Screensaver = (function() {
   t.views = [];
   t.sizingType = 0;
   t.aniType = 0;
+  t.paused = false;
   t.noPhotos = false;
   t.noPhotosLabel = '';
   t.timeLabel = '';
-  t.pausedLabel = '';
 
   /**
    * Event: Template Bound, bindings have resolved and content has been
@@ -121,11 +121,11 @@ app.Screensaver = (function() {
 
     /**
      * Set the state when slideshow is paused
-     * @param {string} label - paused label
+     * @param {boolean} paused - paused state
      * @memberOf app.Screensaver
      */
-    setPausedLabel: function(label) {
-      t.pausedLabel = label;
+    setPaused: function(paused) {
+      t.paused = paused;
     },
   };
 })();
