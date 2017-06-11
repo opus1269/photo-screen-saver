@@ -216,6 +216,15 @@ app.SSFinder = (function() {
     },
 
     /**
+     * Get the index into [t.photos]{@link app.Screensaver.t}
+     * @returns {int} idx - array index
+     * @memberOf app.SSFinder
+     */
+    getPhotosIndex: function() {
+      return _VARS.photosIdx;
+    },
+
+    /**
      * Set the index into [t.photos]{@link app.Screensaver.t}
      * @param {int} idx - array index
      * @memberOf app.SSFinder

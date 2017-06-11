@@ -29,25 +29,30 @@ app.SSRunner = (function() {
   const _VARS = {
     started: false,
     lastSelected: -1,
+    lastLastSelected: -1,
     waitTime: 30000,
     paused: false,
     timeOutId: 0,
+    history: [],
+    historyIdx: -1,
   };
 
   /**
    * Called at fixed time intervals to cycle through the photos
    * Potentially runs forever
+   * @param {?int} [newIdx=null] override selected
    * @private
    * @memberOf app.SSRunner
    */
-  function _runShow() {
+  function _runShow(newIdx = null) {
     const t = app.Screensaver.getTemplate();
     if (t.noPhotos) {
       // no usable photos to show
       return;
     }
 
-    const curIdx = !app.SSRunner.isStarted() ? 0 : t.p.selected;
+    let curIdx = (newIdx === null) ? t.p.selected : newIdx;
+    curIdx = !app.SSRunner.isStarted() ? 0 : curIdx;
     const prevIdx = (curIdx > 0) ? curIdx - 1 : t.views.length - 1;
     let nextIdx = (curIdx === t.views.length - 1) ? 0 : curIdx + 1;
 
@@ -61,12 +66,27 @@ app.SSRunner = (function() {
     if (nextIdx !== -1) {
       // the next photo is ready
 
+      // track history
+      const idx = _VARS.historyIdx;
+      const len = _VARS.history.length;
+      if ((newIdx === null) && (idx === len)) {
+        // add newest photo
+        const photoName = t.views[curIdx].photo.name;
+        const photoIdx = photoName.match(/\d+/)[0];
+        _VARS.history.push({
+          viewsIdx: curIdx,
+          photosIdx: photoIdx,
+        });
+      }
+      _VARS.historyIdx++;
+
       if (!app.SSRunner.isStarted()) {
         _VARS.started = true;
         app.SSTime.setTime();
       }
 
       // update t.p.selected so the animation runs
+      _VARS.lastLastSelected = _VARS.lastSelected;
       _VARS.lastSelected = t.p.selected;
       t.p.selected = nextIdx;
 
@@ -192,19 +212,18 @@ app.SSRunner = (function() {
      */
     back: function() {
       if (_VARS.started) {
-        const t = app.Screensaver.getTemplate();
-        _VARS.historyIdx = Math.max(_VARS.historyIdx - 2, 0);
-        const viewIdx = _VARS.history[_VARS.historyIdx].viewIdx;
-        const photoName = _VARS.history[_VARS.historyIdx + 1].name;
-        const photoIdx = photoName.match(/\d+/)[0];
-        app.SSFinder.setPhotosIndex(photoIdx);
-        // _VARS.lastSelected = _VARS.lastLastSelected;
+        let idx = _VARS.historyIdx - 2;
+        idx = Math.max(idx, 0);
+        _VARS.historyIdx = idx;
+        const photosIdx = _VARS.history[idx].photosIdx;
+        const viewsIdx = _VARS.history[idx].viewsIdx;
+        app.SSFinder.setPhotosIndex(photosIdx);
         if (app.SSRunner.isPaused()) {
-          app.SSRunner.togglePaused(viewIdx);
+          app.SSRunner.togglePaused(viewsIdx);
           app.SSRunner.togglePaused();
         } else {
           window.clearTimeout(_VARS.timeOutId);
-          _restart(viewIdx);
+          _restart(viewsIdx);
         }
       }
     },
