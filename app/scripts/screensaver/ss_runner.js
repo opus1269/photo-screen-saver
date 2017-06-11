@@ -38,8 +38,57 @@ app.SSRunner = (function() {
   };
 
   /**
-   * Called at fixed time intervals to cycle through the photos
-   * Potentially runs forever
+   * Restart the slideshow
+   * @param {?int} [newIdx=null] optional idx to use for current idx
+   * @memberOf app.SSRunner
+   */
+  function _restart(newIdx = null) {
+    const transTime = Chrome.Storage.get('transitionTime');
+    if (transTime) {
+      app.SSRunner.setWaitTime(transTime.base * 1000);
+    }
+    _runShow(newIdx);
+  }
+
+  /**
+   * Increment the slide show manually
+   * @param {?int} [newIdx=null] optional idx to use for current idx
+   * @memberOf app.SSRunner
+   */
+  function _step(newIdx = null) {
+    if (app.SSRunner.isPaused()) {
+      app.SSRunner.togglePaused(newIdx);
+      app.SSRunner.togglePaused();
+    } else {
+      window.clearTimeout(_VARS.timeOutId);
+      _restart(newIdx);
+    }
+  }
+
+  /**
+   * Track the history of the photo traversal
+   * @param {?int} newIdx - if not null, a request from the back command
+   * @param {int} curIdx - the current selection
+   * @private
+   */
+  function _trackHistory(newIdx, curIdx) {
+    const t = app.Screensaver.getTemplate();
+    const idx = _VARS.historyIdx;
+    const len = _VARS.history.length;
+    if ((newIdx === null) && (idx === len)) {
+      // add newest photo
+      const photoName = t.views[curIdx].getPhotoName();
+      const photoIdx = photoName.match(/\d+/)[0];
+      _VARS.history.push({
+        viewsIdx: curIdx,
+        photosIdx: photoIdx,
+      });
+    }
+    _VARS.historyIdx++;
+  }
+
+  /**
+   * Self called at fixed time intervals to cycle through the photos
    * @param {?int} [newIdx=null] override selected
    * @private
    * @memberOf app.SSRunner
@@ -66,19 +115,8 @@ app.SSRunner = (function() {
     if (nextIdx !== -1) {
       // the next photo is ready
 
-      // track history
-      const idx = _VARS.historyIdx;
-      const len = _VARS.history.length;
-      if ((newIdx === null) && (idx === len)) {
-        // add newest photo
-        const photoName = t.views[curIdx].photo.name;
-        const photoIdx = photoName.match(/\d+/)[0];
-        _VARS.history.push({
-          viewsIdx: curIdx,
-          photosIdx: photoIdx,
-        });
-      }
-      _VARS.historyIdx++;
+      // track the photo history
+      _trackHistory(newIdx, curIdx);
 
       if (!app.SSRunner.isStarted()) {
         _VARS.started = true;
@@ -98,19 +136,6 @@ app.SSRunner = (function() {
     _VARS.timeOutId = window.setTimeout(() => {
       _runShow();
     }, _VARS.waitTime);
-  }
-
-  /**
-   * Restart the slideshow
-   * @param {?int} [newIdx=null] optional idx to use for current idx
-   * @memberOf app.SSRunner
-   */
-  function _restart(newIdx = null) {
-    const transTime = Chrome.Storage.get('transitionTime');
-    if (transTime) {
-      app.SSRunner.setWaitTime(transTime.base * 1000);
-    }
-    _runShow(newIdx);
   }
 
   return {
@@ -196,13 +221,7 @@ app.SSRunner = (function() {
      */
     forward: function() {
       if (_VARS.started) {
-        if (app.SSRunner.isPaused()) {
-          app.SSRunner.togglePaused();
-          app.SSRunner.togglePaused();
-        } else {
-          window.clearTimeout(_VARS.timeOutId);
-          _restart();
-        }
+        _step();
       }
     },
 
@@ -212,19 +231,21 @@ app.SSRunner = (function() {
      */
     back: function() {
       if (_VARS.started) {
+        const t = app.Screensaver.getTemplate();
         let idx = _VARS.historyIdx - 2;
-        idx = Math.max(idx, 0);
+        let viewsIdx;
+        idx = Math.max(idx, -1);
         _VARS.historyIdx = idx;
-        const photosIdx = _VARS.history[idx].photosIdx;
-        const viewsIdx = _VARS.history[idx].viewsIdx;
-        app.SSFinder.setPhotosIndex(photosIdx);
-        if (app.SSRunner.isPaused()) {
-          app.SSRunner.togglePaused(viewsIdx);
-          app.SSRunner.togglePaused();
+        if (idx >= 0) {
+          const photosIdx = _VARS.history[idx].photosIdx;
+          app.SSFinder.setPhotosIndex(photosIdx);
+          viewsIdx = _VARS.history[idx].viewsIdx;
+          t.views[viewsIdx].setPhoto(t.photos[photosIdx]);
+          t.views[viewsIdx].render();
         } else {
-          window.clearTimeout(_VARS.timeOutId);
-          _restart(viewsIdx);
+          viewsIdx = -1;
         }
+        _step(viewsIdx);
       }
     },
   };
