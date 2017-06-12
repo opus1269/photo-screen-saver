@@ -16,6 +16,19 @@ app.SSRunner = (function() {
   new ExceptionHandler();
 
   /**
+   * Slide show history
+   * @const
+   * @type {{arr: Array, idx: number, max: number}}
+   * @private
+   * @memberOf app.SSRunner
+   */
+  const history = {
+    arr: [],
+    idx: -1,
+    max: 100,
+  };
+
+  /**
    * Instance variables
    * @type {Object}
    * @property {boolean} started - true if slideshow started
@@ -23,9 +36,6 @@ app.SSRunner = (function() {
    * @property {int} waitTime - wait time when looking for photo in milliSecs
    * @property {boolean} paused - is screensaver paused
    * @property {number} timeOutId - id of setTimeout
-   * @property {Object} history - slide show history
-   * @property {int} historyIdx - index into history
-   * @property {int} maxHistory - max size of history
    * @private
    * @memberOf app.SSRunner
    */
@@ -35,15 +45,11 @@ app.SSRunner = (function() {
     waitTime: 30000,
     paused: false,
     timeOutId: 0,
-    history: {
-      arr: [],
-      idx: -1,
-      max: 100,
-    },
   };
 
   /**
    * Stop the animation
+   * @private
    * @memberOf app.SSRunner
    */
   function _stop() {
@@ -55,6 +61,7 @@ app.SSRunner = (function() {
   /**
    * Restart the slideshow
    * @param {?int} [newIdx=null] optional idx to use for current idx
+   * @private
    * @memberOf app.SSRunner
    */
   function _restart(newIdx = null) {
@@ -68,6 +75,7 @@ app.SSRunner = (function() {
   /**
    * Increment the slide show manually
    * @param {?int} [newIdx=null] optional idx to use for current idx
+   * @private
    * @memberOf app.SSRunner
    */
   function _step(newIdx = null) {
@@ -85,33 +93,34 @@ app.SSRunner = (function() {
    * @param {?int} newIdx - if not null, a request from the back command
    * @param {int} selection - the current selection
    * @private
+   * @memberOf app.SSRunner
    */
   function _trackHistory(newIdx, selection) {
     const t = app.Screensaver.getTemplate();
-    const idx = _VARS.history.idx;
-    const len = _VARS.history.arr.length;
+    const idx = history.idx;
+    const len = history.arr.length;
     if ((newIdx === null) && (idx === len - 1)) {
       // add newest photo
       const photoName = t.views[selection].getPhotoName();
       const photoIdx = photoName.match(/\d+/)[0];
-      _VARS.history.arr.push({
+      history.arr.push({
         viewsIdx: selection,
         lastViewsIdx: _VARS.lastSelected,
         photosIdx: photoIdx,
       });
     }
 
-    if (_VARS.history.arr.length > _VARS.history.max) {
+    if (history.arr.length > history.max) {
       // limit history size
-      _VARS.history.arr.shift();
-      _VARS.history.idx--;
-      _VARS.history.idx = Math.max(_VARS.history.idx, -1);
+      history.arr.shift();
+      history.idx--;
+      history.idx = Math.max(history.idx, -1);
     }
 
-    _VARS.history.idx++;
-    if (_VARS.history.idx === _VARS.history.max) {
+    history.idx++;
+    if (history.idx === history.max) {
       // reset pointer to beginning
-      _VARS.history.idx = 0;
+      history.idx = 0;
     }
   }
 
@@ -176,7 +185,7 @@ app.SSRunner = (function() {
       if (transTime) {
         app.SSRunner.setWaitTime(transTime.base * 1000);
       }
-      _VARS.history.max = Math.min(t.photos.length, _VARS.history.max);
+      history.max = Math.min(t.photos.length, history.max);
 
       // start slide show. slight delay at beginning so we have a smooth start
       window.setTimeout(_runShow, 2000);
@@ -261,20 +270,20 @@ app.SSRunner = (function() {
      */
     back: function() {
       if (_VARS.started) {
-        if (_VARS.history.idx <= 0) {
+        if (history.idx <= 0) {
           // at beginning
           return;
         }
 
         const t = app.Screensaver.getTemplate();
-        let idx = _VARS.history.idx - 2;
-        _VARS.history.idx = idx;
+        let idx = history.idx - 2;
+        history.idx = idx;
         let viewsIdx;
         if (idx >= 0) {
-          const photosIdx = _VARS.history.arr[idx].photosIdx;
+          const photosIdx = history.arr[idx].photosIdx;
           app.SSFinder.setPhotosIndex(photosIdx);
-          viewsIdx = _VARS.history.arr[idx].viewsIdx;
-          _VARS.lastSelected = _VARS.history.arr[idx].lastViewsIdx;
+          viewsIdx = history.arr[idx].viewsIdx;
+          _VARS.lastSelected = history.arr[idx].lastViewsIdx;
           t.views[viewsIdx].setPhoto(t.photos[photosIdx]);
           t.views[viewsIdx].render();
         } else {
