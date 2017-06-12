@@ -23,18 +23,21 @@ app.SSRunner = (function() {
    * @property {int} waitTime - wait time when looking for photo in milliSecs
    * @property {boolean} paused - is screensaver paused
    * @property {number} timeOutId - id of setTimeout
+   * @property {Array} history - slide show history
+   * @property {int} historyIdx - index into history
+   * @property {int} maxHistory - max size of history
    * @private
    * @memberOf app.SSRunner
    */
   const _VARS = {
     started: false,
     lastSelected: -1,
-    lastLastSelected: -1,
     waitTime: 30000,
     paused: false,
     timeOutId: 0,
     history: [],
     historyIdx: -1,
+    maxHistory: 100, // todo
   };
 
   /**
@@ -84,7 +87,19 @@ app.SSRunner = (function() {
         photosIdx: photoIdx,
       });
     }
+
+    if (_VARS.history.length > _VARS.maxHistory) {
+      // limit history size
+      _VARS.history.shift();
+      _VARS.historyIdx--;
+      _VARS.historyIdx = Math.max(_VARS.historyIdx, -1);
+    }
+
     _VARS.historyIdx++;
+    if (_VARS.historyIdx === _VARS.maxHistory) {
+      // reset pointer to beginning
+      _VARS.historyIdx = 0;
+    }
   }
 
   /**
@@ -123,8 +138,10 @@ app.SSRunner = (function() {
         app.SSTime.setTime();
       }
 
+      console.log(nextIdx, t.views[nextIdx].photo.name);
+      console.log(_VARS.historyIdx, _VARS.history[_VARS.historyIdx]);
+
       // update t.p.selected so the animation runs
-      _VARS.lastLastSelected = _VARS.lastSelected;
       _VARS.lastSelected = t.p.selected;
       t.p.selected = nextIdx;
 
@@ -144,11 +161,14 @@ app.SSRunner = (function() {
      * @memberOf app.SSRunner
      */
     start: function() {
+      const t = app.Screensaver.getTemplate();
       const transTime = Chrome.Storage.get('transitionTime');
       if (transTime) {
         app.SSRunner.setWaitTime(transTime.base * 1000);
       }
-      // slight delay at beginning so we have a smooth start
+      _VARS.maxHistory = Math.min(t.photos.length, _VARS.maxHistory);
+
+      // start slide show. slight delay at beginning so we have a smooth start
       window.setTimeout(_runShow, 2000);
     },
 
@@ -231,11 +251,15 @@ app.SSRunner = (function() {
      */
     back: function() {
       if (_VARS.started) {
+        if (_VARS.historyIdx === 0) {
+          // at beginning
+          return;
+        }
+
         const t = app.Screensaver.getTemplate();
         let idx = _VARS.historyIdx - 2;
-        let viewsIdx;
-        idx = Math.max(idx, -1);
         _VARS.historyIdx = idx;
+        let viewsIdx;
         if (idx >= 0) {
           const photosIdx = _VARS.history[idx].photosIdx;
           app.SSFinder.setPhotosIndex(photosIdx);
