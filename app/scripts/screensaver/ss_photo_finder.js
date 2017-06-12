@@ -43,7 +43,7 @@ app.SSFinder = (function() {
    */
   function _markPhotoBad(idx) {
     const t = app.Screensaver.getTemplate();
-    const name = t.views[idx].getName();
+    const name = t.views[idx].getPhotoName();
     const index = t.photos.findIndex((item) => {
       return item.name === name;
     });
