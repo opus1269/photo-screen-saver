@@ -34,6 +34,7 @@ app.SSRunner = (function() {
    * @property {boolean} started - true if slideshow started
    * @property {int} lastSelected - last selected page
    * @property {int} waitTime - wait time when looking for photo in milliSecs
+   * @property {boolean} interactive - is interaction allowed
    * @property {boolean} paused - is screensaver paused
    * @property {number} timeOutId - id of setTimeout
    * @private
@@ -43,6 +44,7 @@ app.SSRunner = (function() {
     started: false,
     lastSelected: -1,
     waitTime: 30000,
+    interactive: false,
     paused: false,
     timeOutId: 0,
   };
@@ -185,6 +187,8 @@ app.SSRunner = (function() {
       if (transTime) {
         app.SSRunner.setWaitTime(transTime.base * 1000);
       }
+      _VARS.interactive = Chrome.Storage.get('interactive');
+
       history.max = Math.min(t.photos.length, history.max);
 
       // start slide show. slight delay at beginning so we have a smooth start
@@ -217,6 +221,15 @@ app.SSRunner = (function() {
     isStarted: function() {
       return _VARS.started;
     },
+    /**
+     * Is interactive mode allowed
+     * @returns {boolean} true if allowed
+     * @memberOf app.SSRunner
+     */
+    isInteractive: function() {
+      return _VARS.interactive;
+    },
+
     /**
      * Are we paused
      * @returns {boolean} true if paused

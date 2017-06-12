@@ -31,7 +31,16 @@
     "message": "Enable (Alt+Shift+Q)"
   },
   "display_now": {
-    "message": "Display now (Alt+Shift+D)"
+    "message": "Display now"
+  },
+  "ss_toggle_paused": {
+    "message": "Toggle paused"
+  },
+  "ss_forward": {
+    "message": "Forward one photo"
+  },
+  "ss_back": {
+    "message": "Back one photo"
   },
   "help": {
     "message": "Help"
@@ -55,9 +64,6 @@
   },
   "photos": {
     "message": "photos"
-  },
-  "paused": {
-    "message": "Paused"
   },
   "no_photos": {
     "message": "No Photos"
@@ -187,6 +193,12 @@
   },
   "setting_photo_transition": {
     "message": "Photo transition method"
+  },
+  "setting_interactive": {
+    "message": "Interactive mode"
+  },
+  "setting_interactive_desc": {
+    "message": "Toggle paused (Ctrl+Space), Back (Ctrl+LeftArrow), Forward (Ctrl+RightArrow)"
   },
   "setting_show_time": {
     "message": "Show time"

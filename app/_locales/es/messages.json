@@ -25,13 +25,22 @@
     "message": "esté Apagado"
   },
   "disable": {
-    "message": "Deshabilitar (Alt+Shift+Q)"
+    "message": "Deshabilitar (Alt+Mayus+Q)"
   },
   "enable": {
-    "message": "Habilitar (Alt+Shift+Q)"
+    "message": "Habilitar (Alt+Mayus+Q)"
   },
   "display_now": {
-    "message": "Mostrar ahora (Alt+Shift+D)"
+    "message": "Mostrar ahora"
+  },
+  "ss_toggle_paused": {
+    "message": "Alternar pausado"
+  },
+  "ss_forward": {
+    "message": "Reenviar una foto"
+  },
+  "ss_back": {
+    "message": "Volver una foto"
   },
   "help": {
     "message": "Ayuda"
@@ -55,9 +64,6 @@
   },
   "photos": {
     "message": "fotos"
-  },
-  "paused": {
-    "message": "En Pausa"
   },
   "no_photos": {
     "message": "No Hay Fotos"
@@ -187,6 +193,12 @@
   },
   "setting_photo_transition": {
     "message": "Foto método de transición"
+  },
+  "setting_interactive": {
+    "message": "Modo interactivo"
+  },
+  "setting_interactive_desc": {
+    "message": "Alternar pausado (Ctrl+Espacio), Atrás (Ctrl+Flecha izquierda), Adelante (Ctrl+Flecha derecha)"
   },
   "setting_show_time": {
     "message": "Tiempo de la funcion"

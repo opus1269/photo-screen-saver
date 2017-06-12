@@ -31,7 +31,16 @@
     "message": "Schakel in (Alt+Shift+Q)"
   },
   "display_now": {
-    "message": "Toon de screensaver (Alt+Shift+D)"
+    "message": "Toon de screensaver"
+  },
+  "ss_toggle_paused": {
+    "message": "Wissel pauze"
+  },
+  "ss_forward": {
+    "message": "Doorsturen een foto "
+  },
+  "ss_back": {
+    "message": "Terug een foto"
   },
   "help": {
     "message": "Hulp"
@@ -55,9 +64,6 @@
   },
   "photos": {
     "message": "foto's"
-  },
-  "paused": {
-    "message": "Onderbroken"
   },
   "no_photos": {
     "message": "Geen Foto's"
@@ -187,6 +193,12 @@
   },
   "setting_photo_transition": {
     "message": "Foto overgang methode"
+  },
+  "setting_interactive": {
+    "message": "Interactieve modus"
+  },
+  "setting_interactive_desc": {
+    "message": "Wissel pauze (Ctrl+Spatie), Terug (Ctrl+Pijl-links), Doorsturen (Ctrl+Pijl-rechts)"
   },
   "setting_show_time": {
     "message": "Weergavetijd"

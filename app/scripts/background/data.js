@@ -25,7 +25,7 @@ app.Data = (function() {
    * @private
    * @memberOf app.Data
    */
-  const _DATA_VERSION = 12;
+  const _DATA_VERSION = 13;
 
   /**
    * A number and associated units
@@ -47,6 +47,7 @@ app.Data = (function() {
    * @property {boolean} shuffle - randomize photo order
    * @property {int} photoSizing - photo display type
    * @property {int} photoTransition - transition animation
+   * @property {boolean} interactive - vcr controls for screensaver
    * @property {int} showTime - time display format
    * @property {boolean} largeTime - display larger time label
    * @property {boolean} showPhotog - display name on own photos
@@ -89,6 +90,7 @@ app.Data = (function() {
     'shuffle': true,
     'photoSizing': 0,
     'photoTransition': 4,
+    'interactive': true,
     'showTime': 2, // 24 hr format
     'largeTime': false,
     'showPhotog': true,

@@ -7,17 +7,32 @@
 	"minimum_chrome_version": "38",
 	"default_locale": "en_US",
 	"commands": {
-		"toggle-enabled": {
+    "show-screensaver": {
+      "description": "__MSG_display_now__"
+    },
+    "toggle-enabled": {
 			"suggested_key": {
 				"default": "Alt+Shift+Q"
 			},
 			"description": "__MSG_toggle_enabled__"
 		},
-		"show-screensaver": {
+		"ss-toggle-paused": {
 			"suggested_key": {
-				"default": "Alt+Shift+D"
+				"default": "Ctrl+Space"
 			},
-			"description": "__MSG_display_now__"
+			"description": "__MSG_ss_toggle_paused__"
+		},
+		"ss-back": {
+			"suggested_key": {
+				"default": "Ctrl+Left"
+			},
+			"description": "__MSG_ss_back__"
+		},
+		"ss-forward": {
+			"suggested_key": {
+				"default": "Ctrl+Right"
+			},
+			"description": "__MSG_ss_forward__"
 		}
 	},
 	"icons": {

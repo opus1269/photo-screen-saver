@@ -38,6 +38,29 @@ app.SSEvents = (function() {
     }, 750);
   }
 
+  /**
+   * Event: Fired when a registered command is activated using
+   * a keyboard shortcut.
+   * @see https://developer.chrome.com/extensions/commands#event-onCommand
+   * @param {string} cmd - keyboard command
+   * @private
+   * @memberOf app.SSEvents
+   */
+  function _onKeyCommand(cmd) {
+    if (app.SSRunner.isInteractive()) {
+      if (cmd === 'ss-toggle-paused') {
+        Chrome.GA.event(Chrome.GA.EVENT.KEY_COMMAND, `${cmd}`);
+        app.SSRunner.togglePaused();
+      } else if (cmd === 'ss-forward') {
+        Chrome.GA.event(Chrome.GA.EVENT.KEY_COMMAND, `${cmd}`);
+        app.SSRunner.forward();
+      } else if (cmd === 'ss-back') {
+        Chrome.GA.event(Chrome.GA.EVENT.KEY_COMMAND, `${cmd}`);
+        app.SSRunner.back();
+      }
+    }
+  }
+
   // noinspection JSUnusedLocalSymbols
   /**
    * Event: Fired when a message is sent from either an extension<br>
@@ -61,7 +84,7 @@ app.SSEvents = (function() {
   }
 
   /**
-   * Event: keyup
+   * Event: KeyboardEvent
    * @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
    * @param {KeyboardEvent} ev - KeyboardEvent
    * @private
@@ -74,17 +97,14 @@ app.SSEvents = (function() {
       return;
     }
     switch (keyName) {
+      case 'Control':
       case ' ':
-        Chrome.GA.event(Chrome.GA.EVENT.KEY_COMMAND, 'SS-Toggle-Paused');
-        app.SSRunner.togglePaused();
-        break;
       case 'ArrowLeft':
-        Chrome.GA.event(Chrome.GA.EVENT.KEY_COMMAND, 'SS-Back');
-        app.SSRunner.back();
-        break;
       case 'ArrowRight':
-        Chrome.GA.event(Chrome.GA.EVENT.KEY_COMMAND, 'SS-Forward');
-        app.SSRunner.forward();
+        // fallthrough
+        if (!app.SSRunner.isInteractive()) {
+          _close();
+        }
         break;
       default:
         _close();
@@ -143,6 +163,9 @@ app.SSEvents = (function() {
 
       // listen for mouse click events
       window.addEventListener('click', _onMouseClick, false);
+
+      // listen for special keyboard commands
+      chrome.commands.onCommand.addListener(_onKeyCommand);
     },
   };
 })();

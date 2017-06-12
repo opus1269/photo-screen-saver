@@ -124,6 +124,11 @@
                 items="{{_computePhotoTransitionMenu()}}"
                 disabled$="[[!enabled]]"></setting-dropdown>
             <setting-toggle
+                name="interactive"
+                main-label="{{localize('setting_interactive')}}"
+                secondary-label="{{localize('setting_interactive_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
                 name="shuffle"
                 main-label="{{localize('setting_shuffle')}}"
                 secondary-label="{{localize('setting_shuffle_desc')}}"
