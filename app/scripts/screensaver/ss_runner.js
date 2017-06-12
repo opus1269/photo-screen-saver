@@ -37,8 +37,18 @@ app.SSRunner = (function() {
     timeOutId: 0,
     history: [],
     historyIdx: -1,
-    maxHistory: 100, // todo
+    maxHistory: 100,
   };
+
+  /**
+   * Stop the animation
+   * @memberOf app.SSRunner
+   */
+  function _stop() {
+    window.clearTimeout(_VARS.timeOutId);
+    // because animation may be interrupted
+    app.SSFinder.replacePhoto();
+  }
 
   /**
    * Restart the slideshow
@@ -63,7 +73,7 @@ app.SSRunner = (function() {
       app.SSRunner.togglePaused(newIdx);
       app.SSRunner.togglePaused();
     } else {
-      window.clearTimeout(_VARS.timeOutId);
+      _stop();
       _restart(newIdx);
     }
   }
@@ -71,19 +81,19 @@ app.SSRunner = (function() {
   /**
    * Track the history of the photo traversal
    * @param {?int} newIdx - if not null, a request from the back command
-   * @param {int} curIdx - the current selection
+   * @param {int} selection - the current selection
    * @private
    */
-  function _trackHistory(newIdx, curIdx) {
+  function _trackHistory(newIdx, selection) {
     const t = app.Screensaver.getTemplate();
     const idx = _VARS.historyIdx;
     const len = _VARS.history.length;
     if ((newIdx === null) && (idx === len - 1)) {
       // add newest photo
-      const photoName = t.views[curIdx].getPhotoName();
+      const photoName = t.views[selection].getPhotoName();
       const photoIdx = photoName.match(/\d+/)[0];
       _VARS.history.push({
-        viewsIdx: curIdx,
+        viewsIdx: selection,
         lastViewsIdx: _VARS.lastSelected,
         photosIdx: photoIdx,
       });
@@ -139,17 +149,12 @@ app.SSRunner = (function() {
         app.SSTime.setTime();
       }
 
-      // todo
-      console.log(nextIdx, t.views[nextIdx].photo.name);
-      console.log(_VARS.historyIdx, _VARS.history[_VARS.historyIdx]);
-
       // setup photo
       t.views[nextIdx].render();
 
       // update t.p.selected so the animation runs
       _VARS.lastSelected = t.p.selected;
       t.p.selected = nextIdx;
-
     }
 
     // set the next timeout, then call ourselves - runs unless interrupted
@@ -231,7 +236,7 @@ app.SSRunner = (function() {
         _VARS.paused = !_VARS.paused;
         app.Screensaver.setPaused(_VARS.paused);
         if (_VARS.paused) {
-          window.clearTimeout(_VARS.timeOutId);
+          _stop();
         } else {
           _restart(newIdx);
         }
@@ -254,7 +259,7 @@ app.SSRunner = (function() {
      */
     back: function() {
       if (_VARS.started) {
-        if (_VARS.historyIdx === -1) {
+        if (_VARS.historyIdx <= 0) {
           // at beginning
           return;
         }
