@@ -78,12 +78,13 @@ app.SSRunner = (function() {
     const t = app.Screensaver.getTemplate();
     const idx = _VARS.historyIdx;
     const len = _VARS.history.length;
-    if ((newIdx === null) && (idx === len)) {
+    if ((newIdx === null) && (idx === len - 1)) {
       // add newest photo
       const photoName = t.views[curIdx].getPhotoName();
       const photoIdx = photoName.match(/\d+/)[0];
       _VARS.history.push({
         viewsIdx: curIdx,
+        lastViewsIdx: _VARS.lastSelected,
         photosIdx: photoIdx,
       });
     }
@@ -120,10 +121,10 @@ app.SSRunner = (function() {
     const prevIdx = (curIdx > 0) ? curIdx - 1 : t.views.length - 1;
     let nextIdx = (curIdx === t.views.length - 1) ? 0 : curIdx + 1;
 
-    if (!app.SSRunner.isStarted()) {
+    if (!app.SSRunner.isStarted() || (newIdx === -1)) {
       // special case for first page. neon-animated-pages is configured
       // to run the entry animation for the first selection
-      nextIdx = curIdx;
+      nextIdx = 0;
     }
 
     nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected, prevIdx);
@@ -131,22 +132,24 @@ app.SSRunner = (function() {
       // the next photo is ready
 
       // track the photo history
-      _trackHistory(newIdx, curIdx);
+      _trackHistory(newIdx, nextIdx);
 
       if (!app.SSRunner.isStarted()) {
         _VARS.started = true;
         app.SSTime.setTime();
       }
 
+      // todo
       console.log(nextIdx, t.views[nextIdx].photo.name);
       console.log(_VARS.historyIdx, _VARS.history[_VARS.historyIdx]);
+
+      // setup photo
+      t.views[nextIdx].render();
 
       // update t.p.selected so the animation runs
       _VARS.lastSelected = t.p.selected;
       t.p.selected = nextIdx;
 
-      // setup photo
-      t.views[nextIdx].render();
     }
 
     // set the next timeout, then call ourselves - runs unless interrupted
@@ -251,7 +254,7 @@ app.SSRunner = (function() {
      */
     back: function() {
       if (_VARS.started) {
-        if (_VARS.historyIdx === 0) {
+        if (_VARS.historyIdx === -1) {
           // at beginning
           return;
         }
@@ -264,9 +267,11 @@ app.SSRunner = (function() {
           const photosIdx = _VARS.history[idx].photosIdx;
           app.SSFinder.setPhotosIndex(photosIdx);
           viewsIdx = _VARS.history[idx].viewsIdx;
+          _VARS.lastSelected = _VARS.history[idx].lastViewsIdx;
           t.views[viewsIdx].setPhoto(t.photos[photosIdx]);
           t.views[viewsIdx].render();
         } else {
+          _VARS.lastSelected = -1;
           viewsIdx = -1;
         }
         _step(viewsIdx);
