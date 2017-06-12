@@ -90,7 +90,7 @@ app.Data = (function() {
     'shuffle': true,
     'photoSizing': 0,
     'photoTransition': 4,
-    'interactive': true,
+    'interactive': false,
     'showTime': 2, // 24 hr format
     'largeTime': false,
     'showPhotog': true,
