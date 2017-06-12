@@ -23,7 +23,7 @@ app.SSRunner = (function() {
    * @property {int} waitTime - wait time when looking for photo in milliSecs
    * @property {boolean} paused - is screensaver paused
    * @property {number} timeOutId - id of setTimeout
-   * @property {Array} history - slide show history
+   * @property {Object} history - slide show history
    * @property {int} historyIdx - index into history
    * @property {int} maxHistory - max size of history
    * @private
@@ -35,9 +35,11 @@ app.SSRunner = (function() {
     waitTime: 30000,
     paused: false,
     timeOutId: 0,
-    history: [],
-    historyIdx: -1,
-    maxHistory: 100,
+    history: {
+      arr: [],
+      idx: -1,
+      max: 100,
+    },
   };
 
   /**
@@ -86,30 +88,30 @@ app.SSRunner = (function() {
    */
   function _trackHistory(newIdx, selection) {
     const t = app.Screensaver.getTemplate();
-    const idx = _VARS.historyIdx;
-    const len = _VARS.history.length;
+    const idx = _VARS.history.idx;
+    const len = _VARS.history.arr.length;
     if ((newIdx === null) && (idx === len - 1)) {
       // add newest photo
       const photoName = t.views[selection].getPhotoName();
       const photoIdx = photoName.match(/\d+/)[0];
-      _VARS.history.push({
+      _VARS.history.arr.push({
         viewsIdx: selection,
         lastViewsIdx: _VARS.lastSelected,
         photosIdx: photoIdx,
       });
     }
 
-    if (_VARS.history.length > _VARS.maxHistory) {
+    if (_VARS.history.arr.length > _VARS.history.max) {
       // limit history size
-      _VARS.history.shift();
-      _VARS.historyIdx--;
-      _VARS.historyIdx = Math.max(_VARS.historyIdx, -1);
+      _VARS.history.arr.shift();
+      _VARS.history.idx--;
+      _VARS.history.idx = Math.max(_VARS.history.idx, -1);
     }
 
-    _VARS.historyIdx++;
-    if (_VARS.historyIdx === _VARS.maxHistory) {
+    _VARS.history.idx++;
+    if (_VARS.history.idx === _VARS.history.max) {
       // reset pointer to beginning
-      _VARS.historyIdx = 0;
+      _VARS.history.idx = 0;
     }
   }
 
@@ -174,7 +176,7 @@ app.SSRunner = (function() {
       if (transTime) {
         app.SSRunner.setWaitTime(transTime.base * 1000);
       }
-      _VARS.maxHistory = Math.min(t.photos.length, _VARS.maxHistory);
+      _VARS.history.max = Math.min(t.photos.length, _VARS.history.max);
 
       // start slide show. slight delay at beginning so we have a smooth start
       window.setTimeout(_runShow, 2000);
@@ -259,20 +261,20 @@ app.SSRunner = (function() {
      */
     back: function() {
       if (_VARS.started) {
-        if (_VARS.historyIdx <= 0) {
+        if (_VARS.history.idx <= 0) {
           // at beginning
           return;
         }
 
         const t = app.Screensaver.getTemplate();
-        let idx = _VARS.historyIdx - 2;
-        _VARS.historyIdx = idx;
+        let idx = _VARS.history.idx - 2;
+        _VARS.history.idx = idx;
         let viewsIdx;
         if (idx >= 0) {
-          const photosIdx = _VARS.history[idx].photosIdx;
+          const photosIdx = _VARS.history.arr[idx].photosIdx;
           app.SSFinder.setPhotosIndex(photosIdx);
-          viewsIdx = _VARS.history[idx].viewsIdx;
-          _VARS.lastSelected = _VARS.history[idx].lastViewsIdx;
+          viewsIdx = _VARS.history.arr[idx].viewsIdx;
+          _VARS.lastSelected = _VARS.history.arr[idx].lastViewsIdx;
           t.views[viewsIdx].setPhoto(t.photos[photosIdx]);
           t.views[viewsIdx].render();
         } else {
