@@ -25,7 +25,7 @@ app.SSRunner = (function() {
   const history = {
     arr: [],
     idx: -1,
-    max: 100,
+    max: 18,
   };
 
   /**
@@ -149,6 +149,11 @@ app.SSRunner = (function() {
       // to run the entry animation for the first selection
       nextIdx = 0;
     }
+
+    // if (newIdx === null) {
+    //   // add next photo from master array
+    //   app.SSFinder.replacePhoto();
+    // }
 
     nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected, prevIdx);
     if (nextIdx !== -1) {
@@ -300,18 +305,27 @@ app.SSRunner = (function() {
         const t = app.Screensaver.getTemplate();
         let idx = history.idx - 2;
         history.idx = idx;
-        let viewsIdx;
-        if (idx >= 0) {
-          const photosIdx = history.arr[idx].photosIdx;
-          app.SSFinder.setPhotosIndex(photosIdx);
-          viewsIdx = history.arr[idx].viewsIdx;
-          _VARS.lastSelected = history.arr[idx].lastViewsIdx;
-          t.views[viewsIdx].setPhoto(t.photos[photosIdx]);
-          t.views[viewsIdx].render();
-        } else {
-          _VARS.lastSelected = -1;
-          viewsIdx = -1;
+        if (idx < 0) {
+          if (history.arr.length === history.max) {
+            // wrap around
+            idx = history.arr.length - 1;
+          } else {
+            // backup to beginning before cycling through
+            // history at least once
+            _VARS.lastSelected = -1;
+            _step(-1);
+            return;
+          }
         }
+
+        // update state from history
+        const photosIdx = history.arr[idx].photosIdx;
+        app.SSFinder.setPhotosIndex(photosIdx);
+        const viewsIdx = history.arr[idx].viewsIdx;
+        _VARS.lastSelected = history.arr[idx].lastViewsIdx;
+        t.views[viewsIdx].setPhoto(t.photos[photosIdx]);
+        t.views[viewsIdx].render();
+
         _step(viewsIdx);
       }
     },
