@@ -59,19 +59,29 @@ app.Flickr = (function() {
     /** @(type) {PhotoSource.SourcePhoto[]} */
     const photos = [];
     response.photos.photo.forEach((photo) => {
-      if (photo && photo.url_k &&
-          (photo.media === 'photo') &&
-          (photo.isfriend !== '0') &&
+      let url = null;
+      let width;
+      let height;
+      if (photo && (photo.media === 'photo') && (photo.isfriend !== '0') &&
           (photo.isfamily !== '0')) {
-        const width = parseInt(photo.width_k, 10);
-        const height = parseInt(photo.height_k, 10);
-        const asp = width / height;
-        let pt = null;
-        if (photo.latitude && photo.longitude) {
-          pt = app.PhotoSource.getPt(photo.latitude, photo.longitude);
+        url = photo.url_k || url;
+        url = photo.url_o || url;
+        if (url) {
+          if (photo.url_o) {
+            width = parseInt(photo.width_o, 10);
+            height = parseInt(photo.height_o, 10);
+          } else {
+            width = parseInt(photo.width_k, 10);
+            height = parseInt(photo.height_k, 10);
+          }
+          const asp = width / height;
+          let pt = null;
+          if (photo.latitude && photo.longitude) {
+            pt = app.PhotoSource.getPt(photo.latitude, photo.longitude);
+          }
+          app.PhotoSource.addPhoto(photos, url,
+              photo.ownername, asp, photo.owner, pt);
         }
-        app.PhotoSource.addPhoto(photos, photo.url_k,
-            photo.ownername, asp, photo.owner, pt);
       }
     });
     return Promise.resolve(photos);
@@ -88,7 +98,7 @@ app.Flickr = (function() {
       const url =
           `${_URL_BASE}?method=flickr.people.getPublicPhotos` +
           `&api_key=${_KEY}&user_id=${userId}` +
-          `&extras=owner_name,url_k,media,geo&per_page=${_MAX_PHOTOS}` +
+          `&extras=owner_name,url_o,media,geo&per_page=${_MAX_PHOTOS}` +
           '&format=json&nojsoncallback=1';
       return Chrome.Http.doGet(url).then((response) => {
         if (response.stat !== 'ok') {
