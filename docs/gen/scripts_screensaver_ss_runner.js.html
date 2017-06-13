@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="app.Time.html">app.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
+					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="Chrome.Time.html">Chrome.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
 				</ul>
 			</li>
 			
@@ -102,65 +102,171 @@ app.SSRunner = (function() {
   new ExceptionHandler();
 
   /**
+   * History item
+   * @typedef {Object} app.SSRunner.HistoryItem
+   * @property {int} viewsIdx - t.views index
+   * @property {int} lastViewsIdx - t.views index
+   * @property {int} photosIdx - t.photos index
+   * @memberOf app.SSRunner
+   */
+
+  /**
+   * Slide show history
+   * @const
+   * @type {{arr: Array&lt;app.SSRunner.HistoryItem>, idx: number, max: number}}
+   * @private
+   * @memberOf app.SSRunner
+   */
+  const history = {
+    arr: [],
+    idx: -1,
+    max: 20,
+  };
+
+  /**
    * Instance variables
    * @type {Object}
-   * @property {boolean} firstAni - true after first animation cycle
+   * @property {boolean} started - true if slideshow started
    * @property {int} lastSelected - last selected page
    * @property {int} waitTime - wait time when looking for photo in milliSecs
+   * @property {boolean} interactive - is interaction allowed
+   * @property {boolean} paused - is screensaver paused
+   * @property {number} timeOutId - id of setTimeout
    * @private
    * @memberOf app.SSRunner
    */
   const _VARS = {
-    firstAni: false,
+    started: false,
     lastSelected: -1,
     waitTime: 30000,
+    interactive: false,
+    paused: false,
+    timeOutId: 0,
   };
 
   /**
-   * Called at fixed time intervals to cycle through the photos
-   * Potentially runs forever
+   * Stop the animation
    * @private
    * @memberOf app.SSRunner
    */
-  function _runShow() {
+  function _stop() {
+    window.clearTimeout(_VARS.timeOutId);
+    // because animation may be interrupted
+    app.SSFinder.replacePhoto();
+  }
+
+  /**
+   * Restart the slideshow
+   * @param {?int} [newIdx=null] optional idx to use for current idx
+   * @private
+   * @memberOf app.SSRunner
+   */
+  function _restart(newIdx = null) {
+    const transTime = Chrome.Storage.get('transitionTime');
+    if (transTime) {
+      app.SSRunner.setWaitTime(transTime.base * 1000);
+    }
+    _runShow(newIdx);
+  }
+
+  /**
+   * Increment the slide show manually
+   * @param {?int} [newIdx=null] optional idx to use for current idx
+   * @private
+   * @memberOf app.SSRunner
+   */
+  function _step(newIdx = null) {
+    if (app.SSRunner.isPaused()) {
+      app.SSRunner.togglePaused(newIdx);
+      app.SSRunner.togglePaused();
+    } else {
+      _stop();
+      _restart(newIdx);
+    }
+  }
+
+  /**
+   * Track the history of the photo traversal
+   * @param {?int} newIdx - if not null, a request from the back command
+   * @param {int} selection - the current selection
+   * @private
+   * @memberOf app.SSRunner
+   */
+  function _trackHistory(newIdx, selection) {
+    const t = app.Screensaver.getTemplate();
+    const idx = history.idx;
+    const len = history.arr.length;
+    if ((newIdx === null) &amp;&amp; (idx === len - 1)) {
+      // add newest photo
+      const photoName = t.views[selection].getPhotoName();
+      const photoIdx = photoName.match(/\d+/)[0];
+      history.arr.push({
+        viewsIdx: selection,
+        lastViewsIdx: _VARS.lastSelected,
+        photosIdx: photoIdx,
+      });
+    }
+
+    if (history.arr.length > history.max) {
+      // limit history size
+      history.arr.shift();
+      history.idx--;
+      history.idx = Math.max(history.idx, -1);
+    }
+
+    history.idx++;
+    if (history.idx === history.max) {
+      // reset pointer to beginning
+      history.idx = 1;
+    }
+  }
+
+  /**
+   * Self called at fixed time intervals to cycle through the photos
+   * @param {?int} [newIdx=null] override selected
+   * @private
+   * @memberOf app.SSRunner
+   */
+  function _runShow(newIdx = null) {
     const t = app.Screensaver.getTemplate();
     if (t.noPhotos) {
       // no usable photos to show
       return;
     }
 
-    const curIdx = !t.started ? 0 : t.p.selected;
+    let curIdx = (newIdx === null) ? t.p.selected : newIdx;
+    curIdx = !app.SSRunner.isStarted() ? 0 : curIdx;
     const prevIdx = (curIdx > 0) ? curIdx - 1 : t.views.length - 1;
     let nextIdx = (curIdx === t.views.length - 1) ? 0 : curIdx + 1;
 
-    if (!t.started) {
+    if (!app.SSRunner.isStarted()) {
       // special case for first page. neon-animated-pages is configured
       // to run the entry animation for the first selection
-      nextIdx = curIdx;
-    } else if (!_VARS.firstAni) {
-      // special case for first full animation. next time ready to start
-      // splicing in the new images
-      _VARS.firstAni = true;
+      nextIdx = 0;
     }
 
     nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected, prevIdx);
     if (nextIdx !== -1) {
       // the next photo is ready
-      if (!t.started) {
-        t.started = true;
+
+      // track the photo history
+      _trackHistory(newIdx, nextIdx);
+
+      if (!app.SSRunner.isStarted()) {
+        _VARS.started = true;
         app.SSTime.setTime();
       }
+
+      // setup photo
+      t.views[nextIdx].render();
 
       // update t.p.selected so the animation runs
       _VARS.lastSelected = t.p.selected;
       t.p.selected = nextIdx;
-
-      // setup photo
-      t.views[nextIdx].render();
     }
 
     // set the next timeout, then call ourselves - runs unless interrupted
-    window.setTimeout(() => {
+    _VARS.timeOutId = window.setTimeout(() => {
       _runShow();
     }, _VARS.waitTime);
   }
@@ -175,8 +281,11 @@ app.SSRunner = (function() {
       if (transTime) {
         app.SSRunner.setWaitTime(transTime.base * 1000);
       }
+      _VARS.interactive = Chrome.Storage.get('interactive');
 
-      // slight delay at beginning so we have a smooth start
+      history.max = Math.min(app.SSFinder.getPhotosCount(), history.max);
+
+      // start slide show. slight delay at beginning so we have a smooth start
       window.setTimeout(_runShow, 2000);
     },
 
@@ -199,12 +308,29 @@ app.SSRunner = (function() {
     },
 
     /**
-     * Has the first animation cycle run
+     * Has the first page run
      * @returns {boolean} if animation has started
      * @memberOf app.SSRunner
      */
-    isAnimating: function() {
-      return _VARS.firstAni;
+    isStarted: function() {
+      return _VARS.started;
+    },
+    /**
+     * Is interactive mode allowed
+     * @returns {boolean} true if allowed
+     * @memberOf app.SSRunner
+     */
+    isInteractive: function() {
+      return _VARS.interactive;
+    },
+
+    /**
+     * Are we paused
+     * @returns {boolean} true if paused
+     * @memberOf app.SSRunner
+     */
+    isPaused: function() {
+      return _VARS.paused;
     },
 
     /**
@@ -216,6 +342,83 @@ app.SSRunner = (function() {
     isCurrentPair: function(idx) {
       const t = app.Screensaver.getTemplate();
       return ((idx === t.p.selected) || (idx === _VARS.lastSelected));
+    },
+
+    /**
+     * Reset the slide show history
+     * @memberOf app.SSRunner
+     */
+    clearHistory: function() {
+      history.arr = [];
+      history.idx = -1;
+    },
+
+    /**
+     * Toggle paused state of the slideshow
+     * @param {?int} [newIdx=null] optional idx to use for current idx
+     * @memberOf app.SSRunner
+     */
+    togglePaused: function(newIdx = null) {
+      if (_VARS.started) {
+        _VARS.paused = !_VARS.paused;
+        app.Screensaver.setPaused(_VARS.paused);
+        if (_VARS.paused) {
+          _stop();
+        } else {
+          _restart(newIdx);
+        }
+      }
+    },
+
+    /**
+     * Forward one slide
+     * @memberOf app.SSRunner
+     */
+    forward: function() {
+      if (_VARS.started) {
+        _step();
+      }
+    },
+
+    /**
+     * Backup one slide
+     * @memberOf app.SSRunner
+     */
+    back: function() {
+      if (!_VARS.started || (history.idx &lt;= 0)) {
+        return;
+      }
+
+      const t = app.Screensaver.getTemplate();
+      let idx = history.idx - 2;
+      history.idx = idx;
+      if (idx &lt; 0) {
+        if ((history.arr.length === history.max)) {
+          if (history.max === t.views.length) {
+            // wrap around when history length is equal to
+            // the number of pages
+            idx = history.arr.length - 1;
+          } else {
+            return;
+          }
+        } else {
+          // backup to beginning before cycling through
+          // history at least once
+          _VARS.lastSelected = undefined;
+          _step(-1);
+          return;
+        }
+      }
+
+      // update state from history
+      const photosIdx = history.arr[idx].photosIdx;
+      const viewsIdx = history.arr[idx].viewsIdx;
+      app.SSFinder.setPhotosIndex(photosIdx);
+      _VARS.lastSelected = history.arr[idx].lastViewsIdx;
+      t.views[viewsIdx].setPhoto(t.photos[photosIdx]);
+      t.views[viewsIdx].render();
+
+      _step(viewsIdx);
     },
   };
 })();
@@ -264,7 +467,7 @@ app.SSRunner = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 8th 2017, 12:03:12 pm
+		on June 13th 2017, 8:17:12 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

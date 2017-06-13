@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="app.Time.html">app.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
+					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="Chrome.Time.html">Chrome.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
 				</ul>
 			</li>
 			
@@ -224,7 +224,7 @@
 
         <tr>
             
-                <td class="name"><code>firstAni</code></td>
+                <td class="name"><code>started</code></td>
             
 
             <td class="type">
@@ -241,7 +241,7 @@
 
             
 
-            <td class="description last"><p>true after first animation cycle</p></td>
+            <td class="description last"><p>true if slideshow started</p></td>
         </tr>
 
     
@@ -293,6 +293,78 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>interactive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>is interaction allowed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>paused</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>is screensaver paused</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timeOutId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>id of setTimeout</p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 </dl>
@@ -331,7 +403,88 @@
 		<ul class="dummy">
 			<li>
 				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
-				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-27">line 27</a>
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-52">line 52</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id=".history">
+    <h4 id=".history"><span class="type-signature">&lt;private, static, constant> </span>history<span class="type-signature"> :Object</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Slide show history</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-34">line 34</a>
 			</li>
 		</ul>
 	</dd>
@@ -358,7 +511,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="._runShow"><span class="type-signature">&lt;private, static> </span>_runShow<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="._restart"><span class="type-signature">&lt;private, static> </span>_restart<span class="signature">( [newIdx])</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -366,8 +519,487 @@
 
     
     <div class="description">
-        <p>Called at fixed time intervals to cycle through the photos
-Potentially runs forever</p>
+        <p>Restart the slideshow</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>newIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>optional idx to use for current idx</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-78">line 78</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._runShow"><span class="type-signature">&lt;private, static> </span>_runShow<span class="signature">( [newIdx])</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Self called at fixed time intervals to cycle through the photos</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>newIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>override selected</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-144">line 144</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._step"><span class="type-signature">&lt;private, static> </span>_step<span class="signature">( [newIdx])</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Increment the slide show manually</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>newIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>optional idx to use for current idx</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-92">line 92</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._stop"><span class="type-signature">&lt;private, static> </span>_stop<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Stop the animation</p>
     </div>
     
 
@@ -414,7 +1046,453 @@ Potentially runs forever</p>
 		<ul class="dummy">
 			<li>
 				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
-				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-39">line 39</a>
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-66">line 66</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._trackHistory"><span class="type-signature">&lt;private, static> </span>_trackHistory<span class="signature">(newIdx, selection)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Track the history of the photo traversal</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>newIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>if not null, a request from the back command</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>selection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the current selection</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-109">line 109</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".back"><span class="type-signature">&lt;static> </span>back<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Backup one slide</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-301">line 301</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".clearHistory"><span class="type-signature">&lt;static> </span>clearHistory<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Reset the slide show history</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-265">line 265</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".forward"><span class="type-signature">&lt;static> </span>forward<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Forward one slide</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-291">line 291</a>
 			</li>
 		</ul>
 	</dd>
@@ -502,7 +1580,7 @@ Potentially runs forever</p>
 		<ul class="dummy">
 			<li>
 				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
-				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-102">line 102</a>
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-211">line 211</a>
 			</li>
 		</ul>
 	</dd>
@@ -543,118 +1621,6 @@ Potentially runs forever</p>
     <dd>
         
 <span class="param-type">int</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".isAnimating"><span class="type-signature">&lt;static> </span>isAnimating<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Has the first animation cycle run</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
-				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-120">line 120</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>if animation has started</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
 
 
 
@@ -776,7 +1742,7 @@ Potentially runs forever</p>
 		<ul class="dummy">
 			<li>
 				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
-				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-130">line 130</a>
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-256">line 256</a>
 			</li>
 		</ul>
 	</dd>
@@ -806,6 +1772,342 @@ Potentially runs forever</p>
             
 <div class="param-desc">
     <p>if selected or last selected</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".isInteractive"><span class="type-signature">&lt;static> </span>isInteractive<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Is interactive mode allowed</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-237">line 237</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>true if allowed</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".isPaused"><span class="type-signature">&lt;static> </span>isPaused<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Are we paused</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-246">line 246</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>true if paused</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".isStarted"><span class="type-signature">&lt;static> </span>isStarted<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Has the first page run</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-229">line 229</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>if animation has started</p>
 </div>
 
 
@@ -938,7 +2240,7 @@ Potentially runs forever</p>
 		<ul class="dummy">
 			<li>
 				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
-				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-111">line 111</a>
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-220">line 220</a>
 			</li>
 		</ul>
 	</dd>
@@ -1026,7 +2328,167 @@ Potentially runs forever</p>
 		<ul class="dummy">
 			<li>
 				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
-				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-87">line 87</a>
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-193">line 193</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".togglePaused"><span class="type-signature">&lt;static> </span>togglePaused<span class="signature">( [newIdx])</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Toggle paused state of the slideshow</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>newIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>optional idx to use for current idx</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-275">line 275</a>
 			</li>
 		</ul>
 	</dd>
@@ -1058,6 +2520,192 @@ Potentially runs forever</p>
         </dl>
     
 
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        <dl>
+                
+<hr>
+<dt class="name" id=".HistoryItem">
+    <h4 id=".HistoryItem">HistoryItem</h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>History item</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>viewsIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>t.views index</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lastViewsIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>t.views index</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>photosIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>t.photos index</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_runner.js.html">scripts/screensaver/ss_runner.js</a>,
+				 <a href="scripts_screensaver_ss_runner.js.html#sunlight-1-line-18">line 18</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            </dl>
     
 
     
@@ -1109,7 +2757,7 @@ Potentially runs forever</p>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 8th 2017, 12:03:12 pm
+		on June 13th 2017, 8:17:15 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

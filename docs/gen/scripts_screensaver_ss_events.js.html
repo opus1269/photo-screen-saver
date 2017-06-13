@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="app.Time.html">app.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
+					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="Chrome.Time.html">Chrome.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
 				</ul>
 			</li>
 			
@@ -124,66 +124,134 @@ app.SSEvents = (function() {
     }, 750);
   }
 
-  return {
-    // noinspection JSUnusedLocalSymbols
-    /**
-     * Event: Fired when a message is sent from either an extension&lt;br>
-     * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
-     * @see https://developer.chrome.com/extensions/runtime#event-onMessage
-     * @param {Chrome.Msg.Message} request - details for the message
-     * @param {Object} [sender] - MessageSender object
-     * @param {Function} [response] - function to call once after processing
-     * @returns {boolean} true if asynchronous
-     * @memberOf app.SSEvents
-     */
-    onMessage: function(request, sender, response) {
-      if (request.message === app.Msg.SS_CLOSE.message) {
-        _close();
-      } else if (request.message === app.Msg.SS_IS_SHOWING.message) {
-        // let people know we are here
-        response({message: 'OK'});
+  /**
+   * Event: Fired when a registered command is activated using
+   * a keyboard shortcut.
+   * @see https://developer.chrome.com/extensions/commands#event-onCommand
+   * @param {string} cmd - keyboard command
+   * @private
+   * @memberOf app.SSEvents
+   */
+  function _onKeyCommand(cmd) {
+    if (app.SSRunner.isInteractive()) {
+      if (cmd === 'ss-toggle-paused') {
+        Chrome.GA.event(Chrome.GA.EVENT.KEY_COMMAND, `${cmd}`);
+        app.SSRunner.togglePaused();
+      } else if (cmd === 'ss-forward') {
+        Chrome.GA.event(Chrome.GA.EVENT.KEY_COMMAND, `${cmd}`);
+        app.SSRunner.forward();
+      } else if (cmd === 'ss-back') {
+        Chrome.GA.event(Chrome.GA.EVENT.KEY_COMMAND, `${cmd}`);
+        app.SSRunner.back();
       }
-      return false;
-    },
+    }
+  }
 
-    /**
-     * Event: keyup
-     * @memberOf app.SSEvents
-     */
-    onKeyUp: function() {
+  // noinspection JSUnusedLocalSymbols
+  /**
+   * Event: Fired when a message is sent from either an extension&lt;br>
+   * (by runtime.sendMessage) or a content script (by tabs.sendMessage).
+   * @see https://developer.chrome.com/extensions/runtime#event-onMessage
+   * @param {Chrome.Msg.Message} request - details for the message
+   * @param {Object} [sender] - MessageSender object
+   * @param {Function} [response] - function to call once after processing
+   * @returns {boolean} true if asynchronous
+   * @private
+   * @memberOf app.SSEvents
+   */
+  function _onMessage(request, sender, response) {
+    if (request.message === app.Msg.SS_CLOSE.message) {
       _close();
-    },
+    } else if (request.message === app.Msg.SS_IS_SHOWING.message) {
+      // let people know we are here
+      response({message: 'OK'});
+    }
+    return false;
+  }
 
-    /**
-     * Event: mousemove
-     * @param {Event} ev - mousemove event
-     * @memberOf app.SSEvents
-     */
-    onMouseMove: function(ev) {
-      if (_MOUSE_START.x &amp;&amp; _MOUSE_START.y) {
-        const deltaX = Math.abs(ev.clientX - _MOUSE_START.x);
-        const deltaY = Math.abs(ev.clientY - _MOUSE_START.y);
-        if (Math.max(deltaX, deltaY) > 10) {
-          // close after a minimum amount of mouse movement
+  /**
+   * Event: KeyboardEvent
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
+   * @param {KeyboardEvent} ev - KeyboardEvent
+   * @private
+   * @memberOf app.SSEvents
+   */
+  function _onKey(ev) {
+    const keyName = ev.key;
+    if (!app.SSRunner.isStarted()) {
+      _close();
+      return;
+    }
+    switch (keyName) {
+      case 'Control':
+      case ' ':
+      case 'ArrowLeft':
+      case 'ArrowRight':
+        // fallthrough
+        if (!app.SSRunner.isInteractive()) {
           _close();
         }
-      } else {
-        // first move, set values
-        _MOUSE_START.x = ev.clientX;
-        _MOUSE_START.y = ev.clientY;
-      }
-    },
+        break;
+      default:
+        _close();
+        break;
+    }
+  }
 
+  /**
+   * Event: mousemove
+   * @param {MouseEvent} ev - mousemove event
+   * @private
+   * @memberOf app.SSEvents
+   */
+  function _onMouseMove(ev) {
+    if (_MOUSE_START.x &amp;&amp; _MOUSE_START.y) {
+      const deltaX = Math.abs(ev.clientX - _MOUSE_START.x);
+      const deltaY = Math.abs(ev.clientY - _MOUSE_START.y);
+      if (Math.max(deltaX, deltaY) > 10) {
+        // close after a minimum amount of mouse movement
+        _close();
+      }
+    } else {
+      // first move, set values
+      _MOUSE_START.x = ev.clientX;
+      _MOUSE_START.y = ev.clientY;
+    }
+  }
+
+  /**
+   * Event: mouse click
+   * @private
+   * @memberOf app.SSEvents
+   */
+  function _onMouseClick() {
+    const t = app.Screensaver.getTemplate();
+    if (app.SSRunner.isStarted()) {
+      app.Photo.showSource(t.views[t.p.selected].photo);
+    }
+    _close();
+  }
+
+  return {
     /**
-     * Event: mouse click
+     * Add the event listeners
      * @memberOf app.SSEvents
      */
-    onMouseClick: function() {
-      const t = app.Screensaver.getTemplate();
-      if (t.started) {
-        app.Photo.showSource(t.views[t.p.selected].photo);
-      }
-      _close();
+    initialize: function() {
+      // listen for chrome messages
+      Chrome.Msg.listen(_onMessage);
+
+      // listen for key events
+      window.addEventListener('keydown', _onKey, false);
+
+      // listen for mousemove events
+      window.addEventListener('mousemove', _onMouseMove, false);
+
+      // listen for mouse click events
+      window.addEventListener('click', _onMouseClick, false);
+
+      // listen for special keyboard commands
+      chrome.commands.onCommand.addListener(_onKeyCommand);
     },
   };
 })();
@@ -232,7 +300,7 @@ app.SSEvents = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 8th 2017, 12:03:12 pm
+		on June 13th 2017, 8:17:12 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

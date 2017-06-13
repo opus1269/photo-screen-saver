@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="app.Time.html">app.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
+					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="Chrome.Time.html">Chrome.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
 				</ul>
 			</li>
 			
@@ -110,10 +110,10 @@ app.Screensaver = (function() {
    * @property {Array&lt;app.SSView>} views - array of views
    * @property {int} sizingType - the way the photos are rendered
    * @property {int} aniType - the animation type for photo transitions
+   * @property {boolean} paused - true if slideshow paused
    * @property {boolean} noPhotos - true if there are no usable photos
-   * @property {boolean} started - true if the first page has been selected
-   * @property {string} time - current time label
-   * @property {Function} _computeNoPhotosLabel - computed binding
+   * @property {string} noPhotosLabel - label when no photos are useable
+   * @property {string} timeLabel - current time label
    * @property {Function} _OnAniFinished - event, slide animation finished
    * @memberOf app.Screensaver
    */
@@ -132,9 +132,10 @@ app.Screensaver = (function() {
   t.views = [];
   t.sizingType = 0;
   t.aniType = 0;
+  t.paused = false;
   t.noPhotos = false;
-  t.started = false;
-  t.time = 'time';
+  t.noPhotosLabel = '';
+  t.timeLabel = '';
 
   /**
    * Event: Template Bound, bindings have resolved and content has been
@@ -149,26 +150,13 @@ app.Screensaver = (function() {
 
     Chrome.GA.page('/screensaver.html');
 
-    // listen for chrome messages
-    Chrome.Msg.listen(app.SSEvents.onMessage);
-
-    // listen for keydown events
-    window.addEventListener('keyup', app.SSEvents.onKeyUp, false);
-
-    // listen for mousemove events
-    window.addEventListener('mousemove', app.SSEvents.onMouseMove, false);
-
-    // listen for mouse click events
-    window.addEventListener('click', app.SSEvents.onMouseClick, false);
+    // register event listeners
+    app.SSEvents.initialize();
 
     t.rep = t.$.repeatTemplate;
     t.p = t.$.pages;
 
-    const hasPhotos = app.SSBuilder.build();
-    if (hasPhotos) {
-      // kick off the slide show if there are photos selected
-      app.SSRunner.start();
-    }
+    app.Screensaver.launch();
   }
 
   /**
@@ -181,21 +169,23 @@ app.Screensaver = (function() {
     app.SSFinder.replacePhoto();
   };
 
-  /**
-   * Computed binding: No photos label
-   * @returns {string} i18n label
-   * @memberOf app.Screensaver
-   */
-  t._computeNoPhotosLabel = function() {
-    const no = Chrome.Locale.localize('no');
-    const photos = Chrome.Locale.localize('photos');
-    return `${no} ${photos}`;
-  };
-
   // listen for dom-change
   t.addEventListener('dom-change', _onDomChange);
 
   return {
+    /**
+     * Launch the slide show
+     * @param {int} [delay=2000] - delay before start
+     * @memberOf app.Screensaver
+     */
+    launch: function(delay = 2000) {
+      const hasPhotos = app.SSBuilder.build();
+      if (hasPhotos) {
+        // kick off the slide show if there are photos selected
+        app.SSRunner.start(delay);
+      }
+    },
+
     /**
      * Get reference to the auto-binding template
      * @returns {app.Screensaver.Template} The auto-binding template
@@ -212,6 +202,32 @@ app.Screensaver = (function() {
     setNoPhotos: function() {
       const t = app.Screensaver.getTemplate();
       t.set('noPhotos', true);
+      t.noPhotosLabel = Chrome.Locale.localize('no_photos');
+    },
+
+    /**
+     * Set the time label
+     * @param {string} label - current time
+     * @memberOf app.Screensaver
+     */
+    setTimeLabel: function(label) {
+      t.timeLabel = label;
+    },
+
+    /**
+     * Set the state when slideshow is paused
+     * @param {boolean} paused - paused state
+     * @memberOf app.Screensaver
+     */
+    setPaused: function(paused) {
+      t.paused = paused;
+      if (paused) {
+        t.$.pauseImage.classList.add('fadeOut');
+        t.$.playImage.classList.remove('fadeOut');
+      } else {
+        t.$.playImage.classList.add('fadeOut');
+        t.$.pauseImage.classList.remove('fadeOut');
+      }
     },
   };
 })();
@@ -260,7 +276,7 @@ app.Screensaver = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 8th 2017, 12:03:12 pm
+		on June 13th 2017, 8:17:12 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

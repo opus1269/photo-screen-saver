@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="app.Time.html">app.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
+					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="Chrome.Time.html">Chrome.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
 				</ul>
 			</li>
 			
@@ -115,8 +115,8 @@ app.SSFinder = (function() {
    */
   const _VARS = {
     photosIdx: 0,
-    replaceIdx: -1,
-    previousIdx: -1,
+    replaceIdx: 0,
+    previousIdx: 0,
     transTime: 30000,
     waitForLoad: true,
   };
@@ -129,7 +129,7 @@ app.SSFinder = (function() {
    */
   function _markPhotoBad(idx) {
     const t = app.Screensaver.getTemplate();
-    const name = t.views[idx].getName();
+    const name = t.views[idx].getPhotoName();
     const index = t.photos.findIndex((item) => {
       return item.name === name;
     });
@@ -188,22 +188,31 @@ app.SSFinder = (function() {
       _markPhotoBad(idx);
     }
 
-    if (app.SSRunner.isAnimating() &amp;&amp; (t.photos.length > t.views.length)) {
-      let item;
-      for (let i = _VARS.photosIdx; i &lt; t.photos.length; i++) {
+    if (t.photos.length > t.views.length) {
+      let item = null;
+      // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
+      for (let i = 0; i &lt; t.photos.length; i++) {
+        const index = (i + _VARS.photosIdx) % t.photos.length;
         // find a url that is ok, AFAWK
-        item = t.photos[i];
+        item = t.photos[index];
         if (item.name !== 'skip') {
-          _VARS.photosIdx = i;
+          _VARS.photosIdx = index;
           break;
         }
       }
-      // add the next image from the master list to this page
-      t.views[idx].setPhoto(item);
-      if (_VARS.photosIdx === t.photos.length - 1) {
-        _VARS.photosIdx = 0;
-      } else {
-        _VARS.photosIdx += 1;
+
+      if (item &amp;&amp; !app.SSRunner.isCurrentPair(idx)) {
+        // add the next image from the master list to this page
+        t.views[idx].setPhoto(item);
+        if (_VARS.photosIdx === t.photos.length - 1) {
+          _VARS.photosIdx = 0;
+        } else {
+          _VARS.photosIdx += 1;
+        }
+      }
+      if (!item) {
+        // all photos bad
+        app.Screensaver.setNoPhotos();
       }
     }
   }
@@ -214,22 +223,28 @@ app.SSFinder = (function() {
    * @memberOf app.SSFinder
    */
   function _replaceAllPhotos() {
+    app.SSRunner.clearHistory();
     const t = app.Screensaver.getTemplate();
     if (t.photos.length > t.views.length) {
       let pos = 0;
       let newIdx = _VARS.photosIdx;
-      for (let i = _VARS.photosIdx; i &lt; t.photos.length; i++) {
-        newIdx = i;
-        const item = t.photos[i];
+      // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
+      for (let i = 0; i &lt; t.photos.length; i++) {
+        const index = (i + _VARS.photosIdx) % t.photos.length;
+        newIdx = index;
+        const item = t.photos[index];
         if (item.name !== 'skip') {
           if (app.SSRunner.isCurrentPair(pos)) {
             // don't replace current animation pair
+            pos++;
             continue;
           }
           // replace photo
-          t.views[pos].setPhoto(item);
+          if (pos &lt; t.views.length) {
+            t.views[pos].setPhoto(item);
+          }
           pos++;
-          if (pos === t.views.length) {
+          if (pos >= t.views.length) {
             break;
           }
         }
@@ -285,6 +300,25 @@ app.SSFinder = (function() {
         app.SSRunner.setWaitTime(_VARS.transTime);
       }
       return ret;
+    },
+
+    /**
+     * Get the number of photos
+     * @returns {int} photo count
+     * @memberOf app.SSFinder
+     */
+    getPhotosCount: function() {
+      const t = app.Screensaver.getTemplate();
+      return t.photos.length;
+    },
+
+    /**
+     * Get the index into [t.photos]{@link app.Screensaver.t}
+     * @returns {int} idx - array index
+     * @memberOf app.SSFinder
+     */
+    getPhotosIndex: function() {
+      return _VARS.photosIdx;
     },
 
     /**
@@ -359,7 +393,7 @@ app.SSFinder = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 8th 2017, 12:03:12 pm
+		on June 13th 2017, 8:17:12 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
