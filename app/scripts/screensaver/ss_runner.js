@@ -16,9 +16,18 @@ app.SSRunner = (function() {
   new ExceptionHandler();
 
   /**
+   * History item
+   * @typedef {Object} app.SSRunner.HistoryItem
+   * @property {int} viewsIdx - t.views index
+   * @property {int} lastViewsIdx - t.views index
+   * @property {int} photosIdx - t.photos index
+   * @memberOf app.SSRunner
+   */
+
+  /**
    * Slide show history
    * @const
-   * @type {{arr: Array, idx: number, max: number}}
+   * @type {{arr: Array<app.SSRunner.HistoryItem>, idx: number, max: number}}
    * @private
    * @memberOf app.SSRunner
    */
@@ -290,42 +299,40 @@ app.SSRunner = (function() {
      * @memberOf app.SSRunner
      */
     back: function() {
-      if (_VARS.started) {
-        if (history.idx <= 0) {
-          return;
-        }
+      if (!_VARS.started || (history.idx <= 0)) {
+        return;
+      }
 
-        const t = app.Screensaver.getTemplate();
-        let idx = history.idx - 2;
-        history.idx = idx;
-        if (idx < 0) {
-          if ((history.arr.length === history.max)) {
-            if (history.max === t.views.length) {
-              // wrap around when the number of photos is equal to
-              // the number of pages
-              idx = history.arr.length - 1;
-            } else {
-              return;
-            }
+      const t = app.Screensaver.getTemplate();
+      let idx = history.idx - 2;
+      history.idx = idx;
+      if (idx < 0) {
+        if ((history.arr.length === history.max)) {
+          if (history.max === t.views.length) {
+            // wrap around when history length is equal to
+            // the number of pages
+            idx = history.arr.length - 1;
           } else {
-            // backup to beginning before cycling through
-            // history at least once
-            _VARS.lastSelected = undefined;
-            _step(-1);
             return;
           }
+        } else {
+          // backup to beginning before cycling through
+          // history at least once
+          _VARS.lastSelected = undefined;
+          _step(-1);
+          return;
         }
-
-        // update state from history
-        const photosIdx = history.arr[idx].photosIdx;
-        app.SSFinder.setPhotosIndex(photosIdx);
-        const viewsIdx = history.arr[idx].viewsIdx;
-        _VARS.lastSelected = history.arr[idx].lastViewsIdx;
-        t.views[viewsIdx].setPhoto(t.photos[photosIdx]);
-        t.views[viewsIdx].render();
-
-        _step(viewsIdx);
       }
+
+      // update state from history
+      const photosIdx = history.arr[idx].photosIdx;
+      const viewsIdx = history.arr[idx].viewsIdx;
+      app.SSFinder.setPhotosIndex(photosIdx);
+      _VARS.lastSelected = history.arr[idx].lastViewsIdx;
+      t.views[viewsIdx].setPhoto(t.photos[photosIdx]);
+      t.views[viewsIdx].render();
+
+      _step(viewsIdx);
     },
   };
 })();
