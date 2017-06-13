@@ -137,6 +137,7 @@ app.SSFinder = (function() {
    * @memberOf app.SSFinder
    */
   function _replaceAllPhotos() {
+    app.SSRunner.clearHistory();
     const t = app.Screensaver.getTemplate();
     if (t.photos.length > t.views.length) {
       let pos = 0;

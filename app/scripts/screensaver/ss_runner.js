@@ -251,6 +251,15 @@ app.SSRunner = (function() {
     },
 
     /**
+     * Reset the slide show history
+     * @memberOf app.SSRunner
+     */
+    clearHistory: function() {
+      history.arr = [];
+      history.idx = -1;
+    },
+
+    /**
      * Toggle paused state of the slideshow
      * @param {?int} [newIdx=null] optional idx to use for current idx
      * @memberOf app.SSRunner
