@@ -110,15 +110,25 @@ app.SSRunner = (function() {
     const t = app.Screensaver.getTemplate();
     const idx = history.idx;
     const len = history.arr.length;
-    if ((newIdx === null) && (idx === len - 1)) {
-      // add newest photo
+    if ((newIdx === null)) {
       const photoName = t.views[selection].getPhotoName();
-      const photoIdx = photoName.match(/\d+/)[0];
-      history.arr.push({
-        viewsIdx: selection,
-        lastViewsIdx: _VARS.lastSelected,
-        photosIdx: photoIdx,
-      });
+      const photoIdx = parseInt(photoName.match(/\d+/)[0], 10);
+      const photosPos = app.SSFinder.getPhotosIndex();
+      if ((idx === len - 1)) {
+        // add newest photo
+        history.arr.push({
+          viewsIdx: selection,
+          lastViewsIdx: _VARS.lastSelected,
+          photosIdx: photoIdx,
+          photosPos: photosPos,
+        });
+      } else {
+        // update current
+        history.arr[idx + 1].viewsIdx = selection;
+        // todo history.arr[idx + 1].lastViewsIdx = _VARS.lastSelected;
+        history.arr[idx + 1].photosIdx = photoIdx;
+        history.arr[idx + 1].photosPos = photosPos;
+      }
     }
 
     if (history.arr.length > history.max) {
@@ -131,7 +141,7 @@ app.SSRunner = (function() {
     history.idx++;
     if (history.idx === history.max) {
       // reset pointer to beginning
-      history.idx = 1;
+      history.idx = 0;
     }
   }
 
@@ -157,6 +167,15 @@ app.SSRunner = (function() {
       // special case for first page. neon-animated-pages is configured
       // to run the entry animation for the first selection
       nextIdx = 0;
+    }
+
+    if(newIdx === null && history.idx >= 0) {
+      const photosPos = history.arr[history.idx].photosPos;
+      if (history.idx < history.arr.length - 1) {
+        app.SSFinder.setPhotosIndex(photosPos);
+      } else {
+        // todo app.SSFinder.setPhotosIndex(photosPos + 1);
+      }
     }
 
     nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected, prevIdx);
@@ -300,6 +319,7 @@ app.SSRunner = (function() {
      */
     back: function() {
       if (!_VARS.started || (history.idx <= 0)) {
+        // todo app.SSRunner.clearHistory();
         return;
       }
 
@@ -325,9 +345,10 @@ app.SSRunner = (function() {
       }
 
       // update state from history
+      const photosPos = history.arr[idx].photosPos;
       const photosIdx = history.arr[idx].photosIdx;
       const viewsIdx = history.arr[idx].viewsIdx;
-      app.SSFinder.setPhotosIndex(photosIdx);
+      app.SSFinder.setPhotosIndex(photosPos);
       _VARS.lastSelected = history.arr[idx].lastViewsIdx;
       t.views[viewsIdx].setPhoto(t.photos[photosIdx]);
       t.views[viewsIdx].render();
