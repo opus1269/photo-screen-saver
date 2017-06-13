@@ -70,11 +70,7 @@ app.Screensaver = (function() {
     t.rep = t.$.repeatTemplate;
     t.p = t.$.pages;
 
-    const hasPhotos = app.SSBuilder.build();
-    if (hasPhotos) {
-      // kick off the slide show if there are photos selected
-      app.SSRunner.start();
-    }
+    app.Screensaver.launch();
   }
 
   /**
@@ -91,6 +87,19 @@ app.Screensaver = (function() {
   t.addEventListener('dom-change', _onDomChange);
 
   return {
+    /**
+     * Launch the slide show
+     * @param {int} [delay=2000] - delay before start
+     * @memberOf app.Screensaver
+     */
+    launch: function(delay = 2000) {
+      const hasPhotos = app.SSBuilder.build();
+      if (hasPhotos) {
+        // kick off the slide show if there are photos selected
+        app.SSRunner.start(delay);
+      }
+    },
+
     /**
      * Get reference to the auto-binding template
      * @returns {app.Screensaver.Template} The auto-binding template

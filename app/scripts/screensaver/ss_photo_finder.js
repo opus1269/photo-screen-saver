@@ -217,6 +217,16 @@ app.SSFinder = (function() {
     },
 
     /**
+     * Get the number of photos
+     * @returns {int} photo count
+     * @memberOf app.SSFinder
+     */
+    getPhotosCount: function() {
+      const t = app.Screensaver.getTemplate();
+      return t.photos.length;
+    },
+
+    /**
      * Get the index into [t.photos]{@link app.Screensaver.t}
      * @returns {int} idx - array index
      * @memberOf app.SSFinder

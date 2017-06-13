@@ -25,7 +25,7 @@ app.SSRunner = (function() {
   const history = {
     arr: [],
     idx: -1,
-    max: 18,
+    max: 20,
   };
 
   /**
@@ -122,7 +122,7 @@ app.SSRunner = (function() {
     history.idx++;
     if (history.idx === history.max) {
       // reset pointer to beginning
-      history.idx = 0;
+      history.idx = 1;
     }
   }
 
@@ -144,16 +144,11 @@ app.SSRunner = (function() {
     const prevIdx = (curIdx > 0) ? curIdx - 1 : t.views.length - 1;
     let nextIdx = (curIdx === t.views.length - 1) ? 0 : curIdx + 1;
 
-    if (!app.SSRunner.isStarted() || (newIdx === -1)) {
+    if (!app.SSRunner.isStarted()) {
       // special case for first page. neon-animated-pages is configured
       // to run the entry animation for the first selection
       nextIdx = 0;
     }
-
-    // if (newIdx === null) {
-    //   // add next photo from master array
-    //   app.SSFinder.replacePhoto();
-    // }
 
     nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected, prevIdx);
     if (nextIdx !== -1) {
@@ -187,14 +182,13 @@ app.SSRunner = (function() {
      * @memberOf app.SSRunner
      */
     start: function() {
-      const t = app.Screensaver.getTemplate();
       const transTime = Chrome.Storage.get('transitionTime');
       if (transTime) {
         app.SSRunner.setWaitTime(transTime.base * 1000);
       }
       _VARS.interactive = Chrome.Storage.get('interactive');
 
-      history.max = Math.min(t.photos.length, history.max);
+      history.max = Math.min(app.SSFinder.getPhotosCount(), history.max);
 
       // start slide show. slight delay at beginning so we have a smooth start
       window.setTimeout(_runShow, 2000);
@@ -298,7 +292,6 @@ app.SSRunner = (function() {
     back: function() {
       if (_VARS.started) {
         if (history.idx <= 0) {
-          // at beginning
           return;
         }
 
@@ -306,13 +299,18 @@ app.SSRunner = (function() {
         let idx = history.idx - 2;
         history.idx = idx;
         if (idx < 0) {
-          if (history.arr.length === history.max) {
-            // wrap around
-            idx = history.arr.length - 1;
+          if ((history.arr.length === history.max)) {
+            if (history.max === t.views.length) {
+              // wrap around when the number of photos is equal to
+              // the number of pages
+              idx = history.arr.length - 1;
+            } else {
+              return;
+            }
           } else {
             // backup to beginning before cycling through
             // history at least once
-            _VARS.lastSelected = -1;
+            _VARS.lastSelected = undefined;
             _step(-1);
             return;
           }
