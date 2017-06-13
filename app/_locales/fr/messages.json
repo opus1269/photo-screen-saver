@@ -198,7 +198,7 @@
     "message": "Mode interactif"
   },
   "setting_interactive_desc": {
-    "message": "Basculer en pause (Ctrl+Espace), Retour (Ctrl+Gauche), En avant (Ctrl+Droit)"
+    "message": "Basculer en pause (Alt+Maj+Espace), Retour (Alt+Maj+Gauche), En avant (Alt+Maj+Droit)"
   },
   "setting_show_time": {
     "message": "Afficher l'heure"

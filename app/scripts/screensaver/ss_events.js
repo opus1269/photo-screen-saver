@@ -97,7 +97,8 @@ app.SSEvents = (function() {
       return;
     }
     switch (keyName) {
-      case 'Control':
+      case 'Alt':
+      case 'Shift':
       case ' ':
       case 'ArrowLeft':
       case 'ArrowRight':

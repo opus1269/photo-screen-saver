@@ -198,7 +198,7 @@
     "message": "Interactive mode"
   },
   "setting_interactive_desc": {
-    "message": "Toggle paused (Ctrl+Space), Back (Ctrl+LeftArrow), Forward (Ctrl+RightArrow)"
+    "message": "Toggle paused (Alt+Shift+Space), Back (Alt+Shift+LeftArrow), Forward (Alt+Shift+RightArrow)"
   },
   "setting_show_time": {
     "message": "Show time"

@@ -198,7 +198,7 @@
     "message": "Interactieve modus"
   },
   "setting_interactive_desc": {
-    "message": "Wissel pauze (Ctrl+Spatie), Terug (Ctrl+Pijl-links), Doorsturen (Ctrl+Pijl-rechts)"
+    "message": "Wissel pauze (Alt+Shift+Spatie), Terug (Alt+Shift+Pijl-links), Doorsturen (Alt+Shift+Pijl-rechts)"
   },
   "setting_show_time": {
     "message": "Weergavetijd"

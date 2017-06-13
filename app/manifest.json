@@ -18,19 +18,19 @@
 		},
 		"ss-toggle-paused": {
 			"suggested_key": {
-				"default": "Ctrl+Space"
+				"default": "Alt+Shift+Space"
 			},
 			"description": "__MSG_ss_toggle_paused__"
 		},
 		"ss-back": {
 			"suggested_key": {
-				"default": "Ctrl+Left"
+				"default": "Alt+Shift+Left"
 			},
 			"description": "__MSG_ss_back__"
 		},
 		"ss-forward": {
 			"suggested_key": {
-				"default": "Ctrl+Right"
+				"default": "Alt+Shift+Right"
 			},
 			"description": "__MSG_ss_forward__"
 		}

@@ -198,7 +198,7 @@
     "message": "Modo interactivo"
   },
   "setting_interactive_desc": {
-    "message": "Alternar pausado (Ctrl+Espacio), Atrás (Ctrl+Flecha izquierda), Adelante (Ctrl+Flecha derecha)"
+    "message": "Alternar pausado (Alt+Mayus+Espacio), Atrás (Alt+Mayus+Flecha izquierda), Adelante (Alt+Mayus+Flecha derecha)"
   },
   "setting_show_time": {
     "message": "Tiempo de la funcion"
