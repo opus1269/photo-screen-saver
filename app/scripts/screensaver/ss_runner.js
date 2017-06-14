@@ -194,9 +194,10 @@ app.SSRunner = (function() {
   return {
     /**
      * Start the slideshow
+     * @param {int} [delay=2000] - delay before start
      * @memberOf app.SSRunner
      */
-    start: function() {
+    start: function(delay = 2000) {
       const transTime = Chrome.Storage.get('transitionTime');
       if (transTime) {
         app.SSRunner.setWaitTime(transTime.base * 1000);
@@ -206,7 +207,7 @@ app.SSRunner = (function() {
       history.max = Math.min(app.SSFinder.getPhotosCount(), history.max);
 
       // start slide show. slight delay at beginning so we have a smooth start
-      window.setTimeout(_runShow, 2000);
+      window.setTimeout(_runShow, delay);
     },
 
     /**
