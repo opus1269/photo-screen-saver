@@ -111,7 +111,10 @@ app.Permissions = (function() {
   }
 
   return {
-    /** @type {app.Permissions.Type} */
+    /**
+     * @type {app.Permissions.Type}
+     * @memberOf app.Permissions
+     */
     PICASA: PICASA,
 
     /**
