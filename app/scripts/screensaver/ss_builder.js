@@ -165,6 +165,7 @@ app.SSBuilder = (function() {
     /**
      * Build everything related to a {@link app.Screensaver}
      * @returns {boolean} true if there are photos for the show
+     * @memberOf app.SSBuilder
      */
     build: function() {
       _setZoom();
