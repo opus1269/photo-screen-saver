@@ -29,13 +29,16 @@ app.SSRunner = (function() {
    * Slide show history
    * @const
    * @type {{arr: Array<app.SSRunner.HistoryItem>, idx: number, max: number}}
+   * @property {Array<app.SSRunner.HistoryItem>} arr - history items
+   * @property {int} idx - pointer into arr
+   * @property {int} max - max length or arr, it will actually have 1 item more
    * @private
    * @memberOf app.SSRunner
    */
   const history = {
     arr: [],
     idx: -1,
-    max: 20, // todo
+    max: 20,
   };
 
   /**
@@ -66,9 +69,7 @@ app.SSRunner = (function() {
    */
   function _stop() {
     window.clearTimeout(_VARS.timeOutId);
-    // because animation may be interrupted
-    // todo app.SSFinder.replacePhoto();
-  }
+   }
 
   /**
    * Restart the slideshow
@@ -111,7 +112,7 @@ app.SSRunner = (function() {
     const t = app.Screensaver.getTemplate();
     const idx = history.idx;
     const len = history.arr.length;
-    if ((newIdx === null)) {
+    if (newIdx === null) {
       const photoName = t.views[selection].getPhotoName();
       const photoId = parseInt(photoName.match(/\d+/)[0], 10);
       const photosPos = app.SSFinder.getPhotosIndex();
@@ -130,53 +131,9 @@ app.SSRunner = (function() {
           photosPos: photosPos,
         });
       }
-      // todo else if (idx >= 0) {
-      //   // update current
-      //   history.arr[idx].viewsIdx = selection;
-      //   history.arr[idx].lastViewsIdx = _VARS.lastSelected;
-      //   history.arr[idx].photoId = photoId;
-      //   history.arr[idx].photosPos = photosPos;
-      // }
     }
 
     history.idx++;
-    if (history.idx > history.max) {
-      // reset pointer to beginning
-      history.idx = 0;
-    }
-    // if ((newIdx === null)) {
-    //   const photoName = t.views[selection].getPhotoName();
-    //   const photoId = parseInt(photoName.match(/\d+/)[0], 10);
-    //   const photosPos = app.SSFinder.getPhotosIndex();
-    //   if ((idx === len - 1)) {
-    //     // add newest photo
-    //     history.arr.push({
-    //       viewsIdx: selection,
-    //       lastViewsIdx: _VARS.lastSelected,
-    //       photoId: photoId,
-    //       photosPos: photosPos,
-    //     });
-    //   } else {
-    //     // update current
-    //     history.arr[idx + 1].viewsIdx = selection;
-    //     history.arr[idx + 1].lastViewsIdx = _VARS.lastSelected;
-    //     history.arr[idx + 1].photoId = photoId;
-    //     history.arr[idx + 1].photosPos = photosPos;
-    //   }
-    // }
-    //
-    // if (history.arr.length > history.max) {
-    //   // limit history size
-    //   history.arr.shift();
-    //   history.idx--;
-    //   history.idx = Math.max(history.idx, -1);
-    // }
-    //
-    // history.idx++;
-    // if (history.idx === history.max) {
-    //   // reset pointer to beginning
-    //   history.idx = 0;
-    // }
   }
 
   /**
@@ -202,22 +159,6 @@ app.SSRunner = (function() {
       // to run the entry animation for the first selection
       nextIdx = 0;
     }
-
-    // todo if (newIdx === null) {
-    //   if (history.idx >= 0) {
-    //     const photosPos = history.arr[history.idx].photosPos;
-    //     app.SSFinder.setPhotosIndex(photosPos);
-    //   }
-    // }
-
-    // if(newIdx === null && history.idx >= 0) {
-    //   const photosPos = history.arr[history.idx].photosPos;
-    //   if (history.idx < history.arr.length - 1) {
-    //     app.SSFinder.setPhotosIndex(photosPos);
-    //   } else {
-    //     // todo app.SSFinder.setPhotosIndex(photosPos + 1);
-    //   }
-    // }
 
     nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected, prevIdx);
     if (nextIdx !== -1) {
@@ -369,7 +310,6 @@ app.SSRunner = (function() {
       }
       if (history.idx <= 0) {
         // at beginning
-        // todo app.SSRunner.clearHistory();
         return;
       }
 
@@ -379,18 +319,11 @@ app.SSRunner = (function() {
       history.idx = idx;
       if (idx < 0) {
         if ((history.arr.length > history.max)) {
-          // at beginning
+          // at beginning of history
+          history.idx+= 2;
           return;
-          // todo if (history.max === t.views.length) {
-          //   // wrap around when history length is equal to
-          //   // the number of pages
-          //   idx = history.arr.length - 1;
-          // } else {
-          //   // at beginning
-          //   return;
-          // }
         } else {
-          // first slide, first time through
+          // at beginning, first time through
           nextStep = -1;
           idx = 0;
         }

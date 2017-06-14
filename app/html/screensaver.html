@@ -27,8 +27,7 @@
 <body unresolved class="fullbleed vertical layout">
 <template is="dom-bind" id="t">
   <div id="mainContainer" class="flex" hidden$="{{noPhotos}}">
-    <neon-animated-pages id="pages" class="fit" animate-initial-selection
-                         on-neon-animation-finish="_OnAniFinished">
+    <neon-animated-pages id="pages" class="fit" animate-initial-selection>
       <template is="dom-repeat" id="repeatTemplate" as="view" items="{{views}}">
         <slide-animatable ani-type="{{aniType}}" class="fit">
           <section id="view[[index]]">

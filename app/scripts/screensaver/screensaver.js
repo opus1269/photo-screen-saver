@@ -28,7 +28,6 @@ app.Screensaver = (function() {
    * @property {boolean} noPhotos - true if there are no usable photos
    * @property {string} noPhotosLabel - label when no photos are useable
    * @property {string} timeLabel - current time label
-   * @property {Function} _OnAniFinished - event, slide animation finished
    * @memberOf app.Screensaver
    */
 
@@ -72,16 +71,6 @@ app.Screensaver = (function() {
 
     app.Screensaver.launch();
   }
-
-  /**
-   * Event: Slide animation finished
-   * @memberOf app.Screensaver
-   */
-  t._OnAniFinished = function() {
-    // replace the previous selected with the next one from master array
-    // do it here so the web request doesn't run during the animation
-    app.SSFinder.replacePhoto();
-  };
 
   // listen for dom-change
   t.addEventListener('dom-change', _onDomChange);
