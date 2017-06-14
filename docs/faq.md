@@ -42,7 +42,7 @@
 
     Chrome only allows 4 pre-defined short-cut keys per extension.
     I needed to remove this one to add the "Interactive mode" feature.
-    You can define the key command manually. Go to [Extensions](chrome://extensions/),
+    You can define the key command manually. Go to [Extensions](chrome:extensions),
     scroll to the bottom and click on "Keyboard shortcuts".
     Find the Photo Screen Saver extension and enter the key combination
     you want to use for "Display now". Actually press the combination
