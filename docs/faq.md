@@ -42,7 +42,7 @@
 
     Chrome only allows 4 pre-defined short-cut keys per extension.
     I needed to remove this one to add the "Interactive mode" feature.
-    You can define the key command manually. Go to [Extensions](chrome:extensions),
+    You can define the key command manually. Go to "More tools" -> "Extensions,
     scroll to the bottom and click on "Keyboard shortcuts".
     Find the Photo Screen Saver extension and enter the key combination
     you want to use for "Display now". Actually press the combination
@@ -89,7 +89,7 @@
 
 * **Why is the time label incorrect on my Chromebook?**
 
-  If you have this problem, go to [Settings](chrome://settings/),
+  If you have this problem, go to "Settings",
   select "Show Advanced Settings" and in the "Date and time" section
   uncheck the "Set time zone automatically using your location".
   You will need to re-start for the change to take effect.
