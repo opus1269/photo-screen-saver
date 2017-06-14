@@ -20,7 +20,8 @@ app.SSRunner = (function() {
    * @typedef {Object} app.SSRunner.HistoryItem
    * @property {int} viewsIdx - t.views index
    * @property {int} lastViewsIdx - t.views index
-   * @property {int} photosIdx - t.photos index
+   * @property {int} photoId - t.photos index
+   * @property {int} photosPos - pointer into t.photos
    * @memberOf app.SSRunner
    */
 
@@ -34,7 +35,7 @@ app.SSRunner = (function() {
   const history = {
     arr: [],
     idx: -1,
-    max: 20,
+    max: 5, // todo
   };
 
   /**
@@ -112,37 +113,69 @@ app.SSRunner = (function() {
     const len = history.arr.length;
     if ((newIdx === null)) {
       const photoName = t.views[selection].getPhotoName();
-      const photoIdx = parseInt(photoName.match(/\d+/)[0], 10);
+      const photoId = parseInt(photoName.match(/\d+/)[0], 10);
       const photosPos = app.SSFinder.getPhotosIndex();
       if ((idx === len - 1)) {
+        if (history.arr.length > history.max) {
+          // FIFO delete
+          history.arr.shift();
+          history.idx--;
+          history.idx = Math.max(history.idx, -1);
+        }
         // add newest photo
         history.arr.push({
           viewsIdx: selection,
           lastViewsIdx: _VARS.lastSelected,
-          photosIdx: photoIdx,
+          photoId: photoId,
           photosPos: photosPos,
         });
       } else {
         // update current
         history.arr[idx + 1].viewsIdx = selection;
-        // todo history.arr[idx + 1].lastViewsIdx = _VARS.lastSelected;
-        history.arr[idx + 1].photosIdx = photoIdx;
+        history.arr[idx + 1].lastViewsIdx = _VARS.lastSelected;
+        history.arr[idx + 1].photoId = photoId;
         history.arr[idx + 1].photosPos = photosPos;
       }
     }
 
-    if (history.arr.length > history.max) {
-      // limit history size
-      history.arr.shift();
-      history.idx--;
-      history.idx = Math.max(history.idx, -1);
-    }
-
     history.idx++;
-    if (history.idx === history.max) {
+    if (history.idx > history.max) {
       // reset pointer to beginning
       history.idx = 0;
     }
+    // if ((newIdx === null)) {
+    //   const photoName = t.views[selection].getPhotoName();
+    //   const photoId = parseInt(photoName.match(/\d+/)[0], 10);
+    //   const photosPos = app.SSFinder.getPhotosIndex();
+    //   if ((idx === len - 1)) {
+    //     // add newest photo
+    //     history.arr.push({
+    //       viewsIdx: selection,
+    //       lastViewsIdx: _VARS.lastSelected,
+    //       photoId: photoId,
+    //       photosPos: photosPos,
+    //     });
+    //   } else {
+    //     // update current
+    //     history.arr[idx + 1].viewsIdx = selection;
+    //     history.arr[idx + 1].lastViewsIdx = _VARS.lastSelected;
+    //     history.arr[idx + 1].photoId = photoId;
+    //     history.arr[idx + 1].photosPos = photosPos;
+    //   }
+    // }
+    //
+    // if (history.arr.length > history.max) {
+    //   // limit history size
+    //   history.arr.shift();
+    //   history.idx--;
+    //   history.idx = Math.max(history.idx, -1);
+    // }
+    //
+    // history.idx++;
+    // if (history.idx === history.max) {
+    //   // reset pointer to beginning
+    //   history.idx = 0;
+    // }
   }
 
   /**
@@ -169,14 +202,21 @@ app.SSRunner = (function() {
       nextIdx = 0;
     }
 
-    if(newIdx === null && history.idx >= 0) {
-      const photosPos = history.arr[history.idx].photosPos;
-      if (history.idx < history.arr.length - 1) {
+    if (newIdx === null) {
+      if (history.idx >= 0) {
+        const photosPos = history.arr[history.idx].photosPos;
         app.SSFinder.setPhotosIndex(photosPos);
-      } else {
-        // todo app.SSFinder.setPhotosIndex(photosPos + 1);
       }
     }
+
+    // if(newIdx === null && history.idx >= 0) {
+    //   const photosPos = history.arr[history.idx].photosPos;
+    //   if (history.idx < history.arr.length - 1) {
+    //     app.SSFinder.setPhotosIndex(photosPos);
+    //   } else {
+    //     // todo app.SSFinder.setPhotosIndex(photosPos + 1);
+    //   }
+    // }
 
     nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected, prevIdx);
     if (nextIdx !== -1) {
@@ -318,42 +358,47 @@ app.SSRunner = (function() {
      * @memberOf app.SSRunner
      */
     back: function() {
-      if (!_VARS.started || (history.idx <= 0)) {
+      if (!_VARS.started) {
+        return;
+      }
+      if (history.idx <= 0) {
+        // at beginning
         // todo app.SSRunner.clearHistory();
         return;
       }
 
       const t = app.Screensaver.getTemplate();
+      let nextStep = null;
       let idx = history.idx - 2;
       history.idx = idx;
       if (idx < 0) {
-        if ((history.arr.length === history.max)) {
+        if ((history.arr.length > history.max)) {
           if (history.max === t.views.length) {
             // wrap around when history length is equal to
             // the number of pages
             idx = history.arr.length - 1;
           } else {
+            // at beginning
             return;
           }
         } else {
-          // backup to beginning before cycling through
-          // history at least once
-          _VARS.lastSelected = undefined;
-          _step(-1);
-          return;
+          // first slide, first time through
+          nextStep = -1;
+          idx = 0;
         }
       }
 
       // update state from history
       const photosPos = history.arr[idx].photosPos;
-      const photosIdx = history.arr[idx].photosIdx;
+      const photoId = history.arr[idx].photoId;
       const viewsIdx = history.arr[idx].viewsIdx;
+      nextStep = (nextStep === null) ? viewsIdx : nextStep;
       app.SSFinder.setPhotosIndex(photosPos);
       _VARS.lastSelected = history.arr[idx].lastViewsIdx;
-      t.views[viewsIdx].setPhoto(t.photos[photosIdx]);
+      t.views[viewsIdx].setPhoto(t.photos[photoId]);
       t.views[viewsIdx].render();
 
-      _step(viewsIdx);
+      _step(nextStep);
     },
   };
 })();
