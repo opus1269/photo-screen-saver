@@ -35,7 +35,7 @@ app.SSRunner = (function() {
   const history = {
     arr: [],
     idx: -1,
-    max: 5, // todo
+    max: 20, // todo
   };
 
   /**
@@ -67,7 +67,7 @@ app.SSRunner = (function() {
   function _stop() {
     window.clearTimeout(_VARS.timeOutId);
     // because animation may be interrupted
-    app.SSFinder.replacePhoto();
+    // todo app.SSFinder.replacePhoto();
   }
 
   /**
@@ -129,13 +129,14 @@ app.SSRunner = (function() {
           photoId: photoId,
           photosPos: photosPos,
         });
-      } else {
-        // update current
-        history.arr[idx + 1].viewsIdx = selection;
-        history.arr[idx + 1].lastViewsIdx = _VARS.lastSelected;
-        history.arr[idx + 1].photoId = photoId;
-        history.arr[idx + 1].photosPos = photosPos;
       }
+      // todo else if (idx >= 0) {
+      //   // update current
+      //   history.arr[idx].viewsIdx = selection;
+      //   history.arr[idx].lastViewsIdx = _VARS.lastSelected;
+      //   history.arr[idx].photoId = photoId;
+      //   history.arr[idx].photosPos = photosPos;
+      // }
     }
 
     history.idx++;
@@ -202,12 +203,12 @@ app.SSRunner = (function() {
       nextIdx = 0;
     }
 
-    if (newIdx === null) {
-      if (history.idx >= 0) {
-        const photosPos = history.arr[history.idx].photosPos;
-        app.SSFinder.setPhotosIndex(photosPos);
-      }
-    }
+    // todo if (newIdx === null) {
+    //   if (history.idx >= 0) {
+    //     const photosPos = history.arr[history.idx].photosPos;
+    //     app.SSFinder.setPhotosIndex(photosPos);
+    //   }
+    // }
 
     // if(newIdx === null && history.idx >= 0) {
     //   const photosPos = history.arr[history.idx].photosPos;
@@ -236,6 +237,11 @@ app.SSRunner = (function() {
       // update t.p.selected so the animation runs
       _VARS.lastSelected = t.p.selected;
       t.p.selected = nextIdx;
+    }
+
+    if (newIdx === null) {
+      // load next photo from master array
+      app.SSFinder.replacePhoto();
     }
 
     // set the next timeout, then call ourselves - runs unless interrupted
@@ -373,14 +379,16 @@ app.SSRunner = (function() {
       history.idx = idx;
       if (idx < 0) {
         if ((history.arr.length > history.max)) {
-          if (history.max === t.views.length) {
-            // wrap around when history length is equal to
-            // the number of pages
-            idx = history.arr.length - 1;
-          } else {
-            // at beginning
-            return;
-          }
+          // at beginning
+          return;
+          // todo if (history.max === t.views.length) {
+          //   // wrap around when history length is equal to
+          //   // the number of pages
+          //   idx = history.arr.length - 1;
+          // } else {
+          //   // at beginning
+          //   return;
+          // }
         } else {
           // first slide, first time through
           nextStep = -1;
