@@ -38,6 +38,14 @@
 
   ***
 
+* **I set the option to run Chrome in the background, but it is not working. Why is that?**
+
+  Chrome has a setting that can disable this. Go to Chrome Settings,
+  click on advanced and scroll to the system area. Make sure
+  "Continue running background apps when Chrome is closed" is selected.
+
+  ***
+
 * **What happened to the short-cut key for launching the screensaver?**
 
     Chrome only allows 4 pre-defined short-cut keys per extension.
@@ -53,6 +61,14 @@
 
 ### Google Photos
 
+* **Why does the dialog asking for Picasa permissions say it can change my data?**
+
+    The extension will never change any of your data.
+    The API that Google provides for interacting with your Google Photos
+    does not have a read only scope. The extension only reads data.
+
+  ***
+
 * **Why aren't all my Google Photos albums showing?**
 
     The API that Google provides to interface with Google Photos does
@@ -60,9 +76,9 @@
     shared album to a format the screen saver supports,
     select the album, click on 'Sharing Options' and unset the 'Share'
     option.
-    
+
     Also, the extension can only retrieve a maximum of 1000 albums.
-  
+
   ***
 
 * **Why aren't all my photos showing?**
@@ -117,4 +133,17 @@
 
   It can be done, but I have not gotten around to it yet.
   
+  ***
+
+* **Can you hide the cursor when the screensaver is displayed?**
+
+    There is bug in Chrome that prevents this. It was working on MS Windows
+    computers until Chrome Version 58 broke it. It has been broken on Chrome OS
+    for a long time. If you would like to see this fixed, star
+    [issue 714378](https://bugs.chromium.org/p/chromium/issues/detail?id=714378)
+    on the Chromium bug tracker. You will need to sign in with your Google account
+    to do this. Thanks.
+
+
+
   <br />
