@@ -182,6 +182,12 @@
   "tooltip_google_toggle": {
     "message": "Activer/désactiver l'utilisation des albums"
   },
+  "setting_background": {
+    "message": "Exécuter Chrome en arrière-plan"
+  },
+  "setting_background_desc": {
+    "message": "Démarre Chrome sur le démarrage de l'ordinateur et continue de fonctionner lorsqu'il est fermé (recommandé)"
+  },
   "setting_idle_time": {
     "message": "Temps d'attente"
   },

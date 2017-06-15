@@ -182,6 +182,12 @@
   "tooltip_google_toggle": {
     "message": "Enable/disable use of albums"
   },
+  "setting_background": {
+    "message": "Run Chrome in background"
+  },
+  "setting_background_desc": {
+    "message": "Starts Chrome on computer boot and keeps running when closed (Recommended)"
+  },
   "setting_idle_time": {
     "message": "Wait time"
   },

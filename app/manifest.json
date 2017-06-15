@@ -56,10 +56,10 @@
 		"power",
 		"system.display",
 		"alarms",
-		"contextMenus",
-		"background"
+		"contextMenus"
 	],
 	"optional_permissions": [
+		"background",
 		"https://picasaweb.google.com/"
 	],
 	"background": {

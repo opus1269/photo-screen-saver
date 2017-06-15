@@ -103,6 +103,12 @@
       <div class="page-content">
         <iron-pages selected="{{selectedTab}}">
           <div>
+            <setting-toggle
+                name="allowBackground"
+                main-label="{{localize('setting_background')}}"
+                secondary-label="{{localize('setting_background_desc')}}"
+                on-tap="_chromeBackgroundTapped"
+                disabled$="[[!enabled]]"></setting-toggle>
             <setting-slider
                 name="idleTime"
                 label="{{localize('setting_idle_time')}}"
@@ -344,6 +350,25 @@
     },
 
     /**
+     * Event: Process the background permission
+     * @private
+     */
+    _chromeBackgroundTapped() {
+      const isSet = !Chrome.Storage.get('allowBackground');
+      const perm = app.Permissions.BACKGROUND;
+      const isAllowed = app.Permissions.isAllowed(perm);
+      if (isSet && !isAllowed) {
+        app.Permissions.request(perm).catch((err) => {
+          console.log(err);
+        });
+      } else if (!isSet && isAllowed) {
+        app.Permissions.remove(perm).catch((err) => {
+          console.log(err);
+        });
+      }
+    },
+
+    /**
      * Set checked state of a {@link app.PhotoSource}
      * @param {string} useName - source name
      * @param {boolean} state - checked state
@@ -369,7 +394,7 @@
       });
     },
 
-    /**
+  /**
      * Computed property: Set menu icons visibility
      * @param {int} selectedTab - the current tab
      * @returns {boolean} true if menu should be visible

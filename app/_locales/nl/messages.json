@@ -182,6 +182,12 @@
   "tooltip_google_toggle": {
     "message": "Schakel gebruik van albums in/uit"
   },
+  "setting_background": {
+    "message": "Run Chrome op de achtergrond"
+  },
+  "setting_background_desc": {
+    "message": "Start Chrome op computer opstart en blijft draaien wanneer gesloten (aanbevolen)"
+  },
   "setting_idle_time": {
     "message": "Wachttijd"
   },
