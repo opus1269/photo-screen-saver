@@ -243,42 +243,44 @@ app.Data = (function() {
     update: function() {
       // New items, changes, and removal of unused items can take place
       // here when the version changes
-      const oldVersion = Chrome.Storage.getInt('version', _DATA_VERSION);
+      const oldVersion = Chrome.Storage.getInt('version');
 
-      if (_DATA_VERSION >= oldVersion) {
+      if ((oldVersion === null) || (_DATA_VERSION > oldVersion)) {
         // update version number
         Chrome.Storage.set('version', _DATA_VERSION);
       }
 
-      if (oldVersion < 14) {
-        // background used to be a required permission
-        // installed extensions before the change will keep
-        // this permission on update.
-        // https://stackoverflow.com/a/38278824/4468645
-        Chrome.Storage.set('permBackground', 'allowed');
-        Chrome.Storage.set('allowBackground', true);
-      }
-
-      if (oldVersion < 12) {
-        // picasa used to be a required permission
-        // installed extensions before the change will keep
-        // this permission on update.
-        // https://stackoverflow.com/a/38278824/4468645
-        Chrome.Storage.set('permPicasa', 'allowed');
-      }
-
-      if (oldVersion < 10) {
-        // was setting this without quotes before
-        const oldOS = localStorage.getItem('os');
-        if (oldOS) {
-          Chrome.Storage.set('os', oldOS);
+      if(oldVersion !== null) {
+        if (oldVersion < 14) {
+          // background used to be a required permission
+          // installed extensions before the change will keep
+          // this permission on update.
+          // https://stackoverflow.com/a/38278824/4468645
+          Chrome.Storage.set('permBackground', 'allowed');
+          Chrome.Storage.set('allowBackground', true);
         }
-      }
 
-      if (oldVersion < 8) {
-        // change setting-slider values due to adding units
-        _convertSliderValue('transitionTime');
-        _convertSliderValue('idleTime');
+        if (oldVersion < 12) {
+          // picasa used to be a required permission
+          // installed extensions before the change will keep
+          // this permission on update.
+          // https://stackoverflow.com/a/38278824/4468645
+          Chrome.Storage.set('permPicasa', 'allowed');
+        }
+
+        if (oldVersion < 10) {
+          // was setting this without quotes before
+          const oldOS = localStorage.getItem('os');
+          if (oldOS) {
+            Chrome.Storage.set('os', oldOS);
+          }
+        }
+
+        if (oldVersion < 8) {
+          // change setting-slider values due to adding units
+          _convertSliderValue('transitionTime');
+          _convertSliderValue('idleTime');
+        }
       }
 
       _addDefaults();
