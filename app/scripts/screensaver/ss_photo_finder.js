@@ -42,14 +42,15 @@ app.SSFinder = (function() {
    * @memberOf app.SSFinder
    */
   function _markPhotoBad(idx) {
-    const t = app.Screensaver.getTemplate();
-    const name = t.views[idx].getPhotoName();
-    const index = t.photos.findIndex((item) => {
+    const views = app.Screensaver.getViews();
+    const photos = app.Screensaver.getPhotos();
+    const name = views[idx].getPhotoName();
+    const index = photos.findIndex((item) => {
       return item.name === name;
     });
     if (index !== -1) {
-      t.photos[index].name = 'skip';
-      const skipAll = t.photos.every((item) => {
+      photos[index].name = 'skip';
+      const skipAll = photos.every((item) => {
         return item.name === 'skip';
       });
       if (skipAll) {
@@ -67,14 +68,14 @@ app.SSFinder = (function() {
    * @memberOf app.SSFinder
    */
   function _findLoadedPhoto(idx) {
-    const t = app.Screensaver.getTemplate();
-    if (t.views[idx].isLoaded()) {
+    const views = app.Screensaver.getViews();
+    if (views[idx].isLoaded()) {
       return idx;
     }
     // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
-    for (let i = 0; i < t.views.length; i++) {
-      const index = (i + idx) % t.views.length;
-      const view = t.views[index];
+    for (let i = 0; i < views.length; i++) {
+      const index = (i + idx) % views.length;
+      const view = views[index];
       if (app.SSRunner.isCurrentPair(index)) {
         // don't use current animation pair
         continue;
@@ -96,38 +97,40 @@ app.SSFinder = (function() {
    * @memberOf app.SSFinder
    */
   function _replacePhoto(idx, error) {
-    const t = app.Screensaver.getTemplate();
     if (error) {
       // bad url, mark it
       _markPhotoBad(idx);
     }
 
-    if (t.photos.length > t.views.length) {
-      let item = null;
-      // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
-      for (let i = 0; i < t.photos.length; i++) {
-        const index = (i + _VARS.photosIdx) % t.photos.length;
-        // find a url that is ok, AFAWK
-        item = t.photos[index];
-        if (item.name !== 'skip') {
-          _VARS.photosIdx = index;
-          break;
-        }
+    const views = app.Screensaver.getViews();
+    const photos = app.Screensaver.getPhotos();
+    if (views.length <= photos.length) {
+      return;
+    }
+    let item = null;
+    // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
+    for (let i = 0; i < photos.length; i++) {
+      const index = (i + _VARS.photosIdx) % photos.length;
+      // find a url that is ok, AFAWK
+      item = photos[index];
+      if (item.name !== 'skip') {
+        _VARS.photosIdx = index;
+        break;
       }
+    }
 
-      if (item && !app.SSRunner.isCurrentPair(idx)) {
-        // add the next image from the master list to this page
-        t.views[idx].setPhoto(item);
-        if (_VARS.photosIdx === t.photos.length - 1) {
-          _VARS.photosIdx = 0;
-        } else {
-          _VARS.photosIdx += 1;
-        }
+    if (item && !app.SSRunner.isCurrentPair(idx)) {
+      // add the next image from the master list to this page
+      views[idx].setPhoto(item);
+      if (_VARS.photosIdx === photos.length - 1) {
+        _VARS.photosIdx = 0;
+      } else {
+        _VARS.photosIdx += 1;
       }
-      if (!item) {
-        // all photos bad
-        app.Screensaver.setNoPhotos();
-      }
+    }
+    if (!item) {
+      // all photos bad
+      app.Screensaver.setNoPhotos();
     }
   }
 
@@ -137,34 +140,36 @@ app.SSFinder = (function() {
    * @memberOf app.SSFinder
    */
   function _replaceAllPhotos() {
+    const views = app.Screensaver.getViews();
+    const photos = app.Screensaver.getPhotos();
+    if (views.length <= photos.length) {
+      return;
+    }
     app.SSRunner.clearHistory();
-    const t = app.Screensaver.getTemplate();
-    if (t.photos.length > t.views.length) {
-      let pos = 0;
-      let newIdx = _VARS.photosIdx;
-      // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
-      for (let i = 0; i < t.photos.length; i++) {
-        const index = (i + _VARS.photosIdx) % t.photos.length;
-        newIdx = index;
-        const item = t.photos[index];
-        if (item.name !== 'skip') {
-          if (app.SSRunner.isCurrentPair(pos)) {
-            // don't replace current animation pair
-            pos++;
-            continue;
-          }
-          // replace photo
-          if (pos < t.views.length) {
-            t.views[pos].setPhoto(item);
-          }
+    let pos = 0;
+    let newIdx = _VARS.photosIdx;
+    // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
+    for (let i = 0; i < photos.length; i++) {
+      const index = (i + _VARS.photosIdx) % photos.length;
+      newIdx = index;
+      const item = photos[index];
+      if (item.name !== 'skip') {
+        if (app.SSRunner.isCurrentPair(pos)) {
+          // don't replace current animation pair
           pos++;
-          if (pos >= t.views.length) {
-            break;
-          }
+          continue;
+        }
+        // replace photo
+        if (pos < views.length) {
+          views[pos].setPhoto(item);
+        }
+        pos++;
+        if (pos >= views.length) {
+          break;
         }
       }
-      _VARS.photosIdx = (newIdx === t.photos.length - 1) ? 0 : newIdx + 1;
     }
+    _VARS.photosIdx = (newIdx === photos.length - 1) ? 0 : newIdx + 1;
   }
 
   return {
@@ -192,7 +197,6 @@ app.SSFinder = (function() {
     getNext: function(idx, lastSelected, previousIdx) {
       _VARS.replaceIdx = lastSelected;
       _VARS.previousIdx = previousIdx;
-      const t = app.Screensaver.getTemplate();
       let ret = _findLoadedPhoto(idx);
       if (ret === -1) {
         if (_VARS.waitForLoad) {
@@ -203,7 +207,8 @@ app.SSFinder = (function() {
           // tried waiting for load, now replace the current photos
           app.SSRunner.setWaitTime(200);
           _replaceAllPhotos();
-          idx = (idx === t.views.length - 1) ? 0 : idx + 1;
+          const views = app.Screensaver.getViews();
+          idx = (idx === views.length - 1) ? 0 : idx + 1;
           ret = _findLoadedPhoto(idx);
           if (ret !== -1) {
             _VARS.waitForLoad = true;
@@ -222,8 +227,8 @@ app.SSFinder = (function() {
      * @memberOf app.SSFinder
      */
     getPhotosCount: function() {
-      const t = app.Screensaver.getTemplate();
-      return t.photos.length;
+      const photos = app.Screensaver.getPhotos();
+      return photos.length;
     },
 
     /**
@@ -249,13 +254,13 @@ app.SSFinder = (function() {
      * @memberOf app.SSFinder
      */
     replacePhoto: function() {
-      const t = app.Screensaver.getTemplate();
       if (_VARS.replaceIdx >= 0) {
         _replacePhoto(_VARS.replaceIdx, false);
       }
 
+      const views = app.Screensaver.getViews();
       const prevPage = _VARS.previousIdx;
-      if ((prevPage >= 0) && t.views[prevPage].isError()) {
+      if ((prevPage >= 0) && views[prevPage].isError()) {
         // broken link, mark it and replace it
         _replacePhoto(prevPage, true);
       }

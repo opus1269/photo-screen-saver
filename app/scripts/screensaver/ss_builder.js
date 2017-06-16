@@ -101,30 +101,30 @@ app.SSBuilder = (function() {
     const t = app.Screensaver.getTemplate();
     let sources = app.PhotoSource.getSelectedPhotos();
     sources = sources || [];
-    sources.forEach((source) => {
+    for (const source of sources) {
       const type = source.type;
       let ct = 0;
-      source.photos.forEach((sourcePhoto) => {
+      for (const sourcePhoto of source.photos) {
         if (!app.Photo.ignore(sourcePhoto.asp, t.photoSizing)) {
-          const photo =
-              new app.Photo('photo' + ct, sourcePhoto, type);
-          t.photos.push(photo);
+          const photo = new app.Photo('photo' + ct, sourcePhoto, type);
+          app.Screensaver.addPhoto(photo);
           ct++;
         }
-      });
-    });
+      }
+    }
 
-    if (!t.photos || (t.photos.length === 0)) {
-      // No usable photos, display static image
+    const photos = app.Screensaver.getPhotos();
+    if (!photos || (photos.length === 0)) {
+      // No usable photos
       app.Screensaver.setNoPhotos();
       return false;
     }
 
     if (Chrome.Storage.getBool('shuffle')) {
       // randomize the order
-      Chrome.Utils.shuffleArray(t.photos);
+      Chrome.Utils.shuffleArray(photos);
       // rename
-      t.photos.forEach((photo, index) => {
+      photos.forEach((photo, index) => {
         photo.name = 'photo' + index;
       });
     }
@@ -138,19 +138,21 @@ app.SSBuilder = (function() {
    */
   function _createPages() {
     const t = app.Screensaver.getTemplate();
-    const len = Math.min(t.photos.length, _MAX_PAGES);
+    const photos = app.Screensaver.getPhotos();
+    const len = Math.min(photos.length, _MAX_PAGES);
     for (let i = 0; i < len; i++) {
-      const photo = t.photos[i];
+      const photo = photos[i];
       const view = app.SSView.createView(photo, t.photoSizing);
-      t.push('views', view);
+      app.Screensaver.addView(view);
     }
     app.SSFinder.setPhotosIndex(len);
 
     // force update of animated pages
-    t.rep.render();
+    app.Screensaver.renderPages();
 
-    // set the Elements of the view
-    t.views.forEach((view, index) => {
+    // set the Elements of each view
+    const views = app.Screensaver.getViews();
+    views.forEach((view, index) => {
       const el = t.p.querySelector('#view' + index);
       const image = el.querySelector('.image');
       const author = el.querySelector('.author');

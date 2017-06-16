@@ -109,11 +109,11 @@ app.SSRunner = (function() {
    * @memberOf app.SSRunner
    */
   function _trackHistory(newIdx, selection) {
-    const t = app.Screensaver.getTemplate();
+    const views = app.Screensaver.getViews();
     const idx = history.idx;
     const len = history.arr.length;
     if (newIdx === null) {
-      const photoName = t.views[selection].getPhotoName();
+      const photoName = views[selection].getPhotoName();
       const photoId = parseInt(photoName.match(/\d+/)[0], 10);
       const photosPos = app.SSFinder.getPhotosIndex();
       if ((idx === len - 1)) {
@@ -143,16 +143,17 @@ app.SSRunner = (function() {
    * @memberOf app.SSRunner
    */
   function _runShow(newIdx = null) {
-    const t = app.Screensaver.getTemplate();
-    if (t.noPhotos) {
+    if (!app.Screensaver.hasPhotos()) {
       // no usable photos to show
       return;
     }
 
-    let curIdx = (newIdx === null) ? t.p.selected : newIdx;
+    const selected = app.Screensaver.getSelected();
+    const views = app.Screensaver.getViews();
+    let curIdx = (newIdx === null) ? selected : newIdx;
     curIdx = !app.SSRunner.isStarted() ? 0 : curIdx;
-    const prevIdx = (curIdx > 0) ? curIdx - 1 : t.views.length - 1;
-    let nextIdx = (curIdx === t.views.length - 1) ? 0 : curIdx + 1;
+    const prevIdx = (curIdx > 0) ? curIdx - 1 : views.length - 1;
+    let nextIdx = (curIdx === views.length - 1) ? 0 : curIdx + 1;
 
     if (!app.SSRunner.isStarted()) {
       // special case for first page. neon-animated-pages is configured
@@ -173,11 +174,11 @@ app.SSRunner = (function() {
       }
 
       // setup photo
-      t.views[nextIdx].render();
+      views[nextIdx].render();
 
-      // update t.p.selected so the animation runs
-      _VARS.lastSelected = t.p.selected;
-      t.p.selected = nextIdx;
+      // update selected so the animation runs
+      _VARS.lastSelected = selected;
+      app.Screensaver.setSelected(nextIdx);
     }
 
     if (newIdx === null) {
@@ -261,8 +262,8 @@ app.SSRunner = (function() {
      * @memberOf app.SSRunner
      */
     isCurrentPair: function(idx) {
-      const t = app.Screensaver.getTemplate();
-      return ((idx === t.p.selected) || (idx === _VARS.lastSelected));
+      const selected = app.Screensaver.getSelected();
+      return ((idx === selected) || (idx === _VARS.lastSelected));
     },
 
     /**
@@ -308,13 +309,11 @@ app.SSRunner = (function() {
     back: function() {
       if (!_VARS.started) {
         return;
-      }
-      if (history.idx <= 0) {
+      } else if (history.idx <= 0) {
         // at beginning
         return;
       }
 
-      const t = app.Screensaver.getTemplate();
       let nextStep = null;
       let idx = history.idx - 2;
       history.idx = idx;
@@ -337,8 +336,10 @@ app.SSRunner = (function() {
       nextStep = (nextStep === null) ? viewsIdx : nextStep;
       app.SSFinder.setPhotosIndex(photosPos);
       _VARS.lastSelected = history.arr[idx].lastViewsIdx;
-      t.views[viewsIdx].setPhoto(t.photos[photoId]);
-      t.views[viewsIdx].render();
+      const views = app.Screensaver.getViews();
+      const photos = app.Screensaver.getPhotos();
+      views[viewsIdx].setPhoto(photos[photoId]);
+      views[viewsIdx].render();
 
       _step(nextStep);
     },

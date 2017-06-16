@@ -90,12 +90,47 @@ app.Screensaver = (function() {
     },
 
     /**
+     * Render the animated pages
+     * @memberOf app.Screensaver
+     */
+    renderPages: function() {
+      t.rep.render();
+    },
+
+    /**
      * Get reference to the auto-binding template
      * @returns {app.Screensaver.Template} The auto-binding template
      * @memberOf app.Screensaver
      */
     getTemplate: function() {
       return t;
+    },
+
+    /**
+     * Get the selected index
+     * @returns {int|undefined} The index
+     * @memberOf app.Screensaver
+     */
+    getSelected: function() {
+      return t.p.selected;
+    },
+
+    /**
+     * Set the selected index
+     * @param {int} selected - The index
+     * @memberOf app.Screensaver
+     */
+    setSelected: function(selected) {
+      t.p.selected = selected;
+    },
+
+    /**
+     * Do we have usable photos
+     * @returns {boolean} true if we have usable photos
+     * @memberOf app.Screensaver
+     */
+    hasPhotos: function() {
+      return !t.noPhotos;
     },
 
     /**
@@ -106,6 +141,42 @@ app.Screensaver = (function() {
       const t = app.Screensaver.getTemplate();
       t.set('noPhotos', true);
       t.noPhotosLabel = Chrome.Locale.localize('no_photos');
+    },
+
+    /**
+     * Get reference to [t.views]{@link app.Screensaver.Template}
+     * @returns {Array<app.SSView>} The views
+     * @memberOf app.Screensaver
+     */
+    getViews: function() {
+      return t.views;
+    },
+
+    /**
+     * Add view to [t.views]{@link app.Screensaver.Template}
+     * @param {app.SSView} view - The view to add
+     * @memberOf app.Screensaver
+     */
+    addView: function(view) {
+      t.push('views', view);
+    },
+
+    /**
+     * Get reference to [t.photos]{@link app.Screensaver.Template}
+     * @returns {app.Photo[]} The photos
+     * @memberOf app.Screensaver
+     */
+    getPhotos: function() {
+      return t.photos;
+    },
+
+    /**
+     * Add photo to [t.photos]{@link app.Screensaver.Template}
+     * @param {app.Photo} photo - The photo to add
+     * @memberOf app.Screensaver
+     */
+    addPhoto: function(photo) {
+      t.photos.push(photo);
     },
 
     /**
