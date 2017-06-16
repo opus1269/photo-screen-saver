@@ -25,9 +25,9 @@ app.ChromeCast = (function() {
       const url = '/assets/chromecast.json';
       return Chrome.Http.doGet(url).then((photos) => {
         photos = photos || [];
-        photos.forEach((photo) => {
+        for (const photo of photos) {
           photo.asp = 1.78;
-        });
+        }
         return Promise.resolve(photos);
       });
     },
