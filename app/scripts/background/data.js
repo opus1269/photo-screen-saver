@@ -243,9 +243,9 @@ app.Data = (function() {
     update: function() {
       // New items, changes, and removal of unused items can take place
       // here when the version changes
-      const oldVersion = Chrome.Storage.getInt('version');
+      const oldVersion = Chrome.Storage.getInt('version', _DATA_VERSION);
 
-      if (_DATA_VERSION > oldVersion) {
+      if (_DATA_VERSION >= oldVersion) {
         // update version number
         Chrome.Storage.set('version', _DATA_VERSION);
       }
