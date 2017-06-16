@@ -359,11 +359,13 @@
       const isAllowed = app.Permissions.isAllowed(perm);
       if (isSet && !isAllowed) {
         app.Permissions.request(perm).catch((err) => {
-          console.log(err);
+          Chrome.GA.error(err.message,
+              'settings-page._chromeBackgroundTapped');
         });
       } else if (!isSet && isAllowed) {
         app.Permissions.remove(perm).catch((err) => {
-          console.log(err);
+          Chrome.GA.error(err.message,
+              'settings-page._chromeBackgroundTapped');
         });
       }
     },
