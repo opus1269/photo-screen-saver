@@ -26,7 +26,7 @@ app.ChromeCast = (function() {
       return Chrome.Http.doGet(url).then((photos) => {
         photos = photos || [];
         photos.forEach((photo) => {
-          photo.asp = 16 / 9;
+          photo.asp = 1.78;
         });
         return Promise.resolve(photos);
       });
