@@ -18,8 +18,7 @@ app.SSFinder = (function() {
   /**
    * Instance variables
    * @type {Object}
-   * @property {int} photosIdx - pointer into
-   *     [t.photos]{@link app.Screensaver.t} array
+   * @property {int} photosIdx - pointer into {@link app.SSPhotos} array
    * @property {int} replaceIdx - page whose photo is to be replaced
    * @property {int} previousIdx - previous page (may have failed to load)
    * @property {int} transTime - slide transition time in milliSecs
@@ -36,24 +35,18 @@ app.SSFinder = (function() {
   };
 
   /**
-   * Mark a photo in [t.photos]{@link app.Screensaver.t} as unusable
+   * Mark a photo in {@link app.SSPhotos} as unusable
    * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
    * @private
    * @memberOf app.SSFinder
    */
   function _markPhotoBad(idx) {
     const views = app.Screensaver.getViews();
-    const photos = app.Screensaver.getPhotos();
     const name = views[idx].getPhotoName();
-    const index = photos.findIndex((item) => {
-      return item.name === name;
-    });
+    const index = app.SSPhotos.getIndexFromName(name);
     if (index !== -1) {
-      photos[index].name = 'skip';
-      const skipAll = photos.every((item) => {
-        return item.name === 'skip';
-      });
-      if (skipAll) {
+      app.SSPhotos.markBad(index);
+      if (!app.SSPhotos.hasUsable()) {
         // if all items are bad set no photos state
         app.Screensaver.setNoPhotos();
       }
@@ -103,17 +96,17 @@ app.SSFinder = (function() {
     }
 
     const views = app.Screensaver.getViews();
-    const photos = app.Screensaver.getPhotos();
-    if (views.length <= photos.length) {
+    const photoLen = app.SSPhotos.getCount();
+    if (photoLen <= views.length) {
       return;
     }
     let item = null;
     // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
-    for (let i = 0; i < photos.length; i++) {
-      const index = (i + _VARS.photosIdx) % photos.length;
+    for (let i = 0; i < photoLen; i++) {
+      const index = (i + _VARS.photosIdx) % photoLen;
       // find a url that is ok, AFAWK
-      item = photos[index];
-      if (item.name !== 'skip') {
+      if (app.SSPhotos.isUsable(index)) {
+        item = app.SSPhotos.get(index);
         _VARS.photosIdx = index;
         break;
       }
@@ -122,7 +115,7 @@ app.SSFinder = (function() {
     if (item && !app.SSRunner.isCurrentPair(idx)) {
       // add the next image from the master list to this page
       views[idx].setPhoto(item);
-      if (_VARS.photosIdx === photos.length - 1) {
+      if (_VARS.photosIdx === photoLen - 1) {
         _VARS.photosIdx = 0;
       } else {
         _VARS.photosIdx += 1;
@@ -141,19 +134,19 @@ app.SSFinder = (function() {
    */
   function _replaceAllPhotos() {
     const views = app.Screensaver.getViews();
-    const photos = app.Screensaver.getPhotos();
-    if (views.length <= photos.length) {
+    const photoLen = app.SSPhotos.getCount();
+    if (photoLen <= views.length) {
       return;
     }
     app.SSRunner.clearHistory();
     let pos = 0;
     let newIdx = _VARS.photosIdx;
     // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
-    for (let i = 0; i < photos.length; i++) {
-      const index = (i + _VARS.photosIdx) % photos.length;
+    for (let i = 0; i < photoLen; i++) {
+      const index = (i + _VARS.photosIdx) % photoLen;
       newIdx = index;
-      const item = photos[index];
-      if (item.name !== 'skip') {
+      if (app.SSPhotos.isUsable(index)) {
+        const item = app.SSPhotos.get(index);
         if (app.SSRunner.isCurrentPair(pos)) {
           // don't replace current animation pair
           pos++;
@@ -169,7 +162,7 @@ app.SSFinder = (function() {
         }
       }
     }
-    _VARS.photosIdx = (newIdx === photos.length - 1) ? 0 : newIdx + 1;
+    _VARS.photosIdx = (newIdx === photoLen - 1) ? 0 : newIdx + 1;
   }
 
   return {
@@ -222,17 +215,7 @@ app.SSFinder = (function() {
     },
 
     /**
-     * Get the number of photos
-     * @returns {int} photo count
-     * @memberOf app.SSFinder
-     */
-    getPhotosCount: function() {
-      const photos = app.Screensaver.getPhotos();
-      return photos.length;
-    },
-
-    /**
-     * Get the index into [t.photos]{@link app.Screensaver.t}
+     * Get the index into {@link app.SSPhotos}
      * @returns {int} idx - array index
      * @memberOf app.SSFinder
      */
@@ -241,7 +224,7 @@ app.SSFinder = (function() {
     },
 
     /**
-     * Set the index into [t.photos]{@link app.Screensaver.t}
+     * Set the index into {@link app.SSPhotos}
      * @param {int} idx - array index
      * @memberOf app.SSFinder
      */

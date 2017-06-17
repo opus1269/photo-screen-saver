@@ -20,14 +20,16 @@ app.Screensaver = (function() {
    * @typedef {Element} app.Screensaver.Template
    * @property {?Element} rep - repeat template
    * @property {?Element} p - animated-pages
-   * @property {Array<app.Photo>} photos - array of photos
    * @property {Array<app.SSView>} views - array of views
-   * @property {int} sizingType - the way the photos are rendered
+   * @property {int} photoSizing - the way the photos are rendered
+   * @property {?string} sizingType - the way an image is rendered
    * @property {int} aniType - the animation type for photo transitions
    * @property {boolean} paused - true if slideshow paused
    * @property {boolean} noPhotos - true if there are no usable photos
    * @property {string} noPhotosLabel - label when no photos are useable
    * @property {string} timeLabel - current time label
+   * @property {Function} set - Polymer setter
+   * @property {Function} push - Polymer pusher
    * @memberOf app.Screensaver
    */
 
@@ -41,9 +43,9 @@ app.Screensaver = (function() {
   const t = document.querySelector('#t');
   t.rep = null;
   t.p = null;
-  t.photos = [];
   t.views = [];
-  t.sizingType = 0;
+  t.photoSizing = 0;
+  t.sizingType = null;
   t.aniType = 0;
   t.paused = false;
   t.noPhotos = false;
@@ -69,11 +71,78 @@ app.Screensaver = (function() {
     t.rep = t.$.repeatTemplate;
     t.p = t.$.pages;
 
+    _setZoom();
+    _setupPhotoSizing();
+    _setupPhotoTransitions();
+
     app.Screensaver.launch();
   }
 
   // listen for dom-change
   t.addEventListener('dom-change', _onDomChange);
+
+  /**
+   * Process settings related to the photo's appearance
+   * @private
+   * @memberOf app.Screensaver
+   */
+  function _setupPhotoSizing() {
+    t.photoSizing = Chrome.Storage.getInt('photoSizing', 0);
+    if (t.photoSizing === 4) {
+      // pick random sizing
+      t.photoSizing = Chrome.Utils.getRandomInt(0, 3);
+    }
+    let type = 'contain';
+    switch (t.photoSizing) {
+      case 0:
+        type = 'contain';
+        break;
+      case 1:
+        type = 'cover';
+        break;
+      case 2:
+      case 3:
+        type = null;
+        break;
+    }
+    t.set('sizingType', type);
+  }
+
+  /**
+   * Process settings related to between photo transitions
+   * @private
+   * @memberOf app.Screensaver
+   */
+  function _setupPhotoTransitions() {
+    let type = Chrome.Storage.getInt('photoTransition', 0);
+    if (type === 8) {
+      // pick random transition
+      type = Chrome.Utils.getRandomInt(0, 7);
+    }
+    t.set('aniType', type);
+
+    app.SSTime.initialize();
+  }
+
+  /**
+   * Set the window zoom factor to 1.0
+   * @private
+   * @memberOf app.Screensaver
+   */
+  function _setZoom() {
+    if (Chrome.Utils.getChromeVersion() >= 42) {
+      // override zoom factor to 1.0 - chrome 42 and later
+      const chromep = new ChromePromise();
+      chromep.tabs.getZoom().then((zoomFactor) => {
+        if ((zoomFactor <= 0.99) || (zoomFactor >= 1.01)) {
+          chrome.tabs.setZoom(1.0);
+        }
+        return null;
+      }).catch((err) => {
+        Chrome.GA.error(err.message, 'chromep.tabs.getZoom');
+      });
+    }
+  }
 
   return {
     /**
@@ -107,6 +176,15 @@ app.Screensaver = (function() {
     },
 
     /**
+     * Get the type of view
+     * @returns {int} The sizing type
+     * @memberOf app.Screensaver
+     */
+    getViewType: function() {
+      return t.photoSizing;
+    },
+
+    /**
      * Get the selected index
      * @returns {int|undefined} The index
      * @memberOf app.Screensaver
@@ -126,11 +204,11 @@ app.Screensaver = (function() {
 
     /**
      * Do we have usable photos
-     * @returns {boolean} true if we have usable photos
+     * @returns {boolean} true if all photos are bad
      * @memberOf app.Screensaver
      */
-    hasPhotos: function() {
-      return !t.noPhotos;
+    noPhotos: function() {
+      return t.noPhotos;
     },
 
     /**
@@ -159,24 +237,6 @@ app.Screensaver = (function() {
      */
     addView: function(view) {
       t.push('views', view);
-    },
-
-    /**
-     * Get reference to [t.photos]{@link app.Screensaver.Template}
-     * @returns {app.Photo[]} The photos
-     * @memberOf app.Screensaver
-     */
-    getPhotos: function() {
-      return t.photos;
-    },
-
-    /**
-     * Add photo to [t.photos]{@link app.Screensaver.Template}
-     * @param {app.Photo} photo - The photo to add
-     * @memberOf app.Screensaver
-     */
-    addPhoto: function(photo) {
-      t.photos.push(photo);
     },
 
     /**

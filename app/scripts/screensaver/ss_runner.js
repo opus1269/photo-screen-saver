@@ -143,7 +143,7 @@ app.SSRunner = (function() {
    * @memberOf app.SSRunner
    */
   function _runShow(newIdx = null) {
-    if (!app.Screensaver.hasPhotos()) {
+    if (app.Screensaver.noPhotos()) {
       // no usable photos to show
       return;
     }
@@ -205,7 +205,7 @@ app.SSRunner = (function() {
       }
       _VARS.interactive = Chrome.Storage.get('interactive');
 
-      history.max = Math.min(app.SSFinder.getPhotosCount(), history.max);
+      history.max = Math.min(app.SSPhotos.getCount(), history.max);
 
       // start slide show. slight delay at beginning so we have a smooth start
       window.setTimeout(_runShow, delay);
@@ -337,8 +337,8 @@ app.SSRunner = (function() {
       app.SSFinder.setPhotosIndex(photosPos);
       _VARS.lastSelected = history.arr[idx].lastViewsIdx;
       const views = app.Screensaver.getViews();
-      const photos = app.Screensaver.getPhotos();
-      views[viewsIdx].setPhoto(photos[photoId]);
+      const photo = app.SSPhotos.get(photoId);
+      views[viewsIdx].setPhoto(photo);
       views[viewsIdx].render();
 
       _step(nextStep);
