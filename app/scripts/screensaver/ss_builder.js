@@ -23,7 +23,7 @@ app.SSBuilder = (function() {
    * @private
    * @memberOf app.SSBuilder
    */
-  const _MAX_PAGES = 20;
+  const _MAX_PAGES = 20; // todo
 
   /**
    * Build the {@link app.SSPhotos} that will be displayed
@@ -65,7 +65,7 @@ app.SSBuilder = (function() {
       const view = app.SSView.createView(photo, viewType);
       app.Screensaver.addView(view);
     }
-    app.SSFinder.setPhotosIndex(len);
+    app.SSPhotos.setCurrentIndex(len);
 
     // force update of animated pages
     app.Screensaver.renderPages();

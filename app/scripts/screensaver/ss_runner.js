@@ -114,8 +114,8 @@ app.SSRunner = (function() {
     const len = history.arr.length;
     if (newIdx === null) {
       const photoName = views[selection].getPhotoName();
-      const photoId = parseInt(photoName.match(/\d+/)[0], 10);
-      const photosPos = app.SSFinder.getPhotosIndex();
+      const photoId = app.SSPhotos.getIndexFromName(photoName);
+      const photosPos = app.SSPhotos.getCurrentIndex();
       if ((idx === len - 1)) {
         if (history.arr.length > history.max) {
           // FIFO delete
@@ -179,11 +179,11 @@ app.SSRunner = (function() {
       // update selected so the animation runs
       _VARS.lastSelected = selected;
       app.Screensaver.setSelected(nextIdx);
-    }
 
-    if (newIdx === null) {
-      // load next photo from master array
-      app.SSFinder.replacePhoto();
+      if (newIdx === null) {
+        // load next photo from master array
+        app.SSFinder.replacePhoto();
+      }
     }
 
     // set the next timeout, then call ourselves - runs unless interrupted
@@ -276,6 +276,22 @@ app.SSRunner = (function() {
     },
 
     /**
+     * Update the history for the given t.views index
+     * @param {int} viewsIdx - t.views index
+     * @param {int} photoId - {@link app.SSPhotos} index
+     * @param {int} photosPos - {@link app.SSPhotos} index
+     * @memberOf app.SSRunner
+     */
+    updateHistory: function(viewsIdx, photoId, photosPos) {
+      for (const item of history.arr) {
+        if (item.viewsIdx === viewsIdx) {
+          item.photoId = photoId;
+          item.photosPos = photosPos;
+        }
+      }
+    },
+
+    /**
      * Toggle paused state of the slideshow
      * @param {?int} [newIdx=null] optional idx to use for current idx
      * @memberOf app.SSRunner
@@ -324,8 +340,9 @@ app.SSRunner = (function() {
           return;
         } else {
           // at beginning, first time through
+          // history.idx += 1;
           nextStep = -1;
-          idx = 0;
+          idx = 1;
         }
       }
 
@@ -334,7 +351,7 @@ app.SSRunner = (function() {
       const photoId = history.arr[idx].photoId;
       const viewsIdx = history.arr[idx].viewsIdx;
       nextStep = (nextStep === null) ? viewsIdx : nextStep;
-      app.SSFinder.setPhotosIndex(photosPos);
+      app.SSPhotos.setCurrentIndex(photosPos);
       _VARS.lastSelected = history.arr[idx].lastViewsIdx;
       const views = app.Screensaver.getViews();
       const photo = app.SSPhotos.get(photoId);

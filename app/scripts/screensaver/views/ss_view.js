@@ -28,7 +28,7 @@
      * @constructor
      */
     constructor(photo) {
-      this.photo = Chrome.JSONUtils.shallowCopy(photo);
+      this.photo = photo;
       this.image = null;
       this.author = null;
       this.time = null;
@@ -163,9 +163,8 @@
      * @param {app.Photo} photo - a photo to render
      */
     setPhoto(photo) {
-      const photoCopy = Chrome.JSONUtils.shallowCopy(photo);
       if (this.model) {
-        this.model.set('view.photo', photoCopy);
+        this.model.set('view.photo', photo);
       }
       this._setLocation();
       this._super500px();
