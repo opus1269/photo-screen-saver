@@ -37,7 +37,7 @@ app.SSHistory = (function() {
   const history = {
     arr: [],
     idx: -1,
-    max: 20, // todo
+    max: 20,
   };
 
   return {
@@ -131,7 +131,6 @@ app.SSHistory = (function() {
           return null;
         } else {
           // at beginning, first time through
-          // todo history.idx += 1;
           nextStep = -1;
           idx = 1;
         }

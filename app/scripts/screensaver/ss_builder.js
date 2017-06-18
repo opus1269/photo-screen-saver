@@ -23,7 +23,7 @@ app.SSBuilder = (function() {
    * @private
    * @memberOf app.SSBuilder
    */
-  const _MAX_PAGES = 20; // todo
+  const _MAX_PAGES = 20;
 
   /**
    * Build the {@link app.SSPhotos} that will be displayed
