@@ -86,7 +86,7 @@ app.SSFinder = (function() {
           view.setPhoto(photo);
           // todo const photoId = app.SSPhotos.getIndexFromName(photo.name);
           // const photosIdx = app.SSPhotos.getCurrentIndex();
-          // app.SSRunner.updateHistory(idx, photoId, photosIdx);
+          // app.SSHistory.update(idx, photoId, photosIdx);
         }
       }
     }
@@ -101,8 +101,7 @@ app.SSFinder = (function() {
    */
   function _replacePhoto(idx) {
     if (app.SSRunner.isCurrentPair(idx)) {
-      Chrome.GA.error('Attempt to replace member of current pair',
-          'SSFinder._replacePhoto');
+      console.log('Attempt to replace member of current pair');
       return;
     }
 
