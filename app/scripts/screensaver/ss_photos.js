@@ -176,15 +176,6 @@ app.SSPhotos = (function() {
       return parseInt(name.match(/\d+/)[0], 10);
     },
 
-    // todo /**
-    //  * Get an {@link Iterator} on the photos
-    //  * @returns {Iterator.<app.SSPhotos>} Iterator
-    //  * @memberOf app.SSPhotos
-    //  */
-    // getEntries: function() {
-    //   return _photos.entries;
-    // },
-
     /**
      * Mark an {@link app.Photo} as bad
      * @param {int} idx - The index

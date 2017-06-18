@@ -152,7 +152,6 @@ app.SSRunner = (function() {
     const views = app.Screensaver.getViews();
     let curIdx = (newIdx === null) ? selected : newIdx;
     curIdx = !app.SSRunner.isStarted() ? 0 : curIdx;
-    const prevIdx = (curIdx > 0) ? curIdx - 1 : views.length - 1;
     let nextIdx = (curIdx === views.length - 1) ? 0 : curIdx + 1;
 
     if (!app.SSRunner.isStarted()) {
@@ -161,7 +160,7 @@ app.SSRunner = (function() {
       nextIdx = 0;
     }
 
-    nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected, prevIdx);
+    nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected);
     if (nextIdx !== -1) {
       // the next photo is ready
 
