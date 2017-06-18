@@ -20,7 +20,7 @@ app.SSHistory = (function() {
    * @typedef {Object} app.SSHistory.Item
    * @property {int} viewsIdx - t.views index
    * @property {int} lastViewsIdx - t.views index
-   * @property {int} photoId - {@link app.Photo} id
+   * @property {int} photoId - {@link app.SSPhoto} id
    * @property {int} photosPos - pointer into {@link app.SSPhotos}
    * @memberOf app.SSHistory
    */
@@ -30,7 +30,7 @@ app.SSHistory = (function() {
    * @property {Array<app.SSHistory.Item>} arr - history items
    * @property {int} idx - pointer into arr
    * @property {int} max - max length of arr, it will actually have 1 item more
-   * @const
+   * @consts
    * @private
    * @memberOf app.SSHistory
    */

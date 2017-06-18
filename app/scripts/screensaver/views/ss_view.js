@@ -13,6 +13,7 @@
 
   /**
    * Screensaver zoom view and base class for other SSView classes
+   * @property {app.SSPhoto} photo - photo to view
    * @property {Element} image - paper-image
    * @property {Element} author - label
    * @property {Element} time - label
@@ -24,7 +25,7 @@
 
     /**
      * Create a new SSView
-     * @param {app.Photo} photo - photo item
+     * @param {app.SSPhoto} photo - An {app.SSPhoto}
      * @constructor
      */
     constructor(photo) {
@@ -38,7 +39,7 @@
 
     /**
      * Factory Method to create a new View
-     * @param {app.Photo} photo - photo item
+     * @param {app.SSPhoto} photo - An {app.SSPhoto}
      * @param {int} sizing - photo sizing type
      * @returns {app.SSView} a new SSView or subclass
      * @static
@@ -160,7 +161,7 @@
 
     /**
      * Set the photo
-     * @param {app.Photo} photo - a photo to render
+     * @param {app.SSPhoto} photo - a photo to render
      */
     setPhoto(photo) {
       if (this.model) {

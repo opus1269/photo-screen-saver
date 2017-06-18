@@ -143,7 +143,7 @@ app.SSEvents = (function() {
     const selected = app.Screensaver.getSelected();
     const views = app.Screensaver.getViews();
     if (app.SSRunner.isStarted()) {
-      app.Photo.showSource(views[selected].photo);
+      views[selected].photo.showSource();
     }
     _close();
   }

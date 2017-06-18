@@ -34,7 +34,7 @@
 
 		/**
 		 * Create new SSView
-		 * @param {app.Photo} photo - photo item
+		 * @param {app.SSPhoto} photo - An {app.SSPhoto}
 		 * @constructor
 		 */
 		constructor(photo) {

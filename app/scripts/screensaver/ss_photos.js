@@ -7,7 +7,7 @@
 window.app = window.app || {};
 
 /**
- * Collection of {@link app.Photo} objects
+ * Collection of {@link app.SSPhoto} objects
  * @namespace
  */
 app.SSPhotos = (function() {
@@ -17,7 +17,7 @@ app.SSPhotos = (function() {
 
   /**
    * The array of photos
-   * @type {Array<app.Photo>}
+   * @type {Array<app.SSPhoto>}
    * @const
    * @private
    * @memberOf app.SSPhotos
@@ -41,8 +41,8 @@ app.SSPhotos = (function() {
   let _hasUsable = true;
 
   /**
-   * Is the given {@link app.Photo} in one of the views
-   * @param {app.Photo} photo - A photo
+   * Is the given {@link app.SSPhoto} in one of the views
+   * @param {app.SSPhoto} photo - A photo
    * @returns {boolean} true if in t.views
    * @private
    * @memberOf app.SSPhotos
@@ -70,8 +70,8 @@ app.SSPhotos = (function() {
       const viewType = app.Screensaver.getViewType();
       let ct = 0;
       for (const sourcePhoto of source.photos) {
-        if (!app.Photo.ignore(sourcePhoto.asp, viewType)) {
-          const photo = new app.Photo('photo' + ct, sourcePhoto, type);
+        if (!app.SSPhoto.ignore(sourcePhoto.asp, viewType)) {
+          const photo = new app.SSPhoto('photo' + ct, sourcePhoto, type);
           _photos.push(photo);
           ct++;
         }
@@ -107,9 +107,9 @@ app.SSPhotos = (function() {
     },
 
     /**
-     * Get the {@link app.Photo} at the given index
+     * Get the {@link app.SSPhoto} at the given index
      * @param {int} idx - The index
-     * @returns {app.Photo} A {@link app.Photo}
+     * @returns {app.SSPhoto} A {@link app.SSPhoto}
      * @memberOf app.SSPhotos
      */
     get: function(idx) {
@@ -117,8 +117,8 @@ app.SSPhotos = (function() {
     },
 
     /**
-     * Get the next {@link app.Photo} that is usable
-     * @returns {?app.Photo} A {@link app.Photo}
+     * Get the next {@link app.SSPhoto} that is usable
+     * @returns {?app.SSPhoto} An {@link app.SSPhoto}
      * @memberOf app.SSPhotos
      */
     getNextUsable: function() {
@@ -164,7 +164,7 @@ app.SSPhotos = (function() {
     },
 
     /**
-     * Get the index of the {@link app.Photo} with the given name
+     * Get the index of the {@link app.SSPhoto} with the given name
      * @param {string} name - The name
      * @returns {int} The index, -1 if photo is bad
      * @memberOf app.SSPhotos
@@ -177,7 +177,7 @@ app.SSPhotos = (function() {
     },
 
     /**
-     * Mark an {@link app.Photo} as bad
+     * Mark an {@link app.SSPhoto} as bad
      * @param {int} idx - The index
      * @memberOf app.SSPhotos
      */

@@ -25,7 +25,7 @@
 
 		/**
 		 * Create new SSViewFrame
-		 * @param {app.Photo} photo - photo item
+		 * @param {app.SSPhoto} photo - An {app.SSPhoto}
 		 * @constructor
 		 */
 		constructor(photo) {
@@ -88,7 +88,7 @@
 			const imageStyle = image.style;
 			const img = image.$.img;
 			const imgStyle = img.style;
-			/** @type {app.Photo} */
+			/** @type {app.SSPhoto} */
 			const photo = this.photo;
 			const ar = photo.aspectRatio;
 
@@ -97,9 +97,8 @@
 			const borderBot = screen.height * 0.05;
 			const padding = screen.height * 0.025;
 
-			const label =
-				app.Photo.buildAuthorLabel(photo.type, photo.author, true);
-			model.set('view.label', label);
+			photo.setAuthorLabel(true);
+			model.set('view.label', photo.label);
 
 			const height =
 				Math.min((screen.width - padding * 2 - border * 2) / ar,
