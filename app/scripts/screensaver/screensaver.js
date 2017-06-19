@@ -24,9 +24,11 @@ app.Screensaver = (function() {
    * @property {int} photoSizing - the way the photos are rendered
    * @property {?string} sizingType - the way an image is rendered
    * @property {int} aniType - the animation type for photo transitions
+   * @property {int} screenWidth - screen width in pixels
+   * @property {int} screenHeight - screen height in pixels
    * @property {boolean} paused - true if slideshow paused
    * @property {boolean} noPhotos - true if there are no usable photos
-   * @property {string} noPhotosLabel - label when no photos are useable
+   * @property {string} noPhotosLabel - label when no photos are usable
    * @property {string} timeLabel - current time label
    * @property {Function} set - Polymer setter
    * @property {Function} push - Polymer pusher
@@ -46,6 +48,8 @@ app.Screensaver = (function() {
   t.views = [];
   t.photoSizing = 0;
   t.sizingType = null;
+  t.screenWidth = screen.width;
+  t.screenHeight = screen.height;
   t.aniType = 0;
   t.paused = false;
   t.noPhotos = false;

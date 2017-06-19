@@ -5,9 +5,8 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 (function() {
-  window.app = window.app || {};
-
   'use strict';
+  window.app = window.app || {};
 
   new ExceptionHandler();
 
@@ -28,8 +27,6 @@
    * @property {Element} location - Geo location
    * @property {Object} model - template item model
    * @property {string} url - photo url, binding
-   * @property {int} width - photo width, binding
-   * @property {int} height - photo height, binding
    * @property {string} authorLabel - author text, binding
    * @property {string} locationLabel - location text, binding
    * @alias app.SSView
@@ -49,8 +46,6 @@
       this.location = null;
       this.model = null;
       this.url = photo.getUrl();
-      this.width = screen.width;
-      this.height = screen.height;
       this.authorLabel = '';
       this.locationLabel = '';
     }
@@ -92,10 +87,10 @@
     }
 
     /**
-     * Determine if a photo should not be displayed
+     * Determine if a given aspect ratio should be ignored
      * @param {number} asp - an aspect ratio
      * @param {int} photoSizing - the sizing type
-     * @returns {boolean} true if the photo should not be displayed
+     * @returns {boolean} true if the aspect ratio should be ignored
      */
     static ignore(asp, photoSizing) {
       let ret = false;
@@ -184,6 +179,9 @@
      */
     _setAuthorLabel(force) {
       this.authorLabel = '';
+      this.model.set('view.authorLabel', this.authorLabel);
+      this._super500px();
+
       const type = this.photo.getType();
       const photographer = this.photo.getPhotographer();
       let newType = type;
@@ -213,6 +211,9 @@
      * Set the geolocation text
      */
     _setLocationLabel() {
+      this.locationLabel = '';
+      this.model.set('view.locationLabel', this.locationLabel);
+
       if (app.SSView._showLocation() && this._hasLocation()) {
         const point = this.photo.getPoint();
         app.Geo.get(point).then((location) => {
