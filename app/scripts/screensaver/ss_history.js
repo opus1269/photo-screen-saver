@@ -61,8 +61,7 @@ app.SSHistory = (function() {
       const idx = history.idx;
       const len = history.arr.length;
       if (newIdx === null) {
-        const photoName = views[selected].getPhotoName();
-        const photoId = app.SSPhotos.getIndexFromName(photoName);
+        const photoId = views[selected].photo.getId();
         const photosPos = app.SSPhotos.getCurrentIndex();
         const historyItem = {
           viewsIdx: selected,

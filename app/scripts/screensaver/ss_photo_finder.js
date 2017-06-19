@@ -38,14 +38,10 @@ app.SSFinder = (function() {
    */
   function _markPhotoBad(idx) {
     const views = app.Screensaver.getViews();
-    const name = views[idx].getPhotoName();
-    const index = app.SSPhotos.getIndexFromName(name);
-    if (index !== -1) {
-      app.SSPhotos.markBad(index);
-      if (!app.SSPhotos.hasUsable()) {
-        // if all items are bad set no photos state
-        app.Screensaver.setNoPhotos();
-      }
+    views[idx].photo.markBad();
+    if (!app.SSPhotos.hasUsable()) {
+      // if all items are bad set no photos state
+      app.Screensaver.setNoPhotos();
     }
   }
 
@@ -59,7 +55,7 @@ app.SSFinder = (function() {
   function _findLoadedPhoto(idx) {
     const views = app.Screensaver.getViews();
     if (views[idx].isLoaded()) {
-      console.log(views[idx].photo.name);
+      console.log('found first time: photo', views[idx].photo.getId());
       return idx;
     }
     // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
@@ -71,7 +67,7 @@ app.SSFinder = (function() {
         continue;
       }
       if (view.isLoaded()) {
-        console.log('found in loop ', view.photo.name);
+        console.log('found in loop: photo', view.photo.getId());
         return index;
       } else if (view.isError()) {
         _markPhotoBad(index);
@@ -82,9 +78,9 @@ app.SSFinder = (function() {
         }
         const photo = app.SSPhotos.getNextUsable();
         if (photo) {
-          console.log('replacing in find: ', photo.name);
+          console.log('replacing in find: photo', photo.getId());
           view.setPhoto(photo);
-          // todo const photoId = app.SSPhotos.getIndexFromName(photo.name);
+          // todo const photoId = photo.getId();
           // const photosIdx = app.SSPhotos.getCurrentIndex();
           // app.SSHistory.update(idx, photoId, photosIdx);
         }
@@ -113,7 +109,7 @@ app.SSFinder = (function() {
 
     const photo = app.SSPhotos.getNextUsable();
     if (photo) {
-      console.log('replacing in replace: ', photo.name);
+      console.log('replacing in replace: photo', photo.getId());
       views[idx].setPhoto(photo);
     }
   }

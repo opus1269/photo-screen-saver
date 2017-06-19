@@ -33,14 +33,6 @@ app.SSPhotos = (function() {
   let _curIdx = 0;
 
   /**
-   * Flag to indicate if any photos are usable
-   * @type {boolean}
-   * @private
-   * @memberOf app.SSPhotos
-   */
-  let _hasUsable = true;
-
-  /**
    * Is the given {@link app.SSPhoto} in one of the views
    * @param {app.SSPhoto} photo - A photo
    * @returns {boolean} true if in t.views
@@ -51,7 +43,7 @@ app.SSPhotos = (function() {
     let ret = false;
     const views = app.Screensaver.getViews();
     for (const view of views) {
-      if (view.photo.name === photo.name) {
+      if (view.photo.getId() === photo.getId()) {
         ret = true;
       }
     }
@@ -71,7 +63,7 @@ app.SSPhotos = (function() {
       let ct = 0;
       for (const sourcePhoto of source.photos) {
         if (!app.SSView.ignore(sourcePhoto.asp, viewType)) {
-          const photo = new app.SSPhoto('photo' + ct, sourcePhoto, type);
+          const photo = new app.SSPhoto(ct, sourcePhoto, type);
           _photos.push(photo);
           ct++;
         }
@@ -93,17 +85,9 @@ app.SSPhotos = (function() {
      * @memberOf app.SSPhotos
      */
     hasUsable: function() {
-      return _hasUsable;
-    },
-
-    /**
-     * Is the photo at the given index not marked bad
-     * @param {int} idx - The index
-     * @returns {boolean} true if photo is good
-     * @memberOf app.SSPhotos
-     */
-    isUsable: function(idx) {
-      return _photos[idx].name !== 'skip';
+      return !_photos.every((photo) => {
+        return photo.isBad();
+      });
     },
 
     /**
@@ -127,7 +111,7 @@ app.SSPhotos = (function() {
         // find a url that is ok, AFAWK
         const index = (i + _curIdx) % _photos.length;
         const photo = _photos[index];
-        if (app.SSPhotos.isUsable(index) && !_inViews(photo)) {
+        if (!photo.isBad() && !_inViews(photo)) {
           _curIdx = index;
           app.SSPhotos.incCurrentIndex();
           return photo;
@@ -164,44 +148,14 @@ app.SSPhotos = (function() {
     },
 
     /**
-     * Get the index of the {@link app.SSPhoto} with the given name
-     * @param {string} name - The name
-     * @returns {int} The index, -1 if photo is bad
-     * @memberOf app.SSPhotos
-     */
-    getIndexFromName: function(name) {
-      if (name === 'skip') {
-        return -1;
-      }
-      return parseInt(name.match(/\d+/)[0], 10);
-    },
-
-    /**
-     * Mark an {@link app.SSPhoto} as bad
-     * @param {int} idx - The index
-     * @memberOf app.SSPhotos
-     */
-    markBad: function(idx) {
-      const photo = _photos[idx];
-      photo.name = 'skip';
-      _hasUsable = !_photos.every((photo) => {
-        return photo.name === 'skip';
-      });
-      if (photo.getType() === 'Google') {
-        // log bad chromecast links
-        Chrome.GA.error(`${photo.getUrl()}`, 'SSPhotos.markBad');
-      }
-    },
-
-    /**
      * Randomize the photos
      * @memberOf app.SSPhotos
      */
     shuffle: function() {
       Chrome.Utils.shuffleArray(_photos);
-      // rename
+      // renumber
       _photos.forEach((photo, index) => {
-        photo.name = 'photo' + index;
+        photo.setId(index);
       });
     },
   };

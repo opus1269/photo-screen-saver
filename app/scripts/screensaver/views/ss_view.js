@@ -262,14 +262,6 @@
     }
 
     /**
-     * Get the name of the photo in this view
-     * @returns {string} name of photo
-     */
-    getPhotoName() {
-      return this.photo.name;
-    }
-
-    /**
      * Render the page for display - the default CSS is for our view
      * subclasses override this to determine the look of photo
      */

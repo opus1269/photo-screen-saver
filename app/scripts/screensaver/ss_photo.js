@@ -14,32 +14,69 @@
   /**
    * A photo for the screen saver
    *
-   * @property {string} name - Unique name
+   * @property {int} _id - Unique id
    * @property {string} _url - The url to the photo
    * @property {string} _photographer - The photographer
    * @property {string} _type - type of {@link app.PhotoSource}
    * @property {number} _aspectRatio - aspect ratio
    * @property {Object} _ex - additional information about the photo
    * @property {string} _point - geolocation 'lat lon'
+   * @property {boolean} _isBad - true if url didn't load
    * @alias app.SSPhoto
    */
   app.SSPhoto = class SSPhoto {
 
     /**
      * Create a new photo
-     * @param {string} name - unique name
+     * @param {int} id - unique id
      * @param {app.PhotoSource.SourcePhoto} source - source photo
      * @param {string} sourceType - type of {@link app.PhotoSource}
      * @constructor
      */
-    constructor(name, source, sourceType) {
-      this.name = name;
+    constructor(id, source, sourceType) {
+      this._id = id;
       this._url = source.url;
       this._photographer = source.author ? source.author : '';
       this._type = sourceType;
       this._aspectRatio = source.asp;
       this._ex = source.ex;
       this._point = source.point;
+      this._isBad = false;
+    }
+
+    /**
+     * Get unique id
+     * @returns {int} id
+     */
+    getId() {
+      return this._id;
+    }
+
+    /**
+     * Set unique id
+     * @param {int} id - unique id
+     */
+    setId(id) {
+      this._id = id;
+    }
+
+    /**
+     * Is photo bad
+     * @returns {boolean} true if bad
+     */
+    isBad() {
+      return this._isBad;
+    }
+
+    /**
+     * Mark photo bad
+     */
+    markBad() {
+      this._isBad = true;
+      if (this.getType() === 'Google') {
+        // log bad Chromecast links
+        Chrome.GA.error(`${this.getUrl()}`, 'SSPhoto.markBad');
+      }
     }
 
     /**
