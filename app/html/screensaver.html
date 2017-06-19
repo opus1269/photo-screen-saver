@@ -29,15 +29,15 @@
           <section id="view[[index]]">
             <iron-image
                 class="image"
-                src="[[view.photo.path]]"
-                width="[[view.photo.width]]"
-                height="[[view.photo.height]]"
+                src="[[view.url]]"
+                width="[[view.width]]"
+                height="[[view.height]]"
                 sizing="[[sizingType]]"
                 preload>
             </iron-image>
             <div class="time">[[timeLabel]]</div>
-            <div class="author">[[view.photo.label]]<sup id="sup"></sup></div>
-            <div class="location">[[view.photo.location]]</div>
+            <div class="author">[[view.authorLabel]]<sup id="sup"></sup></div>
+            <div class="location">[[view.locationLabel]]</div>
           </section>
         </slide-animatable>
       </template>

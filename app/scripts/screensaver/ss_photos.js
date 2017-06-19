@@ -70,7 +70,7 @@ app.SSPhotos = (function() {
       const viewType = app.Screensaver.getViewType();
       let ct = 0;
       for (const sourcePhoto of source.photos) {
-        if (!app.SSPhoto.ignore(sourcePhoto.asp, viewType)) {
+        if (!app.SSView.ignore(sourcePhoto.asp, viewType)) {
           const photo = new app.SSPhoto('photo' + ct, sourcePhoto, type);
           _photos.push(photo);
           ct++;
@@ -187,9 +187,9 @@ app.SSPhotos = (function() {
       _hasUsable = !_photos.every((photo) => {
         return photo.name === 'skip';
       });
-      if (photo.type === 'Google') {
+      if (photo.getType() === 'Google') {
         // log bad chromecast links
-        Chrome.GA.error(`${photo.path}`, 'SSPhotos.markBad');
+        Chrome.GA.error(`${photo.getUrl()}`, 'SSPhotos.markBad');
       }
     },
 

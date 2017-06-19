@@ -12,28 +12,15 @@
   new ExceptionHandler();
 
   /**
-   * aspect ratio of screen
-   * @type {number}
-   * @const
-   * @private
-   * @memberOf app.SSPhoto
-   */
-  const _SCREEN_ASP = screen.width / screen.height;
-
-  /**
    * A photo for the screen saver
    *
    * @property {string} name - Unique name
-   * @property {string} path - The url to the photo
-   * @property {string} author - The photographer
-   * @property {string} type - type of {@link app.PhotoSource}
-   * @property {int} width - width
-   * @property {int} height - height
-   * @property {number} aspectRatio - aspect ratio
-   * @property {Object} ex - additional information about the photo
-   * @property {string} point - geolocation 'lat lon'
-   * @property {string} label - author label
-   * @property {?string} location - geolocation label
+   * @property {string} _url - The url to the photo
+   * @property {string} _photographer - The photographer
+   * @property {string} _type - type of {@link app.PhotoSource}
+   * @property {number} _aspectRatio - aspect ratio
+   * @property {Object} _ex - additional information about the photo
+   * @property {string} _point - geolocation 'lat lon'
    * @alias app.SSPhoto
    */
   app.SSPhoto = class SSPhoto {
@@ -47,77 +34,52 @@
      */
     constructor(name, source, sourceType) {
       this.name = name;
-      this.path = source.url;
-      this.author = source.author ? source.author : '';
-      this.type = sourceType;
-      this.aspectRatio = source.asp;
-      this.ex = source.ex;
-      this.point = source.point;
-      this.width = screen.width;
-      this.height = screen.height;
-      this.location = null;
-
-      this.setAuthorLabel(false);
+      this._url = source.url;
+      this._photographer = source.author ? source.author : '';
+      this._type = sourceType;
+      this._aspectRatio = source.asp;
+      this._ex = source.ex;
+      this._point = source.point;
     }
 
     /**
-     * Determine if a photo would look bad zoomed or stretched on the screen
-     * @param {number} asp - an aspect ratio
-     * @returns {boolean} true if a photo aspect ratio differs substantially
-     * from the screens'
-     * @private
+     * Get photo url
+     * @returns {string} url
      */
-    static _isBadAspect(asp) {
-      // arbitrary
-      const CUT_OFF = 0.5;
-      return (asp < _SCREEN_ASP - CUT_OFF) || (asp > _SCREEN_ASP + CUT_OFF);
+    getUrl() {
+      return this._url;
     }
 
     /**
-     * Determine if a photo should not be displayed
-     * @param {number} asp - an aspect ratio
-     * @param {int} photoSizing - the sizing type
-     * @returns {boolean} true if the photo should not be displayed
+     * Get photo source type
+     * @returns {string} type
      */
-    static ignore(asp, photoSizing) {
-      let ret = false;
-      const skip = Chrome.Storage.getBool('skip');
-
-      if ((!asp || isNaN(asp)) ||
-          (skip && ((photoSizing === 1) || (photoSizing === 3)) &&
-          app.SSPhoto._isBadAspect(asp))) {
-        // ignore photos that don't have aspect ratio
-        // or would look bad with cropped or stretched sizing options
-        ret = true;
-      }
-      return ret;
+    getType() {
+      return this._type;
     }
 
     /**
-     * Set the author label
-     * @param {boolean} force - require display of label if true
+     * Get photographer
+     * @returns {string} photographer
      */
-    setAuthorLabel(force) {
-      this.label = '';
-      let newType = this.type;
-      const idx = this.type.search('User');
+    getPhotographer() {
+      return this._photographer;
+    }
 
-      if (!force && !Chrome.Storage.getBool('showPhotog') && (idx !== -1)) {
-        // don't show label for user's own photos, if requested
-        return;
-      }
+    /**
+     * Get photo aspect ratio
+     * @returns {number} aspect ratio
+     */
+    getAspectRatio() {
+      return this._aspectRatio;
+    }
 
-      if (idx !== -1) {
-        // strip off 'User'
-        newType = this.type.substring(0, idx - 1);
-      }
-
-      if (this.author) {
-        this.label = `${this.author} / ${newType}`;
-      } else {
-        // no photographer name
-        this.label = `${Chrome.Locale.localize('photo_from')} ${newType}`;
-      }
+    /**
+     * Get geo location point
+     * @returns {?string} point
+     */
+    getPoint() {
+      return this._point;
     }
 
     /**
@@ -129,24 +91,24 @@
       let id;
       let url = null;
 
-      switch (this.type) {
+      switch (this._type) {
         case '500':
           // parse photo id
           regex = /(\/[^\/]*){4}/;
-          id = this.path.match(regex);
+          id = this._url.match(regex);
           url = `http://500px.com/photo${id[1]}`;
           break;
         case 'flickr':
-          if (this.ex) {
+          if (this._ex) {
             // parse photo id
             regex = /(\/[^\/]*){4}(_.*_)/;
-            id = this.path.match(regex);
-            url = `https://www.flickr.com/photos/${this.ex}${id[1]}`;
+            id = this._url.match(regex);
+            url = `https://www.flickr.com/photos/${this._ex}${id[1]}`;
           }
           break;
         case 'reddit':
-          if (this.ex) {
-            url = this.ex;
+          if (this._ex) {
+            url = this._ex;
           }
           break;
         default:
