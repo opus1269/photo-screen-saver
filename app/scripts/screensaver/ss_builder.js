@@ -16,16 +16,6 @@ app.SSBuilder = (function() {
   new ExceptionHandler();
 
   /**
-   * Max number of animated pages
-   * @type {int}
-   * @const
-   * @default
-   * @private
-   * @memberOf app.SSBuilder
-   */
-  const _MAX_PAGES = 20;
-
-  /**
    * Build the {@link app.SSPhotos} that will be displayed
    * @returns {boolean} true if there is at least one photo
    * @private
@@ -51,38 +41,6 @@ app.SSBuilder = (function() {
     return true;
   }
 
-  /**
-   * Create the [t.views]{@link app.Screensaver.t} that will be animated
-   * @private
-   * @memberOf app.SSBuilder
-   */
-  function _createPages() {
-    const t = app.Screensaver.getTemplate();
-    const viewType = app.Screensaver.getViewType();
-    const len = Math.min(app.SSPhotos.getCount(), _MAX_PAGES);
-    for (let i = 0; i < len; i++) {
-      const photo = app.SSPhotos.get(i);
-      const view = app.SSView.createView(photo, viewType);
-      app.Screensaver.addView(view);
-    }
-    app.SSPhotos.setCurrentIndex(len);
-
-    // force update of animated pages
-    app.Screensaver.renderPages();
-
-    // set the Elements of each view
-    const views = app.Screensaver.getViews();
-    views.forEach((view, index) => {
-      const el = t.p.querySelector('#view' + index);
-      const image = el.querySelector('.image');
-      const author = el.querySelector('.author');
-      const time = el.querySelector('.time');
-      const location = el.querySelector('.location');
-      const model = t.rep.modelForElement(el);
-      view.setElements(image, author, time, location, model);
-    });
-  }
-
   return {
     /**
      * Build everything related to a {@link app.Screensaver}
@@ -94,7 +52,7 @@ app.SSBuilder = (function() {
       const hasPhotos = _loadPhotos();
       if (hasPhotos) {
         // create the animated pages
-        _createPages();
+        app.Screensaver.createPages();
         // initialize the photo finder
         app.SSFinder.initialize();
       }

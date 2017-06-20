@@ -16,6 +16,16 @@ app.Screensaver = (function() {
   new ExceptionHandler();
 
   /**
+   * Max number of animated pages
+   * @type {int}
+   * @const
+   * @default
+   * @private
+   * @memberOf app.Screensaver
+   */
+  const _MAX_PAGES = 20;
+
+  /**
    * Main auto-binding template
    * @typedef {Element} app.Screensaver.Template
    * @property {?Element} rep - repeat template
@@ -64,8 +74,8 @@ app.Screensaver = (function() {
    */
   function _onDomChange() {
     // set selected background image
-    document.body.style.background = Chrome.Storage.get('background').
-        substring(11);
+    document.body.style.background =
+        Chrome.Storage.get('background').substring(11);
 
     Chrome.GA.page('/screensaver.html');
 
@@ -81,9 +91,6 @@ app.Screensaver = (function() {
 
     app.Screensaver.launch();
   }
-
-  // listen for dom-change
-  t.addEventListener('dom-change', _onDomChange);
 
   /**
    * Process settings related to the photo's appearance
@@ -148,6 +155,9 @@ app.Screensaver = (function() {
     }
   }
 
+  // listen for dom-change
+  t.addEventListener('dom-change', _onDomChange);
+
   return {
     /**
      * Launch the slide show
@@ -163,20 +173,33 @@ app.Screensaver = (function() {
     },
 
     /**
-     * Render the animated pages
+     * Create the [t.views]{@link app.Screensaver.t} that will be animated
      * @memberOf app.Screensaver
      */
-    renderPages: function() {
-      t.rep.render();
-    },
+    createPages: function() {
+      const viewType = app.Screensaver.getViewType();
+      const len = Math.min(app.SSPhotos.getCount(), _MAX_PAGES);
+      for (let i = 0; i < len; i++) {
+        const photo = app.SSPhotos.get(i);
+        const view = app.SSView.createView(photo, viewType);
+        t.push('views', view);
+      }
+      app.SSPhotos.setCurrentIndex(len);
 
-    /**
-     * Get reference to the auto-binding template
-     * @returns {app.Screensaver.Template} The auto-binding template
-     * @memberOf app.Screensaver
-     */
-    getTemplate: function() {
-      return t;
+      // force update of animated pages
+      t.rep.render();
+
+      // set the Elements of each view
+      const views = app.Screensaver.getViews();
+      views.forEach((view, index) => {
+        const el = t.p.querySelector('#view' + index);
+        const image = el.querySelector('.image');
+        const author = el.querySelector('.author');
+        const time = el.querySelector('.time');
+        const location = el.querySelector('.location');
+        const model = t.rep.modelForElement(el);
+        view.setElements(image, author, time, location, model);
+      });
     },
 
     /**
@@ -230,7 +253,6 @@ app.Screensaver = (function() {
      * @memberOf app.Screensaver
      */
     setNoPhotos: function() {
-      const t = app.Screensaver.getTemplate();
       t.set('noPhotos', true);
       t.noPhotosLabel = Chrome.Locale.localize('no_photos');
     },
@@ -242,15 +264,6 @@ app.Screensaver = (function() {
      */
     getViews: function() {
       return t.views;
-    },
-
-    /**
-     * Add view to [t.views]{@link app.Screensaver.Template}
-     * @param {app.SSView} view - The view to add
-     * @memberOf app.Screensaver
-     */
-    addView: function(view) {
-      t.push('views', view);
     },
 
     /**
