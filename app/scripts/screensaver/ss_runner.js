@@ -19,6 +19,7 @@ app.SSRunner = (function() {
    * Instance variables
    * @type {Object}
    * @property {boolean} started - true if slideshow started
+   * @property {int} replaceIdx - page to replace with next photo
    * @property {int} lastSelected - last selected page
    * @property {int} waitTime - wait time when looking for photo in milliSecs
    * @property {boolean} interactive - is interaction allowed
@@ -29,6 +30,7 @@ app.SSRunner = (function() {
    */
   const _VARS = {
     started: false,
+    replaceIdx: -1,
     lastLastSelected: -1,
     lastSelected: -1,
     waitTime: 30000,
@@ -44,7 +46,7 @@ app.SSRunner = (function() {
    */
   function _stop() {
     window.clearTimeout(_VARS.timeOutId);
-   }
+  }
 
   /**
    * Restart the slideshow
@@ -100,7 +102,7 @@ app.SSRunner = (function() {
       nextIdx = 0;
     }
 
-    nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected);
+    nextIdx = app.SSFinder.getNext(nextIdx);
     if (nextIdx !== -1) {
       // the next photo is ready
 
@@ -112,18 +114,20 @@ app.SSRunner = (function() {
       // setup photo
       views[nextIdx].render();
 
+      // track the photo history
+      app.SSHistory.add(newIdx, nextIdx, _VARS.lastSelected, _VARS.replaceIdx);
+
       // update selected so the animation runs
-      _VARS.lastLastSelected = _VARS.lastSelected;
       _VARS.lastSelected = selected;
       app.Screensaver.setSelected(nextIdx);
 
-      // track the photo history
-      app.SSHistory.add(newIdx, nextIdx, _VARS.lastSelected);
-
+      // load next photo from master array
       if (newIdx === null) {
         // load next photo from master array
-        app.SSFinder.replacePhoto();
+        app.SSFinder.replacePhoto(_VARS.replaceIdx);
+        _VARS.replaceIdx = _VARS.lastSelected;
       }
+
     }
 
     // set the next timeout, then call ourselves - runs unless interrupted
@@ -170,12 +174,21 @@ app.SSRunner = (function() {
     },
 
     /**
-     * Set wait time between _runShow calls in milliSecs
+     * Set last selected index
      * @param {int} lastSelected - last index in t.views
      * @memberOf app.SSRunner
      */
     setLastSelected: function(lastSelected) {
       _VARS.lastSelected = lastSelected;
+    },
+
+    /**
+     * Set last selected index
+     * @param {int} idx - replace index in t.views
+     * @memberOf app.SSRunner
+     */
+    setReplaceIdx: function(idx) {
+      _VARS.replaceIdx = idx;
     },
 
     /**

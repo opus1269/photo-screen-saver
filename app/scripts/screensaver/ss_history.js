@@ -19,6 +19,7 @@ app.SSHistory = (function() {
    * History item
    * @typedef {Object} app.SSHistory.Item
    * @property {int} viewsIdx - t.views index
+   * @property {int} replaceIdx - t.views index
    * @property {int} lastViewsIdx - t.views index
    * @property {int} photoId - {@link app.SSPhoto} id
    * @property {int} photosPos - pointer into {@link app.SSPhotos}
@@ -37,7 +38,7 @@ app.SSHistory = (function() {
   const history = {
     arr: [],
     idx: -1,
-    max: 20,
+    max: 20, // todo
   };
 
   return {
@@ -54,9 +55,10 @@ app.SSHistory = (function() {
      * @param {?int} newIdx - if not null, a request from the back command
      * @param {int} selected - the current selection
      * @param {int} lastSelected - the last selection
+     * @param {int} replaceIdx - the replace index
      * @memberOf app.SSHistory
      */
-    add: function(newIdx, selected, lastSelected) {
+    add: function(newIdx, selected, lastSelected, replaceIdx) {
       const views = app.Screensaver.getViews();
       const idx = history.idx;
       const len = history.arr.length;
@@ -65,6 +67,7 @@ app.SSHistory = (function() {
         const photosPos = app.SSPhotos.getCurrentIndex();
         const historyItem = {
           viewsIdx: selected,
+          replaceIdx: replaceIdx,
           lastViewsIdx: lastSelected,
           photoId: photoId,
           photosPos: photosPos,
@@ -121,28 +124,33 @@ app.SSHistory = (function() {
       }
 
       let nextStep = null;
-      let idx = history.idx - 2;
+      let inc = 2;
+      let idx = history.idx - inc;
       history.idx = idx;
       if (idx < 0) {
+        history.idx = -1;
         if ((history.arr.length > history.max)) {
           // at beginning of history
-          history.idx += 2;
           return null;
         } else {
           // at beginning, first time through
+          inc = 1;
           nextStep = -1;
-          idx = 1;
+          idx = 0;
         }
       }
 
       // update state from history
       const photosPos = history.arr[idx].photosPos;
-      const photoId = history.arr[idx].photoId;
-      const viewsIdx = history.arr[idx].viewsIdx;
-      const lastSelected = history.arr[idx].lastViewsIdx;
-      nextStep = (nextStep === null) ? viewsIdx : nextStep;
+      const replaceIdx = history.arr[idx + inc].replaceIdx;
+      // const lastSelected = history.arr[idx+1].lastViewsIdx;
       app.SSPhotos.setCurrentIndex(photosPos);
-      app.SSRunner.setLastSelected(lastSelected);
+      app.SSRunner.setReplaceIdx(replaceIdx);
+      // app.SSRunner.setLastSelected(lastSelected);
+
+      const viewsIdx = history.arr[idx].viewsIdx;
+      const photoId = history.arr[idx].photoId;
+      nextStep = (nextStep === null) ? viewsIdx : nextStep;
       const views = app.Screensaver.getViews();
       const photo = app.SSPhotos.get(photoId);
       views[viewsIdx].setPhoto(photo);

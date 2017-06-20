@@ -16,16 +16,15 @@ app.SSFinder = (function() {
   new ExceptionHandler();
 
   /**
+   * todo get rid of _VARS
    * Instance variables
    * @type {Object}
-   * @property {int} replaceIdx - page whose photo is to be replaced
    * @property {int} transTime - slide transition time in milliSecs
    * @property {boolean} waitForLoad - if false, replace all current photos
    * @private
    * @memberOf app.SSFinder
    */
   const _VARS = {
-    replaceIdx: -1,
     transTime: 30000,
     waitForLoad: true,
   };
@@ -55,7 +54,7 @@ app.SSFinder = (function() {
   function _findLoadedPhoto(idx) {
     const views = app.Screensaver.getViews();
     if (views[idx].isLoaded()) {
-      console.log('found first time: photo', views[idx].photo.getId());
+      console.log('found first time: photo', views[idx].photo.getId(), ' view', idx);
       return idx;
     }
     // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
@@ -67,7 +66,7 @@ app.SSFinder = (function() {
         continue;
       }
       if (view.isLoaded()) {
-        console.log('found in loop: photo', view.photo.getId());
+        console.log('found in loop: photo', view.photo.getId(), ' view', index);
         return index;
       } else if (view.isError()) {
         _markPhotoBad(index);
@@ -78,7 +77,7 @@ app.SSFinder = (function() {
         }
         const photo = app.SSPhotos.getNextUsable();
         if (photo) {
-          console.log('replacing in find: photo', photo.getId());
+          console.log('replacing in find: photo', photo.getId(), ' view', index);
           view.setPhoto(photo);
           // todo const photoId = photo.getId();
           // const photosIdx = app.SSPhotos.getCurrentIndex();
@@ -96,8 +95,8 @@ app.SSFinder = (function() {
    * @memberOf app.SSFinder
    */
   function _replacePhoto(idx) {
-    if (app.SSRunner.isCurrentPair(idx)) {
-      console.log('Attempt to replace member of current pair');
+    if (app.Screensaver.isSelected(idx)) {
+      console.log('Attempt to replace selected: view', idx);
       return;
     }
 
@@ -109,7 +108,7 @@ app.SSFinder = (function() {
 
     const photo = app.SSPhotos.getNextUsable();
     if (photo) {
-      console.log('replacing in replace: photo', photo.getId());
+      console.log('replacing in replace: photo', photo.getId(), ' view', idx);
       views[idx].setPhoto(photo);
     }
   }
@@ -130,13 +129,11 @@ app.SSFinder = (function() {
     /**
      * Get the next photo to display
      * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
-     * @param {int} lastSelected - last selected index
      * @returns {int} next - index into [t.views]{@link app.Screensaver.t}
      * to display, -1 if none are ready
      * @memberOf app.SSFinder
      */
-    getNext: function(idx, lastSelected) {
-      _VARS.replaceIdx = lastSelected;
+    getNext: function(idx) {
       let ret = _findLoadedPhoto(idx);
       if (ret === -1) {
         // no photos ready, wait a little, try again
@@ -150,11 +147,12 @@ app.SSFinder = (function() {
 
     /**
      * Add the next photo from the master array
+     * @param {int} idx - t.views index to replace
      * @memberOf app.SSFinder
      */
-    replacePhoto: function() {
-      if (_VARS.replaceIdx >= 0) {
-        _replacePhoto(_VARS.replaceIdx);
+    replacePhoto: function(idx) {
+      if (idx >= 0) {
+        _replacePhoto(idx);
       }
     },
   };

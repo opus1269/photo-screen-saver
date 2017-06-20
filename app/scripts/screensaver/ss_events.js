@@ -161,10 +161,10 @@ app.SSEvents = (function() {
       window.addEventListener('keydown', _onKey, false);
 
       // listen for mousemove events
-      window.addEventListener('mousemove', _onMouseMove, false);
+      // todo window.addEventListener('mousemove', _onMouseMove, false);
 
       // listen for mouse click events
-      window.addEventListener('click', _onMouseClick, false);
+      // todo window.addEventListener('click', _onMouseClick, false);
 
       // listen for special keyboard commands
       chrome.commands.onCommand.addListener(_onKeyCommand);

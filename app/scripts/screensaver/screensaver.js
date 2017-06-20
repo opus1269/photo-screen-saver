@@ -207,6 +207,16 @@ app.Screensaver = (function() {
     },
 
     /**
+     * Is the given idx the selected index
+     * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
+     * @returns {boolean} true if selected
+     * @memberOf app.Screensaver
+     */
+    isSelected: function(idx) {
+      return (idx === t.p.selected);
+    },
+
+    /**
      * Do we have usable photos
      * @returns {boolean} true if all photos are bad
      * @memberOf app.Screensaver
