@@ -128,12 +128,13 @@ app.SSHistory = (function() {
       let idx = history.idx - inc;
       history.idx = idx;
       if (idx < 0) {
-        history.idx = -1;
         if ((history.arr.length > history.max)) {
           // at beginning of history
+          history.idx+= inc;
           return null;
         } else {
           // at beginning, first time through
+          history.idx = -1;
           inc = 1;
           nextStep = -1;
           idx = 0;
