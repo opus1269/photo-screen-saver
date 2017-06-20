@@ -30,6 +30,29 @@ app.SSFinder = (function() {
   };
 
   /**
+   * Do all views have bad photos
+   * @returns {boolean} true if all bad
+   * @private
+   * @memberOf app.SSFinder
+   */
+  function _allViewsBad() {
+    let ret = true;
+    const views = app.Screensaver.getViews();
+    for (let i = 0; i < views.length; i++) {
+      const view = views[i];
+      if (app.SSRunner.isCurrentPair(i)) {
+        // don't check current animation pair
+        continue;
+      }
+      if (!view.photo.isBad()) {
+        ret = false;
+        break;
+      }
+    }
+    return ret;
+  }
+
+  /**
    * Mark a photo in {@link app.SSPhotos} as unusable
    * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
    * @private
@@ -53,8 +76,22 @@ app.SSFinder = (function() {
    */
   function _findLoadedPhoto(idx) {
     const views = app.Screensaver.getViews();
+    if (_allViewsBad()) {
+      // replace all photos
+      for (let i = 0; i < views.length; i++) {
+        const view = views[i];
+        const photo = app.SSPhotos.getNextUsable();
+        if (app.SSRunner.isCurrentPair(i)) {
+          // don't replace current animation pair
+          continue;
+        }
+        view.setPhoto(photo);
+      }
+      return -1;
+    }
     if (views[idx].isLoaded()) {
-      console.log('found first time: photo', views[idx].photo.getId(), ' view', idx);
+      console.log('found first time: photo', views[idx].photo.getId(), ' view',
+          idx);
       return idx;
     }
     // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
@@ -75,14 +112,14 @@ app.SSFinder = (function() {
           app.Screensaver.setNoPhotos();
           return -1;
         }
-        const photo = app.SSPhotos.getNextUsable();
-        if (photo) {
-          console.log('replacing in find: photo', photo.getId(), ' view', index);
-          view.setPhoto(photo);
-          // todo const photoId = photo.getId();
-          // const photosIdx = app.SSPhotos.getCurrentIndex();
-          // app.SSHistory.update(idx, photoId, photosIdx);
-        }
+        //   todo const photo = app.SSPhotos.getNextUsable();
+        //   if (photo) {
+        //     console.log('replacing in find: photo', photo.getId(), ' view', index);
+        //     view.setPhoto(photo);
+        //     const photoId = photo.getId();
+        //     const photosIdx = app.SSPhotos.getCurrentIndex();
+        //     app.SSHistory.update(idx, photoId, photosIdx);
+        //   }
       }
     }
     return -1;
