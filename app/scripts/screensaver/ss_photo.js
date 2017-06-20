@@ -69,13 +69,15 @@
     }
 
     /**
-     * Mark photo bad
+     * Mark photo unusable
      */
     markBad() {
-      this._isBad = true;
-      if (this.getType() === 'Google') {
-        // log bad Chromecast links
-        Chrome.GA.error(`${this.getUrl()}`, 'SSPhoto.markBad');
+      if (!this._isBad) {
+        this._isBad = true;
+        if (this.getType() === 'Google') {
+          // log bad Chromecast links
+          Chrome.GA.error(`${this.getUrl()}`, 'SSPhoto.markBad');
+        }
       }
     }
 

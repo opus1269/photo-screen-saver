@@ -66,21 +66,6 @@ app.SSFinder = (function() {
   }
 
   /**
-   * Mark a photo in {@link app.SSPhotos} as unusable
-   * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
-   * @private
-   * @memberOf app.SSFinder
-   */
-  function _markPhotoBad(idx) {
-    const views = app.Screensaver.getViews();
-    views[idx].photo.markBad();
-    if (!app.SSPhotos.hasUsable()) {
-      // if all items are bad set no photos state
-      app.Screensaver.setNoPhotos();
-    }
-  }
-
-  /**
    * Try to find a photo that has finished loading
    * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
    * @returns {int} index into t.views, -1 if none are loaded
@@ -106,8 +91,8 @@ app.SSFinder = (function() {
       }
       if (view.isLoaded()) {
         return index;
-      } else if (view.isError()) {
-        _markPhotoBad(index);
+      } else if (view.isError() && !view.photo.isBad()) {
+        view.photo.markBad();
         if (!app.SSPhotos.hasUsable()) {
           // all photos bad
           app.Screensaver.setNoPhotos();
