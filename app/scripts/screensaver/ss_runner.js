@@ -31,7 +31,6 @@ app.SSRunner = (function() {
   const _VARS = {
     started: false,
     replaceIdx: -1,
-    lastLastSelected: -1,
     lastSelected: -1,
     waitTime: 30000,
     interactive: false,
@@ -115,19 +114,17 @@ app.SSRunner = (function() {
       views[nextIdx].render();
 
       // track the photo history
-      app.SSHistory.add(newIdx, nextIdx, _VARS.lastSelected, _VARS.replaceIdx);
+      app.SSHistory.add(newIdx, nextIdx, _VARS.replaceIdx);
 
       // update selected so the animation runs
       _VARS.lastSelected = selected;
       app.Screensaver.setSelected(nextIdx);
 
-      // load next photo from master array
       if (newIdx === null) {
         // load next photo from master array
         app.SSFinder.replacePhoto(_VARS.replaceIdx);
         _VARS.replaceIdx = _VARS.lastSelected;
       }
-
     }
 
     // set the next timeout, then call ourselves - runs unless interrupted

@@ -16,18 +16,12 @@ app.SSFinder = (function() {
   new ExceptionHandler();
 
   /**
-   * todo get rid of _VARS
-   * Instance variables
-   * @type {Object}
-   * @property {int} transTime - slide transition time in milliSecs
-   * @property {boolean} waitForLoad - if false, replace all current photos
+   * Transition time in milliseconds
+   * @type {int}
    * @private
    * @memberOf app.SSFinder
    */
-  const _VARS = {
-    transTime: 30000,
-    waitForLoad: true,
-  };
+  let _transTime = 30000;
 
   /**
    * Do all views have bad photos
@@ -50,6 +44,25 @@ app.SSFinder = (function() {
       }
     }
     return ret;
+  }
+
+  /**
+   * Replace all views
+   * @private
+   * @memberOf app.SSFinder
+   */
+  function _replaceAll() {
+    const views = app.Screensaver.getViews();
+    for (let i = 0; i < views.length; i++) {
+      const view = views[i];
+      const photo = app.SSPhotos.getNextUsable();
+      if (app.SSRunner.isCurrentPair(i)) {
+        // don't replace current animation pair
+        continue;
+      }
+      view.setPhoto(photo);
+    }
+    app.SSHistory.clear();
   }
 
   /**
@@ -77,21 +90,10 @@ app.SSFinder = (function() {
   function _findLoadedPhoto(idx) {
     const views = app.Screensaver.getViews();
     if (_allViewsBad()) {
-      // replace all photos
-      for (let i = 0; i < views.length; i++) {
-        const view = views[i];
-        const photo = app.SSPhotos.getNextUsable();
-        if (app.SSRunner.isCurrentPair(i)) {
-          // don't replace current animation pair
-          continue;
-        }
-        view.setPhoto(photo);
-      }
-      return -1;
+      // replace the photos
+      _replaceAll();
     }
     if (views[idx].isLoaded()) {
-      console.log('found first time: photo', views[idx].photo.getId(), ' view',
-          idx);
       return idx;
     }
     // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
@@ -103,7 +105,6 @@ app.SSFinder = (function() {
         continue;
       }
       if (view.isLoaded()) {
-        console.log('found in loop: photo', view.photo.getId(), ' view', index);
         return index;
       } else if (view.isError()) {
         _markPhotoBad(index);
@@ -112,14 +113,6 @@ app.SSFinder = (function() {
           app.Screensaver.setNoPhotos();
           return -1;
         }
-        //   todo const photo = app.SSPhotos.getNextUsable();
-        //   if (photo) {
-        //     console.log('replacing in find: photo', photo.getId(), ' view', index);
-        //     view.setPhoto(photo);
-        //     const photoId = photo.getId();
-        //     const photosIdx = app.SSPhotos.getCurrentIndex();
-        //     app.SSHistory.update(idx, photoId, photosIdx);
-        //   }
       }
     }
     return -1;
@@ -133,7 +126,6 @@ app.SSFinder = (function() {
    */
   function _replacePhoto(idx) {
     if (app.Screensaver.isSelected(idx)) {
-      console.log('Attempt to replace selected: view', idx);
       return;
     }
 
@@ -145,7 +137,6 @@ app.SSFinder = (function() {
 
     const photo = app.SSPhotos.getNextUsable();
     if (photo) {
-      console.log('replacing in replace: photo', photo.getId(), ' view', idx);
       views[idx].setPhoto(photo);
     }
   }
@@ -158,9 +149,8 @@ app.SSFinder = (function() {
     initialize: function() {
       const transTime = Chrome.Storage.get('transitionTime');
       if (transTime) {
-        _VARS.transTime = transTime.base * 1000;
+        _transTime = transTime.base * 1000;
       }
-      _VARS.waitForLoad = true;
     },
 
     /**
@@ -174,10 +164,10 @@ app.SSFinder = (function() {
       let ret = _findLoadedPhoto(idx);
       if (ret === -1) {
         // no photos ready, wait a little, try again
-        app.SSRunner.setWaitTime(200);
+        app.SSRunner.setWaitTime(500);
       } else {
         // photo found, set the waitTime back to transition time
-        app.SSRunner.setWaitTime(_VARS.transTime);
+        app.SSRunner.setWaitTime(_transTime);
       }
       return ret;
     },

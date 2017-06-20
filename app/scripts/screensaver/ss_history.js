@@ -20,7 +20,6 @@ app.SSHistory = (function() {
    * @typedef {Object} app.SSHistory.Item
    * @property {int} viewsIdx - t.views index
    * @property {int} replaceIdx - t.views index
-   * @property {int} lastViewsIdx - t.views index
    * @property {int} photoId - {@link app.SSPhoto} id
    * @property {int} photosPos - pointer into {@link app.SSPhotos}
    * @memberOf app.SSHistory
@@ -38,7 +37,7 @@ app.SSHistory = (function() {
   const history = {
     arr: [],
     idx: -1,
-    max: 20, // todo
+    max: 20,
   };
 
   return {
@@ -54,11 +53,10 @@ app.SSHistory = (function() {
      * Add item to the history
      * @param {?int} newIdx - if not null, a request from the back command
      * @param {int} selected - the current selection
-     * @param {int} lastSelected - the last selection
      * @param {int} replaceIdx - the replace index
      * @memberOf app.SSHistory
      */
-    add: function(newIdx, selected, lastSelected, replaceIdx) {
+    add: function(newIdx, selected, replaceIdx) {
       const views = app.Screensaver.getViews();
       const idx = history.idx;
       const len = history.arr.length;
@@ -68,7 +66,6 @@ app.SSHistory = (function() {
         const historyItem = {
           viewsIdx: selected,
           replaceIdx: replaceIdx,
-          lastViewsIdx: lastSelected,
           photoId: photoId,
           photosPos: photosPos,
         };
@@ -94,22 +91,6 @@ app.SSHistory = (function() {
     clear: function() {
       history.arr = [];
       history.idx = -1;
-    },
-
-    /**
-     * Update the history for the given t.views index
-     * @param {int} viewsIdx - t.views index
-     * @param {int} photoId - {@link app.SSPhotos} index
-     * @param {int} photosPos - {@link app.SSPhotos} index
-     * @memberOf app.SSHistory
-     */
-    update: function(viewsIdx, photoId, photosPos) {
-      for (const item of history.arr) {
-        if (item.viewsIdx === viewsIdx) {
-          item.photoId = photoId;
-          item.photosPos = photosPos;
-        }
-      }
     },
 
     /**
@@ -144,10 +125,8 @@ app.SSHistory = (function() {
       // update state from history
       const photosPos = history.arr[idx].photosPos;
       const replaceIdx = history.arr[idx + inc].replaceIdx;
-      // const lastSelected = history.arr[idx+1].lastViewsIdx;
       app.SSPhotos.setCurrentIndex(photosPos);
       app.SSRunner.setReplaceIdx(replaceIdx);
-      // app.SSRunner.setLastSelected(lastSelected);
 
       const viewsIdx = history.arr[idx].viewsIdx;
       const photoId = history.arr[idx].photoId;
