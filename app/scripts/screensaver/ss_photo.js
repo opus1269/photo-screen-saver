@@ -133,14 +133,14 @@
       switch (this._type) {
         case '500':
           // parse photo id
-          regex = /(\/[^\/]*){4}/;
+          regex = /(\/[^/]*){4}/;
           id = this._url.match(regex);
           url = `http://500px.com/photo${id[1]}`;
           break;
         case 'flickr':
           if (this._ex) {
             // parse photo id
-            regex = /(\/[^\/]*){4}(_.*_)/;
+            regex = /(\/[^/]*){4}(_.*_)/;
             id = this._url.match(regex);
             url = `https://www.flickr.com/photos/${this._ex}${id[1]}`;
           }
