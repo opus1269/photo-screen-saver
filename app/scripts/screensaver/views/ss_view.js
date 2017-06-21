@@ -15,7 +15,7 @@
    * @type {number}
    * @const
    * @private
-   * @memberOf app.SSPhoto
+   * @memberOf app.SSView
    */
   const _SCREEN_ASP = screen.width / screen.height;
 
