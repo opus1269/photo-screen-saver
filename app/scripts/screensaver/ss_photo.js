@@ -5,9 +5,8 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 (function() {
-  window.app = window.app || {};
-
   'use strict';
+  window.app = window.app || {};
 
   new ExceptionHandler();
 
