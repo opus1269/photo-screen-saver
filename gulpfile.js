@@ -78,7 +78,7 @@ const minify = composer(uglifyjs, console);
 // load the rest
 const plugins = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'gulp.*'],
-  replaceString: /\bgulp[\-.]/,
+  replaceString: /\bgulp[-.]/,
 });
 
 /**
