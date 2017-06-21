@@ -16,35 +16,10 @@ app.SSRunner = (function() {
   new ExceptionHandler();
 
   /**
-   * History item
-   * @typedef {Object} app.SSRunner.HistoryItem
-   * @property {int} viewsIdx - t.views index
-   * @property {int} lastViewsIdx - t.views index
-   * @property {int} photoId - t.photos index
-   * @property {int} photosPos - pointer into t.photos
-   * @memberOf app.SSRunner
-   */
-
-  /**
-   * Slide show history
-   * @const
-   * @type {{arr: Array<app.SSRunner.HistoryItem>, idx: number, max: number}}
-   * @property {Array<app.SSRunner.HistoryItem>} arr - history items
-   * @property {int} idx - pointer into arr
-   * @property {int} max - max length or arr, it will actually have 1 item more
-   * @private
-   * @memberOf app.SSRunner
-   */
-  const history = {
-    arr: [],
-    idx: -1,
-    max: 20,
-  };
-
-  /**
    * Instance variables
    * @type {Object}
    * @property {boolean} started - true if slideshow started
+   * @property {int} replaceIdx - page to replace with next photo
    * @property {int} lastSelected - last selected page
    * @property {int} waitTime - wait time when looking for photo in milliSecs
    * @property {boolean} interactive - is interaction allowed
@@ -55,6 +30,7 @@ app.SSRunner = (function() {
    */
   const _VARS = {
     started: false,
+    replaceIdx: -1,
     lastSelected: -1,
     waitTime: 30000,
     interactive: false,
@@ -69,7 +45,7 @@ app.SSRunner = (function() {
    */
   function _stop() {
     window.clearTimeout(_VARS.timeOutId);
-   }
+  }
 
   /**
    * Restart the slideshow
@@ -102,57 +78,22 @@ app.SSRunner = (function() {
   }
 
   /**
-   * Track the history of the photo traversal
-   * @param {?int} newIdx - if not null, a request from the back command
-   * @param {int} selection - the current selection
-   * @private
-   * @memberOf app.SSRunner
-   */
-  function _trackHistory(newIdx, selection) {
-    const t = app.Screensaver.getTemplate();
-    const idx = history.idx;
-    const len = history.arr.length;
-    if (newIdx === null) {
-      const photoName = t.views[selection].getPhotoName();
-      const photoId = parseInt(photoName.match(/\d+/)[0], 10);
-      const photosPos = app.SSFinder.getPhotosIndex();
-      if ((idx === len - 1)) {
-        if (history.arr.length > history.max) {
-          // FIFO delete
-          history.arr.shift();
-          history.idx--;
-          history.idx = Math.max(history.idx, -1);
-        }
-        // add newest photo
-        history.arr.push({
-          viewsIdx: selection,
-          lastViewsIdx: _VARS.lastSelected,
-          photoId: photoId,
-          photosPos: photosPos,
-        });
-      }
-    }
-
-    history.idx++;
-  }
-
-  /**
    * Self called at fixed time intervals to cycle through the photos
    * @param {?int} [newIdx=null] override selected
    * @private
    * @memberOf app.SSRunner
    */
   function _runShow(newIdx = null) {
-    const t = app.Screensaver.getTemplate();
-    if (t.noPhotos) {
+    if (app.Screensaver.noPhotos()) {
       // no usable photos to show
       return;
     }
 
-    let curIdx = (newIdx === null) ? t.p.selected : newIdx;
+    const selected = app.Screensaver.getSelected();
+    const views = app.Screensaver.getViews();
+    let curIdx = (newIdx === null) ? selected : newIdx;
     curIdx = !app.SSRunner.isStarted() ? 0 : curIdx;
-    const prevIdx = (curIdx > 0) ? curIdx - 1 : t.views.length - 1;
-    let nextIdx = (curIdx === t.views.length - 1) ? 0 : curIdx + 1;
+    let nextIdx = (curIdx === views.length - 1) ? 0 : curIdx + 1;
 
     if (!app.SSRunner.isStarted()) {
       // special case for first page. neon-animated-pages is configured
@@ -160,12 +101,9 @@ app.SSRunner = (function() {
       nextIdx = 0;
     }
 
-    nextIdx = app.SSFinder.getNext(nextIdx, _VARS.lastSelected, prevIdx);
+    nextIdx = app.SSFinder.getNext(nextIdx);
     if (nextIdx !== -1) {
       // the next photo is ready
-
-      // track the photo history
-      _trackHistory(newIdx, nextIdx);
 
       if (!app.SSRunner.isStarted()) {
         _VARS.started = true;
@@ -173,16 +111,20 @@ app.SSRunner = (function() {
       }
 
       // setup photo
-      t.views[nextIdx].render();
+      views[nextIdx].render();
 
-      // update t.p.selected so the animation runs
-      _VARS.lastSelected = t.p.selected;
-      t.p.selected = nextIdx;
-    }
+      // track the photo history
+      app.SSHistory.add(newIdx, nextIdx, _VARS.replaceIdx);
 
-    if (newIdx === null) {
-      // load next photo from master array
-      app.SSFinder.replacePhoto();
+      // update selected so the animation runs
+      _VARS.lastSelected = selected;
+      app.Screensaver.setSelected(nextIdx);
+
+      if (newIdx === null) {
+        // load next photo from master array
+        app.SSFinder.replacePhoto(_VARS.replaceIdx);
+        _VARS.replaceIdx = _VARS.lastSelected;
+      }
     }
 
     // set the next timeout, then call ourselves - runs unless interrupted
@@ -204,7 +146,7 @@ app.SSRunner = (function() {
       }
       _VARS.interactive = Chrome.Storage.get('interactive');
 
-      history.max = Math.min(app.SSFinder.getPhotosCount(), history.max);
+      app.SSHistory.initialize();
 
       // start slide show. slight delay at beginning so we have a smooth start
       window.setTimeout(_runShow, delay);
@@ -226,6 +168,24 @@ app.SSRunner = (function() {
      */
     setWaitTime: function(waitTime) {
       _VARS.waitTime = waitTime;
+    },
+
+    /**
+     * Set last selected index
+     * @param {int} lastSelected - last index in t.views
+     * @memberOf app.SSRunner
+     */
+    setLastSelected: function(lastSelected) {
+      _VARS.lastSelected = lastSelected;
+    },
+
+    /**
+     * Set last selected index
+     * @param {int} idx - replace index in t.views
+     * @memberOf app.SSRunner
+     */
+    setReplaceIdx: function(idx) {
+      _VARS.replaceIdx = idx;
     },
 
     /**
@@ -261,17 +221,8 @@ app.SSRunner = (function() {
      * @memberOf app.SSRunner
      */
     isCurrentPair: function(idx) {
-      const t = app.Screensaver.getTemplate();
-      return ((idx === t.p.selected) || (idx === _VARS.lastSelected));
-    },
-
-    /**
-     * Reset the slide show history
-     * @memberOf app.SSRunner
-     */
-    clearHistory: function() {
-      history.arr = [];
-      history.idx = -1;
+      const selected = app.Screensaver.getSelected();
+      return ((idx === selected) || (idx === _VARS.lastSelected));
     },
 
     /**
@@ -306,41 +257,12 @@ app.SSRunner = (function() {
      * @memberOf app.SSRunner
      */
     back: function() {
-      if (!_VARS.started) {
-        return;
-      }
-      if (history.idx <= 0) {
-        // at beginning
-        return;
-      }
-
-      const t = app.Screensaver.getTemplate();
-      let nextStep = null;
-      let idx = history.idx - 2;
-      history.idx = idx;
-      if (idx < 0) {
-        if ((history.arr.length > history.max)) {
-          // at beginning of history
-          history.idx+= 2;
-          return;
-        } else {
-          // at beginning, first time through
-          nextStep = -1;
-          idx = 0;
+      if (_VARS.started) {
+        const nextStep = app.SSHistory.back();
+        if (nextStep !== null) {
+          _step(nextStep);
         }
       }
-
-      // update state from history
-      const photosPos = history.arr[idx].photosPos;
-      const photoId = history.arr[idx].photoId;
-      const viewsIdx = history.arr[idx].viewsIdx;
-      nextStep = (nextStep === null) ? viewsIdx : nextStep;
-      app.SSFinder.setPhotosIndex(photosPos);
-      _VARS.lastSelected = history.arr[idx].lastViewsIdx;
-      t.views[viewsIdx].setPhoto(t.photos[photoId]);
-      t.views[viewsIdx].render();
-
-      _step(nextStep);
     },
   };
 })();

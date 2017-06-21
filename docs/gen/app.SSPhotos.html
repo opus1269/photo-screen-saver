@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Class: Time</title>
+	<title>Documentation Namespace: SSPhotos</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,16 +79,14 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: Time</h1>
+	<h1 class="page-title">Namespace: SSPhotos</h1>
 <section>
 
 <header>
     
         <h2>
-        Time
+        SSPhotos
         </h2>
-        
-            <div class="class-description"><p>Time Class</p></div>
         
     
 </header>
@@ -98,179 +96,11 @@
     <div class="container-overview">
     
         
-<hr>
-<dt>
-    <h4 class="name" id="Time"><span class="type-signature"></span>new Time<span class="signature">( [timeString])</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Create a new Time</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Argument</th>
+            <div class="description"><p>Collection of <a href="app.SSPhoto.html">app.SSPhoto</a> objects</p></div>
         
 
         
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>timeString</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>in '00:00' format, if null
-use current Date</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
 <dl class="details">
-    
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    <dl>
-
-<table class="props table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>_hr</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">int</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>24 hour time</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_min</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">int</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>minutes</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-</dl>
-
     
 
 	
@@ -304,8 +134,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="bower_components_chrome-extension-utils_chrome_time.js.html">bower_components/chrome-extension-utils/chrome_time.js</a>,
-				 <a href="bower_components_chrome-extension-utils_chrome_time.js.html#sunlight-1-line-20">line 20</a>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-13">line 13</a>
 			</li>
 		</ul>
 	</dd>
@@ -319,21 +149,7 @@ use current Date</p></td>
 </dl>
 
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
+        
     
     </div>
 
@@ -353,18 +169,29 @@ use current Date</p></td>
         <dl>
             
 <hr>
-<dt class="name" id=".MIN_IN_DAY">
-    <h4 id=".MIN_IN_DAY"><span class="type-signature">&lt;static> </span>MIN_IN_DAY<span class="type-signature"></span></h4>
+<dt class="name" id="._curIdx">
+    <h4 id="._curIdx"><span class="type-signature">&lt;private, static> </span>_curIdx<span class="type-signature"> :int</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>Minutes in day</p>
+        <p>Current index into _photos</p>
     </div>
     
 
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">int</span>
+
+
+
+            </li>
+        </ul>
     
 
     
@@ -402,8 +229,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="bower_components_chrome-extension-utils_chrome_time.js.html">bower_components/chrome-extension-utils/chrome_time.js</a>,
-				 <a href="bower_components_chrome-extension-utils_chrome_time.js.html#sunlight-1-line-37">line 37</a>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-33">line 33</a>
 			</li>
 		</ul>
 	</dd>
@@ -423,18 +250,29 @@ use current Date</p></td>
         
             
 <hr>
-<dt class="name" id=".MSEC_IN_DAY">
-    <h4 id=".MSEC_IN_DAY"><span class="type-signature">&lt;static> </span>MSEC_IN_DAY<span class="type-signature"></span></h4>
+<dt class="name" id="._hasUsable">
+    <h4 id="._hasUsable"><span class="type-signature">&lt;private, static> </span>_hasUsable<span class="type-signature"> :boolean</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        <p>Milliseconds in day</p>
+        <p>Flag to indicate if any photos are usable</p>
     </div>
     
 
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">boolean</span>
+
+
+
+            </li>
+        </ul>
     
 
     
@@ -472,8 +310,89 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="bower_components_chrome-extension-utils_chrome_time.js.html">bower_components/chrome-extension-utils/chrome_time.js</a>,
-				 <a href="bower_components_chrome-extension-utils_chrome_time.js.html#sunlight-1-line-46">line 46</a>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-41">line 41</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="._photos">
+    <h4 id="._photos"><span class="type-signature">&lt;private, static, constant> </span>_photos<span class="type-signature"> :Array.&lt;<a href="app.SSPhoto.html">app.SSPhoto</a>></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>The array of photos</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Array.&lt;<a href="app.SSPhoto.html">app.SSPhoto</a>></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-25">line 25</a>
 			</li>
 		</ul>
 	</dd>
@@ -500,7 +419,7 @@ use current Date</p></td>
             
 <hr>
 <dt>
-    <h4 class="name" id="._is24Hr"><span class="type-signature">&lt;private, static> </span>_is24Hr<span class="signature">( [frmt])</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="._inViews"><span class="type-signature">&lt;private, static> </span>_inViews<span class="signature">(photo)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
     
 </dt>
@@ -508,7 +427,7 @@ use current Date</p></td>
 
     
     <div class="description">
-        <p>Determine if user wants 24 hr time</p>
+        <p>Is the given <a href="app.SSPhoto.html">app.SSPhoto</a> in one of the views</p>
     </div>
     
 
@@ -531,11 +450,7 @@ use current Date</p></td>
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -547,13 +462,13 @@ use current Date</p></td>
 
         <tr>
             
-                <td class="name"><code>frmt</code></td>
+                <td class="name"><code>photo</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">int</span>
+<span class="param-type"><a href="app.SSPhoto.html">app.SSPhoto</a></span>
 
 
 
@@ -561,28 +476,10 @@ use current Date</p></td>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
 
-            <td class="description last"><p>optional format, overrides storage value</p></td>
+            <td class="description last"><p>A photo</p></td>
         </tr>
 
     
@@ -626,8 +523,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="bower_components_chrome-extension-utils_chrome_time.js.html">bower_components/chrome-extension-utils/chrome_time.js</a>,
-				 <a href="bower_components_chrome-extension-utils_chrome_time.js.html#sunlight-1-line-57">line 57</a>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-50">line 50</a>
 			</li>
 		</ul>
 	</dd>
@@ -656,7 +553,7 @@ use current Date</p></td>
     
             
 <div class="param-desc">
-    <p>true for 24 hour time</p>
+    <p>true if in t.views</p>
 </div>
 
 
@@ -684,7 +581,7 @@ use current Date</p></td>
             
 <hr>
 <dt>
-    <h4 class="name" id=".getStringFull"><span class="type-signature">&lt;static> </span>getStringFull<span class="signature">(timeString [, frmt])</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id=".addFromSource"><span class="type-signature">&lt;static> </span>addFromSource<span class="signature">(source)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -692,7 +589,7 @@ use current Date</p></td>
 
     
     <div class="description">
-        <p>Get time as string suitable for display, including AM/PM if 12hr</p>
+        <p>Add the photos from an <a href="app.PhotoSource.html#.SourcePhotos">app.PhotoSource.SourcePhotos</a></p>
     </div>
     
 
@@ -715,11 +612,7 @@ use current Date</p></td>
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -731,13 +624,13 @@ use current Date</p></td>
 
         <tr>
             
-                <td class="name"><code>timeString</code></td>
+                <td class="name"><code>source</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="app.PhotoSource.html#.SourcePhotos">app.PhotoSource.SourcePhotos</a></span>
 
 
 
@@ -745,29 +638,133 @@ use current Date</p></td>
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last"><p>in '00:00' format</p></td>
+            <td class="description last"><ul>
+<li>The <a href="app.PhotoSource.html#.SourcePhotos">app.PhotoSource.SourcePhotos</a></li>
+</ul></td>
         </tr>
 
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-68">line 68</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".get"><span class="type-signature">&lt;static> </span>get<span class="signature">(idx)</span><span class="type-signature"> &rarr; {<a href="app.SSPhoto.html">app.SSPhoto</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the <a href="app.SSPhoto.html">app.SSPhoto</a> at the given index</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>frmt</code></td>
+                <td class="name"><code>idx</code></td>
             
 
             <td class="type">
@@ -781,28 +778,10 @@ use current Date</p></td>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
 
-            <td class="description last"><p>optional format, overrides storage value</p></td>
+            <td class="description last"><p>The index</p></td>
         </tr>
 
     
@@ -846,8 +825,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="bower_components_chrome-extension-utils_chrome_time.js.html">bower_components/chrome-extension-utils/chrome_time.js</a>,
-				 <a href="bower_components_chrome-extension-utils_chrome_time.js.html#sunlight-1-line-141">line 141</a>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-115">line 115</a>
 			</li>
 		</ul>
 	</dd>
@@ -876,7 +855,7 @@ use current Date</p></td>
     
             
 <div class="param-desc">
-    <p>display string</p>
+    <p>A <a href="app.SSPhoto.html">app.SSPhoto</a></p>
 </div>
 
 
@@ -887,7 +866,7 @@ use current Date</p></td>
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type"><a href="app.SSPhoto.html">app.SSPhoto</a></span>
 
 
 
@@ -904,7 +883,7 @@ use current Date</p></td>
             
 <hr>
 <dt>
-    <h4 class="name" id=".getStringShort"><span class="type-signature">&lt;static> </span>getStringShort<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id=".getCount"><span class="type-signature">&lt;static> </span>getCount<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
     
     
 </dt>
@@ -912,7 +891,7 @@ use current Date</p></td>
 
     
     <div class="description">
-        <p>Get current time suitable for display w/o AM/PM if 12hr</p>
+        <p>Get number of photos</p>
     </div>
     
 
@@ -958,8 +937,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="bower_components_chrome-extension-utils_chrome_time.js.html">bower_components/chrome-extension-utils/chrome_time.js</a>,
-				 <a href="bower_components_chrome-extension-utils_chrome_time.js.html#sunlight-1-line-151">line 151</a>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-86">line 86</a>
 			</li>
 		</ul>
 	</dd>
@@ -988,169 +967,7 @@ use current Date</p></td>
     
             
 <div class="param-desc">
-    <p>display string</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".getTime"><span class="type-signature">&lt;static> </span>getTime<span class="signature">(timeString)</span><span class="type-signature"> &rarr; {int}</span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Convert string to current time</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>timeString</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>in '00:00' format</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="bower_components_chrome-extension-utils_chrome_time.js.html">bower_components/chrome-extension-utils/chrome_time.js</a>,
-				 <a href="bower_components_chrome-extension-utils_chrome_time.js.html#sunlight-1-line-80">line 80</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>time in milliSeconds from epoch</p>
+    <p>The number of photos</p>
 </div>
 
 
@@ -1178,7 +995,7 @@ use current Date</p></td>
             
 <hr>
 <dt>
-    <h4 class="name" id=".getTimeDelta"><span class="type-signature">&lt;static> </span>getTimeDelta<span class="signature">(timeString)</span><span class="type-signature"> &rarr; {int}</span></h4>
+    <h4 class="name" id=".getCurrentIndex"><span class="type-signature">&lt;static> </span>getCurrentIndex<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
     
     
 </dt>
@@ -1186,7 +1003,7 @@ use current Date</p></td>
 
     
     <div class="description">
-        <p>Calculate time delta from now on a 24hr basis</p>
+        <p>Get current index into _photos</p>
     </div>
     
 
@@ -1195,56 +1012,6 @@ use current Date</p></td>
     
 
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>timeString</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>in '00:00' format</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
     
 
     
@@ -1282,8 +1049,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="bower_components_chrome-extension-utils_chrome_time.js.html">bower_components/chrome-extension-utils/chrome_time.js</a>,
-				 <a href="bower_components_chrome-extension-utils_chrome_time.js.html#sunlight-1-line-96">line 96</a>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-144">line 144</a>
 			</li>
 		</ul>
 	</dd>
@@ -1312,7 +1079,7 @@ use current Date</p></td>
     
             
 <div class="param-desc">
-    <p>time delta in minutes</p>
+    <p>index</p>
 </div>
 
 
@@ -1340,7 +1107,7 @@ use current Date</p></td>
             
 <hr>
 <dt>
-    <h4 class="name" id=".isInRange"><span class="type-signature">&lt;static> </span>isInRange<span class="signature">(start, stop)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id=".getIndexFromName"><span class="type-signature">&lt;static> </span>getIndexFromName<span class="signature">(name)</span><span class="type-signature"> &rarr; {int}</span></h4>
     
     
 </dt>
@@ -1348,7 +1115,7 @@ use current Date</p></td>
 
     
     <div class="description">
-        <p>Determine if current time is between start and stop, inclusive</p>
+        <p>Get the index of the <a href="app.SSPhoto.html">app.SSPhoto</a> with the given name</p>
     </div>
     
 
@@ -1383,7 +1150,7 @@ use current Date</p></td>
 
         <tr>
             
-                <td class="name"><code>start</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
@@ -1400,31 +1167,7 @@ use current Date</p></td>
 
             
 
-            <td class="description last"><p>in '00:00' format</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>stop</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>in '00:00' format</p></td>
+            <td class="description last"><p>The name</p></td>
         </tr>
 
     
@@ -1468,8 +1211,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="bower_components_chrome-extension-utils_chrome_time.js.html">bower_components/chrome-extension-utils/chrome_time.js</a>,
-				 <a href="bower_components_chrome-extension-utils_chrome_time.js.html#sunlight-1-line-114">line 114</a>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-172">line 172</a>
 			</li>
 		</ul>
 	</dd>
@@ -1498,7 +1241,231 @@ use current Date</p></td>
     
             
 <div class="param-desc">
-    <p>true if in the given range</p>
+    <p>The index, -1 if photo is bad</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getNextUsable"><span class="type-signature">&lt;static> </span>getNextUsable<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="app.SSPhoto.html">app.SSPhoto</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the next <a href="app.SSPhoto.html">app.SSPhoto</a> that is usable</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-124">line 124</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>An <a href="app.SSPhoto.html">app.SSPhoto</a></p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="app.SSPhoto.html">app.SSPhoto</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".hasUsable"><span class="type-signature">&lt;static> </span>hasUsable<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Do we have photos that aren't bad</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-95">line 95</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>true if at least one photo is good</p>
 </div>
 
 
@@ -1526,7 +1493,7 @@ use current Date</p></td>
             
 <hr>
 <dt>
-    <h4 class="name" id="_parse"><span class="type-signature">&lt;private> </span>_parse<span class="signature">(timeString)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".incCurrentIndex"><span class="type-signature">&lt;static> </span>incCurrentIndex<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
     
     
 </dt>
@@ -1534,7 +1501,119 @@ use current Date</p></td>
 
     
     <div class="description">
-        <p>Parse time string</p>
+        <p>Increment current index into _photos</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-162">line 162</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>new current index</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".isUsable"><span class="type-signature">&lt;static> </span>isUsable<span class="signature">(idx)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Is the photo at the given index not marked bad</p>
     </div>
     
 
@@ -1569,13 +1648,13 @@ use current Date</p></td>
 
         <tr>
             
-                <td class="name"><code>timeString</code></td>
+                <td class="name"><code>idx</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">int</span>
 
 
 
@@ -1586,7 +1665,7 @@ use current Date</p></td>
 
             
 
-            <td class="description last"><p>in '00:00' format</p></td>
+            <td class="description last"><p>The index</p></td>
         </tr>
 
     
@@ -1630,8 +1709,170 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="bower_components_chrome-extension-utils_chrome_time.js.html">bower_components/chrome-extension-utils/chrome_time.js</a>,
-				 <a href="bower_components_chrome-extension-utils_chrome_time.js.html#sunlight-1-line-164">line 164</a>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-105">line 105</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>true if photo is good</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".markBad"><span class="type-signature">&lt;static> </span>markBad<span class="signature">(idx)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Mark an <a href="app.SSPhoto.html">app.SSPhoto</a> as bad</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>idx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The index</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-184">line 184</a>
 			</li>
 		</ul>
 	</dd>
@@ -1664,7 +1905,7 @@ use current Date</p></td>
             
 <hr>
 <dt>
-    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">( [frmt])</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id=".setCurrentIndex"><span class="type-signature">&lt;static> </span>setCurrentIndex<span class="signature">(idx)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1672,7 +1913,7 @@ use current Date</p></td>
 
     
     <div class="description">
-        <p>Get string representation of Time</p>
+        <p>Set current index into _photos</p>
     </div>
     
 
@@ -1695,11 +1936,7 @@ use current Date</p></td>
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1711,7 +1948,7 @@ use current Date</p></td>
 
         <tr>
             
-                <td class="name"><code>frmt</code></td>
+                <td class="name"><code>idx</code></td>
             
 
             <td class="type">
@@ -1725,28 +1962,10 @@ use current Date</p></td>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
 
-            <td class="description last"><p>optional format, overrides storage value</p></td>
+            <td class="description last"><p>The index</p></td>
         </tr>
 
     
@@ -1790,8 +2009,8 @@ use current Date</p></td>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="bower_components_chrome-extension-utils_chrome_time.js.html">bower_components/chrome-extension-utils/chrome_time.js</a>,
-				 <a href="bower_components_chrome-extension-utils_chrome_time.js.html#sunlight-1-line-180">line 180</a>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-153">line 153</a>
 			</li>
 		</ul>
 	</dd>
@@ -1816,30 +2035,94 @@ use current Date</p></td>
     
 
     
-    <h5>Returns:</h5>
+
     
-            
-<div class="param-desc">
-    <p>As string</p>
-</div>
+</dd>
 
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
         
-<span class="param-type">string</span>
+            
+<hr>
+<dt>
+    <h4 class="name" id=".shuffle"><span class="type-signature">&lt;static> </span>shuffle<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Randomize the photos</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
 
 
 
-    </dd>
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_photos.js.html">scripts/screensaver/ss_photos.js</a>,
+				 <a href="scripts_screensaver_ss_photos.js.html#sunlight-1-line-200">line 200</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
 </dl>
 
 
-        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 
     
 </dd>
@@ -1898,7 +2181,7 @@ use current Date</p></td>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 18th 2017, 6:19:10 pm
+		on June 18th 2017, 6:19:09 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

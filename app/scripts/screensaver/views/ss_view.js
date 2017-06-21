@@ -5,11 +5,19 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 (function() {
+  'use strict';
   window.app = window.app || {};
 
-  'use strict';
-
   new ExceptionHandler();
+
+  /**
+   * aspect ratio of screen
+   * @type {number}
+   * @const
+   * @private
+   * @memberOf app.SSPhoto
+   */
+  const _SCREEN_ASP = screen.width / screen.height;
 
   /**
    * Screensaver zoom view and base class for other SSView classes
@@ -18,27 +26,33 @@
    * @property {Element} time - label
    * @property {Element} location - Geo location
    * @property {Object} model - template item model
+   * @property {string} url - photo url, binding
+   * @property {string} authorLabel - author text, binding
+   * @property {string} locationLabel - location text, binding
    * @alias app.SSView
    */
   app.SSView = class SSView {
 
     /**
      * Create a new SSView
-     * @param {app.Photo} photo - photo item
+     * @param {app.SSPhoto} photo - An {@link app.SSPhoto}
      * @constructor
      */
     constructor(photo) {
-      this.photo = Chrome.JSONUtils.shallowCopy(photo);
+      this.photo = photo;
       this.image = null;
       this.author = null;
       this.time = null;
       this.location = null;
       this.model = null;
+      this.url = photo.getUrl();
+      this.authorLabel = '';
+      this.locationLabel = '';
     }
 
     /**
      * Factory Method to create a new View
-     * @param {app.Photo} photo - photo item
+     * @param {app.SSPhoto} photo - An {@link app.SSPhoto}
      * @param {int} sizing - photo sizing type
      * @returns {app.SSView} a new SSView or subclass
      * @static
@@ -54,10 +68,42 @@
         case 3:
           return new app.SSViewFull(photo);
         default:
-          Chrome.GA.error(`Unknown SSView type: ${sizing}`,
-              'SSView.createView');
+          Chrome.GA.error(`Bad SSView type: ${sizing}`, 'SSView.createView');
           return new app.SSViewLetterbox(photo);
       }
+    }
+
+    /**
+     * Determine if a photo would look bad zoomed or stretched on the screen
+     * @param {number} asp - an aspect ratio
+     * @returns {boolean} true if a photo aspect ratio differs substantially
+     * from the screens'
+     * @private
+     */
+    static _isBadAspect(asp) {
+      // arbitrary
+      const CUT_OFF = 0.5;
+      return (asp < _SCREEN_ASP - CUT_OFF) || (asp > _SCREEN_ASP + CUT_OFF);
+    }
+
+    /**
+     * Determine if a given aspect ratio should be ignored
+     * @param {number} asp - an aspect ratio
+     * @param {int} photoSizing - the sizing type
+     * @returns {boolean} true if the aspect ratio should be ignored
+     */
+    static ignore(asp, photoSizing) {
+      let ret = false;
+      const skip = Chrome.Storage.getBool('skip');
+
+      if ((!asp || isNaN(asp)) ||
+          (skip && ((photoSizing === 1) || (photoSizing === 3)) &&
+          app.SSView._isBadAspect(asp))) {
+        // ignore photos that don't have aspect ratio
+        // or would look bad with cropped or stretched sizing options
+        ret = true;
+      }
+      return ret;
     }
 
     /**
@@ -83,7 +129,8 @@
      * @returns {boolean} true if we should show the author
      */
     _hasAuthor() {
-      return !!this.photo.label;
+      const photographer = this.photo.getPhotographer();
+      return !Chrome.Utils.isWhiteSpace(photographer);
     }
 
     /**
@@ -91,7 +138,7 @@
      * @returns {boolean} true if geolocation point is non-null
      */
     _hasLocation() {
-      return !!this.photo.point;
+      return !!this.photo.getPoint();
     }
 
     /**
@@ -99,8 +146,8 @@
      * @private
      */
     _super500px() {
-      const type = this.photo.type;
-      const authorText = this.photo.label;
+      const type = this.photo.getType();
+      const authorText = this.authorLabel;
       const sup = this.author.querySelector('#sup');
       sup.textContent = '';
       if (!Chrome.Utils.isWhiteSpace(authorText) && (type === '500')) {
@@ -119,20 +166,67 @@
     }
 
     /**
+     * Set the url
+     */
+    _setUrl() {
+      this.url = this.photo.getUrl();
+      this.model.set('view.url', this.url);
+    }
+
+    /**
+     * Set the author text
+     * @param {boolean} force - require display of label if true
+     */
+    _setAuthorLabel(force) {
+      this.authorLabel = '';
+      this.model.set('view.authorLabel', this.authorLabel);
+      this._super500px();
+
+      const type = this.photo.getType();
+      const photographer = this.photo.getPhotographer();
+      let newType = type;
+      const idx = type.search('User');
+
+      if (!force && !Chrome.Storage.getBool('showPhotog') && (idx !== -1)) {
+        // don't show label for user's own photos, if requested
+        return;
+      }
+
+      if (idx !== -1) {
+        // strip off 'User'
+        newType = type.substring(0, idx - 1);
+      }
+
+      if (this._hasAuthor()) {
+        this.authorLabel = `${photographer} / ${newType}`;
+      } else {
+        // no photographer name
+        this.authorLabel = `${Chrome.Locale.localize('photo_from')} ${newType}`;
+      }
+      this.model.set('view.authorLabel', this.authorLabel);
+      this._super500px();
+    }
+
+    /**
      * Set the geolocation text
      */
-    _setLocation() {
+    _setLocationLabel() {
+      this.locationLabel = '';
+      this.model.set('view.locationLabel', this.locationLabel);
+
       if (app.SSView._showLocation() && this._hasLocation()) {
-        app.Geo.get(this.photo.point).then((location) => {
+        const point = this.photo.getPoint();
+        app.Geo.get(point).then((location) => {
           if (location && this.model) {
             location = location.replace('Unnamed Road, ', '');
-            this.model.set('view.photo.location', location);
+            this.locationLabel = location;
+            this.model.set('view.locationLabel', this.locationLabel);
           }
           return Promise.resolve();
         }).catch((err) => {
           const networkErr = Chrome.Locale.localize('err_network');
           if (!err.message.includes(networkErr)) {
-            Chrome.GA.error(err.message, 'SSView._setLocation');
+            Chrome.GA.error(err.message, 'SSView._setLocationLabel');
           }
         });
       }
@@ -154,29 +248,18 @@
       this.model = model;
 
       this._setTimeStyle();
-      this._setLocation();
-      this._super500px();
+      this.setPhoto(this.photo);
     }
 
     /**
      * Set the photo
-     * @param {app.Photo} photo - a photo to render
+     * @param {app.SSPhoto} photo - a photo to render
      */
     setPhoto(photo) {
-      const photoCopy = Chrome.JSONUtils.shallowCopy(photo);
-      if (this.model) {
-        this.model.set('view.photo', photoCopy);
-      }
-      this._setLocation();
-      this._super500px();
-    }
-
-    /**
-     * Get the name of the photo in this view
-     * @returns {string} name of photo
-     */
-    getPhotoName() {
-      return this.photo.name;
+      this.photo = photo;
+      this._setUrl();
+      this._setAuthorLabel(false);
+      this._setLocationLabel();
     }
 
     /**

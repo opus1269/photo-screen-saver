@@ -16,18 +16,32 @@ app.Screensaver = (function() {
   new ExceptionHandler();
 
   /**
+   * Max number of animated pages
+   * @type {int}
+   * @const
+   * @default
+   * @private
+   * @memberOf app.Screensaver
+   */
+  const _MAX_PAGES = 20;
+
+  /**
    * Main auto-binding template
    * @typedef {Element} app.Screensaver.Template
    * @property {?Element} rep - repeat template
    * @property {?Element} p - animated-pages
-   * @property {Array<app.Photo>} photos - array of photos
    * @property {Array<app.SSView>} views - array of views
-   * @property {int} sizingType - the way the photos are rendered
+   * @property {int} photoSizing - the way the photos are rendered
+   * @property {?string} sizingType - the way an image is rendered
    * @property {int} aniType - the animation type for photo transitions
+   * @property {int} screenWidth - screen width in pixels
+   * @property {int} screenHeight - screen height in pixels
    * @property {boolean} paused - true if slideshow paused
    * @property {boolean} noPhotos - true if there are no usable photos
-   * @property {string} noPhotosLabel - label when no photos are useable
+   * @property {string} noPhotosLabel - label when no photos are usable
    * @property {string} timeLabel - current time label
+   * @property {Function} set - Polymer setter
+   * @property {Function} push - Polymer pusher
    * @memberOf app.Screensaver
    */
 
@@ -41,9 +55,11 @@ app.Screensaver = (function() {
   const t = document.querySelector('#t');
   t.rep = null;
   t.p = null;
-  t.photos = [];
   t.views = [];
-  t.sizingType = 0;
+  t.photoSizing = 0;
+  t.sizingType = null;
+  t.screenWidth = screen.width;
+  t.screenHeight = screen.height;
   t.aniType = 0;
   t.paused = false;
   t.noPhotos = false;
@@ -58,8 +74,8 @@ app.Screensaver = (function() {
    */
   function _onDomChange() {
     // set selected background image
-    document.body.style.background = Chrome.Storage.get('background').
-        substring(11);
+    document.body.style.background =
+        Chrome.Storage.get('background').substring(11);
 
     Chrome.GA.page('/screensaver.html');
 
@@ -69,7 +85,74 @@ app.Screensaver = (function() {
     t.rep = t.$.repeatTemplate;
     t.p = t.$.pages;
 
+    _setZoom();
+    _setupPhotoSizing();
+    _setupPhotoTransitions();
+
     app.Screensaver.launch();
+  }
+
+  /**
+   * Process settings related to the photo's appearance
+   * @private
+   * @memberOf app.Screensaver
+   */
+  function _setupPhotoSizing() {
+    t.photoSizing = Chrome.Storage.getInt('photoSizing', 0);
+    if (t.photoSizing === 4) {
+      // pick random sizing
+      t.photoSizing = Chrome.Utils.getRandomInt(0, 3);
+    }
+    let type = 'contain';
+    switch (t.photoSizing) {
+      case 0:
+        type = 'contain';
+        break;
+      case 1:
+        type = 'cover';
+        break;
+      case 2:
+      case 3:
+        type = null;
+        break;
+    }
+    t.set('sizingType', type);
+  }
+
+  /**
+   * Process settings related to between photo transitions
+   * @private
+   * @memberOf app.Screensaver
+   */
+  function _setupPhotoTransitions() {
+    let type = Chrome.Storage.getInt('photoTransition', 0);
+    if (type === 8) {
+      // pick random transition
+      type = Chrome.Utils.getRandomInt(0, 7);
+    }
+    t.set('aniType', type);
+
+    app.SSTime.initialize();
+  }
+
+  /**
+   * Set the window zoom factor to 1.0
+   * @private
+   * @memberOf app.Screensaver
+   */
+  function _setZoom() {
+    if (Chrome.Utils.getChromeVersion() >= 42) {
+      // override zoom factor to 1.0 - chrome 42 and later
+      const chromep = new ChromePromise();
+      chromep.tabs.getZoom().then((zoomFactor) => {
+        if ((zoomFactor <= 0.99) || (zoomFactor >= 1.01)) {
+          chrome.tabs.setZoom(1.0);
+        }
+        return null;
+      }).catch((err) => {
+        Chrome.GA.error(err.message, 'chromep.tabs.getZoom');
+      });
+    }
   }
 
   // listen for dom-change
@@ -90,12 +173,79 @@ app.Screensaver = (function() {
     },
 
     /**
-     * Get reference to the auto-binding template
-     * @returns {app.Screensaver.Template} The auto-binding template
+     * Create the [t.views]{@link app.Screensaver.t} that will be animated
      * @memberOf app.Screensaver
      */
-    getTemplate: function() {
-      return t;
+    createPages: function() {
+      const viewType = app.Screensaver.getViewType();
+      const len = Math.min(app.SSPhotos.getCount(), _MAX_PAGES);
+      for (let i = 0; i < len; i++) {
+        const photo = app.SSPhotos.get(i);
+        const view = app.SSView.createView(photo, viewType);
+        t.push('views', view);
+      }
+      app.SSPhotos.setCurrentIndex(len);
+
+      // force update of animated pages
+      t.rep.render();
+
+      // set the Elements of each view
+      const views = app.Screensaver.getViews();
+      views.forEach((view, index) => {
+        const el = t.p.querySelector('#view' + index);
+        const image = el.querySelector('.image');
+        const author = el.querySelector('.author');
+        const time = el.querySelector('.time');
+        const location = el.querySelector('.location');
+        const model = t.rep.modelForElement(el);
+        view.setElements(image, author, time, location, model);
+      });
+    },
+
+    /**
+     * Get the type of view
+     * @returns {int} The sizing type
+     * @memberOf app.Screensaver
+     */
+    getViewType: function() {
+      return t.photoSizing;
+    },
+
+    /**
+     * Get the selected index
+     * @returns {int|undefined} The index
+     * @memberOf app.Screensaver
+     */
+    getSelected: function() {
+      return t.p.selected;
+    },
+
+    /**
+     * Set the selected index
+     * @param {int} selected - The index
+     * @memberOf app.Screensaver
+     */
+    setSelected: function(selected) {
+      t.p.selected = selected;
+    },
+
+    /**
+     * Is the given idx the selected index
+     * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
+     * @returns {boolean} true if selected
+     * @memberOf app.Screensaver
+     */
+    isSelected: function(idx) {
+      return (idx === t.p.selected);
+    },
+
+    /**
+     * Do we have usable photos
+     * @returns {boolean} true if all photos are bad
+     * @memberOf app.Screensaver
+     */
+    noPhotos: function() {
+      return t.noPhotos;
     },
 
     /**
@@ -103,9 +253,17 @@ app.Screensaver = (function() {
      * @memberOf app.Screensaver
      */
     setNoPhotos: function() {
-      const t = app.Screensaver.getTemplate();
       t.set('noPhotos', true);
       t.noPhotosLabel = Chrome.Locale.localize('no_photos');
+    },
+
+    /**
+     * Get reference to [t.views]{@link app.Screensaver.Template}
+     * @returns {Array<app.SSView>} The views
+     * @memberOf app.Screensaver
+     */
+    getViews: function() {
+      return t.views;
     },
 
     /**

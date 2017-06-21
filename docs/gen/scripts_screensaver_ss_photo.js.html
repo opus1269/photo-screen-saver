@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: scripts/screensaver/photo.js</title>
+	<title>Documentation Source: scripts/screensaver/ss_photo.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Photo.html">app.Photo</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="Chrome.Time.html">Chrome.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
+					<li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.SSPhoto.html">app.SSPhoto</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="Chrome.Time.html">Chrome.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
 				</ul>
 			</li>
 			
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: scripts/screensaver/photo.js</h1>
+		<h1 class="page-title">Source: scripts/screensaver/ss_photo.js</h1>
     
 <section>
     <article>
@@ -91,6 +91,8 @@
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
 (function() {
+  window.app = window.app || {};
+
   'use strict';
 
   new ExceptionHandler();
@@ -100,14 +102,12 @@
    * @type {number}
    * @const
    * @private
-   * @memberOf app.Photo
+   * @memberOf app.SSPhoto
    */
   const _SCREEN_ASP = screen.width / screen.height;
 
   /**
    * A photo for the screen saver
-   * Important: Only implement static methods. This Object
-   * will be shallow copied in the screensaver and lose its instance methods
    *
    * @property {string} name - Unique name
    * @property {string} path - The url to the photo
@@ -120,132 +120,127 @@
    * @property {string} point - geolocation 'lat lon'
    * @property {string} label - author label
    * @property {?string} location - geolocation label
-   * @param {string} name - unique name
-   * @param {app.PhotoSource.SourcePhoto} source - source photo
-   * @param {string} sourceType - type of {@link app.PhotoSource}
-   * @constructor
-   * @alias app.Photo
+   * @alias app.SSPhoto
    */
-  const Photo = function(name, source, sourceType) {
-    this.name = name;
-    this.path = source.url;
-    this.author = source.author ? source.author : '';
-    this.type = sourceType;
-    this.aspectRatio = source.asp;
-    this.ex = source.ex;
-    this.point = source.point;
-    this.width = screen.width;
-    this.height = screen.height;
-    this.label = Photo.buildAuthorLabel(this.type, this.author, false);
-    this.location = null;
-  };
+  app.SSPhoto = class SSPhoto {
 
-  window.app = window.app || {};
-  app.Photo = Photo;
+    /**
+     * Create a new photo
+     * @param {string} name - unique name
+     * @param {app.PhotoSource.SourcePhoto} source - source photo
+     * @param {string} sourceType - type of {@link app.PhotoSource}
+     * @constructor
+     */
+    constructor(name, source, sourceType) {
+      this.name = name;
+      this.path = source.url;
+      this.author = source.author ? source.author : '';
+      this.type = sourceType;
+      this.aspectRatio = source.asp;
+      this.ex = source.ex;
+      this.point = source.point;
+      this.width = screen.width;
+      this.height = screen.height;
+      this.location = null;
 
-  /**
-   * Create the author label
-   * @param {string} type - source of photo
-   * @param {string} author - author of photo
-   * @param {boolean} force - require display of label if true
-   * @returns {string} label describing the photo source and photographer name
-   */
-  Photo.buildAuthorLabel = function(type, author, force) {
-    let ret = '';
-    let newType = type;
-    const idx = type.search('User');
+      this.setAuthorLabel(false);
+    }
 
-    if (!force &amp;&amp; !Chrome.Storage.getBool('showPhotog') &amp;&amp; (idx !== -1)) {
-      // don't show label for user's own photos, if requested
+    /**
+     * Determine if a photo would look bad zoomed or stretched on the screen
+     * @param {number} asp - an aspect ratio
+     * @returns {boolean} true if a photo aspect ratio differs substantially
+     * from the screens'
+     * @private
+     */
+    static _isBadAspect(asp) {
+      // arbitrary
+      const CUT_OFF = 0.5;
+      return (asp &lt; _SCREEN_ASP - CUT_OFF) || (asp > _SCREEN_ASP + CUT_OFF);
+    }
+
+    /**
+     * Determine if a photo should not be displayed
+     * @param {number} asp - an aspect ratio
+     * @param {int} photoSizing - the sizing type
+     * @returns {boolean} true if the photo should not be displayed
+     */
+    static ignore(asp, photoSizing) {
+      let ret = false;
+      const skip = Chrome.Storage.getBool('skip');
+
+      if ((!asp || isNaN(asp)) ||
+          (skip &amp;&amp; ((photoSizing === 1) || (photoSizing === 3)) &amp;&amp;
+          app.SSPhoto._isBadAspect(asp))) {
+        // ignore photos that don't have aspect ratio
+        // or would look bad with cropped or stretched sizing options
+        ret = true;
+      }
       return ret;
     }
 
-    if (idx !== -1) {
-      // strip off 'User'
-      newType = type.substring(0, idx - 1);
+    /**
+     * Set the author label
+     * @param {boolean} force - require display of label if true
+     */
+    setAuthorLabel(force) {
+      this.label = '';
+      let newType = this.type;
+      const idx = this.type.search('User');
+
+      if (!force &amp;&amp; !Chrome.Storage.getBool('showPhotog') &amp;&amp; (idx !== -1)) {
+        // don't show label for user's own photos, if requested
+        return;
+      }
+
+      if (idx !== -1) {
+        // strip off 'User'
+        newType = this.type.substring(0, idx - 1);
+      }
+
+      if (this.author) {
+        this.label = `${this.author} / ${newType}`;
+      } else {
+        // no photographer name
+        this.label = `${Chrome.Locale.localize('photo_from')} ${newType}`;
+      }
     }
 
-    if (author) {
-      ret = `${author} / ${newType}`;
-    } else {
-      // no photographer name
-      ret = `${Chrome.Locale.localize('photo_from')} ${newType}`;
-    }
-    return ret;
-  };
+    /**
+     * Create a new tab with a link to the
+     * original source of the photo, if possible
+     */
+    showSource() {
+      let regex;
+      let id;
+      let url = null;
 
-  /**
-   * Determine if a photo would look bad zoomed or stretched on the screen
-   * @param {number} asp aspect ratio of photo
-   * @returns {boolean} true if a photo aspect ratio differs substantially
-   * from the screens'
-   * @private
-   */
-  Photo._isBadAspect = function(asp) {
-    // arbitrary
-    const CUT_OFF = 0.5;
-    return (asp &lt; _SCREEN_ASP - CUT_OFF) || (asp > _SCREEN_ASP + CUT_OFF);
-  };
-
-  /**
-   * Determine if a photo should not be displayed
-   * @param {number} asp - aspect ratio
-   * @param {int} photoSizing - the sizing type
-   * @returns {boolean} true if the photo should not be displayed
-   */
-  Photo.ignore = function(asp, photoSizing) {
-    let ret = false;
-    const skip = Chrome.Storage.getBool('skip');
-
-    if ((!asp || isNaN(asp)) ||
-        (skip &amp;&amp; ((photoSizing === 1) || (photoSizing === 3)) &amp;&amp;
-        Photo._isBadAspect(asp))) {
-      // ignore photos that don't have aspect ratio
-      // or would look bad with cropped or stretched sizing options
-      ret = true;
-    }
-    return ret;
-  };
-
-  /**
-   * Create a new tab with a link to the
-   * original source of the current photo, if possible
-   * @param {Object} item - a photo item
-   */
-  Photo.showSource = function(item) {
-    if (!item) {
-      return;
-    }
-    const path = item.path;
-    const extra = item.ex;
-    let regex;
-    let id;
-    let url;
-
-    switch (item.type) {
-      case '500':
-        // parse photo id
-        regex = /(\/[^\/]*){4}/;
-        id = path.match(regex);
-        url = `http://500px.com/photo${id[1]}`;
-        chrome.tabs.create({url: url});
-        break;
-      case 'flickr':
-        if (extra) {
+      switch (this.type) {
+        case '500':
           // parse photo id
-          regex = /(\/[^\/]*){4}(_.*_)/;
-          id = path.match(regex);
-          url = `https://www.flickr.com/photos/${item.ex}${id[1]}`;
-          chrome.tabs.create({url: url});
-        }
-        break;
-      case 'reddit':
-        if (extra) {
-          chrome.tabs.create({url: item.ex});
-        }
-        break;
-      default:
-        break;
+          regex = /(\/[^\/]*){4}/;
+          id = this.path.match(regex);
+          url = `http://500px.com/photo${id[1]}`;
+          break;
+        case 'flickr':
+          if (this.ex) {
+            // parse photo id
+            regex = /(\/[^\/]*){4}(_.*_)/;
+            id = this.path.match(regex);
+            url = `https://www.flickr.com/photos/${this.ex}${id[1]}`;
+          }
+          break;
+        case 'reddit':
+          if (this.ex) {
+            url = this.ex;
+          }
+          break;
+        default:
+          break;
+      }
+      if (url !== null) {
+        chrome.tabs.create({url: url});
+      }
     }
   };
 })();
@@ -294,7 +289,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 15th 2017, 11:43:33 am
+		on June 18th 2017, 6:19:09 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

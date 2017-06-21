@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: scripts/background/reddit.js</title>
+	<title>Documentation Source: scripts/screensaver/ss_photos.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: scripts/background/reddit.js</h1>
+		<h1 class="page-title">Source: scripts/screensaver/ss_photos.js</h1>
     
 <section>
     <article>
@@ -93,183 +93,204 @@
 window.app = window.app || {};
 
 /**
- * Interface to Reddit API
+ * Collection of {@link app.SSPhoto} objects
  * @namespace
  */
-app.Reddit = (function() {
-	'use strict';
+app.SSPhotos = (function() {
+  'use strict';
 
-	new ExceptionHandler();
+  new ExceptionHandler();
 
-	/**
-	 * Extension's redirect uri
-	 * @type {string}
-	 * @const
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	const _REDIRECT_URI =
-		`https://${chrome.runtime.id}.chromiumapp.org/reddit`;
+  /**
+   * The array of photos
+   * @type {Array&lt;app.SSPhoto>}
+   * @const
+   * @private
+   * @memberOf app.SSPhotos
+   */
+  const _photos = [];
 
-	/**
-	 * Reddit rest API authorization key
-	 * @type {string}
-	 * @const
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	const _KEY = 'bATkDOUNW_tOlg';
+  /**
+   * Current index into {@link _photos}
+   * @type {int}
+   * @private
+   * @memberOf app.SSPhotos
+   */
+  let _curIdx = 0;
 
-	/**
-	 * Max photos to return
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	const _MAX_PHOTOS = 100;
+  /**
+   * Flag to indicate if any photos are usable
+   * @type {boolean}
+   * @private
+   * @memberOf app.SSPhotos
+   */
+  let _hasUsable = true;
 
-	/**
-	 * Min size of photo to use
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	const _MIN_SIZE = 750;
+  /**
+   * Is the given {@link app.SSPhoto} in one of the views
+   * @param {app.SSPhoto} photo - A photo
+   * @returns {boolean} true if in t.views
+   * @private
+   * @memberOf app.SSPhotos
+   */
+  function _inViews(photo) {
+    let ret = false;
+    const views = app.Screensaver.getViews();
+    for (const view of views) {
+      if (view.photo.name === photo.name) {
+        ret = true;
+      }
+    }
+    return ret;
+  }
 
-	/**
-	 * Max size of photo to use
-	 * @type {int}
-	 * @const
-	 * @default
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	const _MAX_SIZE = 3500;
+  return {
+    /**
+     * Add the photos from an {@link app.PhotoSource.SourcePhotos}
+     * @param {app.PhotoSource.SourcePhotos} source
+     * - The {@link app.PhotoSource.SourcePhotos}
+     * @memberOf app.SSPhotos
+     */
+    addFromSource: function(source) {
+      const type = source.type;
+      const viewType = app.Screensaver.getViewType();
+      let ct = 0;
+      for (const sourcePhoto of source.photos) {
+        if (!app.SSPhoto.ignore(sourcePhoto.asp, viewType)) {
+          const photo = new app.SSPhoto('photo' + ct, sourcePhoto, type);
+          _photos.push(photo);
+          ct++;
+        }
+      }
+    },
 
-	/**
-	 * Expose reddit API
-	 * @type {Function}
-	 * @const
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	const _snoocore = new Snoocore({
-		userAgent: 'photo-screen-saver',
-		throttle: 0,
-		oauth: {
-			type: 'implicit',
-			key: _KEY,
-			redirectUri: _REDIRECT_URI,
-			scope: ['read'],
-		},
-	});
+    /**
+     * Get number of photos
+     * @returns {int} The number of photos
+     * @memberOf app.SSPhotos
+     */
+    getCount: function() {
+      return _photos.length;
+    },
 
-	/**
-	 * Parse the size from the submission title.
-	 * this is the old way reddit did it
-	 * @param {string} title - submission title
-	 * @returns {{width: int, height: int}} Photo size
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	function _getSize(title) {
-		const ret = {width: -1, height: -1};
-		const regex = /\[(\d*)\D*(\d*)\]/;
-		const res = title.match(regex);
-		if (res) {
-			ret.width = parseInt(res[1], 10);
-			ret.height = parseInt(res[2], 10);
-		}
-		return ret;
-	}
+    /**
+     * Do we have photos that aren't bad
+     * @returns {boolean} true if at least one photo is good
+     * @memberOf app.SSPhotos
+     */
+    hasUsable: function() {
+      return _hasUsable;
+    },
 
-	/**
-	 * Build the list of photos for one page of items
-	 * @param {Array} children - Array of objects from reddit
-	 * @returns {app.PhotoSource.SourcePhoto[]} Array of photos
-	 * @private
-	 * @memberOf app.Reddit
-	 */
-	function _processChildren(children) {
-		const photos = [];
-		let url;
-		let width = 1;
-		let height = 1;
+    /**
+     * Is the photo at the given index not marked bad
+     * @param {int} idx - The index
+     * @returns {boolean} true if photo is good
+     * @memberOf app.SSPhotos
+     */
+    isUsable: function(idx) {
+      return _photos[idx].name !== 'skip';
+    },
 
-		children.forEach((child) => {
-			const data = child.data;
-			if (!data.over_18) {
-				// skip NSFW
-				if (data.preview &amp;&amp; data.preview.images) {
-					// new way. has full size image and array of reduced
-					// resolutions
-					let item = data.preview.images[0];
-					url = item.source.url;
-					width = parseInt(item.source.width, 10);
-					height = parseInt(item.source.height, 10);
-					if (Math.max(width, height) > _MAX_SIZE) {
-						// too big. get the largest reduced resolution image
-						item = item.resolutions[item.resolutions.length - 1];
-						url = item.url.replace(/&amp;amp;/g, '&amp;');
-						width = parseInt(item.width, 10);
-						height = parseInt(item.height, 10);
-					}
-				} else if (data.title) {
-					// old way of specifying images - parse size from title
-					const size = _getSize(data.title);
-					url = data.url;
-					width = size.width;
-					height = size.height;
-				}
-			}
+    /**
+     * Get the {@link app.SSPhoto} at the given index
+     * @param {int} idx - The index
+     * @returns {app.SSPhoto} A {@link app.SSPhoto}
+     * @memberOf app.SSPhotos
+     */
+    get: function(idx) {
+      return _photos[idx];
+    },
 
-			const asp = width / height;
-			const author = data.author;
-			if (asp &amp;&amp; !isNaN(asp) &amp;&amp; (Math.max(width, height) >= _MIN_SIZE) &amp;&amp;
-				(Math.max(width, height) &lt;= _MAX_SIZE)) {
-				app.PhotoSource.addPhoto(photos, url, author, asp, data.url);
-			}
-		});
-		return photos;
-	}
+    /**
+     * Get the next {@link app.SSPhoto} that is usable
+     * @returns {?app.SSPhoto} An {@link app.SSPhoto}
+     * @memberOf app.SSPhotos
+     */
+    getNextUsable: function() {
+      // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
+      for (let i = 0; i &lt; _photos.length; i++) {
+        // find a url that is ok, AFAWK
+        const index = (i + _curIdx) % _photos.length;
+        const photo = _photos[index];
+        if (app.SSPhotos.isUsable(index) &amp;&amp; !_inViews(photo)) {
+          _curIdx = index;
+          app.SSPhotos.incCurrentIndex();
+          return photo;
+        }
+      }
+      return null;
+    },
 
-	return {
-		/**
-		 * Retrieve the array of reddit photos
-		 * @param {string} subreddit - name of photo subreddit
-		 * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
-		 * @memberOf app.Reddit
-		 */
-		loadPhotos: function(subreddit) {
-			let photos = [];
+    /**
+     * Get current index into {@link _photos}
+     * @returns {int} index
+     * @memberOf app.SSPhotos
+     */
+    getCurrentIndex: function() {
+      return _curIdx;
+    },
 
-			return _snoocore(`${subreddit}hot`).listing({
-				limit: _MAX_PHOTOS,
-			}).then((slice) => {
-				photos = photos.concat(_processChildren(slice.children));
-				return slice.next();
-			}).then((slice) => {
-				photos = photos.concat(_processChildren(slice.children));
-				return Promise.resolve(photos);
-			}).catch((err) => {
-				let msg = err.message;
-				if (msg) {
-					// extract first sentence
-					const idx = msg.indexOf('.');
-					if (idx !== -1) {
-						msg = msg.substring(0, idx + 1);
-					}
-				} else {
-					msg = 'Unknown Error';
-				}
-				throw new Error(msg);
-			});
-		},
-	};
+    /**
+     * Set current index into {@link _photos}
+     * @param {int} idx - The index
+     * @memberOf app.SSPhotos
+     */
+    setCurrentIndex: function(idx) {
+      _curIdx = idx;
+    },
+
+    /**
+     * Increment current index into {@link _photos}
+     * @returns {int} new current index
+     * @memberOf app.SSPhotos
+     */
+    incCurrentIndex: function() {
+     return _curIdx = (_curIdx === _photos.length - 1) ? 0 : _curIdx + 1;
+    },
+
+    /**
+     * Get the index of the {@link app.SSPhoto} with the given name
+     * @param {string} name - The name
+     * @returns {int} The index, -1 if photo is bad
+     * @memberOf app.SSPhotos
+     */
+    getIndexFromName: function(name) {
+      if (name === 'skip') {
+        return -1;
+      }
+      return parseInt(name.match(/\d+/)[0], 10);
+    },
+
+    /**
+     * Mark an {@link app.SSPhoto} as bad
+     * @param {int} idx - The index
+     * @memberOf app.SSPhotos
+     */
+    markBad: function(idx) {
+      const photo = _photos[idx];
+      photo.name = 'skip';
+      _hasUsable = !_photos.every((photo) => {
+        return photo.name === 'skip';
+      });
+      if (photo.type === 'Google') {
+        // log bad chromecast links
+        Chrome.GA.error(`${photo.path}`, 'SSPhotos.markBad');
+      }
+    },
+
+    /**
+     * Randomize the photos
+     * @memberOf app.SSPhotos
+     */
+    shuffle: function() {
+      Chrome.Utils.shuffleArray(_photos);
+      // rename
+      _photos.forEach((photo, index) => {
+        photo.name = 'photo' + index;
+      });
+    },
+  };
 })();
 </pre>
     </article>

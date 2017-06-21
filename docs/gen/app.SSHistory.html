@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Namespace: Background</title>
+	<title>Documentation Namespace: SSHistory</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,13 +79,13 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Namespace: Background</h1>
+	<h1 class="page-title">Namespace: SSHistory</h1>
 <section>
 
 <header>
     
         <h2>
-        Background
+        SSHistory
         </h2>
         
     
@@ -96,7 +96,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>The background script for the extension.<br></p></div>
+            <div class="description"><p>Track the recent history of a <a href="app.Screensaver.html">app.Screensaver</a> traversal</p></div>
         
 
         
@@ -134,8 +134,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="scripts_background_background.js.html">scripts/background/background.js</a>,
-				 <a href="scripts_background_background.js.html#sunlight-1-line-10">line 10</a>
+				<a href="scripts_screensaver_ss_history.js.html">scripts/screensaver/ss_history.js</a>,
+				 <a href="scripts_screensaver_ss_history.js.html#sunlight-1-line-13">line 13</a>
 			</li>
 		</ul>
 	</dd>
@@ -164,6 +164,181 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<hr>
+<dt class="name" id=".history">
+    <h4 id=".history"><span class="type-signature">&lt;private, static, constant> </span>history<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Slide show history</p>
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>arr</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="app.SSHistory.html#.Item">app.SSHistory.Item</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>history items</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>idx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>pointer into arr</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>max</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>max length of arr, it will actually have 1 item more</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_history.js.html">scripts/screensaver/ss_history.js</a>,
+				 <a href="scripts_screensaver_ss_history.js.html#sunlight-1-line-37">line 37</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -172,7 +347,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="._onChromeMessage"><span class="type-signature">&lt;private, static> </span>_onChromeMessage<span class="signature">(request [, sender] [, response])</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id=".add"><span class="type-signature">&lt;static> </span>add<span class="signature">(newIdx, selected, lastSelected)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -180,8 +355,7 @@
 
     
     <div class="description">
-        <p>Event: Fired when a message is sent from either an extension process<br>
-(by runtime.sendMessage) or a content script (by tabs.sendMessage).</p>
+        <p>Add item to the history</p>
     </div>
     
 
@@ -218,13 +392,13 @@
 
         <tr>
             
-                <td class="name"><code>request</code></td>
+                <td class="name"><code>newIdx</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Chrome.Msg.html#.Message">Chrome.Msg.Message</a></span>
+<span class="param-type">int</span>
 
 
 
@@ -236,6 +410,8 @@
                 
 
                 
+                    &lt;nullable><br>
+                
 
                 
                 </td>
@@ -243,20 +419,20 @@
 
             
 
-            <td class="description last"><p>details for the message</p></td>
+            <td class="description last"><p>if not null, a request from the back command</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>sender</code></td>
+                <td class="name"><code>selected</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">int</span>
 
 
 
@@ -265,8 +441,6 @@
 
             
                 <td class="attributes">
-                
-                    &lt;optional><br>
                 
 
                 
@@ -277,20 +451,20 @@
 
             
 
-            <td class="description last"><p>MessageSender object</p></td>
+            <td class="description last"><p>the current selection</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>response</code></td>
+                <td class="name"><code>lastSelected</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">int</span>
 
 
 
@@ -299,8 +473,6 @@
 
             
                 <td class="attributes">
-                
-                    &lt;optional><br>
                 
 
                 
@@ -311,7 +483,7 @@
 
             
 
-            <td class="description last"><p>function to call once after processing</p></td>
+            <td class="description last"><p>the last selection</p></td>
         </tr>
 
     
@@ -355,8 +527,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="scripts_background_background.js.html">scripts/background/background.js</a>,
-				 <a href="scripts_background_background.js.html#sunlight-1-line-96">line 96</a>
+				<a href="scripts_screensaver_ss_history.js.html">scripts/screensaver/ss_history.js</a>,
+				 <a href="scripts_screensaver_ss_history.js.html#sunlight-1-line-59">line 59</a>
 			</li>
 		</ul>
 	</dd>
@@ -365,12 +537,93 @@
 	
 
 	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="https://developer.chrome.com/extensions/runtime#event-onMessage">https://developer.chrome.com/extensions/runtime#event-onMessage</a></li>
-			</ul>
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".back"><span class="type-signature">&lt;static> </span>back<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Backup one slide</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_history.js.html">scripts/screensaver/ss_history.js</a>,
+				 <a href="scripts_screensaver_ss_history.js.html#sunlight-1-line-118">line 118</a>
+			</li>
+		</ul>
 	</dd>
+	
+
+	
+
 	
 
 	
@@ -392,7 +645,7 @@
     
             
 <div class="param-desc">
-    <p>true if asynchronous</p>
+    <p>t.views index to step to</p>
 </div>
 
 
@@ -403,7 +656,7 @@
     </dt>
     <dd>
         
-<span class="param-type">boolean</span>
+<span class="param-type">int</span>
 
 
 
@@ -420,7 +673,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="._onIconClicked"><span class="type-signature">&lt;private, static> </span>_onIconClicked<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".clear"><span class="type-signature">&lt;static> </span>clear<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -428,7 +681,7 @@
 
     
     <div class="description">
-        <p>Event: Fired when a browser action icon is clicked.</p>
+        <p>Reset the slide show history</p>
     </div>
     
 
@@ -474,8 +727,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="scripts_background_background.js.html">scripts/background/background.js</a>,
-				 <a href="scripts_background_background.js.html#sunlight-1-line-68">line 68</a>
+				<a href="scripts_screensaver_ss_history.js.html">scripts/screensaver/ss_history.js</a>,
+				 <a href="scripts_screensaver_ss_history.js.html#sunlight-1-line-92">line 92</a>
 			</li>
 		</ul>
 	</dd>
@@ -483,13 +736,6 @@
 
 	
 
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="https://goo.gl/abVwKu">https://goo.gl/abVwKu</a></li>
-			</ul>
-	</dd>
 	
 
 	
@@ -515,7 +761,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="._onInstalled"><span class="type-signature">&lt;private, static> </span>_onInstalled<span class="signature">(details)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".initialize"><span class="type-signature">&lt;static> </span>initialize<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -523,9 +769,95 @@
 
     
     <div class="description">
-        <p>Event: Fired when the extension is first installed,<br />
-when the extension is updated to a new version,<br />
-and when Chrome is updated to a new version.</p>
+        <p>Initialize the history</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_history.js.html">scripts/screensaver/ss_history.js</a>,
+				 <a href="scripts_screensaver_ss_history.js.html#sunlight-1-line-48">line 48</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".update"><span class="type-signature">&lt;static> </span>update<span class="signature">(viewsIdx, photoId, photosPos)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Update the history for the given t.views index</p>
     </div>
     
 
@@ -560,13 +892,13 @@ and when Chrome is updated to a new version.</p>
 
         <tr>
             
-                <td class="name"><code>details</code></td>
+                <td class="name"><code>viewsIdx</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">int</span>
 
 
 
@@ -577,237 +909,20 @@ and when Chrome is updated to a new version.</p>
 
             
 
-            <td class="description last"><p>type of event</p></td>
+            <td class="description last"><p>t.views index</p></td>
         </tr>
 
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="scripts_background_background.js.html">scripts/background/background.js</a>,
-				 <a href="scripts_background_background.js.html#sunlight-1-line-39">line 39</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="https://developer.chrome.com/extensions/runtime#event-onInstalled">https://developer.chrome.com/extensions/runtime#event-onInstalled</a></li>
-			</ul>
-	</dd>
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._onStartup"><span class="type-signature">&lt;private, static> </span>_onStartup<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Event: Fired when a profile that has this extension installed first
-starts up</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="scripts_background_background.js.html">scripts/background/background.js</a>,
-				 <a href="scripts_background_background.js.html#sunlight-1-line-57">line 57</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="https://developer.chrome.com/extensions/runtime#event-onStartup">https://developer.chrome.com/extensions/runtime#event-onStartup</a></li>
-			</ul>
-	</dd>
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._onStorageChanged"><span class="type-signature">&lt;private, static> </span>_onStorageChanged<span class="signature">(event)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Event: Fired when item in localStorage changes</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>event</code></td>
+                <td class="name"><code>photoId</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Event</span>
+<span class="param-type">int</span>
 
 
 
@@ -818,39 +933,20 @@ starts up</p>
 
             
 
-            <td class="description last"><p>StorageEvent</p>
-                <h6 class="method-params-label method-subparams-label">Properties</h6>
-                
+            <td class="description last"><p><a href="app.SSPhotos.html">app.SSPhotos</a> index</p></td>
+        </tr>
 
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>key</code></td>
+                <td class="name"><code>photosPos</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">int</span>
 
 
 
@@ -861,14 +957,7 @@ starts up</p>
 
             
 
-            <td class="description last"><p>storage item that changed</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
+            <td class="description last"><p><a href="app.SSPhotos.html">app.SSPhotos</a> index</p></td>
         </tr>
 
     
@@ -912,103 +1001,8 @@ starts up</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="scripts_background_background.js.html">scripts/background/background.js</a>,
-				 <a href="scripts_background_background.js.html#sunlight-1-line-80">line 80</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="https://developer.mozilla.org/en-US/docs/Web/Events/storage">https://developer.mozilla.org/en-US/docs/Web/Events/storage</a></li>
-			</ul>
-	</dd>
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="._showOptionsTab"><span class="type-signature">&lt;private, static> </span>_showOptionsTab<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Display the options tab</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="scripts_background_background.js.html">scripts/background/background.js</a>,
-				 <a href="scripts_background_background.js.html#sunlight-1-line-22">line 22</a>
+				<a href="scripts_screensaver_ss_history.js.html">scripts/screensaver/ss_history.js</a>,
+				 <a href="scripts_screensaver_ss_history.js.html#sunlight-1-line-104">line 104</a>
 			</li>
 		</ul>
 	</dd>
@@ -1040,6 +1034,216 @@ starts up</p>
         </dl>
     
 
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        <dl>
+                
+<hr>
+<dt class="name" id=".Item">
+    <h4 id=".Item">Item</h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>History item</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>viewsIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>t.views index</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lastViewsIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>t.views index</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>photoId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p><a href="app.SSPhoto.html">app.SSPhoto</a> id</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>photosPos</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>pointer into <a href="app.SSPhotos.html">app.SSPhotos</a></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="scripts_screensaver_ss_history.js.html">scripts/screensaver/ss_history.js</a>,
+				 <a href="scripts_screensaver_ss_history.js.html#sunlight-1-line-18">line 18</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            </dl>
     
 
     
