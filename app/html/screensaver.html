@@ -24,7 +24,7 @@
 <template is="dom-bind" id="t">
   <div id="mainContainer" class="flex" hidden$="[[noPhotos]]">
     <neon-animated-pages id="pages" class="fit" animate-initial-selection>
-      <template is="dom-repeat" id="repeatTemplate" as="view" items="[[views]]">
+      <template is="dom-repeat" id="repeatTemplate" as="view" items="[[_views]]">
         <slide-animatable ani-type="[[aniType]]" class="fit">
           <section id="view[[index]]">
             <iron-image
@@ -74,6 +74,7 @@
 <script src="../scripts/screensaver/views/ss_view_letterbox.js"></script>
 <script src="../scripts/screensaver/views/ss_view_frame.js"></script>
 <script src="../scripts/screensaver/views/ss_view_full.js"></script>
+<script src="../scripts/screensaver/ss_views.js"></script>
 <script src="../scripts/screensaver/screensaver.js"></script>
 
 </body>

@@ -24,86 +24,6 @@ app.SSFinder = (function() {
   let _transTime = 30000;
 
   /**
-   * Do all views have bad photos
-   * @returns {boolean} true if all bad
-   * @private
-   * @memberOf app.SSFinder
-   */
-  function _allViewsBad() {
-    let ret = true;
-    const views = app.Screensaver.getViews();
-    for (let i = 0; i < views.length; i++) {
-      const view = views[i];
-      if (app.SSRunner.isCurrentPair(i)) {
-        // don't check current animation pair
-        continue;
-      }
-      if (!view.photo.isBad()) {
-        ret = false;
-        break;
-      }
-    }
-    return ret;
-  }
-
-  /**
-   * Replace all views
-   * @private
-   * @memberOf app.SSFinder
-   */
-  function _replaceAll() {
-    const views = app.Screensaver.getViews();
-    for (let i = 0; i < views.length; i++) {
-      const view = views[i];
-      const photo = app.SSPhotos.getNextUsable();
-      if (app.SSRunner.isCurrentPair(i)) {
-        // don't replace current animation pair
-        continue;
-      }
-      view.setPhoto(photo);
-    }
-    app.SSHistory.clear();
-  }
-
-  /**
-   * Try to find a photo that has finished loading
-   * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
-   * @returns {int} index into t.views, -1 if none are loaded
-   * @private
-   * @memberOf app.SSFinder
-   */
-  function _findLoadedPhoto(idx) {
-    const views = app.Screensaver.getViews();
-    if (_allViewsBad()) {
-      // replace the photos
-      _replaceAll();
-    }
-    if (views[idx].isLoaded()) {
-      return idx;
-    }
-    // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
-    for (let i = 0; i < views.length; i++) {
-      const index = (i + idx) % views.length;
-      const view = views[index];
-      if (app.SSRunner.isCurrentPair(index)) {
-        // don't use current animation pair
-        continue;
-      }
-      if (view.isLoaded()) {
-        return index;
-      } else if (view.isError() && !view.photo.isBad()) {
-        view.photo.markBad();
-        if (!app.SSPhotos.hasUsable()) {
-          // all photos bad
-          app.Screensaver.setNoPhotos();
-          return -1;
-        }
-      }
-    }
-    return -1;
-  }
-
-  /**
    * Add the next photo from the master array
    * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
    * @private
@@ -114,15 +34,16 @@ app.SSFinder = (function() {
       return;
     }
 
-    const views = app.Screensaver.getViews();
+    const viewLength = app.SSViews.getCount();
     const photoLen = app.SSPhotos.getCount();
-    if (photoLen <= views.length) {
+    if (photoLen <= viewLength) {
       return;
     }
 
     const photo = app.SSPhotos.getNextUsable();
     if (photo) {
-      views[idx].setPhoto(photo);
+      const view = app.SSViews.get(idx);
+      view.setPhoto(photo);
     }
   }
 
@@ -146,7 +67,7 @@ app.SSFinder = (function() {
      * @memberOf app.SSFinder
      */
     getNext: function(idx) {
-      let ret = _findLoadedPhoto(idx);
+      let ret = app.SSViews.findLoadedPhoto(idx);
       if (ret === -1) {
         // no photos ready, wait a little, try again
         app.SSRunner.setWaitTime(500);

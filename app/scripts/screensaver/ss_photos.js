@@ -32,24 +32,6 @@ app.SSPhotos = (function() {
    */
   let _curIdx = 0;
 
-  /**
-   * Is the given {@link app.SSPhoto} in one of the views
-   * @param {app.SSPhoto} photo - A photo
-   * @returns {boolean} true if in t.views
-   * @private
-   * @memberOf app.SSPhotos
-   */
-  function _inViews(photo) {
-    let ret = false;
-    const views = app.Screensaver.getViews();
-    for (const view of views) {
-      if (view.photo.getId() === photo.getId()) {
-        ret = true;
-      }
-    }
-    return ret;
-  }
-
   return {
     /**
      * Add the photos from an {@link app.PhotoSource.SourcePhotos}
@@ -111,7 +93,7 @@ app.SSPhotos = (function() {
         // find a url that is ok, AFAWK
         const index = (i + _curIdx) % _photos.length;
         const photo = _photos[index];
-        if (!photo.isBad() && !_inViews(photo)) {
+        if (!photo.isBad() && !app.SSViews.hasPhoto(photo)) {
           _curIdx = index;
           app.SSPhotos.incCurrentIndex();
           return photo;

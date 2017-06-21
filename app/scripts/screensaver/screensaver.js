@@ -16,16 +16,6 @@ app.Screensaver = (function() {
   new ExceptionHandler();
 
   /**
-   * Max number of animated pages
-   * @type {int}
-   * @const
-   * @default
-   * @private
-   * @memberOf app.Screensaver
-   */
-  const _MAX_PAGES = 20;
-
-  /**
    * Main auto-binding template
    * @typedef {Element} app.Screensaver.Template
    * @property {?Element} rep - repeat template
@@ -55,7 +45,6 @@ app.Screensaver = (function() {
   const t = document.querySelector('#t');
   t.rep = null;
   t.p = null;
-  t.views = [];
   t.photoSizing = 0;
   t.sizingType = null;
   t.screenWidth = screen.width;
@@ -173,33 +162,11 @@ app.Screensaver = (function() {
     },
 
     /**
-     * Create the [t.views]{@link app.Screensaver.t} that will be animated
+     * Create the {@link app.SSViews} that will be animated
      * @memberOf app.Screensaver
      */
     createPages: function() {
-      const viewType = app.Screensaver.getViewType();
-      const len = Math.min(app.SSPhotos.getCount(), _MAX_PAGES);
-      for (let i = 0; i < len; i++) {
-        const photo = app.SSPhotos.get(i);
-        const view = app.SSView.createView(photo, viewType);
-        t.push('views', view);
-      }
-      app.SSPhotos.setCurrentIndex(len);
-
-      // force update of animated pages
-      t.rep.render();
-
-      // set the Elements of each view
-      const views = app.Screensaver.getViews();
-      views.forEach((view, index) => {
-        const el = t.p.querySelector('#view' + index);
-        const image = el.querySelector('.image');
-        const author = el.querySelector('.author');
-        const time = el.querySelector('.time');
-        const location = el.querySelector('.location');
-        const model = t.rep.modelForElement(el);
-        view.setElements(image, author, time, location, model);
-      });
+      app.SSViews.create(t);
     },
 
     /**
@@ -255,15 +222,6 @@ app.Screensaver = (function() {
     setNoPhotos: function() {
       t.set('noPhotos', true);
       t.noPhotosLabel = Chrome.Locale.localize('no_photos');
-    },
-
-    /**
-     * Get reference to [t.views]{@link app.Screensaver.Template}
-     * @returns {Array<app.SSView>} The views
-     * @memberOf app.Screensaver
-     */
-    getViews: function() {
-      return t.views;
     },
 
     /**

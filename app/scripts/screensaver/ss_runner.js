@@ -90,10 +90,10 @@ app.SSRunner = (function() {
     }
 
     const selected = app.Screensaver.getSelected();
-    const views = app.Screensaver.getViews();
+    const viewLen = app.SSViews.getCount();
     let curIdx = (newIdx === null) ? selected : newIdx;
     curIdx = !app.SSRunner.isStarted() ? 0 : curIdx;
-    let nextIdx = (curIdx === views.length - 1) ? 0 : curIdx + 1;
+    let nextIdx = (curIdx === viewLen - 1) ? 0 : curIdx + 1;
 
     if (!app.SSRunner.isStarted()) {
       // special case for first page. neon-animated-pages is configured
@@ -111,7 +111,8 @@ app.SSRunner = (function() {
       }
 
       // setup photo
-      views[nextIdx].render();
+      const view = app.SSViews.get(nextIdx);
+      view.render();
 
       // track the photo history
       app.SSHistory.add(newIdx, nextIdx, _VARS.replaceIdx);

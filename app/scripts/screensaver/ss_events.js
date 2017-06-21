@@ -140,10 +140,9 @@ app.SSEvents = (function() {
    * @memberOf app.SSEvents
    */
   function _onMouseClick() {
-    const selected = app.Screensaver.getSelected();
-    const views = app.Screensaver.getViews();
+    const view = app.SSViews.getSelected();
     if (app.SSRunner.isStarted()) {
-      views[selected].photo.showSource();
+      view.photo.showSource();
     }
     _close();
   }

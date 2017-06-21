@@ -57,11 +57,11 @@ app.SSHistory = (function() {
      * @memberOf app.SSHistory
      */
     add: function(newIdx, selected, replaceIdx) {
-      const views = app.Screensaver.getViews();
-      const idx = _history.idx;
-      const len = _history.arr.length;
       if (newIdx === null) {
-        const photoId = views[selected].photo.getId();
+        const view = app.SSViews.get(selected);
+        const idx = _history.idx;
+        const len = _history.arr.length;
+        const photoId = view.photo.getId();
         const photosPos = app.SSPhotos.getCurrentIndex();
         const historyItem = {
           viewsIdx: selected,
@@ -131,10 +131,10 @@ app.SSHistory = (function() {
       const viewsIdx = _history.arr[idx].viewsIdx;
       const photoId = _history.arr[idx].photoId;
       nextStep = (nextStep === null) ? viewsIdx : nextStep;
-      const views = app.Screensaver.getViews();
+      const view = app.SSViews.get(viewsIdx);
       const photo = app.SSPhotos.get(photoId);
-      views[viewsIdx].setPhoto(photo);
-      views[viewsIdx].render();
+      view.setPhoto(photo);
+      view.render();
 
       return nextStep;
     },
