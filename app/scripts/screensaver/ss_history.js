@@ -34,7 +34,7 @@ app.SSHistory = (function() {
    * @private
    * @memberOf app.SSHistory
    */
-  const history = {
+  const _history = {
     arr: [],
     idx: -1,
     max: 20,
@@ -46,7 +46,7 @@ app.SSHistory = (function() {
      * @memberOf app.SSHistory
      */
     initialize: function() {
-      history.max = Math.min(app.SSPhotos.getCount(), history.max);
+      _history.max = Math.min(app.SSPhotos.getCount(), _history.max);
     },
 
     /**
@@ -58,8 +58,8 @@ app.SSHistory = (function() {
      */
     add: function(newIdx, selected, replaceIdx) {
       const views = app.Screensaver.getViews();
-      const idx = history.idx;
-      const len = history.arr.length;
+      const idx = _history.idx;
+      const len = _history.arr.length;
       if (newIdx === null) {
         const photoId = views[selected].photo.getId();
         const photosPos = app.SSPhotos.getCurrentIndex();
@@ -71,17 +71,17 @@ app.SSHistory = (function() {
         };
         if ((idx === len - 1)) {
           // add to end
-          if (history.arr.length > history.max) {
+          if (_history.arr.length > _history.max) {
             // FIFO delete
-            history.arr.shift();
-            history.idx--;
-            history.idx = Math.max(history.idx, -1);
+            _history.arr.shift();
+            _history.idx--;
+            _history.idx = Math.max(_history.idx, -1);
           }
           // add newest photo
-          history.arr.push(historyItem);
+          _history.arr.push(historyItem);
         }
       }
-      history.idx++;
+      _history.idx++;
     },
 
     /**
@@ -89,8 +89,8 @@ app.SSHistory = (function() {
      * @memberOf app.SSHistory
      */
     clear: function() {
-      history.arr = [];
-      history.idx = -1;
+      _history.arr = [];
+      _history.idx = -1;
     },
 
     /**
@@ -99,23 +99,23 @@ app.SSHistory = (function() {
      * @memberOf app.SSHistory
      */
     back: function() {
-      if (history.idx <= 0) {
+      if (_history.idx <= 0) {
         // at beginning
         return null;
       }
 
       let nextStep = null;
       let inc = 2;
-      let idx = history.idx - inc;
-      history.idx = idx;
+      let idx = _history.idx - inc;
+      _history.idx = idx;
       if (idx < 0) {
-        if ((history.arr.length > history.max)) {
+        if ((_history.arr.length > _history.max)) {
           // at beginning of history
-          history.idx+= inc;
+          _history.idx+= inc;
           return null;
         } else {
           // at beginning, first time through
-          history.idx = -1;
+          _history.idx = -1;
           inc = 1;
           nextStep = -1;
           idx = 0;
@@ -123,13 +123,13 @@ app.SSHistory = (function() {
       }
 
       // update state from history
-      const photosPos = history.arr[idx].photosPos;
-      const replaceIdx = history.arr[idx + inc].replaceIdx;
+      const photosPos = _history.arr[idx].photosPos;
+      const replaceIdx = _history.arr[idx + inc].replaceIdx;
       app.SSPhotos.setCurrentIndex(photosPos);
       app.SSRunner.setReplaceIdx(replaceIdx);
 
-      const viewsIdx = history.arr[idx].viewsIdx;
-      const photoId = history.arr[idx].photoId;
+      const viewsIdx = _history.arr[idx].viewsIdx;
+      const photoId = _history.arr[idx].photoId;
       nextStep = (nextStep === null) ? viewsIdx : nextStep;
       const views = app.Screensaver.getViews();
       const photo = app.SSPhotos.get(photoId);
