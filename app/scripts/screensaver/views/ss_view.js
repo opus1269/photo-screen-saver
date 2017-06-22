@@ -53,19 +53,19 @@
     /**
      * Factory Method to create a new View
      * @param {app.SSPhoto} photo - An {@link app.SSPhoto}
-     * @param {int} sizing - photo sizing type
+     * @param {app.SSViews.Type} sizing - photo sizing type
      * @returns {app.SSView} a new SSView or subclass
      * @static
      */
     static createView(photo, sizing) {
       switch (sizing) {
-        case 0:
+        case app.SSViews.Type.LETTERBOX:
           return new app.SSViewLetterbox(photo);
-        case 1:
+        case app.SSViews.Type.ZOOM:
           return new app.SSView(photo);
-        case 2:
+        case app.SSViews.Type.FRAME:
           return new app.SSViewFrame(photo);
-        case 3:
+        case app.SSViews.Type.FULL:
           return new app.SSViewFull(photo);
         default:
           Chrome.GA.error(`Bad SSView type: ${sizing}`, 'SSView.createView');

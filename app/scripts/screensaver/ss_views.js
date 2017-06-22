@@ -43,12 +43,28 @@ app.SSViews = (function() {
   let _pages = null;
 
   /**
+   * Enum for view type
+   * @typedef {enum} app.SSViews.Type
+   * @readonly
+   * @enum {int}
+   * @memberOf app.SSViews
+   */
+  const Type = {
+    UNDEFINED: -1,
+    LETTERBOX: 0,
+    ZOOM: 1,
+    FRAME: 2,
+    FULL: 3,
+    RANDOM: 4,
+  };
+
+  /**
    * The view type
    * @type {int}
    * @private
    * @memberOf app.SSViews
    */
-  let _type = -1;
+  let _type = Type.UNDEFINED;
 
   /**
    * Process settings related to the photo's appearance
@@ -57,20 +73,20 @@ app.SSViews = (function() {
    */
   function _setViewType() {
     _type = Chrome.Storage.getInt('photoSizing', 0);
-    if (_type === 4) {
+    if (_type === Type.RANDOM) {
       // pick random sizing
       _type = Chrome.Utils.getRandomInt(0, 3);
     }
     let type = 'contain';
     switch (_type) {
-      case 0:
+      case Type.LETTERBOX:
         type = 'contain';
         break;
-      case 1:
+      case Type.ZOOM:
         type = 'cover';
         break;
-      case 2:
-      case 3:
+      case Type.FRAME:
+      case Type.FULL:
         type = null;
         break;
     }
@@ -78,6 +94,8 @@ app.SSViews = (function() {
   }
 
   return {
+    Type: Type,
+
     /**
      * Create the {@link app.SSView} pages
      * @param {app.Screensaver.Template} t - auto binding template
@@ -95,7 +113,7 @@ app.SSViews = (function() {
       }
       app.SSPhotos.setCurrentIndex(len);
 
-      // set and update of animated pages
+      // set and force render of animated pages
       t.set('_views', _views);
       t.$.repeatTemplate.render();
 
@@ -117,7 +135,7 @@ app.SSViews = (function() {
      * @memberOf app.SSViews
      */
     getType: function() {
-      if (_type === -1) {
+      if (_type === Type.UNDEFINED) {
         _setViewType();
       }
       return _type;
