@@ -35,12 +35,47 @@ app.SSViews = (function() {
   const _views = [];
 
   /**
-   * Current index into {@link _views}
+   * The neon-animated-pages
+   * @type {?Element}
+   * @private
+   * @memberOf app.SSViews
+   */
+  let _pages = null;
+
+  /**
+   * The view type
    * @type {int}
    * @private
    * @memberOf app.SSViews
    */
-  let _curIdx = 0;
+  let _type = -1;
+
+  /**
+   * Process settings related to the photo's appearance
+   * @private
+   * @memberOf app.SSViews
+   */
+  function _setViewType() {
+    _type = Chrome.Storage.getInt('photoSizing', 0);
+    if (_type === 4) {
+      // pick random sizing
+      _type = Chrome.Utils.getRandomInt(0, 3);
+    }
+    let type = 'contain';
+    switch (_type) {
+      case 0:
+        type = 'contain';
+        break;
+      case 1:
+        type = 'cover';
+        break;
+      case 2:
+      case 3:
+        type = null;
+        break;
+    }
+    app.Screensaver.setSizingType(type);
+  }
 
   return {
     /**
@@ -49,29 +84,43 @@ app.SSViews = (function() {
      * @memberOf app.SSViews
      */
     create: function(t) {
-      const viewType = app.Screensaver.getViewType();
+      _pages = t.$.pages;
+      _setViewType();
+
       const len = Math.min(app.SSPhotos.getCount(), _MAX_VIEWS);
       for (let i = 0; i < len; i++) {
         const photo = app.SSPhotos.get(i);
-        const view = app.SSView.createView(photo, viewType);
+        const view = app.SSView.createView(photo, _type);
         _views.push(view);
       }
       app.SSPhotos.setCurrentIndex(len);
 
       // set and update of animated pages
       t.set('_views', _views);
-      t.rep.render();
+      t.$.repeatTemplate.render();
 
       // set the Elements of each view
       _views.forEach((view, index) => {
-        const el = t.p.querySelector('#view' + index);
+        const el = _pages.querySelector('#view' + index);
         const image = el.querySelector('.image');
         const author = el.querySelector('.author');
         const time = el.querySelector('.time');
         const location = el.querySelector('.location');
-        const model = t.rep.modelForElement(el);
+        const model = t.$.repeatTemplate.modelForElement(el);
         view.setElements(image, author, time, location, model);
       });
+    },
+
+    /**
+     * Get the type of view
+     * @returns {int} The view type
+     * @memberOf app.SSViews
+     */
+    getType: function() {
+      if (_type === -1) {
+        _setViewType();
+      }
+      return _type;
     },
 
     /**
@@ -81,6 +130,61 @@ app.SSViews = (function() {
      */
     getCount: function() {
       return _views.length;
+    },
+
+    /**
+     * Get the {@link app.SSView} at the given index
+     * @param {int} idx - The index
+     * @returns {app.SSView} A {@link app.SSView}
+     * @memberOf app.SSViews
+     */
+    get: function(idx) {
+      return _views[idx];
+    },
+
+    /**
+     * Get the selected index
+     * @returns {int|undefined} The index
+     * @memberOf app.SSViews
+     */
+    getSelected: function() {
+      return _pages.selected;
+    },
+
+    /**
+     * Set the selected index
+     * @param {int} selected - The index
+     * @memberOf app.SSViews
+     */
+    setSelected: function(selected) {
+      _pages.selected = selected;
+    },
+
+    /**
+     * Is the given idx the selected index
+     * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
+     * @returns {boolean} true if selected
+     * @memberOf app.SSViews
+     */
+    isSelected: function(idx) {
+      return (idx === _pages.selected);
+    },
+
+    /**
+     * Is the given {@link app.SSPhoto} in one of the {@link _views}
+     * @param {app.SSPhoto} photo - A photo
+     * @returns {boolean} true if in {@link _views}
+     * @memberOf app.SSViews
+     */
+    hasPhoto: function(photo) {
+      let ret = false;
+      for (const view of _views) {
+        if (view.photo.getId() === photo.getId()) {
+          ret = true;
+          break;
+        }
+      }
+      return ret;
     },
 
     /**
@@ -122,104 +226,41 @@ app.SSViews = (function() {
     },
 
     /**
-     * Get the {@link app.SSView} at the given index
-     * @param {int} idx - The index
-     * @returns {app.SSView} A {@link app.SSView}
-     * @memberOf app.SSViews
-     */
-    get: function(idx) {
-      return _views[idx];
-    },
-
-    /**
-     * Get the selected {@link app.SSView}
-     * @returns {app.SSView} A {@link app.SSView}
-     * @memberOf app.SSViews
-     */
-    getSelected: function() {
-      return _views[app.Screensaver.getSelected()];
-    },
-
-    /**
-     * Is the given {@link app.SSPhoto} in one of the views
-     * @param {app.SSPhoto} photo - A photo
-     * @returns {boolean} true if in {@link _views}
-     * @memberOf app.SSViews
-     */
-    hasPhoto: function(photo) {
-      let ret = false;
-      for (const view of _views) {
-        if (view.photo.getId() === photo.getId()) {
-          ret = true;
-          break;
-        }
-      }
-      return ret;
-    },
-
-    /**
      * Try to find a photo that has finished loading
      * @param {int} idx - index into {@link _views}
      * @returns {int} index into {@link _views}, -1 if none are loaded
      * @memberOf app.SSViews
      */
     findLoadedPhoto: function(idx) {
-    if (!app.SSViews.hasUsable()) {
-      // replace the photos
-      app.SSViews.replaceAll();
-    }
-
-    if (_views[idx].isLoaded()) {
-      return idx;
-    }
-
-    // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
-    for (let i = 0; i < _views.length; i++) {
-      const index = (i + idx) % _views.length;
-      const view = _views[index];
-      if (app.SSRunner.isCurrentPair(index)) {
-        // don't use current animation pair
-        continue;
+      if (!app.SSViews.hasUsable()) {
+        // replace the photos
+        app.SSViews.replaceAll();
       }
-      if (view.isLoaded()) {
-        return index;
-      } else if (view.isError() && !view.photo.isBad()) {
-        view.photo.markBad();
-        if (!app.SSPhotos.hasUsable()) {
-          // all photos bad
-          app.Screensaver.setNoPhotos();
-          return -1;
+
+      if (_views[idx].isLoaded()) {
+        return idx;
+      }
+
+      // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
+      for (let i = 0; i < _views.length; i++) {
+        const index = (i + idx) % _views.length;
+        const view = _views[index];
+        if (app.SSRunner.isCurrentPair(index)) {
+          // don't use current animation pair
+          continue;
+        }
+        if (view.isLoaded()) {
+          return index;
+        } else if (view.isError() && !view.photo.isBad()) {
+          view.photo.markBad();
+          if (!app.SSPhotos.hasUsable()) {
+            // all photos bad
+            app.Screensaver.setNoPhotos();
+            return -1;
+          }
         }
       }
-    }
-    return -1;
-  },
-
-  /**
-     * Get current index into {@link _views}
-     * @returns {int} index
-     * @memberOf app.SSViews
-     */
-    getCurrentIndex: function() {
-      return _curIdx;
-    },
-
-    /**
-     * Set current index into {@link _views}
-     * @param {int} idx - The index
-     * @memberOf app.SSViews
-     */
-    setCurrentIndex: function(idx) {
-      _curIdx = idx;
-    },
-
-    /**
-     * Increment current index into {@link _views}
-     * @returns {int} new current index
-     * @memberOf app.SSViews
-     */
-    incCurrentIndex: function() {
-      return _curIdx = (_curIdx === _views.length - 1) ? 0 : _curIdx + 1;
+      return -1;
     },
   };
 })();

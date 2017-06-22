@@ -18,10 +18,7 @@ app.Screensaver = (function() {
   /**
    * Main auto-binding template
    * @typedef {Element} app.Screensaver.Template
-   * @property {?Element} rep - repeat template
-   * @property {?Element} p - animated-pages
-   * @property {Array<app.SSView>} views - array of views
-   * @property {int} photoSizing - the way the photos are rendered
+   * @property {Array<app.SSView>} _views - array of views
    * @property {?string} sizingType - the way an image is rendered
    * @property {int} aniType - the animation type for photo transitions
    * @property {int} screenWidth - screen width in pixels
@@ -43,9 +40,6 @@ app.Screensaver = (function() {
    * @memberOf app.Screensaver
    */
   const t = document.querySelector('#t');
-  t.rep = null;
-  t.p = null;
-  t.photoSizing = 0;
   t.sizingType = null;
   t.screenWidth = screen.width;
   t.screenHeight = screen.height;
@@ -71,41 +65,10 @@ app.Screensaver = (function() {
     // register event listeners
     app.SSEvents.initialize();
 
-    t.rep = t.$.repeatTemplate;
-    t.p = t.$.pages;
-
     _setZoom();
-    _setupPhotoSizing();
     _setupPhotoTransitions();
 
     app.Screensaver.launch();
-  }
-
-  /**
-   * Process settings related to the photo's appearance
-   * @private
-   * @memberOf app.Screensaver
-   */
-  function _setupPhotoSizing() {
-    t.photoSizing = Chrome.Storage.getInt('photoSizing', 0);
-    if (t.photoSizing === 4) {
-      // pick random sizing
-      t.photoSizing = Chrome.Utils.getRandomInt(0, 3);
-    }
-    let type = 'contain';
-    switch (t.photoSizing) {
-      case 0:
-        type = 'contain';
-        break;
-      case 1:
-        type = 'cover';
-        break;
-      case 2:
-      case 3:
-        type = null;
-        break;
-    }
-    t.set('sizingType', type);
   }
 
   /**
@@ -170,40 +133,12 @@ app.Screensaver = (function() {
     },
 
     /**
-     * Get the type of view
-     * @returns {int} The sizing type
+     * Set the sizing type for the paper-image elements
+     * @param {string} type The sizing type
      * @memberOf app.Screensaver
      */
-    getViewType: function() {
-      return t.photoSizing;
-    },
-
-    /**
-     * Get the selected index
-     * @returns {int|undefined} The index
-     * @memberOf app.Screensaver
-     */
-    getSelected: function() {
-      return t.p.selected;
-    },
-
-    /**
-     * Set the selected index
-     * @param {int} selected - The index
-     * @memberOf app.Screensaver
-     */
-    setSelected: function(selected) {
-      t.p.selected = selected;
-    },
-
-    /**
-     * Is the given idx the selected index
-     * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
-     * @returns {boolean} true if selected
-     * @memberOf app.Screensaver
-     */
-    isSelected: function(idx) {
-      return (idx === t.p.selected);
+    setSizingType: function(type) {
+      t.set('sizingType', type);
     },
 
     /**

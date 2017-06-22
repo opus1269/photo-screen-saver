@@ -41,7 +41,7 @@ app.SSPhotos = (function() {
      */
     addFromSource: function(source) {
       const type = source.type;
-      const viewType = app.Screensaver.getViewType();
+      const viewType = app.SSViews.getType();
       let ct = 0;
       for (const sourcePhoto of source.photos) {
         if (!app.SSView.ignore(sourcePhoto.asp, viewType)) {
