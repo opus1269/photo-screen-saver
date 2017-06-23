@@ -193,7 +193,7 @@ gulp.task('bower', () => {
   return gulp.src(input, {base: '.'})
       .pipe(isWatch ? watch(input, watchOpts) : util.noop())
       .pipe(plumber())
-      .pipe(plugins.if('*.html', plugins.crisper(crisperOpts)))
+      .pipe(If('*.html', plugins.crisper(crisperOpts)))
       .pipe(gulp.dest(base.dev));
 });
 
