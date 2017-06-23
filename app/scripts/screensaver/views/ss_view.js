@@ -11,7 +11,7 @@
   new ExceptionHandler();
 
   /**
-   * aspect ratio of screen
+   * Aspect ratio of screen
    * @type {number}
    * @const
    * @private
@@ -51,7 +51,7 @@
     }
 
     /**
-     * Factory Method to create a new View
+     * Factory Method to create a new {@link app.SSView}
      * @param {app.SSPhoto} photo - An {@link app.SSPhoto}
      * @param {app.SSViews.Type} sizing - photo sizing type
      * @returns {app.SSView} a new SSView or subclass
