@@ -1,7 +1,7 @@
 {
   "name": "photo-screen-saver",
   "version": "1.0.0",
-  "description": "<a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/kohpcmlfdjfdggcjmjhhbcbankgmppgc\">",
+  "description": "https://chrome.google.com/webstore/detail/kohpcmlfdjfdggcjmjhhbcbankgmppgc",
   "main": "background.js",
   "scripts": {
     "update_savedev": "npm update --save-dev",
@@ -29,6 +29,7 @@
     "gulp-changed": "^3.0.0",
     "gulp-clean-css": "^3.4.2",
     "gulp-crisper": "^1.1.0",
+    "gulp-debug": "^3.1.0",
     "gulp-eslint": "^4.0.0",
     "gulp-html-extract": "^0.3.0",
     "gulp-if": "^2.0.2",
@@ -37,6 +38,7 @@
     "gulp-load-plugins": "^1.5.0",
     "gulp-minify-html": "^1.0.6",
     "gulp-minify-inline": "^0.2.1",
+    "gulp-plumber": "^1.1.0",
     "gulp-polylint": "^1.0.3",
     "gulp-replace": "^0.6.1",
     "gulp-size": "^2.1.0",

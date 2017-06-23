@@ -45,7 +45,7 @@ module.exports = {
     'no-trailing-spaces': 'off',
     'padded-blocks': 'off',
     'require-jsdoc': 'warn',
-    'new-cap': ['error', {'capIsNewExceptions': ['Polymer']}],
+    'new-cap': ['error', {'capIsNewExceptions': ['Polymer', 'If']}],
     'quotes': ['error', 'single'],
     'quote-props': ['error', 'consistent'],
     'prefer-rest-params': 'off',

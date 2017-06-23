@@ -21,10 +21,10 @@ body {
 
 @keyframes fadeOut {
 	from {
-		opacity: 1
+		opacity: 1.0
 	}
 	to {
-		opacity: 0
+		opacity: 0.0
 	}
 }
 
@@ -41,6 +41,18 @@ body {
 .time {
 	font-size: 5.25vh;
 	font-weight: 200;
+	position: fixed;
+	right: 1vw;
+	bottom: 3.5vh;
+	padding: 0;
+	margin: 0;
+	color: white;
+	opacity: 1.0;
+}
+
+.timeLarge {
+	font-size: 8.5vh;
+	font-weight: 300;
 	position: fixed;
 	right: 1vw;
 	bottom: 3.5vh;
