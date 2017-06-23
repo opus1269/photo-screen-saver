@@ -103,22 +103,6 @@ gulp.Gulp.prototype._runTask = function(task) {
 // Default - watch for changes in development
 gulp.task('default', ['incrementalBuild']);
 
-gulp.task('incrementalBuild', (cb) => {
-  isWatch = true;
-  runSequence('lint', [
-    'bower',
-    'manifest',
-    'html',
-    'lintdevjs',
-    'scripts',
-    'styles',
-    'elements',
-    'images',
-    'assets',
-    'lib',
-    'locales'], cb);
-});
-
 // Development build
 gulp.task('dev', (cb) => {
   isProd = false;
@@ -174,6 +158,23 @@ gulp.task('clean-all', () => {
   return del([base.dist, base.dev]);
 });
 
+// Incremental Development build
+gulp.task('incrementalBuild', (cb) => {
+  isWatch = true;
+  runSequence('lint', [
+    'bower',
+    'manifest',
+    'html',
+    'lintdevjs',
+    'scripts',
+    'styles',
+    'elements',
+    'images',
+    'assets',
+    'lib',
+    'locales'], cb);
+});
+
 // manifest.json
 gulp.task('manifest', () => {
   const input = files.manifest;
@@ -192,6 +193,7 @@ gulp.task('bower', () => {
   return gulp.src(input, {base: '.'})
       .pipe(isWatch ? watch(input, watchOpts) : util.noop())
       .pipe(plumber())
+      .pipe(plugins.if('*.html', plugins.crisper(crisperOpts)))
       .pipe(gulp.dest(base.dev));
 });
 
@@ -222,10 +224,9 @@ gulp.task('scripts', () => {
   watchOpts.name = currentTaskName;
   return gulp.src(input, {base: '.'})
       .pipe(isWatch ? watch(input, watchOpts) : util.noop())
-      .pipe(plumber())
       .pipe(plugins.eslint())
       .pipe(plugins.eslint.formatEach())
-      .pipe(plugins.eslint.failOnError())
+      .pipe(plugins.eslint.failAfterError())
       .pipe(isProd ? minify(minifyOpts).on('error', util.log) : util.noop())
       .pipe(isProd ? gulp.dest(base.dist) : gulp.dest(base.dev));
 });
@@ -243,13 +244,15 @@ gulp.task('html', () => {
       .pipe(isProd ? gulp.dest(base.dist) : gulp.dest(base.dev));
 });
 
-// elements - lint first
+// elements
 gulp.task('elements', () => {
   const input = files.elements;
   watchOpts.name = currentTaskName;
   return gulp.src(input, {base: '.'})
       .pipe(isWatch ? watch(input, watchOpts) : util.noop())
-      .pipe(plumber())
+      .pipe(plugins.eslint())
+      .pipe(plugins.eslint.formatEach())
+      .pipe(plugins.eslint.failAfterError())
       .pipe(If('*.html', plugins.crisper(crisperOpts)))
       .pipe(gulp.dest(base.dev));
 });
