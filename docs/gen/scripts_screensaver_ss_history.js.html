@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -105,7 +105,7 @@ app.SSHistory = (function() {
    * History item
    * @typedef {Object} app.SSHistory.Item
    * @property {int} viewsIdx - t.views index
-   * @property {int} lastViewsIdx - t.views index
+   * @property {int} replaceIdx - t.views index
    * @property {int} photoId - {@link app.SSPhoto} id
    * @property {int} photosPos - pointer into {@link app.SSPhotos}
    * @memberOf app.SSHistory
@@ -120,7 +120,7 @@ app.SSHistory = (function() {
    * @private
    * @memberOf app.SSHistory
    */
-  const history = {
+  const _history = {
     arr: [],
     idx: -1,
     max: 20,
@@ -132,43 +132,42 @@ app.SSHistory = (function() {
      * @memberOf app.SSHistory
      */
     initialize: function() {
-      history.max = Math.min(app.SSPhotos.getCount(), history.max);
+      _history.max = Math.min(app.SSPhotos.getCount(), _history.max);
     },
 
     /**
      * Add item to the history
      * @param {?int} newIdx - if not null, a request from the back command
      * @param {int} selected - the current selection
-     * @param {int} lastSelected - the last selection
+     * @param {int} replaceIdx - the replace index
      * @memberOf app.SSHistory
      */
-    add: function(newIdx, selected, lastSelected) {
-      const views = app.Screensaver.getViews();
-      const idx = history.idx;
-      const len = history.arr.length;
+    add: function(newIdx, selected, replaceIdx) {
       if (newIdx === null) {
-        const photoName = views[selected].getPhotoName();
-        const photoId = app.SSPhotos.getIndexFromName(photoName);
+        const view = app.SSViews.get(selected);
+        const idx = _history.idx;
+        const len = _history.arr.length;
+        const photoId = view.photo.getId();
         const photosPos = app.SSPhotos.getCurrentIndex();
         const historyItem = {
           viewsIdx: selected,
-          lastViewsIdx: lastSelected,
+          replaceIdx: replaceIdx,
           photoId: photoId,
           photosPos: photosPos,
         };
         if ((idx === len - 1)) {
           // add to end
-          if (history.arr.length > history.max) {
+          if (_history.arr.length > _history.max) {
             // FIFO delete
-            history.arr.shift();
-            history.idx--;
-            history.idx = Math.max(history.idx, -1);
+            _history.arr.shift();
+            _history.idx--;
+            _history.idx = Math.max(_history.idx, -1);
           }
           // add newest photo
-          history.arr.push(historyItem);
+          _history.arr.push(historyItem);
         }
       }
-      history.idx++;
+      _history.idx++;
     },
 
     /**
@@ -176,24 +175,8 @@ app.SSHistory = (function() {
      * @memberOf app.SSHistory
      */
     clear: function() {
-      history.arr = [];
-      history.idx = -1;
-    },
-
-    /**
-     * Update the history for the given t.views index
-     * @param {int} viewsIdx - t.views index
-     * @param {int} photoId - {@link app.SSPhotos} index
-     * @param {int} photosPos - {@link app.SSPhotos} index
-     * @memberOf app.SSHistory
-     */
-    update: function(viewsIdx, photoId, photosPos) {
-      for (const item of history.arr) {
-        if (item.viewsIdx === viewsIdx) {
-          item.photoId = photoId;
-          item.photosPos = photosPos;
-        }
-      }
+      _history.arr = [];
+      _history.idx = -1;
     },
 
     /**
@@ -202,38 +185,42 @@ app.SSHistory = (function() {
      * @memberOf app.SSHistory
      */
     back: function() {
-      if (history.idx &lt;= 0) {
+      if (_history.idx &lt;= 0) {
         // at beginning
         return null;
       }
 
       let nextStep = null;
-      let idx = history.idx - 2;
-      history.idx = idx;
+      let inc = 2;
+      let idx = _history.idx - inc;
+      _history.idx = idx;
       if (idx &lt; 0) {
-        if ((history.arr.length > history.max)) {
+        if ((_history.arr.length > _history.max)) {
           // at beginning of history
-          history.idx += 2;
+          _history.idx+= inc;
           return null;
         } else {
           // at beginning, first time through
+          _history.idx = -1;
+          inc = 1;
           nextStep = -1;
-          idx = 1;
+          idx = 0;
         }
       }
 
       // update state from history
-      const photosPos = history.arr[idx].photosPos;
-      const photoId = history.arr[idx].photoId;
-      const viewsIdx = history.arr[idx].viewsIdx;
-      const lastSelected = history.arr[idx].lastViewsIdx;
-      nextStep = (nextStep === null) ? viewsIdx : nextStep;
+      const photosPos = _history.arr[idx].photosPos;
+      const replaceIdx = _history.arr[idx + inc].replaceIdx;
       app.SSPhotos.setCurrentIndex(photosPos);
-      app.SSRunner.setLastSelected(lastSelected);
-      const views = app.Screensaver.getViews();
+      app.SSRunner.setReplaceIdx(replaceIdx);
+
+      const viewsIdx = _history.arr[idx].viewsIdx;
+      const photoId = _history.arr[idx].photoId;
+      nextStep = (nextStep === null) ? viewsIdx : nextStep;
+      const view = app.SSViews.get(viewsIdx);
       const photo = app.SSPhotos.get(photoId);
-      views[viewsIdx].setPhoto(photo);
-      views[viewsIdx].render();
+      view.setPhoto(photo);
+      view.render();
 
       return nextStep;
     },
@@ -284,7 +271,7 @@ app.SSHistory = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 18th 2017, 6:19:09 pm
+		on June 23rd 2017, 4:43:37 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -104,15 +104,14 @@ app.Screensaver = (function() {
   /**
    * Main auto-binding template
    * @typedef {Element} app.Screensaver.Template
-   * @property {?Element} rep - repeat template
-   * @property {?Element} p - animated-pages
-   * @property {Array&lt;app.SSView>} views - array of views
-   * @property {int} photoSizing - the way the photos are rendered
+   * @property {Array&lt;app.SSView>} _views - array of views
    * @property {?string} sizingType - the way an image is rendered
    * @property {int} aniType - the animation type for photo transitions
+   * @property {int} screenWidth - screen width in pixels
+   * @property {int} screenHeight - screen height in pixels
    * @property {boolean} paused - true if slideshow paused
    * @property {boolean} noPhotos - true if there are no usable photos
-   * @property {string} noPhotosLabel - label when no photos are useable
+   * @property {string} noPhotosLabel - label when no photos are usable
    * @property {string} timeLabel - current time label
    * @property {Function} set - Polymer setter
    * @property {Function} push - Polymer pusher
@@ -127,11 +126,9 @@ app.Screensaver = (function() {
    * @memberOf app.Screensaver
    */
   const t = document.querySelector('#t');
-  t.rep = null;
-  t.p = null;
-  t.views = [];
-  t.photoSizing = 0;
   t.sizingType = null;
+  t.screenWidth = screen.width;
+  t.screenHeight = screen.height;
   t.aniType = 0;
   t.paused = false;
   t.noPhotos = false;
@@ -146,52 +143,18 @@ app.Screensaver = (function() {
    */
   function _onDomChange() {
     // set selected background image
-    document.body.style.background = Chrome.Storage.get('background').
-        substring(11);
+    document.body.style.background =
+        Chrome.Storage.get('background').substring(11);
 
     Chrome.GA.page('/screensaver.html');
 
     // register event listeners
     app.SSEvents.initialize();
 
-    t.rep = t.$.repeatTemplate;
-    t.p = t.$.pages;
-
     _setZoom();
-    _setupPhotoSizing();
     _setupPhotoTransitions();
 
     app.Screensaver.launch();
-  }
-
-  // listen for dom-change
-  t.addEventListener('dom-change', _onDomChange);
-
-  /**
-   * Process settings related to the photo's appearance
-   * @private
-   * @memberOf app.Screensaver
-   */
-  function _setupPhotoSizing() {
-    t.photoSizing = Chrome.Storage.getInt('photoSizing', 0);
-    if (t.photoSizing === 4) {
-      // pick random sizing
-      t.photoSizing = Chrome.Utils.getRandomInt(0, 3);
-    }
-    let type = 'contain';
-    switch (t.photoSizing) {
-      case 0:
-        type = 'contain';
-        break;
-      case 1:
-        type = 'cover';
-        break;
-      case 2:
-      case 3:
-        type = null;
-        break;
-    }
-    t.set('sizingType', type);
   }
 
   /**
@@ -230,6 +193,9 @@ app.Screensaver = (function() {
     }
   }
 
+  // listen for dom-change
+  t.addEventListener('dom-change', _onDomChange);
+
   return {
     /**
      * Launch the slide show
@@ -245,47 +211,20 @@ app.Screensaver = (function() {
     },
 
     /**
-     * Render the animated pages
+     * Create the {@link app.SSViews} that will be animated
      * @memberOf app.Screensaver
      */
-    renderPages: function() {
-      t.rep.render();
+    createPages: function() {
+      app.SSViews.create(t);
     },
 
     /**
-     * Get reference to the auto-binding template
-     * @returns {app.Screensaver.Template} The auto-binding template
+     * Set the sizing type for the paper-image elements
+     * @param {string} type The sizing type
      * @memberOf app.Screensaver
      */
-    getTemplate: function() {
-      return t;
-    },
-
-    /**
-     * Get the type of view
-     * @returns {int} The sizing type
-     * @memberOf app.Screensaver
-     */
-    getViewType: function() {
-      return t.photoSizing;
-    },
-
-    /**
-     * Get the selected index
-     * @returns {int|undefined} The index
-     * @memberOf app.Screensaver
-     */
-    getSelected: function() {
-      return t.p.selected;
-    },
-
-    /**
-     * Set the selected index
-     * @param {int} selected - The index
-     * @memberOf app.Screensaver
-     */
-    setSelected: function(selected) {
-      t.p.selected = selected;
+    setSizingType: function(type) {
+      t.set('sizingType', type);
     },
 
     /**
@@ -302,27 +241,8 @@ app.Screensaver = (function() {
      * @memberOf app.Screensaver
      */
     setNoPhotos: function() {
-      const t = app.Screensaver.getTemplate();
       t.set('noPhotos', true);
       t.noPhotosLabel = Chrome.Locale.localize('no_photos');
-    },
-
-    /**
-     * Get reference to [t.views]{@link app.Screensaver.Template}
-     * @returns {Array&lt;app.SSView>} The views
-     * @memberOf app.Screensaver
-     */
-    getViews: function() {
-      return t.views;
-    },
-
-    /**
-     * Add view to [t.views]{@link app.Screensaver.Template}
-     * @param {app.SSView} view - The view to add
-     * @memberOf app.Screensaver
-     */
-    addView: function(view) {
-      t.push('views', view);
     },
 
     /**
@@ -396,7 +316,7 @@ app.Screensaver = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 18th 2017, 6:19:09 pm
+		on June 23rd 2017, 4:43:37 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

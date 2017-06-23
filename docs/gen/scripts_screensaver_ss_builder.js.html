@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ChromeCast.html">app.ChromeCast</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.Flickr.html">app.Flickr</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Reddit.html">app.Reddit</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="app.Use500px.html">app.Use500px</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -102,16 +102,6 @@ app.SSBuilder = (function() {
   new ExceptionHandler();
 
   /**
-   * Max number of animated pages
-   * @type {int}
-   * @const
-   * @default
-   * @private
-   * @memberOf app.SSBuilder
-   */
-  const _MAX_PAGES = 20;
-
-  /**
    * Build the {@link app.SSPhotos} that will be displayed
    * @returns {boolean} true if there is at least one photo
    * @private
@@ -137,38 +127,6 @@ app.SSBuilder = (function() {
     return true;
   }
 
-  /**
-   * Create the [t.views]{@link app.Screensaver.t} that will be animated
-   * @private
-   * @memberOf app.SSBuilder
-   */
-  function _createPages() {
-    const t = app.Screensaver.getTemplate();
-    const viewType = app.Screensaver.getViewType();
-    const len = Math.min(app.SSPhotos.getCount(), _MAX_PAGES);
-    for (let i = 0; i &lt; len; i++) {
-      const photo = app.SSPhotos.get(i);
-      const view = app.SSView.createView(photo, viewType);
-      app.Screensaver.addView(view);
-    }
-    app.SSPhotos.setCurrentIndex(len);
-
-    // force update of animated pages
-    app.Screensaver.renderPages();
-
-    // set the Elements of each view
-    const views = app.Screensaver.getViews();
-    views.forEach((view, index) => {
-      const el = t.p.querySelector('#view' + index);
-      const image = el.querySelector('.image');
-      const author = el.querySelector('.author');
-      const time = el.querySelector('.time');
-      const location = el.querySelector('.location');
-      const model = t.rep.modelForElement(el);
-      view.setElements(image, author, time, location, model);
-    });
-  }
-
   return {
     /**
      * Build everything related to a {@link app.Screensaver}
@@ -180,7 +138,7 @@ app.SSBuilder = (function() {
       const hasPhotos = _loadPhotos();
       if (hasPhotos) {
         // create the animated pages
-        _createPages();
+        app.Screensaver.createPages();
         // initialize the photo finder
         app.SSFinder.initialize();
       }
@@ -233,7 +191,7 @@ app.SSBuilder = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 18th 2017, 6:19:09 pm
+		on June 23rd 2017, 4:43:37 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
