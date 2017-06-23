@@ -173,7 +173,7 @@ app.SSRunner = (function() {
 
     /**
      * Set last selected index
-     * @param {int} lastSelected - last index in t.views
+     * @param {int} lastSelected - last index in {@link app.SSViews}
      * @memberOf app.SSRunner
      */
     setLastSelected: function(lastSelected) {
@@ -182,7 +182,7 @@ app.SSRunner = (function() {
 
     /**
      * Set last selected index
-     * @param {int} idx - replace index in t.views
+     * @param {int} idx - replace index in {@link app.SSViews}
      * @memberOf app.SSRunner
      */
     setReplaceIdx: function(idx) {
@@ -217,7 +217,7 @@ app.SSRunner = (function() {
 
     /**
      * Is the given idx a part of the current animation pair
-     * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
+     * @param {int} idx - index into {@link app.SSViews}
      * @returns {boolean} if selected or last selected
      * @memberOf app.SSRunner
      */

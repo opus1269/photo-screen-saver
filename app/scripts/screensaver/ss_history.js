@@ -18,8 +18,8 @@ app.SSHistory = (function() {
   /**
    * History item
    * @typedef {Object} app.SSHistory.Item
-   * @property {int} viewsIdx - t.views index
-   * @property {int} replaceIdx - t.views index
+   * @property {int} viewsIdx - {@link app.SSViews} index
+   * @property {int} replaceIdx - {@link app.SSViews} index
    * @property {int} photoId - {@link app.SSPhoto} id
    * @property {int} photosPos - pointer into {@link app.SSPhotos}
    * @memberOf app.SSHistory
@@ -95,7 +95,7 @@ app.SSHistory = (function() {
 
     /**
      * Backup one slide
-     * @returns {?int} t.views index to step to
+     * @returns {?int} {@link app.SSViews} index to step to
      * @memberOf app.SSHistory
      */
     back: function() {

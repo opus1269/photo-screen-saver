@@ -25,7 +25,7 @@ app.SSFinder = (function() {
 
   /**
    * Add the next photo from the master array
-   * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
+   * @param {int} idx - index into {@link app.SSViews}
    * @private
    * @memberOf app.SSFinder
    */
@@ -61,8 +61,8 @@ app.SSFinder = (function() {
 
     /**
      * Get the next photo to display
-     * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
-     * @returns {int} next - index into [t.views]{@link app.Screensaver.t}
+     * @param {int} idx - index into {@link app.SSViews}
+     * @returns {int} next - index into {@link app.SSViews}
      * to display, -1 if none are ready
      * @memberOf app.SSFinder
      */
@@ -80,7 +80,7 @@ app.SSFinder = (function() {
 
     /**
      * Add the next photo from the master array
-     * @param {int} idx - t.views index to replace
+     * @param {int} idx - {@link app.SSViews} index to replace
      * @memberOf app.SSFinder
      */
     replacePhoto: function(idx) {

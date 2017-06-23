@@ -180,7 +180,7 @@ app.SSViews = (function() {
 
     /**
      * Is the given idx the selected index
-     * @param {int} idx - index into [t.views]{@link app.Screensaver.t}
+     * @param {int} idx - index into {@link app.SSViews}
      * @returns {boolean} true if selected
      * @memberOf app.SSViews
      */
