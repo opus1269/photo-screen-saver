@@ -81,12 +81,12 @@
 
       // percent of half the width of image
       let maxWidth = imgWidthPer / 2;
-      if (app.SSView._showLocation() && this._hasLocation()) {
+      if (this._hasLocationLabel()) {
         // limit author width if we also have a location
         authorStyle.maxWidth = maxWidth - 1.1 + 'vw';
       }
 
-      if (this._hasAuthor()) {
+      if (this._hasAuthorLabel()) {
         // limit location width if we also have an author
         locationStyle.maxWidth = maxWidth - 1.1 + 'vw';
       }

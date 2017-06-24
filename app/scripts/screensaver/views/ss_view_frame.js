@@ -96,8 +96,6 @@
       const borderBot = screen.height * 0.05;
       const padding = screen.height * 0.025;
 
-      this._setAuthorLabel(true);
-
       const height =
           Math.min((screen.width - padding * 2 - border * 2) / ar,
               screen.height - padding * 2 - border - borderBot);
@@ -137,12 +135,12 @@
 
       // percent of half the width of image
       let maxWidth = imgWidthPer / 2;
-      if (app.SSView._showLocation() && this._hasLocation()) {
+      if (this._hasLocationLabel()) {
         // limit author width if we also have a location
         authorStyle.maxWidth = maxWidth - 1 + 'vw';
       }
 
-      if (this._hasAuthor()) {
+      if (this._hasAuthorLabel()) {
         // limit location width if we also have an author
         locationStyle.maxWidth = maxWidth - 1 + 'vw';
       }

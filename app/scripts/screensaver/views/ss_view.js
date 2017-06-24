@@ -134,11 +134,27 @@
     }
 
     /**
+     * Does a view have an author label set
+     * @returns {boolean} true if author label is not empty
+     */
+    _hasAuthorLabel() {
+      return !Chrome.Utils.isWhiteSpace(this.authorLabel);
+    }
+
+    /**
      * Does a photo have a geolocation
      * @returns {boolean} true if geolocation point is non-null
      */
     _hasLocation() {
       return !!this.photo.getPoint();
+    }
+
+    /**
+     * Does a view have an location label set
+     * @returns {boolean} true if location label is not empty
+     */
+    _hasLocationLabel() {
+      return !Chrome.Utils.isWhiteSpace(this.locationLabel);
     }
 
     /**
@@ -175,9 +191,8 @@
 
     /**
      * Set the author text
-     * @param {boolean} force - require display of label if true
      */
-    _setAuthorLabel(force) {
+    _setAuthorLabel() {
       this.authorLabel = '';
       this.model.set('view.authorLabel', this.authorLabel);
       this._super500px();
@@ -187,7 +202,7 @@
       let newType = type;
       const idx = type.search('User');
 
-      if (!force && !Chrome.Storage.getBool('showPhotog') && (idx !== -1)) {
+      if (!Chrome.Storage.getBool('showPhotog') && (idx !== -1)) {
         // don't show label for user's own photos, if requested
         return;
       }
