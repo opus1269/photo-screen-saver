@@ -121,5 +121,5 @@ app.Geo = (function() {
         return Promise.resolve(location);
       });
     },
-  };
+};
 })();

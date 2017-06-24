@@ -77,7 +77,7 @@ app.Flickr = (function() {
           const asp = width / height;
           let pt = null;
           if (photo.latitude && photo.longitude) {
-            pt = app.PhotoSource.getPt(photo.latitude, photo.longitude);
+            pt = app.PhotoSource.createPoint(photo.latitude, photo.longitude);
           }
           app.PhotoSource.addPhoto(photos, url,
               photo.ownername, asp, photo.owner, pt);

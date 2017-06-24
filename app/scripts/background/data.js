@@ -333,15 +333,15 @@ app.Data = (function() {
           return fn();
         });
         // process photo SOURCES
-        app.PhotoSource.processAll();
+        app.PhotoSources.processAll();
         // set os, if not already
         if (!Chrome.Storage.get('os')) {
           _setOS().catch(() => {});
         }
       } else {
         // individual change
-        if (app.PhotoSource.contains(key)) {
-          app.PhotoSource.process(key).catch((err) => {
+        if (app.PhotoSources.isUseKey(key)) {
+          app.PhotoSources.process(key).catch((err) => {
             // send message on processing error
             const msg = app.Msg.PHOTO_SOURCE_FAILED;
             msg.key = key;

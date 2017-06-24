@@ -390,7 +390,7 @@
      * @private
      */
     _setPhotoSourcesChecked: function(state) {
-      const useNames = app.PhotoSource.getUseNames();
+      const useNames = app.PhotoSources.getUseKeys();
       useNames.forEach((useName) => {
         this._setPhotoSourceChecked(useName, state);
       });

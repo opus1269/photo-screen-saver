@@ -22,7 +22,7 @@ app.SSBuilder = (function() {
    * @memberOf app.SSBuilder
    */
   function _loadPhotos() {
-    let sources = app.PhotoSource.getSelectedPhotos();
+    let sources = app.PhotoSources.getSelectedPhotos();
     sources = sources || [];
     for (const source of sources) {
       app.SSPhotos.addFromSource(source);

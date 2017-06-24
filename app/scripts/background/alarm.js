@@ -108,7 +108,7 @@ app.Alarm = (function() {
         break;
       case _ALARMS.UPDATE_PHOTOS:
         // get the latest for the live photo streams
-        app.PhotoSource.processDaily();
+        app.PhotoSources.processDaily();
         break;
       case _ALARMS.BADGE_TEXT:
         // set the icons text

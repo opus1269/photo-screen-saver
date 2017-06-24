@@ -271,7 +271,7 @@
         }
         this.set('waitForLoad', true);
         // call interactively
-        return app.GooglePhotos.loadAlbumList(true);
+        return app.GoogleSource.loadAlbumList(true);
       }).then((albums) => {
         // get all the user's albums
         this.splice('albums', 0, this.albums.length);
@@ -281,7 +281,7 @@
         });
         // update the currently selected albums from the web
         // eslint-disable-next-line promise/no-nesting
-        app.PhotoSource.process('useGoogle').catch((err) => {
+        app.PhotoSources.process('useGoogle').catch((err) => {
           Chrome.GA.error(err.message,
               'PhotoSource.process via GooglePhotosPage.loadAlbumList');
         });

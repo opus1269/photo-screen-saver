@@ -77,7 +77,7 @@ app.Use500px = (function() {
           let ex = null;
           let pt = null;
           if (photo.latitude && photo.longitude) {
-            pt = app.PhotoSource.getPt(photo.latitude, photo.longitude);
+            pt = app.PhotoSource.createPoint(photo.latitude, photo.longitude);
             ex = {};
           }
           app.PhotoSource.addPhoto(photos, photo.images[0].url,
