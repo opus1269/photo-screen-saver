@@ -41,34 +41,6 @@ app.PhotoSources = (function() {
   const _sources = [];
 
   /**
-   * Array of PhotoSources
-   * @private
-   * @type {app.PhotoSource[]}
-   */
-  // PhotoSource._SRCS = [
-  //   new PhotoSource('useGoogle', 'albumSelections', 'Google User',
-  //       true, true, 'GooglePhotos', 'loadPhotos', []),
-  //   new PhotoSource('useChromecast', 'ccImages', 'Google',
-  //       false, false, 'ChromeCast', 'loadPhotos', []),
-  //   new PhotoSource('useEditors500px', 'editors500pxImages', '500',
-  //       true, false, 'Use500px', 'loadPhotos', ['editors']),
-  //   new PhotoSource('usePopular500px', 'popular500pxImages', '500',
-  //       true, false, 'Use500px', 'loadPhotos', ['popular']),
-  //   new PhotoSource('useYesterday500px', 'yesterday500pxImages', '500',
-  //       true, false, 'Use500px', 'loadPhotos', ['fresh_yesterday']),
-  //   new PhotoSource('useSpaceReddit', 'spaceRedditImages', 'reddit',
-  //       true, false, 'Reddit', 'loadPhotos', ['r/spaceporn/']),
-  //   new PhotoSource('useEarthReddit', 'earthRedditImages', 'reddit',
-  //       true, false, 'Reddit', 'loadPhotos', ['r/EarthPorn/']),
-  //   new PhotoSource('useAnimalReddit', 'animalRedditImages', 'reddit',
-  //       true, false, 'Reddit', 'loadPhotos', ['r/animalporn/']),
-  //   new PhotoSource('useInterestingFlickr', 'flickrInterestingImages',
-  //       'flickr', true, false, 'Flickr', 'loadPhotos', []),
-  //   new PhotoSource('useAuthors', 'authorImages', 'flickr',
-  //       false, false, 'Flickr', 'loadAuthorPhotos', []),
-  // ];
-
-  /**
    * Get the selected sources from local storage
    * @private
    * @memberOf app.PhotoSources
@@ -129,6 +101,7 @@ app.PhotoSources = (function() {
      * This normally requires a https call and may fail for various reasons
      * @param {string} useKey - The photo source to retrieve
      * @returns {Promise<void>} void
+     * @memberOf app.PhotoSources
      */
     process: function(useKey) {
       const source = app.PhotoSource.createSource(useKey);
