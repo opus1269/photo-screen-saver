@@ -165,7 +165,7 @@ app.SSViews = (function() {
      * @returns {int|undefined} The index
      * @memberOf app.SSViews
      */
-    getSelected: function() {
+    getSelectedIndex: function() {
       return _pages.selected;
     },
 
@@ -174,7 +174,7 @@ app.SSViews = (function() {
      * @param {int} selected - The index
      * @memberOf app.SSViews
      */
-    setSelected: function(selected) {
+    setSelectedIndex: function(selected) {
       _pages.selected = selected;
     },
 
@@ -184,7 +184,7 @@ app.SSViews = (function() {
      * @returns {boolean} true if selected
      * @memberOf app.SSViews
      */
-    isSelected: function(idx) {
+    isSelectedIndex: function(idx) {
       return (idx === _pages.selected);
     },
 

@@ -89,7 +89,7 @@ app.SSRunner = (function() {
       return;
     }
 
-    const selected = app.SSViews.getSelected();
+    const selected = app.SSViews.getSelectedIndex();
     const viewLen = app.SSViews.getCount();
     let curIdx = (newIdx === null) ? selected : newIdx;
     curIdx = !app.SSRunner.isStarted() ? 0 : curIdx;
@@ -119,7 +119,7 @@ app.SSRunner = (function() {
 
       // update selected so the animation runs
       _VARS.lastSelected = selected;
-      app.SSViews.setSelected(nextIdx);
+      app.SSViews.setSelectedIndex(nextIdx);
 
       if (newIdx === null) {
         // load next photo from master array
@@ -222,7 +222,7 @@ app.SSRunner = (function() {
      * @memberOf app.SSRunner
      */
     isCurrentPair: function(idx) {
-      const selected = app.SSViews.getSelected();
+      const selected = app.SSViews.getSelectedIndex();
       return ((idx === selected) || (idx === _VARS.lastSelected));
     },
 

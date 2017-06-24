@@ -30,7 +30,7 @@ app.SSFinder = (function() {
    * @memberOf app.SSFinder
    */
   function _replacePhoto(idx) {
-    if (app.SSViews.isSelected(idx)) {
+    if (app.SSViews.isSelectedIndex(idx)) {
       return;
     }
 

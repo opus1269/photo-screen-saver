@@ -150,6 +150,9 @@
           }
           break;
         default:
+          if (this._type !== 'Google User') {
+            url = this._url;
+          }
           break;
       }
       if (url !== null) {

@@ -336,7 +336,7 @@
     "message": "Photos des créateurs de cette extension"
   },
   "setting_click_to_view": {
-    "message": "Cliquez sur la souris pour afficher le site pour les photos Flickr, 500px et reddit"
+    "message": "Cliquez sur la souris pour voir la photo"
   },
   "setting_flickr_api": {
     "message": "Ce produit utilise l'API Flickr mais n'est pas approuvé ou certifié par Flickr"
