@@ -17,13 +17,13 @@
   app.CCSource = class extends app.PhotoSource {
 
     /**
-     * Create a new Chromecast source
+     * Create a new photo source
      * @param {string} useKey - The key for if the source is selected
      * @param {string} photosKey - The key for the collection of photos
      * @param {string} type - A descriptor of the photo source
      * @param {boolean} isDaily - Should the source be updated daily
      * @param {boolean} isArray - Is the source an Array of photo Arrays
-     * @param {?string} [loadArg=null] - optional arg for load function
+     * @param {?Object} [loadArg=null] - optional arg for load function
      * @constructor
      */
     constructor(useKey, photosKey, type, isDaily, isArray, loadArg = null) {

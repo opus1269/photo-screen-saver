@@ -37,7 +37,7 @@
   app.PhotoSource = class PhotoSource {
 
     /**
-     * Create a new photo
+     * Create a new photo source
      * @param {string} useKey - The key for if the source is selected
      * @param {string} photosKey - The key for the collection of photos
      * @param {string} type - A descriptor of the photo source
@@ -47,12 +47,12 @@
      * @constructor
      */
     constructor(useKey, photosKey, type, isDaily, isArray, loadArg = null) {
-      this.useKey = useKey;
-      this.photosKey = photosKey;
-      this.type = type;
-      this.isDaily = isDaily;
-      this.isArray = isArray;
-      this.loadArg = loadArg;
+      this._useKey = useKey;
+      this._photosKey = photosKey;
+      this._type = type;
+      this._isDaily = isDaily;
+      this._isArray = isArray;
+      this._loadArg = loadArg;
     }
 
     /**
@@ -98,6 +98,14 @@
               'SSView.createView');
           return null;
       }
+    }
+
+    /**
+     * Get if we should update daily
+     * @returns {boolean} if true, update daily
+     */
+    static isDaily() {
+      return this._isDaily;
     }
 
     /**
@@ -155,20 +163,20 @@
      */
     getPhotos() {
       let ret = {
-        type: this.type,
+        type: this._type,
         photos: [],
       };
       if (this.use()) {
         let photos = [];
-        if (this.isArray) {
-          let items = Chrome.Storage.get(this.photosKey);
+        if (this._isArray) {
+          let items = Chrome.Storage.get(this._photosKey);
           // could be that items have not been retrieved yet
           items = items || [];
           items.forEach((item) => {
             photos = photos.concat(item.photos);
           });
         } else {
-          photos = Chrome.Storage.get(this.photosKey);
+          photos = Chrome.Storage.get(this._photosKey);
           // could be that items have not been retrieved yet
           photos = photos || [];
         }
@@ -186,9 +194,9 @@
      */
     _savePhotos(photos) {
       let ret = null;
-      const keyBool = (this.useKey === 'useGoogle') ? null : this.useKey;
+      const keyBool = (this._useKey === 'useGoogle') ? null : this._useKey;
       if (photos || photos.length) {
-        const set = Chrome.Storage.safeSet(this.photosKey, photos, keyBool);
+        const set = Chrome.Storage.safeSet(this._photosKey, photos, keyBool);
         if (!set) {
           ret = 'Exceeded storage capacity.';
         }
@@ -201,7 +209,7 @@
      * @returns {boolean} true if selected
      */
     use() {
-      return Chrome.Storage.getBool(this.useKey);
+      return Chrome.Storage.getBool(this._useKey);
     }
 
     /**
@@ -221,8 +229,8 @@
           throw err;
         });
       } else {
-        if (this.useKey !== 'useGoogle') {
-          localStorage.removeItem(this.photosKey);
+        if (this._useKey !== 'useGoogle') {
+          localStorage.removeItem(this._photosKey);
         }
         return Promise.resolve();
       }

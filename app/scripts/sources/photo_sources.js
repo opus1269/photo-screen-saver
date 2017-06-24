@@ -148,7 +148,7 @@ app.PhotoSources = (function() {
     processDaily: function() {
       _getSelectedSources();
       for (const source of _sources) {
-        if (source.isDaily) {
+        if (source.isDaily()) {
           source.process().catch(() => {});
         }
       }
