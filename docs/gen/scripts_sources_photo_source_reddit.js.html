@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: scripts/screensaver/views/ss_view.js</title>
+	<title>Documentation Source: scripts/sources/photo_source_reddit.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: scripts/screensaver/views/ss_view.js</h1>
+		<h1 class="page-title">Source: scripts/sources/photo_source_reddit.js</h1>
     
 <section>
     <article>
@@ -97,278 +97,189 @@
   new ExceptionHandler();
 
   /**
-   * Aspect ratio of screen
-   * @type {number}
+   * Extension's redirect uri
+   * @type {string}
    * @const
    * @private
-   * @memberOf app.SSView
+   * @memberOf app.RedditSource
    */
-  const _SCREEN_ASP = screen.width / screen.height;
+  const _REDIRECT_URI =
+      `https://${chrome.runtime.id}.chromiumapp.org/reddit`;
 
   /**
-   * Screensaver zoom view and base class for other SSView classes
-   * @property {Element} image - paper-image
-   * @property {Element} author - label
-   * @property {Element} time - label
-   * @property {Element} location - Geo location
-   * @property {Object} model - template item model
-   * @property {string} url - photo url, binding
-   * @property {string} authorLabel - author text, binding
-   * @property {string} locationLabel - location text, binding
-   * @alias app.SSView
+   * Reddit rest API authorization key
+   * @type {string}
+   * @const
+   * @private
+   * @memberOf app.RedditSource
    */
-  app.SSView = class SSView {
+  const _KEY = 'bATkDOUNW_tOlg';
+
+  /**
+   * Max photos to return
+   * @type {int}
+   * @const
+   * @default
+   * @private
+   * @memberOf app.RedditSource
+   */
+  const _MAX_PHOTOS = 100;
+
+  /**
+   * Min size of photo to use
+   * @type {int}
+   * @const
+   * @default
+   * @private
+   * @memberOf app.RedditSource
+   */
+  const _MIN_SIZE = 750;
+
+  /**
+   * Max size of photo to use
+   * @type {int}
+   * @const
+   * @default
+   * @private
+   * @memberOf app.RedditSource
+   */
+  const _MAX_SIZE = 3500;
+
+  /**
+   * Expose reddit API
+   * @type {Function}
+   * @const
+   * @private
+   * @memberOf app.RedditSource
+   */
+  const _snoocore = new Snoocore({
+    userAgent: 'photo-screen-saver',
+    throttle: 0,
+    oauth: {
+      type: 'implicit',
+      key: _KEY,
+      redirectUri: _REDIRECT_URI,
+      scope: ['read'],
+    },
+  });
+
+  /**
+   * A potential source of photos from reddit
+   * @alias app.RedditSource
+   */
+  app.RedditSource = class extends app.PhotoSource {
 
     /**
-     * Create a new SSView
-     * @param {app.SSPhoto} photo - An {@link app.SSPhoto}
+     * Create a new reddit source
+     * @param {string} useKey - The key for if the source is selected
+     * @param {string} photosKey - The key for the collection of photos
+     * @param {string} type - A descriptor of the photo source
+     * @param {boolean} isDaily - Should the source be updated daily
+     * @param {boolean} isArray - Is the source an Array of photo Arrays
+     * @param {?string} [loadArg=null] - optional arg for load function
      * @constructor
      */
-    constructor(photo) {
-      this.photo = photo;
-      this.image = null;
-      this.author = null;
-      this.time = null;
-      this.location = null;
-      this.model = null;
-      this.url = photo.getUrl();
-      this.authorLabel = '';
-      this.locationLabel = '';
+    constructor(useKey, photosKey, type, isDaily, isArray, loadArg = null) {
+      super(useKey, photosKey, type, isDaily, isArray, loadArg);
     }
 
     /**
-     * Factory Method to create a new {@link app.SSView}
-     * @param {app.SSPhoto} photo - An {@link app.SSPhoto}
-     * @param {app.SSViews.Type} sizing - photo sizing type
-     * @returns {app.SSView} a new SSView or subclass
-     * @static
-     */
-    static createView(photo, sizing) {
-      switch (sizing) {
-        case app.SSViews.Type.LETTERBOX:
-          return new app.SSViewLetterbox(photo);
-        case app.SSViews.Type.ZOOM:
-          return new app.SSView(photo);
-        case app.SSViews.Type.FRAME:
-          return new app.SSViewFrame(photo);
-        case app.SSViews.Type.FULL:
-          return new app.SSViewFull(photo);
-        default:
-          Chrome.GA.error(`Bad SSView type: ${sizing}`, 'SSView.createView');
-          return new app.SSViewLetterbox(photo);
-      }
-    }
-
-    /**
-     * Determine if a photo would look bad zoomed or stretched on the screen
-     * @param {number} asp - an aspect ratio
-     * @returns {boolean} true if a photo aspect ratio differs substantially
-     * from the screens'
+     * Parse the size from the submission title.
+     * this is the old way reddit did it
+     * @param {string} title - submission title
+     * @returns {{width: int, height: int}} Photo size
      * @private
      */
-    static _isBadAspect(asp) {
-      // arbitrary
-      const CUT_OFF = 0.5;
-      return (asp &lt; _SCREEN_ASP - CUT_OFF) || (asp > _SCREEN_ASP + CUT_OFF);
-    }
-
-    /**
-     * Determine if a given aspect ratio should be ignored
-     * @param {number} asp - an aspect ratio
-     * @param {int} photoSizing - the sizing type
-     * @returns {boolean} true if the aspect ratio should be ignored
-     */
-    static ignore(asp, photoSizing) {
-      let ret = false;
-      const skip = Chrome.Storage.getBool('skip');
-
-      if ((!asp || isNaN(asp)) ||
-          (skip &amp;&amp; ((photoSizing === 1) || (photoSizing === 3)) &amp;&amp;
-          app.SSView._isBadAspect(asp))) {
-        // ignore photos that don't have aspect ratio
-        // or would look bad with cropped or stretched sizing options
-        ret = true;
+    static _getSize(title) {
+      const ret = {width: -1, height: -1};
+      const regex = /\[(\d*)\D*(\d*)\]/;
+      const res = title.match(regex);
+      if (res) {
+        ret.width = parseInt(res[1], 10);
+        ret.height = parseInt(res[2], 10);
       }
       return ret;
     }
 
     /**
-     * Should we show the location, if available
-     * @returns {boolean} true if we should show the location
-     * @static
-     */
-    static _showLocation() {
-      return Chrome.Storage.getBool('showLocation');
-    }
-
-    /**
-     * Should we show the time
-     * @returns {boolean} true if we should show the time
-     * @static
-     */
-    static showTime() {
-      return Chrome.Storage.getBool('showTime');
-    }
-
-    /**
-     * Does a photo have an author label to show
-     * @returns {boolean} true if we should show the author
-     */
-    _hasAuthor() {
-      const photographer = this.photo.getPhotographer();
-      return !Chrome.Utils.isWhiteSpace(photographer);
-    }
-
-    /**
-     * Does a photo have a geolocation
-     * @returns {boolean} true if geolocation point is non-null
-     */
-    _hasLocation() {
-      return !!this.photo.getPoint();
-    }
-
-    /**
-     * Add superscript to the label for 500px photos
+     * Build the list of photos for one page of items
+     * @param {Array} children - Array of objects from reddit
+     * @returns {app.PhotoSource.SourcePhoto[]} Array of photos
      * @private
      */
-    _super500px() {
-      const type = this.photo.getType();
-      const authorText = this.authorLabel;
-      const sup = this.author.querySelector('#sup');
-      sup.textContent = '';
-      if (!Chrome.Utils.isWhiteSpace(authorText) &amp;&amp; (type === '500')) {
-        sup.textContent = 'px';
-      }
-    }
+    static _processChildren(children) {
+      const photos = [];
+      let url;
+      let width = 1;
+      let height = 1;
 
-    /**
-     * Set the style for the time label
-     */
-    _setTimeStyle() {
-      if (Chrome.Storage.getBool('largeTime')) {
-        this.time.style.fontSize = '8.5vh';
-        this.time.style.fontWeight = 300;
-      }
-    }
-
-    /**
-     * Set the url
-     */
-    _setUrl() {
-      this.url = this.photo.getUrl();
-      this.model.set('view.url', this.url);
-    }
-
-    /**
-     * Set the author text
-     * @param {boolean} force - require display of label if true
-     */
-    _setAuthorLabel(force) {
-      this.authorLabel = '';
-      this.model.set('view.authorLabel', this.authorLabel);
-      this._super500px();
-
-      const type = this.photo.getType();
-      const photographer = this.photo.getPhotographer();
-      let newType = type;
-      const idx = type.search('User');
-
-      if (!force &amp;&amp; !Chrome.Storage.getBool('showPhotog') &amp;&amp; (idx !== -1)) {
-        // don't show label for user's own photos, if requested
-        return;
-      }
-
-      if (idx !== -1) {
-        // strip off 'User'
-        newType = type.substring(0, idx - 1);
-      }
-
-      if (this._hasAuthor()) {
-        this.authorLabel = `${photographer} / ${newType}`;
-      } else {
-        // no photographer name
-        this.authorLabel = `${Chrome.Locale.localize('photo_from')} ${newType}`;
-      }
-      this.model.set('view.authorLabel', this.authorLabel);
-      this._super500px();
-    }
-
-    /**
-     * Set the geolocation text
-     */
-    _setLocationLabel() {
-      this.locationLabel = '';
-      this.model.set('view.locationLabel', this.locationLabel);
-
-      if (app.SSView._showLocation() &amp;&amp; this._hasLocation()) {
-        const point = this.photo.getPoint();
-        app.Geo.get(point).then((location) => {
-          if (location &amp;&amp; this.model) {
-            location = location.replace('Unnamed Road, ', '');
-            this.locationLabel = location;
-            this.model.set('view.locationLabel', this.locationLabel);
+      children.forEach((child) => {
+        const data = child.data;
+        if (!data.over_18) {
+          // skip NSFW
+          if (data.preview &amp;&amp; data.preview.images) {
+            // new way. has full size image and array of reduced
+            // resolutions
+            let item = data.preview.images[0];
+            url = item.source.url;
+            width = parseInt(item.source.width, 10);
+            height = parseInt(item.source.height, 10);
+            if (Math.max(width, height) > _MAX_SIZE) {
+              // too big. get the largest reduced resolution image
+              item = item.resolutions[item.resolutions.length - 1];
+              url = item.url.replace(/&amp;amp;/g, '&amp;');
+              width = parseInt(item.width, 10);
+              height = parseInt(item.height, 10);
+            }
+          } else if (data.title) {
+            // old way of specifying images - parse size from title
+            const size = app.RedditSource._getSize(data.title);
+            url = data.url;
+            width = size.width;
+            height = size.height;
           }
-          return Promise.resolve();
-        }).catch((err) => {
-          const networkErr = Chrome.Locale.localize('err_network');
-          if (!err.message.includes(networkErr)) {
-            Chrome.GA.error(`${err.message}, point: ${point}`,
-                'SSView._setLocationLabel');
+        }
+
+        const asp = width / height;
+        const author = data.author;
+        if (asp &amp;&amp; !isNaN(asp) &amp;&amp; (Math.max(width, height) >= _MIN_SIZE) &amp;&amp;
+            (Math.max(width, height) &lt;= _MAX_SIZE)) {
+          app.PhotoSource.addPhoto(photos, url, author, asp, data.url);
+        }
+      });
+      return photos;
+    }
+
+    /**
+     * Fetch the photos for this source
+     * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
+     */
+    fetchPhotos() {
+      let photos = [];
+
+      return _snoocore(`${this.loadArg}hot`).listing({
+        limit: _MAX_PHOTOS,
+      }).then((slice) => {
+        photos =
+            photos.concat(app.RedditSource._processChildren(slice.children));
+        return slice.next();
+      }).then((slice) => {
+        photos =
+            photos.concat(app.RedditSource._processChildren(slice.children));
+        return Promise.resolve(photos);
+      }).catch((err) => {
+        let msg = err.message;
+        if (msg) {
+          // extract first sentence
+          const idx = msg.indexOf('.');
+          if (idx !== -1) {
+            msg = msg.substring(0, idx + 1);
           }
-        });
-      }
-    }
-
-    /**
-     * Set the elements of the view
-     * @param {Element} image - paper-image, photo
-     * @param {Element} author - div, photographer
-     * @param {Element} time - div, current time
-     * @param {Element} location - div, geolocation text
-     * @param {Object} model - template item model
-     */
-    setElements(image, author, time, location, model) {
-      this.image = image;
-      this.author = author;
-      this.time = time;
-      this.location = location;
-      this.model = model;
-
-      this._setTimeStyle();
-      this.setPhoto(this.photo);
-    }
-
-    /**
-     * Set the photo
-     * @param {app.SSPhoto} photo - a photo to render
-     */
-    setPhoto(photo) {
-      this.photo = photo;
-      this._setUrl();
-      this._setAuthorLabel(false);
-      this._setLocationLabel();
-    }
-
-    /**
-     * Render the page for display - the default CSS is for our view
-     * subclasses override this to determine the look of photo
-     */
-    render() {}
-
-    /**
-     * Determine if a photo failed to load (usually 404 error)
-     * @returns {boolean} true if image load failed
-     */
-    isError() {
-      return !this.image || this.image.error;
-    }
-
-    /**
-     * Determine if a photo has finished loading
-     * @returns {boolean} true if image is loaded
-     */
-    isLoaded() {
-      return !!this.image &amp;&amp; this.image.loaded;
+        } else {
+          msg = 'Unknown Error';
+        }
+        throw new Error(msg);
+      });
     }
   };
 })();

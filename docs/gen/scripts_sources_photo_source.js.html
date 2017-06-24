@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: scripts/screensaver/views/ss_view.js</title>
+	<title>Documentation Source: scripts/sources/photo_source.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: scripts/screensaver/views/ss_view.js</h1>
+		<h1 class="page-title">Source: scripts/sources/photo_source.js</h1>
     
 <section>
     <article>
@@ -97,278 +97,221 @@
   new ExceptionHandler();
 
   /**
-   * Aspect ratio of screen
-   * @type {number}
-   * @const
-   * @private
-   * @memberOf app.SSView
+   * A photo from a {@link app.PhotoSource}
+   * This is the photo information that is persisted.
+   *
+   * @typedef {{}} app.PhotoSource.SourcePhoto
+   * @property {string} url - The url to the photo
+   * @property {string} author - The photographer
+   * @property {number} asp - The aspect ratio of the photo
+   * @property {Object} [ex] - Additional information about the photo
+   * @property {string} [point] - geolocation 'lat lon'
    */
-  const _SCREEN_ASP = screen.width / screen.height;
 
   /**
-   * Screensaver zoom view and base class for other SSView classes
-   * @property {Element} image - paper-image
-   * @property {Element} author - label
-   * @property {Element} time - label
-   * @property {Element} location - Geo location
-   * @property {Object} model - template item model
-   * @property {string} url - photo url, binding
-   * @property {string} authorLabel - author text, binding
-   * @property {string} locationLabel - location text, binding
-   * @alias app.SSView
+   * The photos for a {@link app.PhotoSource}
+   *
+   * @typedef {{}} app.PhotoSource.SourcePhotos
+   * @property {string} type - type of {@link app.PhotoSource}
+   * @property {app.PhotoSource.SourcePhoto[]} photos - The photos
    */
-  app.SSView = class SSView {
+
+  /**
+   * A potential source of photos for the screen saver
+   * @alias app.PhotoSource
+   */
+  app.PhotoSource = class PhotoSource {
 
     /**
-     * Create a new SSView
-     * @param {app.SSPhoto} photo - An {@link app.SSPhoto}
+     * Create a new photo
+     * @param {string} useKey - The key for if the source is selected
+     * @param {string} photosKey - The key for the collection of photos
+     * @param {string} type - A descriptor of the photo source
+     * @param {boolean} isDaily - Should the source be updated daily
+     * @param {boolean} isArray - Is the source an Array of photo Arrays
+     * @param {?Object} [loadArg=null] - optional arg for load function
      * @constructor
      */
-    constructor(photo) {
-      this.photo = photo;
-      this.image = null;
-      this.author = null;
-      this.time = null;
-      this.location = null;
-      this.model = null;
-      this.url = photo.getUrl();
-      this.authorLabel = '';
-      this.locationLabel = '';
+    constructor(useKey, photosKey, type, isDaily, isArray, loadArg = null) {
+      this.useKey = useKey;
+      this.photosKey = photosKey;
+      this.type = type;
+      this.isDaily = isDaily;
+      this.isArray = isArray;
+      this.loadArg = loadArg;
     }
 
     /**
-     * Factory Method to create a new {@link app.SSView}
-     * @param {app.SSPhoto} photo - An {@link app.SSPhoto}
-     * @param {app.SSViews.Type} sizing - photo sizing type
-     * @returns {app.SSView} a new SSView or subclass
+     * Factory Method to create a new {@link app.PhotoSource}
+     * @param {app.PhotoSources.UseKey} useKey - photo source useKey
+     * @returns {?app.PhotoSource} a new PhotoSource or subclass
      * @static
      */
-    static createView(photo, sizing) {
-      switch (sizing) {
-        case app.SSViews.Type.LETTERBOX:
-          return new app.SSViewLetterbox(photo);
-        case app.SSViews.Type.ZOOM:
-          return new app.SSView(photo);
-        case app.SSViews.Type.FRAME:
-          return new app.SSViewFrame(photo);
-        case app.SSViews.Type.FULL:
-          return new app.SSViewFull(photo);
+    static createSource(useKey) {
+      switch (useKey) {
+        case app.PhotoSources.UseKey.GOOGLE:
+          return new app.GoogleSource(useKey, 'albumSelections', 'Google User',
+              true, true, null);
+        case app.PhotoSources.UseKey.CHROMECAST:
+          return new app.CCSource(useKey, 'ccImages', 'Google',
+              false, false, null);
+        case app.PhotoSources.UseKey.ED_500:
+          return new app.Px500Source(useKey, 'editors500pxImages',
+              '500', true, false, 'editors');
+        case app.PhotoSources.UseKey.POP_500:
+          return new app.Px500Source(useKey, 'popular500pxImages',
+              '500', true, false, 'popular');
+        case app.PhotoSources.UseKey.YEST_500:
+          return new app.Px500Source(useKey, 'yesterday500pxImages',
+              '500', true, false, 'fresh_yesterday');
+        case app.PhotoSources.UseKey.INT_FLICKR:
+          return new app.FlickrSource(useKey, 'flickrInterestingImages',
+              'flickr', true, false, false);
+        case app.PhotoSources.UseKey.AUTHOR:
+          return new app.FlickrSource(useKey, 'authorImages', 'flickr',
+              false, false, true);
+        case app.PhotoSources.UseKey.SPACE_RED:
+          return new app.RedditSource(useKey, 'spaceRedditImages', 'reddit',
+              true, false, 'r/spaceporn/');
+        case app.PhotoSources.UseKey.EARTH_RED:
+          return new app.RedditSource(useKey, 'earthRedditImages', 'reddit',
+              true, false, 'r/EarthPorn/');
+        case app.PhotoSources.UseKey.ANIMAL_RED:
+          return new app.RedditSource(useKey, 'animalRedditImages', 'reddit',
+              true, false, 'r/animalporn/');
         default:
-          Chrome.GA.error(`Bad SSView type: ${sizing}`, 'SSView.createView');
-          return new app.SSViewLetterbox(photo);
+          Chrome.GA.error(`Bad PhotoSource type: ${useKey}`,
+              'SSView.createView');
+          return null;
       }
     }
 
     /**
-     * Determine if a photo would look bad zoomed or stretched on the screen
-     * @param {number} asp - an aspect ratio
-     * @returns {boolean} true if a photo aspect ratio differs substantially
-     * from the screens'
-     * @private
+     * Add a {@link app.PhotoSource.SourcePhoto} to an existing Array
+     * @param {Array} photos - {@link app.PhotoSource.SourcePhoto} Array
+     * @param {string} url - The url to the photo
+     * @param {string} author - The photographer
+     * @param {number} asp - The aspect ratio of the photo
+     * @param {Object} [ex] - Additional information about the photo
+     * @param {string} [point] - 'lat lon'
      */
-    static _isBadAspect(asp) {
-      // arbitrary
-      const CUT_OFF = 0.5;
-      return (asp &lt; _SCREEN_ASP - CUT_OFF) || (asp > _SCREEN_ASP + CUT_OFF);
+    static addPhoto(photos, url, author, asp, ex, point) {
+      /** @type {app.PhotoSource.SourcePhoto} */
+      const photo = {
+        url: url,
+        author: author,
+        asp: asp.toPrecision(3),
+      };
+      if (ex) {
+        photo.ex = ex;
+      }
+      if (point) {
+        photo.point = point;
+      }
+      photos.push(photo);
     }
 
     /**
-     * Determine if a given aspect ratio should be ignored
-     * @param {number} asp - an aspect ratio
-     * @param {int} photoSizing - the sizing type
-     * @returns {boolean} true if the aspect ratio should be ignored
+     * Create a geo point string from a latitude and longitude
+     * @param {number} lat - latitude
+     * @param {number} lon - longitude
+     * @returns {string} 'lat lon'
+     * @memberOf app.Geo
      */
-    static ignore(asp, photoSizing) {
-      let ret = false;
-      const skip = Chrome.Storage.getBool('skip');
+    static createPoint(lat, lon) {
+      if ((typeof lat === 'number') &amp;&amp; (typeof lon === 'number')) {
+        return `${lat.toPrecision(8)} ${lon.toPrecision(8)}`;
+      } else {
+        return `${lat} ${lon}`;
+      }
+    }
 
-      if ((!asp || isNaN(asp)) ||
-          (skip &amp;&amp; ((photoSizing === 1) || (photoSizing === 3)) &amp;&amp;
-          app.SSView._isBadAspect(asp))) {
-        // ignore photos that don't have aspect ratio
-        // or would look bad with cropped or stretched sizing options
-        ret = true;
+    /**
+     * Fetch the photos for this source - override
+     * @abstract
+     * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
+     */
+    fetchPhotos() {
+      return Promise.resolve([]);
+    }
+
+    /**
+     * Get the photos from local storage
+     * @returns {app.PhotoSource.SourcePhotos} the photos
+     */
+    getPhotos() {
+      let ret = {
+        type: this.type,
+        photos: [],
+      };
+      if (this.use()) {
+        let photos = [];
+        if (this.isArray) {
+          let items = Chrome.Storage.get(this.photosKey);
+          // could be that items have not been retrieved yet
+          items = items || [];
+          items.forEach((item) => {
+            photos = photos.concat(item.photos);
+          });
+        } else {
+          photos = Chrome.Storage.get(this.photosKey);
+          // could be that items have not been retrieved yet
+          photos = photos || [];
+        }
+        ret.photos = photos;
       }
       return ret;
     }
 
     /**
-     * Should we show the location, if available
-     * @returns {boolean} true if we should show the location
-     * @static
-     */
-    static _showLocation() {
-      return Chrome.Storage.getBool('showLocation');
-    }
-
-    /**
-     * Should we show the time
-     * @returns {boolean} true if we should show the time
-     * @static
-     */
-    static showTime() {
-      return Chrome.Storage.getBool('showTime');
-    }
-
-    /**
-     * Does a photo have an author label to show
-     * @returns {boolean} true if we should show the author
-     */
-    _hasAuthor() {
-      const photographer = this.photo.getPhotographer();
-      return !Chrome.Utils.isWhiteSpace(photographer);
-    }
-
-    /**
-     * Does a photo have a geolocation
-     * @returns {boolean} true if geolocation point is non-null
-     */
-    _hasLocation() {
-      return !!this.photo.getPoint();
-    }
-
-    /**
-     * Add superscript to the label for 500px photos
+     * Save the photos to localStorage in a safe manner
+     * @param {app.PhotoSource.SourcePhoto[]} photos
+     * - {@link app.PhotoSource.SourcePhoto} Array
+     * @returns {?string} non-null on error
      * @private
      */
-    _super500px() {
-      const type = this.photo.getType();
-      const authorText = this.authorLabel;
-      const sup = this.author.querySelector('#sup');
-      sup.textContent = '';
-      if (!Chrome.Utils.isWhiteSpace(authorText) &amp;&amp; (type === '500')) {
-        sup.textContent = 'px';
+    _savePhotos(photos) {
+      let ret = null;
+      const keyBool = (this.useKey === 'useGoogle') ? null : this.useKey;
+      if (photos || photos.length) {
+        const set = Chrome.Storage.safeSet(this.photosKey, photos, keyBool);
+        if (!set) {
+          ret = 'Exceeded storage capacity.';
+        }
       }
+      return ret;
     }
 
     /**
-     * Set the style for the time label
+     * Determine if this source has been selected for display
+     * @returns {boolean} true if selected
      */
-    _setTimeStyle() {
-      if (Chrome.Storage.getBool('largeTime')) {
-        this.time.style.fontSize = '8.5vh';
-        this.time.style.fontWeight = 300;
-      }
+    use() {
+      return Chrome.Storage.getBool(this.useKey);
     }
 
     /**
-     * Set the url
+     * Process the photo source.
+     * @returns {Promise&lt;void>} void
      */
-    _setUrl() {
-      this.url = this.photo.getUrl();
-      this.model.set('view.url', this.url);
-    }
-
-    /**
-     * Set the author text
-     * @param {boolean} force - require display of label if true
-     */
-    _setAuthorLabel(force) {
-      this.authorLabel = '';
-      this.model.set('view.authorLabel', this.authorLabel);
-      this._super500px();
-
-      const type = this.photo.getType();
-      const photographer = this.photo.getPhotographer();
-      let newType = type;
-      const idx = type.search('User');
-
-      if (!force &amp;&amp; !Chrome.Storage.getBool('showPhotog') &amp;&amp; (idx !== -1)) {
-        // don't show label for user's own photos, if requested
-        return;
-      }
-
-      if (idx !== -1) {
-        // strip off 'User'
-        newType = type.substring(0, idx - 1);
-      }
-
-      if (this._hasAuthor()) {
-        this.authorLabel = `${photographer} / ${newType}`;
-      } else {
-        // no photographer name
-        this.authorLabel = `${Chrome.Locale.localize('photo_from')} ${newType}`;
-      }
-      this.model.set('view.authorLabel', this.authorLabel);
-      this._super500px();
-    }
-
-    /**
-     * Set the geolocation text
-     */
-    _setLocationLabel() {
-      this.locationLabel = '';
-      this.model.set('view.locationLabel', this.locationLabel);
-
-      if (app.SSView._showLocation() &amp;&amp; this._hasLocation()) {
-        const point = this.photo.getPoint();
-        app.Geo.get(point).then((location) => {
-          if (location &amp;&amp; this.model) {
-            location = location.replace('Unnamed Road, ', '');
-            this.locationLabel = location;
-            this.model.set('view.locationLabel', this.locationLabel);
+    process() {
+      if (this.use()) {
+        return this.fetchPhotos().then((photos) => {
+          const err = this._savePhotos(photos);
+          if (err) {
+            throw new Error(err);
           }
           return Promise.resolve();
         }).catch((err) => {
-          const networkErr = Chrome.Locale.localize('err_network');
-          if (!err.message.includes(networkErr)) {
-            Chrome.GA.error(`${err.message}, point: ${point}`,
-                'SSView._setLocationLabel');
-          }
+          Chrome.GA.error(err.message, 'PhotoSource.process');
+          throw err;
         });
+      } else {
+        if (this.useKey !== 'useGoogle') {
+          localStorage.removeItem(this.photosKey);
+        }
+        return Promise.resolve();
       }
-    }
-
-    /**
-     * Set the elements of the view
-     * @param {Element} image - paper-image, photo
-     * @param {Element} author - div, photographer
-     * @param {Element} time - div, current time
-     * @param {Element} location - div, geolocation text
-     * @param {Object} model - template item model
-     */
-    setElements(image, author, time, location, model) {
-      this.image = image;
-      this.author = author;
-      this.time = time;
-      this.location = location;
-      this.model = model;
-
-      this._setTimeStyle();
-      this.setPhoto(this.photo);
-    }
-
-    /**
-     * Set the photo
-     * @param {app.SSPhoto} photo - a photo to render
-     */
-    setPhoto(photo) {
-      this.photo = photo;
-      this._setUrl();
-      this._setAuthorLabel(false);
-      this._setLocationLabel();
-    }
-
-    /**
-     * Render the page for display - the default CSS is for our view
-     * subclasses override this to determine the look of photo
-     */
-    render() {}
-
-    /**
-     * Determine if a photo failed to load (usually 404 error)
-     * @returns {boolean} true if image load failed
-     */
-    isError() {
-      return !this.image || this.image.error;
-    }
-
-    /**
-     * Determine if a photo has finished loading
-     * @returns {boolean} true if image is loaded
-     */
-    isLoaded() {
-      return !!this.image &amp;&amp; this.image.loaded;
     }
   };
 })();

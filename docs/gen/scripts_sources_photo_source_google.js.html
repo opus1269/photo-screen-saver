@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: scripts/google_photos.js</title>
+	<title>Documentation Source: scripts/sources/photo_source_google.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: scripts/google_photos.js</h1>
+		<h1 class="page-title">Source: scripts/sources/photo_source_google.js</h1>
     
 <section>
     <article>
@@ -90,20 +90,15 @@
  *  https://opensource.org/licenses/BSD-3-Clause
  *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
-window.app = window.app || {};
-
-/**
- * Interface to Picasa API
- * @namespace
- */
-app.GooglePhotos = (function() {
+(function() {
   'use strict';
+  window.app = window.app || {};
 
   new ExceptionHandler();
 
   /**
    * A Google Photo Album
-   * @typedef {Object} app.GooglePhotos.Album
+   * @typedef {Object} app.GoogleSource.Album
    * @property {int} index - Array index
    * @property {string} uid - unique identifier
    * @property {string} name - album name
@@ -112,15 +107,15 @@ app.GooglePhotos = (function() {
    * @property {boolean} checked - is album selected
    * @property {int} ct - number of photos
    * @property {app.PhotoSource.SourcePhoto[]} photos - Array of photos
-   * @memberOf app.GooglePhotos
+   * @memberOf app.GoogleSource
    */
 
   /**
    * A Selected Google Photo Album
-   * @typedef {Object} app.GooglePhotos.SelectedAlbum
+   * @typedef {Object} app.GoogleSource.SelectedAlbum
    * @property {string} id - Google album Id
    * @property {app.PhotoSource.SourcePhoto[]} photos - Array of photos
-   * @memberOf app.GooglePhotos
+   * @memberOf app.GoogleSource
    */
 
   /**
@@ -129,7 +124,7 @@ app.GooglePhotos = (function() {
    * @const
    * @default
    * @private
-   * @memberOf app.GooglePhotos
+   * @memberOf app.GoogleSource
    */
   const _URL_BASE = 'https://picasaweb.google.com/data/feed/api/user/';
 
@@ -139,7 +134,7 @@ app.GooglePhotos = (function() {
    * @const
    * @default
    * @private
-   * @memberOf app.GooglePhotos
+   * @memberOf app.GoogleSource
    */
   const _ALBUMS_QUERY = '?max-results=2000&amp;visibility=all&amp;kind=album' +
       '&amp;fields=entry(gphoto:albumType,gphoto:id)&amp;v2&amp;alt=json';
@@ -150,124 +145,138 @@ app.GooglePhotos = (function() {
    * @const
    * @default
    * @private
-   * @memberOf app.GooglePhotos
+   * @memberOf app.GoogleSource
    */
   const _ALBUM_QUERY = '?imgmax=1600&amp;thumbsize=72' +
       '&amp;fields=title,gphoto:id,entry(media:group/media:content,' +
       'media:group/media:credit,media:group/media:thumbnail,georss:where)' +
       '&amp;v=2&amp;alt=json';
 
-  /** Determine if a Picasa entry is an image
-   * @param {Object} entry - Picasa media object
-   * @returns {boolean} true if entry is a photo
-   * @private
-   * @memberOf app.GooglePhotos
+  /**
+   * A potential source of photos from Google
+   * @alias app.GoogleSource
    */
-  function _isImage(entry) {
-    const content = entry.media$group.media$content;
-    for (let i = 0; i &lt; content.length; i++) {
-      if (content[i].medium !== 'image') {
-        return false;
+  app.GoogleSource = class extends app.PhotoSource {
+
+    /**
+     * Create a new Chromecast source
+     * @param {string} useKey - The key for if the source is selected
+     * @param {string} photosKey - The key for the collection of photos
+     * @param {string} type - A descriptor of the photo source
+     * @param {boolean} isDaily - Should the source be updated daily
+     * @param {boolean} isArray - Is the source an Array of photo Arrays
+     * @param {?string} [loadArg=null] - optional arg for load function
+     * @constructor
+     */
+    constructor(useKey, photosKey, type, isDaily, isArray, loadArg = null) {
+      super(useKey, photosKey, type, isDaily, isArray, loadArg);
+    }
+
+    /** Determine if a Picasa entry is an image
+     * @param {Object} entry - Picasa media object
+     * @returns {boolean} true if entry is a photo
+     * @private
+     */
+    static _isImage(entry) {
+      const content = entry.media$group.media$content;
+      for (let i = 0; i &lt; content.length; i++) {
+        if (content[i].medium !== 'image') {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    /** Determine if a Picasa entry has Geo position
+     * @param {Object} entry - Picasa media object
+     * @returns {boolean} true if entry has Geo position
+     * @private
+     */
+    static _hasGeo(entry) {
+      return !!(entry.georss$where &amp;&amp;
+      entry.georss$where.gml$Point &amp;&amp;
+      entry.georss$where.gml$Point.gml$pos &amp;&amp;
+      entry.georss$where.gml$Point.gml$pos.$t);
+    }
+
+    /** Get the thumbnail url if it exists
+     * @param {Array} entry - Picasa media object
+     * @returns {?string} url or null
+     * @private
+     */
+    static _getThumbnail(entry) {
+      let ret = null;
+      if (entry.length &amp;&amp;
+          entry[0].media$group &amp;&amp;
+          entry[0].media$group.media$thumbnail[0]) {
+        ret = entry[0].media$group.media$thumbnail[0].url;
+      }
+      return ret;
+    }
+
+    /**
+     * Extract the Picasa photos into an Array
+     * @param {Object} root - root object from Picasa API call
+     * @returns {app.PhotoSource.SourcePhoto[]} Array of photos
+     * @private
+     */
+    static _processPhotos(root) {
+      const photos = [];
+      if (root) {
+        const feed = root.feed;
+        const entries = feed.entry || [];
+        entries.forEach((entry) => {
+          if (app.GoogleSource._isImage(entry)) {
+            const url = entry.media$group.media$content[0].url;
+            const width = entry.media$group.media$content[0].width;
+            const height = entry.media$group.media$content[0].height;
+            const asp = width / height;
+            const author = entry.media$group.media$credit[0].$t;
+            let point;
+            if (app.GoogleSource._hasGeo(entry)) {
+              point = entry.georss$where.gml$Point.gml$pos.$t;
+            }
+            app.PhotoSource.addPhoto(photos, url, author, asp, {},
+                point);
+          }
+        });
+      }
+      return photos;
+    }
+
+    /**
+     * Retrieve a Google Photos album
+     * @param {string} albumId - Picasa album ID
+     * @param {string} [userId='default'] - userId for non-authenticated request
+     * @returns {Promise&lt;Object>} Root object from Picasa call null if not found
+     * @private
+     * @memberOf app.GooglePhotos
+     */
+    static _loadPicasaAlbum(albumId, userId = 'default') {
+      const url = `${_URL_BASE}${userId}/albumid/${albumId}/${_ALBUM_QUERY}`;
+      if (userId === 'default') {
+        const conf = Chrome.JSONUtils.shallowCopy(Chrome.Http.conf);
+        conf.isAuth = true;
+        return Chrome.Http.doGet(url, conf).catch((err) => {
+          const statusMsg = `${Chrome.Locale.localize('err_status')}: 404`;
+          if (err.message.includes(statusMsg)) {
+            // album was probably deleted
+            return Promise.resolve(null);
+          } else {
+            throw err;
+          }
+        });
+      } else {
+        return Chrome.Http.doGet(url);
       }
     }
-    return true;
-  }
 
-  /** Determine if a Picasa entry has Geo position
-   * @param {Object} entry - Picasa media object
-   * @returns {boolean} true if entry has Geo position
-   * @private
-   * @memberOf app.GooglePhotos
-   */
-  function _hasGeo(entry) {
-    return !!(entry.georss$where &amp;&amp;
-    entry.georss$where.gml$Point &amp;&amp;
-    entry.georss$where.gml$Point.gml$pos &amp;&amp;
-    entry.georss$where.gml$Point.gml$pos.$t);
-  }
-
-  /** Get the thumbnail url if it exists
-   * @param {Array} entry - Picasa media object
-   * @returns {?string} url or null
-   * @private
-   * @memberOf app.GooglePhotos
-   */
-  function _getThumbnail(entry) {
-    let ret = null;
-    if (entry.length &amp;&amp;
-        entry[0].media$group &amp;&amp;
-        entry[0].media$group.media$thumbnail[0]) {
-      ret = entry[0].media$group.media$thumbnail[0].url;
-    }
-    return ret;
-  }
-
-  /**
-   * Extract the Picasa photos into an Array
-   * @param {Object} root - root object from Picasa API call
-   * @returns {app.PhotoSource.SourcePhoto[]} Array of photos
-   * @private
-   * @memberOf app.GooglePhotos
-   */
-  function _processPhotos(root) {
-    const photos = [];
-    if (root) {
-      const feed = root.feed;
-      const entries = feed.entry || [];
-      entries.forEach((entry) => {
-        if (_isImage(entry)) {
-          const url = entry.media$group.media$content[0].url;
-          const width = entry.media$group.media$content[0].width;
-          const height = entry.media$group.media$content[0].height;
-          const asp = width / height;
-          const author = entry.media$group.media$credit[0].$t;
-          let point;
-          if (_hasGeo(entry)) {
-            point = entry.georss$where.gml$Point.gml$pos.$t;
-          }
-          app.PhotoSource.addPhoto(photos, url, author, asp, {},
-              point);
-        }
-      });
-    }
-    return photos;
-  }
-
-  /**
-   * Retrieve a Google Photos album
-   * @param {string} albumId - Picasa album ID
-   * @param {string} [userId='default'] - userId for non-authenticated request
-   * @returns {Promise&lt;Object>} Root object from Picasa call null if not found
-   * @private
-   * @memberOf app.GooglePhotos
-   */
-  function _loadPicasaAlbum(albumId, userId = 'default') {
-    const url = `${_URL_BASE}${userId}/albumid/${albumId}/${_ALBUM_QUERY}`;
-    if (userId === 'default') {
-      const conf = Chrome.JSONUtils.shallowCopy(Chrome.Http.conf);
-      conf.isAuth = true;
-      return Chrome.Http.doGet(url, conf).catch((err) => {
-        const statusMsg = `${Chrome.Locale.localize('err_status')}: 404`;
-        if (err.message.includes(statusMsg)) {
-          // album was probably deleted
-          return Promise.resolve(null);
-        } else {
-          throw err;
-        }
-      });
-    } else {
-      return Chrome.Http.doGet(url);
-    }
-  }
-
-  return {
     /**
      * Retrieve the users list of albums, including the photos in each
      * @param {boolean} interactive - true is user initiated call
      * @returns {Promise&lt;app.GooglePhotos.Album[]>} Array of albums
-     * @memberOf app.GooglePhotos
      */
-    loadAlbumList: function(interactive = false) {
+    static loadAlbumList(interactive = false) {
       const url = `${_URL_BASE}default/${_ALBUMS_QUERY}`;
 
       // get list of albums
@@ -289,7 +298,7 @@ app.GooglePhotos = (function() {
           if (!entry.gphoto$albumType) {
             // skip special albums (e.g. Google+ posts, backups)
             const albumId = entry.gphoto$id.$t;
-            promises.push(_loadPicasaAlbum(albumId));
+            promises.push(app.GoogleSource._loadPicasaAlbum(albumId));
           }
         });
 
@@ -304,10 +313,10 @@ app.GooglePhotos = (function() {
           if (value !== null) {
             const feed = value.feed;
             if (feed &amp;&amp; feed.entry) {
-              const thumb = _getThumbnail(feed.entry);
-              const photos = _processPhotos(value);
+              const thumb = app.GoogleSource._getThumbnail(feed.entry);
+              const photos = app.GoogleSource._processPhotos(value);
               if (photos &amp;&amp; photos.length) {
-                /** @type {app.GooglePhotos.Album} */
+                /** @type {app.GoogleSource.Album} */
                 const album = {};
                 album.index = ct;
                 album.uid = 'album' + ct;
@@ -325,21 +334,20 @@ app.GooglePhotos = (function() {
         });
         return Promise.resolve(albums);
       });
-    },
+    }
 
     /**
-     * Retrieve the photos in the selected albums
-     * @returns {Promise&lt;app.GooglePhotos.SelectedAlbum[]>} Array albums
-     * @memberOf app.GooglePhotos
+     * Fetch the photos for this source
+     * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
      */
-    loadPhotos: function() {
+    fetchPhotos() {
       let vals = Chrome.Storage.get('albumSelections');
 
       // series of API calls to get each album
       const promises = [];
       const albums = vals || [];
       albums.forEach((album) => {
-        promises.push(_loadPicasaAlbum(album.id));
+        promises.push(app.GoogleSource._loadPicasaAlbum(album.id));
       });
 
       // Collate the albums
@@ -350,7 +358,7 @@ app.GooglePhotos = (function() {
         values.forEach((value) => {
           if (value) {
             const feed = value.feed;
-            const photos = _processPhotos(value);
+            const photos = app.GoogleSource._processPhotos(value);
             if (photos &amp;&amp; photos.length) {
               albums.push({
                 id: feed.gphoto$id.$t,
@@ -361,7 +369,7 @@ app.GooglePhotos = (function() {
         });
         return Promise.resolve(albums);
       });
-    },
+    }
   };
 })();
 </pre>

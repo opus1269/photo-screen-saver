@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: scripts/screensaver/ss_photos.js</title>
+	<title>Documentation Source: scripts/sources/photo_sources.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: scripts/screensaver/ss_photos.js</h1>
+		<h1 class="page-title">Source: scripts/sources/photo_sources.js</h1>
     
 <section>
     <article>
@@ -92,139 +92,152 @@
  */
 window.app = window.app || {};
 
-/**
- * Collection of {@link app.SSPhoto} objects
- * @namespace
- */
-app.SSPhotos = (function() {
+app.PhotoSources = (function() {
   'use strict';
 
   new ExceptionHandler();
 
   /**
-   * The array of photos
-   * @type {Array&lt;app.SSPhoto>}
-   * @const
-   * @private
-   * @memberOf app.SSPhotos
+   * Enum for {@link app.PhotoSource} useKey
+   * @typedef {enum} app.PhotoSources.UseKey
+   * @readonly
+   * @enum {int}
+   * @memberOf app.PhotoSources
    */
-  const _photos = [];
+  const UseKey = {
+    GOOGLE: 'useGoogle',
+    CHROMECAST: 'useChromecast',
+    ED_500: 'useEditors500px',
+    POP_500: 'usePopular500px',
+    YEST_500: 'useYesterday500px',
+    SPACE_RED: 'useSpaceReddit',
+    EARTH_RED: 'useEarthReddit',
+    ANIMAL_RED: 'useAnimalReddit',
+    INT_FLICKR: 'useInterestingFlickr',
+    AUTHOR: 'useAuthors',
+  };
 
   /**
-   * Current index into {@link _photos}
-   * @type {int}
+   * The array of photo sources
+   * @type {Array&lt;app.PhotoSource>}
+   * @const
    * @private
-   * @memberOf app.SSPhotos
+   * @memberOf app.PhotoSources
    */
-  let _curIdx = 0;
+  const _sources = [];
+
+  /**
+   * Get the selected sources from local storage
+   * @private
+   * @memberOf app.PhotoSources
+   */
+  function _getSelectedSources() {
+    for (const key in UseKey) {
+      if (UseKey.hasOwnProperty(key)) {
+        const useKey = UseKey[key];
+        if (Chrome.Storage.getBool(useKey)) {
+          const source = app.PhotoSource.createSource(useKey);
+          if (source) {
+            _sources.push(source);
+          }
+        }
+      }
+    }
+  }
 
   return {
+    UseKey: UseKey,
+
     /**
-     * Add the photos from an {@link app.PhotoSource.SourcePhotos}
-     * @param {app.PhotoSource.SourcePhotos} source
-     * - The {@link app.PhotoSource.SourcePhotos}
-     * @memberOf app.SSPhotos
+     * Get all the useage keys
+     * @returns {string[]} Array of useage keys
+     * @memberOf app.PhotoSources
      */
-    addFromSource: function(source) {
-      const type = source.type;
-      const viewType = app.SSViews.getType();
-      let ct = 0;
-      for (const sourcePhoto of source.photos) {
-        if (!app.SSView.ignore(sourcePhoto.asp, viewType)) {
-          const photo = new app.SSPhoto(ct, sourcePhoto, type);
-          _photos.push(photo);
-          ct++;
+    getUseKeys: function() {
+      let ret = [];
+      for (const key in UseKey) {
+        if (UseKey.hasOwnProperty(key)) {
+          ret = ret.concat(UseKey[key]);
         }
+      }
+      return ret;
+    },
+
+    /**
+     * Determine if a given string is a photo source
+     * @param {string} useKey - String to check
+     * @returns {boolean} true if photo source
+     * @memberOf app.PhotoSources
+     */
+    isUseKey: function(useKey) {
+      let ret = false;
+      for (const key in UseKey) {
+        if (UseKey.hasOwnProperty(key)) {
+          if (UseKey[key] === useKey) {
+            ret = true;
+            break;
+          }
+        }
+      }
+      return ret;
+    },
+
+    /**
+     * Process the given photo source and save to localStorage.
+     * This normally requires a https call and may fail for various reasons
+     * @param {string} useKey - The photo source to retrieve
+     * @returns {Promise&lt;void>} void
+     * @memberOf app.PhotoSources
+     */
+    process: function(useKey) {
+      const source = app.PhotoSource.createSource(useKey);
+      if (source) {
+        return source.process();
+      } else {
+        throw new Error('Unknown Photo Source');
       }
     },
 
     /**
-     * Get number of photos
-     * @returns {int} The number of photos
-     * @memberOf app.SSPhotos
+     * Get all the photos from all selected sources. These will be
+     * used by the screensaver.
+     * @returns {app.PhotoSource.SourcePhotos[]} Array of sources photos
+     * @memberOf app.PhotoSources
      */
-    getCount: function() {
-      return _photos.length;
+    getSelectedPhotos: function() {
+      _getSelectedSources();
+      let ret = [];
+      for (const source of _sources) {
+        ret.push(source.getPhotos());
+      }
+      return ret;
     },
 
     /**
-     * Do we have photos that aren't bad
-     * @returns {boolean} true if at least one photo is good
-     * @memberOf app.SSPhotos
+     * Process all the selected photo sources.
+     * This normally requires a https call and may fail for various reasons
+     * @memberOf app.PhotoSources
      */
-    hasUsable: function() {
-      return !_photos.every((photo) => {
-        return photo.isBad();
-      });
+    processAll: function() {
+      _getSelectedSources();
+      for (const source of _sources) {
+        source.process().catch(() => {});
+      }
     },
 
     /**
-     * Get the {@link app.SSPhoto} at the given index
-     * @param {int} idx - The index
-     * @returns {app.SSPhoto} A {@link app.SSPhoto}
-     * @memberOf app.SSPhotos
+     * Process all the selected photo sources that are to be
+     * updated every day.
+     * This normally requires a https call and may fail for various reasons
+     * @memberOf app.PhotoSources
      */
-    get: function(idx) {
-      return _photos[idx];
-    },
-
-    /**
-     * Get the next {@link app.SSPhoto} that is usable
-     * @returns {?app.SSPhoto} An {@link app.SSPhoto}
-     * @memberOf app.SSPhotos
-     */
-    getNextUsable: function() {
-      // wrap-around loop: https://stackoverflow.com/a/28430482/4468645
-      for (let i = 0; i &lt; _photos.length; i++) {
-        // find a url that is ok, AFAWK
-        const index = (i + _curIdx) % _photos.length;
-        const photo = _photos[index];
-        if (!photo.isBad() &amp;&amp; !app.SSViews.hasPhoto(photo)) {
-          _curIdx = index;
-          app.SSPhotos.incCurrentIndex();
-          return photo;
+    processDaily: function() {
+      _getSelectedSources();
+      for (const source of _sources) {
+        if (source.isDaily) {
+          source.process().catch(() => {});
         }
       }
-      return null;
-    },
-
-    /**
-     * Get current index into {@link _photos}
-     * @returns {int} index
-     * @memberOf app.SSPhotos
-     */
-    getCurrentIndex: function() {
-      return _curIdx;
-    },
-
-    /**
-     * Set current index into {@link _photos}
-     * @param {int} idx - The index
-     * @memberOf app.SSPhotos
-     */
-    setCurrentIndex: function(idx) {
-      _curIdx = idx;
-    },
-
-    /**
-     * Increment current index into {@link _photos}
-     * @returns {int} new current index
-     * @memberOf app.SSPhotos
-     */
-    incCurrentIndex: function() {
-     return _curIdx = (_curIdx === _photos.length - 1) ? 0 : _curIdx + 1;
-    },
-
-    /**
-     * Randomize the photos
-     * @memberOf app.SSPhotos
-     */
-    shuffle: function() {
-      Chrome.Utils.shuffleArray(_photos);
-      // renumber
-      _photos.forEach((photo, index) => {
-        photo.setId(index);
-      });
     },
   };
 })();
