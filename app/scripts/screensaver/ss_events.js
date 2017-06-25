@@ -140,10 +140,12 @@ app.SSEvents = (function() {
    * @memberOf app.SSEvents
    */
   function _onMouseClick() {
-    const idx = app.SSViews.getSelectedIndex();
-    const view = app.SSViews.get(idx);
     if (app.SSRunner.isStarted()) {
-      view.photo.showSource();
+      const idx = app.SSViews.getSelectedIndex();
+      if (typeof(idx) !== 'undefined') {
+        const view = app.SSViews.get(idx);
+        view.photo.showSource();
+      }
     }
     _close();
   }
