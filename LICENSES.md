@@ -1,4 +1,4 @@
-# Open Source Licenses Used By Pushy Clipboard Chrome Extension
+# Open Source Licenses Used By Photo Screen Saver Chrome Extension
 
 ## chrome-promise
 
