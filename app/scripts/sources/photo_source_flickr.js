@@ -72,7 +72,7 @@
 
       /** @(type) {PhotoSource.SourcePhoto[]} */
       const photos = [];
-      response.photos.photo.forEach((photo) => {
+      for (const photo of response.photos.photo) {
         let url = null;
         let width;
         let height;
@@ -97,7 +97,7 @@
                 photo.ownername, asp, photo.owner, pt);
           }
         }
-      });
+      }
       return Promise.resolve(photos);
     }
 

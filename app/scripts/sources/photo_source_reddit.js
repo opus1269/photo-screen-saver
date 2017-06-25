@@ -127,7 +127,7 @@
       let width = 1;
       let height = 1;
 
-      children.forEach((child) => {
+      for (const child of children) {
         const data = child.data;
         if (!data.over_18) {
           // skip NSFW
@@ -160,7 +160,7 @@
             (Math.max(width, height) <= _MAX_SIZE)) {
           app.PhotoSource.addPhoto(photos, url, author, asp, data.url);
         }
-      });
+      }
       return photos;
     }
 

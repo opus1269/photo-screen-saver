@@ -85,7 +85,7 @@
           throw new Error(response.error);
         }
         const photos = [];
-        response.photos.forEach((photo) => {
+        for (const photo of response.photos) {
           if (!photo.nsfw) {
             const asp = photo.width / photo.height;
             let ex = null;
@@ -97,7 +97,7 @@
             app.PhotoSource.addPhoto(photos, photo.images[0].url,
                 photo.user.fullname, asp, ex, pt);
           }
-        });
+        }
         return Promise.resolve(photos);
       });
     }
@@ -110,20 +110,20 @@
       const type = this._loadArg;
       // series of API calls
       const promises = [];
-      _CATS.forEach((_CAT) => {
+      for (const _CAT of _CATS) {
         let url =
             `${_URL_BASE}photos/?consumer_key=${_KEY}&feature=${type}` +
             `&only=${_CAT}&rpp=${_MAX_PHOTOS}` +
             '&sort=rating&image_size=2048';
         promises.push(app.Px500Source._doGet(url));
-      });
+      }
 
       // Collate the photos
       return Promise.all(promises).then((values) => {
         let photos = [];
-        values.forEach((value) => {
+        for (const value of values) {
           photos = photos.concat(value);
-        });
+        }
         return Promise.resolve(photos);
       });
     }

@@ -139,7 +139,7 @@
       if (root) {
         const feed = root.feed;
         const entries = feed.entry || [];
-        entries.forEach((entry) => {
+        for (const entry of entries) {
           if (app.GoogleSource._isImage(entry)) {
             const url = entry.media$group.media$content[0].url;
             const width = entry.media$group.media$content[0].width;
@@ -153,7 +153,7 @@
             app.PhotoSource.addPhoto(photos, url, author, asp, {},
                 point);
           }
-        });
+        }
       }
       return photos;
     }
@@ -207,13 +207,13 @@
         // series of API calls to get each album
         const promises = [];
         const entries = feed.entry || [];
-        entries.forEach((entry) => {
+        for (const entry of entries) {
           if (!entry.gphoto$albumType) {
             // skip special albums (e.g. Google+ posts, backups)
             const albumId = entry.gphoto$id.$t;
             promises.push(app.GoogleSource._loadPicasaAlbum(albumId));
           }
-        });
+        }
 
         // Collate the albums
         return Promise.all(promises);
@@ -222,7 +222,7 @@
         let albums = [];
         let ct = 0;
         const values = vals || [];
-        values.forEach((value) => {
+        for (const value of values) {
           if (value !== null) {
             const feed = value.feed;
             if (feed && feed.entry) {
@@ -244,7 +244,7 @@
               }
             }
           }
-        });
+        }
         return Promise.resolve(albums);
       });
     }
@@ -259,16 +259,16 @@
       // series of API calls to get each album
       const promises = [];
       const albums = vals || [];
-      albums.forEach((album) => {
+      for (const album of albums) {
         promises.push(app.GoogleSource._loadPicasaAlbum(album.id));
-      });
+      }
 
       // Collate the albums
       return Promise.all(promises).then((vals) => {
         /** @type {app.GoogleSource.SelectedAlbum[]} */
         const albums = [];
         const values = vals || [];
-        values.forEach((value) => {
+        for (const value of values) {
           if (value) {
             const feed = value.feed;
             const photos = app.GoogleSource._processPhotos(value);
@@ -279,7 +279,7 @@
               });
             }
           }
-        });
+        }
         return Promise.resolve(albums);
       });
     }

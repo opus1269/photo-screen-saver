@@ -124,9 +124,9 @@ app.SSControl = (function() {
       if (displayArr.length === 1) {
         _open(null);
       } else {
-        displayArr.forEach((display) => {
+        for (const display of displayArr) {
           _open(display);
-        });
+        }
       }
       return Promise.resolve();
     }).catch((err) => {
