@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.GooglePhotos.html">app.GooglePhotos</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.PhotoSources.html">app.PhotoSources</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
 				</ul>
 			</li>
 			
@@ -123,7 +123,7 @@
   app.PhotoSource = class PhotoSource {
 
     /**
-     * Create a new photo
+     * Create a new photo source
      * @param {string} useKey - The key for if the source is selected
      * @param {string} photosKey - The key for the collection of photos
      * @param {string} type - A descriptor of the photo source
@@ -133,12 +133,12 @@
      * @constructor
      */
     constructor(useKey, photosKey, type, isDaily, isArray, loadArg = null) {
-      this.useKey = useKey;
-      this.photosKey = photosKey;
-      this.type = type;
-      this.isDaily = isDaily;
-      this.isArray = isArray;
-      this.loadArg = loadArg;
+      this._useKey = useKey;
+      this._photosKey = photosKey;
+      this._type = type;
+      this._isDaily = isDaily;
+      this._isArray = isArray;
+      this._loadArg = loadArg;
     }
 
     /**
@@ -232,7 +232,14 @@
      * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
      */
     fetchPhotos() {
-      return Promise.resolve([]);
+    }
+
+    /**
+     * Get if we should update daily
+     * @returns {boolean} if true, update daily
+     */
+    isDaily() {
+      return this._isDaily;
     }
 
     /**
@@ -241,20 +248,20 @@
      */
     getPhotos() {
       let ret = {
-        type: this.type,
+        type: this._type,
         photos: [],
       };
       if (this.use()) {
         let photos = [];
-        if (this.isArray) {
-          let items = Chrome.Storage.get(this.photosKey);
+        if (this._isArray) {
+          let items = Chrome.Storage.get(this._photosKey);
           // could be that items have not been retrieved yet
           items = items || [];
-          items.forEach((item) => {
+          for (const item of items) {
             photos = photos.concat(item.photos);
-          });
+          }
         } else {
-          photos = Chrome.Storage.get(this.photosKey);
+          photos = Chrome.Storage.get(this._photosKey);
           // could be that items have not been retrieved yet
           photos = photos || [];
         }
@@ -272,9 +279,9 @@
      */
     _savePhotos(photos) {
       let ret = null;
-      const keyBool = (this.useKey === 'useGoogle') ? null : this.useKey;
-      if (photos || photos.length) {
-        const set = Chrome.Storage.safeSet(this.photosKey, photos, keyBool);
+      const keyBool = (this._useKey === 'useGoogle') ? null : this._useKey;
+      if (photos &amp;&amp; photos.length) {
+        const set = Chrome.Storage.safeSet(this._photosKey, photos, keyBool);
         if (!set) {
           ret = 'Exceeded storage capacity.';
         }
@@ -287,7 +294,7 @@
      * @returns {boolean} true if selected
      */
     use() {
-      return Chrome.Storage.getBool(this.useKey);
+      return Chrome.Storage.getBool(this._useKey);
     }
 
     /**
@@ -307,8 +314,8 @@
           throw err;
         });
       } else {
-        if (this.useKey !== 'useGoogle') {
-          localStorage.removeItem(this.photosKey);
+        if (this._useKey !== 'useGoogle') {
+          localStorage.removeItem(this._photosKey);
         }
         return Promise.resolve();
       }
@@ -360,7 +367,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on June 24th 2017, 7:06:31 am
+		on June 24th 2017, 10:39:18 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
