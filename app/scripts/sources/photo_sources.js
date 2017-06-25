@@ -6,6 +6,10 @@
  */
 window.app = window.app || {};
 
+/**
+ * Manage the {@link app.PhotoSource} objects
+ * @namespace
+ */
 app.PhotoSources = (function() {
   'use strict';
 
@@ -32,31 +36,25 @@ app.PhotoSources = (function() {
   };
 
   /**
-   * The array of photo sources
-   * @type {Array<app.PhotoSource>}
-   * @const
-   * @private
-   * @memberOf app.PhotoSources
-   */
-  const _sources = [];
-
-  /**
    * Get the selected sources from local storage
+   * @returns {app.PhotoSource[]} Array of sources
    * @private
    * @memberOf app.PhotoSources
    */
   function _getSelectedSources() {
+    let ret = [];
     for (const key in UseKey) {
       if (UseKey.hasOwnProperty(key)) {
         const useKey = UseKey[key];
         if (Chrome.Storage.getBool(useKey)) {
           const source = app.PhotoSource.createSource(useKey);
           if (source) {
-            _sources.push(source);
+            ret.push(source);
           }
         }
       }
     }
+    return ret;
   }
 
   return {
@@ -71,23 +69,23 @@ app.PhotoSources = (function() {
       let ret = [];
       for (const key in UseKey) {
         if (UseKey.hasOwnProperty(key)) {
-          ret = ret.concat(UseKey[key]);
+          ret.push(UseKey[key]);
         }
       }
       return ret;
     },
 
     /**
-     * Determine if a given string is a photo source
-     * @param {string} useKey - String to check
+     * Determine if a given key is a photo source
+     * @param {string} keyName - key to check
      * @returns {boolean} true if photo source
      * @memberOf app.PhotoSources
      */
-    isUseKey: function(useKey) {
+    isUseKey: function(keyName) {
       let ret = false;
       for (const key in UseKey) {
         if (UseKey.hasOwnProperty(key)) {
-          if (UseKey[key] === useKey) {
+          if (UseKey[key] === keyName) {
             ret = true;
             break;
           }
@@ -98,7 +96,6 @@ app.PhotoSources = (function() {
 
     /**
      * Process the given photo source and save to localStorage.
-     * This normally requires a https call and may fail for various reasons
      * @param {string} useKey - The photo source to retrieve
      * @returns {Promise<void>} void
      * @memberOf app.PhotoSources
@@ -119,9 +116,9 @@ app.PhotoSources = (function() {
      * @memberOf app.PhotoSources
      */
     getSelectedPhotos: function() {
-      _getSelectedSources();
+      const sources = _getSelectedSources();
       let ret = [];
-      for (const source of _sources) {
+      for (const source of sources) {
         ret.push(source.getPhotos());
       }
       return ret;
@@ -133,8 +130,8 @@ app.PhotoSources = (function() {
      * @memberOf app.PhotoSources
      */
     processAll: function() {
-      _getSelectedSources();
-      for (const source of _sources) {
+      const sources = _getSelectedSources();
+      for (const source of sources) {
         source.process().catch(() => {});
       }
     },
@@ -146,8 +143,8 @@ app.PhotoSources = (function() {
      * @memberOf app.PhotoSources
      */
     processDaily: function() {
-      _getSelectedSources();
-      for (const source of _sources) {
+      const sources = _getSelectedSources();
+      for (const source of sources) {
         if (source.isDaily()) {
           source.process().catch(() => {});
         }

@@ -101,14 +101,6 @@
     }
 
     /**
-     * Get if we should update daily
-     * @returns {boolean} if true, update daily
-     */
-    static isDaily() {
-      return this._isDaily;
-    }
-
-    /**
      * Add a {@link app.PhotoSource.SourcePhoto} to an existing Array
      * @param {Array} photos - {@link app.PhotoSource.SourcePhoto} Array
      * @param {string} url - The url to the photo
@@ -154,7 +146,14 @@
      * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
      */
     fetchPhotos() {
-      return Promise.resolve([]);
+    }
+
+    /**
+     * Get if we should update daily
+     * @returns {boolean} if true, update daily
+     */
+    isDaily() {
+      return this._isDaily;
     }
 
     /**
@@ -172,9 +171,9 @@
           let items = Chrome.Storage.get(this._photosKey);
           // could be that items have not been retrieved yet
           items = items || [];
-          items.forEach((item) => {
+          for (const item of items) {
             photos = photos.concat(item.photos);
-          });
+          }
         } else {
           photos = Chrome.Storage.get(this._photosKey);
           // could be that items have not been retrieved yet
@@ -195,7 +194,7 @@
     _savePhotos(photos) {
       let ret = null;
       const keyBool = (this._useKey === 'useGoogle') ? null : this._useKey;
-      if (photos || photos.length) {
+      if (photos && photos.length) {
         const set = Chrome.Storage.safeSet(this._photosKey, photos, keyBool);
         if (!set) {
           ret = 'Exceeded storage capacity.';
