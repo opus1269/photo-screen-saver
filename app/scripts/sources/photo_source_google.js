@@ -164,7 +164,6 @@
      * @param {string} [userId='default'] - userId for non-authenticated request
      * @returns {Promise<Object>} Root object from Picasa call null if not found
      * @private
-     * @memberOf app.GooglePhotos
      */
     static _loadPicasaAlbum(albumId, userId = 'default') {
       const url = `${_URL_BASE}${userId}/albumid/${albumId}/${_ALBUM_QUERY}`;
@@ -188,7 +187,7 @@
     /**
      * Retrieve the users list of albums, including the photos in each
      * @param {boolean} interactive - true is user initiated call
-     * @returns {Promise<app.GooglePhotos.Album[]>} Array of albums
+     * @returns {Promise<app.GoogleSource.Album[]>} Array of albums
      */
     static loadAlbumList(interactive = false) {
       const url = `${_URL_BASE}default/${_ALBUMS_QUERY}`;
@@ -219,7 +218,7 @@
         // Collate the albums
         return Promise.all(promises);
       }).then((vals) => {
-        /** @type {app.GooglePhotos.Album[]} */
+        /** @type {app.GoogleSource.Album[]} */
         let albums = [];
         let ct = 0;
         const values = vals || [];
@@ -266,7 +265,7 @@
 
       // Collate the albums
       return Promise.all(promises).then((vals) => {
-        /** @type {app.GooglePhotos.SelectedAlbum[]} */
+        /** @type {app.GoogleSource.SelectedAlbum[]} */
         const albums = [];
         const values = vals || [];
         values.forEach((value) => {

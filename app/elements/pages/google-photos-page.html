@@ -222,7 +222,7 @@
 
     properties: {
       albums: {
-        /** @type {app.GooglePhotos.Album[]} */
+        /** @type {app.GoogleSource.Album[]} */
         type: Array,
         notify: true,
         value: [],
@@ -360,7 +360,7 @@
     /**
      * Event: Handle tap on checkbox for an album
      * @param {Event} event - tap event
-     * @param {app.GooglePhotos.Album} event.model.album - the album
+     * @param {app.GoogleSource.Album} event.model.album - the album
      * @private
      */
     _albumSelectChange: function(event) {
