@@ -166,7 +166,11 @@ app.SSViews = (function() {
      * @memberOf app.SSViews
      */
     getSelectedIndex: function() {
-      return _pages.selected;
+      if (_pages) {
+        return _pages.selected;
+      }
+      // noinspection UnnecessaryReturnStatementJS
+      return;
     },
 
     /**
@@ -185,7 +189,11 @@ app.SSViews = (function() {
      * @memberOf app.SSViews
      */
     isSelectedIndex: function(idx) {
-      return (idx === _pages.selected);
+      let ret = false;
+      if (_pages && (idx === _pages.selected)) {
+        ret = true;
+      }
+      return ret;
     },
 
     /**
