@@ -21,6 +21,30 @@
 
   ***
 
+* **How do I turn off the Windows screensaver?**
+
+  1. Right-click the empty space on your desktop and select **Personalize**.
+  2. It now opens up the Personalization settings. Click on **Lock screen**
+   in the left pane, then click the **Screen saver settings** link in the right pane.
+
+   If you’re running Windows 7, simply click on the Screen Saver link at
+   the bottom of the window.
+  3. In the Screen Saver Settings dialog, select **(none)** for the
+  screensaver and Uncheck the box to **On resume, display logon screen**.
+
+  ***
+
+* **How do I keep my screen from going black?**
+
+  1. Click on the extension icon to bring up the **Settings**.
+  2. Click on the **DISPLAY CONTROLS** tab.
+  3. Select the **Keep Awake** option.
+
+   You can also select a start and stop for the **Keep Awake** to control
+   when it is active. See the [Keep Awake](#keep-awake) section for more details.
+
+  ***
+
 * **Why do my photos look "squished" or "stretched"?**
 
   The display mode "Full" will change the aspect ratio of the photo
