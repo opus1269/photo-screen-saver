@@ -17,7 +17,7 @@
 * **How do I uninstall this?**
 
   Right click on the icon in the browser toolbar and select
-  "Remove From Chrome..."
+  **Remove From Chrome...**
 
   ***
 
@@ -47,7 +47,7 @@
 
 * **Why do my photos look "squished" or "stretched"?**
 
-  The display mode "Full" will change the aspect ratio of the photo
+  The display mode **Full** will change the aspect ratio of the photo
   to match the screen.  All other modes maintain the photo's aspect
   ratio.
 
@@ -66,7 +66,7 @@
 
   Chrome has a setting that can disable this. Go to Chrome Settings,
   click on advanced and scroll to the system area. Make sure
-  "Continue running background apps when Chrome is closed" is selected.
+  **Continue running background apps when Chrome is closed** is selected.
 
   ***
 
@@ -85,10 +85,10 @@
 
     Chrome only allows 4 pre-defined short-cut keys per extension.
     I needed to remove this one to add the "Interactive mode" feature.
-    You can define the key command manually. Go to "More tools" -> "Extensions,
-    scroll to the bottom and click on "Keyboard shortcuts".
+    You can define the key command manually. Go to **More tools** -> **Extensions**,
+    scroll to the bottom and click on **Keyboard shortcuts**.
     Find the Photo Screen Saver extension and enter the key combination
-    you want to use for "Display now". Actually press the combination
+    you want to use for **Display now**. Actually press the combination
     you want to use, don't try to spell it out.
 
     Notice that you can override any of the short-cuts and make them work
@@ -109,7 +109,7 @@
     The API that Google provides to interface with Google Photos does
     not fully support the new shared albums.  To convert an existing
     shared album to a format the screen saver supports,
-    select the album, click on 'Sharing Options' and unset the 'Share'
+    select the album, click on **Sharing Options** and unset the **Share**
     option.
 
     Also, the extension can only retrieve a maximum of 1000 albums.
@@ -140,9 +140,9 @@
 
 * **Why is the time label incorrect on my Chromebook?**
 
-  If you have this problem, go to "Settings",
-  select "Show Advanced Settings" and in the "Date and time" section
-  uncheck the "Set time zone automatically using your location".
+  If you have this problem, go to the Browsers **Settings**,
+  select **Show Advanced Settings** and in the **Date and time** section
+  uncheck the **Set time zone automatically using your location**.
   You will need to re-start for the change to take effect.
 
 ### Keep Awake
@@ -178,7 +178,6 @@
     [issue 714378](https://bugs.chromium.org/p/chromium/issues/detail?id=714378)
     on the Chromium bug tracker. You will need to sign in with your Google account
     to do this. Thanks.
-
 
 
   <br />
