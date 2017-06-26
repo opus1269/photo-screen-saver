@@ -233,8 +233,11 @@
   "setting_photog": {
     "message": "Show author for photos you own"
   },
-  "setting_photog_desc": {
-    "message": "Note: Always shows in Frame mode"
+  "setting_full_res": {
+    "message": "Use full resolution for photos you own"
+  },
+  "setting_full_res_desc": {
+    "message": "These files may be very large"
   },
   "setting_location": {
     "message": "Show photo location, if available"

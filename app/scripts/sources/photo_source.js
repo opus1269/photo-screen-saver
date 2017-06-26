@@ -68,7 +68,7 @@
               true, true, true);
         case app.PhotoSources.UseKey.PHOTOS_GOOGLE:
           return new app.GoogleSource(useKey, 'googlePhotosSelections',
-              'Google User', true, true, false);
+              'Google User', true, false, false);
         case app.PhotoSources.UseKey.CHROMECAST:
           return new app.CCSource(useKey, 'ccImages', 'Google',
               false, false, null);

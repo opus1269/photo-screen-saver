@@ -54,14 +54,14 @@
       '&fields=entry(gphoto:albumType,gphoto:id)&v2&alt=json';
 
   /**
-   * Query an album
+   * Query an album for its photos
    * @type {string}
    * @const
    * @default
    * @private
    * @memberOf app.GoogleSource
    */
-  const _ALBUM_QUERY = '?imgmax=1600&thumbsize=72' +
+  const _ALBUM_QUERY = '&thumbsize=72' +
       '&fields=title,gphoto:id,entry(media:group/media:content,' +
       'media:group/media:credit,media:group/media:thumbnail,georss:where)' +
       '&v=2&alt=json';
@@ -71,12 +71,12 @@
    * @type {string}
    * @const
    * @default
-   * @private'
+   * @private
    * @memberOf app.GoogleSource
    */
-  const _PHOTOS_QUERY = '?imgmax=1600' +
+  const _PHOTOS_QUERY = '&max-results=2000&visibility=all&kind=photo' +
       '&fields=title,gphoto:id,entry(media:group/media:content,' +
-      'media:group/media:credit,media:group/media:thumbnail,georss:where)' +
+      'media:group/media:credit,georss:where)' +
       '&v=2&alt=json';
 
   /**
@@ -112,6 +112,18 @@
         }
       }
       return true;
+    }
+
+    /** Get max image size to retrieve
+     * @returns {string} image size description
+     * @private
+     */
+    static _getMaxImageSize() {
+      let ret = '1600';
+      if (Chrome.Storage.getBool('fullResGoogle')) {
+        ret = 'd';
+      }
+      return ret;
     }
 
     /** Determine if a Picasa entry has Geo position
@@ -178,8 +190,10 @@
      * @returns {Promise<Object>} Root object from Picasa call null if not found
      * @private
      */
-    static _loadPicasaAlbum(albumId, userId = 'default') {
-      const url = `${_URL_BASE}${userId}/albumid/${albumId}/${_ALBUM_QUERY}`;
+    static _loadAlbum(albumId, userId = 'default') {
+      const imageMax = app.GoogleSource._getMaxImageSize();
+      const queryParams = `?imgmax=${imageMax}${_ALBUM_QUERY}`;
+      const url = `${_URL_BASE}${userId}/albumid/${albumId}/${queryParams}`;
       if (userId === 'default') {
         const conf = Chrome.JSONUtils.shallowCopy(Chrome.Http.conf);
         conf.isAuth = true;
@@ -195,6 +209,20 @@
       } else {
         return Chrome.Http.doGet(url);
       }
+    }
+
+    /**
+     * Retrieve a users Google Photos
+     * @returns {Promise<Object>} Root object from Picasa call null if not found
+     * @private
+     */
+    static _loadPhotos() {
+      const imageMax = app.GoogleSource._getMaxImageSize();
+      const queryParams = `?imgmax=${imageMax}${_PHOTOS_QUERY}`;
+      const url = `${_URL_BASE}default/${queryParams}`;
+      const conf = Chrome.JSONUtils.shallowCopy(Chrome.Http.conf);
+      conf.isAuth = true;
+      return Chrome.Http.doGet(url, conf);
     }
 
     /**
@@ -224,7 +252,7 @@
           if (!entry.gphoto$albumType) {
             // skip special albums (e.g. Google+ posts, backups)
             const albumId = entry.gphoto$id.$t;
-            promises.push(app.GoogleSource._loadPicasaAlbum(albumId));
+            promises.push(app.GoogleSource._loadAlbum(albumId));
           }
         }
 
@@ -273,7 +301,7 @@
       const promises = [];
       const albums = vals || [];
       for (const album of albums) {
-        promises.push(app.GoogleSource._loadPicasaAlbum(album.id));
+        promises.push(app.GoogleSource._loadAlbum(album.id));
       }
 
       // Collate the albums
@@ -298,6 +326,16 @@
     }
 
     /**
+     * Fetch the photos for the current user
+     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     */
+    static _fetchPhotos() {
+      return app.GoogleSource._loadPhotos().then((root) => {
+        return app.GoogleSource._processPhotos(root);
+      });
+    }
+
+    /**
      * Fetch the photos for this source
      * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
      */
@@ -307,8 +345,7 @@
         return app.GoogleSource._fetchAlbumPhotos();
       } else {
         // photos
-        // todo fetch photos
-        return Promise.resolve([]);
+        return app.GoogleSource._fetchPhotos();
       }
     }
   };

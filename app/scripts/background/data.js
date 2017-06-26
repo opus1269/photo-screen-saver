@@ -71,10 +71,11 @@ app.Data = (function() {
    * @property {boolean} useChromecast - use this photo source
    * @property {boolean} useAuthors - use this photo source
    * @property {boolean} useSpaceReddit - use this photo source
+   * @property {boolean} fullResGoogle - true for actual size Google photos
+   * @property {boolean} isAlbumMode - true if Google Photos album mode
    * @property {boolean} useGoogle - use this photo source
    * @property {boolean} useGoogleAlbums - use this photo source
    * @property {boolean} useGooglePhotos - use this photo source
-   * @property {boolean} isAlbumMode - true if Google Photos album mode
    * @property {Array} albumSelections - Users Google Photos albums to use
    * @property {Array} googlePhotosSelections - Users Google Photos to use
    */
@@ -119,10 +120,11 @@ app.Data = (function() {
     'useInterestingFlickr': false,
     'useChromecast': true,
     'useAuthors': false,
+    'isAlbumMode': true,
+    'fullResGoogle': false,
     'useGoogle': true,
     'useGoogleAlbums': true,
     'useGooglePhotos': false,
-    'isAlbumMode': true,
     'albumSelections': [],
     'googlePhotoSelections': [],
   };

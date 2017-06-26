@@ -233,8 +233,11 @@
   "setting_photog": {
     "message": "Toon de auteur voor de foto's die u bezit"
   },
-  "setting_photog_desc": {
-    "message": "Opmerking: toon altijd in frame-modus"
+  "setting_full_res": {
+    "message": "Gebruik volledige resolutie voor foto's die u bezit"
+  },
+  "setting_full_res_desc": {
+    "message": "Deze bestanden kunnen zeer groot zijn"
   },
   "setting_location": {
     "message": "Toon foto locatie, indien beschikbaar"

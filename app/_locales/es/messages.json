@@ -233,8 +233,11 @@
   "setting_photog": {
     "message": "Mostrar el nombre de las fotos que posee"
   },
-  "setting_photog_desc": {
-    "message": "Nota: Siempre se muestra en modo Frame"
+  "setting_full_res": {
+    "message": "Utilice la resolución completa para las fotos que posee"
+  },
+  "setting_full_res_desc": {
+    "message": "Estos archivos pueden ser muy grandes"
   },
   "setting_location": {
     "message": "Mostrar ubicación de la foto, si está disponible"
