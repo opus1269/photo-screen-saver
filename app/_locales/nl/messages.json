@@ -182,6 +182,12 @@
   "tooltip_google_toggle": {
     "message": "Schakel gebruik van albums in/uit"
   },
+  "tooltip_google_mode_albums": {
+    "message": "Overschakelen naar de fotomodus"
+  },
+  "tooltip_google_mode_photos": {
+    "message": "Overschakelen naar de albummodus"
+  },
   "setting_background": {
     "message": "Run Chrome op de achtergrond"
   },
@@ -355,6 +361,9 @@
   },
   "google_title": {
     "message": "Google Fotoalbums"
+  },
+  "google_title_photos": {
+    "message": "Google Fotos"
   },
   "google_shared_albums_note": {
     "message": "Opmerking: Gedeelde albums zijn misschien niet beschikbaar. Zie de Veelgestelde Vragen voor meer informatie."

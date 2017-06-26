@@ -39,7 +39,6 @@
     <style include="iron-flex iron-flex-alignment"></style>
     <style include="shared-styles"></style>
     <style>
-
       :host {
         display: block;
         position: relative;
@@ -109,13 +108,20 @@
       .list-item[disabled] .setting-label {
         color: var(--disabled-text-color);
       }
-
     </style>
 
     <paper-material elevation="1" class="page-container">
       <paper-material elevation="1">
         <paper-toolbar class="page-toolbar">
-          <div class="flex">{{localize('google_title')}}</div>
+          <div class="flex">[[_computeTitle(isAlbumMode)]]</div>
+          <paper-icon-button
+              id="mode"
+              icon="[[_computeModeIcon(isAlbumMode)]]"
+              on-tap="_toggleMode"
+              disabled$="[[!useGoogle]]"></paper-icon-button>
+          <paper-tooltip for="mode" position="left" offset="0">
+            [[_computeModeTooltip(isAlbumMode)]]
+          </paper-tooltip>
           <paper-icon-button
               id="select"
               icon="myicons:check-box"
@@ -189,7 +195,7 @@
                                   disabled$="[[!useGoogle]]"></paper-checkbox>
                   <paper-item-body class="flex" two-line>
                     <div class="setting-label">{{album.name}}</div>
-                    <div class="setting-label" secondary>{{_computePhotoLabel(album.ct)}}</div>
+                    <div class="setting-label" secondary>[[_computePhotoLabel(album.ct)]]</div>
                     <paper-ripple center></paper-ripple>
                   </paper-item-body>
                   <iron-image src="[[album.thumb]]" sizing="cover" preload disabled$="[[!useGoogle]]"></iron-image>
@@ -221,6 +227,12 @@
     ],
 
     properties: {
+      isAlbumMode: {
+        type: Boolean,
+        value: true,
+        notify: true,
+      },
+
       albums: {
         /** @type {app.GoogleSource.Album[]} */
         type: Array,
@@ -302,6 +314,7 @@
     /**
      * Try to get permissions, if not already authorized - may block
      * @returns {Promise<boolean>} true if we have permissions
+     * @private
      */
     _checkPermissions: function() {
       if (app.Permissions.isAllowed(app.Permissions.PICASA)) {
@@ -311,6 +324,14 @@
           return Promise.resolve(granted);
         });
       }
+    },
+
+    /**
+     * Event: Handle tap on mode icon
+     * @private
+     */
+    _toggleMode: function() {
+      this.set('isAlbumMode', !this.isAlbumMode);
     },
 
     /**
@@ -395,6 +416,7 @@
 
     /**
      * Event: checked state changed on main toggle
+     * @private
      */
     _onUseGoogleChange: function() {
       Chrome.GA.event(Chrome.GA.EVENT.TOGGLE,
@@ -452,6 +474,54 @@
       let ret = true;
       if (!waitForLoad && (permPicasa === 'allowed')) {
         ret = false;
+      }
+      return ret;
+    },
+
+    /**
+     * Computed binding: Calculate page title
+     * @param {boolean} isAlbumMode - true if album mode
+     * @returns {string} page title
+     * @private
+     */
+    _computeTitle: function(isAlbumMode) {
+      let ret = '';
+      if (isAlbumMode) {
+        ret = Chrome.Locale.localize('google_title');
+      } else {
+        ret = Chrome.Locale.localize('google_title_photos');
+      }
+      return ret;
+    },
+
+    /**
+     * Computed binding: Calculate mode icon
+     * @param {boolean} isAlbumMode - true if album mode
+     * @returns {string} an icon
+     * @private
+     */
+    _computeModeIcon: function(isAlbumMode) {
+      let ret = '';
+      if (isAlbumMode) {
+        ret = 'myicons:photo-album';
+      } else {
+        ret = 'myicons:photo';
+      }
+      return ret;
+    },
+
+    /**
+     * Computed binding: Calculate mode tooltip
+     * @param {boolean} isAlbumMode - true if album mode
+     * @returns {string} page title
+     * @private
+     */
+    _computeModeTooltip: function(isAlbumMode) {
+      let ret = '';
+      if (isAlbumMode) {
+        ret = Chrome.Locale.localize('tooltip_google_mode_albums');
+      } else {
+        ret = Chrome.Locale.localize('tooltip_google_mode_photos');
       }
       return ret;
     },

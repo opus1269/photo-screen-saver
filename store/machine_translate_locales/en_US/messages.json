@@ -182,6 +182,12 @@
   "tooltip_google_toggle": {
     "message": "Enable/disable use of albums"
   },
+  "tooltip_google_mode_albums": {
+    "message": "Switch to photo mode"
+  },
+  "tooltip_google_mode_photos": {
+    "message": "Switch to album mode"
+  },
   "setting_background": {
     "message": "Run Chrome in background"
   },
@@ -355,6 +361,9 @@
   },
   "google_title": {
     "message": "Google Photos Albums"
+  },
+  "google_title_photos": {
+    "message": "Google Photos"
   },
   "google_shared_albums_note": {
     "message": "Note: Shared albums may not be available.  See the FAQ for more info."

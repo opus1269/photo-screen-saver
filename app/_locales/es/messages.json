@@ -182,6 +182,12 @@
   "tooltip_google_toggle": {
     "message": "Habilitar / Deshabilitar el uso de los álbumes"
   },
+  "tooltip_google_mode_albums": {
+    "message": "Cambiar al modo de foto"
+  },
+  "tooltip_google_mode_photos": {
+    "message": "Cambiar al modo de álbum"
+  },
   "setting_background": {
     "message": "Ejecutar Chrome en segundo plano"
   },
@@ -355,6 +361,9 @@
   },
   "google_title": {
     "message": "Álbumes de Fotos de Google"
+  },
+  "google_title_photos": {
+    "message": "Fotos de Google"
   },
   "google_shared_albums_note": {
     "message": "Nota: Los álbumes compartidos pueden no estar disponibles. Consulte las preguntas frecuentes para obtener más información."
