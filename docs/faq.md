@@ -24,13 +24,8 @@
 * **How do I turn off the Windows screensaver?**
 
   1. Right-click the empty space on your desktop and select **Personalize**.
-  2. It now opens up the Personalization settings. Click on **Lock screen**
-   in the left pane, then click the **Screen saver settings** link in the right pane.
-
-   If you’re running Windows 7, simply click on the Screen Saver link at
-   the bottom of the window.
-  3. In the Screen Saver Settings dialog, select **(none)** for the
-  screensaver and Uncheck the box to **On resume, display logon screen**.
+  2. It now opens up the Personalization settings. Click on **Lock screen** in the left pane, then click the **Screen saver settings** link in the right pane. If you’re running Windows 7, simply click on the Screen Saver link at the bottom of the window.
+  3. In the Screen Saver Settings dialog, select **(none)** for the screensaver and Uncheck the box to **On resume, display logon screen**.
 
   ***
 
@@ -55,10 +50,10 @@
 
 * **What do the labels on the icon mean?**
 
-  - No label: Screensaver is enabled and will be displayed when the computer is idle.
-  - OFF: Screensaver is disabled.
-  - SLP: The time is in the inactive range of the scheduler. The screensaver will not display.
-  - PWR: The scheduler will process the Keep Awake settings, but the screensaver will never be displayed.
+  - No label: The screensaver is enabled and will be displayed when the computer is idle.
+  - **OFF**: The screensaver is disabled. It will not be displayed.
+  - **SLP**: The time is in the inactive range of the scheduler. The screensaver will not be displayed.
+  - **PWR**: The scheduler will process the Keep Awake settings, but the screensaver will not be displayed.
 
   ***
 
