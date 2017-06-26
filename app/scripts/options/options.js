@@ -188,7 +188,7 @@
       t.gPhotosPage =
           new app.GooglePhotosPage('gPhotosPage');
       Polymer.dom(t.$.googlePhotosInsertion).appendChild(t.gPhotosPage);
-    } else {
+    } else if (Chrome.Storage.getBool('isAlbumMode')) {
       t.gPhotosPage.loadAlbumList();
     }
     t.route = t.pages[index].route;

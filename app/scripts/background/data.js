@@ -25,7 +25,7 @@ app.Data = (function() {
    * @private
    * @memberOf app.Data
    */
-  const _DATA_VERSION = 14;
+  const _DATA_VERSION = 15;
 
   /**
    * A number and associated units
@@ -70,9 +70,11 @@ app.Data = (function() {
    * @property {boolean} useInterestingFlickr - use this photo source
    * @property {boolean} useChromecast - use this photo source
    * @property {boolean} useAuthors - use this photo source
-   * @property {boolean} useGoogle - use this photo source
    * @property {boolean} useSpaceReddit - use this photo source
-   * @property {Array} albumSelections - Users Google Photos to use
+   * @property {boolean} useGoogle - use this photo source
+   * @property {boolean} isAlbumMode - true if Google Photos album mode
+   * @property {Array} albumSelections - Users Google Photos albums to use
+   * @property {Array} googlePhotosSelections - Users Google Photos to use
    */
 
   /**
@@ -116,7 +118,9 @@ app.Data = (function() {
     'useChromecast': true,
     'useAuthors': false,
     'useGoogle': true,
+    'isAlbumMode': true,
     'albumSelections': [],
+    'googlePhotoSelections': [],
   };
 
   /**

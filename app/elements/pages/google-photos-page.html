@@ -126,7 +126,7 @@
               id="select"
               icon="myicons:check-box"
               on-tap="_selectAllTapped"
-              disabled$="[[!useGoogle]]"></paper-icon-button>
+              disabled$="[[_computeAlbumIconDisabled(useGoogle, isAlbumMode)]]"></paper-icon-button>
           <paper-tooltip for="select" position="left" offset="0">
             {{localize('tooltip_select')}}
           </paper-tooltip>
@@ -134,7 +134,7 @@
               id="deselect"
               icon="myicons:check-box-outline-blank"
               on-tap="_deselectAllTapped"
-              disabled$="[[!useGoogle]]"></paper-icon-button>
+              disabled$="[[_computeAlbumIconDisabled(useGoogle, isAlbumMode)]]"></paper-icon-button>
           <paper-tooltip for="deselect" position="left" offset="0">
             {{localize('tooltip_deselect')}}
           </paper-tooltip>
@@ -142,7 +142,7 @@
               id="refresh"
               icon="myicons:refresh"
               on-tap="_refreshTapped"
-              disabled$="[[!useGoogle]]"></paper-icon-button>
+              disabled$="[[_computeAlbumIconDisabled(useGoogle, isAlbumMode)]]"></paper-icon-button>
           <paper-tooltip for="refresh" position="left" offset="0">
             {{localize('tooltip_refresh')}}
           </paper-tooltip>
@@ -182,31 +182,36 @@
           </paper-item>
         </div>
 
-        <div class="list-container" hidden$="[[isHidden]]">
-          <paper-item class="list-note">
-            {{localize('google_shared_albums_note')}}
-          </paper-item>
+        <template is="dom-if" if="{{isAlbumMode}}">
+          <div class="list-container" hidden$="[[isHidden]]">
+            <paper-item class="list-note">
+              {{localize('google_shared_albums_note')}}
+            </paper-item>
 
-          <template is="dom-repeat" id="t" items="{{albums}}" as="album">
-            <div class="list-item" id="[[album.uid]]" disabled$="[[!useGoogle]]">
-              <iron-label>
-                <paper-item class="center horizontal layout" tabindex="-1">
-                  <paper-checkbox iron-label-target checked="{{album.checked}}" on-change="_albumSelectChange"
-                                  disabled$="[[!useGoogle]]"></paper-checkbox>
-                  <paper-item-body class="flex" two-line>
-                    <div class="setting-label">{{album.name}}</div>
-                    <div class="setting-label" secondary>[[_computePhotoLabel(album.ct)]]</div>
-                    <paper-ripple center></paper-ripple>
-                  </paper-item-body>
-                  <iron-image src="[[album.thumb]]" sizing="cover" preload disabled$="[[!useGoogle]]"></iron-image>
-                </paper-item>
-              </iron-label>
-            </div>
-          </template>
-        </div>
+            <template is="dom-repeat" id="t" items="{{albums}}" as="album">
+              <div class="list-item" id="[[album.uid]]" disabled$="[[!useGoogle]]">
+                <iron-label>
+                  <paper-item class="center horizontal layout" tabindex="-1">
+                    <paper-checkbox iron-label-target checked="{{album.checked}}" on-change="_albumSelectChange"
+                                    disabled$="[[!useGoogle]]"></paper-checkbox>
+                    <paper-item-body class="flex" two-line>
+                      <div class="setting-label">{{album.name}}</div>
+                      <div class="setting-label" secondary>[[_computePhotoLabel(album.ct)]]</div>
+                      <paper-ripple center></paper-ripple>
+                    </paper-item-body>
+                    <iron-image src="[[album.thumb]]" sizing="cover" preload disabled$="[[!useGoogle]]"></iron-image>
+                  </paper-item>
+                </iron-label>
+              </div>
+            </template>
+          </div>
+        </template>
       </div>
       <iron-localstorage name="permPicasa" value="{{permPicasa}}"
                          on-iron-localstorage-load-empty="_initPermPicasa">
+      </iron-localstorage>
+      <iron-localstorage name="isAlbumMode" value="{{isAlbumMode}}"
+                         on-iron-localstorage-load-empty="_initIsAlbumMode">
       </iron-localstorage>
       <content></content>
     </paper-material>
@@ -270,7 +275,9 @@
     },
 
     ready: function() {
-      this.loadAlbumList();
+      if (Chrome.Storage.getBool('isAlbumMode')) {
+        this.loadAlbumList();
+      }
     },
 
     /**
@@ -332,6 +339,9 @@
      */
     _toggleMode: function() {
       this.set('isAlbumMode', !this.isAlbumMode);
+      if (this.isAlbumMode) {
+        this.loadAlbumList();
+      }
     },
 
     /**
@@ -527,6 +537,17 @@
     },
 
     /**
+     * Computed binding: Calculate mode tooltip
+     * @param {boolean} useGoogle - true if using Google Photos
+     * @param {boolean} isAlbumMode - true if album mode
+     * @returns {boolean} true if album icons should be disabled
+     * @private
+     */
+    _computeAlbumIconDisabled(useGoogle, isAlbumMode) {
+      return !(useGoogle && isAlbumMode);
+    },
+
+    /**
      * Computed binding: Set photo count label on an album
      * @param {int} count - number of photos in album
      * @returns {string} i18n label
@@ -546,6 +567,14 @@
      */
     _initPermPicasa: function() {
       this.set('permPicasa', 'notSet');
+    },
+
+    /**
+     * Initialize value if it is not in localStorage
+     * @private
+     */
+    _initIsAlbumMode: function() {
+      this.set('isAlbumMode', true);
     },
   });
 </script>
