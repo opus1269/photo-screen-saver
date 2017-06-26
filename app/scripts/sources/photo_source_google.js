@@ -67,6 +67,19 @@
       '&v=2&alt=json';
 
   /**
+   * Query all photos
+   * @type {string}
+   * @const
+   * @default
+   * @private'
+   * @memberOf app.GoogleSource
+   */
+  const _PHOTOS_QUERY = '?imgmax=1600' +
+      '&fields=title,gphoto:id,entry(media:group/media:content,' +
+      'media:group/media:credit,media:group/media:thumbnail,georss:where)' +
+      '&v=2&alt=json';
+
+  /**
    * A potential source of photos from Google
    * @alias app.GoogleSource
    */
@@ -250,10 +263,10 @@
     }
 
     /**
-     * Fetch the photos for this source
+     * Fetch the photos for the selected albums
      * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
      */
-    fetchPhotos() {
+    static _fetchAlbumPhotos() {
       let vals = Chrome.Storage.get('albumSelections');
 
       // series of API calls to get each album
@@ -282,6 +295,21 @@
         }
         return Promise.resolve(albums);
       });
+    }
+
+    /**
+     * Fetch the photos for this source
+     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     */
+    fetchPhotos() {
+      if (this._loadArg) {
+        // albums
+        return app.GoogleSource._fetchAlbumPhotos();
+      } else {
+        // photos
+        // todo fetch photos
+        return Promise.resolve([]);
+      }
     }
   };
 })();

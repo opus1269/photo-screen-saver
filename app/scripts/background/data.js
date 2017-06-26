@@ -72,6 +72,8 @@ app.Data = (function() {
    * @property {boolean} useAuthors - use this photo source
    * @property {boolean} useSpaceReddit - use this photo source
    * @property {boolean} useGoogle - use this photo source
+   * @property {boolean} useGoogleAlbums - use this photo source
+   * @property {boolean} useGooglePhotos - use this photo source
    * @property {boolean} isAlbumMode - true if Google Photos album mode
    * @property {Array} albumSelections - Users Google Photos albums to use
    * @property {Array} googlePhotosSelections - Users Google Photos to use
@@ -118,6 +120,8 @@ app.Data = (function() {
     'useChromecast': true,
     'useAuthors': false,
     'useGoogle': true,
+    'useGoogleAlbums': true,
+    'useGooglePhotos': false,
     'isAlbumMode': true,
     'albumSelections': [],
     'googlePhotoSelections': [],
@@ -299,7 +303,8 @@ app.Data = (function() {
      */
     restoreDefaults: function() {
       Object.keys(_DEF_VALUES).forEach(function(key) {
-        if ((key !== 'useGoogle') &&
+        if (!key.includes('useGoogle') &&
+            (key !== 'googlePhotosSelections') &&
             (key !== 'albumSelections')) {
           // skip Google photos settings
           Chrome.Storage.set(key, _DEF_VALUES[key]);

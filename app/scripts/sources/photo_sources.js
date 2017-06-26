@@ -23,7 +23,8 @@ app.PhotoSources = (function() {
    * @memberOf app.PhotoSources
    */
   const UseKey = {
-    GOOGLE: 'useGoogle',
+    ALBUMS_GOOGLE: 'useGoogleAlbums',
+    PHOTOS_GOOGLE: 'useGooglePhotos',
     CHROMECAST: 'useChromecast',
     ED_500: 'useEditors500px',
     POP_500: 'usePopular500px',

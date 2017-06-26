@@ -379,7 +379,7 @@
     _setPhotoSourceChecked: function(useName, state) {
       const query = `[name=${useName}]`;
       const el = document.querySelector(query);
-      if (el && (useName !== 'useGoogle')) {
+      if (el && !useName.includes('useGoogle')) {
         el.setChecked(state);
       }
     },
