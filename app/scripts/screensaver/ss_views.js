@@ -246,7 +246,12 @@ app.SSViews = (function() {
           // don't replace current animation pair
           continue;
         }
-        view.setPhoto(photo);
+        if (photo) {
+          view.setPhoto(photo);
+        } else {
+          // all bad
+          break;
+        }
       }
       app.SSHistory.clear();
     },
