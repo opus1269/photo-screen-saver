@@ -50,7 +50,7 @@
    * @private
    * @memberOf app.GoogleSource
    */
-  const _ALBUMS_QUERY = '?max-results=2000&visibility=all&kind=album' +
+  const _ALBUMS_QUERY = '?max-results=2000&access=all&kind=album' +
       '&fields=entry(gphoto:albumType,gphoto:id)&v2&alt=json';
 
   /**
@@ -64,7 +64,7 @@
   const _ALBUM_QUERY = '&thumbsize=72' +
       '&fields=title,gphoto:id,entry(media:group/media:content,' +
       'media:group/media:credit,media:group/media:thumbnail,georss:where)' +
-      '&v=2&alt=json';
+      '&v2&alt=json';
 
   /**
    * Query all photos
@@ -74,10 +74,11 @@
    * @private
    * @memberOf app.GoogleSource
    */
-  const _PHOTOS_QUERY = '&max-results=2000&visibility=all&kind=photo' +
-      '&fields=title,gphoto:id,entry(media:group/media:content,' +
-      'media:group/media:credit,georss:where)' +
-      '&v=2&alt=json';
+  const _PHOTOS_QUERY = '&v2&alt=json';
+  // todo const _PHOTOS_QUERY = '&access=all&kind=photo' +
+  //     '&fields=title,gphoto:id,entry(media:group/media:content,' +
+  //     'media:group/media:credit,georss:where)' +
+  //     '&v=3&alt=json';
 
   /**
    * A potential source of photos from Google
@@ -213,13 +214,17 @@
 
     /**
      * Retrieve a users Google Photos
+     * @param {int} startIdx - photo to start at
+     * @param {int} maxRes - max results to return
      * @returns {Promise<Object>} Root object from Picasa call null if not found
      * @private
      */
-    static _loadPhotos() {
+    static _loadPhotos(startIdx, maxRes) {
       const imageMax = app.GoogleSource._getMaxImageSize();
-      const queryParams = `?imgmax=${imageMax}${_PHOTOS_QUERY}`;
-      const url = `${_URL_BASE}default/${queryParams}`;
+      const sizeQuery = `?access=all&kind=photo&imgmax=${imageMax}`;
+      const resQuery = `&max-results=${maxRes}&start-index=${startIdx}`;
+      const queryParams = `${sizeQuery}${resQuery}${_PHOTOS_QUERY}`;
+      const url = `${_URL_BASE}default${queryParams}`;
       const conf = Chrome.JSONUtils.shallowCopy(Chrome.Http.conf);
       conf.isAuth = true;
       return Chrome.Http.doGet(url, conf);
@@ -330,8 +335,18 @@
      * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
      */
     static _fetchPhotos() {
-      return app.GoogleSource._loadPhotos().then((root) => {
-        return app.GoogleSource._processPhotos(root);
+      let photos = [];
+      let startIdx = 1;
+      const maxPhotos = 200;
+      return app.GoogleSource._loadPhotos(startIdx, maxPhotos).then((root) => {
+        const values = app.GoogleSource._processPhotos(root);
+        photos = photos.concat(values);
+        startIdx += photos.length;
+        return app.GoogleSource._loadPhotos(startIdx, maxPhotos)
+            .then((root) => {
+              const values = app.GoogleSource._processPhotos(root);
+              return photos = photos.concat(values);
+            });
       });
     }
 
