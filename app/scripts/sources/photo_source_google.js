@@ -51,7 +51,7 @@
    * @memberOf app.GoogleSource
    */
   const _ALBUMS_QUERY = '?max-results=2000&access=all&kind=album' +
-      '&fields=entry(gphoto:albumType,gphoto:id)&v2&alt=json';
+      '&fields=entry(gphoto:albumType,gphoto:id)&v=3&alt=json';
 
   /**
    * Query an album for its photos
@@ -64,7 +64,7 @@
   const _ALBUM_QUERY = '&thumbsize=72' +
       '&fields=title,gphoto:id,entry(media:group/media:content,' +
       'media:group/media:credit,media:group/media:thumbnail,georss:where)' +
-      '&v2&alt=json';
+      '&v=3&alt=json';
 
   /**
    * Query all photos
@@ -74,7 +74,7 @@
    * @private
    * @memberOf app.GoogleSource
    */
-  const _PHOTOS_QUERY = '&v2&alt=json';
+  const _PHOTOS_QUERY = '&v=3&alt=json';
   // todo const _PHOTOS_QUERY = '&access=all&kind=photo' +
   //     '&fields=title,gphoto:id,entry(media:group/media:content,' +
   //     'media:group/media:credit,georss:where)' +
@@ -222,7 +222,7 @@
     static _loadPhotos(startIdx, maxRes) {
       const imageMax = app.GoogleSource._getMaxImageSize();
       const sizeQuery = `?access=all&kind=photo&imgmax=${imageMax}`;
-      const resQuery = `&max-results=${maxRes}&start-index=${startIdx}`;
+      const resQuery = `&start-index=${startIdx}&max-results=${maxRes}`;
       const queryParams = `${sizeQuery}${resQuery}${_PHOTOS_QUERY}`;
       const url = `${_URL_BASE}default${queryParams}`;
       const conf = Chrome.JSONUtils.shallowCopy(Chrome.Http.conf);
@@ -337,7 +337,7 @@
     static _fetchPhotos() {
       let photos = [];
       let startIdx = 1;
-      const maxPhotos = 200;
+      const maxPhotos = 1000;
       return app.GoogleSource._loadPhotos(startIdx, maxPhotos).then((root) => {
         const values = app.GoogleSource._processPhotos(root);
         photos = photos.concat(values);
