@@ -347,11 +347,13 @@ app.Data = (function() {
         }
       } else {
         // individual change
-        if (app.PhotoSources.isUseKey(key)) {
-          app.PhotoSources.process(key).catch((err) => {
+        if (app.PhotoSources.isUseKey(key) || (key === 'fullResGoogle')) {
+          // photo source change
+          const useKey = (key === 'fullResGoogle') ? 'useGoogleAlbums' : key; 
+          app.PhotoSources.process(useKey).catch((err) => {
             // send message on processing error
             const msg = app.Msg.PHOTO_SOURCE_FAILED;
-            msg.key = key;
+            msg.key = useKey;
             msg.error = err.message;
             return Chrome.Msg.send(msg);
           }).catch(() => {});
