@@ -76,8 +76,6 @@ app.Data = (function() {
    * @property {boolean} useGoogle - use this photo source
    * @property {boolean} useGoogleAlbums - use this photo source
    * @property {boolean} useGooglePhotos - use this photo source
-   * @property {Array} albumSelections - Users Google Photos albums to use
-   * @property {Array} googlePhotosSelections - Users Google Photos to use
    */
 
   /**
@@ -90,6 +88,7 @@ app.Data = (function() {
   const _DEF_VALUES = {
     'version': _DATA_VERSION,
     'enabled': true,
+    'isAlbumMode': true,
     'permPicasa': 'notSet', // enum: notSet allowed denied
     'permBackground': 'notSet', // enum: notSet allowed denied
     'allowBackground': false,
@@ -102,6 +101,7 @@ app.Data = (function() {
     'interactive': false,
     'showTime': 2, // 24 hr format
     'largeTime': false,
+    'fullResGoogle': false,
     'showPhotog': true,
     'showLocation': true,
     'background': 'background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)',
@@ -120,13 +120,9 @@ app.Data = (function() {
     'useInterestingFlickr': false,
     'useChromecast': true,
     'useAuthors': false,
-    'isAlbumMode': true,
-    'fullResGoogle': false,
     'useGoogle': true,
     'useGoogleAlbums': true,
     'useGooglePhotos': false,
-    'albumSelections': [],
-    'googlePhotoSelections': [],
   };
 
   /**

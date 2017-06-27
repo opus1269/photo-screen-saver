@@ -117,7 +117,7 @@
           <paper-icon-button
               id="mode"
               icon="[[_computeModeIcon(isAlbumMode)]]"
-              on-tap="_toggleMode"
+              on-tap="_onModeTapped"
               disabled$="[[!useGoogle]]"></paper-icon-button>
           <paper-tooltip for="mode" position="left" offset="0">
             [[_computeModeTooltip(isAlbumMode)]]
@@ -125,7 +125,7 @@
           <paper-icon-button
               id="select"
               icon="myicons:check-box"
-              on-tap="_selectAllTapped"
+              on-tap="_onSelectAllTapped"
               disabled$="[[_computeAlbumIconDisabled(useGoogle, isAlbumMode)]]"></paper-icon-button>
           <paper-tooltip for="select" position="left" offset="0">
             {{localize('tooltip_select')}}
@@ -133,7 +133,7 @@
           <paper-icon-button
               id="deselect"
               icon="myicons:check-box-outline-blank"
-              on-tap="_deselectAllTapped"
+              on-tap="_onDeselectAllTapped"
               disabled$="[[_computeAlbumIconDisabled(useGoogle, isAlbumMode)]]"></paper-icon-button>
           <paper-tooltip for="deselect" position="left" offset="0">
             {{localize('tooltip_deselect')}}
@@ -141,14 +141,14 @@
           <paper-icon-button
               id="refresh"
               icon="myicons:refresh"
-              on-tap="_refreshTapped"
+              on-tap="_onRefreshTapped"
               disabled$="[[_computeAlbumIconDisabled(useGoogle, isAlbumMode)]]"></paper-icon-button>
           <paper-tooltip for="refresh" position="left" offset="0">
             {{localize('tooltip_refresh')}}
           </paper-tooltip>
           <paper-toggle-button
               id="googlePhotosToggle"
-              on-change="_onUseGoogleChange"
+              on-change="_onUseGoogleChanged"
               checked="{{useGoogle}}"></paper-toggle-button>
           <paper-tooltip for="googlePhotosToggle" position="left" offset="0">
             {{localize('tooltip_google_toggle')}}
@@ -193,7 +193,7 @@
               <div class="list-item" id="[[album.uid]]" disabled$="[[!useGoogle]]">
                 <iron-label>
                   <paper-item class="center horizontal layout" tabindex="-1">
-                    <paper-checkbox iron-label-target checked="{{album.checked}}" on-change="_albumSelectChange"
+                    <paper-checkbox iron-label-target checked="{{album.checked}}" on-change="_onAlbumSelectChanged"
                                     disabled$="[[!useGoogle]]"></paper-checkbox>
                     <paper-item-body class="flex" two-line>
                       <div class="setting-label">{{album.name}}</div>
@@ -379,11 +379,14 @@
      * Event: Handle tap on mode icon
      * @private
      */
-    _toggleMode: function() {
+    _onModeTapped: function() {
       this.set('isAlbumMode', !this.isAlbumMode);
       this._setUseKeys(this.$.googlePhotosToggle.checked, this.isAlbumMode);
       if (this.isAlbumMode) {
         this.loadAlbumList();
+      } else {
+        this.albums.splice(0, this.albums.length);
+        this.selections.splice(0, this.selections.length);
       }
     },
 
@@ -391,7 +394,7 @@
      * Event: Handle tap on refresh album list icon
      * @private
      */
-    _refreshTapped: function() {
+    _onRefreshTapped: function() {
       Chrome.GA.event(Chrome.GA.EVENT.ICON, 'refreshGoogleAlbums');
       this.loadAlbumList();
     },
@@ -400,19 +403,19 @@
      * Event: Handle tap on select all albums icon
      * @private
      */
-    _selectAllTapped: function() {
+    _onSelectAllTapped: function() {
       Chrome.GA.event(Chrome.GA.EVENT.ICON, 'selectAllGoogleAlbums');
       for (let i = 0; i < this.albums.length; i++) {
         const album = this.albums[i];
         if (!album.checked) {
           this.selections.push({id: album.id, photos: album.photos});
-          const set =
-              Chrome.Storage.safeSet('albumSelections', this.selections, null);
+          const set = Chrome.Storage.safeSet('albumSelections', this.selections,
+                  'useGoogleAlbums');
           if (!set) {
             // exceeded storage limits
             this.selections.pop();
             this._showStorageErrorDialog(
-                'GooglePhotosPage._selectAllTapped');
+                'GooglePhotosPage._onSelectAllTapped');
             break;
           }
           this.set('albums.' + i + '.checked', true);
@@ -424,20 +427,20 @@
      * Event: Handle tap on deselect all albums icon
      * @private
      */
-    _deselectAllTapped: function() {
+    _onDeselectAllTapped: function() {
       Chrome.GA.event(Chrome.GA.EVENT.ICON, 'deselectAllGoogleAlbums');
       this._uncheckAll();
       this.selections.splice(0, this.selections.length);
-      Chrome.Storage.set('albumSelections', this.selections);
+      Chrome.Storage.set('albumSelections', null);
     },
 
     /**
-     * Event: Handle tap on checkbox for an album
+     * Event: Album checkbox state changed
      * @param {Event} event - tap event
      * @param {app.GoogleSource.Album} event.model.album - the album
      * @private
      */
-    _albumSelectChange: function(event) {
+    _onAlbumSelectChanged: function(event) {
       const album = event.model.album;
 
       Chrome.GA.event(Chrome.GA.EVENT.CHECK,
@@ -456,22 +459,22 @@
         }
       }
 
-      const set =
-          Chrome.Storage.safeSet('albumSelections', this.selections, null);
+      const set = Chrome.Storage.safeSet('albumSelections', this.selections,
+          'useGoogleAlbums');
       if (!set) {
         // exceeded storage limits
         this.selections.pop();
         this.set('albums.' + album.index + '.checked', false);
         this._showStorageErrorDialog(
-            'GooglePhotosPage._albumSelectChange');
+            'GooglePhotosPage._onAlbumSelectChanged');
       }
     },
 
     /**
-     * Event: checked state changed on main toggle
+     * Event: checked state changed on main toggle changed
      * @private
      */
-    _onUseGoogleChange: function() {
+    _onUseGoogleChanged: function() {
       const useGoogle = this.$.googlePhotosToggle.checked;
       this._setUseKeys(useGoogle, this.isAlbumMode);
       Chrome.GA.event(Chrome.GA.EVENT.TOGGLE,
