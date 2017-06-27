@@ -240,13 +240,18 @@ app.SSViews = (function() {
      */
     replaceAll: function() {
       for (let i = 0; i < _views.length; i++) {
-        const view = _views[i];
-        const photo = app.SSPhotos.getNextUsable();
         if (app.SSRunner.isCurrentPair(i)) {
           // don't replace current animation pair
           continue;
         }
-        view.setPhoto(photo);
+        const view = _views[i];
+        const photo = app.SSPhotos.getNextUsable();
+        if (photo) {
+          view.setPhoto(photo);
+        } else {
+          // all bad
+          break;
+        }
       }
       app.SSHistory.clear();
     },
