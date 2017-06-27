@@ -114,11 +114,11 @@
       <paper-material elevation="1">
         <paper-toolbar class="page-toolbar">
           <div class="flex">[[_computeTitle(isAlbumMode)]]</div>
-          <paper-icon-button
-              id="mode"
-              icon="[[_computeModeIcon(isAlbumMode)]]"
-              on-tap="_onModeTapped"
-              disabled$="[[!useGoogle]]"></paper-icon-button>
+          <!--<paper-icon-button-->
+              <!--id="mode"-->
+              <!--icon="[[_computeModeIcon(isAlbumMode)]]"-->
+              <!--on-tap="_onModeTapped"-->
+              <!--disabled$="[[!useGoogle]]"></paper-icon-button>-->
           <paper-tooltip for="mode" position="left" offset="0">
             [[_computeModeTooltip(isAlbumMode)]]
           </paper-tooltip>
