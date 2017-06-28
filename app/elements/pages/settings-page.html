@@ -103,12 +103,6 @@
       <div class="page-content">
         <iron-pages selected="{{selectedTab}}">
           <div>
-            <setting-toggle
-                name="allowBackground"
-                main-label="{{localize('setting_background')}}"
-                secondary-label="{{localize('setting_background_desc')}}"
-                on-tap="_chromeBackgroundTapped"
-                disabled$="[[!enabled]]"></setting-toggle>
             <setting-slider
                 name="idleTime"
                 label="{{localize('setting_idle_time')}}"
@@ -130,6 +124,12 @@
                 items="{{_computePhotoTransitionMenu()}}"
                 disabled$="[[!enabled]]"></setting-dropdown>
             <setting-toggle
+                name="allowBackground"
+                main-label="{{localize('setting_background')}}"
+                secondary-label="{{localize('setting_background_desc')}}"
+                on-tap="_chromeBackgroundTapped"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
                 name="interactive"
                 main-label="{{localize('setting_interactive')}}"
                 secondary-label="{{localize('setting_interactive_desc')}}"
@@ -144,6 +144,20 @@
                 main-label="{{localize('setting_skip')}}"
                 secondary-label="{{localize('setting_skip_desc')}}"
                 disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="fullResGoogle"
+                main-label="{{localize('setting_full_res')}}"
+                secondary-label="{{localize('setting_full_res_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="showPhotog"
+                main-label="{{localize('setting_photog')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="showLocation"
+                main-label="{{localize('setting_location')}}"
+                secondary-label="{{localize('setting_location_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
             <setting-dropdown
                 name="showTime"
                 label="{{localize('setting_show_time')}}"
@@ -156,15 +170,6 @@
                 indent
                 disabled$="[[_computeLargeTimeDisabled(enabled, showTimeValue)]]">
             </setting-toggle>
-            <setting-toggle
-                name="showPhotog"
-                main-label="{{localize('setting_photog')}}"
-                disabled$="[[!enabled]]"></setting-toggle>
-            <setting-toggle
-                name="showLocation"
-                main-label="{{localize('setting_location')}}"
-                secondary-label="{{localize('setting_location_desc')}}"
-                disabled$="[[!enabled]]"></setting-toggle>
             <setting-background
                 name="background"
                 main-label="{{localize('setting_bg')}}"
@@ -379,7 +384,7 @@
     _setPhotoSourceChecked: function(useName, state) {
       const query = `[name=${useName}]`;
       const el = document.querySelector(query);
-      if (el && (useName !== 'useGoogle')) {
+      if (el && !useName.includes('useGoogle')) {
         el.setChecked(state);
       }
     },

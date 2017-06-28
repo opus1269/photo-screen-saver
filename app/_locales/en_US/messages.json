@@ -182,6 +182,12 @@
   "tooltip_google_toggle": {
     "message": "Enable/disable use of albums"
   },
+  "tooltip_google_mode_albums": {
+    "message": "Switch to photo mode"
+  },
+  "tooltip_google_mode_photos": {
+    "message": "Switch to album mode"
+  },
   "setting_background": {
     "message": "Run Chrome in background"
   },
@@ -227,8 +233,11 @@
   "setting_photog": {
     "message": "Show author for photos you own"
   },
-  "setting_photog_desc": {
-    "message": "Note: Always shows in Frame mode"
+  "setting_full_res": {
+    "message": "Use full resolution for photos you own"
+  },
+  "setting_full_res_desc": {
+    "message": "These files may be very large"
   },
   "setting_location": {
     "message": "Show photo location, if available"
@@ -355,6 +364,9 @@
   },
   "google_title": {
     "message": "Google Photos Albums"
+  },
+  "google_title_photos": {
+    "message": "Google Photos"
   },
   "google_shared_albums_note": {
     "message": "Note: Shared albums may not be available.  See the FAQ for more info."

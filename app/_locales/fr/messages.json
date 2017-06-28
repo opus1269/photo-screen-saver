@@ -182,6 +182,12 @@
   "tooltip_google_toggle": {
     "message": "Activer/désactiver l'utilisation des albums"
   },
+  "tooltip_google_mode_albums": {
+    "message": "Passer en mode photo"
+  },
+  "tooltip_google_mode_photos": {
+    "message": "Passer en mode album"
+  },
   "setting_background": {
     "message": "Exécuter Chrome en arrière-plan"
   },
@@ -227,8 +233,11 @@
   "setting_photog": {
     "message": "Afficher l'auteur des photos que vous possédez"
   },
-  "setting_photog_desc": {
-    "message": "Remarque : toujours afficher en mode Cadre"
+  "setting_full_res": {
+    "message": "Utilisez la résolution complète pour les photos que vous possédez"
+  },
+  "setting_full_res_desc": {
+    "message": "Ces fichiers peuvent être très gros"
   },
   "setting_location": {
     "message": "Afficher l'emplacement des photos, si cela est possible"
@@ -355,6 +364,9 @@
   },
   "google_title": {
     "message": "Albums Google Photos"
+  },
+  "google_title_photos": {
+    "message": "Google Photos"
   },
   "google_shared_albums_note": {
     "message": "Remarque: les albums partagés ne sont peut-être pas disponibles. Consultez notre FAQ pour obtenir plus d'informations."

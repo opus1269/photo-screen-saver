@@ -116,6 +116,7 @@
             `&extras=owner_name,url_o,media,geo&per_page=${_MAX_PHOTOS}` +
             '&format=json&nojsoncallback=1';
       } else {
+        // public photos
         url =
             `${_URL_BASE}?method=flickr.interestingness.getList` +
             `&api_key=${_KEY}&extras=owner_name,url_k,media,geo` +

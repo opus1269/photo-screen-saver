@@ -25,7 +25,7 @@ app.Data = (function() {
    * @private
    * @memberOf app.Data
    */
-  const _DATA_VERSION = 14;
+  const _DATA_VERSION = 15;
 
   /**
    * A number and associated units
@@ -70,9 +70,13 @@ app.Data = (function() {
    * @property {boolean} useInterestingFlickr - use this photo source
    * @property {boolean} useChromecast - use this photo source
    * @property {boolean} useAuthors - use this photo source
-   * @property {boolean} useGoogle - use this photo source
    * @property {boolean} useSpaceReddit - use this photo source
-   * @property {Array} albumSelections - Users Google Photos to use
+   * @property {boolean} fullResGoogle - true for actual size Google photos
+   * @property {boolean} isAlbumMode - true if Google Photos album mode
+   * @property {boolean} useGoogle - use this photo source
+   * @property {boolean} useGoogleAlbums - use this photo source
+   * @property {Array} albumSelections - user's selected Google Photos albums
+   * @property {boolean} useGooglePhotos - use this photo source
    */
 
   /**
@@ -85,6 +89,7 @@ app.Data = (function() {
   const _DEF_VALUES = {
     'version': _DATA_VERSION,
     'enabled': true,
+    'isAlbumMode': true,
     'permPicasa': 'notSet', // enum: notSet allowed denied
     'permBackground': 'notSet', // enum: notSet allowed denied
     'allowBackground': false,
@@ -97,6 +102,7 @@ app.Data = (function() {
     'interactive': false,
     'showTime': 2, // 24 hr format
     'largeTime': false,
+    'fullResGoogle': false,
     'showPhotog': true,
     'showLocation': true,
     'background': 'background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)',
@@ -116,7 +122,9 @@ app.Data = (function() {
     'useChromecast': true,
     'useAuthors': false,
     'useGoogle': true,
+    'useGoogleAlbums': true,
     'albumSelections': [],
+    'useGooglePhotos': false,
   };
 
   /**
@@ -295,7 +303,8 @@ app.Data = (function() {
      */
     restoreDefaults: function() {
       Object.keys(_DEF_VALUES).forEach(function(key) {
-        if ((key !== 'useGoogle') &&
+        if (!key.includes('useGoogle') &&
+            (key !== 'googlePhotosSelections') &&
             (key !== 'albumSelections')) {
           // skip Google photos settings
           Chrome.Storage.set(key, _DEF_VALUES[key]);
@@ -340,11 +349,13 @@ app.Data = (function() {
         }
       } else {
         // individual change
-        if (app.PhotoSources.isUseKey(key)) {
-          app.PhotoSources.process(key).catch((err) => {
+        if (app.PhotoSources.isUseKey(key) || (key === 'fullResGoogle')) {
+          // photo source change
+          const useKey = (key === 'fullResGoogle') ? 'useGoogleAlbums' : key; 
+          app.PhotoSources.process(useKey).catch((err) => {
             // send message on processing error
             const msg = app.Msg.PHOTO_SOURCE_FAILED;
-            msg.key = key;
+            msg.key = useKey;
             msg.error = err.message;
             return Chrome.Msg.send(msg);
           }).catch(() => {});

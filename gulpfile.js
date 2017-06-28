@@ -139,11 +139,17 @@ gulp.task('docs', (cb) => {
 
 // polylint elements
 gulp.task('polylint', () => {
-  return gulp.src([files.elements])
-      .pipe(plugins.polylint({noRecursion: false}))
+  const input = files.elements;
+  const opts = {
+    verbose: true,
+    name: currentTaskName,
+  };
+  return gulp.src(input)
+      .pipe(isWatch ? watch(input, opts) : util.noop())
+      .pipe(plugins.polylint({noRecursion: true}))
       .pipe(plugins.polylint.reporter(plugins.polylint.reporter.stylishlike))
       .pipe(plugins.polylint.reporter.fail({
-        buffer: true,
+        buffer: false,
         ignoreWarnings: false,
       }));
 });

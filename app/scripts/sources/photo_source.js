@@ -63,9 +63,13 @@
      */
     static createSource(useKey) {
       switch (useKey) {
-        case app.PhotoSources.UseKey.GOOGLE:
+        case app.PhotoSources.UseKey.ALBUMS_GOOGLE:
           return new app.GoogleSource(useKey, 'albumSelections', 'Google User',
-              true, true, null);
+              true, true, true);
+        case app.PhotoSources.UseKey.PHOTOS_GOOGLE:
+          // not implemented yet
+          return new app.GoogleSource(useKey, 'googleImages', 'Google User',
+              true, false, false);
         case app.PhotoSources.UseKey.CHROMECAST:
           return new app.CCSource(useKey, 'ccImages', 'Google',
               false, false, null);
@@ -193,7 +197,7 @@
      */
     _savePhotos(photos) {
       let ret = null;
-      const keyBool = (this._useKey === 'useGoogle') ? null : this._useKey;
+      const keyBool = this._useKey;
       if (photos && photos.length) {
         const set = Chrome.Storage.safeSet(this._photosKey, photos, keyBool);
         if (!set) {
@@ -228,9 +232,7 @@
           throw err;
         });
       } else {
-        if (this._useKey !== 'useGoogle') {
-          localStorage.removeItem(this._photosKey);
-        }
+        localStorage.removeItem(this._photosKey);
         return Promise.resolve();
       }
     }

@@ -182,6 +182,12 @@
   "tooltip_google_toggle": {
     "message": "Schakel gebruik van albums in/uit"
   },
+  "tooltip_google_mode_albums": {
+    "message": "Overschakelen naar de fotomodus"
+  },
+  "tooltip_google_mode_photos": {
+    "message": "Overschakelen naar de albummodus"
+  },
   "setting_background": {
     "message": "Run Chrome op de achtergrond"
   },
@@ -227,8 +233,11 @@
   "setting_photog": {
     "message": "Toon de auteur voor de foto's die u bezit"
   },
-  "setting_photog_desc": {
-    "message": "Opmerking: toon altijd in frame-modus"
+  "setting_full_res": {
+    "message": "Gebruik volledige resolutie voor foto's die u bezit"
+  },
+  "setting_full_res_desc": {
+    "message": "Deze bestanden kunnen zeer groot zijn"
   },
   "setting_location": {
     "message": "Toon foto locatie, indien beschikbaar"
@@ -355,6 +364,9 @@
   },
   "google_title": {
     "message": "Google Fotoalbums"
+  },
+  "google_title_photos": {
+    "message": "Google Fotos"
   },
   "google_shared_albums_note": {
     "message": "Opmerking: Gedeelde albums zijn misschien niet beschikbaar. Zie de Veelgestelde Vragen voor meer informatie."
