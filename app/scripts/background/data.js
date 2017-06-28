@@ -75,6 +75,7 @@ app.Data = (function() {
    * @property {boolean} isAlbumMode - true if Google Photos album mode
    * @property {boolean} useGoogle - use this photo source
    * @property {boolean} useGoogleAlbums - use this photo source
+   * @property {Array} albumSelections - user's selected Google Photos albums
    * @property {boolean} useGooglePhotos - use this photo source
    */
 
@@ -122,6 +123,7 @@ app.Data = (function() {
     'useAuthors': false,
     'useGoogle': true,
     'useGoogleAlbums': true,
+    'albumSelections': [],
     'useGooglePhotos': false,
   };
 
