@@ -212,7 +212,7 @@
         <template is="dom-if" if="{{!isAlbumMode}}">
           <div class="photos-container">
             <paper-item>
-              [[_computePhotoCountLabel()]];
+              Photo UI here;
             </paper-item>
           </div>
         </template>
@@ -318,8 +318,7 @@
           throw new Error(Chrome.Locale.localize('err_auth_picasa'));
         }
         this.set('waitForLoad', true);
-        // call interactively
-        return app.GoogleSource.loadAlbumList(true);
+        return app.GoogleSource.loadAlbumList();
       }).then((albums) => {
         // get all the user's albums
         this.splice('albums', 0, this.albums.length);

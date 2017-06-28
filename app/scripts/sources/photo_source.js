@@ -67,6 +67,7 @@
           return new app.GoogleSource(useKey, 'albumSelections', 'Google User',
               true, true, true);
         case app.PhotoSources.UseKey.PHOTOS_GOOGLE:
+          // not implemented yet
           return new app.GoogleSource(useKey, 'googleImages', 'Google User',
               true, false, false);
         case app.PhotoSources.UseKey.CHROMECAST:

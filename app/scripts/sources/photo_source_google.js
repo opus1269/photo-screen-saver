@@ -51,7 +51,7 @@
    * @memberOf app.GoogleSource
    */
   const _ALBUMS_QUERY = '?max-results=2000&access=all&kind=album' +
-      '&fields=entry(gphoto:albumType,gphoto:id)&v=3&alt=json';
+      '&fields=entry(gphoto:albumType,gphoto:id)&v=2&alt=json';
 
   /**
    * Query an album for its photos
@@ -64,21 +64,7 @@
   const _ALBUM_QUERY = '&thumbsize=72' +
       '&fields=title,gphoto:id,entry(media:group/media:content,' +
       'media:group/media:credit,media:group/media:thumbnail,georss:where)' +
-      '&v=3&alt=json';
-
-  /**
-   * Query all photos
-   * @type {string}
-   * @const
-   * @default
-   * @private
-   * @memberOf app.GoogleSource
-   */
-  const _PHOTOS_QUERY = '&v=3&alt=json';
-  // todo const _PHOTOS_QUERY = '&access=all&kind=photo' +
-  //     '&fields=title,gphoto:id,entry(media:group/media:content,' +
-  //     'media:group/media:credit,georss:where)' +
-  //     '&v=3&alt=json';
+      '&v=2&alt=json';
 
   /**
    * A potential source of photos from Google
@@ -213,47 +199,26 @@
     }
 
     /**
-     * Retrieve a users Google Photos
-     * @param {int} startIdx - photo to start at
-     * @param {int} maxRes - max results to return
-     * @returns {Promise<Object>} Root object from Picasa call null if not found
-     * @private
-     */
-    static _loadPhotos(startIdx, maxRes) {
-      const imageMax = app.GoogleSource._getMaxImageSize();
-      const sizeQuery = `?access=all&kind=photo&imgmax=${imageMax}`;
-      const resQuery = `&start-index=${startIdx}&max-results=${maxRes}`;
-      const queryParams = `${sizeQuery}${resQuery}${_PHOTOS_QUERY}`;
-      const url = `${_URL_BASE}default${queryParams}`;
-      const conf = Chrome.JSONUtils.shallowCopy(Chrome.Http.conf);
-      conf.isAuth = true;
-      return Chrome.Http.doGet(url, conf);
-    }
-
-    /**
      * Retrieve the users list of albums, including the photos in each
-     * @param {boolean} interactive - true is user initiated call
      * @returns {Promise<app.GoogleSource.Album[]>} Array of albums
      */
-    static loadAlbumList(interactive = false) {
+    static loadAlbumList() {
       const url = `${_URL_BASE}default/${_ALBUMS_QUERY}`;
 
       // get list of albums
       const conf = Chrome.JSONUtils.shallowCopy(Chrome.Http.conf);
       conf.isAuth = true;
       conf.retryToken = true;
-      conf.interactive = interactive;
+      conf.interactive = true;
       return Chrome.Http.doGet(url, conf).then((root) => {
         if (!root || !root.feed || !root.feed.entry) {
           throw new Error(Chrome.Locale.localize('err_no_albums'));
         }
-
         const feed = root.feed;
-
-        // series of API calls to get each album
-        const promises = [];
         const entries = feed.entry || [];
+        const promises = [];
         for (const entry of entries) {
+          // series of API calls to get each album
           if (!entry.gphoto$albumType) {
             // skip special albums (e.g. Google+ posts, backups)
             const albumId = entry.gphoto$id.$t;
@@ -331,37 +296,11 @@
     }
 
     /**
-     * Fetch the photos for the current user
-     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
-     */
-    static _fetchPhotos() {
-      let photos = [];
-      let startIdx = 1;
-      const maxPhotos = 1000;
-      return app.GoogleSource._loadPhotos(startIdx, maxPhotos).then((root) => {
-        const values = app.GoogleSource._processPhotos(root);
-        photos = photos.concat(values);
-        startIdx += photos.length;
-        return app.GoogleSource._loadPhotos(startIdx, maxPhotos)
-            .then((root) => {
-              const values = app.GoogleSource._processPhotos(root);
-              return photos = photos.concat(values);
-            });
-      });
-    }
-
-    /**
      * Fetch the photos for this source
      * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
      */
     fetchPhotos() {
-      if (this._loadArg) {
-        // albums
-        return app.GoogleSource._fetchAlbumPhotos();
-      } else {
-        // photos
-        return app.GoogleSource._fetchPhotos();
-      }
+      return app.GoogleSource._fetchAlbumPhotos();
     }
   };
 })();
