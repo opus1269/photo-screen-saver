@@ -4,8 +4,6 @@
 
 #### [Google Photos questions](#google-photos)
 
-#### [Windows 10 Creators questions](#windows-10-creators)
-
 #### [Chromebook questions](#chromebook)
 
 #### [Keep Awake questions](#keep-awake)
@@ -132,22 +130,6 @@
 
   This is an error on the Server that provides the photos.
   This is a temporary issue - please try again later.
-
-### Windows 10 Creators
-
-* **The screensaver is "freezing". Why is that?**
-
-  There have been numerous issues with non-Microsoft browsers freezing
-  and crashing after the update. There could be many reasons for this,
-  a good place to start is [here](https://appuals.com/windows-10-creators-update-crashes-and-freezes/)
-
-  What solved the problem for me, is to **Reset your computer’s Winsock catalog**
-  To do this:
-
-  1. Right click on the Windows start icon and select **Command Prompt (Admin)**
-  or **Powershell (Admin)**
-  2. At the prompt, enter the command **netsh winsock reset**
-  3. Restart your computer.
 
 ### Chromebook
 
