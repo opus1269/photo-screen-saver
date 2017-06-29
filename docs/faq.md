@@ -144,7 +144,7 @@
   What solved the problem for me, is to **Reset your computer’s Winsock catalog**
   To do this:
 
-  1. Right click on the Windows start icon and select **Command prompt (Admin)**
+  1. Right click on the Windows start icon and select **Command Prompt (Admin)**
   or **Powershell (Admin)**
   2. At the prompt, enter the command **netsh winsock reset**
   3. Restart your computer.
