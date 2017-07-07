@@ -99,6 +99,16 @@
 
   ***
 
+* **Why are some of my photos upside down or on their side?**
+
+    If this is the case, you need to turn off the
+    **Use full resolution for photos you own** option in **Settings**.
+    This option uses the original photo that you uploaded. If you want
+    to use them, you will need to orient them properly before uploading,
+    or edit the original photo in Google Photos and rotate it.
+
+  ***
+
 * **Why aren't all my Google Photos albums showing?**
 
     The API that Google provides to interface with Google Photos does
