@@ -407,6 +407,9 @@
   "help_release_notes": {
     "message": "Release notes"
   },
+  "help_contributors": {
+    "message": "Contributors"
+  },
   "help_licenses": {
     "message": "Open source licenses"
   },

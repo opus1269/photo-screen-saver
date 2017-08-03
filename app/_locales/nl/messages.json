@@ -407,6 +407,9 @@
   "help_release_notes": {
     "message": "Uitgaveopmerkingen"
   },
+  "help_contributors": {
+    "message": "Ontwikkelaars"
+  },
   "help_licenses": {
     "message": "Open bron licenties"
   },
