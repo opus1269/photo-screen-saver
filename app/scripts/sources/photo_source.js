@@ -138,7 +138,7 @@
      */
     static createPoint(lat, lon) {
       if ((typeof lat === 'number') && (typeof lon === 'number')) {
-        return `${lat.toPrecision(8)} ${lon.toPrecision(8)}`;
+        return `${lat.toFixed(6)} ${lon.toFixed(6)}`;
       } else {
         return `${lat} ${lon}`;
       }
