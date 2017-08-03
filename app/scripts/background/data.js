@@ -98,7 +98,7 @@ app.Data = (function() {
     'skip': true,
     'shuffle': true,
     'photoSizing': 0,
-    'photoTransition': 4,
+    'photoTransition': 1,
     'interactive': false,
     'showTime': 2, // 24 hr format
     'largeTime': false,
