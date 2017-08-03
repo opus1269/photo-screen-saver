@@ -237,7 +237,7 @@
     "message": "Use full resolution for photos you own"
   },
   "setting_full_res_desc": {
-    "message": "These files may be very large"
+    "message": "These files may be very large and rotated"
   },
   "setting_location": {
     "message": "Show photo location, if available"
