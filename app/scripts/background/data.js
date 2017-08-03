@@ -333,12 +333,11 @@ app.Data = (function() {
         'allowSuspend': _processKeepAwake,
         'idleTime': _processIdleTime,
       };
-      let fn;
       if (key === 'all') {
         // process everything
         Object.keys(STATE_MAP).forEach(function(ky) {
-          fn = STATE_MAP[ky];
-          return fn();
+          const fn = STATE_MAP[ky];
+          fn();
         });
         // process photo SOURCES
         app.PhotoSources.processAll();
@@ -359,7 +358,10 @@ app.Data = (function() {
             return Chrome.Msg.send(msg);
           }).catch(() => {});
         } else {
-          (STATE_MAP[key] || Chrome.Utils.noop());
+          const fn = STATE_MAP[key];
+          if (typeof(fn) !== 'undefined') {
+            fn();
+          }
         }
       }
     },
