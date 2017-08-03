@@ -333,7 +333,6 @@ app.Data = (function() {
         'allowSuspend': _processKeepAwake,
         'idleTime': _processIdleTime,
       };
-      const noop = function() {};
       let fn;
       if (key === 'all') {
         // process everything
@@ -360,7 +359,7 @@ app.Data = (function() {
             return Chrome.Msg.send(msg);
           }).catch(() => {});
         } else {
-          (STATE_MAP[key] || noop)();
+          (STATE_MAP[key] || Chrome.Utils.noop());
         }
       }
     },
