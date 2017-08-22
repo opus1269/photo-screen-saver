@@ -82,12 +82,18 @@
     {
       label: Chrome.Locale.localize('menu_help'), route: 'page-help',
       icon: 'myicons:help', obj: _showHelpPage, ready: false,
-      divider: false,
+      divider: true,
+    },
+    {
+      label: Chrome.Locale.localize('help_faq'), route: 'page-faq',
+      icon: 'myicons:help',
+      obj: 'https://opus1269.github.io/photo-screen-saver/faq.html',
+      ready: true, divider: false,
     },
     {
       label: Chrome.Locale.localize('menu_support'), route: 'page-support',
       icon: 'myicons:help', obj: `${EXT_URI}support`, ready: true,
-      divider: true,
+      divider: false,
     },
     {
       label: Chrome.Locale.localize('menu_rate'), route: 'page-rate',
