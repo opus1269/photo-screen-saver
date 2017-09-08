@@ -1,7 +1,7 @@
-node_modules
+/node_modules
 /dev
 /dist
-bower_components
+/app/bower_components
 .tmp
 *.db
 *.lock
