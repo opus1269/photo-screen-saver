@@ -9,7 +9,7 @@
 
   /**
    * Extension's Options page
-   * @namespace app.Options
+   * @namespace Options
    */
 
   new ExceptionHandler();
@@ -24,7 +24,7 @@
    * @property {?Object|Function} obj - something to be done when selected
    * @property {boolean} ready - true if html is inserted
    * @property {boolean} divider - true for divider before item
-   * @memberOf app.Options
+   * @memberOf Options
    */
 
   /**
@@ -32,7 +32,7 @@
    * @type {string}
    * @const
    * @private
-   * @memberOf app.Options
+   * @memberOf Options
    */
   const EXT_URI =
       'https://chrome.google.com/webstore/detail/photo-screen-saver/' +
@@ -44,7 +44,7 @@
    * @const
    * @default
    * @private
-   * @memberOf app.Options
+   * @memberOf Options
    */
   const PUSHY_URI =
       'https://chrome.google.com/webstore/detail/pushy-clipboard/' +
@@ -55,14 +55,14 @@
    * @type {Object}
    * @const
    * @private
-   * @memberOf app.Options
+   * @memberOf Options
    */
   const t = document.querySelector('#t');
 
   /**
    * Array of pages
    * @type {Options.Page[]}
-   * @memberOf app.Options
+   * @memberOf Options
    */
   t.pages = [
     {
@@ -114,14 +114,14 @@
   /**
    * Current {@link Options.Page}
    * @type {string}
-   * @memberOf app.Options
+   * @memberOf Options
    */
   t.route = 'page-settings';
 
   /**
    * Event Listener for template bound event to know when bindings
    * have resolved and content has been stamped to the page
-   * @memberOf app.Options
+   * @memberOf Options
    */
   t.addEventListener('dom-change', function() {
     Chrome.GA.page('/options.html');
@@ -133,7 +133,7 @@
    * Event: navigation menu selected
    * Route to proper page
    * @param {Event} event - ClickEvent
-   * @memberOf app.Options
+   * @memberOf Options
    */
   t._onNavMenuItemTapped = function(event) {
     // Close drawer after menu item is selected if it is narrow
@@ -167,7 +167,7 @@
   /**
    * Computed property: Page title
    * @returns {string} i18n title
-   * @memberOf app.Options
+   * @memberOf Options
    */
   t._computeTitle = function() {
     return Chrome.Locale.localize('chrome_extension_name');
@@ -176,7 +176,7 @@
   /**
    * Computed property: Menu label
    * @returns {string} i18n label
-   * @memberOf app.Options
+   * @memberOf Options
    */
   t._computeMenu = function() {
     return Chrome.Locale.localize('menu');
@@ -185,7 +185,7 @@
   /**
    * Show the Google Photos page
    * @param {int} index - index into [t.pages]{@link Options.t.pages}
-   * @memberOf app.Options
+   * @memberOf Options
    */
   function _showGooglePhotosPage(index) {
     if (!t.pages[index].ready) {
@@ -205,7 +205,7 @@
    * Show the help page
    * @param {int} index - index into [t.pages]{@link Options.t.pages}
    * @private
-   * @memberOf app.Options
+   * @memberOf Options
    */
   function _showHelpPage(index) {
     if (!t.pages[index].ready) {
@@ -223,7 +223,7 @@
    * Display a preview of the screen saver
    * @param {int} index - index into [t.pages]{@link Options.t.pages}
    * @param {string} prevRoute - last page selected
-   * @memberOf app.Options
+   * @memberOf Options
    */
   function _showScreensaverPreview(index, prevRoute) {
     // reselect previous page - need to delay so tap event is done
@@ -235,7 +235,7 @@
 
   /**
    * Scroll page to top
-   * @memberOf app.Options
+   * @memberOf Options
    */
   function _scrollPageToTop() {
     t.$.scrollPanel.scrollToTop(true);
@@ -251,7 +251,7 @@
    * @param {Function} [response] - function to call once after processing
    * @returns {boolean} true if asynchronous
    * @private
-   * @memberOf app.Options
+   * @memberOf Options
    */
   function _onMessage(request, sender, response) {
     if (request.message === app.Msg.HIGHLIGHT.message) {
