@@ -29,7 +29,7 @@ app.Data = (function() {
 
   /**
    * A number and associated units
-   * @typedef {Object} UnitValue
+   * @typedef {Object} app.Data.UnitValue
    * @property {number} base - value in base unit
    * @property {number} display - value in display unit
    * @property {int} unit - display unit
@@ -37,14 +37,14 @@ app.Data = (function() {
 
   /**
    * Values for items in localStorage
-   * @typedef {Object} AppData
+   * @typedef {Object} app.Data.LocalStorage
    * @property {int} version - version of data
    * @property {boolean} enabled - is screensaver enabled
    * @property {string} permPicasa - optional permission for Picasa
    * @property {string} permBackground - optional permission to run in bg
    * @property {boolean} allowBackground - run Chrome in background
-   * @property {UnitValue} idleTime - idle time to display screensaver
-   * @property {UnitValue} transitionTime - time between photos
+   * @property {app.Data.UnitValue} idleTime - idle time to display screensaver
+   * @property {app.Data.UnitValue} transitionTime - time between photos
    * @property {boolean} skip - ignore extreme aspect ratio photos
    * @property {boolean} shuffle - randomize photo order
    * @property {int} photoSizing - photo display type
@@ -82,7 +82,7 @@ app.Data = (function() {
 
   /**
    * Default values in localStorage
-   * @type {AppData}
+   * @type {app.Data.LocalStorage}
    * @const
    * @private
    * @memberOf app.Data
