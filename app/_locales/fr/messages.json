@@ -245,6 +245,9 @@
   "setting_location_desc": {
     "message": "La localisation estimée de Google Photos ne sera pas affichée"
   },
+  "setting_photo_clicks": {
+    "message": "Afficher la source de la photo sur le clic de la souris, si disponible"
+  },
   "setting_bg": {
     "message": "Contexte"
   },

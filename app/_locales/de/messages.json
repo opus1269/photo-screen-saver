@@ -245,6 +245,9 @@
   "setting_location_desc": {
     "message": "Wird nicht den ‚geschätzten‘ Standort von Google Fotos anzeigen"
   },
+  "setting_photo_clicks": {
+    "message": "Zeigen Sie die Quelle des Fotos auf Mausklick, wenn verfügbar"
+  },
   "setting_bg": {
     "message": "Hintergrund"
   },

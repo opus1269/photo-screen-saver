@@ -142,7 +142,8 @@ app.SSEvents = (function() {
   function _onMouseClick() {
     if (app.SSRunner.isStarted()) {
       const idx = app.SSViews.getSelectedIndex();
-      if (typeof(idx) !== 'undefined') {
+      const allowPhotoClicks = Chrome.Storage.getBool('allowPhotoClicks');
+      if (allowPhotoClicks && (typeof(idx) !== 'undefined')) {
         const view = app.SSViews.get(idx);
         view.photo.showSource();
       }

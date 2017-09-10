@@ -245,6 +245,9 @@
   "setting_location_desc": {
     "message": "Zal  de \"geschatte\" locatie van Google Foto's niet tonen"
   },
+  "setting_photo_clicks": {
+    "message": "Toon bron van foto op muisklik, indien beschikbaar"
+  },
   "setting_bg": {
     "message": "Achtergrond"
   },

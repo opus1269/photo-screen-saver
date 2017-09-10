@@ -25,7 +25,7 @@ app.Data = (function() {
    * @private
    * @memberOf app.Data
    */
-  const _DATA_VERSION = 15;
+  const _DATA_VERSION = 16;
 
   /**
    * A number and associated units
@@ -112,6 +112,7 @@ app.Data = (function() {
     'activeStart': '00:00', // 24 hr time
     'activeStop': '00:00', // 24 hr time
     'allowSuspend': false,
+    'allowPhotoClicks': true,
     'useSpaceReddit': false,
     'useEarthReddit': false,
     'useAnimalReddit': false,

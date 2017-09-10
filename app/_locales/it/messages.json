@@ -245,6 +245,9 @@
   "setting_location_desc": {
     "message": "Non mostrare presunta ubicazione delle Foto di Google"
   },
+  "setting_photo_clicks": {
+    "message": "Mostra la fonte di foto sul clic del mouse, se disponibile"
+  },
   "setting_bg": {
     "message": "Sfondo"
   },

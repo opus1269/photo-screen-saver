@@ -245,6 +245,9 @@
   "setting_location_desc": {
     "message": "Will not show Google Photos 'estimated' location"
   },
+  "setting_photo_clicks": {
+    "message": "Show source of photo on mouse click, if available"
+  },
   "setting_bg": {
     "message": "Background"
   },

@@ -245,6 +245,9 @@
   "setting_location_desc": {
     "message": "No mostrará la ubicación estimada de Google Fotos"
   },
+  "setting_photo_clicks": {
+    "message": "Mostrar el origen de la foto en el clic del ratón, si está disponible"
+  },
   "setting_bg": {
     "message": "Fondo"
   },
