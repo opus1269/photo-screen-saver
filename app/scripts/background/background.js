@@ -9,7 +9,7 @@
 
   /**
    * The background script for the extension.<br>
-   * @namespace app.Background
+   * @namespace Background
    */
 
   new ExceptionHandler();
@@ -17,7 +17,7 @@
   /**
    * Display the options tab
    * @private
-   * @memberOf app.Background
+   * @memberOf Background
    */
   function _showOptionsTab() {
     // send message to the option tab to focus it.
@@ -34,7 +34,7 @@
    * @see https://developer.chrome.com/extensions/runtime#event-onInstalled
    * @param {Object} details - type of event
    * @private
-   * @memberOf app.Background
+   * @memberOf Background
    */
   function _onInstalled(details) {
     if (details.reason === 'install') {
@@ -52,7 +52,7 @@
    * starts up
    * @see https://developer.chrome.com/extensions/runtime#event-onStartup
    * @private
-   * @memberOf app.Background
+   * @memberOf Background
    */
   function _onStartup() {
     Chrome.GA.page('/background.html');
@@ -63,7 +63,7 @@
    * Event: Fired when a browser action icon is clicked.
    * @see https://goo.gl/abVwKu
    * @private
-   * @memberOf app.Background
+   * @memberOf Background
    */
   function _onIconClicked() {
     _showOptionsTab();
@@ -75,7 +75,7 @@
    * @param {Event} event - StorageEvent
    * @param {string} event.key - storage item that changed
    * @private
-   * @memberOf app.Background
+   * @memberOf Background
    */
   function _onStorageChanged(event) {
     app.Data.processState(event.key);
@@ -91,7 +91,7 @@
    * @param {Function} [response] - function to call once after processing
    * @returns {boolean} true if asynchronous
    * @private
-   * @memberOf app.Background
+   * @memberOf Background
    */
   function _onChromeMessage(request, sender, response) {
     if (request.message === app.Msg.RESTORE_DEFAULTS.message) {
