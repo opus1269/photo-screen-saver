@@ -61,6 +61,7 @@ app.Data = (function() {
    * @property {string} activeStart - Keep Wake start time '00:00' 24 hr
    * @property {string} activeStop - Keep Wake stop time '00:00' 24 hr
    * @property {boolean} allowSuspend - let computer sleep
+   * @property {boolean} allowPhotoClicks - show photo source on left click
    * @property {boolean} useSpaceReddit - use this photo source
    * @property {boolean} useEarthReddit - use this photo source
    * @property {boolean} useAnimalReddit - use this photo source
