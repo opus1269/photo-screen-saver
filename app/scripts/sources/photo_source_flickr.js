@@ -62,7 +62,7 @@
     /**
      * Extract the photos into an Array
      * @param {JSON} response - server response
-     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
      * @private
      */
     static _processPhotos(response) {
@@ -103,7 +103,7 @@
 
     /**
      * Fetch the photos for this source
-     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
      */
     fetchPhotos() {
       let url;

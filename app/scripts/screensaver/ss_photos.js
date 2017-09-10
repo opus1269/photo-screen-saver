@@ -34,9 +34,9 @@ app.SSPhotos = (function() {
 
   return {
     /**
-     * Add the photos from an {@link app.PhotoSource.SourcePhotos}
-     * @param {app.PhotoSource.SourcePhotos} source
-     * - The {@link app.PhotoSource.SourcePhotos}
+     * Add the photos from an {@link app.PhotoSource.Photos}
+     * @param {app.PhotoSource.Photos} source
+     * - The {@link app.PhotoSource.Photos}
      * @memberOf app.SSPhotos
      */
     addFromSource: function(source) {

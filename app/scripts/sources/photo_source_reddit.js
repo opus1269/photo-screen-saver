@@ -118,7 +118,7 @@
     /**
      * Build the list of photos for one page of items
      * @param {Array} children - Array of objects from reddit
-     * @returns {app.PhotoSource.SourcePhoto[]} Array of photos
+     * @returns {app.PhotoSource.Photo[]} Array of photos
      * @private
      */
     static _processChildren(children) {
@@ -166,7 +166,7 @@
 
     /**
      * Fetch the photos for this source
-     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
      */
     fetchPhotos() {
       let photos = [];

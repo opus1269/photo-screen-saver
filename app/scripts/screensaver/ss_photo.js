@@ -28,7 +28,7 @@
     /**
      * Create a new photo
      * @param {int} id - unique id
-     * @param {app.PhotoSource.SourcePhoto} source - source photo
+     * @param {app.PhotoSource.Photo} source - source photo
      * @param {string} sourceType - type of {@link app.PhotoSource}
      * @constructor
      */

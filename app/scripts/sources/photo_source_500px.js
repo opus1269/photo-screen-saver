@@ -76,7 +76,7 @@
     /**
      * Call API to get some photos
      * @param {string} url - server url
-     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
      * @private
      */
     static _doGet(url) {
@@ -104,7 +104,7 @@
 
     /**
      * Fetch the photos for this source
-     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
      */
     fetchPhotos() {
       const type = this._loadArg;

@@ -113,7 +113,7 @@ app.PhotoSources = (function() {
     /**
      * Get all the photos from all selected sources. These will be
      * used by the screensaver.
-     * @returns {app.PhotoSource.SourcePhotos[]} Array of sources photos
+     * @returns {app.PhotoSource.Photos[]} Array of sources photos
      * @memberOf app.PhotoSources
      */
     getSelectedPhotos: function() {

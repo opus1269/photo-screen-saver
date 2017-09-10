@@ -14,7 +14,7 @@
    * A photo from a {@link app.PhotoSource}
    * This is the photo information that is persisted.
    *
-   * @typedef {{}} app.PhotoSource.SourcePhoto
+   * @typedef {{}} app.PhotoSource.Photo
    * @property {string} url - The url to the photo
    * @property {string} author - The photographer
    * @property {number} asp - The aspect ratio of the photo
@@ -25,9 +25,9 @@
   /**
    * The photos for a {@link app.PhotoSource}
    *
-   * @typedef {{}} app.PhotoSource.SourcePhotos
+   * @typedef {{}} app.PhotoSource.Photos
    * @property {string} type - type of {@link app.PhotoSource}
-   * @property {app.PhotoSource.SourcePhoto[]} photos - The photos
+   * @property {app.PhotoSource.Photo[]} photos - The photos
    */
 
   /**
@@ -105,8 +105,8 @@
     }
 
     /**
-     * Add a {@link app.PhotoSource.SourcePhoto} to an existing Array
-     * @param {Array} photos - {@link app.PhotoSource.SourcePhoto} Array
+     * Add a {@link app.PhotoSource.Photo} to an existing Array
+     * @param {Array} photos - {@link app.PhotoSource.Photo} Array
      * @param {string} url - The url to the photo
      * @param {string} author - The photographer
      * @param {number} asp - The aspect ratio of the photo
@@ -114,7 +114,7 @@
      * @param {string} [point] - 'lat lon'
      */
     static addPhoto(photos, url, author, asp, ex, point) {
-      /** @type {app.PhotoSource.SourcePhoto} */
+      /** @type {app.PhotoSource.Photo} */
       const photo = {
         url: url,
         author: author,
@@ -147,7 +147,7 @@
     /**
      * Fetch the photos for this source - override
      * @abstract
-     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
      */
     fetchPhotos() {
     }
@@ -162,7 +162,7 @@
 
     /**
      * Get the photos from local storage
-     * @returns {app.PhotoSource.SourcePhotos} the photos
+     * @returns {app.PhotoSource.Photos} the photos
      */
     getPhotos() {
       let ret = {
@@ -190,8 +190,8 @@
 
     /**
      * Save the photos to localStorage in a safe manner
-     * @param {app.PhotoSource.SourcePhoto[]} photos
-     * - {@link app.PhotoSource.SourcePhoto} Array
+     * @param {app.PhotoSource.Photo[]} photos
+     * - {@link app.PhotoSource.Photo} Array
      * @returns {?string} non-null on error
      * @private
      */

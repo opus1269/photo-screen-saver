@@ -20,7 +20,7 @@
    * @property {string} thumb - thumbnail url
    * @property {boolean} checked - is album selected
    * @property {int} ct - number of photos
-   * @property {app.PhotoSource.SourcePhoto[]} photos - Array of photos
+   * @property {app.PhotoSource.Photo[]} photos - Array of photos
    * @memberOf app.GoogleSource
    */
 
@@ -28,7 +28,7 @@
    * A Selected Google Photo Album
    * @typedef {Object} app.GoogleSource.SelectedAlbum
    * @property {string} id - Google album Id
-   * @property {app.PhotoSource.SourcePhoto[]} photos - Array of photos
+   * @property {app.PhotoSource.Photo[]} photos - Array of photos
    * @memberOf app.GoogleSource
    */
 
@@ -143,7 +143,7 @@
     /**
      * Extract the Picasa photos into an Array
      * @param {Object} root - root object from Picasa API call
-     * @returns {app.PhotoSource.SourcePhoto[]} Array of photos
+     * @returns {app.PhotoSource.Photo[]} Array of photos
      * @private
      */
     static _processPhotos(root) {
@@ -262,7 +262,7 @@
 
     /**
      * Fetch the photos for the selected albums
-     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
      */
     static _fetchAlbumPhotos() {
       let vals = Chrome.Storage.get('albumSelections');
@@ -297,7 +297,7 @@
 
     /**
      * Fetch the photos for this source
-     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
      */
     fetchPhotos() {
       return app.GoogleSource._fetchAlbumPhotos();

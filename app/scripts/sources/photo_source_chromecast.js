@@ -32,7 +32,7 @@
 
     /**
      * Fetch the photos for this source
-     * @returns {Promise<app.PhotoSource.SourcePhoto[]>} Array of photos
+     * @returns {Promise<app.PhotoSource.Photo[]>} Array of photos
      */
     fetchPhotos() {
       const url = '/assets/chromecast.json';
