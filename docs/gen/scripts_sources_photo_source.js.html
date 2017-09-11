@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.PhotoSources.html">app.PhotoSources</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.PhotoSources.html">app.PhotoSources</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="Background.html">Background</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li><li><a href="Options.html">Options</a></li>
 				</ul>
 			</li>
 			
@@ -41,13 +41,6 @@
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
 					<li><a href="app.CCSource.html">app.CCSource</a></li><li><a href="app.FlickrSource.html">app.FlickrSource</a></li><li><a href="app.GoogleSource.html">app.GoogleSource</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.Px500Source.html">app.Px500Source</a></li><li><a href="app.RedditSource.html">app.RedditSource</a></li><li><a href="app.SSPhoto.html">app.SSPhoto</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="Chrome.Time.html">Chrome.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
-				</ul>
-			</li>
-			
-			<li class="dropdown">
-				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
-				<ul class="dropdown-menu ">
-					<li><a href="global.html">Global</a></li>
 				</ul>
 			</li>
 			
@@ -100,7 +93,7 @@
    * A photo from a {@link app.PhotoSource}
    * This is the photo information that is persisted.
    *
-   * @typedef {{}} app.PhotoSource.SourcePhoto
+   * @typedef {{}} app.PhotoSource.Photo
    * @property {string} url - The url to the photo
    * @property {string} author - The photographer
    * @property {number} asp - The aspect ratio of the photo
@@ -111,9 +104,9 @@
   /**
    * The photos for a {@link app.PhotoSource}
    *
-   * @typedef {{}} app.PhotoSource.SourcePhotos
+   * @typedef {{}} app.PhotoSource.Photos
    * @property {string} type - type of {@link app.PhotoSource}
-   * @property {app.PhotoSource.SourcePhoto[]} photos - The photos
+   * @property {app.PhotoSource.Photo[]} photos - The photos
    */
 
   /**
@@ -191,8 +184,8 @@
     }
 
     /**
-     * Add a {@link app.PhotoSource.SourcePhoto} to an existing Array
-     * @param {Array} photos - {@link app.PhotoSource.SourcePhoto} Array
+     * Add a {@link app.PhotoSource.Photo} to an existing Array
+     * @param {Array} photos - {@link app.PhotoSource.Photo} Array
      * @param {string} url - The url to the photo
      * @param {string} author - The photographer
      * @param {number} asp - The aspect ratio of the photo
@@ -200,7 +193,7 @@
      * @param {string} [point] - 'lat lon'
      */
     static addPhoto(photos, url, author, asp, ex, point) {
-      /** @type {app.PhotoSource.SourcePhoto} */
+      /** @type {app.PhotoSource.Photo} */
       const photo = {
         url: url,
         author: author,
@@ -233,7 +226,7 @@
     /**
      * Fetch the photos for this source - override
      * @abstract
-     * @returns {Promise&lt;app.PhotoSource.SourcePhoto[]>} Array of photos
+     * @returns {Promise&lt;app.PhotoSource.Photo[]>} Array of photos
      */
     fetchPhotos() {
     }
@@ -248,7 +241,7 @@
 
     /**
      * Get the photos from local storage
-     * @returns {app.PhotoSource.SourcePhotos} the photos
+     * @returns {app.PhotoSource.Photos} the photos
      */
     getPhotos() {
       let ret = {
@@ -276,8 +269,8 @@
 
     /**
      * Save the photos to localStorage in a safe manner
-     * @param {app.PhotoSource.SourcePhoto[]} photos
-     * - {@link app.PhotoSource.SourcePhoto} Array
+     * @param {app.PhotoSource.Photo[]} photos
+     * - {@link app.PhotoSource.Photo} Array
      * @returns {?string} non-null on error
      * @private
      */
@@ -369,7 +362,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on August 22nd 2017, 2:33:06 am
+		on September 10th 2017, 8:40:43 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

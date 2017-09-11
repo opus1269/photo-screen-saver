@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.PhotoSources.html">app.PhotoSources</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.PhotoSources.html">app.PhotoSources</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="Background.html">Background</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li><li><a href="Options.html">Options</a></li>
 				</ul>
 			</li>
 			
@@ -41,13 +41,6 @@
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
 					<li><a href="app.CCSource.html">app.CCSource</a></li><li><a href="app.FlickrSource.html">app.FlickrSource</a></li><li><a href="app.GoogleSource.html">app.GoogleSource</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.Px500Source.html">app.Px500Source</a></li><li><a href="app.RedditSource.html">app.RedditSource</a></li><li><a href="app.SSPhoto.html">app.SSPhoto</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="Chrome.Time.html">Chrome.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
-				</ul>
-			</li>
-			
-			<li class="dropdown">
-				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
-				<ul class="dropdown-menu ">
-					<li><a href="global.html">Global</a></li>
 				</ul>
 			</li>
 			
@@ -95,7 +88,7 @@
 
   /**
    * Extension's Options page
-   * @namespace app.Options
+   * @namespace Options
    */
 
   new ExceptionHandler();
@@ -110,7 +103,7 @@
    * @property {?Object|Function} obj - something to be done when selected
    * @property {boolean} ready - true if html is inserted
    * @property {boolean} divider - true for divider before item
-   * @memberOf app.Options
+   * @memberOf Options
    */
 
   /**
@@ -118,7 +111,7 @@
    * @type {string}
    * @const
    * @private
-   * @memberOf app.Options
+   * @memberOf Options
    */
   const EXT_URI =
       'https://chrome.google.com/webstore/detail/photo-screen-saver/' +
@@ -130,7 +123,7 @@
    * @const
    * @default
    * @private
-   * @memberOf app.Options
+   * @memberOf Options
    */
   const PUSHY_URI =
       'https://chrome.google.com/webstore/detail/pushy-clipboard/' +
@@ -141,14 +134,14 @@
    * @type {Object}
    * @const
    * @private
-   * @memberOf app.Options
+   * @memberOf Options
    */
   const t = document.querySelector('#t');
 
   /**
    * Array of pages
    * @type {Options.Page[]}
-   * @memberOf app.Options
+   * @memberOf Options
    */
   t.pages = [
     {
@@ -200,14 +193,14 @@
   /**
    * Current {@link Options.Page}
    * @type {string}
-   * @memberOf app.Options
+   * @memberOf Options
    */
   t.route = 'page-settings';
 
   /**
    * Event Listener for template bound event to know when bindings
    * have resolved and content has been stamped to the page
-   * @memberOf app.Options
+   * @memberOf Options
    */
   t.addEventListener('dom-change', function() {
     Chrome.GA.page('/options.html');
@@ -219,7 +212,7 @@
    * Event: navigation menu selected
    * Route to proper page
    * @param {Event} event - ClickEvent
-   * @memberOf app.Options
+   * @memberOf Options
    */
   t._onNavMenuItemTapped = function(event) {
     // Close drawer after menu item is selected if it is narrow
@@ -253,7 +246,7 @@
   /**
    * Computed property: Page title
    * @returns {string} i18n title
-   * @memberOf app.Options
+   * @memberOf Options
    */
   t._computeTitle = function() {
     return Chrome.Locale.localize('chrome_extension_name');
@@ -262,7 +255,7 @@
   /**
    * Computed property: Menu label
    * @returns {string} i18n label
-   * @memberOf app.Options
+   * @memberOf Options
    */
   t._computeMenu = function() {
     return Chrome.Locale.localize('menu');
@@ -271,7 +264,7 @@
   /**
    * Show the Google Photos page
    * @param {int} index - index into [t.pages]{@link Options.t.pages}
-   * @memberOf app.Options
+   * @memberOf Options
    */
   function _showGooglePhotosPage(index) {
     if (!t.pages[index].ready) {
@@ -291,7 +284,7 @@
    * Show the help page
    * @param {int} index - index into [t.pages]{@link Options.t.pages}
    * @private
-   * @memberOf app.Options
+   * @memberOf Options
    */
   function _showHelpPage(index) {
     if (!t.pages[index].ready) {
@@ -309,7 +302,7 @@
    * Display a preview of the screen saver
    * @param {int} index - index into [t.pages]{@link Options.t.pages}
    * @param {string} prevRoute - last page selected
-   * @memberOf app.Options
+   * @memberOf Options
    */
   function _showScreensaverPreview(index, prevRoute) {
     // reselect previous page - need to delay so tap event is done
@@ -321,7 +314,7 @@
 
   /**
    * Scroll page to top
-   * @memberOf app.Options
+   * @memberOf Options
    */
   function _scrollPageToTop() {
     t.$.scrollPanel.scrollToTop(true);
@@ -337,7 +330,7 @@
    * @param {Function} [response] - function to call once after processing
    * @returns {boolean} true if asynchronous
    * @private
-   * @memberOf app.Options
+   * @memberOf Options
    */
   function _onMessage(request, sender, response) {
     if (request.message === app.Msg.HIGHLIGHT.message) {
@@ -411,7 +404,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on August 22nd 2017, 2:33:06 am
+		on September 10th 2017, 8:40:43 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

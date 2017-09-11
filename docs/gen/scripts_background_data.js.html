@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Background.html">app.Background</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Options.html">app.Options</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.PhotoSources.html">app.PhotoSources</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.ContextMenu.html">app.ContextMenu</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.PhotoSources.html">app.PhotoSources</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="Background.html">Background</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li><li><a href="Options.html">Options</a></li>
 				</ul>
 			</li>
 			
@@ -41,13 +41,6 @@
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
 					<li><a href="app.CCSource.html">app.CCSource</a></li><li><a href="app.FlickrSource.html">app.FlickrSource</a></li><li><a href="app.GoogleSource.html">app.GoogleSource</a></li><li><a href="app.PhotoSource.html">app.PhotoSource</a></li><li><a href="app.Px500Source.html">app.Px500Source</a></li><li><a href="app.RedditSource.html">app.RedditSource</a></li><li><a href="app.SSPhoto.html">app.SSPhoto</a></li><li><a href="app.SSView.html">app.SSView</a></li><li><a href="app.SSViewFrame.html">app.SSViewFrame</a></li><li><a href="app.SSViewFull.html">app.SSViewFull</a></li><li><a href="app.SSViewLetterbox.html">app.SSViewLetterbox</a></li><li><a href="Chrome.Time.html">Chrome.Time</a></li><li><a href="ExceptionHandler.html">ExceptionHandler</a></li>
-				</ul>
-			</li>
-			
-			<li class="dropdown">
-				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
-				<ul class="dropdown-menu ">
-					<li><a href="global.html">Global</a></li>
 				</ul>
 			</li>
 			
@@ -111,11 +104,11 @@ app.Data = (function() {
    * @private
    * @memberOf app.Data
    */
-  const _DATA_VERSION = 15;
+  const _DATA_VERSION = 16;
 
   /**
    * A number and associated units
-   * @typedef {Object} UnitValue
+   * @typedef {Object} app.Data.UnitValue
    * @property {number} base - value in base unit
    * @property {number} display - value in display unit
    * @property {int} unit - display unit
@@ -123,14 +116,14 @@ app.Data = (function() {
 
   /**
    * Values for items in localStorage
-   * @typedef {Object} AppData
+   * @typedef {Object} app.Data.LocalStorage
    * @property {int} version - version of data
    * @property {boolean} enabled - is screensaver enabled
    * @property {string} permPicasa - optional permission for Picasa
    * @property {string} permBackground - optional permission to run in bg
    * @property {boolean} allowBackground - run Chrome in background
-   * @property {UnitValue} idleTime - idle time to display screensaver
-   * @property {UnitValue} transitionTime - time between photos
+   * @property {app.Data.UnitValue} idleTime - idle time to display screensaver
+   * @property {app.Data.UnitValue} transitionTime - time between photos
    * @property {boolean} skip - ignore extreme aspect ratio photos
    * @property {boolean} shuffle - randomize photo order
    * @property {int} photoSizing - photo display type
@@ -147,6 +140,7 @@ app.Data = (function() {
    * @property {string} activeStart - Keep Wake start time '00:00' 24 hr
    * @property {string} activeStop - Keep Wake stop time '00:00' 24 hr
    * @property {boolean} allowSuspend - let computer sleep
+   * @property {boolean} allowPhotoClicks - show photo source on left click
    * @property {boolean} useSpaceReddit - use this photo source
    * @property {boolean} useEarthReddit - use this photo source
    * @property {boolean} useAnimalReddit - use this photo source
@@ -167,7 +161,7 @@ app.Data = (function() {
 
   /**
    * Default values in localStorage
-   * @type {AppData}
+   * @type {app.Data.LocalStorage}
    * @const
    * @private
    * @memberOf app.Data
@@ -198,6 +192,7 @@ app.Data = (function() {
     'activeStart': '00:00', // 24 hr time
     'activeStop': '00:00', // 24 hr time
     'allowSuspend': false,
+    'allowPhotoClicks': true,
     'useSpaceReddit': false,
     'useEarthReddit': false,
     'useAnimalReddit': false,
@@ -509,7 +504,7 @@ app.Data = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on August 22nd 2017, 2:33:05 am
+		on September 10th 2017, 8:40:43 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
