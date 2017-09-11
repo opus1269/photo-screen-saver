@@ -70,8 +70,8 @@ app.Geo = (function() {
    * Try to get (@link app.Geo.Location} from cache
    * @param {string} point - a geolocation
    * @param {string} location - description
-   * @memberOf app.Geo
    * @private
+   * @memberOf app.Geo
    */
   function _addToCache(point, location) {
     _LOC_CACHE.entries.push({
@@ -82,6 +82,28 @@ app.Geo = (function() {
       // FIFO
       _LOC_CACHE.entries.shift();
     }
+  }
+
+  /**
+   * Make sure point is in fixed point notation
+   * @param {string} point - 'lat lng' may have exponential notation
+   * @returns {string} 'lat,lng' fixed point notation
+   * @private
+   * @memberOf app.Geo
+   */
+  function _cleanPoint(point) {
+    let ret = point;
+    try {
+      const stringArray = point.split(' ');
+      if (stringArray.length === 2) {
+        const lat = parseFloat(stringArray[0]).toFixed(8);
+        const lng = parseFloat(stringArray[1]).toFixed(8);
+        ret = `${lat},${lng}`;
+      }
+    } catch (ex) {
+      Chrome.Utils.noop();
+    }
+    return ret;
   }
 
   return {
@@ -98,16 +120,18 @@ app.Geo = (function() {
         throw new Error('point is empty or null');
       }
 
+      // replace any exponential notation
+      const pt = _cleanPoint(point);
+
       // check cache
-      const cache = _getFromCache(point);
+      const cache = _getFromCache(pt);
       if (cache) {
         // retrieve from cache
         return Promise.resolve(cache.loc);
       }
 
       // get from api - it will translate based on the browser language
-      const url = `${_GEOCODE_API}?sensor=true` +
-          `&latlng=${point}`;
+      const url = `${_GEOCODE_API}?latlng=${pt}`;
       const conf = Chrome.JSONUtils.shallowCopy(Chrome.Http.conf);
       conf.maxRetries = 2;
       return Chrome.Http.doGet(url, conf).then((response) => {
@@ -116,7 +140,7 @@ app.Geo = (function() {
             && (response.results.length > 0)) {
           location = response.results[0].formatted_address;
           // cache it
-          _addToCache(point, location);
+          _addToCache(pt, location);
         }
         return Promise.resolve(location);
       });
