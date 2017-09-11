@@ -177,6 +177,9 @@
 
 * **Can you hide the cursor when the screensaver is displayed?**
 
+    **Update:** As of Chrome version 60 this has been fixed. It may
+    still be broken on Mac though.
+
     There is bug in Chrome that prevents this. It was working on MS Windows
     computers until Chrome Version 58 broke it. It has been broken on Chrome OS
     for a long time. If you would like to see this fixed, star
