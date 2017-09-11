@@ -218,15 +218,5 @@ app.SSControl = (function() {
       // send message to the screen savers to close themselves
       Chrome.Msg.send(app.Msg.SS_CLOSE).catch(() => {});
     },
-
-    /**
-     * Toggle enabled state of the screen saver
-     * @memberOf app.SSControl
-     */
-    toggleEnabled: function() {
-      Chrome.Storage.set('enabled', !Chrome.Storage.getBool('enabled'));
-      // storage changed event not fired on same page as the change
-      app.Data.processState('enabled');
-    },
   };
 })();
