@@ -80,7 +80,7 @@
       divider: false,
     },
     {
-      label: 'View last error', route: 'page-error',
+      label: Chrome.Locale.localize('menu_error'), route: 'page-error',
       icon: 'myicons:error', obj: _showErrorPage,
       ready: false, disabled: false, divider: false,
     },
