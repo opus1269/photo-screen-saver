@@ -77,13 +77,15 @@
      * @param {string} useKey - The key for if the source is selected
      * @param {string} photosKey - The key for the collection of photos
      * @param {string} type - A descriptor of the photo source
+     * @param {string} desc - A human readable description of the source
      * @param {boolean} isDaily - Should the source be updated daily
      * @param {boolean} isArray - Is the source an Array of photo Arrays
      * @param {?Object} [loadArg=null] - optional arg for load function
      * @constructor
      */
-    constructor(useKey, photosKey, type, isDaily, isArray, loadArg = null) {
-      super(useKey, photosKey, type, isDaily, isArray, loadArg);
+    constructor(useKey, photosKey, type, desc, isDaily, isArray,
+                loadArg = null) {
+      super(useKey, photosKey, type, desc, isDaily, isArray, loadArg);
     }
 
     /** Determine if a Picasa entry is an image

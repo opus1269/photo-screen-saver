@@ -41,18 +41,23 @@
      * @param {string} useKey - The key for if the source is selected
      * @param {string} photosKey - The key for the collection of photos
      * @param {string} type - A descriptor of the photo source
+     * @param {string} desc - A human readable description of the source
      * @param {boolean} isDaily - Should the source be updated daily
      * @param {boolean} isArray - Is the source an Array of photo Arrays
      * @param {?Object} [loadArg=null] - optional arg for load function
      * @constructor
      */
-    constructor(useKey, photosKey, type, isDaily, isArray, loadArg = null) {
+    constructor(useKey, photosKey, type, desc, isDaily, isArray,
+                loadArg = null) {
       this._useKey = useKey;
       this._photosKey = photosKey;
       this._type = type;
+      this._desc = desc;
       this._isDaily = isDaily;
       this._isArray = isArray;
       this._loadArg = loadArg;
+
+      // set the user facing description
     }
 
     /**
@@ -65,39 +70,52 @@
       switch (useKey) {
         case app.PhotoSources.UseKey.ALBUMS_GOOGLE:
           return new app.GoogleSource(useKey, 'albumSelections', 'Google User',
+              Chrome.Locale.localize('google_title_photos'),
               true, true, true);
         case app.PhotoSources.UseKey.PHOTOS_GOOGLE:
           // not implemented yet
           return new app.GoogleSource(useKey, 'googleImages', 'Google User',
+              'NOT IMPLEMENTED',
               true, false, false);
         case app.PhotoSources.UseKey.CHROMECAST:
           return new app.CCSource(useKey, 'ccImages', 'Google',
+              Chrome.Locale.localize('setting_chromecast'),
               false, false, null);
         case app.PhotoSources.UseKey.ED_500:
-          return new app.Px500Source(useKey, 'editors500pxImages',
-              '500', true, false, 'editors');
+          return new app.Px500Source(useKey, 'editors500pxImages', '500',
+              Chrome.Locale.localize('setting_500editors'),
+              true, false, 'editors');
         case app.PhotoSources.UseKey.POP_500:
-          return new app.Px500Source(useKey, 'popular500pxImages',
-              '500', true, false, 'popular');
+          return new app.Px500Source(useKey, 'popular500pxImages', '500',
+              Chrome.Locale.localize('setting_500popular'),
+              true, false, 'popular');
         case app.PhotoSources.UseKey.YEST_500:
-          return new app.Px500Source(useKey, 'yesterday500pxImages',
-              '500', true, false, 'fresh_yesterday');
+          return new app.Px500Source(useKey, 'yesterday500pxImages', '500',
+              Chrome.Locale.localize('setting_500yest'),
+              true, false, 'fresh_yesterday');
         case app.PhotoSources.UseKey.INT_FLICKR:
           return new app.FlickrSource(useKey, 'flickrInterestingImages',
-              'flickr', true, false, false);
+              'flickr',
+              Chrome.Locale.localize('setting_flickr_int'),
+              true, false, false);
         case app.PhotoSources.UseKey.AUTHOR:
           return new app.FlickrSource(useKey, 'authorImages', 'flickr',
+              Chrome.Locale.localize('setting_mine'),
               false, false, true);
         case app.PhotoSources.UseKey.SPACE_RED:
           return new app.RedditSource(useKey, 'spaceRedditImages', 'reddit',
+              Chrome.Locale.localize('setting_reddit_space'),
               true, false, 'r/spaceporn/');
         case app.PhotoSources.UseKey.EARTH_RED:
           return new app.RedditSource(useKey, 'earthRedditImages', 'reddit',
+              Chrome.Locale.localize('setting_reddit_earth'),
               true, false, 'r/EarthPorn/');
         case app.PhotoSources.UseKey.ANIMAL_RED:
           return new app.RedditSource(useKey, 'animalRedditImages', 'reddit',
+              Chrome.Locale.localize('setting_reddit_animal'),
               true, false, 'r/animalporn/');
         default:
+          // TODO title
           Chrome.Log.error(`Bad PhotoSource type: ${useKey}`,
               'SSView.createView');
           return null;
@@ -189,25 +207,6 @@
     }
 
     /**
-     * Save the photos to localStorage in a safe manner
-     * @param {app.PhotoSource.Photo[]} photos
-     * - {@link app.PhotoSource.Photo} Array
-     * @returns {?string} non-null on error
-     * @private
-     */
-    _savePhotos(photos) {
-      let ret = null;
-      const keyBool = this._useKey;
-      if (photos && photos.length) {
-        const set = Chrome.Storage.safeSet(this._photosKey, photos, keyBool);
-        if (!set) {
-          ret = 'Exceeded storage capacity.';
-        }
-      }
-      return ret;
-    }
-
-    /**
      * Determine if this source has been selected for display
      * @returns {boolean} true if selected
      */
@@ -228,13 +227,35 @@
           }
           return Promise.resolve();
         }).catch((err) => {
-          Chrome.Log.error(err.message, 'PhotoSource.process');
+          const title =
+              `${Chrome.Locale.localize('err_photo_source_title')}: ` +
+              `${this._desc}`;
+          Chrome.Log.error(err.message, 'PhotoSource.process', title);
           throw err;
         });
       } else {
         localStorage.removeItem(this._photosKey);
         return Promise.resolve();
       }
+    }
+
+    /**
+     * Save the photos to localStorage in a safe manner
+     * @param {app.PhotoSource.Photo[]} photos
+     * - {@link app.PhotoSource.Photo} Array
+     * @returns {?string} non-null on error
+     * @private
+     */
+    _savePhotos(photos) {
+      let ret = null;
+      const keyBool = this._useKey;
+      if (photos && photos.length) {
+        const set = Chrome.Storage.safeSet(this._photosKey, photos, keyBool);
+        if (!set) {
+          ret = 'Exceeded storage capacity.';
+        }
+      }
+      return ret;
     }
   };
 })();
