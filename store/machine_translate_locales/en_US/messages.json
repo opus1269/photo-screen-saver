@@ -104,6 +104,9 @@
   "menu_preview": {
     "message": "Preview screensaver"
   },
+  "menu_error": {
+    "message": "View last error"
+  },
   "menu_help": {
     "message": "Help & feedback"
   },
