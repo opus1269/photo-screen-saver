@@ -33,16 +33,22 @@
    * and when Chrome is updated to a new version.
    * @see https://developer.chrome.com/extensions/runtime#event-onInstalled
    * @param {Object} details - type of event
+   * @param {string} details.reason - reason for install
+   * @param {string} details.previousVersion - old version if 'update' reason
    * @private
    * @memberOf Background
    */
   function _onInstalled(details) {
     if (details.reason === 'install') {
+      // initial install
       Chrome.GA.event(Chrome.GA.EVENT.INSTALLED);
       app.Data.initialize();
       _showOptionsTab();
     } else if (details.reason === 'update') {
       // extension updated
+      const label = `To: ${Chrome.Utils.getVersion()}` +
+          ` From: ${details.previousVersion}`;
+      Chrome.GA.event(Chrome.GA.EVENT.UPDATED, label);
       app.Data.update();
     }
   }
