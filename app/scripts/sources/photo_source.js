@@ -98,7 +98,7 @@
           return new app.RedditSource(useKey, 'animalRedditImages', 'reddit',
               true, false, 'r/animalporn/');
         default:
-          Chrome.GA.error(`Bad PhotoSource type: ${useKey}`,
+          Chrome.Log.error(`Bad PhotoSource type: ${useKey}`,
               'SSView.createView');
           return null;
       }
@@ -228,7 +228,7 @@
           }
           return Promise.resolve();
         }).catch((err) => {
-          Chrome.GA.error(err.message, 'PhotoSource.process');
+          Chrome.Log.error(err.message, 'PhotoSource.process');
           throw err;
         });
       } else {

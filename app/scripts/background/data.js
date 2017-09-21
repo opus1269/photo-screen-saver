@@ -25,7 +25,7 @@ app.Data = (function() {
    * @private
    * @memberOf app.Data
    */
-  const _DATA_VERSION = 16;
+  const _DATA_VERSION = 17;
 
   /**
    * A number and associated units
@@ -239,6 +239,11 @@ app.Data = (function() {
       // set operating system
       _setOS().catch(() => {});
 
+      // and the last error
+      Chrome.Storage.clearLastError().catch((err) => {
+        Chrome.GA.error(err.message, 'Data.initialize');
+      });
+      
       // set time format based on locale
       Chrome.Storage.set('showTime', _getTimeFormat());
 

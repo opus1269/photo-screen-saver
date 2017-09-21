@@ -68,7 +68,7 @@
         case app.SSViews.Type.FULL:
           return new app.SSViewFull(photo);
         default:
-          Chrome.GA.error(`Bad SSView type: ${sizing}`, 'SSView.createView');
+          Chrome.Log.error(`Bad SSView type: ${sizing}`, 'SSView.createView');
           return new app.SSViewLetterbox(photo);
       }
     }
@@ -241,7 +241,7 @@
         }).catch((err) => {
           const networkErr = Chrome.Locale.localize('err_network');
           if (!err.message.includes(networkErr)) {
-            Chrome.GA.error(`${err.message}, point: ${point}`,
+            Chrome.Log.error(`${err.message}, point: ${point}`,
                 'SSView._setLocationLabel');
           }
         });

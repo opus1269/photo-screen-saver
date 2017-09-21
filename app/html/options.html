@@ -74,11 +74,11 @@
         <!-- Drawer Content -->
         <paper-menu class="list" id="mainMenu" attr-for-selected="id"
                     selected="[[route]]">
-          <template is="dom-repeat" items="[[pages]]">
+          <template is="dom-repeat" id="menuTemplate" items="[[pages]]">
             <hr hidden$="[[!item.divider]]"/>
             <paper-item id="[[item.route]]"
                         class="center horizontal layout"
-                        on-click="_onNavMenuItemTapped">
+                        on-click="_onNavMenuItemTapped" disabled$="[[item.disabled]]">
               <iron-icon icon="[[item.icon]]"></iron-icon>
               <span>[[item.label]]</span>
             </paper-item>
@@ -134,6 +134,9 @@
           <neon-animatable data-route="page-google-photos">
             <section id="googlePhotosInsertion"></section>
           </neon-animatable>
+          <neon-animatable data-route="page-error">
+            <section id="errorInsertion"></section>
+          </neon-animatable>
           <neon-animatable data-route="page-help">
             <section id="helpInsertion"></section>
           </neon-animatable>
@@ -145,8 +148,9 @@
 
 <script src="../lib/Snoocore-browser.min.js"></script>
 <script src="../bower_components/chrome-extension-utils/scripts/chrome-promise.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/analytics.js"></script>
 <script src="../bower_components/chrome-extension-utils/scripts/exception_handler.js"></script>
+<script src="../bower_components/chrome-extension-utils/scripts/analytics.js"></script>
+<script src="../bower_components/chrome-extension-utils/scripts/log.js"></script>
 <script src="../bower_components/chrome-extension-utils/scripts/json.js"></script>
 <script src="../bower_components/chrome-extension-utils/scripts/storage.js"></script>
 <script src="../bower_components/chrome-extension-utils/scripts/locales.js"></script>
@@ -163,6 +167,7 @@
 <script src="../scripts/sources/photo_source_flickr.js"></script>
 <script src="../scripts/sources/photo_source_500px.js"></script>
 <script src="../scripts/sources/photo_source_google.js"></script>
+<script src="../scripts/options/utils.js"></script>
 <script src="../scripts/options/permissions.js"></script>
 <script src="../scripts/options/options.js"></script>
 

@@ -50,7 +50,7 @@
       contexts: ['browser_action'],
     }).catch((err) => {
       if (!err.message.includes('duplicate id')) {
-        Chrome.GA.error(err.message, 'chromep.contextMenus.create');
+        Chrome.Log.error(err.message, 'chromep.contextMenus.create');
       }
     });
 
@@ -61,7 +61,7 @@
       contexts: ['browser_action'],
     }).catch((err) => {
       if (!err.message.includes('duplicate id')) {
-        Chrome.GA.error(err.message, 'chromep.contextMenus.create');
+        Chrome.Log.error(err.message, 'chromep.contextMenus.create');
       }
     });
 
@@ -71,7 +71,7 @@
       contexts: ['browser_action'],
     }).catch((err) => {
       if (!err.message.includes('duplicate id')) {
-        Chrome.GA.error(err.message, 'chromep.contextMenus.create');
+        Chrome.Log.error(err.message, 'chromep.contextMenus.create');
       }
     });
   }

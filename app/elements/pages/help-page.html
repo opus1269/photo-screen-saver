@@ -58,19 +58,19 @@
                       name="questionMail"
                       label="{{localize('help_question')}}"
                       icon="myicons:mail"
-                      url="mailto:[[email]]?subject=Question&body=[[_computeEmailBody()]]"></setting-link>
+                      url="[[_computeMailToUrl('Question')]]"></setting-link>
         <setting-link label="{{localize('help_bug')}}"
                       name="bugMail"
                       icon="myicons:mail"
-                      url="mailto:[[email]]?subject=Bug%20report&body=[[_computeEmailBody()]]"></setting-link>
+                      url="[[_computeMailToUrl('Bug report')]]"></setting-link>
         <setting-link label="{{localize('help_feature')}}"
                       name="featureMail"
                       icon="myicons:mail"
-                      url="mailto:[[email]]?subject=Feature%20request&body=[[_computeEmailBody()]]"></setting-link>
+                      url="[[_computeMailToUrl('Feature request')]]"></setting-link>
         <setting-link label="{{localize('help_feedback')}}"
                       name="feedbackMail"
                       icon="myicons:mail"
-                      url="mailto:[[email]]?subject=General%20feedback"></setting-link>
+                      url="[[_computeMailToUrl('General feedback')]]"></setting-link>
         <setting-link label="{{localize('help_issue')}}"
                       name="submitGitHubIssue"
                       noseparator
@@ -127,38 +127,32 @@
       ],
 
       properties: {
-        email: {
-          type: String,
-          value: 'photoscreensaver%40gmail.com',
-          readOnly: true,
-        },
-
         githubPath: {
           type: String,
-          value: 'https://github.com/opus1269/photo-screen-saver/',
+          value: function() {
+            return app.Utils.getGithubPath();
+          },
           readOnly: true,
         },
 
         githubPagesPath: {
           type: String,
-          value: 'https://opus1269.github.io/photo-screen-saver/',
+          value: function() {
+            return app.Utils.getGithubPagesPath();
+          },
           readOnly: true,
         },
       },
 
       /**
-       * computed binding: Get the body for support emails
-       * @returns {string} Body of email
+       * computed binding: Get a mailto url
+       * @param {string} subject - email subject
+       * @returns {string} url
        * @private
        */
-      _computeEmailBody: function() {
-        const text =
-            `Extension version: ${Chrome.Utils.getVersion()}
-				Chrome version: ${Chrome.Utils.getFullChromeVersion()}
-				OS: ${Chrome.Storage.get('os')}\n\n\n`;
-        return encodeURIComponent(text);
+      _computeMailToUrl: function(subject) {
+        return app.Utils.getEmailUrl(subject, app.Utils.getEmailBody());
       },
-
       /**
        * computed binding: Get the extension version
        * @returns {string} Version of the extension

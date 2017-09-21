@@ -355,7 +355,7 @@
      * @private
      */
     _restoreDefaultsTapped: function() {
-      Chrome.Msg.send(app.Msg.RESTORE_DEFAULTS).catch(() => {});
+      Chrome.Msg.send(Chrome.Msg.RESTORE_DEFAULTS).catch(() => {});
     },
 
     /**
@@ -368,12 +368,12 @@
       const isAllowed = app.Permissions.isAllowed(perm);
       if (isSet && !isAllowed) {
         app.Permissions.request(perm).catch((err) => {
-          Chrome.GA.error(err.message,
+          Chrome.Log.error(err.message,
               'settings-page._chromeBackgroundTapped');
         });
       } else if (!isSet && isAllowed) {
         app.Permissions.remove(perm).catch((err) => {
-          Chrome.GA.error(err.message,
+          Chrome.Log.error(err.message,
               'settings-page._chromeBackgroundTapped');
         });
       }

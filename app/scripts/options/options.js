@@ -80,6 +80,11 @@
       divider: false,
     },
     {
+      label: 'View last error', route: 'page-error',
+      icon: 'myicons:error', obj: _showErrorPage,
+      ready: false, disabled: false, divider: false,
+    },
+    {
       label: Chrome.Locale.localize('menu_help'), route: 'page-help',
       icon: 'myicons:help', obj: _showHelpPage, ready: false,
       divider: true,
@@ -125,8 +130,24 @@
    */
   t.addEventListener('dom-change', function() {
     Chrome.GA.page('/options.html');
+
     // listen for chrome messages
     Chrome.Msg.listen(_onMessage);
+
+    // initialize lastError enabled state
+    _setErrorMenuState();
+    
+    // listen for changes to chrome.storage
+    chrome.storage.onChanged.addListener(function(changes) {
+      for (const key in changes) {
+        if (changes.hasOwnProperty(key)) {
+          if (key === 'lastError') {
+            _setErrorMenuState();
+            break;
+          }
+        }
+      }
+    });
   });
 
   /**
@@ -141,26 +162,23 @@
     if (drawerPanel && drawerPanel.narrow) {
       drawerPanel.closeDrawer();
     }
+    const idx = _getPageIdx(event.currentTarget.id);
 
-    const index = t.pages.findIndex((element) => {
-      return element.route === event.currentTarget.id;
-    });
-
-    Chrome.GA.event(Chrome.GA.EVENT.MENU, t.pages[index].route);
+    Chrome.GA.event(Chrome.GA.EVENT.MENU, t.pages[idx].route);
 
     const prevRoute = t.route;
 
-    if (!t.pages[index].obj) {
+    if (!t.pages[idx].obj) {
       // some pages are just pages
-      t.route = t.pages[index].route;
+      t.route = t.pages[idx].route;
       _scrollPageToTop();
-    } else if (typeof t.pages[index].obj === 'string') {
+    } else if (typeof t.pages[idx].obj === 'string') {
       // some pages are url links
       t.$.mainMenu.select(prevRoute);
-      chrome.tabs.create({url: t.pages[index].obj});
+      chrome.tabs.create({url: t.pages[idx].obj});
     } else {
       // some pages have functions to view them
-      t.pages[index].obj(index, prevRoute);
+      t.pages[idx].obj(idx, prevRoute);
     }
   };
 
@@ -183,6 +201,19 @@
   };
 
   /**
+   * Get the index into the {@link Options.pages} array
+   * @param {string} name - {@link Options.page} route
+   * @returns {int} index into array
+   * @private
+   * @memberOf Options
+   */
+  function _getPageIdx(name) {
+    return t.pages.map(function(e) {
+      return e.route;
+    }).indexOf(name);
+  }
+
+  /**
    * Show the Google Photos page
    * @param {int} index - index into [t.pages]{@link Options.t.pages}
    * @memberOf Options
@@ -196,6 +227,23 @@
       Polymer.dom(t.$.googlePhotosInsertion).appendChild(t.gPhotosPage);
     } else if (Chrome.Storage.getBool('isAlbumMode')) {
       t.gPhotosPage.loadAlbumList();
+    }
+    t.route = t.pages[index].route;
+    _scrollPageToTop();
+  }
+
+  /**
+   * Show the error viewer page
+   * @param {int} index - index into {@link Options.pages}
+   * @private
+   * @memberOf Options
+   */
+  function _showErrorPage(index) {
+    if (!t.pages[index].ready) {
+      // insert the page the first time
+      t.pages[index].ready = true;
+      const el = new app.ErrorPageFactory();
+      Polymer.dom(t.$.errorInsertion).appendChild(el);
     }
     t.route = t.pages[index].route;
     _scrollPageToTop();
@@ -241,6 +289,26 @@
     t.$.scrollPanel.scrollToTop(true);
   }
 
+  /**
+   * Set enabled state of Error Viewer menu item
+   * @memberOf Options
+   */
+  function _setErrorMenuState() {
+    // disable error-page if no lastError
+    Chrome.Storage.getLastError().then((lastError) => {
+      const idx = _getPageIdx('page-error');
+      const el = document.getElementById(t.pages[idx].route);
+      if (el && !Chrome.Utils.isWhiteSpace(lastError.message)) {
+        el.removeAttribute('disabled');
+      } else if (el) {
+        el.setAttribute('disabled', 'true');
+      }
+      return Promise.resolve();
+    }).catch((err) => {
+      Chrome.GA.error(err.message, 'Options._setErrorMenuState');
+    });
+  }
+
   // noinspection JSUnusedLocalSymbols
   /**
    * Event: Fired when a message is sent from either an extension process<br>
@@ -254,14 +322,14 @@
    * @memberOf Options
    */
   function _onMessage(request, sender, response) {
-    if (request.message === app.Msg.HIGHLIGHT.message) {
+    if (request.message === Chrome.Msg.HIGHLIGHT.message) {
       // highlight ourselves and let the sender know we are here
       const chromep = new ChromePromise();
       chromep.tabs.getCurrent().then((t) => {
         chrome.tabs.update(t.id, {'highlighted': true});
         return null;
       }).catch((err) => {
-        Chrome.GA.error(err.message, 'chromep.tabs.getCurrent');
+        Chrome.Log.error(err.message, 'chromep.tabs.getCurrent');
       });
       response(JSON.stringify({message: 'OK'}));
     } else if (request.message === Chrome.Msg.STORAGE_EXCEEDED.message) {

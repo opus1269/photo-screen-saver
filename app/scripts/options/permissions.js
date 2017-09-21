@@ -82,7 +82,7 @@ app.Permissions = (function() {
   function _setState(type, value) {
     // send message to store value so items that are bound
     // to it will get storage event
-    const msg = Chrome.JSONUtils.shallowCopy(app.Msg.STORE);
+    const msg = Chrome.JSONUtils.shallowCopy(Chrome.Msg.STORE);
     msg.key = type.name;
     msg.value = value;
     Chrome.Msg.send(msg).catch(() => {});

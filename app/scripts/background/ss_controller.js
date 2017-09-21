@@ -110,7 +110,7 @@ app.SSControl = (function() {
       }
       return null;
     }).catch((err) => {
-      Chrome.GA.error(err.message, 'SSControl._open');
+      Chrome.Log.error(err.message, 'SSControl._open');
     });
   }
 
@@ -130,7 +130,7 @@ app.SSControl = (function() {
       }
       return Promise.resolve();
     }).catch((err) => {
-      Chrome.GA.error(err.message, 'SSControl._openOnAllDisplays');
+      Chrome.Log.error(err.message, 'SSControl._openOnAllDisplays');
     });
   }
 
@@ -165,7 +165,7 @@ app.SSControl = (function() {
         });
       }
     }).catch((err) => {
-      Chrome.GA.error(err.message, 'SSControl._isShowing');
+      Chrome.Log.error(err.message, 'SSControl._isShowing');
     });
   }
 

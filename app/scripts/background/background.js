@@ -21,7 +21,7 @@
    */
   function _showOptionsTab() {
     // send message to the option tab to focus it.
-    Chrome.Msg.send(app.Msg.HIGHLIGHT).catch(() => {
+    Chrome.Msg.send(Chrome.Msg.HIGHLIGHT).catch(() => {
       // no one listening, create it
       chrome.tabs.create({url: '../html/options.html'});
     });
@@ -94,9 +94,9 @@
    * @memberOf Background
    */
   function _onChromeMessage(request, sender, response) {
-    if (request.message === app.Msg.RESTORE_DEFAULTS.message) {
+    if (request.message === Chrome.Msg.RESTORE_DEFAULTS.message) {
       app.Data.restoreDefaults();
-    } else if (request.message === app.Msg.STORE.message) {
+    } else if (request.message === Chrome.Msg.STORE.message) {
       Chrome.Storage.set(request.key, request.value);
     }
     return false;

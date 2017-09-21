@@ -102,7 +102,7 @@ app.Screensaver = (function() {
         }
         return null;
       }).catch((err) => {
-        Chrome.GA.error(err.message, 'chromep.tabs.getZoom');
+        Chrome.Log.error(err.message, 'chromep.tabs.getZoom');
       });
     }
   }

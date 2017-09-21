@@ -53,7 +53,7 @@ app.Alarm = (function() {
       }
       return Promise.resolve();
     }).catch((err) => {
-      Chrome.GA.error(err.message, 'Alarm._setActiveState');
+      Chrome.Log.error(err.message, 'Alarm._setActiveState');
     });
     app.Alarm.updateBadgeText();
   }
@@ -166,7 +166,7 @@ app.Alarm = (function() {
         }
         return Promise.resolve();
       }).catch((err) => {
-        Chrome.GA.error(err.message,
+        Chrome.Log.error(err.message,
             'chromep.alarms.get(_ALARMS.UPDATE_PHOTOS)');
       });
     },
