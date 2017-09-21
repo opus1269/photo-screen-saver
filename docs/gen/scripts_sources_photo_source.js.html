@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.PhotoSources.html">app.PhotoSources</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="Background.html">Background</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li><li><a href="ContextMenus.html">ContextMenus</a></li><li><a href="Options.html">Options</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.PhotoSources.html">app.PhotoSources</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="app.Utils.html">app.Utils</a></li><li><a href="Background.html">Background</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Log.html">Chrome.Log</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li><li><a href="ContextMenus.html">ContextMenus</a></li><li><a href="Options.html">Options</a></li>
 				</ul>
 			</li>
 			
@@ -120,18 +120,23 @@
      * @param {string} useKey - The key for if the source is selected
      * @param {string} photosKey - The key for the collection of photos
      * @param {string} type - A descriptor of the photo source
+     * @param {string} desc - A human readable description of the source
      * @param {boolean} isDaily - Should the source be updated daily
      * @param {boolean} isArray - Is the source an Array of photo Arrays
      * @param {?Object} [loadArg=null] - optional arg for load function
      * @constructor
      */
-    constructor(useKey, photosKey, type, isDaily, isArray, loadArg = null) {
+    constructor(useKey, photosKey, type, desc, isDaily, isArray,
+                loadArg = null) {
       this._useKey = useKey;
       this._photosKey = photosKey;
       this._type = type;
+      this._desc = desc;
       this._isDaily = isDaily;
       this._isArray = isArray;
       this._loadArg = loadArg;
+
+      // set the user facing description
     }
 
     /**
@@ -144,40 +149,53 @@
       switch (useKey) {
         case app.PhotoSources.UseKey.ALBUMS_GOOGLE:
           return new app.GoogleSource(useKey, 'albumSelections', 'Google User',
+              Chrome.Locale.localize('google_title_photos'),
               true, true, true);
         case app.PhotoSources.UseKey.PHOTOS_GOOGLE:
           // not implemented yet
           return new app.GoogleSource(useKey, 'googleImages', 'Google User',
+              'NOT IMPLEMENTED',
               true, false, false);
         case app.PhotoSources.UseKey.CHROMECAST:
           return new app.CCSource(useKey, 'ccImages', 'Google',
+              Chrome.Locale.localize('setting_chromecast'),
               false, false, null);
         case app.PhotoSources.UseKey.ED_500:
-          return new app.Px500Source(useKey, 'editors500pxImages',
-              '500', true, false, 'editors');
+          return new app.Px500Source(useKey, 'editors500pxImages', '500',
+              Chrome.Locale.localize('setting_500editors'),
+              true, false, 'editors');
         case app.PhotoSources.UseKey.POP_500:
-          return new app.Px500Source(useKey, 'popular500pxImages',
-              '500', true, false, 'popular');
+          return new app.Px500Source(useKey, 'popular500pxImages', '500',
+              Chrome.Locale.localize('setting_500popular'),
+              true, false, 'popular');
         case app.PhotoSources.UseKey.YEST_500:
-          return new app.Px500Source(useKey, 'yesterday500pxImages',
-              '500', true, false, 'fresh_yesterday');
+          return new app.Px500Source(useKey, 'yesterday500pxImages', '500',
+              Chrome.Locale.localize('setting_500yest'),
+              true, false, 'fresh_yesterday');
         case app.PhotoSources.UseKey.INT_FLICKR:
           return new app.FlickrSource(useKey, 'flickrInterestingImages',
-              'flickr', true, false, false);
+              'flickr',
+              Chrome.Locale.localize('setting_flickr_int'),
+              true, false, false);
         case app.PhotoSources.UseKey.AUTHOR:
           return new app.FlickrSource(useKey, 'authorImages', 'flickr',
+              Chrome.Locale.localize('setting_mine'),
               false, false, true);
         case app.PhotoSources.UseKey.SPACE_RED:
           return new app.RedditSource(useKey, 'spaceRedditImages', 'reddit',
+              Chrome.Locale.localize('setting_reddit_space'),
               true, false, 'r/spaceporn/');
         case app.PhotoSources.UseKey.EARTH_RED:
           return new app.RedditSource(useKey, 'earthRedditImages', 'reddit',
+              Chrome.Locale.localize('setting_reddit_earth'),
               true, false, 'r/EarthPorn/');
         case app.PhotoSources.UseKey.ANIMAL_RED:
           return new app.RedditSource(useKey, 'animalRedditImages', 'reddit',
+              Chrome.Locale.localize('setting_reddit_animal'),
               true, false, 'r/animalporn/');
         default:
-          Chrome.GA.error(`Bad PhotoSource type: ${useKey}`,
+          // TODO title
+          Chrome.Log.error(`Bad PhotoSource type: ${useKey}`,
               'SSView.createView');
           return null;
       }
@@ -268,25 +286,6 @@
     }
 
     /**
-     * Save the photos to localStorage in a safe manner
-     * @param {app.PhotoSource.Photo[]} photos
-     * - {@link app.PhotoSource.Photo} Array
-     * @returns {?string} non-null on error
-     * @private
-     */
-    _savePhotos(photos) {
-      let ret = null;
-      const keyBool = this._useKey;
-      if (photos &amp;&amp; photos.length) {
-        const set = Chrome.Storage.safeSet(this._photosKey, photos, keyBool);
-        if (!set) {
-          ret = 'Exceeded storage capacity.';
-        }
-      }
-      return ret;
-    }
-
-    /**
      * Determine if this source has been selected for display
      * @returns {boolean} true if selected
      */
@@ -307,13 +306,34 @@
           }
           return Promise.resolve();
         }).catch((err) => {
-          Chrome.GA.error(err.message, 'PhotoSource.process');
+          let title = Chrome.Locale.localize('err_photo_source_title');
+          title += `: ${this._desc}`;
+          Chrome.Log.error(err.message, 'PhotoSource.process', title);
           throw err;
         });
       } else {
         localStorage.removeItem(this._photosKey);
         return Promise.resolve();
       }
+    }
+
+    /**
+     * Save the photos to localStorage in a safe manner
+     * @param {app.PhotoSource.Photo[]} photos
+     * - {@link app.PhotoSource.Photo} Array
+     * @returns {?string} non-null on error
+     * @private
+     */
+    _savePhotos(photos) {
+      let ret = null;
+      const keyBool = this._useKey;
+      if (photos &amp;&amp; photos.length) {
+        const set = Chrome.Storage.safeSet(this._photosKey, photos, keyBool);
+        if (!set) {
+          ret = 'Exceeded storage capacity.';
+        }
+      }
+      return ret;
     }
   };
 })();
@@ -362,7 +382,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on September 11th 2017, 3:13:00 am
+		on September 21st 2017, 10:46:43 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: bower_components/chrome-extension-utils/storage.js</title>
+	<title>Documentation Source: scripts/options/utils.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.PhotoSources.html">app.PhotoSources</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="Background.html">Background</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li><li><a href="ContextMenus.html">ContextMenus</a></li><li><a href="Options.html">Options</a></li>
+					<li><a href="app.Alarm.html">app.Alarm</a></li><li><a href="app.Data.html">app.Data</a></li><li><a href="app.GA.html">app.GA</a></li><li><a href="app.Geo.html">app.Geo</a></li><li><a href="app.Msg.html">app.Msg</a></li><li><a href="app.Permissions.html">app.Permissions</a></li><li><a href="app.PhotoSources.html">app.PhotoSources</a></li><li><a href="app.Screensaver.html">app.Screensaver</a></li><li><a href="app.SSBuilder.html">app.SSBuilder</a></li><li><a href="app.SSControl.html">app.SSControl</a></li><li><a href="app.SSEvents.html">app.SSEvents</a></li><li><a href="app.SSFinder.html">app.SSFinder</a></li><li><a href="app.SSHistory.html">app.SSHistory</a></li><li><a href="app.SSPhotos.html">app.SSPhotos</a></li><li><a href="app.SSRunner.html">app.SSRunner</a></li><li><a href="app.SSTime.html">app.SSTime</a></li><li><a href="app.SSViews.html">app.SSViews</a></li><li><a href="app.Utils.html">app.Utils</a></li><li><a href="Background.html">Background</a></li><li><a href="Chrome.GA.html">Chrome.GA</a></li><li><a href="Chrome.Http.html">Chrome.Http</a></li><li><a href="Chrome.JSONUtils.html">Chrome.JSONUtils</a></li><li><a href="Chrome.Locale.html">Chrome.Locale</a></li><li><a href="Chrome.Log.html">Chrome.Log</a></li><li><a href="Chrome.Msg.html">Chrome.Msg</a></li><li><a href="Chrome.Storage.html">Chrome.Storage</a></li><li><a href="Chrome.Utils.html">Chrome.Utils</a></li><li><a href="ContextMenus.html">ContextMenus</a></li><li><a href="Options.html">Options</a></li>
 				</ul>
 			</li>
 			
@@ -72,124 +72,78 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: bower_components/chrome-extension-utils/storage.js</h1>
+		<h1 class="page-title">Source: scripts/options/utils.js</h1>
     
 <section>
     <article>
         <pre
             class="sunlight-highlight-javascript linenums">/*
- * Copyright (c) 2016-2017, Michael A. Updike All rights reserved.
- * Licensed under Apache 2.0
- * https://opensource.org/licenses/Apache-2.0
- * https://github.com/opus1269/chrome-extension-utils/blob/master/LICENSE.md
+ *  Copyright (c) 2015-2017, Michael A. Updike All rights reserved.
+ *  Licensed under the BSD-3-Clause
+ *  https://opensource.org/licenses/BSD-3-Clause
+ *  https://github.com/opus1269/photo-screen-saver/blob/master/LICENSE.md
  */
-window.Chrome = window.Chrome || {};
+window.app = window.app || {};
 
 /**
- * Manage items in localStorage
+ * Misc. utility methods
  * @namespace
  */
-Chrome.Storage = (function() {
+app.Utils = (function() {
   'use strict';
 
   new ExceptionHandler();
-
   return {
     /**
-     * Get a JSON parsed value from localStorage
-     * @param {!string} key - key to get value for
-     * @param {?Object} [def=null] - return value if key not found
-     * @returns {?Object} JSON object, null if key does not exist
-     * @memberOf Chrome.Storage
+     * Get our email address
+     * @returns {string} email address
+     * @memberOf app.Utils
      */
-    get: function(key, def = null) {
-      let value = def;
-      let item = localStorage.getItem(key);
-      if (item !== null) {
-        value = Chrome.JSONUtils.parse(item);
-      }
-      return value;
+    getEmail: function() {
+      return 'photoscreensaver@gmail.com';
     },
 
     /**
-     * Get integer value from localStorage
-     * @param {!string} key - key to get value for
-     * @param {?int} [def=null] - optional value to return, if NaN
-     * @returns {int} value as integer, NaN on error
-     * @memberOf Chrome.Storage
+     * Get body for an email with basic extension info
+     * @returns {string} text
+     * @memberOf app.Utils
      */
-    getInt: function(key, def = null) {
-      let item = localStorage.getItem(key);
-      let value = parseInt(item, 10);
-      if (Number.isNaN(value)) {
-        value = (def === null) ? value : def;
-        if (def === null) {
-          Chrome.GA.error(`NaN value for: ${key}`, 'Storage.getInt');
-        }
-      }
-      return value;
+    getEmailBody: function() {
+      return `Extension version: ${Chrome.Utils.getVersion()}\n`
+          + `Chrome version: ${Chrome.Utils.getFullChromeVersion()}\n`
+          + `OS: ${Chrome.Storage.get('os')}\n\n\n`;
     },
 
     /**
-     * Get boolean value from localStorage
-     * @param {!string} key - key to get value for
-     * @param {?boolean} [def=null] - return value if key not found
-     * @returns {?boolean} value as boolean, null if key does not exist
-     * @memberOf Chrome.Storage
+     * Get encoded url for an email
+     * @param {string} subject - email subject
+     * @param {string} body - email body
+     * @returns {string} encoded url
+     * @memberOf app.Utils
      */
-    getBool: function(key, def = null) {
-      return Chrome.Storage.get(key, def);
+    getEmailUrl: function(subject, body) {
+      const email = encodeURIComponent(app.Utils.getEmail());
+      const sub = encodeURIComponent(subject);
+      const bod = encodeURIComponent(body);
+      return `mailto:${email}?subject=${sub}&amp;body=${bod}`;
     },
 
     /**
-     * JSON stringify and save a value to localStorage
-     * @param {!string} key - key to set value for
-     * @param {?Object} [value=null] - new value, if null remove item
-     * @memberOf Chrome.Storage
+     * Get our Github base path
+     * @returns {string} path
+     * @memberOf app.Utils
      */
-    set: function(key, value = null) {
-      let val = value;
-      if (value === null) {
-        localStorage.removeItem(key);
-      } else {
-        val = JSON.stringify(value);
-        localStorage.setItem(key, val);
-      }
+    getGithubPath: function() {
+      return 'https://github.com/opus1269/photo-screen-saver/';
     },
 
     /**
-     * Save a value to localStorage only if there is enough room
-     * @param {!string} key - localStorage Key
-     * @param {Object} value - value to save
-     * @param {string} [keyBool] - key to a boolean value
-     *                 that is true if the primary key has non-empty value
-     * @returns {boolean} true if value was set successfully
-     * @memberOf Chrome.Storage
+     * Get our Github pages base path
+     * @returns {string} path
+     * @memberOf app.Utils
      */
-    safeSet: function(key, value, keyBool) {
-      let ret = true;
-      const oldValue = Chrome.Storage.get(key);
-      try {
-        Chrome.Storage.set(key, value);
-      } catch (e) {
-        ret = false;
-        if (oldValue) {
-          // revert to old value
-          Chrome.Storage.set(key, oldValue);
-        }
-        if (keyBool) {
-          // revert to old value
-          if (oldValue &amp;&amp; oldValue.length) {
-            Chrome.Storage.set(keyBool, true);
-          } else {
-            Chrome.Storage.set(keyBool, false);
-          }
-        }
-        // notify listeners
-        Chrome.Msg.send(Chrome.Msg.STORAGE_EXCEEDED).catch(() => {
-        });
-      }
-      return ret;
+    getGithubPagesPath: function() {
+      return 'https://opus1269.github.io/photo-screen-saver/';
     },
   };
 })();
@@ -238,7 +192,7 @@ Chrome.Storage = (function() {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on September 11th 2017, 3:13:00 am
+		on September 21st 2017, 10:46:43 am
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
