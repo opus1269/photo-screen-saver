@@ -1,6 +1,6 @@
 {
   "chrome_extension_name": {
-    "message": "Foto Bildschirmschoner"
+    "message": "Bildschirmschoner"
   },
   "chrome_extension_description": {
     "message": "Ein Bildschirmschoner mit mehreren Fotoquellen, einschließlich Ihrer Google Fotos."
@@ -11,20 +11,36 @@
   "toggle_enabled": {
     "message": "Toggle aktiviert Zustand"
   },
+  "photo_from": {
+    "message": "Foto von",
+    "description": "use example: Photo from Google"
+  },
   "screensaver": {
     "message": "Bildschirmschoner"
   },
   "on": {
-    "message": "Ist an"
+    "message": "ist an"
   },
   "off": {
     "message": "ist aus"
   },
   "disable": {
-    "message": "Deaktivieren"
+    "message": "Deaktivieren (Alt + Shift + Q)"
   },
   "enable": {
-    "message": "Aktivieren"
+    "message": "Aktivieren (Alt + Umschalt + Q)"
+  },
+  "display_now": {
+    "message": "Jetzt anzeigen"
+  },
+  "ss_toggle_paused": {
+    "message": "Toggle pausiert"
+  },
+  "ss_forward": {
+    "message": "Vorwärts ein Foto"
+  },
+  "ss_back": {
+    "message": "Zurück ein Foto"
   },
   "help": {
     "message": "Hilfe"
@@ -40,38 +56,6 @@
     "message": "STORNIEREN",
     "description": "All Caps"
   },
-  "polymer": {
-    "message": "POLYMER",
-    "description": "All Caps"
-  },
-  "github": {
-    "message": "ANSICHT AUF GITHUB",
-    "description": "All Caps"
-  },
-  "w3": {
-    "message": "W3SCHOOLS",
-    "description": "All Caps"
-  },
-  "mdn": {
-    "message": "MDN",
-    "description": "All Caps"
-  },
-  "chromecast": {
-    "message": "CHROMKASTEN",
-    "description": "All Caps"
-  },
-  "picasa": {
-    "message": "PICASA",
-    "description": "All Caps"
-  },
-  "material": {
-    "message": "MATERIAL DESIGN",
-    "description": "All Caps"
-  },
-  "chrome_ext": {
-    "message": "CHROME VERLÄNGERUNG",
-    "description": "All Caps"
-  },
   "note": {
     "message": "Hinweis:"
   },
@@ -80,6 +64,9 @@
   },
   "photos": {
     "message": "Fotos"
+  },
+  "no_photos": {
+    "message": "Keine Fotos"
   },
   "seconds": {
     "message": "Sekunden"
@@ -117,6 +104,9 @@
   "menu_preview": {
     "message": "Vorschau Bildschirmschoner"
   },
+  "menu_error": {
+    "message": "Letzten Fehler anzeigen"
+  },
   "menu_help": {
     "message": "Hilfe & Feedback"
   },
@@ -127,7 +117,7 @@
     "message": "Bewerte die Verlängerung"
   },
   "menu_pushy": {
-    "message": "Versuche die Pushy Clipboard Erweiterung"
+    "message": "Versuchen Sie die Pushy Clipboard Erweiterung"
   },
   "menu_letterbox": {
     "message": "Briefkasten"
@@ -151,7 +141,7 @@
     "message": "Verblassen"
   },
   "menu_slide_from_right": {
-    "message": "Rutschen von rechts"
+    "message": "Von rechts abschieben"
   },
   "menu_slide_down": {
     "message": "Herunterrutschen"
@@ -187,13 +177,25 @@
     "message": "Liste aktualisieren"
   },
   "tooltip_keep_awake": {
-    "message": "Die Keep wach Features sind verfügbar, auch wenn der Bildschirmschoner deaktiviert ist, so können Sie die App als General Power Scheduler verwenden. Das Symbol zeigt in diesem Zustand \"PWR\" an."
+    "message": "Die Keep wach Features sind verfügbar, auch wenn der Bildschirmschoner deaktiviert ist, so können Sie die App als allgemeine Power Scheduler verwenden. Das Symbol zeigt 'PWR' an, wenn in diesem Zustand."
   },
   "tooltip_settings_toggle": {
     "message": "Aktivieren / deaktivieren Sie den Bildschirmschoner"
   },
   "tooltip_google_toggle": {
     "message": "Aktivieren / Deaktivieren der Verwendung von Alben"
+  },
+  "tooltip_google_mode_albums": {
+    "message": "Wechseln Sie in den Fotomodus"
+  },
+  "tooltip_google_mode_photos": {
+    "message": "Wechseln Sie in den Album-Modus"
+  },
+  "setting_background": {
+    "message": "Chrome im Hintergrund ausführen"
+  },
+  "setting_background_desc": {
+    "message": "Startet Chrome beim Computerstart und läuft weiter, wenn geschlossen (empfohlen)"
   },
   "setting_idle_time": {
     "message": "Wartezeit"
@@ -207,8 +209,17 @@
   "setting_photo_transition": {
     "message": "Fotoübergangsmethode"
   },
+  "setting_interactive": {
+    "message": "Interaktiver Modus"
+  },
+  "setting_interactive_desc": {
+    "message": "Toggle pausiert (Alt + Umschalt + Leertaste), Zurück (Alt + Umschalt + Linksfeld), Vorwärts (Alt + Umschalt + RechtsArrow)"
+  },
   "setting_show_time": {
     "message": "Show Time"
+  },
+  "setting_large_time": {
+    "message": "Großzeit-Etikett"
   },
   "setting_shuffle": {
     "message": "Randomisieren"
@@ -225,8 +236,20 @@
   "setting_photog": {
     "message": "Zeigen Sie Autor für Fotos, die Sie besitzen"
   },
-  "setting_photog_desc": {
-    "message": "Hinweis: Im Frame-Modus immer angezeigt"
+  "setting_full_res": {
+    "message": "Verwenden Sie die volle Auflösung für Fotos, die Sie besitzen"
+  },
+  "setting_full_res_desc": {
+    "message": "Diese Dateien können sehr groß und gedreht werden"
+  },
+  "setting_location": {
+    "message": "Fotoausstellung anzeigen, falls vorhanden"
+  },
+  "setting_location_desc": {
+    "message": "Der geschätzte Standort von Google Photos wird nicht angezeigt"
+  },
+  "setting_photo_clicks": {
+    "message": "Zeigen Sie die Quelle des Fotos auf Mausklick, falls vorhanden"
   },
   "setting_bg": {
     "message": "Hintergrund"
@@ -253,7 +276,7 @@
     "message": "Bleib wach"
   },
   "setting_keep_awake_desc": {
-    "message": "Verhindern, dass die Anzeige aus dem Ruhezustand (immer aktiv ist, wenn Start- und Stoppzeiten gleich sind)"
+    "message": "Verhindern Sie die Anzeige aus dem Ruhezustand (immer aktiv, wenn Start- und Stoppzeiten gleich sind)"
   },
   "setting_start_time": {
     "message": "Zeit zum Start"
@@ -277,7 +300,7 @@
     "message": "Chromecast"
   },
   "setting_chromecast_desc": {
-    "message": "Einige Backdrop-Fotos aus dem Chromecast-Gerät"
+    "message": "Einige Backdrop-Fotos vom Chromecast-Gerät"
   },
   "setting_500editors": {
     "message": "500px - Redaktion Wahl"
@@ -295,7 +318,7 @@
     "message": "500px - frisch"
   },
   "setting_500yest_desc": {
-    "message": "Aktuelle Fotos vom 500px, täglich aktualisiert"
+    "message": "Aktuelle Fotos aus dem 500px, täglich aktualisiert"
   },
   "setting_flickr_int": {
     "message": "Flickr - interessant"
@@ -304,19 +327,19 @@
     "message": "Interessante Fotos vom Flickr, täglich aktualisiert"
   },
   "setting_reddit_space": {
-    "message": "Reddit - raum"
+    "message": "reddit - raum"
   },
   "setting_reddit_space_desc": {
-    "message": "Hauptsächlich himmlische Fotos von reddit, täglich aktualisiert"
+    "message": "In erster Linie himmlische Fotos von reddit, täglich aktualisiert"
   },
   "setting_reddit_earth": {
-    "message": "Reddit - erde"
+    "message": "reddit - erde"
   },
   "setting_reddit_earth_desc": {
     "message": "In erster Linie Landschaftsfotos von reddit, täglich aktualisiert"
   },
   "setting_reddit_animal": {
-    "message": "Reddit - tier"
+    "message": "reddit - tier"
   },
   "setting_reddit_animal_desc": {
     "message": "Tierfotos von reddit, täglich aktualisiert"
@@ -325,13 +348,13 @@
     "message": "Erweiterungsentwickler"
   },
   "setting_mine_desc": {
-    "message": "Fotos vom Kerl, der das geschrieben hat"
+    "message": "Fotos von dem Kerl, der das geschrieben hat"
   },
   "setting_click_to_view": {
-    "message": "Klicken Sie auf die Maus, um die Website für Flickr, 500px und reddit Fotos zu sehen"
+    "message": "Klicken Sie auf die Maus, um das Foto anzusehen"
   },
   "setting_flickr_api": {
-    "message": "Dieses Produkt verwendet die Flickr API, ist aber nicht von Flickr bestätigt oder zertifiziert"
+    "message": "Dieses Produkt verwendet die Flickr API, wird aber nicht von Flickr bestätigt oder zertifiziert"
   },
   "tab_slideshow": {
     "message": "SCHIEBEN SIE DIE STEUERUNG",
@@ -348,11 +371,17 @@
   "google_title": {
     "message": "Google Fotos Alben"
   },
+  "google_title_photos": {
+    "message": "Google Fotos"
+  },
   "google_shared_albums_note": {
     "message": "Hinweis: Freigegebene Alben sind möglicherweise nicht verfügbar. Weitere Informationen finden Sie in der FAQ."
   },
   "google_loading": {
     "message": "Alben laden"
+  },
+  "last_error_viewer_title": {
+    "message": "Letzter Fehlerbetrachter"
   },
   "help_title": {
     "message": "Hilfe & Feedback"
@@ -387,11 +416,23 @@
   "help_release_notes": {
     "message": "Versionshinweise"
   },
+  "help_contributors": {
+    "message": "Mitwirkende"
+  },
   "help_licenses": {
     "message": "Open Source Lizenzen"
   },
   "help_source_code": {
     "message": "Quellcode"
+  },
+  "err_load_album_list": {
+    "message": "Fehler beim Abrufen der Liste der Google Foto-Alben"
+  },
+  "err_show_ss": {
+    "message": "Fehler beim Anzeigen des Bildschirmschoners"
+  },
+  "err_optional_permissions": {
+    "message": "Fehler beim Ändern einer optionalen Berechtigung"
   },
   "err_request_failed": {
     "message": "Anfrage fehlgeschlagen. Wählen Sie erneuern, um es erneut zu versuchen."
@@ -400,7 +441,7 @@
     "message": "Überschrittene Speichergrenzen überschritten"
   },
   "err_storage_desc": {
-    "message": "Deaktivieren Sie andere Fotoquellen und versuchen Sie es erneut."
+    "message": "Markieren Sie andere Fotoquellen und versuchen Sie es erneut."
   },
   "err_status": {
     "message": "Status"
@@ -410,6 +451,12 @@
   },
   "err_photo_source_title": {
     "message": "Fehler beim Abrufen der Fotoquelle"
+  },
+  "err_auth_picasa": {
+    "message": "Benutzer hat Picasa nicht autorisiert."
+  },
+  "err_no_albums": {
+    "message": "Keine Alben gefunden"
   },
   "time_format": {
     "message": "12",

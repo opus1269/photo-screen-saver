@@ -9,22 +9,38 @@
     "message": "Photo Screen Saver - haga clic para ver las opciones"
   },
   "toggle_enabled": {
-    "message": "Alternar estado activado"
+    "message": "Activar estado activado"
+  },
+  "photo_from": {
+    "message": "Foto de",
+    "description": "use example: Photo from Google"
   },
   "screensaver": {
     "message": "Salvapantallas"
   },
   "on": {
-    "message": "Está encendido"
+    "message": "está encendido"
   },
   "off": {
     "message": "esta apagado"
   },
   "disable": {
-    "message": "Inhabilitar"
+    "message": "Deshabilitar (Alt + Mayús + Q)"
   },
   "enable": {
-    "message": "Habilitar"
+    "message": "Habilitar (Alt + Mayús + Q)"
+  },
+  "display_now": {
+    "message": "Mostrar ahora"
+  },
+  "ss_toggle_paused": {
+    "message": "Alternar en pausa"
+  },
+  "ss_forward": {
+    "message": "Reenviar una foto"
+  },
+  "ss_back": {
+    "message": "Volver una foto"
   },
   "help": {
     "message": "Ayuda"
@@ -40,38 +56,6 @@
     "message": "CANCELAR",
     "description": "All Caps"
   },
-  "polymer": {
-    "message": "POLÍMERO",
-    "description": "All Caps"
-  },
-  "github": {
-    "message": "VER EN GITHUB",
-    "description": "All Caps"
-  },
-  "w3": {
-    "message": "W3SCHOOLS",
-    "description": "All Caps"
-  },
-  "mdn": {
-    "message": "MDN",
-    "description": "All Caps"
-  },
-  "chromecast": {
-    "message": "CHROMECAST",
-    "description": "All Caps"
-  },
-  "picasa": {
-    "message": "Picasa",
-    "description": "All Caps"
-  },
-  "material": {
-    "message": "DISEÑO MATERIAL",
-    "description": "All Caps"
-  },
-  "chrome_ext": {
-    "message": "EXTENSIÓN DE CROMO",
-    "description": "All Caps"
-  },
   "note": {
     "message": "Nota:"
   },
@@ -79,7 +63,10 @@
     "message": "foto"
   },
   "photos": {
-    "message": "Fotos"
+    "message": "fotos"
+  },
+  "no_photos": {
+    "message": "Sin fotos"
   },
   "seconds": {
     "message": "segundos"
@@ -88,7 +75,7 @@
     "message": "minutos"
   },
   "hours": {
-    "message": "Horas"
+    "message": "horas"
   },
   "days": {
     "message": "días"
@@ -117,6 +104,9 @@
   "menu_preview": {
     "message": "Protector de pantalla de previsualización"
   },
+  "menu_error": {
+    "message": "Ver último error"
+  },
   "menu_help": {
     "message": "Ayuda y comentarios"
   },
@@ -139,7 +129,7 @@
     "message": "Marco"
   },
   "menu_full": {
-    "message": "Lleno (puede distorsionar)"
+    "message": "Completo (puede distorsionar)"
   },
   "menu_random": {
     "message": "Aleatorio"
@@ -163,7 +153,7 @@
     "message": "Deslizar hacia arriba"
   },
   "menu_slide_from_bottom": {
-    "message": "Deslice desde abajo"
+    "message": "Deslizar desde abajo"
   },
   "menu_slide_right": {
     "message": "Deslizar hacia la derecha"
@@ -195,6 +185,18 @@
   "tooltip_google_toggle": {
     "message": "Activar / desactivar el uso de los álbumes"
   },
+  "tooltip_google_mode_albums": {
+    "message": "Cambiar al modo de foto"
+  },
+  "tooltip_google_mode_photos": {
+    "message": "Cambiar al modo álbum"
+  },
+  "setting_background": {
+    "message": "Ejecutar Chrome en segundo plano"
+  },
+  "setting_background_desc": {
+    "message": "Inicia Chrome en el arranque del equipo y sigue funcionando cuando está cerrado (recomendado)"
+  },
   "setting_idle_time": {
     "message": "Tiempo de espera"
   },
@@ -202,13 +204,22 @@
     "message": "Tiempo de transición de la foto"
   },
   "setting_photo_sizing": {
-    "message": "Modo de visualización de fotos"
+    "message": "Modo de visualización de fotografías"
   },
   "setting_photo_transition": {
     "message": "Foto método de transición"
   },
+  "setting_interactive": {
+    "message": "Modo interactivo"
+  },
+  "setting_interactive_desc": {
+    "message": "Alternar pausado (Alt + Mayús + Espacio), Atrás (Alt + Mayús + Flecha Izquierda), Adelante (Alt + Mayús + Flecha Derecha)"
+  },
   "setting_show_time": {
     "message": "Tiempo de la funcion"
+  },
+  "setting_large_time": {
+    "message": "Etiqueta de tiempo grande"
   },
   "setting_shuffle": {
     "message": "Aleatorizar"
@@ -225,8 +236,20 @@
   "setting_photog": {
     "message": "Mostrar autor de las fotos que posee"
   },
-  "setting_photog_desc": {
-    "message": "Nota: Siempre se muestra en modo Frame"
+  "setting_full_res": {
+    "message": "Utilice la resolución completa para las fotos que posee"
+  },
+  "setting_full_res_desc": {
+    "message": "Estos archivos pueden ser muy grandes y rotados"
+  },
+  "setting_location": {
+    "message": "Mostrar la ubicación de la foto, si está disponible"
+  },
+  "setting_location_desc": {
+    "message": "No mostrará la ubicación estimada de Google Fotos"
+  },
+  "setting_photo_clicks": {
+    "message": "Mostrar el origen de la foto en el clic del ratón, si está disponible"
   },
   "setting_bg": {
     "message": "Fondo"
@@ -247,13 +270,13 @@
     "message": "No mostrar en pantalla completa las ventanas de Chrome"
   },
   "setting_full_screen_desc": {
-    "message": "Útil si estás viendo videos"
+    "message": "Útil si está viendo videos"
   },
   "setting_keep_awake": {
     "message": "Mantenerse despierto"
   },
   "setting_keep_awake_desc": {
-    "message": "Impedir la visualización de dormir (siempre activa si los tiempos de inicio y parada son iguales)"
+    "message": "Impedir la visualización de dormir (siempre activa si los tiempos de inicio y de parada son iguales)"
   },
   "setting_start_time": {
     "message": "Tiempo de empezar"
@@ -301,22 +324,22 @@
     "message": "Flickr - interesante"
   },
   "setting_flickr_int_desc": {
-    "message": "Fotos interesantes del Flickr, actualizadas diariamente"
+    "message": "Fotos interesantes de Flickr, actualizadas diariamente"
   },
   "setting_reddit_space": {
-    "message": "Reddit - espacio"
+    "message": "reddit - espacio"
   },
   "setting_reddit_space_desc": {
     "message": "Primariamente fotos celestiales de reddit, actualizadas diariamente"
   },
   "setting_reddit_earth": {
-    "message": "Reddit - tierra"
+    "message": "reddit - tierra"
   },
   "setting_reddit_earth_desc": {
-    "message": "Primariamente fotos de paisaje de reddit, actualizadas diariamente"
+    "message": "Primariamente fotos de paisajes de reddit, actualizadas diariamente"
   },
   "setting_reddit_animal": {
-    "message": "Reddit - animal"
+    "message": "reddit - animal"
   },
   "setting_reddit_animal_desc": {
     "message": "Fotos de animales de reddit, actualizadas diariamente"
@@ -328,10 +351,10 @@
     "message": "Fotos del tipo que escribió esto"
   },
   "setting_click_to_view": {
-    "message": "Haga clic en el ratón para ver el sitio web de Flickr, 500px y reddit fotos"
+    "message": "Haga clic en el ratón para ver la foto"
   },
   "setting_flickr_api": {
-    "message": "Este producto utiliza la API de Flickr pero no está avalada ni certificada por Flickr"
+    "message": "Este producto utiliza la API de Flickr pero no está avalada ni certificada por Flickr."
   },
   "tab_slideshow": {
     "message": "CONTROLES DE LA DIAPOSITIVA",
@@ -348,11 +371,17 @@
   "google_title": {
     "message": "Álbumes de Fotos de Google"
   },
+  "google_title_photos": {
+    "message": "Google Fotos"
+  },
   "google_shared_albums_note": {
     "message": "Nota: Los álbumes compartidos pueden no estar disponibles. Consulte las preguntas frecuentes para obtener más información."
   },
   "google_loading": {
-    "message": "Cargando álbumes"
+    "message": "Cargando Álbumes"
+  },
+  "last_error_viewer_title": {
+    "message": "Último visor de errores"
   },
   "help_title": {
     "message": "Ayuda y comentarios"
@@ -367,13 +396,13 @@
     "message": "Reportar un error"
   },
   "help_feature": {
-    "message": "Solicitar característica"
+    "message": "Función de solicitud"
   },
   "help_feedback": {
     "message": "Suministre realimentación"
   },
   "help_issue": {
-    "message": "Enviar problema de GitHub (requiere cuenta)"
+    "message": "Enviar un problema de GitHub (requiere una cuenta)"
   },
   "help_documentation": {
     "message": "Documentación"
@@ -387,11 +416,23 @@
   "help_release_notes": {
     "message": "Notas de la versión"
   },
+  "help_contributors": {
+    "message": "Colaboradores"
+  },
   "help_licenses": {
     "message": "Licencias de código abierto"
   },
   "help_source_code": {
     "message": "Código fuente"
+  },
+  "err_load_album_list": {
+    "message": "Error al recuperar la lista de álbumes de fotos de Google"
+  },
+  "err_show_ss": {
+    "message": "Error al mostrar el protector de pantalla"
+  },
+  "err_optional_permissions": {
+    "message": "Error al modificar un permiso opcional"
   },
   "err_request_failed": {
     "message": "Solicitud fallida. Selecciona refrescar para intentarlo de nuevo."
@@ -410,6 +451,12 @@
   },
   "err_photo_source_title": {
     "message": "Error al recuperar el origen de la foto"
+  },
+  "err_auth_picasa": {
+    "message": "El usuario no autorizó Picasa."
+  },
+  "err_no_albums": {
+    "message": "No se encontraron álbumes"
   },
   "time_format": {
     "message": "12",

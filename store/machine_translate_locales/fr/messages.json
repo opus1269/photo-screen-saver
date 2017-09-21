@@ -11,6 +11,10 @@
   "toggle_enabled": {
     "message": "Basculer état activé"
   },
+  "photo_from": {
+    "message": "Photo de",
+    "description": "use example: Photo from Google"
+  },
   "screensaver": {
     "message": "Économiseur d'écran"
   },
@@ -21,10 +25,22 @@
     "message": "est éteint"
   },
   "disable": {
-    "message": "Désactiver"
+    "message": "Désactiver (Alt + Maj + Q)"
   },
   "enable": {
-    "message": "Activer"
+    "message": "Activer (Alt + Maj + Q)"
+  },
+  "display_now": {
+    "message": "Afficher maintenant"
+  },
+  "ss_toggle_paused": {
+    "message": "Toggle fait une pause"
+  },
+  "ss_forward": {
+    "message": "Transmettre une photo"
+  },
+  "ss_back": {
+    "message": "Retourner une photo"
   },
   "help": {
     "message": "Aidez-moi"
@@ -40,38 +56,6 @@
     "message": "ANNULER",
     "description": "All Caps"
   },
-  "polymer": {
-    "message": "POLYMÈRE",
-    "description": "All Caps"
-  },
-  "github": {
-    "message": "VOIR SUR GITHUB",
-    "description": "All Caps"
-  },
-  "w3": {
-    "message": "W3SCHOOLS",
-    "description": "All Caps"
-  },
-  "mdn": {
-    "message": "MDN",
-    "description": "All Caps"
-  },
-  "chromecast": {
-    "message": "CHROMECAST",
-    "description": "All Caps"
-  },
-  "picasa": {
-    "message": "PICASA",
-    "description": "All Caps"
-  },
-  "material": {
-    "message": "CONCEPTION MATÉRIELLE",
-    "description": "All Caps"
-  },
-  "chrome_ext": {
-    "message": "EXTENSION CHROME",
-    "description": "All Caps"
-  },
   "note": {
     "message": "Remarque:"
   },
@@ -81,8 +65,11 @@
   "photos": {
     "message": "Photos"
   },
+  "no_photos": {
+    "message": "Pas de photos"
+  },
   "seconds": {
-    "message": "Secondes"
+    "message": "secondes"
   },
   "minutes": {
     "message": "minutes"
@@ -112,10 +99,13 @@
     "message": "Paramètres"
   },
   "menu_google": {
-    "message": "Sélectionner les albums Google Photos"
+    "message": "Sélectionnez les albums Google Photos"
   },
   "menu_preview": {
     "message": "Aperçu de l'économiseur d'écran"
+  },
+  "menu_error": {
+    "message": "Afficher la dernière erreur"
   },
   "menu_help": {
     "message": "Aide et commentaires"
@@ -127,13 +117,13 @@
     "message": "Évaluez l'extension"
   },
   "menu_pushy": {
-    "message": "Essayez l'extension du Presse-papiers Pushy"
+    "message": "Essayez l'extension de presse-papier Pushy"
   },
   "menu_letterbox": {
     "message": "Letterbox"
   },
   "menu_zoom": {
-    "message": "Zoom (Peut récolter)"
+    "message": "Zoom (Peut couper)"
   },
   "menu_frame": {
     "message": "Cadre"
@@ -169,7 +159,7 @@
     "message": "Glissez à droite"
   },
   "menu_12_hour": {
-    "message": "12 heures"
+    "message": "12 heure"
   },
   "menu_24_hour": {
     "message": "24 heures"
@@ -195,6 +185,18 @@
   "tooltip_google_toggle": {
     "message": "Activer / désactiver l'utilisation des albums"
   },
+  "tooltip_google_mode_albums": {
+    "message": "Passer en mode photo"
+  },
+  "tooltip_google_mode_photos": {
+    "message": "Passer en mode album"
+  },
+  "setting_background": {
+    "message": "Exécuter Chrome en arrière-plan"
+  },
+  "setting_background_desc": {
+    "message": "Démarre Chrome sur le démarrage de l'ordinateur et continue de fonctionner lorsqu'il est fermé (recommandé)"
+  },
   "setting_idle_time": {
     "message": "Temps d'attente"
   },
@@ -207,26 +209,47 @@
   "setting_photo_transition": {
     "message": "Méthode de transition photo"
   },
+  "setting_interactive": {
+    "message": "Mode interactif"
+  },
+  "setting_interactive_desc": {
+    "message": "Basculer en pause (Alt + Maj + Espace), Retour (Alt + Maj + Arrière gauche), En avant (Alt + Maj + Arrière droit)"
+  },
   "setting_show_time": {
     "message": "Afficher l'heure"
+  },
+  "setting_large_time": {
+    "message": "Large étiquette de temps"
   },
   "setting_shuffle": {
     "message": "Randomiser"
   },
   "setting_shuffle_desc": {
-    "message": "Présenter les photos dans un ordre aléatoire"
+    "message": "Présenter des photos dans un ordre aléatoire"
   },
   "setting_skip": {
     "message": "Sautez les images du ratio d'aspect extrême"
   },
   "setting_skip_desc": {
-    "message": "Ne pas afficher certaines photos dans Zoom et modes complets"
+    "message": "Ne pas afficher certaines photos dans Zoom et Modes complets"
   },
   "setting_photog": {
     "message": "Afficher l'auteur des photos que vous possédez"
   },
-  "setting_photog_desc": {
-    "message": "Remarque: affiche toujours en mode cadre"
+  "setting_full_res": {
+    "message": "Utilisez la résolution complète pour les photos que vous possédez"
+  },
+  "setting_full_res_desc": {
+    "message": "Ces fichiers peuvent être très importants et tournés"
+  },
+  "setting_location": {
+    "message": "Afficher l'emplacement de la photo, si disponible"
+  },
+  "setting_location_desc": {
+    "message": "Ne montrera pas l'emplacement «estimé» de Google Photos"
+  },
+  "setting_photo_clicks": {
+    "message": "Afficher la source de la photo sur le clic de la souris, si disponible"
   },
   "setting_bg": {
     "message": "Contexte"
@@ -235,7 +258,7 @@
     "message": "Définir l'image de fond de l'économiseur d'écran"
   },
   "setting_bg_dialog_title": {
-    "message": "Sélectionnez l'image de fond"
+    "message": "Sélectionnez l'image d'arrière-plan"
   },
   "setting_all_displays": {
     "message": "Tous les affichages"
@@ -253,13 +276,13 @@
     "message": "Reste éveillé"
   },
   "setting_keep_awake_desc": {
-    "message": "Empêche l'affichage de dormir (toujours actif si les temps de démarrage et d'arrêt sont égaux)"
+    "message": "Empêcher l'affichage de dormir (toujours actif si les temps de démarrage et d'arrêt sont égaux)"
   },
   "setting_start_time": {
     "message": "Le temps de commencer"
   },
   "setting_start_time_desc": {
-    "message": "Autoriser l'affichage de l'écran de veille, à partir de ce moment"
+    "message": "Autoriser l'affichage de l'écran de veille à partir de ce moment"
   },
   "setting_stop_time": {
     "message": "Le temps d'arrêter"
@@ -271,13 +294,13 @@
     "message": "Autoriser le système à suspendre"
   },
   "setting_suspend_desc": {
-    "message": "L'ordinateur peut dormir pendant le temps d'inactivité"
+    "message": "L'ordinateur peut dormir pendant le temps inactif"
   },
   "setting_chromecast": {
     "message": "Chromecast"
   },
   "setting_chromecast_desc": {
-    "message": "Certaines photos de fond de l'appareil Chromecast"
+    "message": "Certaines photos de fond du dispositif Chromecast"
   },
   "setting_500editors": {
     "message": "500px - choix des éditeurs"
@@ -289,13 +312,13 @@
     "message": "500px - populaire"
   },
   "setting_500popular_desc": {
-    "message": "Photos populaires de 500px"
+    "message": "Photos populaires à partir de 500px"
   },
   "setting_500yest": {
     "message": "500px - frais"
   },
   "setting_500yest_desc": {
-    "message": "Photos récentes du 500px, mises à jour quotidiennement"
+    "message": "Photos récentes à partir de 500px, mises à jour quotidiennement"
   },
   "setting_flickr_int": {
     "message": "Flickr - intéressant"
@@ -304,13 +327,13 @@
     "message": "Des photos intéressantes du Flickr, mises à jour quotidiennement"
   },
   "setting_reddit_space": {
-    "message": "Reddit - espace"
+    "message": "reddit - espace"
   },
   "setting_reddit_space_desc": {
     "message": "Des photos principalement célestes de Reddit, mises à jour quotidiennement"
   },
   "setting_reddit_earth": {
-    "message": "Reddit - terre"
+    "message": "reddit - terre"
   },
   "setting_reddit_earth_desc": {
     "message": "Principalement des photos de paysage de Reddit, mis à jour quotidiennement"
@@ -328,13 +351,13 @@
     "message": "Photos du gars qui a écrit ceci"
   },
   "setting_click_to_view": {
-    "message": "Cliquez sur la souris pour voir le site Web pour les photos Flickr, 500px et Reddit"
+    "message": "Cliquez sur la souris pour voir la photo"
   },
   "setting_flickr_api": {
     "message": "Ce produit utilise l'API Flickr mais n'est pas approuvé ou certifié par Flickr"
   },
   "tab_slideshow": {
-    "message": "CONTROLE DE DIAPOSITIF",
+    "message": "CONTROLE DE DIAPOSITIVE",
     "description": "All Caps"
   },
   "tab_display": {
@@ -348,11 +371,17 @@
   "google_title": {
     "message": "Google Photos Albums"
   },
+  "google_title_photos": {
+    "message": "Google Photos"
+  },
   "google_shared_albums_note": {
     "message": "Remarque: les albums partagés peuvent ne pas être disponibles. Consultez les FAQ pour plus d'informations."
   },
   "google_loading": {
     "message": "Chargement des albums"
+  },
+  "last_error_viewer_title": {
+    "message": "Dernière visionneuse d'erreur"
   },
   "help_title": {
     "message": "Aide et commentaires"
@@ -382,10 +411,13 @@
     "message": "Questions fréquemment posées"
   },
   "help_translations": {
-    "message": "Offre d'assistance avec les traductions"
+    "message": "Offre d'aide pour les traductions"
   },
   "help_release_notes": {
     "message": "Notes de version"
+  },
+  "help_contributors": {
+    "message": "Contributeurs"
   },
   "help_licenses": {
     "message": "Licences Open Source"
@@ -393,8 +425,17 @@
   "help_source_code": {
     "message": "Code source"
   },
+  "err_load_album_list": {
+    "message": "Impossible de récupérer la liste des albums photo Google"
+  },
+  "err_show_ss": {
+    "message": "Échec de l'affichage de l'économiseur d'écran"
+  },
+  "err_optional_permissions": {
+    "message": "Impossible de modifier une autorisation facultative"
+  },
   "err_request_failed": {
-    "message": "Demande échoué. Sélectionnez Rafraîchir pour réessayer."
+    "message": "Demande échoué. Sélectionnez Actualiser pour réessayer."
   },
   "err_storage_title": {
     "message": "Limites de stockage dépassées"
@@ -410,6 +451,12 @@
   },
   "err_photo_source_title": {
     "message": "Échec de la récupération de la source de la photo"
+  },
+  "err_auth_picasa": {
+    "message": "L'utilisateur n'a pas autorisé Picasa."
+  },
+  "err_no_albums": {
+    "message": "Aucun album trouvé"
   },
   "time_format": {
     "message": "12",
