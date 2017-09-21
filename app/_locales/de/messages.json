@@ -104,6 +104,9 @@
   "menu_preview": {
     "message": "Vorschau Bildschirmschoner"
   },
+  "menu_error": {
+    "message": "Letzten Fehler anzeigen"
+  },
   "menu_help": {
     "message": "Hilfe & Feedback"
   },

@@ -104,6 +104,9 @@
   "menu_preview": {
     "message": "Aperçu des écrans de veille"
   },
+  "menu_error": {
+    "message": "Afficher la dernière erreur"
+  },
   "menu_help": {
     "message": "Aide et commentaires"
   },

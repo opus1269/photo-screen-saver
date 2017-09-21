@@ -104,6 +104,9 @@
   "menu_preview": {
     "message": "Voorbeeld screensaver"
   },
+  "menu_error": {
+    "message": "Bekijk de laatste fout"
+  },
   "menu_help": {
     "message": "Hulp en feedback"
   },

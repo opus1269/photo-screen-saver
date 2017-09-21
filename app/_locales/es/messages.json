@@ -104,6 +104,9 @@
   "menu_preview": {
     "message": "Vista previa de"
   },
+  "menu_error": {
+    "message": "Ver último error"
+  },
   "menu_help": {
     "message": "Ayuda y comentarios"
   },

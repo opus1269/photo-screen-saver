@@ -104,6 +104,9 @@
   "menu_preview": {
     "message": "Anteprima salvaschermo"
   },
+  "menu_error": {
+    "message": "Visualizza ultimo errore"
+  },
   "menu_help": {
     "message": "Guida e commenti"
   },
