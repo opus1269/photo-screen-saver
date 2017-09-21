@@ -25,7 +25,7 @@ const path = {
   lib: `${base.src}lib/`,
   locales: `${base.src}_locales/`,
   bower: `${base.src}bower_components/`,
-  bowerScripts: `${base.src}bower_components/chrome-extension-utils`,
+  bowerScripts: `${base.src}bower_components/chrome-extension-utils/scripts/`,
 };
 const files = {
   manifest: `${base.src}manifest.json`,
