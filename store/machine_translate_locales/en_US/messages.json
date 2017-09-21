@@ -377,6 +377,9 @@
   "google_loading": {
     "message": "Loading Albums"
   },
+  "last_error_viewer_title": {
+    "message": "Last error viewer"
+  },
   "help_title": {
     "message": "Help & Feedback"
   },
@@ -418,6 +421,15 @@
   },
   "help_source_code": {
     "message": "Source code"
+  },
+  "err_load_album_list": {
+    "message": "Failed to retrieve list of Google Photo albums"
+  },
+  "err_show_ss": {
+    "message": "Failed to display screensaver"
+  },
+  "err_optional_permissions": {
+    "message": "Failed to modify an optional permission"
   },
   "err_request_failed": {
     "message": "Request failed. Select refresh to try again."
