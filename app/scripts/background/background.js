@@ -108,18 +108,28 @@
     return false;
   }
 
-  // listen for extension install or update
-  chrome.runtime.onInstalled.addListener(_onInstalled);
+  /**
+   * Event: called when document and resources are loaded
+   * @private
+   * @memberOf Background
+   */
+  function _onLoad() {
+    // listen for extension install or update
+    chrome.runtime.onInstalled.addListener(_onInstalled);
 
-  // listen for Chrome starting
-  chrome.runtime.onStartup.addListener(_onStartup);
+    // listen for Chrome starting
+    chrome.runtime.onStartup.addListener(_onStartup);
 
-  // listen for click on the icon
-  chrome.browserAction.onClicked.addListener(_onIconClicked);
+    // listen for click on the icon
+    chrome.browserAction.onClicked.addListener(_onIconClicked);
 
-  // listen for changes to the stored data
-  addEventListener('storage', _onStorageChanged, false);
+    // listen for changes to the stored data
+    addEventListener('storage', _onStorageChanged, false);
 
-  // listen for chrome messages
-  Chrome.Msg.listen(_onChromeMessage);
+    // listen for chrome messages
+    Chrome.Msg.listen(_onChromeMessage);
+  }
+  
+  // listen for document and resources loaded
+  window.addEventListener('load', _onLoad);
 })();
