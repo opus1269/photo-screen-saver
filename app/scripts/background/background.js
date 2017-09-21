@@ -41,7 +41,7 @@
   function _onInstalled(details) {
     if (details.reason === 'install') {
       // initial install
-      Chrome.GA.event(Chrome.GA.EVENT.INSTALLED);
+      Chrome.GA.event(Chrome.GA.EVENT.INSTALLED, Chrome.Utils.getVersion());
       app.Data.initialize();
       _showOptionsTab();
     } else if (details.reason === 'update') {
