@@ -443,6 +443,18 @@
   "err_no_albums": {
     "message": "Nessun album trovato"
   },
+  "last_error_viewer_title": {
+    "message": "Ultimo visualizzatore di errori"
+  },
+  "err_load_album_list": {
+    "message": "Impossibile recuperare l'elenco degli album di foto di Google"
+  },
+  "err_show_ss": {
+    "message": "Impossibile visualizzare il salvaschermo"
+  },
+  "err_optional_permissions": {
+    "message": "Impossibile modificare un'autorizzazione facoltativa"
+  },
   "time_format": {
     "message": "24",
     "description": "Set to 12 for AM/PM format or 24"

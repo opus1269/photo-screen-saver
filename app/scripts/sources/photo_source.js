@@ -227,9 +227,8 @@
           }
           return Promise.resolve();
         }).catch((err) => {
-          const title =
-              `${Chrome.Locale.localize('err_photo_source_title')}: ` +
-              `${this._desc}`;
+          let title = Chrome.Locale.localize('err_photo_source_title');
+          title += `: ${this._desc}`;
           Chrome.Log.error(err.message, 'PhotoSource.process', title);
           throw err;
         });

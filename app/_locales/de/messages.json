@@ -443,6 +443,18 @@
   "err_no_albums": {
     "message": "Keine Alben gefunden"
   },
+  "last_error_viewer_title": {
+    "message": "Letzter Fehlerbetrachter"
+  },
+  "err_load_album_list": {
+    "message": "Fehler beim Abrufen der Liste der Google Foto-Alben"
+  },
+  "err_show_ss": {
+    "message": "Fehler beim Anzeigen des Bildschirmschoners"
+  },
+  "err_optional_permissions": {
+    "message": "Fehler beim Ändern einer optionalen Berechtigung"
+  },
   "time_format": {
     "message": "24",
     "description": "Set to 12 for AM/PM format or 24"

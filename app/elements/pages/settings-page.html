@@ -366,15 +366,16 @@
       const isSet = !Chrome.Storage.get('allowBackground');
       const perm = app.Permissions.BACKGROUND;
       const isAllowed = app.Permissions.isAllowed(perm);
+      const errTitle = Chrome.Locale.localize('err_optional_permissions');
       if (isSet && !isAllowed) {
         app.Permissions.request(perm).catch((err) => {
           Chrome.Log.error(err.message,
-              'settings-page._chromeBackgroundTapped');
+              'settings-page._chromeBackgroundTapped', errTitle);
         });
       } else if (!isSet && isAllowed) {
         app.Permissions.remove(perm).catch((err) => {
           Chrome.Log.error(err.message,
-              'settings-page._chromeBackgroundTapped');
+              'settings-page._chromeBackgroundTapped', errTitle);
         });
       }
     },

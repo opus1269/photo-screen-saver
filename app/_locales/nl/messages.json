@@ -443,6 +443,18 @@
   "err_no_albums": {
     "message": "Geen albums gevonden"
   },
+  "last_error_viewer_title": {
+    "message": "Laatste foutviewer"
+  },
+  "err_load_album_list": {
+    "message": "De lijst met Google Fotoalbums kon niet worden opgehaald"
+  },
+  "err_show_ss": {
+    "message": "Kan screensaver niet weergeven"
+  },
+  "err_optional_permissions": {
+    "message": "Kan een facultatieve toestemming niet wijzigen"
+  },
   "time_format": {
     "message": "24",
     "description": "Set to 12 for AM/PM format or 24"

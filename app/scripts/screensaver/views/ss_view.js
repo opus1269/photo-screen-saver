@@ -241,7 +241,7 @@
         }).catch((err) => {
           const networkErr = Chrome.Locale.localize('err_network');
           if (!err.message.includes(networkErr)) {
-            Chrome.Log.error(`${err.message}, point: ${point}`,
+            Chrome.GA.error(`${err.message}, point: ${point}`,
                 'SSView._setLocationLabel');
           }
         });

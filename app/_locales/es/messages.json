@@ -443,12 +443,20 @@
   "err_no_albums": {
     "message": "No hay álbumes encontrados"
   },
+  "last_error_viewer_title": {
+    "message": "Último visor de errores"
+  },
+  "err_load_album_list": {
+    "message": "Error al recuperar la lista de álbumes de fotos de Google"
+  },
+  "err_show_ss": {
+    "message": "Error al mostrar el protector de pantalla"
+  },
+  "err_optional_permissions": {
+    "message": "Error al modificar un permiso opcional"
+  },
   "time_format": {
     "message": "24",
     "description": "For translators: Set to 12 for AM/PM format or 24"
-  },
-  "translationInfo": {
-    "message": "Google Translate API",
-    "description": "Mike Updike"
   }
 }

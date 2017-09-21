@@ -20,12 +20,20 @@ app.SSControl = (function() {
   /**
    * Screensaver URL
    * @type {string}
-   * @default
    * @const
    * @private
    * @memberOf app.SSControl
    */
   const _SS_URL = '/html/screensaver.html';
+
+  /**
+   * Error showing Screensaver
+   * @type {string}
+   * @const
+   * @private
+   * @memberOf app.SSControl
+   */
+  const _ERR_SHOW = Chrome.Locale.localize('err_show_ss');
 
   /**
    * Determine if there is a full screen chrome window running on a display
@@ -110,7 +118,7 @@ app.SSControl = (function() {
       }
       return null;
     }).catch((err) => {
-      Chrome.Log.error(err.message, 'SSControl._open');
+      Chrome.Log.error(err.message, 'SSControl._open', _ERR_SHOW);
     });
   }
 
@@ -130,7 +138,7 @@ app.SSControl = (function() {
       }
       return Promise.resolve();
     }).catch((err) => {
-      Chrome.Log.error(err.message, 'SSControl._openOnAllDisplays');
+      Chrome.Log.error(err.message, 'SSControl._openOnAllDisplays', _ERR_SHOW);
     });
   }
 
@@ -165,7 +173,7 @@ app.SSControl = (function() {
         });
       }
     }).catch((err) => {
-      Chrome.Log.error(err.message, 'SSControl._isShowing');
+      Chrome.Log.error(err.message, 'SSControl._isShowing', _ERR_SHOW);
     });
   }
 

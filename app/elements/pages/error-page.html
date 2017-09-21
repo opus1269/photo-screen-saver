@@ -22,8 +22,9 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 
-<script type="text/javascript"
-        src="../../bower_components/chrome-extension-utils/scripts/exception_handler.js"></script>
+<link rel="import" href="../../bower_components/setting-elements/localize-behavior/localize-behavior.html">
+
+<script type="text/javascript" src="../../bower_components/chrome-extension-utils/scripts/exception_handler.js"></script>
 
 <dom-module id="error-page">
   <template>
@@ -191,8 +192,7 @@
        * @private
        */
       _computeTitle: function(lastError) {
-        // todo localize
-        let ret = 'Last error viewer';
+        let ret = Chrome.Locale.localize('last_error_viewer_title');
         if (lastError.message) {
           ret += ` - ${lastError.title}`;
         }
