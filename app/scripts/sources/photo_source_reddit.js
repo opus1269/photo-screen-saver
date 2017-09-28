@@ -62,20 +62,10 @@
   /**
    * Expose reddit API
    * @type {Function}
-   * @const
    * @private
    * @memberOf app.RedditSource
    */
-  const _snoocore = new Snoocore({
-    userAgent: 'photo-screen-saver',
-    throttle: 0,
-    oauth: {
-      type: 'implicit',
-      key: _KEY,
-      redirectUri: _REDIRECT_URI,
-      scope: ['read'],
-    },
-  });
+  let _snoocore;
 
   /**
    * A potential source of photos from reddit
@@ -198,4 +188,25 @@
       });
     }
   };
+
+  /**
+   * Event: called when document and resources are loaded
+   * @private
+   * @memberOf Background
+   */
+  function _onLoad() {
+    _snoocore = new Snoocore({
+      userAgent: 'photo-screen-saver',
+      throttle: 0,
+      oauth: {
+        type: 'implicit',
+        key: _KEY,
+        redirectUri: _REDIRECT_URI,
+        scope: ['read'],
+      },
+    });
+  }
+
+  // listen for document and resources loaded
+  window.addEventListener('load', _onLoad);
 })();
