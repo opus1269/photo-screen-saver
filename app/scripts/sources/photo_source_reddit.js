@@ -162,7 +162,10 @@
      */
     fetchPhotos() {
       let photos = [];
-
+      if (!_snoocore) {
+        return Promise.reject(new Error('Snoocore library failed to load'));
+      }
+      
       return _snoocore(`${this._loadArg}hot`).listing({
         limit: _MAX_PHOTOS,
       }).then((slice) => {
@@ -195,16 +198,22 @@
    * @memberOf Background
    */
   function _onLoad() {
-    _snoocore = new Snoocore({
-      userAgent: 'photo-screen-saver',
-      throttle: 0,
-      oauth: {
-        type: 'implicit',
-        key: _KEY,
-        redirectUri: _REDIRECT_URI,
-        scope: ['read'],
-      },
-    });
+    try {
+      _snoocore = new Snoocore({
+        userAgent: 'photo-screen-saver',
+        throttle: 0,
+        oauth: {
+          type: 'implicit',
+          key: _KEY,
+          redirectUri: _REDIRECT_URI,
+          scope: ['read'],
+        },
+      });
+    } catch (ex) {
+      Chrome.Log.exception(ex, 'Snoocore library failed to load', false,
+          'reddit sources are not available');
+      _snoocore = null;
+    }
   }
 
   // listen for document and resources loaded
