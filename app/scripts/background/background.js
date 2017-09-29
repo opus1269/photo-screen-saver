@@ -45,6 +45,13 @@
       app.Data.initialize();
       _showOptionsTab();
     } else if (details.reason === 'update') {
+      if (Chrome.Utils.getVersion() === details.previousVersion) {
+        // spurious update: 
+        // https://bugs.chromium.org/p/chromium/issues/detail?id=303481
+        Chrome.GA.error('Spurious update, skipped data update',
+            'Background._onInstalled');
+        return;
+      }
       // extension updated
       const label = `To: ${Chrome.Utils.getVersion()}` +
           ` From: ${details.previousVersion}`;
