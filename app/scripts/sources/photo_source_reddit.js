@@ -199,6 +199,7 @@
    */
   function _onLoad() {
     try {
+      const Snoocore = window.Snoocore;
       _snoocore = new Snoocore({
         userAgent: 'photo-screen-saver',
         throttle: 0,
@@ -210,12 +211,11 @@
         },
       });
     } catch (ex) {
-      Chrome.Log.exception(ex, 'Snoocore library failed to load', false,
-          'reddit sources are not available');
+      Chrome.GA.exception(ex, 'Snoocore library failed to load', false);
       _snoocore = null;
     }
   }
 
   // listen for document and resources loaded
   window.addEventListener('load', _onLoad);
-})();
+})(window);
