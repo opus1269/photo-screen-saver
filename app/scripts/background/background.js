@@ -45,11 +45,11 @@
       app.Data.initialize();
       _showOptionsTab();
     } else if (details.reason === 'update') {
-      if (Chrome.Utils.getVersion() === details.previousVersion) {
-        // spurious update: 
-        // https://bugs.chromium.org/p/chromium/issues/detail?id=303481
-        return;
-      }
+      // if (Chrome.Utils.getVersion() === details.previousVersion) {
+      //   // spurious update: 
+      //   // https://bugs.chromium.org/p/chromium/issues/detail?id=303481
+      //   return;
+      // }
       // extension updated
       app.Data.update();
     }
