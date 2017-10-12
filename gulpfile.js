@@ -233,7 +233,7 @@ gulp.task('scripts', () => {
       .pipe(plugins.eslint())
       .pipe(plugins.eslint.formatEach())
       .pipe(plugins.eslint.failAfterError())
-      // .pipe(isProd ? minify(minifyOpts).on('error', util.log) : util.noop())
+      .pipe(isProd ? minify(minifyOpts).on('error', util.log) : util.noop())
       .pipe(isProd ? gulp.dest(base.dist) : gulp.dest(base.dev));
 });
 
@@ -320,8 +320,8 @@ gulp.task('vulcanize', () => {
   return gulp.src(`${path.elements}elements.html`, {base: '.'})
       .pipe(plugins.vulcanize(vulcanizeOpts))
       .pipe(plugins.crisper(crisperOpts))
-      // .pipe(If('*.html', plugins.minifyInline()))
-      // .pipe(If('*.js', minify(minifyOpts).on('error', util.log)))
+      .pipe(If('*.html', plugins.minifyInline()))
+      .pipe(If('*.js', minify(minifyOpts).on('error', util.log)))
       .pipe(gulp.dest(base.dist));
 });
 
