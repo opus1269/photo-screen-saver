@@ -19,7 +19,6 @@ app.SSViews = (function() {
    * Max number of views
    * @type {int}
    * @const
-   * @default
    * @private
    * @memberOf app.SSViews
    */
@@ -44,7 +43,7 @@ app.SSViews = (function() {
 
   /**
    * Enum for view type
-   * @typedef {enum} app.SSViews.Type
+   * @typedef {int} app.SSViews.Type
    * @readonly
    * @enum {int}
    * @memberOf app.SSViews
@@ -89,6 +88,8 @@ app.SSViews = (function() {
       case Type.FULL:
         type = null;
         break;
+      default:
+        break;
     }
     app.Screensaver.setSizingType(type);
   }
@@ -98,7 +99,7 @@ app.SSViews = (function() {
 
     /**
      * Create the {@link app.SSView} pages
-     * @param {app.Screensaver.Template} t - auto binding template
+     * @param {app.Screensaver.Template} t
      * @memberOf app.SSViews
      */
     create: function(t) {
@@ -131,7 +132,7 @@ app.SSViews = (function() {
 
     /**
      * Get the type of view
-     * @returns {int} The view type
+     * @returns {app.SSViews.Type}
      * @memberOf app.SSViews
      */
     getType: function() {
@@ -143,7 +144,7 @@ app.SSViews = (function() {
 
     /**
      * Get number of views
-     * @returns {int} The number of views
+     * @returns {int}
      * @memberOf app.SSViews
      */
     getCount: function() {
@@ -153,7 +154,7 @@ app.SSViews = (function() {
     /**
      * Get the {@link app.SSView} at the given index
      * @param {int} idx - The index
-     * @returns {app.SSView} A {@link app.SSView}
+     * @returns {app.SSView}
      * @memberOf app.SSViews
      */
     get: function(idx) {
@@ -175,7 +176,7 @@ app.SSViews = (function() {
 
     /**
      * Set the selected index
-     * @param {int} selected - The index
+     * @param {int} selected
      * @memberOf app.SSViews
      */
     setSelectedIndex: function(selected) {
@@ -198,7 +199,7 @@ app.SSViews = (function() {
 
     /**
      * Is the given {@link app.SSPhoto} in one of the {@link _views}
-     * @param {app.SSPhoto} photo - A photo
+     * @param {app.SSPhoto} photo
      * @returns {boolean} true if in {@link _views}
      * @memberOf app.SSViews
      */
@@ -215,7 +216,7 @@ app.SSViews = (function() {
 
     /**
      * Do we have a view with a usable photo
-     * @returns {boolean} true if at least one photo is good
+     * @returns {boolean} true if at least one photo is valid
      * @memberOf app.SSViews
      */
     hasUsable: function() {
