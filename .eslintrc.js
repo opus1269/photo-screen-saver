@@ -51,6 +51,8 @@ module.exports = {
     'prefer-rest-params': 'off',
     'valid-jsdoc': [
       'error', {
+        'requireParamDescription': false,
+        'requireReturnDescription': false,
         'requireReturn': false,
         'prefer': {
           'return': 'returns',
