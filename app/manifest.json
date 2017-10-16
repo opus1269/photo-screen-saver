@@ -63,7 +63,7 @@
     "https://picasaweb.google.com/"
   ],
   "background": {
-    "persistent": true,
+    "persistent": false,
     "scripts": [
       "lib/Snoocore-browser.min.js",
       "bower_components/chrome-extension-utils/scripts/chrome-promise.js",
