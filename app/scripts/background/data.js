@@ -260,12 +260,12 @@ app.Data = (function() {
       // here when the version changes
       const oldVersion = Chrome.Storage.getInt('version');
 
-      if ((oldVersion === null) || (_DATA_VERSION > oldVersion)) {
+      if (Number.isNaN(oldVersion) || (_DATA_VERSION > oldVersion)) {
         // update version number
         Chrome.Storage.set('version', _DATA_VERSION);
       }
 
-      if (oldVersion !== null) {
+      if (!Number.isNaN(oldVersion)) {
         if (oldVersion < 14) {
           // background used to be a required permission
           // installed extensions before the change will keep
