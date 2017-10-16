@@ -48,9 +48,13 @@ app.PhotoSources = (function() {
       if (UseKey.hasOwnProperty(key)) {
         const useKey = UseKey[key];
         if (Chrome.Storage.getBool(useKey)) {
-          const source = app.PhotoSource.createSource(useKey);
-          if (source) {
-            ret.push(source);
+          try {
+            const source = app.PhotoSource.createSource(useKey);
+            if (source) {
+              ret.push(source);
+            }
+          } catch (ex) {
+            Chrome.GA.exception(ex, `${useKey} failed to load`, false);
           }
         }
       }
@@ -102,11 +106,14 @@ app.PhotoSources = (function() {
      * @memberOf app.PhotoSources
      */
     process: function(useKey) {
-      const source = app.PhotoSource.createSource(useKey);
-      if (source) {
-        return source.process();
-      } else {
-        throw new Error('Unknown Photo Source');
+      try {
+        const source = app.PhotoSource.createSource(useKey);
+        if (source) {
+          return source.process();
+        }
+      } catch (ex) {
+        Chrome.GA.exception(ex, `${useKey} failed to load`, false);
+        return Promise.reject(ex);
       }
     },
 
