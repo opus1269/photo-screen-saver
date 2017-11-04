@@ -64,34 +64,7 @@
   ],
   "background": {
     "persistent": false,
-    "scripts": [
-      "lib/Snoocore-browser.min.js",
-      "bower_components/chrome-extension-utils/scripts/chrome-promise.js",
-      "bower_components/chrome-extension-utils/scripts/exception_handler.js",
-      "bower_components/chrome-extension-utils/scripts/analytics.js",
-      "bower_components/chrome-extension-utils/scripts/log.js",
-      "bower_components/chrome-extension-utils/scripts/json.js",
-      "bower_components/chrome-extension-utils/scripts/storage.js",
-      "bower_components/chrome-extension-utils/scripts/locales.js",
-      "bower_components/chrome-extension-utils/scripts/utils.js",
-      "bower_components/chrome-extension-utils/scripts/msg.js",
-      "bower_components/chrome-extension-utils/scripts/time.js",
-      "bower_components/chrome-extension-utils/scripts/http.js",
-      "scripts/analytics.js",
-      "scripts/msg.js",
-      "scripts/sources/photo_sources.js",
-      "scripts/sources/photo_source.js",
-      "scripts/sources/photo_source_chromecast.js",
-      "scripts/sources/photo_source_reddit.js",
-      "scripts/sources/photo_source_flickr.js",
-      "scripts/sources/photo_source_500px.js",
-      "scripts/sources/photo_source_google.js",
-      "scripts/background/context_menus.js",
-      "scripts/background/data.js",
-      "scripts/background/alarm.js",
-      "scripts/background/ss_controller.js",
-      "scripts/background/background.js"
-    ]
+    "page": "html/background.html"
   },
   "browser_action": {
     "default_title": "__MSG_browser_action_title__",

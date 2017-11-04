@@ -17,7 +17,6 @@ app.GA = (function() {
    * Tracking ID
    * @type {string}
    * @const
-   * @default
    * @private
    * @memberOf app.GA
    */

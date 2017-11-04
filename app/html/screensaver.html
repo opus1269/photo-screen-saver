@@ -10,7 +10,8 @@
   <meta charset="utf-8">
   <title>Photo Screen Saver Screensaver Page</title>
 
-  <link rel="import" href="../elements/elements.html">
+  <!-- All script and element imports - will be vulcanized -->
+  <link rel="import" href="screensaver_imports.html">
 
   <style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning"></style>
 
@@ -48,42 +49,7 @@
   <iron-image id="playImage" class="vcr" src="../images/play.png" sizing="contain" preload hidden$="[[paused]]"></iron-image>
 </template>
 
-<script src="../lib/Snoocore-browser.min.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/chrome-promise.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/exception_handler.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/analytics.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/log.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/json.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/storage.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/locales.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/utils.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/msg.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/time.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/http.js"></script>
-<script src="../scripts/analytics.js"></script>
-<script src="../scripts/msg.js"></script>
-<script src="../scripts/sources/photo_sources.js"></script>
-<script src="../scripts/sources/photo_source.js"></script>
-<script src="../scripts/sources/photo_source_chromecast.js"></script>
-<script src="../scripts/sources/photo_source_reddit.js"></script>
-<script src="../scripts/sources/photo_source_flickr.js"></script>
-<script src="../scripts/sources/photo_source_500px.js"></script>
-<script src="../scripts/sources/photo_source_google.js"></script>
-<script src="../scripts/screensaver/geo.js"></script>
-<script src="../scripts/screensaver/ss_photo.js"></script>
-<script src="../scripts/screensaver/ss_photos.js"></script>
-<script src="../scripts/screensaver/ss_builder.js"></script>
-<script src="../scripts/screensaver/ss_time.js"></script>
-<script src="../scripts/screensaver/ss_events.js"></script>
-<script src="../scripts/screensaver/ss_photo_finder.js"></script>
-<script src="../scripts/screensaver/ss_runner.js"></script>
-<script src="../scripts/screensaver/ss_history.js"></script>
-<script src="../scripts/screensaver/views/ss_view.js"></script>
-<script src="../scripts/screensaver/views/ss_view_letterbox.js"></script>
-<script src="../scripts/screensaver/views/ss_view_frame.js"></script>
-<script src="../scripts/screensaver/views/ss_view_full.js"></script>
-<script src="../scripts/screensaver/ss_views.js"></script>
-<script src="../scripts/screensaver/screensaver.js" defer></script>
+<script src="../scripts/screensaver/screensaver.js"></script>
 
 </body>
 </html>

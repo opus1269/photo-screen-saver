@@ -16,7 +16,8 @@
 
   <link rel="stylesheet" href="../styles/options.css">
 
-  <link rel="import" href="../elements/elements.html">
+  <!-- All script and element imports - will be vulcanized -->
+  <link rel="import" href="options_imports.html">
 
   <!-- For iron-flex-layout -->
   <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
@@ -146,30 +147,7 @@
   </paper-drawer-panel>
 </template>
 
-<script src="../lib/Snoocore-browser.min.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/chrome-promise.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/exception_handler.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/analytics.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/log.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/json.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/storage.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/locales.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/utils.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/msg.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/time.js"></script>
-<script src="../bower_components/chrome-extension-utils/scripts/http.js"></script>
-<script src="../scripts/analytics.js"></script>
-<script src="../scripts/msg.js"></script>
-<script src="../scripts/sources/photo_sources.js"></script>
-<script src="../scripts/sources/photo_source.js"></script>
-<script src="../scripts/sources/photo_source_chromecast.js"></script>
-<script src="../scripts/sources/photo_source_reddit.js"></script>
-<script src="../scripts/sources/photo_source_flickr.js"></script>
-<script src="../scripts/sources/photo_source_500px.js"></script>
-<script src="../scripts/sources/photo_source_google.js"></script>
-<script src="../scripts/options/utils.js"></script>
-<script src="../scripts/options/permissions.js"></script>
-<script src="../scripts/options/options.js" defer></script>
+<script src="../scripts/options/options.js"></script>
 
 </body>
 </html>
