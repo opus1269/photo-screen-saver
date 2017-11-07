@@ -119,8 +119,18 @@ app.Alarm = (function() {
     }
   }
 
-  // Listen for alarms
-  chrome.alarms.onAlarm.addListener(_onAlarm);
+  /**
+   * Event: called when document and resources are loaded
+   * @private
+   * @memberOf app.Alarm
+   */
+  function _onLoad() {
+    // Listen for alarms
+    chrome.alarms.onAlarm.addListener(_onAlarm);
+  }
+  
+  // listen for document and resources loaded
+  window.addEventListener('load', _onLoad);
 
   return {
     /**
