@@ -200,16 +200,18 @@
   function _onLoad() {
     try {
       const Snoocore = window.Snoocore;
-      _snoocore = new Snoocore({
-        userAgent: 'photo-screen-saver',
-        throttle: 0,
-        oauth: {
-          type: 'implicit',
-          key: _KEY,
-          redirectUri: _REDIRECT_URI,
-          scope: ['read'],
-        },
-      });
+      if (typeof Snoocore !== 'undefined') {
+        _snoocore = new Snoocore({
+          userAgent: 'photo-screen-saver',
+          throttle: 0,
+          oauth: {
+            type: 'implicit',
+            key: _KEY,
+            redirectUri: _REDIRECT_URI,
+            scope: ['read'],
+          },
+        });
+      }
     } catch (ex) {
       Chrome.GA.exception(ex, 'Snoocore library failed to load', false);
       _snoocore = null;
