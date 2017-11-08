@@ -157,13 +157,13 @@ gulp.task('prod', (cb) => {
     'manifest',
     'scripts',
     'styles',
-    'vulcanize',
+    'vulcanize_options',
+    'vulcanize_screensaver',
     'vulcanize_background',
     'images',
     'assets',
     'lib',
     'locales',
-    'docs',
   ], 'prod_delete', 'zip', cb);
 });
 
