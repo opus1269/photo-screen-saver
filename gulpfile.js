@@ -134,6 +134,7 @@ gulp.task('incrementalBuild', (cb) => {
 // Development build
 gulp.task('dev', (cb) => {
   isProd = false;
+  isProdTest = false;
   runSequence('clean', [
     'bower',
     'manifest',
@@ -276,6 +277,8 @@ gulp.task('scripts', () => {
   watchOpts.name = currentTaskName;
   return gulp.src(input, {base: '.'}).
       pipe(isWatch ? watch(input, watchOpts) : util.noop()).
+      pipe(isProd ? util.noop() :
+          plugins.replace('const _DEBUG = false', 'const _DEBUG = true')).
       pipe(plugins.eslint()).
       pipe(plugins.eslint.formatEach()).
       pipe(plugins.eslint.failAfterError()).

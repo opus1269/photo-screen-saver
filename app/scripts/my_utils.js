@@ -14,7 +14,23 @@ app.Utils = (function() {
   'use strict';
 
   new ExceptionHandler();
+
+  /**
+   * True if development build
+   * @type {boolean}
+   * @private
+   * @memberOf app.Utils
+   */
+  const _DEBUG = false;
+  
   return {
+    /**
+     * True if development build
+     * @type {boolean}
+     * @memberOf app.Utils
+     */
+    DEBUG: _DEBUG,
+    
     /**
      * Get our email address
      * @returns {string} email address
