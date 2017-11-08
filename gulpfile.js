@@ -164,6 +164,7 @@ gulp.task('prod', (cb) => {
     'assets',
     'lib',
     'locales',
+    'docs',
   ], 'prod_delete', 'zip', cb);
 });
 
@@ -188,7 +189,7 @@ gulp.task('prodTest', (cb) => {
 // Generate JSDoc
 gulp.task('docs', (cb) => {
   const config = require('./jsdoc.json');
-  const README = '../Pushy-Clipboard.github.io/README.md';
+  const README = 'README.md';
   gulp.src([
     README,
     files.scripts,
@@ -277,8 +278,8 @@ gulp.task('scripts', () => {
   watchOpts.name = currentTaskName;
   return gulp.src(input, {base: '.'}).
       pipe(isWatch ? watch(input, watchOpts) : util.noop()).
-      pipe(isProd ? util.noop() :
-          plugins.replace('const _DEBUG = false', 'const _DEBUG = true')).
+      pipe(isProd ? util.noop() : plugins.replace('const _DEBUG = false',
+          'const _DEBUG = true')).
       pipe(plugins.eslint()).
       pipe(plugins.eslint.formatEach()).
       pipe(plugins.eslint.failAfterError()).
