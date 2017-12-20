@@ -26,13 +26,13 @@ const path = {
   lib: `${base.src}lib/`,
   locales: `${base.src}_locales/`,
   bower: `${base.src}bower_components/`,
-  bowerScripts: `${base.src}bower_components/chrome-extension-utils/scripts/`,
+  bowerScripts: `${base.src}bower_components/chrome-extension-utils/`,
   bowerElements: `${base.src}bower_components/setting-elements/`,
 };
 const files = {
   manifest: `${base.src}manifest.json`,
   scripts: `${path.scripts}**/*.js`,
-  html: `${path.html}*.*`,
+  html: `${path.html}**/*.html`,
   styles: `${path.styles}**/*.*`,
   elements: `${path.elements}**/*.html`,
   images: `${path.images}*.*`,
@@ -41,8 +41,10 @@ const files = {
   locales: `${path.locales}**/*.*`,
   bower: [
     `${path.bower}**/*`,
+    `!${path.bowerScripts}**/*`,
     `!${path.bower}**/test/*`,
     `!${path.bower}**/demo/*`,
+    `!${path.bower}jquery/**`,
   ],
   bowerScripts: `${path.bowerScripts}**/*.js`,
   bowerElements: `${path.bowerElements}**/*.html`,
@@ -64,7 +66,8 @@ const watchOpts = {
 };
 const minifyOpts = {
   output: {
-    beautify: false,
+    beautify: true,
+    comments: '/Copyright/',
   },
 };
 const crisperOpts = {
@@ -225,7 +228,7 @@ gulp.task('clean', () => {
 });
 
 // clean output directories
-gulp.task('clean-all', () => {
+gulp.task('clean_all', () => {
   return del([base.dist, base.dev]);
 });
 
@@ -363,9 +366,9 @@ gulp.task('locales', () => {
       pipe(isProd ? gulp.dest(base.dist) : gulp.dest(base.dev));
 });
 
-// vulcanize background_imports.html for production
-gulp.task('vulcanize_background', () => {
-  return gulp.src(`${path.html}background_imports.html`, {base: '.'}).
+// vulcanize options_imports.html for production
+gulp.task('vulcanize_options', () => {
+  return gulp.src(`${path.html}options_imports.html`, {base: '.'}).
       pipe(plugins.vulcanize(vulcanizeOpts)).
       pipe(plugins.crisper(crisperOpts)).
       pipe(If('*.html', plugins.minifyInline())).
@@ -373,9 +376,9 @@ gulp.task('vulcanize_background', () => {
       pipe(gulp.dest(base.dist));
 });
 
-// vulcanize options_imports.html for production
-gulp.task('vulcanize_options', () => {
-  return gulp.src(`${path.html}options_imports.html`, {base: '.'}).
+// vulcanize background_imports.html for production
+gulp.task('vulcanize_background', () => {
+  return gulp.src(`${path.html}background_imports.html`, {base: '.'}).
       pipe(plugins.vulcanize(vulcanizeOpts)).
       pipe(plugins.crisper(crisperOpts)).
       pipe(If('*.html', plugins.minifyInline())).
@@ -405,4 +408,3 @@ gulp.task('zip', () => {
           'store-test.zip')).
       pipe(!isProdTest ? gulp.dest(base.store) : gulp.dest(base.dist));
 });
-
