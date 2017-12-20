@@ -221,16 +221,16 @@
     process() {
       if (this.use()) {
         return this.fetchPhotos().then((photos) => {
-          const err = this._savePhotos(photos);
-          if (err) {
-            throw new Error(err);
+          const errMess = this._savePhotos(photos);
+          if (!Chrome.Utils.isWhiteSpace(errMess)) {
+            return Promise.reject(new Error(errMess));
           }
           return Promise.resolve();
         }).catch((err) => {
           let title = Chrome.Locale.localize('err_photo_source_title');
           title += `: ${this._desc}`;
           Chrome.Log.error(err.message, 'PhotoSource.process', title);
-          throw err;
+          return Promise.reject(err);
         });
       } else {
         localStorage.removeItem(this._photosKey);

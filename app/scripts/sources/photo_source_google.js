@@ -192,7 +192,7 @@
             // album was probably deleted
             return Promise.resolve(null);
           } else {
-            throw err;
+            return Promise.reject(err);
           }
         });
       } else {
@@ -214,7 +214,8 @@
       conf.interactive = true;
       return Chrome.Http.doGet(url, conf).then((root) => {
         if (!root || !root.feed || !root.feed.entry) {
-          throw new Error(Chrome.Locale.localize('err_no_albums'));
+          const err = new Error(Chrome.Locale.localize('err_no_albums'));
+          return Promise.reject(err);
         }
         const feed = root.feed;
         const entries = feed.entry || [];

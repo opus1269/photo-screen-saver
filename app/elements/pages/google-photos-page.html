@@ -314,7 +314,8 @@
       const ERR_TITLE = Chrome.Locale.localize('err_load_album_list');
       this._checkPermissions().then((allowed) => {
         if (!allowed) {
-          throw new Error(Chrome.Locale.localize('err_auth_picasa'));
+          const err = new Error(Chrome.Locale.localize('err_auth_picasa'));
+          return Promise.reject(err);
         }
         this.set('waitForLoad', true);
         return app.GoogleSource.loadAlbumList();

@@ -187,7 +187,7 @@
         } else {
           msg = 'Unknown Error';
         }
-        throw new Error(msg);
+        return Promise.reject(new Error(msg));
       });
     }
   };

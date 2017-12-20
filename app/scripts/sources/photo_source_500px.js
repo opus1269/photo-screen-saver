@@ -84,7 +84,7 @@
     static _doGet(url) {
       return Chrome.Http.doGet(url).then((response) => {
         if (response.error) {
-          throw new Error(response.error);
+          return Promise.reject(new Error(response.error));
         }
         const photos = [];
         for (const photo of response.photos) {

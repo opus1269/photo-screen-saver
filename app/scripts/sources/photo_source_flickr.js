@@ -69,7 +69,8 @@
      */
     static _processPhotos(response) {
       if (!response.photos || !response.photos.photo) {
-        throw new Error(Chrome.Locale.localize('err_photo_source_title'));
+        const err = new Error(Chrome.Locale.localize('err_photo_source_title'));
+        return Promise.reject(err);
       }
 
       /** @(type) {PhotoSource.SourcePhoto[]} */
@@ -128,7 +129,7 @@
 
       return Chrome.Http.doGet(url).then((response) => {
         if (response.stat !== 'ok') {
-          throw new Error(response.message);
+          return Promise.reject(new Error(response.message));
         }
         return app.FlickrSource._processPhotos(response);
       });
