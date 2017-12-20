@@ -43,7 +43,7 @@
     "paper-tabs": "PolymerElements/paper-tabs#^1.0.0",
     "paper-slider": "PolymerElements/paper-slider#^1.0.0",
     "paper-time-picker": "bendavis78/paper-time-picker#^1.0.0",
-    "chrome-extension-utils": "opus1269/chrome-extension-utils#^3.0.0",
-    "setting-elements": "opus1269/setting-elements#^3.0.0"
+    "chrome-extension-utils": "opus1269/chrome-extension-utils#^4.0.0",
+    "setting-elements": "opus1269/setting-elements#^4.0.0"
   }
 }
