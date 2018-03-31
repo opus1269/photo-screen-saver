@@ -25,7 +25,7 @@ app.Data = (function() {
    * @private
    * @memberOf app.Data
    */
-  const _DATA_VERSION = 17;
+  const _DATA_VERSION = 18;
 
   /**
    * A number and associated units
@@ -57,6 +57,8 @@ app.Data = (function() {
    * @property {string} background - background image
    * @property {boolean} keepAwake - manage computer poser settings
    * @property {boolean} chromeFullscreen - don't display over fullscreen
+   * @property {boolean} chromeMediaPlay - don't display when a media is playing
+   * @property {boolean} chromeMinimized - don't display when browser is minimized
    * @property {boolean} allDisplays - show on all displays
    * @property {string} activeStart - Keep Wake start time '00:00' 24 hr
    * @property {string} activeStop - Keep Wake stop time '00:00' 24 hr
@@ -109,6 +111,8 @@ app.Data = (function() {
     'background': 'background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)',
     'keepAwake': false,
     'chromeFullscreen': true,
+    'chromeMediaPlay': true,
+    'chromeBackground': true,
     'allDisplays': false,
     'activeStart': '00:00', // 24 hr time
     'activeStop': '00:00', // 24 hr time
@@ -243,7 +247,7 @@ app.Data = (function() {
       Chrome.Storage.clearLastError().catch((err) => {
         Chrome.GA.error(err.message, 'Data.initialize');
       });
-      
+
       // set time format based on locale
       Chrome.Storage.set('showTime', _getTimeFormat());
 
@@ -356,7 +360,7 @@ app.Data = (function() {
         // individual change
         if (app.PhotoSources.isUseKey(key) || (key === 'fullResGoogle')) {
           // photo source change
-          const useKey = (key === 'fullResGoogle') ? 'useGoogleAlbums' : key; 
+          const useKey = (key === 'fullResGoogle') ? 'useGoogleAlbums' : key;
           app.PhotoSources.process(useKey).catch((err) => {
             // send message on processing error
             const msg = app.Msg.PHOTO_SOURCE_FAILED;
