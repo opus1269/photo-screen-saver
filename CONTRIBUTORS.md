@@ -9,3 +9,8 @@ Photo Screen Saver Contributors
 
   * Geolocation of photos
 
+* **[Manpreet Singh](https://github.com/ManpreetSingh80)**
+
+  * Embedded video/audio option
+  * Chrome minimized option
+
