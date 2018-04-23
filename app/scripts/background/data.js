@@ -58,7 +58,7 @@ app.Data = (function() {
    * @property {boolean} keepAwake - manage computer poser settings
    * @property {boolean} chromeFullscreen - don't display over fullscreen
    * @property {boolean} chromeMediaPlay - don't display when a media is playing
-   * @property {boolean} chromeMinimized - don't display when browser is minimized
+   * @property {boolean} chromeBackground - don't display when minimized
    * @property {boolean} allDisplays - show on all displays
    * @property {string} activeStart - Keep Wake start time '00:00' 24 hr
    * @property {string} activeStop - Keep Wake stop time '00:00' 24 hr
@@ -111,8 +111,8 @@ app.Data = (function() {
     'background': 'background:linear-gradient(to bottom, #3a3a3a, #b5bdc8)',
     'keepAwake': false,
     'chromeFullscreen': true,
-    'chromeMediaPlay': true,
-    'chromeBackground': true,
+    'chromeMediaPlay': false,
+    'chromeBackground': false,
     'allDisplays': false,
     'activeStart': '00:00', // 24 hr time
     'activeStop': '00:00', // 24 hr time
