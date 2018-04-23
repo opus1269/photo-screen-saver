@@ -272,6 +272,18 @@
   "setting_full_screen_desc": {
     "message": "Nützlich, wenn Sie Videos ansehen"
   },
+  "setting_media_play": {
+    "message": "Wird nicht angezeigt, wenn ein Medium wiedergegeben wird"
+  },
+  "setting_media_play_desc": {
+    "message": "Nützlich während Sie Videos anschauen"
+  },
+  "setting_minimized": {
+    "message": "Nicht anzeigen, wenn der Browser minimiert ist"
+  },
+  "setting_minimized_desc": {
+    "message": "Nützlich, wenn Sie Ihren Browser oft minimiert oder im Hintergrund laufen lassen"
+  },
   "setting_keep_awake": {
     "message": "Wach Bleiben"
   },

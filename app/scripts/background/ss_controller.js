@@ -65,6 +65,47 @@ app.SSControl = (function() {
   }
 
   /**
+   * Determine if there is a media playing in browser
+   * @returns {Promise<boolean>} true if a media is playing in any tab
+   * @private
+   * @memberOf app.SSControl
+   */
+  function _isMediaPlaying() {
+    if (Chrome.Storage.getBool('chromeMediaPlay')) {
+      return chromep.tabs.query({audible: true}).then((tabs) => {
+        if (tabs.length) {
+          return Promise.resolve(true);
+        } else {
+          return Promise.resolve(false);
+        }
+      });
+    } else {
+      return Promise.resolve(false);
+    }
+  }
+
+  /**
+   * Determine if browser is minimized
+   * @returns {Promise<boolean>} true if all windows are minimized
+   * @private
+   * @memberOf app.SSControl
+   */
+  function _isBowserMinimized() {
+    if (Chrome.Storage.getBool('chromeMinimized')) {
+      return chromep.windows.getAll().then((windows) => {
+        for (let i=0; i<windows.length; i++) {
+          if (windows[i].state !== 'minimized') {
+            return Promise.resolve(false);
+          }
+        }
+        return Promise.resolve(true);
+      });
+    } else {
+      return Promise.resolve(false);
+    }
+  }
+
+  /**
    * Determine if the screen saver is currently showing
    * @returns {Promise<boolean>} true if showing
    * @private
@@ -93,8 +134,10 @@ app.SSControl = (function() {
       focused: true,
       type: 'popup',
     };
-    _hasFullscreen(display).then((isTrue) => {
-      if (isTrue) {
+    Promise.all([_hasFullscreen(), _isMediaPlaying(), _isBowserMinimized()]).then((result) => {
+      const [fullScreen, mediaPlaying, browserMinimized] = result;
+
+      if (fullScreen || mediaPlaying || browserMinimized) {
         // don't display if there is a fullscreen window
         return null;
       }

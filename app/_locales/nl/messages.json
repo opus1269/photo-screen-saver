@@ -272,6 +272,18 @@
   "setting_full_screen_desc": {
     "message": "Handig wanneer u video's wilt bekijken"
   },
+  "setting_media_play": {
+    "message": "Niet laten zien wanneer een medium wordt afgespeeld"
+  },
+  "setting_media_play_desc": {
+    "message": "Handig tijdens het bekijken van video's"
+  },
+  "setting_minimized": {
+    "message": "Niet weergeven wanneer de browser is geminimaliseerd"
+  },
+  "setting_minimized_desc": {
+    "message": "Handig wanneer u uw browser vaak tot een minimum beperkt of op de achtergrond uitvoert"
+  },
   "setting_keep_awake": {
     "message": "Blijf aan"
   },

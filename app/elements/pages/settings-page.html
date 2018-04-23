@@ -192,6 +192,16 @@
                 secondary-label="{{localize('setting_full_screen_desc')}}"
                 disabled$="[[!enabled]]"></setting-toggle>
             <setting-toggle
+                name="chromeMediaPlay"
+                main-label="{{localize('setting_media_play')}}"
+                secondary-label="{{localize('setting_media_play_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
+                name="chromeMinimized"
+                main-label="{{localize('setting_minimized')}}"
+                secondary-label="{{localize('setting_minimized_desc')}}"
+                disabled$="[[!enabled]]"></setting-toggle>
+            <setting-toggle
                 id="keepAwake" name="keepAwake"
                 main-label="{{localize('setting_keep_awake')}}"
                 secondary-label="{{localize('setting_keep_awake_desc')}}"

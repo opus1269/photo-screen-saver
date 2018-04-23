@@ -272,6 +272,18 @@
   "setting_full_screen_desc": {
     "message": "Utile si vous regardez des vidéos"
   },
+  "setting_media_play": {
+    "message": "Ne pas montrer quand un média joue"
+  },
+  "setting_media_play_desc": {
+    "message": "Utile pendant que vous regardez des vidéos"
+  },
+  "setting_minimized": {
+    "message": "Ne pas afficher lorsque le navigateur est réduit"
+  },
+  "setting_minimized_desc": {
+    "message": "Utile lorsque vous gardez souvent votre navigateur réduit ou en cours d'exécution en arrière-plan"
+  },
   "setting_keep_awake": {
     "message": "Rester actif"
   },
