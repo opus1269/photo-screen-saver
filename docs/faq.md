@@ -136,6 +136,14 @@
   
   ***
 
+* **I only want to see my Google Photos. How do I turn off the other photos??**
+
+    1. Click on the screensaver icon to display the Settings.
+    2. Click on the tab named **PHOTO SOURCES**
+    3. Deselect all the Photo sources you don't want to see.
+    
+  ***
+
 * **I received a Status: 500 error trying to load my Google Photos albums. What does that mean?**
 
   This is an error on the Server that provides the photos.
