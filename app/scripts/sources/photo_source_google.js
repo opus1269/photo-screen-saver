@@ -43,6 +43,16 @@
   const _URL_BASE = 'https://picasaweb.google.com/data/feed/api/user/';
 
   /**
+   * Picasa API extension good through 3/15/2019
+   * @type {string}
+   * @const
+   * @default
+   * @private
+   * @memberOf app.GoogleSource
+   */
+  const _EXT_QUERY = '&deprecation-extension=true';
+  
+  /**
    * Query for list of albums
    * @type {string}
    * @const
@@ -51,7 +61,8 @@
    * @memberOf app.GoogleSource
    */
   const _ALBUMS_QUERY = '?max-results=2000&access=all&kind=album' +
-      '&fields=entry(gphoto:albumType,gphoto:id)&v=2&alt=json';
+      '&fields=entry(gphoto:albumType,gphoto:id)&v=2&alt=json' +
+      _EXT_QUERY;
 
   /**
    * Query an album for its photos
@@ -64,7 +75,8 @@
   const _ALBUM_QUERY = '&thumbsize=72' +
       '&fields=title,gphoto:id,entry(media:group/media:content,' +
       'media:group/media:credit,media:group/media:thumbnail,georss:where)' +
-      '&v=2&alt=json';
+      '&v=2&alt=json' +
+      _EXT_QUERY;
 
   /**
    * A potential source of photos from Google
