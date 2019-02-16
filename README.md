@@ -1,3 +1,7 @@
+# Moved to https://github.com/opus1269/screensaver
+
+<br />
+
 ## Photo Screen Saver Chrome Extension
 
 This extension displays a screensaver composed of a slide show of photos from multiple sources. Supported photo sources include:
